@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QComboBox>
+#include <QToolBar>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,6 +18,13 @@ public:
     ~MainWindow();
 
 private:
+    void setupMainWindow();
     Ui::MainWindow *ui;
+    QToolBar *m_toolbarFiles;
+    QToolBar *m_toolbarZooms;
+    QToolBar *m_toolbarWindows;
+    QToolBar *m_toolbarPageSets;
+    QToolBar *m_toolbarColorSets;
+    QComboBox *m_cboxZoomScale;
 };
 #endif // MAINWINDOW_H
