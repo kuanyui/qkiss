@@ -9,7 +9,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setupMainWindow();
+    setupToolBars();
+    setupCenterArea();
 }
 
 MainWindow::~MainWindow()
@@ -17,15 +18,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setupMainWindow()
+void MainWindow::setupToolBars()
 {
     // File
     m_toolbarFiles = new QToolBar(this);
+    m_toolbarFiles->setWindowTitle(tr("Files"));   // The text in context menu when you right-click on toolbar.
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarFiles);
     m_toolbarFiles->addAction(ui->action_openFile);
     m_toolbarFiles->addAction(ui->action_openDirectory);
     // Zoom
     m_toolbarZooms = new QToolBar(this);
+    m_toolbarZooms->setWindowTitle(tr("Zooming Tools"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarZooms);
     m_cboxZoomScale = new QComboBox(m_toolbarZooms);
     m_cboxZoomScale->addItem("1", QVariant(1));
@@ -37,12 +40,14 @@ void MainWindow::setupMainWindow()
     m_toolbarZooms->addWidget(m_cboxZoomScale);
     // Dock Window
     m_toolbarWindows = new QToolBar(this);
+    m_toolbarWindows->setWindowTitle(tr("Windows"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarWindows);
     m_toolbarWindows->addAction(ui->action_window_fileSystemBrowser);
     m_toolbarWindows->addAction(ui->action_window_cnfSelector);
     m_toolbarWindows->addAction(ui->action_window_logs);
     // Page Sets
     m_toolbarPageSets = new QToolBar(this);
+    m_toolbarPageSets->setWindowTitle(tr("Page Sets"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarPageSets);
     m_toolbarPageSets->addWidget(new QLabel(tr("Page Set"), m_toolbarPageSets));
     for (int i = 0; i < 9; i++) {
@@ -53,6 +58,7 @@ void MainWindow::setupMainWindow()
     }
     // Color Sets
     m_toolbarColorSets = new QToolBar(this);
+    m_toolbarColorSets->setWindowTitle(tr("Color Sets"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarColorSets);
     m_toolbarColorSets->addWidget(new QLabel(tr("Color Set"), m_toolbarColorSets));
     for (int i = 0; i < 9; i++) {
@@ -61,6 +67,10 @@ void MainWindow::setupMainWindow()
         btn->setCheckable(true);
         m_toolbarColorSets->addWidget(btn);
     }
+}
+
+void MainWindow::setupDockWindows()
+{
 
 }
 

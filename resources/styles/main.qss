@@ -1,2 +1,2 @@
 QToolBar { padding: 4px 2px; }
-
+QToolBar QLabel { padding-left: 4px; }

@@ -18,7 +18,9 @@ public:
     ~MainWindow();
 
 private:
-    void setupMainWindow();
+    void setupToolBars();
+    void setupDockWindows();
+    void setupCenterArea();
     Ui::MainWindow *ui;
     QToolBar *m_toolbarFiles;
     QToolBar *m_toolbarZooms;
