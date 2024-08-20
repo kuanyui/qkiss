@@ -3,6 +3,7 @@
 #include <QToolButton>
 #include <QString>
 #include <QLabel>
+#include "./archivedfile.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,7 +11,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setupToolBars();
-    setupCenterArea();
+    qDebug() << ArchivedFile::checkLhaCommandAvailability();
+    // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
+    ArchivedFile *af = new ArchivedFile{this};
+    af->loadLzh("/home/ono/projects/qtkiss/test/sample.lzh");
 }
 
 MainWindow::~MainWindow()
