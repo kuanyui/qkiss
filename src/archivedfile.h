@@ -4,21 +4,23 @@
 #include <QObject>
 #include <QString>
 #include <QProcess>
+#include <QTemporaryDir>
 
 class ArchivedFile: public QObject
 {
     Q_OBJECT
 public:
     ArchivedFile(QObject *parent = nullptr);
-    void loadLzh(const QString &filePath);
+    bool loadLzh(const QString &filePath);
     static bool checkLhaCommandAvailability();
 private slots:
     void onProcessReadyRead();
     void onProcessFinished();
 signals:
-    void newLogLines();
+    void newLogLine(QString line);
 private:
     QProcess *m_process;
+    QTemporaryDir *m_tmpDir;
 };
 
 #endif // ARCHIVEDFILE_H

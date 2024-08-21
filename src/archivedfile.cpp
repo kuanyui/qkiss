@@ -2,6 +2,7 @@
 
 #include <QStringList>
 #include <QDebug>
+#include <QDir>
 
 ArchivedFile::ArchivedFile(QObject *parent):
     QObject(parent),
@@ -10,11 +11,24 @@ ArchivedFile::ArchivedFile(QObject *parent):
 
 }
 
-void ArchivedFile::loadLzh(const QString &filePath)
+bool ArchivedFile::loadLzh(const QString &filePath)
 {
     connect(m_process, &QProcess::readyRead, this, &ArchivedFile::onProcessReadyRead);
     connect(m_process, &QProcess::finished, this, &ArchivedFile::onProcessFinished);
-    m_process->start("lha", { "x", filePath });
+    m_tmpDir = new QTemporaryDir(QDir(QDir::tempPath()).filePath("qtkiss-extracted-XXXXXX"));
+    if (!m_tmpDir->isValid()) {
+        return false;
+    }
+    m_process->start("lha", { "x",   // extract
+                              // "-q",   // quiet
+                              "-i",   // flatten folders in target
+                              "-f",   // forces overwrite without asking.
+                              "-w",   // specify extract path
+                              m_tmpDir->path(),   // (extract to here)
+                              "--archive-kanji-code=sjis",
+                              filePath
+                     });
+    return true;
 }
 
 bool ArchivedFile::checkLhaCommandAvailability()
@@ -27,13 +41,20 @@ bool ArchivedFile::checkLhaCommandAvailability()
 
 void ArchivedFile::onProcessReadyRead()
 {
+    qsizetype prefixLen {m_tmpDir->path().length() + 1};
     while ( m_process->canReadLine() ) {
         QString raw = QString(m_process->readLine());
-        qDebug() << "===> " << raw;
+        if (raw.endsWith(QStringLiteral("\t- Melted  \n"))) {
+            QString absPath {raw.split("\t")[0]};
+            QString relPath {absPath.mid(prefixLen)};
+            qDebug() << relPath;
+        }
+        //qDebug() << "===> " << raw;
     }
 }
 
 void ArchivedFile::onProcessFinished()
 {
     qDebug() << "<=== finished!";
+    delete m_tmpDir;
 }
