@@ -3,18 +3,24 @@
 #include <QStringList>
 #include <QDebug>
 #include <QDir>
+#include <QDirIterator>
+#include <QFile>
+#include <QFileInfo>
 
 ArchivedFile::ArchivedFile(QObject *parent):
     QObject(parent),
-    m_process(new QProcess(this))
-{
-
-}
-
-bool ArchivedFile::loadLzh(const QString &filePath)
+    m_process(new QProcess(this)),
+    m_files(new QHash<QString, QByteArray>())
 {
     connect(m_process, &QProcess::readyRead, this, &ArchivedFile::onProcessReadyRead);
     connect(m_process, &QProcess::finished, this, &ArchivedFile::onProcessFinished);
+}
+
+bool ArchivedFile::loadLzh(const QString &filePath, Qt::CaseSensitivity caseSensitivity)
+{
+    m_archiveFilePath = filePath;
+    m_caseSensitivity = caseSensitivity;
+    m_files->clear();
     m_tmpDir = new QTemporaryDir(QDir(QDir::tempPath()).filePath("qtkiss-extracted-XXXXXX"));
     if (!m_tmpDir->isValid()) {
         return false;
@@ -26,7 +32,7 @@ bool ArchivedFile::loadLzh(const QString &filePath)
                               "-w",   // specify extract path
                               m_tmpDir->path(),   // (extract to here)
                               "--archive-kanji-code=sjis",
-                              filePath
+                              m_archiveFilePath
                      });
     return true;
 }
@@ -55,6 +61,22 @@ void ArchivedFile::onProcessReadyRead()
 
 void ArchivedFile::onProcessFinished()
 {
+    QDirIterator it {
+        m_tmpDir->path(),
+        QDir::NoDotAndDotDot | QDir::AllEntries,
+        QDirIterator::Subdirectories
+    };
+    while (it.hasNext()) {
+        QString filePath = it.next();
+        QFile f { filePath };
+        QFileInfo fi { f };
+        qDebug() << "read file: " << fi.fileName() << "  -- from " << f.fileName();
+        f.open(QIODevice::ReadOnly);
+        QByteArray data = f.readAll();
+        m_files->insert(fi.fileName(), data);
+        f.close();
+    }
+
     qDebug() << "<=== finished!";
     delete m_tmpDir;
 }

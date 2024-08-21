@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << ArchivedFile::checkLhaCommandAvailability();
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
     ArchivedFile *af = new ArchivedFile{this};
-    af->loadLzh("/home/ono/projects/qtkiss/test/sample.lzh");
+    af->loadLzh("/home/ono/projects/qtkiss/test/sample.lzh", Qt::CaseInsensitive);
 }
 
 MainWindow::~MainWindow()
