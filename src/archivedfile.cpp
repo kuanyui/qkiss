@@ -6,6 +6,7 @@
 #include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
+// #include <QStringConverter>  // Qt6. In Qt5 this is <QTextCodec>.  http://mochiuwiki.e2.valueserver.jp/index.php?title=Qt%E3%81%AE%E5%9F%BA%E7%A4%8E_-_%E6%96%87%E5%AD%97%E3%82%B3%E3%83%BC%E3%83%89
 
 ArchivedFile::ArchivedFile(QObject *parent):
     QObject(parent),
@@ -70,13 +71,19 @@ void ArchivedFile::onProcessFinished()
         QString filePath = it.next();
         QFile f { filePath };
         QFileInfo fi { f };
-        qDebug() << "read file: " << fi.fileName() << "  -- from " << f.fileName();
+        QString fileNameKey = fi.fileName();
+        if (m_caseSensitivity == Qt::CaseInsensitive) {
+            fileNameKey = fileNameKey.toUpper();
+        }
+        qDebug() << "read file: " << fileNameKey << "  -- from " << f.fileName();
         f.open(QIODevice::ReadOnly);
-        QByteArray data = f.readAll();
-        m_files->insert(fi.fileName(), data);
+        QByteArray rawData = f.readAll();
+        m_files->insert(fi.fileName(), rawData);
+        if (fileNameKey.toUpper().endsWith(".CNF")) {
+            qDebug() << QString::fromStdString( rawData.toStdString() );
+        }
         f.close();
     }
-
     qDebug() << "<=== finished!";
     delete m_tmpDir;
 }
