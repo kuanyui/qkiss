@@ -11,6 +11,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools)
+find_package(ICU REQUIRED COMPONENTS uc i18n data)
+
+if(ICU_FOUND)
+    include_directories(${ICU_INCLUDE_DIRS})
+endif()
 
 set(TS_FILES qtkiss_en_US.ts)
 
@@ -53,7 +58,8 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(qtkiss PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+target_link_libraries(qtkiss PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${ICU_LIBRARIES})
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
