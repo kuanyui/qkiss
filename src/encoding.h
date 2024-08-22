@@ -10,7 +10,7 @@ class Encoding {
 public:
     Encoding() {};
     static std::string ShiftJisToUtf8(const std::string &input);
-    static QString ShiftJisToUtf8(QString input);
+    static QString ShiftJisToUtf8(const QString &input);
 
 };
 #endif // ENCODING_H

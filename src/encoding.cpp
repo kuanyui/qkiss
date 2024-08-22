@@ -33,3 +33,8 @@ std::string Encoding::ShiftJisToUtf8(const std::string& input) {
 
     return utf8_str;
 }
+
+
+QString Encoding::ShiftJisToUtf8(const QString& input) {
+    return QString::fromStdString(ShiftJisToUtf8(input.toStdString()));
+}

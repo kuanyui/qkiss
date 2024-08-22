@@ -84,7 +84,8 @@ void ArchivedFile::onProcessFinished()
         QByteArray rawData = f.readAll();
         m_files->insert(fi.fileName(), rawData);
         if (fileNameKey.toUpper().endsWith(".CNF")) {
-            qDebug() << QString::fromStdString( Encoding::ShiftJisToUtf8(rawData.toStdString()) );
+            qDebug() << Encoding::ShiftJisToUtf8(rawData);
+            // qDebug() << QString::fromStdString( Encoding::ShiftJisToUtf8(rawData.toStdString()) );
         }
         f.close();
     }
