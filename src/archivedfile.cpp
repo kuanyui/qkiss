@@ -1,4 +1,5 @@
 #include "archivedfile.h"
+#include "encoding.h"
 
 #include <QStringList>
 #include <QDebug>
@@ -6,9 +7,7 @@
 #include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
-namespace icu {
-#include <unicode/ucnv.h>
-}
+
 
 // #include <QStringConverter>  // Qt6. In Qt5 this is <QTextCodec>.  http://mochiuwiki.e2.valueserver.jp/index.php?title=Qt%E3%81%AE%E5%9F%BA%E7%A4%8E_-_%E6%96%87%E5%AD%97%E3%82%B3%E3%83%BC%E3%83%89
 
@@ -65,35 +64,6 @@ void ArchivedFile::onProcessReadyRead()
 }
 
 
-// Forked from https://note.com/rakko_v30/n/ncbe33ecaea13
-std::string ShiftJisToUtf8(const std::string& input) {
-    icu::UErrorCode error_code = icu::U_ZERO_ERROR;
-    icu::UConverter* sjis_converter = ucnv_open("Shift-JIS", &error_code);
-    if (U_FAILURE(error_code)) {
-        qDebug() << "Failed to create Shift-JIS converter" << "\n";
-        return "";
-    }
-
-    int32_t utf8_len = ucnv_toAlgorithmic(icu::UCNV_UTF8, sjis_converter, nullptr, 0, input.c_str(), input.length(), &error_code);
-    if (error_code != icu::U_BUFFER_OVERFLOW_ERROR) {
-        qDebug() << "Failed to estimate buffer size for UTF-8 conversion" << "\n";
-        ucnv_close(sjis_converter);
-        return "";
-    }
-
-    error_code = icu::U_ZERO_ERROR;
-    std::string utf8_str(utf8_len, '\0');
-    ucnv_toAlgorithmic(icu::UCNV_UTF8, sjis_converter, &utf8_str[0], utf8_len, input.c_str(), input.length(), &error_code);
-
-    ucnv_close(sjis_converter);
-
-    if (U_FAILURE(error_code)) {
-        qDebug() << "Failed to convert Shift-JIS to UTF-8" << "\n";
-        return "";
-    }
-
-    return utf8_str;
-}
 void ArchivedFile::onProcessFinished()
 {
     QDirIterator it {
@@ -114,7 +84,7 @@ void ArchivedFile::onProcessFinished()
         QByteArray rawData = f.readAll();
         m_files->insert(fi.fileName(), rawData);
         if (fileNameKey.toUpper().endsWith(".CNF")) {
-            qDebug() << QString::fromStdString( ShiftJisToUtf8(rawData.toStdString()) );
+            qDebug() << QString::fromStdString( Encoding::ShiftJisToUtf8(rawData.toStdString()) );
         }
         f.close();
     }
