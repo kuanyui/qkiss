@@ -5,9 +5,9 @@ namespace icu {
 }
 
 // Forked from https://note.com/rakko_v30/n/ncbe33ecaea13
-std::string Encoding::ShiftJisToUtf8(const std::string& input) {
+std::string Encoding::toUtf8(const std::string& input, const char *converterName) {
     icu::UErrorCode error_code = icu::U_ZERO_ERROR;
-    icu::UConverter* sjis_converter = ucnv_open("Shift-JIS", &error_code);
+    icu::UConverter* sjis_converter = ucnv_open(converterName, &error_code);
     if (U_FAILURE(error_code)) {
         qDebug() << "Failed to create Shift-JIS converter" << "\n";
         return "";
@@ -35,6 +35,6 @@ std::string Encoding::ShiftJisToUtf8(const std::string& input) {
 }
 
 
-QString Encoding::ShiftJisToUtf8(const QString& input) {
-    return QString::fromStdString(ShiftJisToUtf8(input.toStdString()));
+QString Encoding::toUtf8(const QString& input, const char *converterName) {
+    return QString::fromStdString(toUtf8(input.toStdString(), converterName));
 }
