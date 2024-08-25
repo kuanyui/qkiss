@@ -35,6 +35,6 @@ std::string Encoding::toUtf8(const std::string& input, const char *converterName
 }
 
 
-QString Encoding::toUtf8(const QString& input, const char *converterName) {
+QString Encoding::toUtf8(const QByteArray &input, const char *converterName) {
     return QString::fromStdString(toUtf8(input.toStdString(), converterName));
 }

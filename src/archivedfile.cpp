@@ -85,7 +85,7 @@ void ArchivedFile::onProcessFinished()
         m_files->insert(fi.fileName(), rawData);
         if (fileNameKey.toUpper().endsWith(".CNF")) {
             qDebug() << Encoding::toUtf8(rawData, "Shift_JIS");
-            // qDebug() << QString::fromStdString( Encoding::ShiftJisToUtf8(rawData.toStdString()) );
+            // qDebug() << QString::fromStdString( Encoding::toUtf8(rawData.toStdString(), "Shift_JIS") );
         }
         f.close();
     }
