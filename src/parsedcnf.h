@@ -14,6 +14,9 @@
  */
 
 /**
+ * https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html
+ * https://otakuworld.com/kiss/kisshelp/DIRECTKISSKISS_General_Specification_CNF.htm
+ *
  * - Syntax: #<object number>[.<fix>] <cel filename> [*<KCF number>] [:<set number>]
  * - Declares a cel, describing the object of which it is a member, which KCF it uses, on what sets it appears, and its initial fix value.
  *
@@ -104,6 +107,7 @@ private:
 class ParsedCnf
 {
 public:
+    /** fileName is the relative file name in archive file. */
     ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding encode);
 private:
     // Basic

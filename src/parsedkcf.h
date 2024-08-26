@@ -1,0 +1,109 @@
+#ifndef PARSEDKCF_H
+#define PARSEDKCF_H
+
+#include <QString>
+#include <QList>
+#include <QVector>
+#include <QColor>
+
+#include "./enums.h"
+
+using ParsedKcfPalette = QVector<QColor>;
+
+/**
+ * https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html
+ * https://otakuworld.com/kiss/kisshelp/DIRECTKISSKISS_General_Specification_KCF.htm
+ *
+Modern KCF Header block
+=======================
+
+Offset	Size	Contents
++0		4		Identifier 'KiSS' ( 4Bh 69h 53h 53h )
++4		1		Palette file mark ( 10h )
++5		1		bits per color ( 12 or 24 )
++6		2		Reserved. Must be 0.
++8		2		Number of colors in one palette (16 or 256). (+8 = low byte, +9 = high byte)
++10		2		Number of palettes (1...65535). (+10 = low byte, +11 = high byte)
++12		2		Reserved. Must be 0.
++14		2		Reserved. Must be 0.
++16		16		Reserved. Must be all 0's.
++32		...		Palette data
+
+Old-style KCF Format
+====================
+The original KCF format was a binary file containing up to 10 palettes. Each palette contained 16 colors and each color was made up of 12 bits. There was no header at all.
+All modern KiSS Artforms use the modern KCF format but most KiSS viewers should be able to load the old format.
+ */
+
+class ParsedKcf
+{
+public:
+    enum class Format {
+        /**
+         *  - No header.
+         *  - Max 10 palattes.
+         *  - Each palette contains 16 colors
+         *  - Each color is 12 bits
+         */
+        OldStyle,
+        Modern,
+        InvalidKcf,
+    };
+    /** fileName is the relative file name in archive file. */
+    ParsedKcf(QString fileName, QByteArray rawData);
+private:
+    /**
+     * - 12 or 24 bits
+     * - Offset +5, 1 byte
+     */
+    uint8_t m_bitsPerColor;
+    /**
+     * - 16 or 256 colors
+     * - Offset +8, 2 bytes (+8 low, +9 high)
+     */
+    uint16_t m_colorAmountsInOnePalette;
+    /**
+     * - 1 ~ 65535
+     * - Offset +10, 2 bytes (+10 low, +11 high)
+     */
+    uint16_t m_paletteAmounts;
+    /**
+
+    ◎１色当たり 12 ビット（4096色）の場合のパレット・データの構成
+
+    １つのパレット・データは 2 バイト、ＲＧＢ各 4 ビットで 4096 色。
+
+    |<-  バイト ->|  |<-  バイト ->|
+    MSB         LSB  MSB         LSB
+
+    | rrrr | bbbb |  | 0000 | gggg | ....
+    １パレット組内の色数 × 全パレット組数 分並びます。
+
+
+    ◎１色当たり 24 ビット（1677万色）の場合のパレット・データの構成
+
+
+    １つのパレット・データは 3 バイト、ＲＧＢ各 8 ビットで 16777216 色。
+
+    |<-  バイト ->|  |<-  バイト ->|  |<-  バイト ->|
+    MSB         LSB  MSB         LSB  MSB         LSB
+
+    |  rrrrrrrr   |  |  gggggggg   |  |  bbbbbbbb   | ...
+    １パレット組内の色数 × 全パレット組数 分並びます。
+
+
+    全パレット組数が 10 に満たない場合、その分は 0 番のパレット
+    組のデータが入ります。
+
+    先頭 4 バイトが 'KiSS' で無かった場合は、
+
+    +0～	パレット・データ
+
+    で 12 ビット／色、パレット組当たりの色数 16 、全パレット組数 10
+    として扱います。要するに、旧フォーマットです。
+
+     */
+    QVector<ParsedKcfPalette> m_paletteData;
+};
+
+#endif // PARSEDKCF_H

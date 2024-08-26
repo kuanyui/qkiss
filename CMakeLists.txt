@@ -37,6 +37,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/parsedcnf.h src/parsedcnf.cpp
         src/enums.h
         src/encoding.h src/encoding.cpp
+        src/parsedkcf.h src/parsedkcf.cpp
+        src/parsedcel.h src/parsedcel.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
