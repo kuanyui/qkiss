@@ -38,3 +38,14 @@ std::string Encoding::toUtf8(const std::string& input, const char *converterName
 QString Encoding::toUtf8(const QByteArray &input, const char *converterName) {
     return QString::fromStdString(toUtf8(input.toStdString(), converterName));
 }
+
+QString Encoding::toUtf8(const QByteArray &input, QtKISS::Encoding encoding)
+{
+    switch (encoding) {
+    case QtKISS::Encoding::ASCII: return QString::fromLatin1(input);
+    case QtKISS::Encoding::UTF8: return QString::fromUtf8(input);
+    case QtKISS::Encoding::SJIS: return toUtf8(input, "Shift_JIS");
+    case QtKISS::Encoding::EUC_JP: return toUtf8(input, "EUC-JP");
+    case QtKISS::Encoding::ISO_2022_JP: return toUtf8(input, "ISO-2022-JP");
+    }
+}

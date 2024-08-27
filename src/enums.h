@@ -7,8 +7,10 @@ namespace QtKISS {
         Sensitive = Qt::CaseSensitive,
         Insensitive = Qt::CaseInsensitive
     };
+    /** https://www.iana.org/assignments/character-sets/character-sets.xhtml */
     enum class Encoding {
         ASCII,
+        UTF8,
         // Japanese
         SJIS,
         EUC_JP,

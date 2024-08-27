@@ -7,6 +7,11 @@
 #include <QPoint>
 #include <optional>
 #include "enums.h"
+
+#include <QLoggingCategory>
+
+// Q_DECLARE_LOGGING_CATEGORY(CnfParser)
+
 /*
  * Docstrings are mainly copied from:
  *
@@ -110,12 +115,18 @@ public:
     /** fileName is the relative file name in archive file. */
     ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding encode);
 private:
+    void log(const QString &line);
+    void warn(const QString &line);
+    void error(const QString &line);
+private:
+    void parseLines(const QStringList &lines);
+    uint32_t m_errCount;
     // Basic
     QString m_fileName;
     /** UTF8 */
-    QString m_fileContent;
+    QString m_fileContentText;
     // Parsed
-    QString m_readableComments;
+    QStringList m_readableComments;
     /**
      * - Syntax: (<horizontal size>,<vertical size>
      * - Defines the size of the play field. If omitted, "(448,320" is assumed for KISS v2.18 compatibility.

@@ -1,6 +1,7 @@
 #ifndef ENCODING_H
 #define ENCODING_H
 #include <QString>
+#include "enums.h"
 
 /**
  * Encoding Name List
@@ -11,6 +12,7 @@ public:
     Encoding() {};
     static std::string toUtf8(const std::string &input, const char* converterName);
     static QString toUtf8(const QByteArray &input, const char* converterName);
+    static QString toUtf8(const QByteArray &input, QtKISS::Encoding encoding);
 
 };
 #endif // ENCODING_H
