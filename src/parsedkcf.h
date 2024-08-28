@@ -51,7 +51,10 @@ public:
     };
     /** fileName is the relative file name in archive file. */
     ParsedKcf(QString fileName, QByteArray rawData);
+    void parseModernKcf(QByteArray data);
+    void parseLegacyKcf(QByteArray data);
 private:
+    QString m_fileName;
     /**
      * - 12 or 24 bits
      * - Offset +5, 1 byte

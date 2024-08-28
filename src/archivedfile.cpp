@@ -1,5 +1,6 @@
 #include "archivedfile.h"
 #include "parsedcnf.h"
+#include "parsedkcf.h"
 #include <QStringList>
 #include <QDebug>
 #include <QDir>
@@ -86,6 +87,8 @@ void ArchivedFile::onProcessFinished()
             // qDebug() << Encoding::toUtf8(rawData, "Shift_JIS");
             // qDebug() << QString::fromStdString( Encoding::toUtf8(rawData.toStdString(), "Shift_JIS") );
             ParsedCnf cnfFile {fileNameKey, rawData, QtKISS::Encoding::SJIS};
+        } else if (fileNameKey.toUpper().endsWith(".KCF")) {
+            ParsedKcf kcfFile {fileNameKey, rawData};
         }
         f.close();
     }

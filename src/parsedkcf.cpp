@@ -1,2 +1,56 @@
 #include "parsedkcf.h"
+#include <QDebug>
 
+ParsedKcf::ParsedKcf(QString fileName, QByteArray rawData):
+    m_fileName(fileName)
+{
+    const static QByteArray identifier = QByteArray::fromRawData("\x4B\x69\x53\x53", 4);
+    if (rawData.startsWith(identifier)) {
+        parseModernKcf(rawData);
+    } else {
+        parseLegacyKcf(rawData);
+    }
+}
+
+void ParsedKcf::parseModernKcf(QByteArray data)
+{
+    qDebug() << "[LOG] Parse Moden KCF";
+    if (data[4] != 0x10) {
+        qCritical() << "[ERROR] Not a palette file mark!"; return;
+    }
+    m_bitsPerColor = data[5];
+    if (m_bitsPerColor != 12 && m_bitsPerColor != 24) {
+        qCritical() << "[ERROR] Invalid bitsPerColor (12 or 24): " << m_bitsPerColor; return;
+    }
+    m_colorAmountsInOnePalette = (static_cast<uint16_t>(data[9]) << 8) | data[8];
+    if (m_colorAmountsInOnePalette != 16 && m_colorAmountsInOnePalette != 256) {
+        qCritical() << "[ERROR] Invalid colorAmountsInOnePalette (16 or 256): " << m_colorAmountsInOnePalette; return;
+    }
+    m_paletteAmounts = (static_cast<uint16_t>(data[11]) << 8) | data[10];
+    if (m_bitsPerColor == 12) {
+        QVector<QColor> palette;
+        palette.reserve(m_colorAmountsInOnePalette);
+        for (uint32_t i = 32; i < data.size(); i += 2) {
+            uint8_t r = data[i] >> 4;
+            uint8_t b = data[i] & 0b1111;
+            uint8_t g = data[i+1];
+            QColor color = QColor::fromRgb(r<<4, g<<4, b<<4);
+            palette.append(color);
+        }
+    } else if (m_bitsPerColor == 24) {
+        QVector<QColor> palette;
+        palette.reserve(m_colorAmountsInOnePalette);
+        for (uint32_t i = 32; i < data.size(); i += 3) {
+            uint8_t r = data[i];
+            uint8_t g = data[i+1];
+            uint8_t b = data[i+2];
+            QColor color = QColor::fromRgb(r, g, b);
+            palette.append(color);
+        }
+    }
+}
+
+void ParsedKcf::parseLegacyKcf(QByteArray data)
+{
+
+}
