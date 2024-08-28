@@ -108,7 +108,7 @@ private:
     として扱います。要するに、旧フォーマットです。
 
      */
-    QVector<ParsedKcfPalette> m_paletteData;
+    QVector<ParsedKcfPalette> m_palettesList;
 };
 
 #endif // PARSEDKCF_H
