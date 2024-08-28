@@ -27,7 +27,6 @@ ParsedCnfSet::ParsedCnfSet(int32_t paletteNoInKcf):
 void ParsedCnfSet::appendObjPos(int32_t x, int32_t y)
 {
     m_objPosList.append(std::optional(QPoint(x, y)));
-    qDebug() << m_objPosList.length() << "appendObjPos: " << x << ", " << y;
 
 }
 
@@ -43,7 +42,6 @@ int32_t ParsedCnfSet::paletteNoInKcf() const
 
 const QList<ParsedCnfSetObjPos> &ParsedCnfSet::getObjPosList() const
 {
-    qDebug() << "get m_objPosList " << m_objPosList.length();
     return m_objPosList;
 }
 
@@ -125,16 +123,16 @@ void ParsedCnf::parseLines(const QStringList &lines)
         m_lineIdx++;
     }
     for (ParsedCnfSet &set : m_sets) {
-        qDebug() << "===================================================================";
+        // qDebug() << "===================================================================";
         qDebug() << "SET WITH PALETTE:" << set.paletteNoInKcf() << " Object Count:" << set.getObjPosList().length();
-        qDebug() << "===================================================================";
-        for (auto pos : set.getObjPosList()) {
-            if (pos.has_value()) {
-                qDebug() << "    " << pos.value();
-            } else {
-                qDebug() << "    *";
-            }
-        }
+        // qDebug() << "===================================================================";
+        // for (auto pos : set.getObjPosList()) {
+        //     if (pos.has_value()) {
+        //         qDebug() << "    " << pos.value();
+        //     } else {
+        //         qDebug() << "    *";
+        //     }
+        // }
     }
     qDebug() << m_readableComments;
     m_lines.clear();
@@ -146,7 +144,6 @@ void ParsedCnf::startToParseSetLines()
     QStringList segs = line.split(" "_L1);
     int32_t paletteNoInPaletteFile = segs[0].mid(1).toInt();
     ParsedCnfSet set { paletteNoInPaletteFile };
-    m_sets.append(set);
     static QRegularExpression rePos(R"#(^(\d+),(\d+)$)#");
     for (uint32_t i = 1; i < segs.length(); i++) {
         QString &seg = segs[i];
@@ -160,7 +157,7 @@ void ParsedCnf::startToParseSetLines()
     }
     while (++m_lineIdx < m_lines.length()) {
         line = m_lines[m_lineIdx];
-        if (!line.startsWith(" "_L1)) { return; }
+        if (!line.startsWith(" "_L1)) { break; }
         segs = line.trimmed().split(" "_L1);
         for (uint32_t i = 0; i < segs.length(); i++) {
             QString &seg = segs[i];
@@ -173,4 +170,5 @@ void ParsedCnf::startToParseSetLines()
             }
         }
     }
+    m_sets.append(set);  // QList::append() will copy this obj... So append here.
 }
