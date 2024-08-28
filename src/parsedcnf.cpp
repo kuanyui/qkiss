@@ -78,7 +78,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             m_outsideColor = line.mid(1).toUInt();
         } else if (line.startsWith("#")) {
             // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)\s+(?:[*](\d+))?\s+(?:[:]([\d\s]+))?)#");
-            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*](\d+))?(?:\s+[:]([\d\s]+))?)#");
+            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*](\d+))?(?:\s+[:]([\d\s]+))?(?:;(.+))?)#");
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
@@ -86,17 +86,20 @@ void ParsedCnf::parseLines(const QStringList &lines)
             QString celFileName = m.captured(3);
             int32_t kcfFileIndex = m.captured(4).toInt();
             static QRegularExpression reSpace("\\s+");
-            QStringList setIndexesStrList = m.captured(5).split(reSpace);
+            QStringList setIndexesStrList = m.captured(5).trimmed().split(reSpace);
             QList<int32_t> setIndexes {};
             for (const QString &x: std::as_const(setIndexesStrList)) {
                 setIndexes.append(x.toInt());
             }
-            log(QString("objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: %5")
+            QString comment = m.captured(6).trimmed();
+            log(QString("{ objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: %5, comment: %6 }")
                 .arg(objId)
                 .arg(fix)
                 .arg(celFileName)
                 .arg(kcfFileIndex)
-                .arg(m.captured(5)));
+                .arg("[" + setIndexesStrList.join(",") + "]")
+                .arg(comment)
+                );
             ParsedCnfCel cnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes};
             m_cels.append(cnfCel);
         } else if (line.startsWith("$")) {
