@@ -1,6 +1,5 @@
 #include "archivedfile.h"
-#include "encoding.h"
-
+#include "parsedcnf.h"
 #include <QStringList>
 #include <QDebug>
 #include <QDir>
@@ -84,8 +83,9 @@ void ArchivedFile::onProcessFinished()
         QByteArray rawData = f.readAll();
         m_files->insert(fi.fileName(), rawData);
         if (fileNameKey.toUpper().endsWith(".CNF")) {
-            qDebug() << Encoding::toUtf8(rawData, "Shift_JIS");
+            // qDebug() << Encoding::toUtf8(rawData, "Shift_JIS");
             // qDebug() << QString::fromStdString( Encoding::toUtf8(rawData.toStdString(), "Shift_JIS") );
+            ParsedCnf cnfFile {fileNameKey, rawData, QtKISS::Encoding::SJIS};
         }
         f.close();
     }

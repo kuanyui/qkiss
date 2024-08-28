@@ -40,7 +40,7 @@
 class ParsedCnfCel
 {
 public:
-    ParsedCnfCel(int32_t objId, int16_t fix, QString celFileName, int16_t kcfFileIndex, QList<uint8_t> setsIndexes);
+    ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes);
 private:
     /*! Cels with the same object ID are members of the same object and will move together as a unit. */
     int32_t m_objId;
@@ -117,10 +117,13 @@ public:
 private:
     void log(const QString &line);
     void warn(const QString &line);
-    void error(const QString &line);
+    void error(const QString &msg);
 private:
     void parseLines(const QStringList &lines);
     uint32_t m_errCount;
+    QStringList m_lines;
+    /** currently parsing line */
+    u_int32_t m_lineNo;
     // Basic
     QString m_fileName;
     /** UTF8 */
