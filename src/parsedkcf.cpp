@@ -33,11 +33,14 @@ void ParsedKcf::parseModernKcf(QByteArray data)
             palette.reserve(m_colorAmountsInOnePalette);
             for (uint32_t colorIdx = 0; colorIdx < m_colorAmountsInOnePalette; colorIdx++) {
                 uint32_t i = 32 + (pltIdx * m_colorAmountsInOnePalette * 2) + colorIdx * 2;  // 2 bytes per color
+                if (i >= data.size()) {
+                    qCritical() << "[ERROR] Out of range palatte colors definition, byte offset:" << i; return;
+                }
                 uint8_t r = data[i] >> 4;
                 uint8_t b = data[i] & 0b1111;
                 uint8_t g = data[i+1];
                 QColor color = QColor::fromRgb(r<<4, g<<4, b<<4);
-                // qDebug() << "[12 bits]" << color << (r<<4) << (g<<4) << (b<<4);
+                // qDebug() << "[12 bits]" << color;
                 palette.append(color);
             }
             m_palettesList.append(palette);
@@ -48,6 +51,9 @@ void ParsedKcf::parseModernKcf(QByteArray data)
             palette.reserve(m_colorAmountsInOnePalette);
             for (uint32_t colorIdx = 0; colorIdx < m_colorAmountsInOnePalette; colorIdx++) {
                 uint32_t i = 32 + (pltIdx * m_colorAmountsInOnePalette * 3) + colorIdx * 3;  // 3 bytes per color
+                if (i >= data.size()) {
+                    qCritical() << "[ERROR] Out of range palatte colors definition, byte offset:" << i; return;
+                }
                 uint8_t r = data[i];
                 uint8_t b = data[i+1];
                 uint8_t g = data[i+2];
@@ -62,5 +68,24 @@ void ParsedKcf::parseModernKcf(QByteArray data)
 
 void ParsedKcf::parseLegacyKcf(QByteArray data)
 {
-
+    qDebug() << "May wrong implementations for legacy KCF because the spec is ambigious.";
+    m_bitsPerColor = 12;
+    m_colorAmountsInOnePalette = 16;
+    m_paletteAmounts = 10;
+    for (uint32_t pltIdx = 0; pltIdx < m_paletteAmounts; pltIdx++) {
+        QVector<QColor> palette;
+        palette.reserve(m_colorAmountsInOnePalette);
+        for (uint32_t colorIdx = 0; colorIdx < m_colorAmountsInOnePalette; colorIdx++) {
+            uint32_t i = (pltIdx * m_colorAmountsInOnePalette * 2) + colorIdx * 2;  // 2 bytes per color
+            if (i >= data.size()) {
+                qCritical() << "[ERROR] Out of range palatte colors definition, byte offset:" << i; return;
+            }
+            uint8_t r = data[i] >> 4;
+            uint8_t b = data[i] & 0b1111;
+            uint8_t g = data[i+1];
+            QColor color = QColor::fromRgb(r<<4, g<<4, b<<4);
+            palette.append(color);
+        }
+        m_palettesList.append(palette);
+    }
 }
