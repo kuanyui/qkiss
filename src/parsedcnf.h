@@ -90,9 +90,11 @@ using ParsedCnfSetObjPos = std::optional<QPoint>;
 class ParsedCnfSet
 {
 public:
-    ParsedCnfSet(uint8_t paletteNoInKcf);
-    void appendObjPos(uint32_t x, uint32_t y);
+    ParsedCnfSet(int32_t paletteNoInKcf);
+    void appendObjPos(int32_t x, int32_t y);
     void appendEmptyObjPos();
+    int32_t paletteNoInKcf() const;
+    const QList<ParsedCnfSetObjPos> &getObjPosList() const;
 private:
     /**
      * - Initial palette for the set. This is the number of a palette within a KCF.
@@ -106,7 +108,7 @@ private:
      * - No spaces may appear between xpos, ypos, and the comma.
      * - An aserisk ('*') means no position data is given for this object. If the object exists, a position of 0,0 is assumed.
      */
-    QList<ParsedCnfSetObjPos> m_objPos;
+    QList<ParsedCnfSetObjPos> m_objPosList;
 };
 
 class ParsedCnf
@@ -120,10 +122,11 @@ private:
     void error(const QString &msg);
 private:
     void parseLines(const QStringList &lines);
+    void startToParseSetLines();
     uint32_t m_errCount;
     QStringList m_lines;
     /** currently parsing line */
-    u_int32_t m_lineNo;
+    u_int32_t m_lineIdx;
     // Basic
     QString m_fileName;
     /** UTF8 */

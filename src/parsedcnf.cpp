@@ -4,6 +4,7 @@
 #include "parsedcnf.h"
 #include "encoding.h"
 // Q_LOGGING_CATEGORY(CnfParser, "qtkiss.parser.cnf")
+using namespace Qt::Literals::StringLiterals;
 
 ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes):
     m_objId(objId),
@@ -17,20 +18,33 @@ ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int3
     }
 }
 
-ParsedCnfSet::ParsedCnfSet(uint8_t paletteNoInKcf):
+ParsedCnfSet::ParsedCnfSet(int32_t paletteNoInKcf):
     m_paletteNoInKcf(paletteNoInKcf)
 {
 
 }
 
-void ParsedCnfSet::appendObjPos(uint32_t x, uint32_t y)
+void ParsedCnfSet::appendObjPos(int32_t x, int32_t y)
 {
-    m_objPos.append(QPoint(x, y));
+    m_objPosList.append(std::optional(QPoint(x, y)));
+    qDebug() << m_objPosList.length() << "appendObjPos: " << x << ", " << y;
+
 }
 
 void ParsedCnfSet::appendEmptyObjPos()
 {
-    m_objPos.append(std::nullopt);
+    m_objPosList.append(std::nullopt);
+}
+
+int32_t ParsedCnfSet::paletteNoInKcf() const
+{
+    return m_paletteNoInKcf;
+}
+
+const QList<ParsedCnfSetObjPos> &ParsedCnfSet::getObjPosList() const
+{
+    qDebug() << "get m_objPosList " << m_objPosList.length();
+    return m_objPosList;
 }
 
 
@@ -45,38 +59,38 @@ ParsedCnf::ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding enco
 
 void ParsedCnf::error(const QString &msg)
 {
-    QString &line = m_lines[m_lineNo-1];
-    qCritical() << "[ERROR]" << m_fileName << ":" << m_lineNo << ": " << msg << " ===>" << line;
+    QString &line = m_lines[m_lineIdx];
+    qCritical() << "[ERROR]" << m_fileName << ":" << m_lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
 void ParsedCnf::log(const QString &msg)
 {
-    QString &line = m_lines[m_lineNo-1];
-    qCritical() << "[LOG]" << m_fileName << ":" << m_lineNo << ": " << msg << " ===>" << line;
+    QString &line = m_lines[m_lineIdx];
+    qCritical() << "[LOG]" << m_fileName << ":" << m_lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
 void ParsedCnf::parseLines(const QStringList &lines)
 {
     m_lines = lines;
-    m_lineNo = 0;
-    for (const QString &line: std::as_const(m_lines)) {
-        m_lineNo++;
-        if (line.startsWith(";") && !line.startsWith(";@")) {
+    m_lineIdx = 0;
+    while (m_lineIdx < m_lines.length()) {
+        QString &line = m_lines[m_lineIdx];
+        if (line.startsWith(";"_L1) && !line.startsWith(";@"_L1)) {
             m_readableComments.append(line);
-        } else if (line.startsWith("(")) {
+        } else if (line.startsWith("("_L1)) {
             static QRegularExpression rePlayFieldSize(R"#(^\((\d+) *?, *?(\d+))#");
             QRegularExpressionMatch m = rePlayFieldSize.match(line);
             if (!m.hasMatch()) { error("Wrong playFieldSize format."); continue; }
             m_playFieldSize.setWidth(m.captured(1).toInt());
             m_playFieldSize.setHeight(m.captured(2).toInt());
-        } else if (line.startsWith("%")) {
+        } else if (line.startsWith("%"_L1)) {
             m_kcfFileNames.append(line.mid(1));
         } else if (line.startsWith("[")) {
             static QRegularExpression reOutsideColor(R"#(^\[(\d+))#");
             QRegularExpressionMatch m = reOutsideColor.match(line);
             if (!m.hasMatch()) { error("Wrong outsideColor format."); continue; }
             m_outsideColor = line.mid(1).toUInt();
-        } else if (line.startsWith("#")) {
+        } else if (line.startsWith("#"_L1)) {
             // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)\s+(?:[*](\d+))?\s+(?:[:]([\d\s]+))?)#");
             static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*](\d+))?(?:\s+[:]([\d\s]+))?(?:;(.+))?)#");
             QRegularExpressionMatch m = reCel.match(line);
@@ -92,20 +106,71 @@ void ParsedCnf::parseLines(const QStringList &lines)
                 setIndexes.append(x.toInt());
             }
             QString comment = m.captured(6).trimmed();
-            log(QString("{ objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: %5, comment: %6 }")
+            log(QString("{ objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: [%5], comment: %6 }")
                 .arg(objId)
                 .arg(fix)
                 .arg(celFileName)
                 .arg(kcfFileIndex)
-                .arg("[" + setIndexesStrList.join(",") + "]")
+                .arg(setIndexesStrList.join(","))
                 .arg(comment)
                 );
             ParsedCnfCel cnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes};
             m_cels.append(cnfCel);
-        } else if (line.startsWith("$")) {
-
+        } else if (line.startsWith("$"_L1)) {
+            static QRegularExpression reSetNo(R"#(^[$]\d+\s)#");
+            if (!reSetNo.match(line).hasMatch()) { error("Wrong set line format."); continue; }
+            startToParseSetLines();  // startToParseSetLines() itself will increase m_lineIdx.
+            continue;
+        }
+        m_lineIdx++;
+    }
+    for (ParsedCnfSet &set : m_sets) {
+        qDebug() << "===================================================================";
+        qDebug() << "SET WITH PALETTE:" << set.paletteNoInKcf() << " Object Count:" << set.getObjPosList().length();
+        qDebug() << "===================================================================";
+        for (auto pos : set.getObjPosList()) {
+            if (pos.has_value()) {
+                qDebug() << "    " << pos.value();
+            } else {
+                qDebug() << "    *";
+            }
         }
     }
     qDebug() << m_readableComments;
     m_lines.clear();
+}
+
+void ParsedCnf::startToParseSetLines()
+{
+    QString line = m_lines[m_lineIdx].trimmed();
+    QStringList segs = line.split(" "_L1);
+    int32_t paletteNoInPaletteFile = segs[0].mid(1).toInt();
+    ParsedCnfSet set { paletteNoInPaletteFile };
+    m_sets.append(set);
+    static QRegularExpression rePos(R"#(^(\d+),(\d+)$)#");
+    for (uint32_t i = 1; i < segs.length(); i++) {
+        QString &seg = segs[i];
+        if (seg == "*"_L1) {
+            set.appendEmptyObjPos();
+        } else if (QRegularExpressionMatch m = rePos.match(seg); m.hasMatch()) {
+            set.appendObjPos(m.captured(1).toInt(), m.captured(2).toInt());
+        } else {
+            error("Wrong objPos format");
+        }
+    }
+    while (++m_lineIdx < m_lines.length()) {
+        line = m_lines[m_lineIdx];
+        if (!line.startsWith(" "_L1)) { return; }
+        segs = line.trimmed().split(" "_L1);
+        for (uint32_t i = 0; i < segs.length(); i++) {
+            QString &seg = segs[i];
+            if (seg == "*"_L1) {
+                set.appendEmptyObjPos();
+            } else if (QRegularExpressionMatch m = rePos.match(seg); m.hasMatch()) {
+                set.appendObjPos(m.captured(1).toInt(), m.captured(2).toInt());
+            } else {
+                error("Wrong objPos format");
+            }
+        }
+    }
 }
