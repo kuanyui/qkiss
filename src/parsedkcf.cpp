@@ -14,7 +14,7 @@ ParsedKcf::ParsedKcf(QString fileName, QByteArray rawData):
 
 void ParsedKcf::parseModernKcf(QByteArray data)
 {
-    qDebug() << "[LOG] Parse Moden KCF";
+    qDebug() << "[LOG] Parse Moden KCF file";
     if (data[4] != 0x10) {
         qCritical() << "[ERROR] Not a palette file mark!"; return;
     }
@@ -68,7 +68,8 @@ void ParsedKcf::parseModernKcf(QByteArray data)
 
 void ParsedKcf::parseLegacyKcf(QByteArray data)
 {
-    qDebug() << "May wrong implementations for legacy KCF because the spec is ambigious.";
+    qDebug() << "[LOG] Parse Legacy KCF file";
+    qDebug() << "[WARNING] May wrong implementations for legacy KCF because the spec is ambigious.";
     m_bitsPerColor = 12;
     m_colorAmountsInOnePalette = 16;
     m_paletteAmounts = 10;

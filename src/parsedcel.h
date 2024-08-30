@@ -4,6 +4,7 @@
 #include <QString>
 #include <QList>
 #include <QVector>
+#include <QColor>
 
 /**
  * https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html
@@ -17,7 +18,15 @@ public:
         ColorBased
     };
     ParsedCel(QString fileName, QByteArray rawData);
+    void parseModernCel(QByteArray data);
+    void parseLegacyCel(QByteArray data);
+    /** Palette Based (4 bits) */
+    QVector<uint8_t> getAs4BitsPixels();
+    /** Palette Based (8 bits) */
+    QVector<uint8_t> getAs8BitsPixels();
+    QVector<QRgb> getAs32BitsPixels();
 private:
+    QString m_fileName;
     /**
      * +4 offset, 1 byte
      * - Cel file mark (the type of cel):
@@ -30,11 +39,11 @@ private:
      * - 8: palette-based image (256 colors per pixel in a palette)
      * - 32: color-based image (16,777,216 colors per pixel, no palette)
      */
-    uint8_t bitsPerPixel;
-    int16_t m_x;
-    int16_t m_y;
-    int16_t m_width;
-    int16_t m_height;
+    uint8_t m_bitsPerPixel;
+    uint16_t m_x;
+    uint16_t m_y;
+    uint16_t m_width;
+    uint16_t m_height;
     /**
     ◎１ピクセル当たり 4 ビット（16色）の場合のピクセル・データの構成
     With 4 bits per pixel, each byte in a cel row contains 2 pixels. In the situation where the number of pixels is odd, the remaining 4 bits are set to 0.
@@ -82,7 +91,7 @@ private:
     また ｘ、ｙ方向の表示位置オフセットは 0 とします。
     要するに、旧フォーマットです。
      */
-    QByteArray m_pixelData;
+    QByteArray m_pixelRawData;
 };
 
 #endif // PARSEDCEL_H
