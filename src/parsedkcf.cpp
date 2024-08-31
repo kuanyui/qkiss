@@ -29,7 +29,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
     m_paletteAmounts = (static_cast<uint16_t>(data[11]) << 8) | data[10];
     if (m_bitsPerColor == 12) {
         for (uint32_t pltIdx = 0; pltIdx < m_paletteAmounts; pltIdx++) {
-            QVector<QColor> palette;
+            QVector<QRgb> palette;
             palette.reserve(m_colorAmountsInOnePalette);
             for (uint32_t colorIdx = 0; colorIdx < m_colorAmountsInOnePalette; colorIdx++) {
                 uint32_t i = 32 + (pltIdx * m_colorAmountsInOnePalette * 2) + colorIdx * 2;  // 2 bytes per color
@@ -39,7 +39,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
                 uint8_t r = data[i] >> 4;
                 uint8_t b = data[i] & 0b1111;
                 uint8_t g = data[i+1];
-                QColor color = QColor::fromRgb(r<<4, g<<4, b<<4);
+                QRgb color = qRgb(r<<4, g<<4, b<<4);
                 // qDebug() << "[12 bits]" << color;
                 palette.append(color);
             }
@@ -47,7 +47,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
         }
     } else if (m_bitsPerColor == 24) {
         for (uint32_t pltIdx = 0; pltIdx < m_paletteAmounts; pltIdx++) {
-            QVector<QColor> palette;
+            QVector<QRgb> palette;
             palette.reserve(m_colorAmountsInOnePalette);
             for (uint32_t colorIdx = 0; colorIdx < m_colorAmountsInOnePalette; colorIdx++) {
                 uint32_t i = 32 + (pltIdx * m_colorAmountsInOnePalette * 3) + colorIdx * 3;  // 3 bytes per color
@@ -57,7 +57,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
                 uint8_t r = data[i];
                 uint8_t b = data[i+1];
                 uint8_t g = data[i+2];
-                QColor color = QColor::fromRgb(r, g, b);
+                QRgb color = qRgb(r, g, b);
                 // qDebug() << "[24 bits]" << color;
                 palette.append(color);
             }
@@ -74,7 +74,7 @@ void ParsedKcf::parseLegacyKcf(QByteArray data)
     m_colorAmountsInOnePalette = 16;
     m_paletteAmounts = 10;
     for (uint32_t pltIdx = 0; pltIdx < m_paletteAmounts; pltIdx++) {
-        QVector<QColor> palette;
+        QVector<QRgb> palette;
         palette.reserve(m_colorAmountsInOnePalette);
         for (uint32_t colorIdx = 0; colorIdx < m_colorAmountsInOnePalette; colorIdx++) {
             uint32_t i = (pltIdx * m_colorAmountsInOnePalette * 2) + colorIdx * 2;  // 2 bytes per color
@@ -84,9 +84,18 @@ void ParsedKcf::parseLegacyKcf(QByteArray data)
             uint8_t r = data[i] >> 4;
             uint8_t b = data[i] & 0b1111;
             uint8_t g = data[i+1];
-            QColor color = QColor::fromRgb(r<<4, g<<4, b<<4);
+            QRgb color = qRgb(r<<4, g<<4, b<<4);
             palette.append(color);
         }
         m_palettesList.append(palette);
     }
+}
+
+const QVector<QRgb> &ParsedKcf::getPalette(uint16_t paletteIdx) const
+{
+    if (paletteIdx >= m_paletteAmounts) {
+        qCritical() << "[ERROR] paletteIdx out of actual paletteAmount, use index 0 as fallback";
+        paletteIdx = 0;
+    }
+    return m_palettesList[paletteIdx];
 }

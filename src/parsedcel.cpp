@@ -50,10 +50,35 @@ QVector<uint8_t> ParsedCel::getAs4BitsPixels()
     return vec;
 }
 
+QVector<QRgb> ParsedCel::getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx)
+{
+    const QVector<QRgb> &palette = kcf.getPalette(paletteIdx);
+    QVector<QRgb> colorizedPixels;
+    colorizedPixels.reserve(m_pixelRawData.length() * 2);
+    for (uint16_t x: m_pixelRawData) {
+        uint8_t pix0 = x >> 4;
+        uint8_t pix1 = x & 0b0001111;
+        colorizedPixels.append(palette[pix0]);
+        colorizedPixels.append(palette[pix1]);
+    }
+    return colorizedPixels;
+}
+
 QVector<uint8_t> ParsedCel::getAs8BitsPixels()
 {
     QVector<uint8_t> vec (m_pixelRawData.begin(), m_pixelRawData.end());
     return vec;
+}
+
+QVector<QRgb> ParsedCel::getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx)
+{
+    const QVector<QRgb> &palette = kcf.getPalette(paletteIdx);
+    QVector<QRgb> colorizedPixels;
+    colorizedPixels.reserve(m_pixelRawData.length());
+    for (uint16_t x: m_pixelRawData) {
+        colorizedPixels.append(palette[x]);
+    }
+    return colorizedPixels;
 }
 
 QVector<QRgb> ParsedCel::getAs32BitsPixels()
@@ -75,5 +100,10 @@ QVector<QRgb> ParsedCel::getAs32BitsPixels()
         vec.append(color);
     }
     return vec;
+}
+
+QRect ParsedCel::getGeometry() const
+{
+    return QRect(m_x, m_y, m_width, m_height);
 }
 

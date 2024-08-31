@@ -8,7 +8,7 @@
 
 #include "./enums.h"
 
-using ParsedKcfPalette = QVector<QColor>;
+using ParsedKcfPalette = QVector<QRgb>;
 
 /**
  * https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html
@@ -53,6 +53,7 @@ public:
     ParsedKcf(QString fileName, QByteArray rawData);
     void parseModernKcf(QByteArray data);
     void parseLegacyKcf(QByteArray data);
+    const QVector<QRgb> &getPalette(uint16_t paletteIdx = 0) const;
 private:
     QString m_fileName;
     /**

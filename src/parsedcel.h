@@ -5,6 +5,8 @@
 #include <QList>
 #include <QVector>
 #include <QColor>
+#include <QRect>
+#include "parsedkcf.h"
 
 /**
  * https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html
@@ -22,9 +24,12 @@ public:
     void parseLegacyCel(QByteArray data);
     /** Palette Based (4 bits) */
     QVector<uint8_t> getAs4BitsPixels();
+    QVector<QRgb> getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx);
     /** Palette Based (8 bits) */
     QVector<uint8_t> getAs8BitsPixels();
+    QVector<QRgb> getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx);
     QVector<QRgb> getAs32BitsPixels();
+    QRect getGeometry() const;
 private:
     QString m_fileName;
     /**
