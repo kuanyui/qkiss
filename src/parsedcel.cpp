@@ -56,10 +56,19 @@ QVector<QRgb> ParsedCel::getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx)
     QVector<QRgb> colorizedPixels;
     colorizedPixels.reserve(m_pixelRawData.length() * 2);
     for (uint16_t x: m_pixelRawData) {
-        uint8_t pix0 = x >> 4;
-        uint8_t pix1 = x & 0b0001111;
-        colorizedPixels.append(palette[pix0]);
-        colorizedPixels.append(palette[pix1]);
+        uint8_t colorNo0 = x >> 4;  // 0 means transparent, which is not included in KCF definition.
+        uint8_t colorNo1 = x & 0b0001111;
+        // (palette-based) a color in a palette is indexed from 1. if a pixel of a CEL is 0, it's transparent.
+        if (colorNo0 == 0) {
+            colorizedPixels.append(qRgba(0, 0, 0, 0));
+        } else {
+            colorizedPixels.append(palette[colorNo0 - 1]);
+        }
+        if (colorNo1 == 0) {
+            colorizedPixels.append(qRgba(0, 0, 0, 0));
+        } else {
+            colorizedPixels.append(palette[colorNo1 - 1]);
+        }
     }
     return colorizedPixels;
 }
@@ -75,8 +84,13 @@ QVector<QRgb> ParsedCel::getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx)
     const QVector<QRgb> &palette = kcf.getPalette(paletteIdx);
     QVector<QRgb> colorizedPixels;
     colorizedPixels.reserve(m_pixelRawData.length());
-    for (uint16_t x: m_pixelRawData) {
-        colorizedPixels.append(palette[x]);
+    for (uint16_t colorNo: m_pixelRawData) {
+        // (palette-based) a color in a palette is indexed from 1. if a pixel of a CEL is 0, it's transparent.
+        if (colorNo == 0) {  // means transparent
+            colorizedPixels.append(qRgba(0, 0, 0, 0));
+        } else {
+            colorizedPixels.append(palette[colorNo - 1]);
+        }
     }
     return colorizedPixels;
 }

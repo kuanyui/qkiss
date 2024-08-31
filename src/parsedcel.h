@@ -28,6 +28,7 @@ public:
     /** Palette Based (8 bits) */
     QVector<uint8_t> getAs8BitsPixels();
     QVector<QRgb> getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx);
+    /** 32 bits full-color (rgba) */
     QVector<QRgb> getAs32BitsPixels();
     QRect getGeometry() const;
 private:
