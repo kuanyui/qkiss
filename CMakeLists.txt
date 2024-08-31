@@ -39,6 +39,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/encoding.h src/encoding.cpp
         src/parsedkcf.h src/parsedkcf.cpp
         src/parsedcel.h src/parsedcel.cpp
+        src/gkissview.h src/gkissview.cpp
+        src/gkissitem.h src/gkissitem.cpp
+        src/gkissscene.h src/gkissscene.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

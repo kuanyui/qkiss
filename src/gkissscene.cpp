@@ -1,0 +1,42 @@
+#include "gkissscene.h"
+#include "parsedcnf.h"
+#include "parsedkcf.h"
+#include "parsedcel.h"
+
+GKissScene::GKissScene(ArchivedFile *archivedFile, QObject *parent)
+    : QGraphicsScene{parent},
+      m_archivedFile(archivedFile)
+{
+
+}
+
+bool GKissScene::loadArchivedFile(ArchivedFile *archivedFile)
+{
+    QStringList cnfFileNameList = m_archivedFile->getCnfNameList();
+    if (cnfFileNameList.isEmpty()) {
+        qCritical() << "[ERROR] No CNF file found in this archivedFile.";
+        return false;
+    }
+    setCurrentCnf(cnfFileNameList.first());
+    return true;
+}
+
+bool GKissScene::setCurrentCnf(QString cnfFileName)
+{
+    clear();
+    auto _cnf = m_archivedFile->getParsedCnf(cnfFileName);
+    if (!_cnf.has_value()) {
+        qCritical() << "[ERROR] No CNF file named " << cnfFileName << " found in this archivedFile.";
+        return false;
+    }
+    ParsedCnf &cnf = *_cnf.value();
+    for (ParsedCnfCel cnfCel : cnf.cels()) {
+        auto _celFile = m_archivedFile->getParsedCel(cnfCel.celFileName());
+        if (!_celFile.has_value()) {
+            qCritical() << "[ERROR] CNF requires a CEL, but no such CEL file found in this archived file: " << cnfCel.celFileName();
+            continue;
+        }
+        ParsedCel &celFile = *_celFile.value();
+
+    }
+}

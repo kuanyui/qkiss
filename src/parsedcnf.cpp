@@ -18,6 +18,31 @@ ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int3
     }
 }
 
+int32_t ParsedCnfCel::objId() const
+{
+    return m_objId;
+}
+
+int16_t ParsedCnfCel::fix() const
+{
+    return m_fix;
+}
+
+QString ParsedCnfCel::celFileName() const
+{
+    return m_celFileName;
+}
+
+int16_t ParsedCnfCel::kcfFileIndex() const
+{
+    return m_kcfFileIndex;
+}
+
+QList<uint8_t> ParsedCnfCel::setsIndexes() const
+{
+    return m_setsIndexes;
+}
+
 ParsedCnfSet::ParsedCnfSet(int32_t paletteNoInKcf):
     m_paletteNoInKcf(paletteNoInKcf)
 {
@@ -171,4 +196,19 @@ void ParsedCnf::startToParseSetLines()
         }
     }
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
+}
+
+QList<ParsedCnfSet> ParsedCnf::sets() const
+{
+    return m_sets;
+}
+
+QList<ParsedCnfCel> ParsedCnf::cels() const
+{
+    return m_cels;
+}
+
+QSize ParsedCnf::playFieldSize() const
+{
+    return m_playFieldSize;
 }

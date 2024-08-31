@@ -41,6 +41,12 @@ class ParsedCnfCel
 {
 public:
     ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes);
+    int32_t objId() const;
+    int16_t fix() const;
+    QString celFileName() const;
+    int16_t kcfFileIndex() const;
+    QList<uint8_t> setsIndexes() const;
+
 private:
     /*! Cels with the same object ID are members of the same object and will move together as a unit. */
     int32_t m_objId;
@@ -116,6 +122,10 @@ class ParsedCnf
 public:
     /** fileName is the relative file name in archive file. */
     ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding encode);
+    QSize playFieldSize() const;
+    QList<ParsedCnfCel> cels() const;
+    QList<ParsedCnfSet> sets() const;
+
 private:
     void log(const QString &line);
     void warn(const QString &line);
@@ -124,9 +134,11 @@ private:
     void parseLines(const QStringList &lines);
     void startToParseSetLines();
     uint32_t m_errCount;
+    /** Temporary storage when parsing. */
     QStringList m_lines;
     /** currently parsing line */
     u_int32_t m_lineIdx;
+
     // Basic
     QString m_fileName;
     /** UTF8 */
