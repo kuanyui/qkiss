@@ -18,8 +18,8 @@ ArchivedFile::ArchivedFile(QObject *parent):
     m_parsedCelFiles(new QHash<QString, ParsedCel*>),
     m_otherFiles(new QMap<QString, QByteArray>())
 {
-    connect(m_process, &QProcess::readyRead, this, &ArchivedFile::onProcessReadyRead);
-    connect(m_process, &QProcess::finished, this, &ArchivedFile::onProcessFinished);
+    connect(m_process, &QProcess::readyRead, this, &ArchivedFile::onQProcessReadyRead);
+    connect(m_process, &QProcess::finished, this, &ArchivedFile::onQProcessFinished);
 }
 
 bool ArchivedFile::loadLzh(const QString &filePath, QtKISS::Case caseSensitivity)
@@ -109,7 +109,19 @@ std::optional<QByteArray> ArchivedFile::getOtherFile(QString fileName) const
     return std::nullopt;
 }
 
-void ArchivedFile::onProcessReadyRead()
+bool ArchivedFile::setCurCnf(QString cnfFileName)
+{
+    auto cnf = getParsedCnf(cnfFileName);
+    if (!cnf.has_value()) {
+        qCritical() << "[ERROR] Set current CNF failed; no CNF named " << cnfFileName << " in this archivedFile.";
+        return false;
+    }
+    m_curCnf = cnf.value();
+    m_curCnfSetNo = 0;
+    return true;
+}
+
+void ArchivedFile::onQProcessReadyRead()
 {
     qsizetype prefixLen {m_tmpDir->path().length() + 1};
     while ( m_process->canReadLine() ) {
@@ -124,7 +136,7 @@ void ArchivedFile::onProcessReadyRead()
 }
 
 
-void ArchivedFile::onProcessFinished()
+void ArchivedFile::onQProcessFinished()
 {
     QDirIterator it {
         m_tmpDir->path(),
@@ -157,4 +169,29 @@ void ArchivedFile::onProcessFinished()
     }
     qDebug() << "<=== finished!";
     delete m_tmpDir;
+}
+
+uint8_t ArchivedFile::curPaletteNo() const
+{
+    return m_curPaletteNo;
+}
+
+void ArchivedFile::setCurPaletteNo(uint8_t newCurPaletteNo)
+{
+    m_curPaletteNo = newCurPaletteNo;
+}
+
+void ArchivedFile::setCurCnfSetNo(uint8_t newCurCnfSetNo)
+{
+    m_curCnfSetNo = newCurCnfSetNo;
+}
+
+uint8_t ArchivedFile::curCnfSetNo() const
+{
+    return m_curCnfSetNo;
+}
+
+ParsedCnf *ArchivedFile::curCnf() const
+{
+    return m_curCnf;
 }

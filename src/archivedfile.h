@@ -25,11 +25,19 @@ public:
     std::optional<ParsedKcf *> getParsedKcf(QString kcfFileName) const;
     std::optional<ParsedCel *> getParsedCel(QString celFileName) const;
     std::optional<QByteArray> getOtherFile(QString celFileName) const;
+    bool setCurCnf(QString cnfFileName);
+    ParsedCnf *curCnf() const;
+    uint8_t curCnfSetNo() const;
+    void setCurCnfSetNo(uint8_t newCurCnfSetNo);
+    uint8_t curPaletteNo() const;
+    void setCurPaletteNo(uint8_t newCurPaletteNo);
+
 private slots:
-    void onProcessReadyRead();
-    void onProcessFinished();
+    void onQProcessReadyRead();
+    void onQProcessFinished();
 signals:
     void newLogLine(QString line);
+    // void curCnfSetNoChanged(uint8_t nv);
 private:
     QtKISS::Case m_caseSensitivity;
     QProcess *m_process;
@@ -39,6 +47,17 @@ private:
     QHash<QString, ParsedCel*> *m_parsedCelFiles;
     QMap<QString, QByteArray> *m_otherFiles;
     QString m_archiveFilePath;
+    // ==========================================
+    /** currently renderred CNF */
+    ParsedCnf *m_curCnf;
+    /**
+     *  - Range is 0-9. MAX is 9. Multiple lines starts with `$` in CNF, this value is the index of these lines.
+     *  - '$'	セット情報（複数個指定可能）
+     *    書式： $<パレット組> [<x座標,y座標> ...] 最初の指定が 0 で 9 まで、最大10個のセット情報を指定できます。
+     */
+    uint8_t m_curCnfSetNo;
+    /** これは ` $<パレット組>` のあれ「パレット組」。KCF ごと N 個パレット組がある。*/
+    uint8_t m_curPaletteNo;
 };
 
 #endif // ARCHIVEDFILE_H

@@ -24,12 +24,16 @@ bool GKissScene::loadArchivedFile(ArchivedFile *archivedFile)
 bool GKissScene::setCurrentCnf(QString cnfFileName)
 {
     clear();
-    auto _cnf = m_archivedFile->getParsedCnf(cnfFileName);
-    if (!_cnf.has_value()) {
+    bool ok = m_archivedFile->setCurCnf(cnfFileName);
+    if (!ok) {
         qCritical() << "[ERROR] No CNF file named " << cnfFileName << " found in this archivedFile.";
         return false;
     }
-    ParsedCnf &cnf = *_cnf.value();
+}
+
+bool GKissScene::renderCurCnfAllSets()
+{
+    ParsedCnf &cnf = *m_archivedFile->curCnf();
     for (ParsedCnfCel cnfCel : cnf.cels()) {
         auto _cel = m_archivedFile->getParsedCel(cnfCel.celFileName());
         if (!_cel.has_value()) {

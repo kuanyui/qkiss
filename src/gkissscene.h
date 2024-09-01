@@ -10,6 +10,7 @@ public:
     explicit GKissScene(ArchivedFile *archivedFile, QObject *parent = nullptr);
     bool loadArchivedFile(ArchivedFile *archivedFile);
     bool setCurrentCnf(QString cnfFileName);
+    bool renderCurCnfAllSets();
 private:
     ArchivedFile *m_archivedFile;
 
