@@ -10,7 +10,12 @@
 class GKissItem : public QGraphicsItem
 {
 public:
-    GKissItem();
+    GKissItem(ParsedCel *cel, ParsedKcf *kcf = nullptr, QVector<QRgb> *palette = nullptr, QGraphicsItem *parent = nullptr)
+    {
+
+    }
+
+private:
 };
 
 #endif // GKISSITEM_H

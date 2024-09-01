@@ -202,6 +202,11 @@ void ParsedCnf::startToParseSetLines()
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
 }
 
+QString ParsedCnf::fileName() const
+{
+    return m_fileName;
+}
+
 QStringList ParsedCnf::kcfFileNames() const
 {
     return m_kcfFileNames;

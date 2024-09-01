@@ -7,12 +7,9 @@
 class GKissScene : public QGraphicsScene
 {
 public:
-    explicit GKissScene(ArchivedFile *archivedFile, QObject *parent = nullptr);
-    bool loadArchivedFile(ArchivedFile *archivedFile);
-    bool setCurrentCnf(QString cnfFileName);
-    bool renderCurCnfAllSets();
+    explicit GKissScene (QObject *parent = nullptr);
+
 private:
-    ArchivedFile *m_archivedFile;
 
 };
 

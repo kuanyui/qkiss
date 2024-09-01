@@ -10,9 +10,15 @@
 class GKissView : public QGraphicsView
 {
 public:
-    GKissView(GKissScene *scene, QWidget *parent=nullptr);
+    GKissView(ArchivedFile *archivedFile, QWidget *parent=nullptr);
+    bool setArchivedFile(ArchivedFile *archivedFile);
+    bool setCurCnf(QString cnfFileName);
+    /** create scenes & items according to current CNF. */
+    bool renderCurCnfAllSets();
+    bool renderCurCnfSet(uint8_t setNo);
 private:
-    GKissScene *m_scene;
+    ArchivedFile *m_archivedFile;
+    QVector<GKissScene *> m_scenes;
 };
 
 #endif // GKISSVIEW_H

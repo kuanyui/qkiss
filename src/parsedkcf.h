@@ -45,16 +45,19 @@ public:
          *  - Each palette contains 16 colors
          *  - Each color is 12 bits
          */
-        OldStyle,
+        Legacy,
         Modern,
         InvalidKcf,
     };
     /** fileName is the relative file name in archive file. */
     ParsedKcf(QString fileName, QByteArray rawData);
+
+    const QVector<QRgb> &getPaletteInKcf(uint16_t paletteIdxInKcf = 0) const;
+    uint8_t bitsPerColor() const;
+
+private:
     void parseModernKcf(QByteArray data);
     void parseLegacyKcf(QByteArray data);
-    const QVector<QRgb> &getPalette(uint16_t paletteIdx = 0) const;
-private:
     QString m_fileName;
     /**
      * - 12 or 24 bits

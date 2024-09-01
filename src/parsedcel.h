@@ -20,8 +20,7 @@ public:
         ColorBased
     };
     ParsedCel(QString fileName, QByteArray rawData);
-    void parseModernCel(QByteArray data);
-    void parseLegacyCel(QByteArray data);
+
     /** Palette Based (4 bits) */
     QVector<uint8_t> getAs4BitsPixels();
     QVector<QRgb> getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx);
@@ -31,7 +30,14 @@ public:
     /** 32 bits full-color (rgba) */
     QVector<QRgb> getAs32BitsPixels();
     QRect getGeometry() const;
+    /** 4 / 8 / 32 */
+    uint8_t bitsPerPixel() const;
+    Type celType() const;
+
 private:
+    void parseModernCel(QByteArray data);
+    void parseLegacyCel(QByteArray data);
+
     QString m_fileName;
     /**
      * +4 offset, 1 byte

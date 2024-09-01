@@ -167,7 +167,10 @@ void ArchivedFile::onQProcessFinished()
         }
         f.close();
     }
-    qDebug() << "<=== finished!";
+    qDebug() << "<=== all archived files parsing finished!";
+    m_curCnf = m_parsedCnfFiles->first();
+    m_curCnfSetNo = 0;
+    m_curPaletteNo = 0;
     delete m_tmpDir;
 }
 

@@ -130,6 +130,7 @@ public:
     */
     QString getKcfNameByKcfIndex(uint8_t kcfFileIndex);
     QStringList kcfFileNames() const;
+    QString fileName() const;
 
 private:
     void log(const QString &line);

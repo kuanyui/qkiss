@@ -91,11 +91,16 @@ void ParsedKcf::parseLegacyKcf(QByteArray data)
     }
 }
 
-const QVector<QRgb> &ParsedKcf::getPalette(uint16_t paletteIdx) const
+uint8_t ParsedKcf::bitsPerColor() const
 {
-    if (paletteIdx >= m_paletteAmounts) {
+    return m_bitsPerColor;
+}
+
+const QVector<QRgb> &ParsedKcf::getPaletteInKcf(uint16_t paletteIdxInKcf) const
+{
+    if (paletteIdxInKcf >= m_paletteAmounts) {
         qCritical() << "[ERROR] paletteIdx out of actual paletteAmount, use index 0 as fallback";
-        paletteIdx = 0;
+        paletteIdxInKcf = 0;
     }
-    return m_palettesList[paletteIdx];
+    return m_palettesList[paletteIdxInKcf];
 }
