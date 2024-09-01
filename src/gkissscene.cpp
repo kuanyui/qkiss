@@ -31,12 +31,13 @@ bool GKissScene::setCurrentCnf(QString cnfFileName)
     }
     ParsedCnf &cnf = *_cnf.value();
     for (ParsedCnfCel cnfCel : cnf.cels()) {
-        auto _celFile = m_archivedFile->getParsedCel(cnfCel.celFileName());
-        if (!_celFile.has_value()) {
+        auto _cel = m_archivedFile->getParsedCel(cnfCel.celFileName());
+        if (!_cel.has_value()) {
             qCritical() << "[ERROR] CNF requires a CEL, but no such CEL file found in this archived file: " << cnfCel.celFileName();
             continue;
         }
-        ParsedCel &celFile = *_celFile.value();
+        // m_archivedFile->getParsedKcf()
+        // ParsedCel &cel = *_cel.value();
 
     }
 }

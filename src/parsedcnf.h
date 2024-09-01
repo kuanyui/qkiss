@@ -125,6 +125,11 @@ public:
     QSize playFieldSize() const;
     QList<ParsedCnfCel> cels() const;
     QList<ParsedCnfSet> sets() const;
+    /**
+     * KCF file index is the index of a KCF in a CNF declaration (KCF files used by this CNF).
+    */
+    QString getKcfNameByKcfIndex(uint8_t kcfFileIndex);
+    QStringList kcfFileNames() const;
 
 private:
     void log(const QString &line);

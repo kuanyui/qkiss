@@ -119,15 +119,19 @@ void ParsedCnf::parseLines(const QStringList &lines)
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
-            int32_t fix = m.captured(2).toInt();
+            int32_t fix = m.captured(2).isEmpty() ? 0 : m.captured(2).toInt();
             QString celFileName = m.captured(3);
-            int32_t kcfFileIndex = m.captured(4).toInt();
+            int32_t kcfFileIndex =  m.captured(4).isEmpty() ? 0 :  m.captured(4).toInt();
             static QRegularExpression reSpace("\\s+");
-            QStringList setIndexesStrList = m.captured(5).trimmed().split(reSpace);
+            QStringList setIndexesStrList;
+            if (!m.captured(5).isEmpty()) {
+                setIndexesStrList = m.captured(5).trimmed().split(reSpace);
+            }
             QList<int32_t> setIndexes {};
             for (const QString &x: std::as_const(setIndexesStrList)) {
                 setIndexes.append(x.toInt());
             }
+
             QString comment = m.captured(6).trimmed();
             log(QString("{ objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: [%5], comment: %6 }")
                 .arg(objId)
@@ -196,6 +200,11 @@ void ParsedCnf::startToParseSetLines()
         }
     }
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
+}
+
+QStringList ParsedCnf::kcfFileNames() const
+{
+    return m_kcfFileNames;
 }
 
 QList<ParsedCnfSet> ParsedCnf::sets() const
