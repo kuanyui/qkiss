@@ -54,7 +54,7 @@ public:
     /** fileName is the relative file name in archive file. */
     ParsedKcf(QString fileName, QByteArray rawData);
 
-    const QVector<QRgb> &getPaletteInKcf(uint16_t paletteIdxInKcf = 0) const;
+    ParsedKcfPalette *getPaletteInKcf(uint16_t paletteIdxInKcf = 0);  // REFACTOR: Use reference?
     uint8_t bitsPerColor() const;
 
 private:

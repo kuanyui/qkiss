@@ -22,15 +22,8 @@ public:
         ColorBased
     };
     ParsedCel(QString fileName, QByteArray rawData);
-
-    /** Palette Based (4 bits) */
-    QVector<uint8_t> getAs4BitsPixels() const;
-    QVector<QRgb> getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx) const;
-    /** Palette Based (8 bits) */
-    QVector<uint8_t> getAs8BitsPixels() const;
-    QVector<QRgb> getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx) const;
-    /** 32 bits full-color (rgba) */
-    QVector<QRgb> getAs32BitsPixels() const;
+    std::unique_ptr<QVector<QRgb> > getColorizedPaletteBasedPixels(ParsedKcf &kcf, int paletteIdx) const;  // REFACTOR: const reference
+    QVector<QRgb> *getColoriBasedPixels() const;
     QRect getGeometry() const;
     /** 4 / 8 / 32 */
     uint8_t bitsPerPixel() const;
@@ -43,6 +36,10 @@ public:
 private:
     void parseModernCel(QByteArray data);
     void parseLegacyCel(QByteArray data);
+    /** Palette Based, NOT colorized yet. (4 bits) */
+    static QVector<uint8_t> *parse4BitsPixelsAsCache(QByteArray *pixelRawData);  // REFACTOR: Use reference instead?
+    /** 32 bits full-color (rgba) */
+    static QVector<QRgb> *parse32BitsPixelsAsCache(QByteArray *pixelRawData);   // REFACTOR: Use reference instead?
 
     QString m_fileName;
     /**
@@ -62,7 +59,7 @@ private:
     uint16_t m_y;
     uint16_t m_width;
     uint16_t m_height;
-    /**
+    /*
     ◎１ピクセル当たり 4 ビット（16色）の場合のピクセル・データの構成
     With 4 bits per pixel, each byte in a cel row contains 2 pixels. In the situation where the number of pixels is odd, the remaining 4 bits are set to 0.
 
@@ -109,7 +106,9 @@ private:
     また ｘ、ｙ方向の表示位置オフセットは 0 とします。
     要するに、旧フォーマットです。
      */
-    QByteArray m_pixelRawData;
+
+    QVector<uint8_t> *m_cachedPaletteBasedPixels = nullptr;
+    QVector<QRgb> *m_cachedColorBasedPixels = nullptr;
 };
 
 #endif // PARSEDCEL_H

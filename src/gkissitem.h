@@ -13,8 +13,12 @@ class GKissItem : public QGraphicsItem
 {
 public:
     GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, ParsedKcf *kcf = nullptr, uint8_t paletteNoInKcf = 0, QGraphicsItem *parent = nullptr);
+    void rerenderImage();
+    void setPaletteNoInKcf(uint8_t newPaletteNoInKcf);
 
 private:
+    void renderPaletteBasedImage();
+    void renderColorBasedImage();
     ParsedCnfCel *m_cnfCel;
     ParsedCel *m_cel;
     ParsedKcf *m_kcf;

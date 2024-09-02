@@ -96,11 +96,15 @@ uint8_t ParsedKcf::bitsPerColor() const
     return m_bitsPerColor;
 }
 
-const QVector<QRgb> &ParsedKcf::getPaletteInKcf(uint16_t paletteIdxInKcf) const
+ParsedKcfPalette *ParsedKcf::getPaletteInKcf(uint16_t paletteIdxInKcf)
 {
+    if (m_palettesList.length() == 0) {
+        qCritical() << "[ERROR] This KCF file contains no valid palette, but you try to get palette from it. Abort.";
+        return nullptr;
+    }
     if (paletteIdxInKcf >= m_paletteAmounts) {
         qCritical() << "[ERROR] paletteIdx out of actual paletteAmount, use index 0 as fallback";
         paletteIdxInKcf = 0;
     }
-    return m_palettesList[paletteIdxInKcf];
+    return &m_palettesList[paletteIdxInKcf];
 }

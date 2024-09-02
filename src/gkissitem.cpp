@@ -10,32 +10,51 @@ GKissItem::GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, ParsedKcf *kcf, uint1
     m_paletteNoInKcf(paletteNoInKcf)
 {
     m_image = new QImage(cel->width(), cel->height(), QImage::Format_ARGB32);
-    renderImage();
+    rerenderImage();
     m_fix = m_cnfCel->fix();
 }
 
-void GKissItem::renderImage()
+void GKissItem::rerenderImage()
 {
-
+    switch (m_cel->celType()) {
+    case ParsedCel::Type::PaletteBased: return renderPaletteBasedImage();
+    case ParsedCel::Type::ColorBased: return renderColorBasedImage();
+    }
 }
+
 
 void GKissItem::renderPaletteBasedImage()
 {
-    const ParsedCel &cel = *m_cel;
-    const ParsedKcfPalette &palette = m_kcf->getPaletteInKcf(m_paletteNoInKcf);
-    const QVector<QRgb> &celPixelsData = cel.getAs32BitsPixels();
+    ParsedKcfPalette *palette = m_kcf->getPaletteInKcf(m_paletteNoInKcf);
+    std::unique_ptr<QVector<QRgb>> celPixelsData = m_cel->getColorizedPaletteBasedPixels(*m_kcf, m_paletteNoInKcf);
+    uint32_t i = 0;
     if (m_cel->celType() == ParsedCel::Type::PaletteBased) {
-        const ParsedKcfPalette &palette = m_kcf->getPaletteInKcf(m_paletteNoInKcf);
-        for (int y = 0; y < cel.height(); ++y) {
+        for (int y = 0; y < m_cel->height(); ++y) {
             QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
-            for (int x = 0; x < cel.width(); ++x) {
-                line[x] =
+            for (int x = 0; x < m_cel->width(); ++x) {
+                line[x] = (*celPixelsData)[i++];   // TODO: check range
             }
         }
     }
 }
 
-void GKissItem::renderFullColorImage()
-{
 
+void GKissItem::renderColorBasedImage()
+{
+    QVector<QRgb> *celPixelsData = m_cel->getColoriBasedPixels();
+    uint32_t i = 0;
+    if (m_cel->celType() == ParsedCel::Type::PaletteBased) {
+        for (int y = 0; y < m_cel->height(); ++y) {
+            QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
+            for (int x = 0; x < m_cel->width(); ++x) {
+                line[x] = (*celPixelsData)[i++];  // TODO: check range
+            }
+        }
+    }
+}
+
+void GKissItem::setPaletteNoInKcf(uint8_t newPaletteNoInKcf)
+{
+    m_paletteNoInKcf = newPaletteNoInKcf;
+    rerenderImage();
 }
