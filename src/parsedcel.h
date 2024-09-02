@@ -9,6 +9,8 @@
 #include "parsedkcf.h"
 
 /**
+ * Represent a parsed .CEL file
+ *
  * https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html
  * https://otakuworld.com/kiss/kisshelp/DIRECTKISSKISS_General_Specification_CNF.htm
  */
@@ -22,17 +24,21 @@ public:
     ParsedCel(QString fileName, QByteArray rawData);
 
     /** Palette Based (4 bits) */
-    QVector<uint8_t> getAs4BitsPixels();
-    QVector<QRgb> getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx);
+    QVector<uint8_t> getAs4BitsPixels() const;
+    QVector<QRgb> getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx) const;
     /** Palette Based (8 bits) */
-    QVector<uint8_t> getAs8BitsPixels();
-    QVector<QRgb> getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx);
+    QVector<uint8_t> getAs8BitsPixels() const;
+    QVector<QRgb> getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx) const;
     /** 32 bits full-color (rgba) */
-    QVector<QRgb> getAs32BitsPixels();
+    QVector<QRgb> getAs32BitsPixels() const;
     QRect getGeometry() const;
     /** 4 / 8 / 32 */
     uint8_t bitsPerPixel() const;
     Type celType() const;
+    uint16_t x() const;
+    uint16_t y() const;
+    uint16_t width() const;
+    uint16_t height() const;
 
 private:
     void parseModernCel(QByteArray data);

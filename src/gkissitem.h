@@ -4,18 +4,24 @@
 #include <QGraphicsItem>
 #include <QObject>
 #include <QWidget>
+#include <QImage>
 #include "parsedkcf.h"
 #include "parsedcel.h"
+#include "parsedcnf.h"
 
 class GKissItem : public QGraphicsItem
 {
 public:
-    GKissItem(ParsedCel *cel, ParsedKcf *kcf = nullptr, QVector<QRgb> *palette = nullptr, QGraphicsItem *parent = nullptr)
-    {
-
-    }
+    GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, ParsedKcf *kcf = nullptr, uint8_t paletteNoInKcf = 0, QGraphicsItem *parent = nullptr);
 
 private:
+    ParsedCnfCel *m_cnfCel;
+    ParsedCel *m_cel;
+    ParsedKcf *m_kcf;
+    uint8_t m_paletteNoInKcf;
+    // ==========================
+    QImage *m_image;
+    int16_t m_fix;
 };
 
 #endif // GKISSITEM_H

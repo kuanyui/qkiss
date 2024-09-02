@@ -80,6 +80,12 @@ ParsedCnf::ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding enco
     parseLines(m_fileContentText.split("\n"));
 }
 
+ParsedCnf::~ParsedCnf()
+{
+    qDeleteAll(m_cels);
+    qDeleteAll(m_sets);
+}
+
 void ParsedCnf::error(const QString &msg)
 {
     QString &line = m_lines[m_lineIdx];
@@ -141,7 +147,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
                 .arg(setIndexesStrList.join(","))
                 .arg(comment)
                 );
-            ParsedCnfCel cnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes};
+            ParsedCnfCel *cnfCel = new ParsedCnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes};
             m_cels.append(cnfCel);
         } else if (line.startsWith("$"_L1)) {
             static QRegularExpression reSetNo(R"#(^[$]\d+\s)#");
@@ -151,9 +157,9 @@ void ParsedCnf::parseLines(const QStringList &lines)
         }
         m_lineIdx++;
     }
-    for (ParsedCnfSet &set : m_sets) {
+    for (ParsedCnfSet *set : m_sets) {
         // qDebug() << "===================================================================";
-        qDebug() << "SET WITH PALETTE:" << set.paletteNoInKcf() << " Object Count:" << set.getObjPosList().length();
+        qDebug() << "SET WITH PALETTE:" << set->paletteNoInKcf() << " Object Count:" << set->getObjPosList().length();
         // qDebug() << "===================================================================";
         // for (auto pos : set.getObjPosList()) {
         //     if (pos.has_value()) {
@@ -172,14 +178,14 @@ void ParsedCnf::startToParseSetLines()
     QString line = m_lines[m_lineIdx].trimmed();
     QStringList segs = line.split(" "_L1);
     int32_t paletteNoInPaletteFile = segs[0].mid(1).toInt();
-    ParsedCnfSet set { paletteNoInPaletteFile };
+    ParsedCnfSet *set = new ParsedCnfSet { paletteNoInPaletteFile };
     static QRegularExpression rePos(R"#(^(\d+),(\d+)$)#");
     for (uint32_t i = 1; i < segs.length(); i++) {
         QString &seg = segs[i];
         if (seg == "*"_L1) {
-            set.appendEmptyObjPos();
+            set->appendEmptyObjPos();
         } else if (QRegularExpressionMatch m = rePos.match(seg); m.hasMatch()) {
-            set.appendObjPos(m.captured(1).toInt(), m.captured(2).toInt());
+            set->appendObjPos(m.captured(1).toInt(), m.captured(2).toInt());
         } else {
             error("Wrong objPos format");
         }
@@ -191,9 +197,9 @@ void ParsedCnf::startToParseSetLines()
         for (uint32_t i = 0; i < segs.length(); i++) {
             QString &seg = segs[i];
             if (seg == "*"_L1) {
-                set.appendEmptyObjPos();
+                set->appendEmptyObjPos();
             } else if (QRegularExpressionMatch m = rePos.match(seg); m.hasMatch()) {
-                set.appendObjPos(m.captured(1).toInt(), m.captured(2).toInt());
+                set->appendObjPos(m.captured(1).toInt(), m.captured(2).toInt());
             } else {
                 error("Wrong objPos format");
             }
@@ -212,12 +218,17 @@ QStringList ParsedCnf::kcfFileNames() const
     return m_kcfFileNames;
 }
 
-QList<ParsedCnfSet> ParsedCnf::sets() const
+size_t ParsedCnf::kcfFilesAmount() const
+{
+    return m_kcfFileNames.size();
+}
+
+QList<ParsedCnfSet *> ParsedCnf::sets() const
 {
     return m_sets;
 }
 
-QList<ParsedCnfCel> ParsedCnf::cels() const
+QList<ParsedCnfCel *> ParsedCnf::cels() const
 {
     return m_cels;
 }

@@ -39,6 +39,26 @@ void ParsedCel::parseLegacyCel(QByteArray data)
     m_pixelRawData = data.mid(4);
 }
 
+uint16_t ParsedCel::height() const
+{
+    return m_height;
+}
+
+uint16_t ParsedCel::width() const
+{
+    return m_width;
+}
+
+uint16_t ParsedCel::y() const
+{
+    return m_y;
+}
+
+uint16_t ParsedCel::x() const
+{
+    return m_x;
+}
+
 ParsedCel::Type ParsedCel::celType() const
 {
     return m_celType;
@@ -49,7 +69,7 @@ uint8_t ParsedCel::bitsPerPixel() const
     return m_bitsPerPixel;
 }
 
-QVector<uint8_t> ParsedCel::getAs4BitsPixels()
+QVector<uint8_t> ParsedCel::getAs4BitsPixels() const
 {
     QVector<uint8_t> vec;
     vec.reserve(m_width * m_height);
@@ -60,7 +80,7 @@ QVector<uint8_t> ParsedCel::getAs4BitsPixels()
     return vec;
 }
 
-QVector<QRgb> ParsedCel::getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx)
+QVector<QRgb> ParsedCel::getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx) const
 {
     const QVector<QRgb> &palette = kcf.getPaletteInKcf(paletteIdx);
     QVector<QRgb> colorizedPixels;
@@ -83,13 +103,13 @@ QVector<QRgb> ParsedCel::getAs4BitsPixels(const ParsedKcf &kcf, int paletteIdx)
     return colorizedPixels;
 }
 
-QVector<uint8_t> ParsedCel::getAs8BitsPixels()
+QVector<uint8_t> ParsedCel::getAs8BitsPixels() const
 {
     QVector<uint8_t> vec (m_pixelRawData.begin(), m_pixelRawData.end());
     return vec;
 }
 
-QVector<QRgb> ParsedCel::getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx)
+QVector<QRgb> ParsedCel::getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx) const
 {
     const QVector<QRgb> &palette = kcf.getPaletteInKcf(paletteIdx);
     QVector<QRgb> colorizedPixels;
@@ -105,7 +125,7 @@ QVector<QRgb> ParsedCel::getAs8BitsPixels(const ParsedKcf &kcf, int paletteIdx)
     return colorizedPixels;
 }
 
-QVector<QRgb> ParsedCel::getAs32BitsPixels()
+QVector<QRgb> ParsedCel::getAs32BitsPixels() const
 {
     uint32_t pxCount = m_width * m_height;
     QVector<QRgb> vec;

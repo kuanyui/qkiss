@@ -19,6 +19,8 @@
  */
 
 /**
+ * Represent a referenced .CEL (a line starts with #) in a parsed .CNF file
+ *
  * https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html
  * https://otakuworld.com/kiss/kisshelp/DIRECTKISSKISS_General_Specification_CNF.htm
  *
@@ -78,6 +80,8 @@ private:
 using ParsedCnfSetObjPos = std::optional<QPoint>;
 
 /**
+ *  Represent a set (a line starts with $) defined in a parsed .CNF file
+ *
  * - Syntax: $<palette> [<xpos,ypos>...]
  * - Palette to use followed by a list of positions for each object declared in the CNF file that has been declared to be in this set.
  * - Traditionally, there are a maximum of 10 sets and most KiSS viewers adhere to this limit.
@@ -117,19 +121,26 @@ private:
     QList<ParsedCnfSetObjPos> m_objPosList;
 };
 
+
+/**
+ * Represent a parsed .CNF file.
+ */
 class ParsedCnf
 {
 public:
     /** fileName is the relative file name in archive file. */
     ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding encode);
+    ~ParsedCnf();
     QSize playFieldSize() const;
-    QList<ParsedCnfCel> cels() const;
-    QList<ParsedCnfSet> sets() const;
+    QList<ParsedCnfCel *> cels() const;
+    QList<ParsedCnfSet *> sets() const;
     /**
      * KCF file index is the index of a KCF in a CNF declaration (KCF files used by this CNF).
     */
     QString getKcfNameByKcfIndex(uint8_t kcfFileIndex);
     QStringList kcfFileNames() const;
+    /** KCF files amount used in this CNF */
+    size_t kcfFilesAmount() const;
     QString fileName() const;
 
 private:
@@ -170,8 +181,8 @@ private:
      * - This color is the index of a palette entry in palette #0 of the first KCF. The screen area outside of the play field is filled with this color.
      */
     u_int32_t m_outsideColor;
-    QList<ParsedCnfCel> m_cels;
-    QList<ParsedCnfSet> m_sets;
+    QList<ParsedCnfCel *> m_cels;
+    QList<ParsedCnfSet *> m_sets;
 };
 
 

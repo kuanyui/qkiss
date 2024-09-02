@@ -98,6 +98,14 @@ std::optional<ParsedCel *> ArchivedFile::getParsedCel(QString celFileName) const
     return std::nullopt;
 }
 
+std::optional<ParsedKcf *> ArchivedFile::getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf)
+{
+    if (kcfIndexInCurrentCnf >= m_curCnfOrderedParsedKcfList.length()) {
+        return std::nullopt;
+    }
+    return m_curCnfOrderedParsedKcfList[kcfIndexInCurrentCnf];
+}
+
 std::optional<QByteArray> ArchivedFile::getOtherFile(QString fileName) const
 {
     if (m_caseSensitivity == QtKISS::Case::Insensitive) {
@@ -111,12 +119,23 @@ std::optional<QByteArray> ArchivedFile::getOtherFile(QString fileName) const
 
 bool ArchivedFile::setCurCnf(QString cnfFileName)
 {
-    auto cnf = getParsedCnf(cnfFileName);
-    if (!cnf.has_value()) {
+    auto _cnf = getParsedCnf(cnfFileName);
+    if (!_cnf.has_value()) {
         qCritical() << "[ERROR] Set current CNF failed; no CNF named " << cnfFileName << " in this archivedFile.";
         return false;
     }
-    m_curCnf = cnf.value();
+    m_curCnf = _cnf.value();
+    m_curCnfOrderedParsedKcfList.clear();
+    for (const QString &kcfFileName : m_curCnf->kcfFileNames()) {
+        auto _kcf = getParsedKcf(kcfFileName);
+        if (!_kcf.has_value()) {
+            qCritical() << QStringLiteral("[ERROR] CNF file '$1' wants KCF file '$2', but this KCF file is not found in this archived file.")
+                           .arg(m_curCnf->fileName())
+                           .arg(kcfFileName);
+            continue;
+        }
+        m_curCnfOrderedParsedKcfList.append(_kcf.value());
+    }
     m_curCnfSetNo = 0;
     return true;
 }
@@ -154,13 +173,13 @@ void ArchivedFile::onQProcessFinished()
         qDebug() << "read file: " << fileNameKey << "  -- from " << f.fileName();
         f.open(QIODevice::ReadOnly);
         QByteArray rawData = f.readAll();
-        if (fileNameKey.toUpper().endsWith(".CNF")) {
+        if (fileNameKey.endsWith(".CNF")) {
             // qDebug() << Encoding::toUtf8(rawData, "Shift_JIS");
             // qDebug() << QString::fromStdString( Encoding::toUtf8(rawData.toStdString(), "Shift_JIS") );
             m_parsedCnfFiles->insert(fileNameKey, new ParsedCnf {fileNameKey, rawData, QtKISS::Encoding::SJIS});
-        } else if (fileNameKey.toUpper().endsWith(".KCF")) {
+        } else if (fileNameKey.endsWith(".KCF")) {
             m_parsedKcfFiles->insert(fileNameKey, new ParsedKcf {fileNameKey, rawData});
-        } else if (fileNameKey.toUpper().endsWith(".CEL")) {
+        } else if (fileNameKey.endsWith(".CEL")) {
             m_parsedCelFiles->insert(fileNameKey, new ParsedCel {fileNameKey, rawData});
         } else {
             m_otherFiles->insert(fileNameKey, rawData);

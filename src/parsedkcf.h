@@ -11,6 +11,8 @@
 using ParsedKcfPalette = QVector<QRgb>;
 
 /**
+ * Represent a parsed .KCF file
+ *
  * https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html
  * https://otakuworld.com/kiss/kisshelp/DIRECTKISSKISS_General_Specification_KCF.htm
  *

@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QHash>
 #include <QTemporaryDir>
+#include <QVector>
 #include "parsedcnf.h"
 #include "parsedkcf.h"
 #include "parsedcel.h"
@@ -22,8 +23,12 @@ public:
     QStringList getOtherFileNameList();
     /** Auto handling case sensitivity. */
     std::optional<ParsedCnf *> getParsedCnf(QString cnfFileName) const;
+    /** Auto handling case sensitivity. */
     std::optional<ParsedKcf *> getParsedKcf(QString kcfFileName) const;
+    /** Auto handling case sensitivity. */
     std::optional<ParsedCel *> getParsedCel(QString celFileName) const;
+    ParsedKcf *getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf);
+    /** Auto handling case sensitivity. */
     std::optional<QByteArray> getOtherFile(QString celFileName) const;
     bool setCurCnf(QString cnfFileName);
     ParsedCnf *curCnf() const;
@@ -50,6 +55,12 @@ private:
     // ==========================================
     /** currently renderred CNF */
     ParsedCnf *m_curCnf;
+    /**
+     * - A CNF file would specify the used KCF files as an ordered list.
+     * - In this CNF file, each CEL line would specify this CEL should be rendered with which KCF file.
+     * - This value is the ordered KCF files list used by the current CNF.
+    */
+    QVector<ParsedKcf*> m_curCnfOrderedParsedKcfList;
     /**
      *  - Range is 0-9. MAX is 9. Multiple lines starts with `$` in CNF, this value is the index of these lines.
      *  - '$'	セット情報（複数個指定可能）
