@@ -142,6 +142,7 @@ public:
     /** KCF files amount used in this CNF */
     size_t kcfFilesAmount() const;
     QString fileName() const;
+    uint32_t outsideBorderColor() const;
 
 private:
     void log(const QString &line);
@@ -179,6 +180,9 @@ private:
     /**
      * - Syntax: [<border color index>
      * - This color is the index of a palette entry in palette #0 of the first KCF. The screen area outside of the play field is filled with this color.
+     *
+     *       Example:
+     *       [12     ; Set border color to color at index 12 in palette #0.
      */
     u_int32_t m_outsideColor;
     QList<ParsedCnfCel *> m_cels;

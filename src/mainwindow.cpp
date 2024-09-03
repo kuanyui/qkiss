@@ -23,10 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
         if (item == nullptr) {
             statusBar()->clearMessage();
         } else {
-            statusBar()->showMessage(QString("File: %1, Pos: (%2, %3), Size: (%4 x %5), Fix: %6")
+            statusBar()->showMessage(QString("File: %1, Pos: (%2, %3), Size: (%4, %5), Fix: %6")
                                      .arg(item->celFileName())
-                                     .arg(-1)
-                                     .arg(-1)
+                                     .arg(item->cel()->x())
+                                     .arg(item->cel()->y())
                                      .arg(item->cel()->width())
                                      .arg(item->cel()->height())
                                      .arg(item->fix())

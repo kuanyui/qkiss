@@ -212,6 +212,11 @@ void ParsedCnf::startToParseSetLines()
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
 }
 
+uint32_t ParsedCnf::outsideBorderColor() const
+{
+    return m_outsideColor;
+}
+
 QString ParsedCnf::fileName() const
 {
     return m_fileName;

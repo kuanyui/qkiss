@@ -170,7 +170,7 @@ void ArchivedFile::onQProcessFinished()
         if (m_caseSensitivity == QtKISS::Case::Insensitive) {
             fileNameKey = fileNameKey.toUpper();
         }
-        qDebug() << "read file: " << fileNameKey << "  -- from " << f.fileName();
+        // qDebug() << "read file: " << fileNameKey << "  -- from " << f.fileName();
         f.open(QIODevice::ReadOnly);
         QByteArray rawData = f.readAll();
         if (fileNameKey.endsWith(".CNF")) {

@@ -31,7 +31,7 @@ void GKissItem::init()
 
 void GKissItem::rerenderImage()
 {
-    qDebug() << QString("[Item] generate image for CEL '%1'").arg(m_cnfCel->celFileName());
+    // qDebug() << QString("[Item] generate image for CEL '%1'").arg(m_cnfCel->celFileName());
     switch (m_cel->celType()) {
     case ParsedCel::Type::PaletteBased: return renderPaletteBasedImage();
     case ParsedCel::Type::ColorBased: return renderColorBasedImage();

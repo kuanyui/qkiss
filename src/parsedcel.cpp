@@ -1,5 +1,6 @@
 #include "parsedcel.h"
 #include <QDebug>
+using namespace Qt::Literals::StringLiterals;
 
 ParsedCel::ParsedCel(QString fileName, QByteArray rawData):
     m_fileName(fileName)
@@ -34,7 +35,6 @@ QVector<QRgb> *ParsedCel::getColorBasedPixels() const
 
 void ParsedCel::parseModernCel(QByteArray data)
 {
-    qDebug() << "[LOG] Parse Moden CEL file";
     switch (data[4]) {
     case 0x20: m_celType = Type::PaletteBased; break;
     case 0x21: m_celType = Type::ColorBased; break;
@@ -54,11 +54,18 @@ void ParsedCel::parseModernCel(QByteArray data)
     case 8: m_cachedPaletteBasedPixels = new QVector<uint8_t>(pixelRawData.begin(), pixelRawData.end()); break;
     case 32: m_cachedColorBasedPixels = parse32BitsPixelsAsCache(&pixelRawData); break;
     }
+    qDebug() << QStringLiteral("[LOG][ParsedCel] (%1)     %2    pos(%3, %4) size(%5, %6)")
+                .arg(m_celType == Type::PaletteBased ? "Palette Based"_L1 : "Full Color"_L1)
+                .arg(m_fileName)
+                .arg(m_x)
+                .arg(m_y)
+                .arg(width())
+                .arg(height())
+                ;
 }
 
 void ParsedCel::parseLegacyCel(QByteArray data)
 {
-    qDebug() << "[LOG] Parse Legacy CEL file";
     m_bitsPerPixel = 4;
     m_width = (static_cast<uint16_t>(data[1]) << 8) | data[0];
     m_height = (static_cast<uint16_t>(data[3]) << 8) | data[2];
