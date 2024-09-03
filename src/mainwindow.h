@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QComboBox>
 #include <QToolBar>
+#include "archivedfile.h"
+#include "gkissview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,5 +30,7 @@ private:
     QToolBar *m_toolbarPageSets;
     QToolBar *m_toolbarColorSets;
     QComboBox *m_cboxZoomScale;
+    ArchivedFile *m_archivedFile;
+    GKissView *m_kissView;
 };
 #endif // MAINWINDOW_H

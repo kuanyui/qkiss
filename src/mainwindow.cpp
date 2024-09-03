@@ -3,18 +3,23 @@
 #include <QToolButton>
 #include <QString>
 #include <QLabel>
-#include "./archivedfile.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     setupToolBars();
     qDebug() << ArchivedFile::checkLhaCommandAvailability();
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
-    ArchivedFile *af = new ArchivedFile{this};
-    af->loadLzh("samples/MIO_H/frkismi4.lzh", QtKISS::Case::Insensitive);
+    m_archivedFile = new ArchivedFile{this};
+    m_archivedFile->loadLzh("samples/MIO_H/frkismi4.lzh", QtKISS::Case::Insensitive);
+    m_kissView = new GKissView(this);
+    m_kissView->setArchivedFile(m_archivedFile);
+    connect(m_archivedFile, &ArchivedFile::archivedFilesParseFinished, [=]() {
+        m_kissView->setCurCnf(m_archivedFile->getCnfNameList().first());
+    });
+    setCentralWidget(m_kissView);
 }
 
 MainWindow::~MainWindow()

@@ -23,7 +23,7 @@ public:
     };
     ParsedCel(QString fileName, QByteArray rawData);
     std::unique_ptr<QVector<QRgb> > getColorizedPaletteBasedPixels(ParsedKcf &kcf, int paletteIdx) const;  // REFACTOR: const reference
-    QVector<QRgb> *getColoriBasedPixels() const;
+    QVector<QRgb> *getColorBasedPixels() const;
     QRect getGeometry() const;
     /** 4 / 8 / 32 */
     uint8_t bitsPerPixel() const;

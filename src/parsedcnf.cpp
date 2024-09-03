@@ -157,9 +157,13 @@ void ParsedCnf::parseLines(const QStringList &lines)
         }
         m_lineIdx++;
     }
-    for (ParsedCnfSet *set : m_sets) {
+    for (int i = 0; i< m_sets.length(); i++) {
+        ParsedCnfSet *set = m_sets[i];
         // qDebug() << "===================================================================";
-        qDebug() << "SET WITH PALETTE:" << set->paletteNoInKcf() << " Object Count:" << set->getObjPosList().length();
+        qDebug() << QStringLiteral("[CNF] Set %1: Palette no: %2, Objects amounts: %3")
+                    .arg(i)
+                    .arg(set->paletteNoInKcf())
+                    .arg(set->getObjPosList().length());
         // qDebug() << "===================================================================";
         // for (auto pos : set.getObjPosList()) {
         //     if (pos.has_value()) {

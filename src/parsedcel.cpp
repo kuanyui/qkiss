@@ -15,8 +15,8 @@ ParsedCel::ParsedCel(QString fileName, QByteArray rawData):
 std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedPixels(ParsedKcf &kcf, int paletteIdx) const
 {
     QVector<QRgb> &palette = *kcf.getPaletteInKcf(paletteIdx);
-    std::unique_ptr<QVector<QRgb>> colorizedPixels = std::make_unique<QVector<QRgb>>(m_cachedColorBasedPixels->length());
-    for (uint16_t colorNo: *m_cachedColorBasedPixels) {
+    std::unique_ptr<QVector<QRgb>> colorizedPixels = std::make_unique<QVector<QRgb>>(m_cachedPaletteBasedPixels->length());
+    for (uint16_t colorNo: *m_cachedPaletteBasedPixels) {
         // (palette-based) a color in a palette is indexed from 1. if a pixel of a CEL is 0, it's transparent.
         if (colorNo == 0) {  // means transparent
             colorizedPixels->append(qRgba(0, 0, 0, 0));
@@ -25,6 +25,11 @@ std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedPixels(ParsedK
         }
     }
     return colorizedPixels;
+}
+
+QVector<QRgb> *ParsedCel::getColorBasedPixels() const
+{
+    return m_cachedColorBasedPixels;
 }
 
 void ParsedCel::parseModernCel(QByteArray data)

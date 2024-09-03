@@ -27,7 +27,7 @@ public:
     std::optional<ParsedKcf *> getParsedKcf(QString kcfFileName) const;
     /** Auto handling case sensitivity. */
     std::optional<ParsedCel *> getParsedCel(QString celFileName) const;
-    ParsedKcf *getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf);
+    std::optional<ParsedKcf *>getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf);
     /** Auto handling case sensitivity. */
     std::optional<QByteArray> getOtherFile(QString celFileName) const;
     bool setCurCnf(QString cnfFileName);
@@ -42,6 +42,7 @@ private slots:
     void onQProcessFinished();
 signals:
     void newLogLine(QString line);
+    void archivedFilesParseFinished(bool success);
     // void curCnfSetNoChanged(uint8_t nv);
 private:
     QtKISS::Case m_caseSensitivity;

@@ -129,7 +129,7 @@ bool ArchivedFile::setCurCnf(QString cnfFileName)
     for (const QString &kcfFileName : m_curCnf->kcfFileNames()) {
         auto _kcf = getParsedKcf(kcfFileName);
         if (!_kcf.has_value()) {
-            qCritical() << QStringLiteral("[ERROR] CNF file '$1' wants KCF file '$2', but this KCF file is not found in this archived file.")
+            qCritical() << QStringLiteral("[ERROR] CNF file '%1' wants KCF file '%2', but this KCF file is not found in this archived file.")
                            .arg(m_curCnf->fileName())
                            .arg(kcfFileName);
             continue;
@@ -191,6 +191,7 @@ void ArchivedFile::onQProcessFinished()
     m_curCnfSetNo = 0;
     m_curPaletteNo = 0;
     delete m_tmpDir;
+    emit archivedFilesParseFinished(true);
 }
 
 uint8_t ArchivedFile::curPaletteNo() const
