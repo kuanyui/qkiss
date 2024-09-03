@@ -139,14 +139,13 @@ void ParsedCnf::parseLines(const QStringList &lines)
             }
 
             QString comment = m.captured(6).trimmed();
-            log(QString("{ objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: [%5], comment: %6 }")
+            qDebug() << QString("[LOG][ParsedCnf] { objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: [%5], comment: %6 }")
                 .arg(objId)
                 .arg(fix)
                 .arg(celFileName)
                 .arg(kcfFileIndex)
                 .arg(setIndexesStrList.join(","))
-                .arg(comment)
-                );
+                .arg(comment);
             ParsedCnfCel *cnfCel = new ParsedCnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes};
             m_cels.append(cnfCel);
         } else if (line.startsWith("$"_L1)) {
@@ -160,7 +159,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
     for (int i = 0; i< m_sets.length(); i++) {
         ParsedCnfSet *set = m_sets[i];
         // qDebug() << "===================================================================";
-        qDebug() << QStringLiteral("[CNF] Set %1: Palette no: %2, Objects amounts: %3")
+        qDebug() << QStringLiteral("[LOG][ParsedCnf] Set %1: Palette no: %2, Objects amounts: %3")
                     .arg(i)
                     .arg(set->paletteNoInKcf())
                     .arg(set->getObjPosList().length());

@@ -54,8 +54,9 @@ void ParsedCel::parseModernCel(QByteArray data)
     case 8: m_cachedPaletteBasedPixels = new QVector<uint8_t>(pixelRawData.begin(), pixelRawData.end()); break;
     case 32: m_cachedColorBasedPixels = parse32BitsPixelsAsCache(&pixelRawData); break;
     }
-    qDebug() << QStringLiteral("[LOG][ParsedCel] (%1)     %2    pos(%3, %4) size(%5, %6)")
+    qDebug() << QStringLiteral("[LOG][ParsedCel] (%1, %2 bits)     %3    pos(%4, %5)     size(%6, %7)")
                 .arg(m_celType == Type::PaletteBased ? "Palette Based"_L1 : "Full Color"_L1)
+                .arg(m_bitsPerPixel)
                 .arg(m_fileName)
                 .arg(m_x)
                 .arg(m_y)
