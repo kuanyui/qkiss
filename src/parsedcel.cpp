@@ -35,19 +35,20 @@ QVector<QRgb> *ParsedCel::getColorBasedPixels() const
 
 void ParsedCel::parseModernCel(QByteArray data)
 {
+    const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     switch (data[4]) {
     case 0x20: m_celType = Type::PaletteBased; break;
     case 0x21: m_celType = Type::ColorBased; break;
     default: qCritical() << "[ERROR] Not a valid CEL file mark!"; return;
     }
-    m_bitsPerPixel = data[5];
+    m_bitsPerPixel = udata[5];
     if (m_bitsPerPixel != 4 && m_bitsPerPixel != 8 && m_bitsPerPixel != 32) {
         qCritical() << "[ERROR] Invalid m_bitsPerPixel (4 or 8 or 32): " << m_bitsPerPixel; return;
     }
-    m_width = (static_cast<uint16_t>(data[9]) << 8) | data[8];
-    m_height = (static_cast<uint16_t>(data[11]) << 8) | data[10];
-    m_x = (static_cast<uint16_t>(data[13]) << 8) | data[12];
-    m_y = (static_cast<uint16_t>(data[15]) << 8) | data[14];
+    m_width = (static_cast<uint16_t>(udata[9]) << 8) | udata[8];
+    m_height = (static_cast<uint16_t>(udata[11]) << 8) | udata[10];
+    m_x = (static_cast<uint16_t>(udata[13]) << 8) | udata[12];
+    m_y = (static_cast<uint16_t>(udata[15]) << 8) | udata[14];
     QByteArray pixelRawData = data.mid(32);
     switch (m_bitsPerPixel) {
     case 4: m_cachedPaletteBasedPixels = parse4BitsPixelsAsCache(&pixelRawData); break;

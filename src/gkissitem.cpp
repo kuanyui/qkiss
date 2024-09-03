@@ -31,7 +31,13 @@ void GKissItem::init()
 
 void GKissItem::rerenderImage()
 {
-    // qDebug() << QString("[Item] generate image for CEL '%1'").arg(m_cnfCel->celFileName());
+    // qDebug() << QStringLiteral("[Item] generate image for CEL '%1' size(%2, %3)  pos(%4, %5)")
+    //             .arg(m_cnfCel->celFileName())
+    //             .arg(m_cel->width())
+    //             .arg(m_cel->height())
+    //             .arg(m_cel->x())
+    //             .arg(m_cel->y())
+    //             ;
     switch (m_cel->celType()) {
     case ParsedCel::Type::PaletteBased: return renderPaletteBasedImage();
     case ParsedCel::Type::ColorBased: return renderColorBasedImage();
