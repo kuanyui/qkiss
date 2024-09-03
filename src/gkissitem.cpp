@@ -47,15 +47,15 @@ void GKissItem::rerenderImage()
 
 void GKissItem::renderPaletteBasedImage()
 {
-    ParsedKcfPalette *palette = m_kcf->getPaletteInKcf(m_paletteNoInKcf);
-    std::unique_ptr<QVector<QRgb>> celPixelsData = m_cel->getColorizedPaletteBasedPixels(*m_kcf, m_paletteNoInKcf);
+    std::unique_ptr<QVector<QRgb>> celColorizedPixelsData = m_cel->getColorizedPaletteBasedCelPixels(*m_kcf, m_paletteNoInKcf);
+    m_image->fill(Qt::red);
     uint32_t i = 0;
     if (m_cel->celType() == ParsedCel::Type::PaletteBased) {
         for (int y = 0; y < m_cel->height(); ++y) {
             QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
             for (int x = 0; x < m_cel->width(); ++x) {
-                line[x] = (*celPixelsData)[i++];
-                if (i == celPixelsData->length() - 1) {
+                line[x] = celColorizedPixelsData->at(i++);
+                if (i == celColorizedPixelsData->length() - 1) {
                     qCritical() << "[WARNING][Item] %1: This should not happened."_L1.arg(m_cnfCel->celFileName());
                     goto end;
                 }

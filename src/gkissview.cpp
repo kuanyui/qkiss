@@ -63,13 +63,8 @@ bool GKissView::renderCurCnfAllSets()
     QStringList kcfFileNamesInCnf = cnf->kcfFileNames();
     for (ParsedCnfSet *cnfSet : cnf->sets()) {
         GKissScene *scene = new GKissScene(0 ,0, cnf->playFieldSize().width(), cnf->playFieldSize().height(), this);
-        m_scenes.append(scene);
-        // Create play field rect bg
         scene->drawBackaground(m_archivedFile, cnfSet);
-        // auto r = cnf->playFieldSize();
-        // QGraphicsRectItem *playRect = new QGraphicsRectItem(0, 0, r.width(), r.height());
-        // playRect->setBrush(QBrush());
-        // scene->addItem(playRect);
+        m_scenes.append(scene);
         // Create cels
         for (int celIdx = cnf->cels().length() - 1; celIdx >= 0; celIdx--) {
             ParsedCnfCel *cnfCel = cnf->cels()[celIdx];
@@ -95,9 +90,12 @@ bool GKissView::renderCurCnfAllSets()
             } else if (cel->celType() == ParsedCel::Type::ColorBased) {
                 item = new GKissItem(cnfCel, cel);
             }
-            // item->setPos(250, 250);
+            item->setPos(cel->x(), cel->y());
             scene->addItem(item);
+            centerOn(item);
+            qDebug() << "[DEBUG][View] addItem" << item->celFileName() << item->pos() << item->boundingRect() << item->isVisible() << scene->items().contains(item);
         }
+        qDebug() << "[DEBUG][View] scene.items().length() ==" << scene->items().length();
     }
     return showSceneByIndex(0);
 }

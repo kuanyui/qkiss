@@ -15,6 +15,7 @@ GKissScene::GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *par
 
 void GKissScene::drawBackaground(ArchivedFile *archivedFile, ParsedCnfSet *cnfSet)
 {
+    // return;
     auto _firstKcf = archivedFile->getParsedKcfByOrderedIndexInCurrentCnf(0);
     if (!_firstKcf.has_value()) {
         qCritical() << "[ERROR][Scene] No CKF found in this CNF, abort.";
