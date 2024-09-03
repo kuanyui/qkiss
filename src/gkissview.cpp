@@ -65,10 +65,7 @@ bool GKissView::renderCurCnfAllSets()
         GKissScene *scene = new GKissScene(0 ,0, cnf->playFieldSize().width(), cnf->playFieldSize().height(), this);
         m_scenes.append(scene);
         // Create play field rect bg
-        ParsedKcf *firstKcf = m_archivedFile->getParsedKcfByOrderedIndexInCurrentCnf(0).value();  // TODO: nullity check
-        ParsedKcfPalette *firstPalette = firstKcf->getPaletteInKcf(m_archivedFile->curPaletteNo()); // TODO: nullity checking
-        QRgb borderColor = (*firstPalette)[cnf->outsideBorderColor()];  // TODO: nullity checking
-        scene->setBackgroundBrush(QBrush(borderColor));
+        scene->drawBackaground(m_archivedFile, cnfSet);
         // auto r = cnf->playFieldSize();
         // QGraphicsRectItem *playRect = new QGraphicsRectItem(0, 0, r.width(), r.height());
         // playRect->setBrush(QBrush());

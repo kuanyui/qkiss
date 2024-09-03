@@ -9,7 +9,7 @@ class GKissScene : public QGraphicsScene
 public:
     explicit GKissScene (QObject *parent = nullptr);
     explicit GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
-
+    void drawBackaground(ArchivedFile *archivedFile, ParsedCnfSet *cnfSet);
 private:
 
 };
