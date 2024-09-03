@@ -4,6 +4,8 @@
 #include "parsedkcf.h"
 #include "parsedcel.h"
 #include <QString>
+#include <QMouseEvent>
+
 using namespace Qt::Literals::StringLiterals;
 
 GKissView::GKissView(QWidget *parent):
@@ -91,4 +93,24 @@ bool GKissView::renderCurCnfAllSets()
         }
     }
     return showSceneByIndex(0);
+}
+
+void GKissView::mouseMoveEvent(QMouseEvent *event)
+{
+    QPointF scenePos = mapToScene(event->pos());
+    QGraphicsItem *curItemRaw = scene()->itemAt(scenePos, QTransform());
+    if (curItemRaw == m_curHoveredItem) {
+        return;
+    }
+    if (curItemRaw == nullptr) {
+        emit hoveredItemChanged(nullptr);
+        return;
+    }
+    if (curItemRaw->type() == GKissItem::Type) {
+        GKissItem *curItem = static_cast<GKissItem *>(curItemRaw);
+        m_curHoveredItem = curItem;
+        emit hoveredItemChanged(curItem);
+    }
+    // 繼續處理其他滑鼠事件
+    QGraphicsView::mouseMoveEvent(event);
 }

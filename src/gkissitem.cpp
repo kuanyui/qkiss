@@ -9,9 +9,7 @@ GKissItem::GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, ParsedKcf *kcf, uint1
     m_kcf(kcf),
     m_paletteNoInKcf(paletteNoInKcf)
 {
-    m_image = new QImage(cel->width(), cel->height(), QImage::Format_ARGB32);
-    rerenderImage();
-    m_fix = m_cnfCel->fix();
+    init();
 }
 
 GKissItem::GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, QGraphicsItem *parent):
@@ -19,10 +17,17 @@ GKissItem::GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, QGraphicsItem *parent
     m_cnfCel(cnfCel),
     m_cel(cel)
 {
-    m_image = new QImage(cel->width(), cel->height(), QImage::Format_ARGB32);
+    init();
+}
+
+void GKissItem::init()
+{
+    setAcceptHoverEvents(true);
+    m_image = new QImage(m_cel->width(), m_cel->height(), QImage::Format_ARGB32);
     rerenderImage();
     m_fix = m_cnfCel->fix();
 }
+
 
 void GKissItem::rerenderImage()
 {
@@ -76,8 +81,34 @@ void GKissItem::renderColorBasedImage()
     setPixmap(QPixmap::fromImage(*m_image));
 }
 
+ParsedCnfCel *GKissItem::cnfCel() const
+{
+    return m_cnfCel;
+}
+
+ParsedCel *GKissItem::cel() const
+{
+    return m_cel;
+}
+
 void GKissItem::setPaletteNoInKcf(uint8_t newPaletteNoInKcf)
 {
     m_paletteNoInKcf = newPaletteNoInKcf;
     rerenderImage();
 }
+
+int32_t GKissItem::objId() const
+{
+    return m_cnfCel->objId();
+}
+
+QString GKissItem::celFileName() const
+{
+    return m_cnfCel->celFileName();
+}
+
+int32_t GKissItem::fix() const
+{
+    return m_fix;
+}
+

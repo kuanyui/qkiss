@@ -19,6 +19,20 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_archivedFile, &ArchivedFile::archivedFilesParseFinished, [=]() {
         m_kissView->setCurCnf(m_archivedFile->getCnfNameList().first());
     });
+    connect(m_kissView, &GKissView::hoveredItemChanged, [=](GKissItem *item) {
+        if (item == nullptr) {
+            statusBar()->clearMessage();
+        } else {
+            statusBar()->showMessage(QString("File: %1, Pos: (%2, %3), Size: (%4 x %5), Fix: %6")
+                                     .arg(item->celFileName())
+                                     .arg(-1)
+                                     .arg(-1)
+                                     .arg(item->cel()->width())
+                                     .arg(item->cel()->height())
+                                     .arg(item->fix())
+                                     );
+        }
+    });
     setCentralWidget(m_kissView);
 }
 
