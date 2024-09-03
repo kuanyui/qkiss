@@ -38,7 +38,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
                     qCritical() << "[ERROR] Out of range palatte colors definition, byte offset:" << i; return;
                 }
                 uint8_t r = udata[i] >> 4;
-                uint8_t b = udata[i] & 0b1111;
+                uint8_t b = udata[i] & 0b00001111;
                 uint8_t g = udata[i+1];
                 QRgb color = qRgb(r<<4, g<<4, b<<4);
                 // qDebug() << "[12 bits]" << color;
@@ -56,8 +56,8 @@ void ParsedKcf::parseModernKcf(QByteArray data)
                     qCritical() << "[ERROR] Out of range palatte colors definition, byte offset:" << i; return;
                 }
                 uint8_t r = udata[i];
-                uint8_t b = udata[i+1];
-                uint8_t g = udata[i+2];
+                uint8_t g = udata[i+1];
+                uint8_t b = udata[i+2];
                 QRgb color = qRgb(r, g, b);
                 // qDebug() << "[24 bits]" << color;
                 palette.append(color);
