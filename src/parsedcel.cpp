@@ -13,16 +13,20 @@ ParsedCel::ParsedCel(QString fileName, QByteArray rawData):
     }
 }
 
-std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, int paletteIdx) const
+std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, int paletteIdxInKcf) const
 {
-    ParsedKcfPalette *paletteInKcf = kcf.getPaletteInKcf(paletteIdx);
+    ParsedKcfPalette *paletteInKcf = kcf.getPaletteInKcf(paletteIdxInKcf);
     std::unique_ptr<QVector<QRgb>> colorizedPixels = std::make_unique<QVector<QRgb>>(m_cachedPaletteBasedPixels->length());
-    for (uint16_t colorNo: *m_cachedPaletteBasedPixels) {
+    for (uint32_t i = 0; i < m_cachedPaletteBasedPixels->length(); i++) {
+        uint8_t colorNo = m_cachedPaletteBasedPixels->at(i);
         // (palette-based) a color in a palette is indexed from 1. if a pixel of a CEL is 0, it's transparent.
         if (colorNo == 0) {  // means transparent
             colorizedPixels->append(qRgba(0, 0, 0, 0));
         } else {
             colorizedPixels->append(paletteInKcf->at(colorNo));
+            if (true) {
+                qDebug() << "[VERBOSE] colorNo of pixel = " << colorNo << ", real color of pixel = " << paletteInKcf->at(colorNo);
+            }
         }
     }
     return colorizedPixels;
@@ -49,13 +53,13 @@ void ParsedCel::parseModernCel(QByteArray data)
     m_height = (static_cast<uint16_t>(udata[11]) << 8) | udata[10];
     m_x = (static_cast<uint16_t>(udata[13]) << 8) | udata[12];
     m_y = (static_cast<uint16_t>(udata[15]) << 8) | udata[14];
-    QByteArray pixelRawData = data.mid(32);
+    QByteArray pixelRawData = data.mid(32);  // OPTIMIZE: Don't use mid()
     switch (m_bitsPerPixel) {
     case 4: m_cachedPaletteBasedPixels = parse4BitsPixelsAsCache(&pixelRawData); break;
     case 8: m_cachedPaletteBasedPixels = new QVector<uint8_t>(pixelRawData.begin(), pixelRawData.end()); break;
     case 32: m_cachedColorBasedPixels = parse32BitsPixelsAsCache(&pixelRawData); break;
     }
-    qDebug() << QStringLiteral("[LOG][ParsedCel] (%1, %2 bits)     %3    pos(%4, %5)     size(%6, %7)")
+    qDebug() << QStringLiteral("[LOG][ParsedCel] (%1, %2 bits per pixel)     %3    pos(%4, %5)     size(%6, %7)")
                 .arg(m_celType == Type::PaletteBased ? "Palette Based"_L1 : "Full Color"_L1)
                 .arg(m_bitsPerPixel)
                 .arg(m_fileName)
@@ -68,10 +72,11 @@ void ParsedCel::parseModernCel(QByteArray data)
 
 void ParsedCel::parseLegacyCel(QByteArray data)
 {
+    const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     m_bitsPerPixel = 4;
-    m_width = (static_cast<uint16_t>(data[1]) << 8) | data[0];
-    m_height = (static_cast<uint16_t>(data[3]) << 8) | data[2];
-    QByteArray pixelRawData = data.mid(4);
+    m_width = (static_cast<uint16_t>(udata[1]) << 8) | udata[0];
+    m_height = (static_cast<uint16_t>(udata[3]) << 8) | udata[2];
+    QByteArray pixelRawData = data.mid(4);  // OPTIMIZE: Don't use mid()
     m_cachedPaletteBasedPixels = parse4BitsPixelsAsCache(&pixelRawData);
 }
 
@@ -107,9 +112,9 @@ uint8_t ParsedCel::bitsPerPixel() const
 
 QVector<uint8_t> *ParsedCel::parse4BitsPixelsAsCache(QByteArray *pixelRawData)
 {
-    QVector<uint8_t> *vec = new QVector<uint8_t>;
-    vec->reserve(pixelRawData->length() * 2);
-    for (uint8_t x: *pixelRawData) {
+    QVector<uint8_t> *vec = new QVector<uint8_t>(pixelRawData->length() * 2);
+    for (qsizetype i = 0; i < pixelRawData->length(); i++) {
+        uint8_t x = static_cast<uint8_t>(vec->at(i));
         vec->append(x >> 4);
         vec->append(x & 0b00001111);
     }
@@ -122,10 +127,10 @@ QVector<QRgb> *ParsedCel::parse32BitsPixelsAsCache(QByteArray *pixelRawData)
     QVector<QRgb> *vec = new QVector<QRgb>(pxCount);
     for (uint32_t i = 0; i < pxCount; i++) {
         uint32_t offset = i * 4;
-        uint32_t b = (*pixelRawData)[offset+0];
-        uint32_t g = (*pixelRawData)[offset+1];
-        uint32_t r = (*pixelRawData)[offset+2];
-        uint32_t a = (*pixelRawData)[offset+3];
+        uint32_t b = static_cast<uint32_t>(static_cast<uint8_t>(pixelRawData->at(offset+0)));
+        uint32_t g = static_cast<uint32_t>(static_cast<uint8_t>(pixelRawData->at(offset+1)));
+        uint32_t r = static_cast<uint32_t>(static_cast<uint8_t>(pixelRawData->at(offset+2)));
+        uint32_t a = static_cast<uint32_t>(static_cast<uint8_t>(pixelRawData->at(offset+3)));
         QRgb color =
                 (a << 24) |
                 (r << 16) |

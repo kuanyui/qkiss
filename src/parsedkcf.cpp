@@ -65,6 +65,11 @@ void ParsedKcf::parseModernKcf(QByteArray data)
             m_palettesList.append(palette);
         }
     }
+    qDebug() << QStringLiteral("[LOG][ParsedKcf] (Modern KCF, %1 bits per color)     %2     %3 palettes    %4 colors per palette")
+                .arg(m_bitsPerColor)
+                .arg(m_fileName)
+                .arg(m_paletteAmounts)
+                .arg(m_colorAmountsInOnePalette);
 }
 
 void ParsedKcf::parseLegacyKcf(QByteArray data)
