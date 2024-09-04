@@ -37,7 +37,7 @@ private:
     void parseModernCel(QByteArray data);
     void parseLegacyCel(QByteArray data);
     /** Palette Based, NOT colorized yet. (4 bits) */
-    static QVector<uint8_t> *parse4BitsPixelsAsCache(QByteArray *pixelRawData);  // REFACTOR: Use reference instead?
+    static QVector<uint8_t> *parse4BitsPixelsAsCache(QByteArray *pixelRawData, size_t celWidth);  // REFACTOR: Use reference instead?
     /** 32 bits full-color (rgba) */
     static QVector<QRgb> *parse32BitsPixelsAsCache(QByteArray *pixelRawData);   // REFACTOR: Use reference instead?
 

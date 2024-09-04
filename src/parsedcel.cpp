@@ -56,7 +56,7 @@ void ParsedCel::parseModernCel(QByteArray data)
     m_y = (static_cast<uint16_t>(udata[15]) << 8) | udata[14];
     QByteArray pixelRawData = data.mid(32);  // OPTIMIZE: Don't use mid()
     switch (m_bitsPerPixel) {
-    case 4: m_cachedPaletteBasedPixels = parse4BitsPixelsAsCache(&pixelRawData); break;
+    case 4: m_cachedPaletteBasedPixels = parse4BitsPixelsAsCache(&pixelRawData, m_width); break;
     case 8: m_cachedPaletteBasedPixels = new QVector<uint8_t>(pixelRawData.begin(), pixelRawData.end()); break;
     case 32: m_cachedColorBasedPixels = parse32BitsPixelsAsCache(&pixelRawData); break;
     }
@@ -78,7 +78,7 @@ void ParsedCel::parseLegacyCel(QByteArray data)
     m_width = (static_cast<uint16_t>(udata[1]) << 8) | udata[0];
     m_height = (static_cast<uint16_t>(udata[3]) << 8) | udata[2];
     QByteArray pixelRawData = data.mid(4);  // OPTIMIZE: Don't use mid()
-    m_cachedPaletteBasedPixels = parse4BitsPixelsAsCache(&pixelRawData);
+    m_cachedPaletteBasedPixels = parse4BitsPixelsAsCache(&pixelRawData, m_width);
 }
 
 uint16_t ParsedCel::height() const
@@ -111,14 +111,29 @@ uint8_t ParsedCel::bitsPerPixel() const
     return m_bitsPerPixel;
 }
 
-QVector<uint8_t> *ParsedCel::parse4BitsPixelsAsCache(QByteArray *pixelRawData)
+QVector<uint8_t> *ParsedCel::parse4BitsPixelsAsCache(QByteArray *pixelRawData, size_t celWidth)
 {
+    bool widthIsOdd = (celWidth % 2 == 1);
     QVector<uint8_t> *vec = new QVector<uint8_t>();
     vec->reserve(pixelRawData->length() * 2);
-    for (qsizetype i = 0; i < pixelRawData->length(); i++) {
-        uint8_t x = static_cast<uint8_t>(pixelRawData->at(i));
-        vec->append(x >> 4);
-        vec->append(x & 0b00001111);
+    if (widthIsOdd) {
+        // ｘ方向幅が奇数のときは最後に１ピクセル分、０が追加されます。
+        uint16_t widthMaxIdx = celWidth;
+        for (qsizetype byteIdx = 0, curHoriPixelIdx = 1; byteIdx < pixelRawData->length(); byteIdx++, curHoriPixelIdx+=2) {
+            uint8_t rawByte = static_cast<uint8_t>(pixelRawData->at(byteIdx));
+            vec->append(rawByte >> 4);
+            if (curHoriPixelIdx != widthMaxIdx) {
+                vec->append(rawByte & 0b00001111);
+            } else {
+                curHoriPixelIdx = 1;
+            }
+        }
+    } else {
+       for (qsizetype i = 0; i < pixelRawData->length(); i++) {
+            uint8_t x = static_cast<uint8_t>(pixelRawData->at(i));
+            vec->append(x >> 4);
+            vec->append(x & 0b00001111);
+        }
     }
     return vec;
 }
