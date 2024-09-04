@@ -16,7 +16,8 @@ ParsedCel::ParsedCel(QString fileName, QByteArray rawData):
 std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, int paletteIdxInKcf) const
 {
     ParsedKcfPalette *paletteInKcf = kcf.getPaletteInKcf(paletteIdxInKcf);
-    std::unique_ptr<QVector<QRgb>> colorizedPixels = std::make_unique<QVector<QRgb>>(m_cachedPaletteBasedPixels->length());
+    std::unique_ptr<QVector<QRgb>> colorizedPixels = std::make_unique<QVector<QRgb>>();
+    colorizedPixels->reserve(m_cachedPaletteBasedPixels->length());
     for (uint32_t i = 0; i < m_cachedPaletteBasedPixels->length(); i++) {
         uint8_t colorNo = m_cachedPaletteBasedPixels->at(i);
         // (palette-based) a color in a palette is indexed from 1. if a pixel of a CEL is 0, it's transparent.
@@ -24,9 +25,9 @@ std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(Pars
             colorizedPixels->append(qRgba(0, 0, 0, 0));
         } else {
             colorizedPixels->append(paletteInKcf->at(colorNo));
-            if (true) {
-                qDebug() << "[VERBOSE] colorNo of pixel = " << colorNo << ", real color of pixel = " << paletteInKcf->at(colorNo);
-            }
+            // if (true) {
+            //     qDebug() << "[VERBOSE] colorNo of pixel = " << colorNo << ", real color of pixel = " << paletteInKcf->at(colorNo);
+            // }
         }
     }
     return colorizedPixels;
@@ -112,9 +113,10 @@ uint8_t ParsedCel::bitsPerPixel() const
 
 QVector<uint8_t> *ParsedCel::parse4BitsPixelsAsCache(QByteArray *pixelRawData)
 {
-    QVector<uint8_t> *vec = new QVector<uint8_t>(pixelRawData->length() * 2);
+    QVector<uint8_t> *vec = new QVector<uint8_t>();
+    vec->reserve(pixelRawData->length() * 2);
     for (qsizetype i = 0; i < pixelRawData->length(); i++) {
-        uint8_t x = static_cast<uint8_t>(vec->at(i));
+        uint8_t x = static_cast<uint8_t>(pixelRawData->at(i));
         vec->append(x >> 4);
         vec->append(x & 0b00001111);
     }
@@ -124,7 +126,8 @@ QVector<uint8_t> *ParsedCel::parse4BitsPixelsAsCache(QByteArray *pixelRawData)
 QVector<QRgb> *ParsedCel::parse32BitsPixelsAsCache(QByteArray *pixelRawData)
 {
     qsizetype pxCount = pixelRawData->length() / 4;
-    QVector<QRgb> *vec = new QVector<QRgb>(pxCount);
+    QVector<QRgb> *vec = new QVector<QRgb>();
+    vec->reserve(pxCount);
     for (uint32_t i = 0; i < pxCount; i++) {
         uint32_t offset = i * 4;
         uint32_t b = static_cast<uint32_t>(static_cast<uint8_t>(pixelRawData->at(offset+0)));
