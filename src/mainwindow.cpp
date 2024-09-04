@@ -19,21 +19,29 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_archivedFile, &ArchivedFile::archivedFilesParseFinished, [=]() {
         m_kissView->setCurCnf(m_archivedFile->getCnfNameList().first());
     });
-    connect(m_kissView, &GKissView::hoveredItemChanged, [=](GKissItem *item) {
+    connect(m_kissView, &GKissView::hoveredItemChanged, [=](GKissItem *item, GKissScene *scene) {
         if (item == nullptr) {
             statusBar()->clearMessage();
         } else {
-            statusBar()->showMessage(QString("File: %1, Pos: (%2, %3), Size: (%4, %5), Fix: %6")
+            QStringList itemsOfObj;
+            for (auto item : *scene->getItemsByObjId(item->objId())) {
+                itemsOfObj.append(item->celFileName());
+            }
+            statusBar()->showMessage(QString("File: %1, ObjId: %2, Pos: (%3, %4), Size: (%5, %6), Fix: %7      Object items (%8): [ %9 ]")
                                      .arg(item->celFileName())
+                                     .arg(item->objId())
                                      .arg(item->cel()->x())
                                      .arg(item->cel()->y())
                                      .arg(item->cel()->width())
                                      .arg(item->cel()->height())
                                      .arg(item->fix())
+                                     .arg(itemsOfObj.length())
+                                     .arg(itemsOfObj.join(", "))
                                      );
         }
     });
     setCentralWidget(m_kissView);
+    resize(920, 560);
 }
 
 MainWindow::~MainWindow()

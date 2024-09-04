@@ -105,6 +105,7 @@ public:
     void appendEmptyObjPos();
     int32_t paletteNoInKcf() const;
     const QList<ParsedCnfSetObjPos> &getObjPosList() const;
+    const ParsedCnfSetObjPos getObjPosByObjId(int32_t objId) const;
 private:
     /**
      * - Initial palette for the set. This is the number of a palette within a KCF.

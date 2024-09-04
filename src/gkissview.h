@@ -17,17 +17,21 @@ public:
     bool setArchivedFile(ArchivedFile *archivedFile);
     bool setCurCnf(QString cnfFileName);
     bool showSceneByIndex(uint8_t setIndex);
+    GKissScene *curScene();
     /** create scenes & items according to current CNF. */
     bool renderCurCnfAllSets();
     // bool renderCurCnfSet(uint8_t setNo);
+    void bindItemsToObjects(GKissScene *scene, ParsedCnfSet *cnfSet);
+
 signals:
-    void hoveredItemChanged(GKissItem *item);
+    void hoveredItemChanged(GKissItem *item, GKissScene *scene);
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
 private:
     ArchivedFile *m_archivedFile;
     QVector<GKissScene *> m_scenes;
-    GKissItem *m_curHoveredItem;
+    uint8_t m_curSceneIdx = 0;
+    GKissItem *m_curHoveredCelItem;
 };
 
 #endif // GKISSVIEW_H

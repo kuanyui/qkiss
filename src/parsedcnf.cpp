@@ -70,6 +70,14 @@ const QList<ParsedCnfSetObjPos> &ParsedCnfSet::getObjPosList() const
     return m_objPosList;
 }
 
+const ParsedCnfSetObjPos ParsedCnfSet::getObjPosByObjId(int32_t objId) const
+{
+    if (objId >= m_objPosList.length()) {
+        return std::nullopt;
+    }
+    return m_objPosList[objId];
+}
+
 
 
 ParsedCnf::ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding encode):

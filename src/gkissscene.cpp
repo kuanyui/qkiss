@@ -13,6 +13,13 @@ GKissScene::GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *par
 
 }
 
+GKissScene::~GKissScene()
+{
+    for (QVector<GKissItem*> *vec : m_objIdToItemsMap.values()) {
+        delete vec;
+    }
+}
+
 void GKissScene::drawBackaground(ArchivedFile *archivedFile, ParsedCnfSet *cnfSet)
 {
     // return;
@@ -39,5 +46,23 @@ void GKissScene::drawBackaground(ArchivedFile *archivedFile, ParsedCnfSet *cnfSe
     QRgb playFieldColor = (*paletteOfCnfSet)[0];
     QColor playFieldBorderColor = QColor(playFieldColor).darker(130);
     this->addRect(this->sceneRect(), QPen(playFieldBorderColor), QBrush(playFieldColor));
+}
+
+void GKissScene::addCelItem(GKissItem *item)
+{
+    addItem(item);
+    if (m_objIdToItemsMap.contains(item->objId())) {
+        QVector<GKissItem*> * itemsOfObj = m_objIdToItemsMap[item->objId()];
+        itemsOfObj->append(item);
+    } else {
+        QVector<GKissItem*> * itemsOfObj = new QVector<GKissItem*>;
+        itemsOfObj->append(item);
+        m_objIdToItemsMap.insert(item->objId(), itemsOfObj);
+    }
+}
+
+QVector<GKissItem *> *GKissScene::getItemsByObjId(int32_t objId)
+{
+    return m_objIdToItemsMap.value(objId);
 }
 

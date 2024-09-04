@@ -49,11 +49,18 @@ bool GKissView::showSceneByIndex(uint8_t setIndex)
         return false;
     }
     if (setIndex >= m_scenes.length()) {
+        m_curSceneIdx = 0;
         setScene(m_scenes[0]);
         return false;
     }
+    m_curSceneIdx = setIndex;
     setScene(m_scenes[setIndex]);
     return true;
+}
+
+GKissScene *GKissView::curScene()
+{
+    return m_scenes[m_curSceneIdx];  // TODO: Check range.
 }
 
 bool GKissView::renderCurCnfAllSets()
@@ -68,6 +75,11 @@ bool GKissView::renderCurCnfAllSets()
         // Create cels
         for (int celIdx = cnf->cels().length() - 1; celIdx >= 0; celIdx--) {
             ParsedCnfCel *cnfCel = cnf->cels()[celIdx];
+            auto objPos = cnfSet->getObjPosByObjId(cnfCel->objId());
+            if (!objPos.has_value()) {
+                // This cel is a part of an object, but this object is not used in this cnfSet, so skip.
+                continue;
+            }
             // auto _celPos = cnfSet->getObjPosList()[celIdx];
             // QPoint celPos = _celPos.has_value() ? _celPos.value() : QPoint();
             auto _cel = m_archivedFile->getParsedCel(cnfCel->celFileName());
@@ -91,38 +103,63 @@ bool GKissView::renderCurCnfAllSets()
                 item = new GKissItem(cnfCel, cel);
             }
             item->setPos(cel->x(), cel->y());
-            scene->addItem(item);
+            scene->addCelItem(item);
             centerOn(item);
             qDebug() << "[DEBUG][View] addItem" << item->celFileName() << item->pos() << item->boundingRect() << item->isVisible() << scene->items().contains(item);
         }
         qDebug() << "[DEBUG][View] scene.items().length() ==" << scene->items().length();
+        // All CEL are rendered as items. Now bound items into obj (according to objId), and handle events.
+        bindItemsToObjects(scene, cnfSet);
+
     }
     return showSceneByIndex(0);
+}
+
+void GKissView::bindItemsToObjects(GKissScene *scene, ParsedCnfSet *cnfSet)
+{
+    auto objPosList = cnfSet->getObjPosList();
+    for (size_t objId = 0; objId < objPosList.length(); objId++) {
+        auto _objPos = objPosList[objId];
+        if (!_objPos.has_value()) {
+            qWarning() << "[WARNING][View] This should not happened. Should be excluded before this step.";
+            continue;
+        }
+        auto objPos = _objPos.value();
+        auto items = scene->getItemsByObjId(objId);
+        if (items->length() == 1) {
+            items->at(0)->setPos(objPos);
+        } else {
+            QGraphicsItemGroup *group = new QGraphicsItemGroup();
+            for (QGraphicsItem *item : *items) {
+                group->addToGroup(item);
+            }
+            group->setPos(objPos);
+            scene->addItem(group);
+        }
+    }
 }
 
 void GKissView::mouseMoveEvent(QMouseEvent *event)
 {
     QPointF scenePos = mapToScene(event->pos());
     QGraphicsItem *curItemRaw = scene()->itemAt(scenePos, QTransform());
-    if (curItemRaw == m_curHoveredItem) {
-        return;
+    if (curItemRaw != m_curHoveredCelItem) {
+        if (curItemRaw != nullptr && curItemRaw->type() == GKissItem::Type) {
+            GKissItem *curItem = static_cast<GKissItem *>(curItemRaw);
+            m_curHoveredCelItem = curItem;
+            emit hoveredItemChanged(curItem, curScene());
+            qDebug() << QString("File: %1, Pos: (%2, %3), Size: (%4, %5), Fix: %6")
+                                                 .arg(curItem->celFileName())
+                                                 .arg(-1)
+                                                 .arg(-1)
+                                                 .arg(curItem->cel()->width())
+                                                 .arg(curItem->cel()->height())
+                                                 .arg(curItem->fix());
+        } else {
+            emit hoveredItemChanged(nullptr, curScene());
+            m_curHoveredCelItem = nullptr;
+        }
     }
-    if (curItemRaw == nullptr) {
-        emit hoveredItemChanged(nullptr);
-        return;
-    }
-    if (curItemRaw->type() == GKissItem::Type) {
-        GKissItem *curItem = static_cast<GKissItem *>(curItemRaw);
-        m_curHoveredItem = curItem;
-        emit hoveredItemChanged(curItem);
-        qDebug() << QString("File: %1, Pos: (%2, %3), Size: (%4, %5), Fix: %6")
-                                             .arg(curItem->celFileName())
-                                             .arg(-1)
-                                             .arg(-1)
-                                             .arg(curItem->cel()->width())
-                                             .arg(curItem->cel()->height())
-                                             .arg(curItem->fix());
-    }
-    // 繼續處理其他滑鼠事件
+    // Handle other events
     QGraphicsView::mouseMoveEvent(event);
 }
