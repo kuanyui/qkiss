@@ -105,9 +105,9 @@ bool GKissView::renderCurCnfAllSets()
             item->setPos(cel->x(), cel->y());
             scene->addCelItem(item);
             centerOn(item);
-            qDebug() << "[DEBUG][View] addItem" << item->celFileName() << item->pos() << item->boundingRect() << item->isVisible() << scene->items().contains(item);
+            // qDebug() << "[DEBUG][View] addItem" << item->celFileName() << item->pos() << item->boundingRect() << item->isVisible() << scene->items().contains(item);
         }
-        qDebug() << "[DEBUG][View] scene.items().length() ==" << scene->items().length();
+        // qDebug() << "[DEBUG][View] scene.items().length() ==" << scene->items().length();
         // All CEL are rendered as items. Now bound items into obj (according to objId), and handle events.
         bindItemsToObjects(scene, cnfSet);
 
