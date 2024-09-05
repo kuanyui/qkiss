@@ -29,6 +29,8 @@ public:
     void addSibling(GKissItem* item);
     QVector<GKissItem*>* siblings();
 
+    void setFix(int32_t newFix);
+
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;

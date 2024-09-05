@@ -126,9 +126,15 @@ void GKissView::bindItemsToObjects(GKissScene *scene, ParsedCnfSet *cnfSet)
         }
         auto objPos = _objPos.value();
         auto items = scene->getItemsByObjId(objId);
+        int32_t maxFix = items->isEmpty() ? 0 : items->at(0)->fix();
         for (GKissItem *item : *items) {
+            maxFix = qMax(item->fix(), maxFix);
             item->setPos(objPos.x() + item->cel()->x(),
                          objPos.y() + item->cel()->y());
+        }
+        // The fix value for an object is the maximum value for all member cels.
+        for (GKissItem *item : *items) {
+            item->setFix(maxFix);
         }
     }
 }
@@ -144,8 +150,8 @@ void GKissView::mouseMoveEvent(QMouseEvent *event)
             emit hoveredItemChanged(curItem, curScene());
             qDebug() << QString("File: %1, Pos: (%2, %3), Size: (%4, %5), Fix: %6")
                                                  .arg(curItem->celFileName())
-                                                 .arg(-1)
-                                                 .arg(-1)
+                                                 .arg(curItem->x())
+                                                 .arg(curItem->y())
                                                  .arg(curItem->cel()->width())
                                                  .arg(curItem->cel()->height())
                                                  .arg(curItem->fix());

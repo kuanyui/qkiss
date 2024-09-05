@@ -90,6 +90,11 @@ void GKissItem::renderColorBasedImage()
     setPixmap(QPixmap::fromImage(*m_image));
 }
 
+void GKissItem::setFix(int32_t newFix)
+{
+    m_fix = newFix;
+}
+
 ParsedCnfCel *GKissItem::cnfCel() const
 {
     return m_cnfCel;
@@ -115,6 +120,7 @@ void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (m_fix > 0) { return; }
     QPointF delta = event->pos() - m_dragStartPosition;
     setPos(pos() + delta);
     foreach (GKissItem *sib, m_siblings) {
@@ -125,6 +131,7 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    m_fix--;
     // QGraphicsItem::mouseReleaseEvent(event);
 }
 
