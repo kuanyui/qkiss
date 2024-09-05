@@ -22,6 +22,9 @@ GKissItem::GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, QGraphicsItem *parent
 
 void GKissItem::init()
 {
+    // setFlag(QGraphicsItem::ItemIsMovable, true);
+    // setFlag(QGraphicsItem::ItemIsSelectable);
+    // setFlag(QGraphicsItem::ItemIsFocusable);
     setAcceptHoverEvents(true);
     m_image = new QImage(m_cel->width(), m_cel->height(), QImage::Format_ARGB32);
     rerenderImage();
@@ -90,6 +93,37 @@ void GKissItem::renderColorBasedImage()
 ParsedCnfCel *GKissItem::cnfCel() const
 {
     return m_cnfCel;
+}
+
+void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    event->accept();  // NOTE: Important!!! Otherwise mouseMoveEvent will not be triggered!
+    qDebug() << "[DEBUG] mousePressEvent " << this;
+    m_dragStartPosition = event->pos();
+    // QGraphicsItem::mousePressEvent(event);
+}
+
+void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    auto distance = QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length();
+    qDebug() << "[DEBUG] mouseMoveEvent, distance =" << distance;
+    if (distance < QApplication::startDragDistance()) {
+        return;
+    }
+    QPointF newPos = pos() + event->pos() - m_dragStartPosition;
+    if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+        setPos(newPos);
+    } else if (QGraphicsItemGroup* group = qgraphicsitem_cast<QGraphicsItemGroup*>(parentItem())) {
+        group->setPos(group->pos() + newPos - pos());
+    } else {
+        setPos(newPos);
+    }
+    // QGraphicsItem::mouseMoveEvent(event);
+}
+
+void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    // QGraphicsItem::mouseReleaseEvent(event);
 }
 
 ParsedCel *GKissItem::cel() const

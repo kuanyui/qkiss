@@ -5,6 +5,8 @@
 #include <QObject>
 #include <QWidget>
 #include <QImage>
+#include <QGraphicsSceneMouseEvent>
+#include <QApplication>
 #include "parsedkcf.h"
 #include "parsedcel.h"
 #include "parsedcnf.h"
@@ -24,6 +26,10 @@ public:
     int32_t fix() const;
     ParsedCel *cel() const;
     ParsedCnfCel *cnfCel() const;
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     void init();
@@ -36,6 +42,7 @@ private:
     // ==========================
     QImage *m_image;
     int32_t m_fix;
+    QPointF m_dragStartPosition;
 };
 
 #endif // GKISSITEM_H
