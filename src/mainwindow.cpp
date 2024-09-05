@@ -40,6 +40,11 @@ MainWindow::MainWindow(QWidget *parent)
                                      );
         }
     });
+    connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=](const QString &text) {
+       int scaleNum = text.toInt();
+       // m_kissView->scale(scaleNum, scaleNum);
+    });
+
     setCentralWidget(m_kissView);
     resize(920, 560);
 }
