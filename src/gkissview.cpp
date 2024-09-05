@@ -126,15 +126,9 @@ void GKissView::bindItemsToObjects(GKissScene *scene, ParsedCnfSet *cnfSet)
         }
         auto objPos = _objPos.value();
         auto items = scene->getItemsByObjId(objId);
-        if (items->length() == 1) {
-            items->at(0)->setPos(objPos);
-        } else {
-            QGraphicsItemGroup *group = new QGraphicsItemGroup();
-            for (QGraphicsItem *item : *items) {
-                group->addToGroup(item);
-            }
-            group->setPos(objPos);
-            scene->addItem(group);
+        for (GKissItem *item : *items) {
+            item->setPos(objPos.x() + item->cel()->x(),
+                         objPos.y() + item->cel()->y());
         }
     }
 }
