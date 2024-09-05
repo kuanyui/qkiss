@@ -21,7 +21,7 @@ public:
     /** create scenes & items according to current CNF. */
     bool renderCurCnfAllSets();
     // bool renderCurCnfSet(uint8_t setNo);
-    void bindItemsToObjects(GKissScene *scene, ParsedCnfSet *cnfSet);
+    void bindItemsToObjects(GKissScene *scene, ParsedCnfSet *cnfSet); // TODO: Move this function to GKissScene
 
 signals:
     void hoveredItemChanged(GKissItem *item, GKissScene *scene);

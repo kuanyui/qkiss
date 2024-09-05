@@ -53,6 +53,10 @@ void GKissScene::addCelItem(GKissItem *item)
     addItem(item);
     if (m_objIdToItemsMap.contains(item->objId())) {
         QVector<GKissItem*> * itemsOfObj = m_objIdToItemsMap[item->objId()];
+        foreach (GKissItem* sibling, *itemsOfObj) {
+            sibling->addSibling(item);
+            item->addSibling(sibling);
+        }
         itemsOfObj->append(item);
     } else {
         QVector<GKissItem*> * itemsOfObj = new QVector<GKissItem*>;

@@ -95,6 +95,16 @@ ParsedCnfCel *GKissItem::cnfCel() const
     return m_cnfCel;
 }
 
+void GKissItem::addSibling(GKissItem *item)
+{
+    m_siblings.append(item);
+}
+
+QVector<GKissItem *> *GKissItem::siblings()
+{
+    return &m_siblings;
+}
+
 void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();  // NOTE: Important!!! Otherwise mouseMoveEvent will not be triggered!
@@ -105,18 +115,10 @@ void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    auto distance = QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length();
-    qDebug() << "[DEBUG] mouseMoveEvent, distance =" << distance;
-    if (distance < QApplication::startDragDistance()) {
-        return;
-    }
-    QPointF newPos = pos() + event->pos() - m_dragStartPosition;
-    if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
-        setPos(newPos);
-    } else if (QGraphicsItemGroup* group = qgraphicsitem_cast<QGraphicsItemGroup*>(parentItem())) {
-        group->setPos(group->pos() + newPos - pos());
-    } else {
-        setPos(newPos);
+    QPointF delta = event->pos() - m_dragStartPosition;
+    setPos(pos() + delta);
+    foreach (GKissItem *sib, m_siblings) {
+        sib->setPos(sib->pos() + delta);
     }
     // QGraphicsItem::mouseMoveEvent(event);
 }

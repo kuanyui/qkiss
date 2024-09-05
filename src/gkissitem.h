@@ -26,6 +26,9 @@ public:
     int32_t fix() const;
     ParsedCel *cel() const;
     ParsedCnfCel *cnfCel() const;
+    void addSibling(GKissItem* item);
+    QVector<GKissItem*>* siblings();
+
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -43,6 +46,7 @@ private:
     QImage *m_image;
     int32_t m_fix;
     QPointF m_dragStartPosition;
+    QVector<GKissItem*> m_siblings;
 };
 
 #endif // GKISSITEM_H
