@@ -69,8 +69,10 @@ bool GKissView::renderCurCnfAllSets()
     ParsedCnf *cnf = m_archivedFile->curCnf();
     QStringList kcfFileNamesInCnf = cnf->kcfFileNames();
     for (ParsedCnfSet *cnfSet : cnf->sets()) {
-        GKissScene *scene = new GKissScene(0 ,0, cnf->playFieldSize().width(), cnf->playFieldSize().height(), this);
-        scene->drawBackaground(m_archivedFile, cnfSet);
+        // GKissScene *scene = new GKissScene(0 ,0, cnf->playFieldSize().width(), cnf->playFieldSize().height(), this);
+        GKissScene *scene = new GKissScene(this);
+        scene->setEssentialContext(m_archivedFile, cnf, cnfSet);
+        scene->drawCurSetBackground();
         m_scenes.append(scene);
         // Create cels
         for (int celIdx = cnf->cels().length() - 1; celIdx >= 0; celIdx--) {

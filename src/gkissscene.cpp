@@ -7,11 +7,11 @@ GKissScene::GKissScene(QObject *parent):
 
 }
 
-GKissScene::GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent):
-    QGraphicsScene(x, y, width, height, parent)
-{
-
-}
+// GKissScene::GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent):
+//     QGraphicsScene(x, y, width, height, parent)
+// {
+//
+// }
 
 GKissScene::~GKissScene()
 {
@@ -20,10 +20,18 @@ GKissScene::~GKissScene()
     }
 }
 
-void GKissScene::drawBackaground(ArchivedFile *archivedFile, ParsedCnfSet *cnfSet)
+void GKissScene::setEssentialContext(ArchivedFile *archivedFile, ParsedCnf *cnf, ParsedCnfSet *cnfSet)
 {
-    // return;
-    auto _firstKcf = archivedFile->getParsedKcfByOrderedIndexInCurrentCnf(0);
+    m_archivedFile = archivedFile;
+    m_cnf = cnf;
+    m_cnfSet = cnfSet;
+    auto pf = m_cnf->playFieldSize();
+    setSceneRect(0, 0, pf.width(), pf.height());
+}
+
+void GKissScene::drawCurSetBackground()
+{
+    auto _firstKcf = m_archivedFile->getParsedKcfByOrderedIndexInCurrentCnf(0);
     if (!_firstKcf.has_value()) {
         qCritical() << "[ERROR][Scene] No CKF found in this CNF, abort.";
         return;
@@ -35,10 +43,10 @@ void GKissScene::drawBackaground(ArchivedFile *archivedFile, ParsedCnfSet *cnfSe
         qCritical() << "[ERROR][Scene] No palette in this KCF. Abort.";
         return;
     }
-    QRgb borderColor = (*firstPaletteInFirstKcfInCnf)[archivedFile->curCnf()->outsideBorderColor()];
+    QRgb borderColor = (*firstPaletteInFirstKcfInCnf)[m_archivedFile->curCnf()->outsideBorderColor()];
     setBackgroundBrush(QBrush(borderColor));
     // play field background
-    ParsedKcfPalette *paletteOfCnfSet = firstKcfInCnf->getPaletteInKcf(cnfSet->paletteNoInKcf());
+    ParsedKcfPalette *paletteOfCnfSet = firstKcfInCnf->getPaletteInKcf(m_cnfSet->paletteNoInKcf());
     if (paletteOfCnfSet == nullptr) {
         qCritical() << "[ERROR][Scene] WTF? In CNF's set definition, not found palette in first KCF of this CNF. Abort.";
         return;
