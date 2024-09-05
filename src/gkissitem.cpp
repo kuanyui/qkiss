@@ -131,7 +131,11 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (m_fix <= 0) { return; }
     m_fix--;
+    for (GKissItem* sib: m_siblings) {
+        sib->setFix(m_fix);
+    }
     // QGraphicsItem::mouseReleaseEvent(event);
 }
 
