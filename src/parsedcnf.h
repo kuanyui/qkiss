@@ -42,12 +42,13 @@
 class ParsedCnfCel
 {
 public:
-    ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes);
+    ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment);
     int32_t objId() const;
     int16_t fix() const;
     QString celFileName() const;
     int16_t kcfFileIndex() const;
     QList<uint8_t> setsIndexes() const;
+    QString comment() const;
 
 private:
     /*! Cels with the same object ID are members of the same object and will move together as a unit. */
@@ -75,6 +76,7 @@ private:
      * If omitted, this cel is drawn in all sets.
      */
     QList<uint8_t> m_setsIndexes;
+    QString m_comment;
 };
 
 using ParsedCnfSetObjPos = std::optional<QPoint>;

@@ -6,12 +6,13 @@
 // Q_LOGGING_CATEGORY(CnfParser, "qtkiss.parser.cnf")
 using namespace Qt::Literals::StringLiterals;
 
-ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes):
+ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment):
     m_objId(objId),
     m_fix(fix),
     m_celFileName(celFileName),
     m_kcfFileIndex(kcfFileIndex),
-    m_setsIndexes()
+    m_setsIndexes(),
+    m_comment(comment)
 {
     for (int32_t x: setsIndexes) {
         m_setsIndexes.append(x);
@@ -41,6 +42,11 @@ int16_t ParsedCnfCel::kcfFileIndex() const
 QList<uint8_t> ParsedCnfCel::setsIndexes() const
 {
     return m_setsIndexes;
+}
+
+QString ParsedCnfCel::comment() const
+{
+    return m_comment;
 }
 
 ParsedCnfSet::ParsedCnfSet(int32_t paletteNoInKcf):
@@ -129,7 +135,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             m_outsideColor = line.mid(1).toUInt();
         } else if (line.startsWith("#"_L1)) {
             // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)\s+(?:[*](\d+))?\s+(?:[:]([\d\s]+))?)#");
-            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*](\d+))?(?:\s+[:]([\d\s]+))?(?:;(.+))?)#");
+            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
@@ -154,7 +160,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
                 .arg(kcfFileIndex)
                 .arg(setIndexesStrList.join(","))
                 .arg(comment);
-            ParsedCnfCel *cnfCel = new ParsedCnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes};
+            ParsedCnfCel *cnfCel = new ParsedCnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes, comment};
             m_cels.append(cnfCel);
         } else if (line.startsWith("$"_L1)) {
             static QRegularExpression reSetNo(R"#(^[$]\d+\s)#");

@@ -13,7 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << ArchivedFile::checkLhaCommandAvailability();
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
     m_archivedFile = new ArchivedFile{this};
-    m_archivedFile->loadLzh("samples/MIO_H/frkismi4.lzh", QtKISS::Case::Insensitive);
+    // m_archivedFile->loadLzh("samples/MIO_H/frkismi4.lzh", QtKISS::Case::Insensitive);
+    m_archivedFile->loadLzh("samples/tyouda_mise/RJ047634_trial.lzh", QtKISS::Case::Insensitive);
     m_kissView = new GKissView(this);
     m_kissView->setArchivedFile(m_archivedFile);
     connect(m_archivedFile, &ArchivedFile::archivedFilesParseFinished, [=]() {
@@ -27,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
             for (auto sibling: *item->siblings()) {
                 itemsOfObj.append(item->celFileName());
             }
-            statusBar()->showMessage(QString("File: %1, ObjId: %2, Pos: (%3, %4), Size: (%5, %6), Fix: %7      Object items (%8): [ %9 ]")
+            statusBar()->showMessage(QString("File: %1, ObjId: %2, Pos: (%3, %4), Size: (%5, %6), Fix: %7, Comment: %8     Object items (%9): [ %10 ]")
                                      .arg(item->celFileName())
                                      .arg(item->objId())
                                      .arg(item->cel()->x())
@@ -35,11 +36,13 @@ MainWindow::MainWindow(QWidget *parent)
                                      .arg(item->cel()->width())
                                      .arg(item->cel()->height())
                                      .arg(item->fix())
+                                     .arg(item->cnfCel()->comment())
                                      .arg(itemsOfObj.length())
                                      .arg(itemsOfObj.join(", "))
                                      );
         }
     });
+    m_kissView->scale(2, 2);
     connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=](const QString &text) {
        int scaleNum = text.toInt();
        // m_kissView->scale(scaleNum, scaleNum);
