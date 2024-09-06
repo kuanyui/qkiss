@@ -127,7 +127,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             m_playFieldSize.setWidth(m.captured(1).toInt());
             m_playFieldSize.setHeight(m.captured(2).toInt());
         } else if (line.startsWith("%"_L1)) {
-            m_kcfFileNames.append(line.mid(1));
+            m_kcfFileNames.append(line.mid(1).trimmed());
         } else if (line.startsWith("[")) {
             static QRegularExpression reOutsideColor(R"#(^\[(\d+))#");
             QRegularExpressionMatch m = reOutsideColor.match(line);
