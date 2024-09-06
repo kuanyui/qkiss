@@ -56,12 +56,12 @@ void GKissItem::renderPaletteBasedImage()
         for (int y = 0; y < m_cel->height(); ++y) {
             QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
             for (int x = 0; x < m_cel->width(); ++x) {
-                line[x] = celColorizedPixelsData->at(i++);
-                // line[x] = qRgb(255,255,0);
-                if (i == celColorizedPixelsData->length() - 1) {
+                if (i == celColorizedPixelsData->length()) {
                     qCritical() << "[WARNING][Item] %1: Pixels length and WxH are not matched. This should not happened."_L1.arg(m_cnfCel->celFileName());
                     goto end;
                 }
+                line[x] = celColorizedPixelsData->at(i++);
+                // line[x] = qRgb(255,255,0);
             }
         }
     }
@@ -78,11 +78,11 @@ void GKissItem::renderColorBasedImage()
         for (int y = 0; y < m_cel->height(); ++y) {
             QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
             for (int x = 0; x < m_cel->width(); ++x) {
-                line[x] = (*celPixelsData)[i++];
-                if (i > celPixelsData->length()) {
+                if (i == celPixelsData->length()) {
                     qCritical() << "[WARNING][Item] %1: This should not happened."_L1.arg(m_cnfCel->celFileName());
                     goto end;
                 }
+                line[x] = (*celPixelsData)[i++];
             }
         }
     }
