@@ -39,7 +39,7 @@ private:
     /** Palette Based, NOT colorized yet. (4 bits) */
     QVector<uint8_t> *parse4BitsPixelsAsCache(QByteArray *pixelRawData);  // REFACTOR: Use reference instead?
     /** 32 bits full-color (rgba) */
-    static QVector<QRgb> *parse32BitsPixelsAsCache(QByteArray *pixelRawData);   // REFACTOR: Use reference instead?
+    QVector<QRgb> *parse32BitsPixelsAsCache(QByteArray *pixelRawData);   // REFACTOR: Use reference instead?
 
     QString m_fileName;
     /**

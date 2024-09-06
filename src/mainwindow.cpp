@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     setCentralWidget(m_kissView);
-    resize(920, 560);
+    // resize(920, 560);
 }
 
 MainWindow::~MainWindow()

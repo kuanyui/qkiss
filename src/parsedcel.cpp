@@ -140,21 +140,19 @@ QVector<uint8_t> *ParsedCel::parse4BitsPixelsAsCache(QByteArray *pixelRawData)
 
 QVector<QRgb> *ParsedCel::parse32BitsPixelsAsCache(QByteArray *pixelRawData)
 {
-    qsizetype pxCount = pixelRawData->length() / 4;
+    qsizetype pxCount = m_width * m_height;
     QVector<QRgb> *vec = new QVector<QRgb>();
     vec->reserve(pxCount);
-    for (uint32_t i = 0; i < pxCount; i++) {
-        uint32_t offset = i * 4;
-        uint32_t b = static_cast<uint32_t>(static_cast<uint8_t>(pixelRawData->at(offset+0)));
-        uint32_t g = static_cast<uint32_t>(static_cast<uint8_t>(pixelRawData->at(offset+1)));
-        uint32_t r = static_cast<uint32_t>(static_cast<uint8_t>(pixelRawData->at(offset+2)));
-        uint32_t a = static_cast<uint32_t>(static_cast<uint8_t>(pixelRawData->at(offset+3)));
-        QRgb color =
-                (a << 24) |
-                (r << 16) |
-                (g << 8) |
-                (b << 0);
-        vec->append(color);
+    for (size_t y = 0; y < m_height; y++) {
+        for (size_t x = 0; x < m_width; x++) {
+            uint32_t byteOffset = ((y * m_width) + x) * 4;
+            uint8_t b = static_cast<uint8_t>(pixelRawData->at(byteOffset + 0));
+            uint8_t g = static_cast<uint8_t>(pixelRawData->at(byteOffset + 1));
+            uint8_t r = static_cast<uint8_t>(pixelRawData->at(byteOffset + 2));
+            uint8_t a = static_cast<uint8_t>(pixelRawData->at(byteOffset + 3));
+            QRgb color = qRgba(r,g,b,a);
+            vec->append(color);
+        }
     }
     return vec;
 }
