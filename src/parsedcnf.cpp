@@ -116,7 +116,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
 {
     m_lines = lines;
     m_lineIdx = 0;
-    while (m_lineIdx < m_lines.length()) {
+    for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
         QString &line = m_lines[m_lineIdx];
         if (line.startsWith(";"_L1) && !line.startsWith(";@"_L1)) {
             m_readableComments.append(line);
@@ -171,7 +171,6 @@ void ParsedCnf::parseLines(const QStringList &lines)
             startToParseSetLines();  // startToParseSetLines() itself will increase m_lineIdx.
             continue;
         }
-        m_lineIdx++;
     }
     for (int i = 0; i< m_sets.length(); i++) {
         ParsedCnfSet *set = m_sets[i];
