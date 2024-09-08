@@ -119,7 +119,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
     m_lineIdx = 0;
     for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
         QString &line = m_lines[m_lineIdx];
-        qDebug() << "===============" << line;
+        // qDebug() << "===============" << line;
         if (line.startsWith(";"_L1) && !line.startsWith(";@"_L1)) {
             m_readableComments.append(line);
         } else if (line.startsWith("("_L1)) {

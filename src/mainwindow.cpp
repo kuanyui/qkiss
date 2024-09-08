@@ -19,7 +19,8 @@ MainWindow::MainWindow(QWidget *parent)
     // m_archivedFile->loadLzh("samples/tyouda_mise/RJ047634_trial.lzh", QtKISS::Case::Insensitive);    // 32bits full-color
     // m_archivedFile->loadLzh("samples/tyouda_mise/FA1280B.lzh", QtKISS::Case::Insensitive);     // 32bits full-color
     // m_archivedFile->loadLzh("samples/Yuki.lzh", QtKISS::Case::Insensitive);     // 4bits legacy palatte
-    m_archivedFile->loadLzh("samples/kssakura.lzh", QtKISS::Case::Insensitive);     // 24bits modern palatte
+    // m_archivedFile->loadLzh("samples/kb-ran.lzh", QtKISS::Case::Insensitive);     // 24bits modern palatte
+    m_archivedFile->loadLzh("samples/pk_ask33.lzh", QtKISS::Case::Insensitive);     // 24bits modern palatte
 
     m_kissView = new GKissView(this);
     connect(m_archivedFile, &ArchivedFile::archivedFilesUncompressAndParseFinished, [=]() {
@@ -90,6 +91,7 @@ void MainWindow::setupToolBars()
     m_cboxZoomScale->addItem("2", QVariant(2));
     m_cboxZoomScale->addItem("3", QVariant(3));
     m_cboxZoomScale->addItem("4", QVariant(4));
+    m_cboxZoomScale->addItem("5", QVariant(5));
     m_toolbarZooms->addAction(ui->action_zoomOut);
     m_toolbarZooms->addAction(ui->action_zoomIn);
     m_toolbarZooms->addWidget(m_cboxZoomScale);
