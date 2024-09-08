@@ -115,16 +115,26 @@ void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     event->accept();  // NOTE: Important!!! Otherwise mouseMoveEvent will not be triggered!
     qDebug() << "[DEBUG] mousePressEvent " << this;
     m_dragStartPosition = event->pos();
+    if (event->button() == Qt::RightButton) {
+        m_fix = 0;
+        foreach (GKissItem *sib, m_siblings) {
+            sib->setFix(0);
+        }
+    }
     // QGraphicsItem::mousePressEvent(event);
 }
 
 void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    bool hasCtrl = event->modifiers() & Qt::ControlModifier;
+    bool hasShift = event->modifiers() & Qt::ControlModifier;
     if (m_fix > 0) { return; }
     QPointF delta = event->pos() - m_dragStartPosition;
     setPos(pos() + delta);
-    foreach (GKissItem *sib, m_siblings) {
-        sib->setPos(sib->pos() + delta);
+    if (!hasCtrl) {
+        foreach (GKissItem *sib, m_siblings) {
+            sib->setPos(sib->pos() + delta);
+        }
     }
     // QGraphicsItem::mouseMoveEvent(event);
 }
