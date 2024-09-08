@@ -151,6 +151,7 @@ void MainWindow::dropEvent(QDropEvent *event)
             if (url.isLocalFile()) {
                 QString filePath = url.toLocalFile();
                 qDebug() << "Dropped file:" << filePath;
+                if (!filePath.toUpper().endsWith(".LZH")) { return; }
                 m_archivedFile->loadLzh(filePath, QtKISS::Case::Insensitive);
             }
         }
