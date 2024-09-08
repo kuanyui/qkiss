@@ -187,7 +187,7 @@ private:
      *       Example:
      *       [12     ; Set border color to color at index 12 in palette #0.
      */
-    u_int32_t m_outsideColor;
+    u_int32_t m_outsideColor = 0;  // if not specified, set to 0.
     QList<ParsedCnfCel *> m_cels;
     QList<ParsedCnfSet *> m_sets;
 };
