@@ -26,7 +26,7 @@ bool GKissView::loadArchivedFile(ArchivedFile *archivedFile)
     m_archivedFile = archivedFile;
     QStringList cnfFileNameList = m_archivedFile->getCnfNameList();
     if (cnfFileNameList.isEmpty()) {
-        qCritical() << "[ERROR] No CNF file found in this archivedFile.";
+        qCritical() << "[ERROR][View] No CNF file found in this archivedFile.";
         return false;
     }
     setCurCnf(cnfFileNameList.first());
@@ -52,9 +52,10 @@ bool GKissView::setCurCnf(QString cnfFileName)
 {
     bool ok = m_archivedFile->setCurCnf(cnfFileName);
     if (!ok) {
-        qCritical() << "[ERROR] No CNF file named " << cnfFileName << " found in this archivedFile.";
+        qCritical() << "[ERROR][View] No CNF file named " << cnfFileName << " found in this archivedFile.";
         return false;
     }
+    qDebug() << "[LOG][View] Set currtent cnfFileName as " << cnfFileName;
     return renderCurCnfAllSets();
 }
 
@@ -101,8 +102,8 @@ bool GKissView::renderCurCnfAllSets()
     deleteAllScenes();
     ParsedCnf *cnf = m_archivedFile->curCnf();
     QStringList kcfFileNamesInCnf = cnf->kcfFileNames();
-    for (ParsedCnfSet *cnfSet : cnf->sets()) {
-        // GKissScene *scene = new GKissScene(0 ,0, cnf->playFieldSize().width(), cnf->playFieldSize().height(), this);
+    for (size_t cnfSetIdx = 0; cnfSetIdx < cnf->sets().length(); cnfSetIdx++) {
+        ParsedCnfSet *cnfSet = cnf->sets().at(cnfSetIdx);
         GKissScene *scene = new GKissScene(this);
         scene->setEssentialContext(m_archivedFile, cnf, cnfSet);
         scene->drawCurSetBackground();
@@ -136,8 +137,15 @@ bool GKissView::renderCurCnfAllSets()
                 item = new GKissItem(cnfCel, cel, kcf, m_archivedFile->curPaletteNo());
             } else if (cel->celType() == ParsedCel::Type::ColorBased) {
                 item = new GKissItem(cnfCel, cel);
+            } else {
+                qCritical() << QString("[ERROR][View] Unknown CEL type (not PaletteBased nor ColorBased), skip: %1")
+                               .arg(cnfCel->celFileName());
+                continue;
             }
             item->setPos(cel->x(), cel->y());
+            qDebug() << QString("[DEBUG][View] setIdx = %1, cel = %2")
+                        .arg(cnfSetIdx)
+                        .arg(cnfCel->celFileName());
             scene->addCelItem(item);
             centerOn(item);
             // qDebug() << "[DEBUG][View] addItem" << item->celFileName() << item->pos() << item->boundingRect() << item->isVisible() << scene->items().contains(item);

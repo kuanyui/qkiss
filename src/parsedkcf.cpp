@@ -75,8 +75,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
 void ParsedKcf::parseLegacyKcf(QByteArray data)
 {
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
-    qDebug() << "[LOG] Parse Legacy KCF file";
-    qDebug() << "[WARNING] May wrong implementations for legacy KCF because the spec is ambigious.";
+    qDebug() << QString("[LOG][ParsedKcf] Parse Legacy KCF file: %1").arg(m_fileName);
     m_bitsPerColor = 12;
     m_colorAmountsInOnePalette = 16;
     m_paletteAmounts = 10;
