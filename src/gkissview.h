@@ -14,8 +14,11 @@ class GKissView : public QGraphicsView
 public:
     GKissView(QWidget *parent=nullptr);
     GKissView(ArchivedFile *archivedFile, QWidget *parent=nullptr);
-    bool setArchivedFile(ArchivedFile *archivedFile);
+    bool loadArchivedFile(ArchivedFile *archivedFile);
+    void unloadArchivedFile();
+    void deleteAllScenes();
     bool setCurCnf(QString cnfFileName);
+    uint8_t scenesAmount() const;
     bool showSceneByIndex(uint8_t setIndex);
     GKissScene *curScene();
     /** create scenes & items according to current CNF. */

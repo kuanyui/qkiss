@@ -3,6 +3,8 @@
 #include <QToolButton>
 #include <QString>
 #include <QLabel>
+#include <QDragEnterEvent>
+#include <QMimeData>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -15,10 +17,21 @@ MainWindow::MainWindow(QWidget *parent)
     m_archivedFile = new ArchivedFile{this};
     // m_archivedFile->loadLzh("samples/MIO_H/frkismi4.lzh", QtKISS::Case::Insensitive);
     m_archivedFile->loadLzh("samples/tyouda_mise/RJ047634_trial.lzh", QtKISS::Case::Insensitive);
+    // m_archivedFile->loadLzh("samples/tyouda_mise/FA1280B.lzh", QtKISS::Case::Insensitive);
     m_kissView = new GKissView(this);
-    m_kissView->setArchivedFile(m_archivedFile);
-    connect(m_archivedFile, &ArchivedFile::archivedFilesParseFinished, [=]() {
+    connect(m_archivedFile, &ArchivedFile::archivedFilesUncompressAndParseFinished, [=]() {
+        m_kissView->unloadArchivedFile();
+        m_kissView->loadArchivedFile(m_archivedFile);
         m_kissView->setCurCnf(m_archivedFile->getCnfNameList().first());
+        m_toolbarPageSets->clear();
+        for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
+            QToolButton *btn = new QToolButton(m_toolbarPageSets);
+            btn->setText(QString::number(sceneIdx));
+            connect(btn, &QAbstractButton::pressed, [=](){
+                m_kissView->showSceneByIndex(sceneIdx) ;
+            });
+            m_toolbarPageSets->addWidget(btn);
+        }
     });
     connect(m_kissView, &GKissView::hoveredItemChanged, [=](GKissItem *item, GKissScene *scene) {
         if (item == nullptr) {
@@ -42,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
                                      );
         }
     });
-    m_kissView->scale(2, 2);
+    // m_kissView->scale(2, 2);
     connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=](const QString &text) {
        int scaleNum = text.toInt();
        // m_kissView->scale(scaleNum, scaleNum);
@@ -111,5 +124,37 @@ void MainWindow::setupToolBars()
 void MainWindow::setupDockWindows()
 {
 
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+void MainWindow::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    const QMimeData* mimeData = event->mimeData();
+
+    if (mimeData->hasUrls()) {
+        QList<QUrl> urlList = mimeData->urls();
+
+        for (const QUrl &url : urlList) {
+            if (url.isLocalFile()) {
+                QString filePath = url.toLocalFile();
+                qDebug() << "Dropped file:" << filePath;
+                m_archivedFile->loadLzh(filePath, QtKISS::Case::Insensitive);
+            }
+        }
+    }
+    event->acceptProposedAction();
 }
 

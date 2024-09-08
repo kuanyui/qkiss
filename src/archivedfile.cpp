@@ -22,6 +22,11 @@ ArchivedFile::ArchivedFile(QObject *parent):
     connect(m_process, &QProcess::finished, this, &ArchivedFile::onQProcessFinished);
 }
 
+ArchivedFile::~ArchivedFile()
+{
+    unloadLzh();
+}
+
 bool ArchivedFile::loadLzh(const QString &filePath, QtKISS::Case caseSensitivity)
 {
     m_archiveFilePath = filePath;
@@ -44,6 +49,21 @@ bool ArchivedFile::loadLzh(const QString &filePath, QtKISS::Case caseSensitivity
                               m_archiveFilePath
                      });
     return true;
+}
+
+void ArchivedFile::unloadLzh()
+{
+    for (ParsedCnf *x : *m_parsedCnfFiles) { delete x; }
+    m_parsedCnfFiles->clear();
+    for (ParsedKcf *x : *m_parsedKcfFiles) { delete x; }
+    m_parsedKcfFiles->clear();
+    for (ParsedCel *x : *m_parsedCelFiles) { delete x; }
+    m_parsedCelFiles->clear();
+    m_otherFiles->clear();
+    m_curCnf=nullptr;
+    m_curCnfOrderedParsedKcfList.clear();
+    m_curCnfSetNo = 0;
+    m_curPaletteNo = 0;
 }
 
 bool ArchivedFile::checkLhaCommandAvailability()
@@ -191,7 +211,7 @@ void ArchivedFile::onQProcessFinished()
     m_curCnfSetNo = 0;
     m_curPaletteNo = 0;
     delete m_tmpDir;
-    emit archivedFilesParseFinished(true);
+    emit archivedFilesUncompressAndParseFinished(true);
 }
 
 uint8_t ArchivedFile::curPaletteNo() const

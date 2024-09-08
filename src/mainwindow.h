@@ -23,6 +23,9 @@ private:
     void setupToolBars();
     void setupDockWindows();
     void setupCenterArea();
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
     Ui::MainWindow *ui;
     QToolBar *m_toolbarFiles;
     QToolBar *m_toolbarZooms;

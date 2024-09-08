@@ -17,7 +17,9 @@ class ArchivedFile: public QObject
     Q_OBJECT
 public:
     ArchivedFile(QObject *parent = nullptr);
+    ~ArchivedFile();
     bool loadLzh(const QString &filePath, QtKISS::Case caseSensitivity);
+    void unloadLzh();
     static bool checkLhaCommandAvailability();
     QStringList getCnfNameList();
     QStringList getOtherFileNameList();
@@ -42,7 +44,7 @@ private slots:
     void onQProcessFinished();
 signals:
     void newLogLine(QString line);
-    void archivedFilesParseFinished(bool success);
+    void archivedFilesUncompressAndParseFinished(bool success);
     // void curCnfSetNoChanged(uint8_t nv);
 private:
     QtKISS::Case m_caseSensitivity;

@@ -17,11 +17,11 @@ GKissView::GKissView(QWidget *parent):
 GKissView::GKissView(ArchivedFile *archivedFile, QWidget *parent):
     QGraphicsView(parent)
 {
-    setArchivedFile(archivedFile);
+    loadArchivedFile(archivedFile);
 }
 
 
-bool GKissView::setArchivedFile(ArchivedFile *archivedFile)
+bool GKissView::loadArchivedFile(ArchivedFile *archivedFile)
 {
     m_archivedFile = archivedFile;
     QStringList cnfFileNameList = m_archivedFile->getCnfNameList();
@@ -31,6 +31,21 @@ bool GKissView::setArchivedFile(ArchivedFile *archivedFile)
     }
     setCurCnf(cnfFileNameList.first());
     return true;
+}
+
+void GKissView::unloadArchivedFile()
+{
+    deleteAllScenes();
+    // m_archivedFile = nullptr;   // DON'T DO THIS!
+}
+
+void GKissView::deleteAllScenes()
+{
+    setScene(nullptr);
+    for (GKissScene *s : m_scenes) {
+        delete s;
+    }
+    m_scenes.clear();
 }
 
 bool GKissView::setCurCnf(QString cnfFileName)
@@ -43,12 +58,23 @@ bool GKissView::setCurCnf(QString cnfFileName)
     return renderCurCnfAllSets();
 }
 
+uint8_t GKissView::scenesAmount() const
+{
+    return m_scenes.length();
+}
+
 bool GKissView::showSceneByIndex(uint8_t setIndex)
 {
-    if (m_scenes.length() == 0) {
+    if (scenesAmount() == 0) {
+        qWarning() << QString("[WARNING][View] only $1 scenes in this view but you ask for sceneIndex $2")
+                      .arg(scenesAmount())
+                      .arg(setIndex);
         return false;
     }
-    if (setIndex >= m_scenes.length()) {
+    if (setIndex >= scenesAmount()) {
+        qWarning() << QString("[WARNING][View] only $1 scenes in this view but you ask for sceneIndex $2")
+                      .arg(scenesAmount())
+                      .arg(setIndex);
         m_curSceneIdx = 0;
         setScene(m_scenes[0]);
         return false;
@@ -65,7 +91,7 @@ GKissScene *GKissView::curScene()
 
 bool GKissView::renderCurCnfAllSets()
 {
-    m_scenes.clear();
+    deleteAllScenes();
     ParsedCnf *cnf = m_archivedFile->curCnf();
     QStringList kcfFileNamesInCnf = cnf->kcfFileNames();
     for (ParsedCnfSet *cnfSet : cnf->sets()) {
