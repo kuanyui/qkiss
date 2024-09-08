@@ -74,6 +74,7 @@ void ParsedCel::parseModernCel(QByteArray data)
 void ParsedCel::parseLegacyCel(QByteArray data)
 {
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
+    m_celType = Type::PaletteBased;
     m_bitsPerPixel = 4;
     m_x = 0;
     m_y = 0;
