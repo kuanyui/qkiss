@@ -75,6 +75,8 @@ void ParsedCel::parseLegacyCel(QByteArray data)
 {
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     m_bitsPerPixel = 4;
+    m_x = 0;
+    m_y = 0;
     m_width = (static_cast<uint16_t>(udata[1]) << 8) | udata[0];
     m_height = (static_cast<uint16_t>(udata[3]) << 8) | udata[2];
     QByteArray pixelRawData = data.mid(4);  // OPTIMIZE: Don't use mid()
