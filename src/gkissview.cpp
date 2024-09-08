@@ -128,7 +128,8 @@ bool GKissView::renderCurCnfAllSets()
             if (cel->celType() == ParsedCel::Type::PaletteBased) {
                 auto _kcf = m_archivedFile->getParsedKcfByOrderedIndexInCurrentCnf(cnfCel->kcfFileIndex());
                 if (!_kcf.has_value()) {
-                    qCritical() << "[ERROR] In CNF, the CEL '%1' requires KCF index $2, but no such KCF file found in this archived file."_L1
+                    qCritical() << "[ERROR] In CNF '%1', the CEL '%2' requires KCF index %3, but no KCF file available in this CNF."_L1
+                                   .arg(cnf->fileName())
                                    .arg(cnfCel->celFileName())
                                    .arg(cnfCel->kcfFileIndex());
                     continue;
@@ -143,9 +144,7 @@ bool GKissView::renderCurCnfAllSets()
                 continue;
             }
             item->setPos(cel->x(), cel->y());
-            qDebug() << QString("[DEBUG][View] setIdx = %1, cel = %2")
-                        .arg(cnfSetIdx)
-                        .arg(cnfCel->celFileName());
+            // qDebug() << QString("[DEBUG][View] setIdx = %1, cel = %2") .arg(cnfSetIdx) .arg(cnfCel->celFileName());
             scene->addCelItem(item);
             centerOn(item);
             // qDebug() << "[DEBUG][View] addItem" << item->celFileName() << item->pos() << item->boundingRect() << item->isVisible() << scene->items().contains(item);

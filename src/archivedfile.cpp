@@ -120,8 +120,13 @@ std::optional<ParsedCel *> ArchivedFile::getParsedCel(QString celFileName) const
 
 std::optional<ParsedKcf *> ArchivedFile::getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf)
 {
-    if (kcfIndexInCurrentCnf >= m_curCnfOrderedParsedKcfList.length()) {
+    if (m_curCnfOrderedParsedKcfList.length() == 0) {
+        qDebug() << QStringLiteral("[ERROR][ArchivedFile] Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.");
         return std::nullopt;
+    }
+    if (kcfIndexInCurrentCnf >= m_curCnfOrderedParsedKcfList.length()) {
+        qDebug() << QStringLiteral("[WARN][ArchivedFile] Need to get ParsedKcf of current CNF at index %1, but out of index, so fallback to 0.");
+        return m_curCnfOrderedParsedKcfList[0];
     }
     return m_curCnfOrderedParsedKcfList[kcfIndexInCurrentCnf];
 }
