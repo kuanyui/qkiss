@@ -91,7 +91,8 @@ ParsedCnf::ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding enco
     m_fileName(fileName)
 {
     m_fileContentText = Encoding::toUtf8(rawData, encode);
-    parseLines(m_fileContentText.split("\n"));
+    static QRegularExpression reNewline(R"#((\r\n|\r|\n))#");
+    parseLines(m_fileContentText.split(reNewline));
 }
 
 ParsedCnf::~ParsedCnf()
@@ -118,6 +119,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
     m_lineIdx = 0;
     for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
         QString &line = m_lines[m_lineIdx];
+        qDebug() << "===============" << line;
         if (line.startsWith(";"_L1) && !line.startsWith(";@"_L1)) {
             m_readableComments.append(line);
         } else if (line.startsWith("("_L1)) {
@@ -130,6 +132,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             static QRegularExpression reKcf(R"#(^%(\S+)\s*?(?:;(.+))?)#");
             QRegularExpressionMatch m = reKcf.match(line);
             if (!m.hasMatch()) { error("Wrong KCF file name format."); continue; }
+            qDebug() << "CNF requires KCF " << m.captured(1).trimmed();
             m_kcfFileNames.append(m.captured(1).trimmed());
         } else if (line.startsWith("[")) {
             static QRegularExpression reOutsideColor(R"#(^\[(\d+))#");

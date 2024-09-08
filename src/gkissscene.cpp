@@ -33,7 +33,7 @@ void GKissScene::drawCurSetBackground()
 {
     auto _firstKcf = m_archivedFile->getParsedKcfByOrderedIndexInCurrentCnf(0);
     if (!_firstKcf.has_value()) {
-        qCritical() << "[ERROR][Scene] No CKF found in this CNF, abort.";
+        qCritical() << "[ERROR][Scene] No KCF found in this CNF, abort.";
         return;
     }
     ParsedKcf *firstKcfInCnf = _firstKcf.value();

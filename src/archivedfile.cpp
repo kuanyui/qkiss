@@ -155,10 +155,11 @@ bool ArchivedFile::setCurCnf(QString cnfFileName)
     }
     m_curCnf = _cnf.value();
     m_curCnfOrderedParsedKcfList.clear();
+    qDebug() << QStringLiteral("[LOG][ArchivedFile] The CNF '%1' requires %2 KCF files.").arg(cnfFileName).arg(m_curCnf->kcfFileNames().length());
     for (const QString &kcfFileName : m_curCnf->kcfFileNames()) {
         auto _kcf = getParsedKcf(kcfFileName);
         if (!_kcf.has_value()) {
-            qCritical() << QStringLiteral("[ERROR] CNF file '%1' wants KCF file '%2', but this KCF file is not found in this archived file.")
+            qCritical() << QStringLiteral("[ERROR] CNF file '%1' requires KCF file '%2', but this KCF file is not found in this archived file.")
                            .arg(m_curCnf->fileName())
                            .arg(kcfFileName);
             continue;

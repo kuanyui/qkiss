@@ -64,6 +64,8 @@ void ParsedKcf::parseModernKcf(QByteArray data)
             }
             m_palettesList.append(palette);
         }
+    } else {
+        qCritical() << QStringLiteral("[ERROR][ParsedKcf] What is this? Unknown KCF bitsPerColor: %1").arg(m_bitsPerColor);
     }
     qDebug() << QStringLiteral("[LOG][ParsedKcf] (Modern KCF, %1 bits per color)     %2     %3 palettes    %4 colors per palette")
                 .arg(m_bitsPerColor)
