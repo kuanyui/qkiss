@@ -57,8 +57,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
     // m_kissView->scale(2, 2);
     connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=](const QString &text) {
-       int scaleNum = text.toInt();
-       // m_kissView->scale(scaleNum, scaleNum);
+       int targetScale = text.toFloat();
+       m_kissView->scaleAbs(targetScale);
     });
 
     setCentralWidget(m_kissView);

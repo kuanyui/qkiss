@@ -84,6 +84,13 @@ bool GKissView::showSceneByIndex(uint8_t setIndex)
     return true;
 }
 
+void GKissView::scaleAbs(qreal targetScale)
+{
+    qreal currentScale = transform().m11();
+    qreal scaleFactor = targetScale / currentScale;
+    scale(scaleFactor, scaleFactor);
+}
+
 GKissScene *GKissView::curScene()
 {
     return m_scenes[m_curSceneIdx];  // TODO: Check range.
