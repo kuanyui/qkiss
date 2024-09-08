@@ -107,6 +107,7 @@ public:
     void appendEmptyObjPos();
     int32_t paletteNoInKcf() const;
     const QList<ParsedCnfSetObjPos> &getObjPosList() const;
+    /** if returns nullopt, it means don't specify the object position. Just leave it as (0,0) */
     const ParsedCnfSetObjPos getObjPosByObjId(int32_t objId) const;
 private:
     /**

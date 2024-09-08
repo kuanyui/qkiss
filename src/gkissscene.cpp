@@ -73,8 +73,12 @@ void GKissScene::addCelItem(GKissItem *item)
     }
 }
 
-QVector<GKissItem *> *GKissScene::getItemsByObjId(int32_t objId)
+std::optional<QVector<GKissItem *> *>GKissScene::getItemsByObjId(int32_t objId)
 {
-    return m_objIdToItemsMap.value(objId);
+    QList<GKissItem *> *tmp = m_objIdToItemsMap.value(objId);
+    if (tmp == nullptr) {
+        return std::nullopt;
+    }
+    return tmp;
 }
 

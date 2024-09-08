@@ -111,16 +111,13 @@ bool GKissView::renderCurCnfAllSets()
         // Create cels
         for (int celIdx = cnf->cels().length() - 1; celIdx >= 0; celIdx--) {
             ParsedCnfCel *cnfCel = cnf->cels()[celIdx];
-            auto objPos = cnfSet->getObjPosByObjId(cnfCel->objId());
-            if (!objPos.has_value()) {
-                // This cel is a part of an object, but this object is not used in this cnfSet, so skip.
+            if (!cnfCel->setsIndexes().contains(cnfSetIdx)) {
                 continue;
             }
-            // auto _celPos = cnfSet->getObjPosList()[celIdx];
-            // QPoint celPos = _celPos.has_value() ? _celPos.value() : QPoint();
             auto _cel = m_archivedFile->getParsedCel(cnfCel->celFileName());
             if (!_cel.has_value()) {
-                qCritical() << "[ERROR] CNF requires a CEL, but no such CEL file found in this archived file: "_L1 << cnfCel->celFileName();
+                qCritical() << QStringLiteral("[ERROR] CNF requires a CEL '%1', but not found in this archived file: ")
+                               .arg(cnfCel->celFileName());
                 continue;
             }
             ParsedCel *cel = _cel.value();
@@ -147,9 +144,14 @@ bool GKissView::renderCurCnfAllSets()
             // qDebug() << QString("[DEBUG][View] setIdx = %1, cel = %2") .arg(cnfSetIdx) .arg(cnfCel->celFileName());
             scene->addCelItem(item);
             centerOn(item);
-            // qDebug() << "[DEBUG][View] addItem" << item->celFileName() << item->pos() << item->boundingRect() << item->isVisible() << scene->items().contains(item);
+            qDebug() << QString("[DEBUG][View] addItem ID #%1    '%2'    (%3, %4)  Visible = %5")
+                        .arg(item->objId())
+                        .arg(item->celFileName())
+                        .arg(item->pos().x())
+                        .arg(item->pos().y())
+                        .arg(item->isVisible());
         }
-        // qDebug() << "[DEBUG][View] scene.items().length() ==" << scene->items().length();
+        //qDebug() << "[DEBUG][View] scene.items().length() ==" << scene->items().length();
         // All CEL are rendered as items. Now bound items into obj (according to objId), and handle events.
         bindItemsToObjects(scene, cnfSet);
 
@@ -159,15 +161,19 @@ bool GKissView::renderCurCnfAllSets()
 
 void GKissView::bindItemsToObjects(GKissScene *scene, ParsedCnfSet *cnfSet)
 {
-    auto objPosList = cnfSet->getObjPosList();
+    QList<ParsedCnfSetObjPos> objPosList = cnfSet->getObjPosList();
     for (size_t objId = 0; objId < objPosList.length(); objId++) {
+        qDebug() << QString("objPosList.length = %1 , bind object id %2")
+                    .arg(objPosList.length())
+                    .arg(objId);
         auto _objPos = objPosList[objId];
-        if (!_objPos.has_value()) {
-            qWarning() << "[WARNING][View] This should not happened. Should be excluded before this step.";
+        QPoint objPos = _objPos.has_value() ? _objPos.value() : QPoint(0, 0);
+        auto _items = scene->getItemsByObjId(objId);
+        if (!_items.has_value()) {
+            qDebug() << QStringLiteral("[WARNING][View] This CNF's set definitions (starts with $ in CNF) has objects amounts greater than it's actually objects count. This is because in CNF's CEL lines, object IDs is not continuous/subsequent and has some gaps. This is a not a matter, but not a good practice.");
             continue;
         }
-        auto objPos = _objPos.value();
-        auto items = scene->getItemsByObjId(objId);
+        auto items = _items.value();
         int32_t maxFix = items->isEmpty() ? 0 : items->at(0)->fix();
         for (GKissItem *item : *items) {
             maxFix = qMax(item->fix(), maxFix);

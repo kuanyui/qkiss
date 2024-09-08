@@ -17,7 +17,7 @@ public:
     void setEssentialContext(ArchivedFile *archivedFile, ParsedCnf* cnf, ParsedCnfSet *cnfSet);
     void drawCurSetBackground();
     void addCelItem(GKissItem *item);
-    QVector<GKissItem*>* getItemsByObjId(int32_t objId);
+    std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
 private:
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
     ArchivedFile *m_archivedFile;
