@@ -171,7 +171,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
         } else if (line.startsWith("$"_L1)) {
             static QRegularExpression reSetNo(R"#(^[$]\d+\s)#");
             if (!reSetNo.match(line).hasMatch()) { error("Wrong set line format."); continue; }
-            startToParseSetLines();  // startToParseSetLines() itself will increase m_lineIdx.
+            startToParseSetLines();
             continue;
         }
     }
@@ -212,8 +212,9 @@ void ParsedCnf::startToParseSetLines()
             error("Wrong objPos format");
         }
     }
-    while (++m_lineIdx < m_lines.length()) {
-        line = m_lines[m_lineIdx];
+    while (m_lineIdx + 1 < m_lines.length()) {
+        line = m_lines[m_lineIdx + 1];
+        qDebug() << "======" << line;
         if (!line.startsWith(" "_L1)) { break; }
         segs = line.trimmed().split(" "_L1);
         for (uint32_t i = 0; i < segs.length(); i++) {
@@ -226,6 +227,7 @@ void ParsedCnf::startToParseSetLines()
                 error("Wrong objPos format");
             }
         }
+        m_lineIdx++;
     }
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
 }
