@@ -125,6 +125,10 @@ private:
     QList<ParsedCnfSetObjPos> m_objPosList;
 };
 
+struct FkissScriptLine {
+    size_t lineNoInCnf;
+    QString line;
+};
 
 /**
  * Represent a parsed .CNF file.

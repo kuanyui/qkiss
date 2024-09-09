@@ -118,14 +118,20 @@ void ParsedCnf::parseLines(const QStringList &lines)
     m_lines = lines;
     m_lineIdx = 0;
     m_sortedObjIdList.clear();
+    /** With ;@ prefix */
+    QList<FkissScriptLine> fkissScriptLines;
     // for (auto l : lines) {
     //     qDebug() << "=========" << l;
     // }
     for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
         QString &line = m_lines[m_lineIdx];
         // qDebug() << "===============" << line;
-        if (line.startsWith(";"_L1) && !line.startsWith(";@"_L1)) {
-            m_readableComments.append(line);
+        if (line.startsWith(";"_L1)) {
+            if (line.startsWith(";@"_L1)) {
+                fkissScriptLines.append({m_lineIdx + 1, line.trimmed()});
+            } else {
+                m_readableComments.append(line);
+            }
         } else if (line.startsWith("("_L1)) {
             static QRegularExpression rePlayFieldSize(R"#(^\((\d+) *?, *?(\d+))#");
             QRegularExpressionMatch m = rePlayFieldSize.match(line);
