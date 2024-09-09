@@ -111,7 +111,8 @@ bool GKissView::renderCurCnfAllSets()
         // Create cels
         for (int celIdx = cnf->cels().length() - 1; celIdx >= 0; celIdx--) {
             ParsedCnfCel *cnfCel = cnf->cels()[celIdx];
-            if (!cnfCel->setsIndexes().contains(cnfSetIdx)) {
+            // Empty setsIndexes means this CEL is used by all sets.
+            if (!cnfCel->setsIndexes().isEmpty() && !cnfCel->setsIndexes().contains(cnfSetIdx)) {
                 continue;
             }
             auto _cel = m_archivedFile->getParsedCel(cnfCel->celFileName());
