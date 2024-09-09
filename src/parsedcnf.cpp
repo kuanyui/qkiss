@@ -63,7 +63,7 @@ void ParsedCnfSet::appendObjPos(int32_t x, int32_t y)
 
 void ParsedCnfSet::appendEmptyObjPos()
 {
-    m_objPosList.append(std::nullopt);
+    m_objPosList.append(std::optional(QPoint(0, 0)));
 }
 
 int32_t ParsedCnfSet::paletteNoInKcf() const
@@ -117,6 +117,10 @@ void ParsedCnf::parseLines(const QStringList &lines)
 {
     m_lines = lines;
     m_lineIdx = 0;
+    m_sortedObjIdList.clear();
+    // for (auto l : lines) {
+    //     qDebug() << "=========" << l;
+    // }
     for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
         QString &line = m_lines[m_lineIdx];
         // qDebug() << "===============" << line;
@@ -145,6 +149,9 @@ void ParsedCnf::parseLines(const QStringList &lines)
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
+            if (!m_sortedObjIdList.contains(objId)) {
+                m_sortedObjIdList.append(objId);
+            }
             int32_t fix = m.captured(2).isEmpty() ? 0 : m.captured(2).toInt();
             QString celFileName = m.captured(3);
             int32_t kcfFileIndex =  m.captured(4).isEmpty() ? 0 :  m.captured(4).toInt();
@@ -175,6 +182,8 @@ void ParsedCnf::parseLines(const QStringList &lines)
             continue;
         }
     }
+    std::sort(m_sortedObjIdList.begin(), m_sortedObjIdList.end(), std::less<int32_t>());
+    qDebug() << m_sortedObjIdList;
     for (int i = 0; i< m_sets.length(); i++) {
         ParsedCnfSet *set = m_sets[i];
         // qDebug() << "===================================================================";
@@ -198,6 +207,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
 void ParsedCnf::startToParseSetLines()
 {
     QString line = m_lines[m_lineIdx].trimmed();
+    qDebug() << "SET START ======" << line;
     QStringList segs = line.split(" "_L1);
     int32_t paletteNoInPaletteFile = segs[0].mid(1).toInt();
     ParsedCnfSet *set = new ParsedCnfSet { paletteNoInPaletteFile };
@@ -230,6 +240,11 @@ void ParsedCnf::startToParseSetLines()
         m_lineIdx++;
     }
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
+}
+
+QList<int32_t> ParsedCnf::sortedObjIdList() const
+{
+    return m_sortedObjIdList;
 }
 
 uint32_t ParsedCnf::outsideBorderColor() const

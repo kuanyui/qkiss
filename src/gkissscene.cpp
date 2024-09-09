@@ -82,3 +82,37 @@ std::optional<QVector<GKissItem *> *>GKissScene::getItemsByObjId(int32_t objId)
     return tmp;
 }
 
+void GKissScene::bindItemsToObjects()
+{
+    /** (In the CEL list (#)) ordered by the value of ObjectID . Length is always larger than object potitions list ($) */
+    QList<int32_t> sortedObjIdList = m_cnf->sortedObjIdList();
+    /** (In the object potitions list ($)) Ordered by the value of ObjectID. */
+    QList<ParsedCnfSetObjPos> objPosList = m_cnfSet->getObjPosList();
+    qDebug() << "BIND FOR SCENE ====================================";
+    qDebug() << QStringLiteral("[DEBUG][Scene] sortedObjIdList (Length = %1)").arg(sortedObjIdList.length()) << sortedObjIdList;
+    qDebug() << QStringLiteral("[DEBUG][Scene] ObjPosList (Length = %1)").arg(objPosList.length());
+    // Iterate by objId (small to large)
+    for (size_t i = 0; i < sortedObjIdList.length() && i < objPosList.length(); i++) {
+        auto objId = sortedObjIdList[i];
+        auto _objPos = objPosList[i];
+        QPoint objPos = _objPos.has_value() ? _objPos.value() : QPoint(0, 0);
+        qDebug() << QStringLiteral("[DEBUG][Scene] index: %1,   objId: %2,   objPos: (%3, %4)").arg(i).arg(objId).arg(objPos.x()).arg(objPos.y());
+        auto _items = this->getItemsByObjId(objId);
+        if (!_items.has_value()) {
+            qDebug() << "[DEBUG][Scene] No items";
+            continue;
+        }
+        auto items = _items.value();
+        int32_t maxFix = items->isEmpty() ? 0 : items->at(0)->fix();
+        foreach (GKissItem *item, *items) {
+            maxFix = qMax(item->fix(), maxFix);
+            item->setPos(objPos.x() + item->cel()->x(),
+                         objPos.y() + item->cel()->y());
+        }
+        // The fix value for an object is the maximum value for all member cels.
+        foreach (GKissItem *item, *items) {
+            item->setFix(maxFix);
+        }
+    }
+}
+

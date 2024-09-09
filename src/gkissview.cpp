@@ -153,39 +153,13 @@ bool GKissView::renderCurCnfAllSets()
         }
         //qDebug() << "[DEBUG][View] scene.items().length() ==" << scene->items().length();
         // All CEL are rendered as items. Now bound items into obj (according to objId), and handle events.
-        bindItemsToObjects(scene, cnfSet);
+        scene->bindItemsToObjects();
 
     }
     return showSceneByIndex(0);
 }
 
-void GKissView::bindItemsToObjects(GKissScene *scene, ParsedCnfSet *cnfSet)
-{
-    QList<ParsedCnfSetObjPos> objPosList = cnfSet->getObjPosList();
-    for (size_t objId = 0; objId < objPosList.length(); objId++) {
-        qDebug() << QString("objPosList.length = %1 , bind object id %2")
-                    .arg(objPosList.length())
-                    .arg(objId);
-        auto _objPos = objPosList[objId];
-        QPoint objPos = _objPos.has_value() ? _objPos.value() : QPoint(0, 0);
-        auto _items = scene->getItemsByObjId(objId);
-        if (!_items.has_value()) {
-            qDebug() << QStringLiteral("[WARNING][View] This CNF's set definitions (starts with $ in CNF) has objects amounts greater than it's actually objects count. This is because in CNF's CEL lines, object IDs is not continuous/subsequent and has some gaps. This is a not a matter, but not a good practice.");
-            continue;
-        }
-        auto items = _items.value();
-        int32_t maxFix = items->isEmpty() ? 0 : items->at(0)->fix();
-        for (GKissItem *item : *items) {
-            maxFix = qMax(item->fix(), maxFix);
-            item->setPos(objPos.x() + item->cel()->x(),
-                         objPos.y() + item->cel()->y());
-        }
-        // The fix value for an object is the maximum value for all member cels.
-        for (GKissItem *item : *items) {
-            item->setFix(maxFix);
-        }
-    }
-}
+
 
 void GKissView::mouseMoveEvent(QMouseEvent *event)
 {

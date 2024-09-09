@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
             for (auto sibling: *item->siblings()) {
                 itemsOfObj.append(item->celFileName());
             }
-            statusBar()->showMessage(QString("File: %1, ObjId: %2, Pos: (%3, %4), Size: (%5, %6), Fix: %7, Comment: %8     Object items (%9): [ %10 ]")
+            statusBar()->showMessage(QString("File: %1, ObjId: %2, CelPos: (%3, %4), Size: (%5, %6), Fix: %7, Comment: %8     Object items (%9): [ %10 ]")
                                      .arg(item->celFileName())
                                      .arg(item->objId())
                                      .arg(item->cel()->x())
