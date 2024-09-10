@@ -7,7 +7,7 @@
 #include <QPoint>
 #include <optional>
 #include "enums.h"
-
+#include "fkiss.h"
 #include <QLoggingCategory>
 
 // Q_DECLARE_LOGGING_CATEGORY(CnfParser)
@@ -125,10 +125,6 @@ private:
     QList<ParsedCnfSetObjPos> m_objPosList;
 };
 
-struct FkissScriptLine {
-    size_t lineNoInCnf;
-    QString line;
-};
 
 /**
  * Represent a parsed .CNF file.
@@ -198,7 +194,8 @@ private:
     QList<ParsedCnfCel *> m_cels;
     QList<ParsedCnfSet *> m_sets;
     /** ObjectID may be not continuous, and CNF's set (starts with $) is sorted by the value of ObjectID. */
-    QList<int32_t> m_sortedObjIdList;
+    QList<int32_t> m_sortedObjIdList;   // DEPRECATED: Unused and unneededanymore.
+    Fkiss *m_fkiss;
 };
 
 

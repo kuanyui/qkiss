@@ -88,7 +88,8 @@ const ParsedCnfSetObjPos ParsedCnfSet::getObjPosByObjId(int32_t objId) const
 
 ParsedCnf::ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding encode):
     m_errCount(0),
-    m_fileName(fileName)
+    m_fileName(fileName),
+    m_fkiss(new Fkiss())
 {
     m_fileContentText = Encoding::toUtf8(rawData, encode);
     static QRegularExpression reNewline(R"#((\r\n|\r|\n))#");
@@ -99,6 +100,7 @@ ParsedCnf::~ParsedCnf()
 {
     qDeleteAll(m_cels);
     qDeleteAll(m_sets);
+    delete m_fkiss;
 }
 
 void ParsedCnf::error(const QString &msg)
@@ -119,7 +121,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
     m_lineIdx = 0;
     m_sortedObjIdList.clear();
     /** With ;@ prefix */
-    QList<FkissScriptLine> fkissScriptLines;
+    QList<FkissLineInfo> fkissScriptLines;
     // for (auto l : lines) {
     //     qDebug() << "=========" << l;
     // }
@@ -128,7 +130,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
         // qDebug() << "===============" << line;
         if (line.startsWith(";"_L1)) {
             if (line.startsWith(";@"_L1)) {
-                fkissScriptLines.append({m_lineIdx + 1, line.trimmed()});
+                fkissScriptLines.append({m_lineIdx + 1, line});
             } else {
                 m_readableComments.append(line);
             }
@@ -207,6 +209,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
         // }
     }
     qDebug() << m_readableComments;
+    m_fkiss->parseLines(fkissScriptLines);
     m_lines.clear();
 }
 

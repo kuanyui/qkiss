@@ -44,6 +44,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/gkissscene.h src/gkissscene.cpp
         src/globalstate.h src/globalstate.cpp
         src/fkiss.h src/fkiss.cpp
+        src/fkissvariant.h src/fkissvariant.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

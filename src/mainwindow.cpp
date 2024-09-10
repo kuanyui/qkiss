@@ -15,13 +15,13 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << ArchivedFile::checkLhaCommandAvailability();
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
     m_archivedFile = new ArchivedFile{this};
-    // m_archivedFile->loadLzh("samples/MIO_H/frkismi4.lzh", QtKISS::Case::Insensitive);     // 4bits modern palatte
+    m_archivedFile->loadLzh("samples/MIO_H/frkismi4.lzh", QtKISS::Case::Insensitive);     // 4bits modern palatte
     // m_archivedFile->loadLzh("samples/tyouda_mise/RJ047634_trial.lzh", QtKISS::Case::Insensitive);    // 32bits full-color
     // m_archivedFile->loadLzh("samples/tyouda_mise/FA1280B.lzh", QtKISS::Case::Insensitive);     // 32bits full-color
     // m_archivedFile->loadLzh("samples/Yuki.lzh", QtKISS::Case::Insensitive);     // 4bits legacy palatte
     // m_archivedFile->loadLzh("samples/kb-ran.lzh", QtKISS::Case::Insensitive);     // 24bits modern palatte
     // m_archivedFile->loadLzh("samples/pk_ask33.lzh", QtKISS::Case::Insensitive);     // 24bits modern palatte
-    m_archivedFile->loadLzh("samples/kis_aki.lzh", QtKISS::Case::Insensitive);     // Debugging for wrong object positions
+    // m_archivedFile->loadLzh("samples/kis_aki.lzh", QtKISS::Case::Insensitive);     // Debugging for wrong object positions
 
     m_kissView = new GKissView(this);
     connect(m_archivedFile, &ArchivedFile::archivedFilesUncompressAndParseFinished, [=]() {
