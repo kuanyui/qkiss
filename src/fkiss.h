@@ -42,6 +42,7 @@ struct Token {
 QDebug operator<<(QDebug debug, const Token& token);
 QDebug operator<<(QDebug debug, const Token::Type& tokenType);
 
+
 struct TokenizerState {
     bool inCmdArgs;
 };
@@ -51,10 +52,13 @@ class Fkiss : public QObject
     Q_OBJECT
 public:
     explicit Fkiss(QObject *parent = nullptr);
-    void parseLines(const QList<FkissLineInfo> &lineInfoList);
+    void compileScriptLines(const QList<FkissLineInfo> &lineInfoList);
 
 private:
+    /** source code -> tokens */
     QVector<Token> tokenize(const QList<FkissLineInfo> &lineInfoList);
+    /** tokens -> AST */
+    void parse(const QVector<Token> &tokens);
     /** Remove `;@` prefix and `; comment` suffix. */
     QString removePrefixAndCommentOfLine(QString line);
 signals:

@@ -8,13 +8,14 @@ Fkiss::Fkiss(QObject *parent)
 
 }
 
-void Fkiss::parseLines(const QList<FkissLineInfo> &lineInfoList)
+void Fkiss::compileScriptLines(const QList<FkissLineInfo> &lineInfoList)
 {
     QVector<Token> tokens = tokenize(lineInfoList);
     // qDebug() << "[Fkiss] parsed tokens count: " << tokens.length();
     // foreach (Token token, tokens) {
     //     qDebug() << "[Fkiss]" << token;
     // }
+    parse(tokens);
 }
 
 QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
@@ -86,6 +87,11 @@ QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
         // tokens.append(Token(Token::Type::EndOfLine, "\n", r, line.length()));
     }
     return tokens;
+}
+
+void Fkiss::parse(const QVector<Token> &tokens)
+{
+
 }
 
 QString Fkiss::removePrefixAndCommentOfLine(QString line) {
