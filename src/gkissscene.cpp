@@ -88,9 +88,9 @@ void GKissScene::bindItemsToObjects()
     QList<int32_t> sortedObjIdList = m_cnf->sortedObjIdList();
     /** (In the object potitions list ($)) Ordered by the value of ObjectID. */
     QList<ParsedCnfSetObjPos> objPosList = m_cnfSet->getObjPosList();
-    qDebug() << "BIND FOR SCENE ====================================";
-    qDebug() << QStringLiteral("[DEBUG][Scene] sortedObjIdList (Length = %1)").arg(sortedObjIdList.length()) << sortedObjIdList;  // FIXME: Misunderstood. Unneeded anymore. Should remove it.
-    qDebug() << QStringLiteral("[DEBUG][Scene] ObjPosList (Length = %1)").arg(objPosList.length());
+    // qDebug() << "BIND FOR SCENE ====================================";
+    // qDebug() << QStringLiteral("[DEBUG][Scene] sortedObjIdList (Length = %1)").arg(sortedObjIdList.length()) << sortedObjIdList;  // FIXME: Misunderstood. Unneeded anymore. Should remove it.
+    // qDebug() << QStringLiteral("[DEBUG][Scene] ObjPosList (Length = %1)").arg(objPosList.length());
     // Iterate by objId (small to large)
     for (size_t objId = 0;  objId  < objPosList.length(); objId ++) {
         auto _objPos = objPosList[objId ];

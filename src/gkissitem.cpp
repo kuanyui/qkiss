@@ -43,7 +43,7 @@ void GKissItem::rerenderImage()
     //             ;
     switch (m_cel->celType()) {
     case ParsedCel::Type::PaletteBased: return renderPaletteBasedImage();
-    case ParsedCel::Type::ColorBased: return renderColorBasedImage();
+    case ParsedCel::Type::FullColor: return renderColorBasedImage();
     }
 }
 
@@ -74,7 +74,7 @@ void GKissItem::renderColorBasedImage()
 {
     QVector<QRgb> *celPixelsData = m_cel->getColorBasedPixels();
     uint32_t i = 0;
-    if (m_cel->celType() == ParsedCel::Type::ColorBased) {
+    if (m_cel->celType() == ParsedCel::Type::FullColor) {
         for (int y = 0; y < m_cel->height(); ++y) {
             QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
             for (int x = 0; x < m_cel->width(); ++x) {
@@ -175,3 +175,13 @@ int32_t GKissItem::fix() const
     return m_fix;
 }
 
+
+QDebug operator<<(QDebug dbg, const GKissItem &item) {
+    dbg.nospace().noquote() << QString("GKissItem { objId: #%1, \tcelFileName: '%2', \tpos: (%3, %4), \tvisible: %5 }")
+                           .arg(item.objId())
+                           .arg(item.celFileName())
+                           .arg(item.pos().x())
+                           .arg(item.pos().y())
+                           .arg(item.isVisible());
+    return dbg;
+};

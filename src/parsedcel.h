@@ -6,6 +6,7 @@
 #include <QVector>
 #include <QColor>
 #include <QRect>
+#include <QDebug>
 #include "parsedkcf.h"
 
 /**
@@ -19,7 +20,7 @@ class ParsedCel
 public:
     enum class Type {
         PaletteBased,
-        ColorBased
+        FullColor
     };
     ParsedCel(QString fileName, QByteArray rawData);
     std::unique_ptr<QVector<QRgb> > getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, int paletteIdxInKcf) const;  // REFACTOR: const reference
@@ -32,6 +33,8 @@ public:
     uint16_t y() const;
     uint16_t width() const;
     uint16_t height() const;
+
+    QString fileName() const;
 
 private:
     void parseModernCel(QByteArray data);
@@ -110,5 +113,8 @@ private:
     QVector<uint8_t> *m_cachedPaletteBasedPixels = nullptr;
     QVector<QRgb> *m_cachedColorBasedPixels = nullptr;
 };
+
+QDebug operator<<(QDebug debug, const ParsedCel &cel);
+
 
 #endif // PARSEDCEL_H

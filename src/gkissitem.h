@@ -7,6 +7,7 @@
 #include <QImage>
 #include <QGraphicsSceneMouseEvent>
 #include <QApplication>
+#include <QDebug>
 #include "parsedkcf.h"
 #include "parsedcel.h"
 #include "parsedcnf.h"
@@ -50,5 +51,7 @@ private:
     QPointF m_dragStartPosition;
     QVector<GKissItem*> m_siblings;
 };
+
+QDebug operator<<(QDebug dbg, const GKissItem &item);
 
 #endif // GKISSITEM_H

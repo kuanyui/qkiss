@@ -11,6 +11,7 @@ ParsedCel::ParsedCel(QString fileName, QByteArray rawData):
     } else {
         parseLegacyCel(rawData);
     }
+    qDebug() << "[DEBUG][ParsedCel] ctor: " << *this;
 }
 
 std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, int paletteIdxInKcf) const
@@ -43,7 +44,7 @@ void ParsedCel::parseModernCel(QByteArray data)
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     switch (data[4]) {
     case 0x20: m_celType = Type::PaletteBased; break;
-    case 0x21: m_celType = Type::ColorBased; break;
+    case 0x21: m_celType = Type::FullColor; break;
     default: qCritical() << "[ERROR] Not a valid CEL file mark!"; return;
     }
     m_bitsPerPixel = udata[5];
@@ -60,15 +61,6 @@ void ParsedCel::parseModernCel(QByteArray data)
     case 8: m_cachedPaletteBasedPixels = new QVector<uint8_t>(pixelRawData.begin(), pixelRawData.end()); break;
     case 32: m_cachedColorBasedPixels = parse32BitsPixelsAsCache(&pixelRawData); break;
     }
-    qDebug() << QStringLiteral("[LOG][ParsedCel] (%1, %2 bits per pixel)     %3    pos(%4, %5)     size(%6, %7)")
-                .arg(m_celType == Type::PaletteBased ? "Palette Based"_L1 : "Full Color"_L1)
-                .arg(m_bitsPerPixel)
-                .arg(m_fileName)
-                .arg(m_x)
-                .arg(m_y)
-                .arg(width())
-                .arg(height())
-                ;
 }
 
 void ParsedCel::parseLegacyCel(QByteArray data)
@@ -160,8 +152,26 @@ QVector<QRgb> *ParsedCel::parse32BitsPixelsAsCache(QByteArray *pixelRawData)
     return vec;
 }
 
+QString ParsedCel::fileName() const
+{
+    return m_fileName;
+}
+
 QRect ParsedCel::getGeometry() const
 {
     return QRect(m_x, m_y, m_width, m_height);
 }
 
+
+QDebug operator<<(QDebug debug, const ParsedCel &cel) {
+    return debug.noquote().nospace() << QStringLiteral("ParsedCel { type: %1 (%2 bits per pixel), \tfileName: \"%3\", \tpos: (%4, %5), \tsize(%6 x %7)")
+                                        .arg(cel.celType() == ParsedCel::Type::PaletteBased ? QStringLiteral("PaletteBased") : QStringLiteral("FullColor"))
+                                        .arg(cel.bitsPerPixel())
+                                        .arg(cel.fileName())
+                                        .arg(cel.x())
+                                        .arg(cel.y())
+                                        .arg(cel.width())
+                                        .arg(cel.height())
+                                        ;
+
+}

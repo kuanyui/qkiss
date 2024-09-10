@@ -134,7 +134,7 @@ bool GKissView::renderCurCnfAllSets()
                 }
                 ParsedKcf *kcf = _kcf.value();
                 item = new GKissItem(cnfCel, cel, kcf, m_archivedFile->curPaletteNo());
-            } else if (cel->celType() == ParsedCel::Type::ColorBased) {
+            } else if (cel->celType() == ParsedCel::Type::FullColor) {
                 item = new GKissItem(cnfCel, cel);
             } else {
                 qCritical() << QString("[ERROR][View] Unknown CEL type (not PaletteBased nor ColorBased), skip: %1")
@@ -145,12 +145,7 @@ bool GKissView::renderCurCnfAllSets()
             // qDebug() << QString("[DEBUG][View] setIdx = %1, cel = %2") .arg(cnfSetIdx) .arg(cnfCel->celFileName());
             scene->addCelItem(item);
             centerOn(item);
-            qDebug() << QString("[DEBUG][View] addItem ID #%1    '%2'    (%3, %4)  Visible = %5")
-                        .arg(item->objId())
-                        .arg(item->celFileName())
-                        .arg(item->pos().x())
-                        .arg(item->pos().y())
-                        .arg(item->isVisible());
+            // qDebug() << "[DEBUG][View] addItem" << *item;
         }
         //qDebug() << "[DEBUG][View] scene.items().length() ==" << scene->items().length();
         // All CEL are rendered as items. Now bound items into obj (according to objId), and handle events.

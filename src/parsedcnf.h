@@ -199,4 +199,7 @@ private:
 };
 
 
+QDebug operator<<(QDebug debug, const ParsedCnfCel &cnfCel);
+
+
 #endif // CNFFILE_H

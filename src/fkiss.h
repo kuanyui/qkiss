@@ -44,10 +44,6 @@ QDebug operator<<(QDebug debug, const Token& token);
 QDebug operator<<(QDebug debug, const Token::Type& tokenType);
 
 
-struct TokenizerState {
-    bool inCmdArgs;
-};
-
 class Fkiss : public QObject
 {
     Q_OBJECT

@@ -11,10 +11,10 @@ Fkiss::Fkiss(QObject *parent)
 void Fkiss::compileScriptLines(const QList<FkissLineInfo> &lineInfoList)
 {
     QVector<Token> tokens = tokenize(lineInfoList);
-    // qDebug() << "[Fkiss] parsed tokens count: " << tokens.length();
-    // foreach (Token token, tokens) {
-    //     qDebug() << "[Fkiss]" << token;
-    // }
+    qDebug() << "[Fkiss] parsed tokens count: " << tokens.length();
+    foreach (Token token, tokens) {
+        qDebug() << "[Fkiss]" << token;
+    }
     parse(tokens);
 }
 
@@ -24,7 +24,6 @@ QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
         auto lineInfo = lineInfoList[r];
         QString line = removePrefixAndCommentOfLine(lineInfo.line);
         int c = 0;  // column index
-        // bool inCmdArgs = false;   // TODO: Too lazy...
         while (c < line.length()) {
             if (line[c].isSpace()) {
                 int begC = c;

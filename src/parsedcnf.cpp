@@ -173,15 +173,16 @@ void ParsedCnf::parseLines(const QStringList &lines)
                 setIndexes.append(x.toInt());
             }
 
-            QString comment = m.captured(6).trimmed();
-            qDebug() << QString("[LOG][ParsedCnf] { objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: [%5], comment: %6 }")
-                .arg(objId)
-                .arg(fix)
-                .arg(celFileName)
-                .arg(kcfFileIndex)
-                .arg(setIndexesStrList.join(","))
-                .arg(comment);
-            ParsedCnfCel *cnfCel = new ParsedCnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes, comment};
+            QString rawComment = m.captured(6).trimmed();
+            // qDebug() << QString("[LOG][ParsedCnf] { objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: [%5], comment: %6 }")
+            //     .arg(objId)
+            //     .arg(fix)
+            //     .arg(celFileName)
+            //     .arg(kcfFileIndex)
+            //     .arg(setIndexesStrList.join(","))
+            //     .arg(comment);
+            ParsedCnfCel *cnfCel = new ParsedCnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes, rawComment};
+            qDebug() << "[DEBUG][ParsedCnf]" << *cnfCel;
             m_cels.append(cnfCel);
         } else if (line.startsWith("$"_L1)) {
             static QRegularExpression reSetNo(R"#(^[$]\d+\s)#");
@@ -289,4 +290,18 @@ QList<ParsedCnfCel *> ParsedCnf::cels() const
 QSize ParsedCnf::playFieldSize() const
 {
     return m_playFieldSize;
+}
+
+QDebug operator<<(QDebug debug, const ParsedCnfCel &cnfCel) {
+    QStringList fmtSetIndexes;
+    foreach (auto x , cnfCel.setsIndexes()) {
+        fmtSetIndexes.append(QString::number(x));
+    }
+    return debug.noquote().nospace() << QString("ParsedCnfCel { objId: %1,    fix: %2,    fileName: %3,     kcfIdx: %4,     sets: [ %5 ],     comment: %6 }")
+                                        .arg(cnfCel.objId())
+                                        .arg(cnfCel.fix())
+                                        .arg(cnfCel.celFileName())
+                                        .arg(cnfCel.kcfFileIndex())
+                                        .arg(fmtSetIndexes.join(", "))
+                                        .arg(cnfCel.comment());
 }
