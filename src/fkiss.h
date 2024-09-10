@@ -23,6 +23,7 @@ struct FkissAction {
 struct Token {
     enum class Type {
         Identifier, // CommandName | VariableName
+        Space,
         LParen,
         RParen,
         Comma,

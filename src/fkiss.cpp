@@ -27,10 +27,13 @@ QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
         // bool inCmdArgs = false;   // TODO: Too lazy...
         while (c < line.length()) {
             if (line[c].isSpace()) {
+                int begC = c;
                 c++;
-                continue;
-            }
-            if (line[c].isLetter()) {
+                while (c < line.length() && line[c].isSpace()) {
+                    c++;
+                }
+                tokens.append(Token(Token::Type::Space, line.mid(begC, c - begC), r, begC));
+            } else if (line[c].isLetter()) {
                 int begC = c;
                 while (c < line.length() && (line[c].isLetterOrNumber() || line[c] == '_')) {
                     c++;
@@ -84,7 +87,7 @@ QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
                 c++;
             }
         }
-        // tokens.append(Token(Token::Type::EndOfLine, "\n", r, line.length()));
+        tokens.append(Token(Token::Type::EndOfLine, "\n", r, line.length()));
     }
     return tokens;
 }
@@ -117,6 +120,7 @@ QDebug operator<<(QDebug debug, const Token::Type &tokenType) {
     QString str;
     switch (tokenType) {
     case Token::Type::Identifier: str = QStringLiteral("Identifier"); break;
+    case Token::Type::Space: str = QStringLiteral("Space"); break;
     case Token::Type::LParen: str = QStringLiteral("LParen"); break;
     case Token::Type::RParen: str = QStringLiteral("RParen"); break;
     case Token::Type::Comma: str = QStringLiteral("Comma"); break;
