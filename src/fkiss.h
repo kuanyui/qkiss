@@ -4,21 +4,10 @@
 #include <QObject>
 #include <QList>
 #include <QHash>
-
-struct FkissLineInfo {
-    size_t lineNoInCnf;
-    QString line;
-};
-
-struct FkissEvent {
-    QString name;
-    QStringList args;
-};
-
-struct FkissAction {
-    QString name;
-    QStringList args;
-};
+#include "fkissvariant.h"
+// ================================================
+// Token
+// ================================================
 
 struct Token {
     enum class Type {
@@ -44,6 +33,37 @@ QDebug operator<<(QDebug debug, const Token& token);
 QDebug operator<<(QDebug debug, const Token::Type& tokenType);
 
 
+// ================================================
+// AST0 (flat, no nested structure (e.g. `alert() ...`, `ifeq() ...` ) )
+// ================================================
+
+using Variant = FkissVariant;
+
+/** Without semantic of command */
+struct ASTCommand {
+    QString name;
+    QList<Variant> args;
+};
+
+// ================================================
+// Fkiss Engine
+// ================================================
+
+struct FkissLineInfo {
+    size_t lineNoInCnf;
+    QString line;
+};
+
+struct FkissEvent {
+    QString name;
+    QStringList args;
+};
+
+struct FkissAction {
+    QString name;
+    QStringList args;
+};
+
 class Fkiss : public QObject
 {
     Q_OBJECT
@@ -54,10 +74,13 @@ public:
 private:
     /** source code -> tokens */
     QVector<Token> tokenize(const QList<FkissLineInfo> &lineInfoList);
-    /** tokens -> AST */
-    void parse(const QVector<Token> &tokens);
+    /** tokens -> AST (flat, no semantic, so no nested structure (e.g. `alert() ...`, `ifeq() ...` )  */
+    QVector<ASTCommand> parse0(const QVector<Token> &tokens);
+    /** Returns the index of nearest Token. If not found, returns -1. */
+    int findNearestToken(QVector<Token> tokens, Token::Type type, int fromIndex);
     /** Remove `;@` prefix and `; comment` suffix. */
     QString removePrefixAndCommentOfLine(QString line);
+    void logSyntaxError(const Token &token, QString msg);
 signals:
 
 private:

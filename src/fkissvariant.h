@@ -11,13 +11,17 @@ public:
         Int,      // 2147483647
         String,   // "Hello!"
         // Cel,      // "RIBBON.CEL"
-        // Object,   // #123
+        Object,   // #123
         // Group,    // !groupName   // Fkiss4 only, unused currently
     };
     FkissVariant(int value);
     FkissVariant(const QString& value);
+    static FkissVariant fromString(const QString &value);
+    static FkissVariant fromInt(const QString &value);
+    static FkissVariant fromObjectId(const QString &value);
     int getInt() const;
     QString getString() const;
+    int getObjectId() const;
     Type type() const;
     operator QString() const;
 
