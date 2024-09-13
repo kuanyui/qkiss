@@ -45,6 +45,8 @@ struct ASTCommand {
     QList<Variant> args;
 };
 
+QDebug operator<<(QDebug debug, const ASTCommand& astCmd);
+
 // ================================================
 // Fkiss Engine
 // ================================================

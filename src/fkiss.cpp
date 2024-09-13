@@ -16,6 +16,9 @@ void Fkiss::compileScriptLines(const QList<FkissLineInfo> &lineInfoList)
     //     qDebug() << "[Fkiss]" << token;
     // }
     QVector<ASTCommand> ast0 = parse0(tokens);
+    foreach (ASTCommand astNode, ast0) {
+        qDebug() << "[Fkiss][ASTCommand]" << astNode;
+    }
 }
 
 QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
@@ -223,3 +226,11 @@ QDebug operator<<(QDebug debug, const Token::Type &tokenType) {
     }
     return debug.nospace() << str;
 }
+
+QDebug operator<<(QDebug debug, const ASTCommand& astCmd) {
+    auto dbg = debug.noquote().nospace() << "[ASTCommand] " << astCmd.name << "( ";
+    foreach (auto arg, astCmd.args) {
+        dbg << arg;
+    }
+    return dbg << ")";
+};
