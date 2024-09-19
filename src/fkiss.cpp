@@ -12,12 +12,12 @@ void Fkiss::compileScriptLines(const QList<FkissLineInfo> &lineInfoList)
 {
     QVector<Token> tokens = tokenize(lineInfoList);
     // qDebug() << "[Fkiss] parsed tokens count: " << tokens.length();
-    // foreach (Token token, tokens) {
-    //     qDebug() << "[Fkiss]" << token;
-    // }
+    foreach (Token token, tokens) {
+        qDebug() << "[Fkiss]" << token;
+    }
     QVector<ASTCommand> ast0 = parse0(tokens);
     foreach (ASTCommand astNode, ast0) {
-        qDebug() << "[Fkiss][ASTCommand]" << astNode;
+        qDebug() << "[Fkiss]" << astNode;
     }
 }
 
@@ -25,6 +25,7 @@ QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
     QVector<Token> tokens;
     for (int r = 0; r < lineInfoList.length(); ++r) {  // row index (line index)
         auto lineInfo = lineInfoList[r];
+        int oriLineNo = lineInfo.lineNoInCnf;
         QString line = removePrefixAndCommentOfLine(lineInfo.line);
         int c = 0;  // column index
         while (c < line.length()) {
@@ -139,7 +140,7 @@ QVector<ASTCommand> Fkiss::parse0(const QVector<Token> &tokens)
             QVector<Variant> cmdArgs;
             bool waitComma = false;
             for (int j = 0; j < argsTokensWithoutParensAndSpaces.length(); j++) {
-                const Token *tk = &tokens[j];
+                const Token *tk = argsTokensWithoutParensAndSpaces[j];
                 if (tk->type == Token::Type::Comma) {
                     if (waitComma) {
                         waitComma = false;
@@ -209,21 +210,15 @@ void Fkiss::logSyntaxError(const Token &token, QString msg)
 }
 
 QDebug operator<<(QDebug debug, const Token &token) {
-    return debug.nospace() << "Token { type: " << token.type << ", value: " << token.value << " }";
+    return debug.nospace() << QStringLiteral("Token { type: %1, value: %2, line: %3, col: %4 }")
+                                        .arg(Token::stringifyType(token.type))
+                                        .arg(token.value)
+                                        .arg(token.lineNo())
+                                        .arg(token.columnNo());
 }
 QDebug operator<<(QDebug debug, const Token::Type &tokenType) {
     QString str;
-    switch (tokenType) {
-    case Token::Type::Identifier: str = QStringLiteral("Identifier"); break;
-    case Token::Type::Space: str = QStringLiteral("Space"); break;
-    case Token::Type::LParen: str = QStringLiteral("LParen"); break;
-    case Token::Type::RParen: str = QStringLiteral("RParen"); break;
-    case Token::Type::Comma: str = QStringLiteral("Comma"); break;
-    case Token::Type::String: str = QStringLiteral("String"); break;
-    case Token::Type::Integer: str = QStringLiteral("Integer"); break;
-    case Token::Type::ObjectID: str = QStringLiteral("ObjectID"); break;
-    case Token::Type::EndOfLine: str = QStringLiteral("EndOfLine"); break;
-    }
+    Token::stringifyType(tokenType);
     return debug.nospace() << str;
 }
 
@@ -234,3 +229,18 @@ QDebug operator<<(QDebug debug, const ASTCommand& astCmd) {
     }
     return dbg << ")";
 };
+
+QString Token::stringifyType(Type type)
+{
+    switch (type) {
+    case Type::Identifier: return QStringLiteral("Identifier");
+    case Type::Space: return QStringLiteral("Space");
+    case Type::LParen: return QStringLiteral("LParen");
+    case Type::RParen: return QStringLiteral("RParen");
+    case Type::Comma: return QStringLiteral("Comma");
+    case Type::String: return QStringLiteral("String");
+    case Type::Integer: return QStringLiteral("Integer");
+    case Type::ObjectID: return QStringLiteral("ObjectID");
+    case Type::EndOfLine: return QStringLiteral("EndOfLine");
+    }
+}

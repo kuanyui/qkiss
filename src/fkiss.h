@@ -22,6 +22,7 @@ struct Token {
         EndOfLine
     };
     Token(Type tokenType, const QString& value, int lineIdx, int columnIdx) : type(tokenType), value(value), lineIdx(lineIdx), columnIdx(columnIdx) {}
+    static QString stringifyType(Type type);
     int lineNo() const { return lineIdx + 1; }
     int columnNo() const { return columnIdx + 1; }
     Type type;
