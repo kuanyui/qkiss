@@ -9,6 +9,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_compile_options(-Wall -Wextra -Wunused -Wunused-variable)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    add_compile_options(/W4)
+endif()
+
+
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools)
 find_package(ICU REQUIRED COMPONENTS uc i18n data)
