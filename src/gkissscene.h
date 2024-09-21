@@ -18,7 +18,7 @@ public:
     void drawCurSetBackground();
     void addCelItem(GKissItem *item);
     std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
-    void bindItemsToObjects(); // TODO: Move this function to GKissScene
+    void bindItemsToObjects();
 
 private:
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;

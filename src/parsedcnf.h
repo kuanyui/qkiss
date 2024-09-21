@@ -148,7 +148,7 @@ public:
     QString fileName() const;
     uint32_t outsideBorderColor() const;
 
-    QList<int32_t> sortedObjIdList() const;
+    const QList<int32_t> &sortedObjIdList() const;
 
 private:
     void log(const QString &line);
@@ -193,7 +193,7 @@ private:
     u_int32_t m_outsideColor = 0;  // if not specified, set to 0.
     QList<ParsedCnfCel *> m_cels;
     QList<ParsedCnfSet *> m_sets;
-    /** ObjectID may be not continuous, and CNF's set (starts with $) is sorted by the value of ObjectID. */
+    /** ObjectID may be not continuous (?), and CNF's set (starts with $) is sorted by the value of ObjectID. */
     QList<int32_t> m_sortedObjIdList;   // DEPRECATED: Unused and unneededanymore.
     Fkiss *m_fkiss;
 };

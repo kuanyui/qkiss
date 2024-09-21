@@ -84,15 +84,15 @@ std::optional<QVector<GKissItem *> *>GKissScene::getItemsByObjId(int32_t objId)
 
 void GKissScene::bindItemsToObjects()
 {
-    /** (In the CEL list (#)) ordered by the value of ObjectID . Length is always larger than object potitions list ($) */
-    QList<int32_t> sortedObjIdList = m_cnf->sortedObjIdList();
+    // /** (In the CEL list (#)) ordered by the value of ObjectID . Length is always larger than object potitions list ($) */
+    // const QList<int32_t> &sortedObjIdList = m_cnf->sortedObjIdList();
     /** (In the object potitions list ($)) Ordered by the value of ObjectID. */
-    QList<ParsedCnfSetObjPos> objPosList = m_cnfSet->getObjPosList();
+    const QList<ParsedCnfSetObjPos> &objPosList = m_cnfSet->getObjPosList();
     // qDebug() << "BIND FOR SCENE ====================================";
     // qDebug() << QStringLiteral("[DEBUG][Scene] sortedObjIdList (Length = %1)").arg(sortedObjIdList.length()) << sortedObjIdList;  // FIXME: Misunderstood. Unneeded anymore. Should remove it.
     // qDebug() << QStringLiteral("[DEBUG][Scene] ObjPosList (Length = %1)").arg(objPosList.length());
     // Iterate by objId (small to large)
-    for (size_t objId = 0;  objId  < objPosList.length(); objId ++) {
+    for (size_t objId = 0; objId < objPosList.length(); objId ++) {
         auto _objPos = objPosList[objId ];
         QPoint objPos = _objPos.has_value() ? _objPos.value() : QPoint(0, 0);
         // qDebug() << QStringLiteral("[DEBUG][Scene] index: %1,   objId: %2,   objPos: (%3, %4)").arg(i).arg(objId).arg(objPos.x()).arg(objPos.y());

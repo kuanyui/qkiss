@@ -252,7 +252,7 @@ void ParsedCnf::startToParseSetLines()
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
 }
 
-QList<int32_t> ParsedCnf::sortedObjIdList() const
+const QList<int32_t> &ParsedCnf::sortedObjIdList() const
 {
     return m_sortedObjIdList;
 }
