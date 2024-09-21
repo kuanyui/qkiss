@@ -46,6 +46,12 @@ struct ASTCommand {
     QList<Variant> args;
 };
 
+struct ASTPairedCommands {
+    std::shared_ptr<ASTCommand> event;
+    QVector<std::shared_ptr<ASTCommand>> actions;
+};
+
+
 QDebug operator<<(QDebug debug, const ASTCommand& astCmd);
 
 // ================================================
@@ -57,14 +63,29 @@ struct FkissLineInfo {
     QString line;
 };
 
-struct FkissEvent {
-    QString name;
-    QStringList args;
+enum class FkissVersion {
+    Unknown = -1,
+    FKiSS1 = 0,
+    FKiSS1b = 1,
+    FKiSS2 = 2,
+    FKiSS2_1 = 3,
+    FKiSS3 = 4,
+    FKiSS4 = 5,
 };
-
-struct FkissAction {
-    QString name;
-    QStringList args;
+struct FkissKeywordInfo {
+    QString id;
+    /**
+     * Val	FKiSS Version
+     * 0	FKiSS1
+     * 1	FKiSS1b
+     * 2	FKiSS2
+     * 3	FKiSS2.1
+     * 4	FKiSS3
+     * 5	FKiSS4
+     */
+    FkissVersion fkissVersion;
+    bool implemented;
+    // QString specUrl;
 };
 
 class Fkiss : public QObject
@@ -73,22 +94,23 @@ class Fkiss : public QObject
 public:
     explicit Fkiss(QObject *parent = nullptr);
     void compileScriptLines(const QList<FkissLineInfo> &lineInfoList);
-
+    static bool commandIsEvent(const QString &command);
+    static bool commandIsAction(const QString &command);
 private:
     /** source code -> tokens */
     QVector<Token> tokenize(const QList<FkissLineInfo> &lineInfoList);
     /** tokens -> AST (flat, no semantic, so no nested structure (e.g. `alert() ...`, `ifeq() ...` )  */
-    QVector<ASTCommand> parse0(const QVector<Token> &tokens);
+    QVector<std::shared_ptr<ASTCommand> > parse0(const QVector<Token> &tokens);
     /** Returns the index of nearest Token. If not found, returns -1. */
     int findNearestToken(QVector<Token> tokens, Token::Type type, int fromIndex);
     /** Remove `;@` prefix and `; comment` suffix. */
     QString removePrefixAndCommentOfLine(QString line);
+    void pairAstCommands(QVector<std::shared_ptr<ASTCommand> > &commands);
     void logSyntaxError(const Token &token, QString msg);
+    QVector<std::shared_ptr<ASTPairedCommands>> m_evpairs;
+    static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
+    static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
 signals:
-
-private:
-    QVector<FkissEvent*> m_events;
-    QVector<FkissAction*> m_actions;
 };
 
 

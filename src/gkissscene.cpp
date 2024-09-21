@@ -115,3 +115,19 @@ void GKissScene::bindItemsToObjects()
     }
 }
 
+bool GKissScene::moveObjectTo(size_t objId, int x, int y)
+{
+    // const auto _objPos = m_cnfSet->getObjPosByObjId(objId);
+    // QPoint objPos = _objPos.has_value() ? _objPos.value() : QPoint(0, 0);
+    auto _items = getItemsByObjId(objId);
+    if (!_items.has_value()) {
+        qWarning() << QStringLiteral("[Scene] WTF, objectId %1 has no item??? Skip.").arg(objId);
+        return false;
+    }
+    auto items = _items.value();
+    foreach (GKissItem *item, *items) {
+        item->setPos(x + item->cel()->x(),
+                     y + item->cel()->y());
+    }
+}
+

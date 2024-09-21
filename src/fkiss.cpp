@@ -1,6 +1,219 @@
 #include "fkiss.h"
 #include <QRegularExpression>
 
+const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_EVENT = {
+    // ### Unique ###
+    // Only one of each of these events can be defined in a single KiSS Artform.
+    { "initialize", { "initialize", FkissVersion::FKiSS1, false } },
+    { "begin", { "begin", FkissVersion::FKiSS1, false } },
+    { "end", { "end", FkissVersion::FKiSS1, false } },
+    { "overflow", { "overflow", FkissVersion::FKiSS3, false } },
+    { "never", { "never", FkissVersion::FKiSS1b, false } },
+
+    // ### Specific ###
+    // These events are specific to sets, colors, and version.
+    { "set", { "set", FkissVersion::FKiSS1, false } },
+    { "col", { "col", FkissVersion::FKiSS1, false } },
+    { "version", { "version", FkissVersion::FKiSS2, false } },
+
+    // ### Named ###
+    // These events are associated with named blocks of code.
+    { "alarm", { "alarm", FkissVersion::FKiSS1, false } },
+    { "label", { "label", FkissVersion::FKiSS1, false } },
+
+    // ### Rectangle-based collision ###
+    // These events are associated with collisions between rectangles.
+    // Rectangle collision is faster than pixel-based collisions but not pixel accurate.
+    { "in", { "in", FkissVersion::FKiSS2, false } },
+    { "out", { "out", FkissVersion::FKiSS2, false } },
+
+    { "stillin", { "stillin", FkissVersion::Unknown, false } },
+    { "stillout", { "stillout", FkissVersion::Unknown, false } },
+
+    // ### Pixel-based collision ###
+    // These events are associated with collisions between pixels of cels.
+    { "collide", { "collide", FkissVersion::Unknown, false } },
+    { "apart", { "apart", FkissVersion::Unknown, false } },
+
+    // ### Mouse-based collision ###
+    // These events are associated with the movement of the mouse cursor.
+    { "mousein", { "mousein", FkissVersion::Unknown, false } },
+    { "mouseout", { "mouseout", FkissVersion::Unknown, false } },
+
+    // ### Keyboard ###
+    // These events are associated with pressing of keys.
+    { "keypress", { "keypress", FkissVersion::Unknown, false } },
+    { "keyrelease", { "keyrelease", FkissVersion::Unknown, false } },
+
+    // ### Click-and-drag ###
+    // These events are associated with clicking on cels as well as clicking and dragging cels around.
+    { "press", { "press", FkissVersion::FKiSS1, false } },
+    { "catch", { "catch", FkissVersion::FKiSS1, false } },   // catch(target) - The catch event is triggered when the user first begins to move the target .
+    { "drop", { "drop", FkissVersion::FKiSS1, false } },   // drop(target) - The drop event is triggered when the user loses control of the target after attempting to move it .
+
+    { "release", { "release", FkissVersion::Unknown, false } },
+    { "fixcatch", { "fixcatch", FkissVersion::Unknown, false } },
+    { "fixdrop", { "fixdrop", FkissVersion::Unknown, false } },
+
+    // ### Fix ###
+    // These events are associated with the fix value of an object.
+    { "unfix", { "unfix", FkissVersion::Unknown, false } },
+    { "fixcatch", { "fixcatch", FkissVersion::Unknown, false } },
+    { "fixdrop", { "fixdrop", FkissVersion::Unknown, false } },
+
+    // ### Attachment ###
+    // This event is associated with detaching a target from a parent object.
+    { "detached", { "detached", FkissVersion::Unknown, false  }}
+};
+const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
+    // ### Alarms ###
+    // These actions set up alarms, which are events triggered when certain conditions occur, such as a timer going off.
+    { "timer", { "timer", FkissVersion::Unknown, false } },
+    { "randomtimer", { "randomtimer", FkissVersion::Unknown, false } },
+    { "lettimer", { "lettimer", FkissVersion::Unknown, false } },
+    { "iffixed", { "iffixed", FkissVersion::Unknown, false } },
+    { "ifmapped", { "ifmapped", FkissVersion::Unknown, false } },
+    { "ifmoved", { "ifmoved", FkissVersion::Unknown, false } },
+    { "ifnotfixed", { "ifnotfixed", FkissVersion::Unknown, false } },
+    { "ifnotmapped", { "ifnotmapped", FkissVersion::Unknown, false } },
+    { "ifnotmoved", { "ifnotmoved", FkissVersion::Unknown, false } },
+    { "exitevent", { "exitevent", FkissVersion::Unknown, false } },
+
+    // ### Labels ###
+    // These actions use labels that mark a block of actions to execute that block of actions from several different places.
+    { "gosub", { "gosub", FkissVersion::Unknown, false } },
+    { "gosubrandom", { "gosubrandom", FkissVersion::Unknown, false } },
+    { "goto", { "goto", FkissVersion::Unknown, false } },
+    { "gotorandom", { "gotorandom", FkissVersion::Unknown, false } },
+    { "repeat", { "repeat", FkissVersion::Unknown, false } },
+    { "exitloop", { "exitloop", FkissVersion::Unknown, false } },
+
+    // ### Mapping ###
+    // These actions control the visibility of a cel. A mapped cel is visible while an unmapped cel is not visible.
+    { "map", { "map", FkissVersion::Unknown, false } },
+    { "unmap", { "unmap", FkissVersion::Unknown, false } },
+    { "altmap", { "altmap", FkissVersion::Unknown, false } },
+    { "letmapped", { "letmapped", FkissVersion::Unknown, false } },
+
+    // ### Movement and Position ###
+    // These actions control the position of a target and allow an action to move a cel in response to an event.
+    { "move", { "move", FkissVersion::Unknown, false } },
+    { "moveto", { "moveto", FkissVersion::Unknown, false } },
+    { "movebyx", { "movebyx", FkissVersion::Unknown, false } },
+    { "movebyy", { "movebyy", FkissVersion::Unknown, false } },
+    { "movetorand", { "movetorand", FkissVersion::Unknown, false } },
+    { "moverandx", { "moverandx", FkissVersion::Unknown, false } },
+    { "moverandy", { "moverandy", FkissVersion::Unknown, false } },
+    { "restrictx", { "restrictx", FkissVersion::Unknown, false } },
+    { "restricty", { "restricty", FkissVersion::Unknown, false } },
+    { "letinitx", { "letinitx", FkissVersion::Unknown, false } },
+    { "letinity", { "letinity", FkissVersion::Unknown, false } },
+    { "letobjectx", { "letobjectx", FkissVersion::Unknown, false } },
+    { "letobjecty", { "letobjecty", FkissVersion::Unknown, false } },
+    { "letcatch", { "letcatch", FkissVersion::Unknown, false } },
+
+    // ### Message ###
+    // These actions show messages to the user or trigger a shell command.
+    { "debug", { "debug", FkissVersion::Unknown, false } },
+    { "notify", { "notify", FkissVersion::Unknown, false } },
+    { "shell", { "shell", FkissVersion::Unknown, false } },
+
+    // ### Sound and Music ###
+    // These actions control music and sound.
+    { "music", { "music", FkissVersion::Unknown, false } },
+    { "sound", { "sound", FkissVersion::Unknown, false } },
+
+    // ### Translucency ###
+    // These actions control the translucency of a target.
+    { "transparent", { "transparent", FkissVersion::Unknown, false } },
+    { "lettransparent", { "lettransparent", FkissVersion::Unknown, false } },
+
+    // ### Attachment ###
+    // These actions control the process of attaching or detaching an object to another object.
+    { "attach", { "attach", FkissVersion::Unknown, false } },
+    { "glue", { "glue", FkissVersion::Unknown, false } },
+    { "detach", { "detach", FkissVersion::Unknown, false } },
+    { "letchild", { "letchild", FkissVersion::Unknown, false } },
+    { "letparent", { "letparent", FkissVersion::Unknown, false } },
+    { "letsibling", { "letsibling", FkissVersion::Unknown, false } },
+
+    // ### Group Frame ###
+    // These actions change the frame that is displayed for a group of cels.
+    { "setframe", { "setframe", FkissVersion::Unknown, false } },
+    { "letframe", { "letframe", FkissVersion::Unknown, false } },
+
+    // ### Arithmetic ###
+    // These actions perform arithmetic operations on a variable.
+    { "add", { "add", FkissVersion::Unknown, false } },
+    { "sub", { "sub", FkissVersion::Unknown, false } },
+    { "mul", { "mul", FkissVersion::Unknown, false } },
+    { "div", { "div", FkissVersion::Unknown, false } },
+    { "mod", { "mod", FkissVersion::Unknown, false } },
+    { "random", { "random", FkissVersion::Unknown, false } },
+
+    // ### Object/Cel State ###
+    // These actions control or read the state of an object.
+    { "setkcf", { "setkcf", FkissVersion::Unknown, false } },
+    { "letkcf", { "letkcf", FkissVersion::Unknown, false } },
+    { "setfix", { "setfix", FkissVersion::Unknown, false } },
+    { "letfix", { "letfix", FkissVersion::Unknown, false } },
+    { "ghost", { "ghost", FkissVersion::Unknown, false } },
+    { "letwidth", { "letwidth", FkissVersion::Unknown, false } },
+    { "letheight", { "letheight", FkissVersion::Unknown, false } },
+    { "letcollide", { "letcollide", FkissVersion::Unknown, false } },
+    { "letinside", { "letinside", FkissVersion::Unknown, false } },
+
+    // ### Conditionals ###
+    // These actions control the flow of execution through a block of actions.
+    { "ifequal", { "ifequal", FkissVersion::Unknown, false } },
+    { "ifnotequal", { "ifnotequal", FkissVersion::Unknown, false } },
+    { "ifgreaterthan", { "ifgreaterthan", FkissVersion::Unknown, false } },
+    { "iflessthan", { "iflessthan", FkissVersion::Unknown, false } },
+    { "else", { "else", FkissVersion::Unknown, false } },
+    { "elseifequal", { "elseifequal", FkissVersion::Unknown, false } },
+    { "elseifnotequal", { "elseifnotequal", FkissVersion::Unknown, false } },
+    { "elseifgreaterthan", { "elseifgreaterthan", FkissVersion::Unknown, false } },
+    { "elseiflessthan", { "elseiflessthan", FkissVersion::Unknown, false } },
+    { "endif", { "endif", FkissVersion::Unknown, false } },
+
+    // ### Keyboard ###
+    // These actions read the keyboard.
+    { "letkey", { "letkey", FkissVersion::Unknown, false } },
+    { "letkeymap", { "letkeymap", FkissVersion::Unknown, false } },
+
+    // ### Mouse ###
+    // These actions read the position of the mouse cursor.
+    { "letmousex", { "letmousex", FkissVersion::Unknown, false } },
+    { "letmousey", { "letmousey", FkissVersion::Unknown, false } },
+
+    // ### Environment ###
+    // These actions affect the environment, set, or play field.
+    { "changecol", { "changecol", FkissVersion::Unknown, false } },
+    { "changeset", { "changeset", FkissVersion::Unknown, false } },
+    { "letpal", { "letpal", FkissVersion::Unknown, false } },
+    { "letset", { "letset", FkissVersion::Unknown, false } },
+
+    // ### Viewport ###
+    // These actions control the size of the window and view on that window.
+    { "windowsize", { "windowsize", FkissVersion::Unknown, false } },
+    { "viewport", { "viewport", FkissVersion::Unknown, false } },
+
+    // ### Miscellaneous ###
+    // These actions fall in no particular category.
+    { "nop", { "nop", FkissVersion::Unknown, false } },
+    { "quit", { "quit", FkissVersion::Unknown, false } },
+
+    // ### Pool Values ###
+    // These actions control access to value pools.
+    { "valuepool", { "valuepool", FkissVersion::Unknown, false } },
+    { "savevalue", { "savevalue", FkissVersion::Unknown, false } },
+    { "loadvalue", { "loadvalue", FkissVersion::Unknown, false } },
+    { "deletevalue", { "deletevalue", FkissVersion::Unknown, false } },
+
+    // ### Variables ###
+    // These actions affect variables.
+    { "let", { "let", FkissVersion::Unknown, false  }}
+};
 
 Fkiss::Fkiss(QObject *parent)
     : QObject{parent}
@@ -12,13 +225,24 @@ void Fkiss::compileScriptLines(const QList<FkissLineInfo> &lineInfoList)
 {
     QVector<Token> tokens = tokenize(lineInfoList);
     // qDebug() << "[Fkiss] parsed tokens count: " << tokens.length();
-    foreach (Token token, tokens) {
-        qDebug() << "[Fkiss]" << token;
-    }
-    QVector<ASTCommand> ast0 = parse0(tokens);
-    foreach (ASTCommand astNode, ast0) {
-        qDebug() << "[Fkiss]" << astNode;
-    }
+    // foreach (Token token, tokens) {
+    //     qDebug() << "[Fkiss]" << token;
+    // }
+    QVector<std::shared_ptr<ASTCommand>> ast0 = parse0(tokens);
+    // foreach (ASTCommand astNode, ast0) {
+    //     qDebug() << "[Fkiss]" << astNode;
+    // }
+    pairAstCommands(ast0);
+}
+
+bool Fkiss::commandIsEvent(const QString &command)
+{
+    return Fkiss::KEYWORDS_EVENT.contains(command);
+}
+
+bool Fkiss::commandIsAction(const QString &command)
+{
+    return Fkiss::KEYWORDS_ACTION.contains(command);
 }
 
 QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
@@ -35,21 +259,21 @@ QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
                 while (c < line.length() && line[c].isSpace()) {
                     c++;
                 }
-                tokens.append(Token(Token::Type::Space, line.mid(begC, c - begC), r, begC));
+                tokens.append(Token(Token::Type::Space, line.mid(begC, c - begC), oriLineNo, begC));
             } else if (line[c].isLetter()) {
                 int begC = c;
                 while (c < line.length() && (line[c].isLetterOrNumber() || line[c] == '_')) {
                     c++;
                 }
-                tokens.append(Token(Token::Type::Identifier, line.mid(begC, c - begC), r, begC));
+                tokens.append(Token(Token::Type::Identifier, line.mid(begC, c - begC), oriLineNo, begC));
             } else if (line[c] == '(') {
-                tokens.append(Token(Token::Type::LParen, "(", r, c));
+                tokens.append(Token(Token::Type::LParen, "(", oriLineNo, c));
                 c++;
             } else if (line[c] == ')') {
-                tokens.append(Token(Token::Type::RParen, ")", r, c));
+                tokens.append(Token(Token::Type::RParen, ")", oriLineNo, c));
                 c++;
             } else if (line[c] == ',') {
-                tokens.append(Token(Token::Type::Comma, ",", r, c));
+                tokens.append(Token(Token::Type::Comma, ",", oriLineNo, c));
                 c++;
             } else if (line[c] == '"') {
                 int begC = c;
@@ -62,7 +286,7 @@ QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
                         QString strWithQuotes = line.mid(begC, c - begC);
                         QString str = strWithQuotes.mid(1, strWithQuotes.length() - 2);
                         QString cleanStr = str.replace(R"#(\")#", R"#(")#");
-                        tokens.append(Token(Token::Type::String, cleanStr, r, begC));
+                        tokens.append(Token(Token::Type::String, cleanStr, oriLineNo, begC));
                         break;  // end of a string
                     }
                     c++;
@@ -77,27 +301,27 @@ QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
                 while (c < line.length() && line[c].isDigit()) {
                     c++;
                 }
-                tokens.append(Token(Token::Type::ObjectID, line.mid(begC, c - begC), r, begC));
+                tokens.append(Token(Token::Type::ObjectID, line.mid(begC, c - begC), oriLineNo, begC));
             } else if (line[c].isDigit() || (c+1 < line.length() && line[c] == '-' && line[c+1].isDigit())) {
                 int begC = c;
                 c++;
                 while (c < line.length() && line[c].isDigit()) {
                     c++;
                 }
-                tokens.append(Token(Token::Type::Integer, line.mid(begC, c - begC), r, begC));
+                tokens.append(Token(Token::Type::Integer, line.mid(begC, c - begC), oriLineNo, begC));
             } else {
                 qCritical() << QStringLiteral("[ERROR][Fkiss::Tokenizer] Unexpected character [%1:%2]: %3").arg(lineInfo.lineNoInCnf).arg(c).arg(lineInfo.line);
                 c++;
             }
         }
-        tokens.append(Token(Token::Type::EndOfLine, "\n", r, line.length()));
+        tokens.append(Token(Token::Type::EndOfLine, "\n", oriLineNo, line.length()));
     }
     return tokens;
 }
 
-QVector<ASTCommand> Fkiss::parse0(const QVector<Token> &tokens)
+QVector<std::shared_ptr<ASTCommand>> Fkiss::parse0(const QVector<Token> &tokens)
 {
-    QVector<ASTCommand> astCmds;
+    QVector<std::shared_ptr<ASTCommand>> astCmds;
     bool bodyStarted = false;
     for (int i = 0; i < tokens.length(); i++) {
         const Token &token = tokens[i];
@@ -165,7 +389,7 @@ QVector<ASTCommand> Fkiss::parse0(const QVector<Token> &tokens)
             if (nextTk.type != Token::Type::EndOfLine && nextTk.type != Token::Type::Space) {
                 logSyntaxError(nextTk, "A command must be followed by a space or an EOL. Still runnable but this is a wrong code.");
             }
-            astCmds.append(ASTCommand{cmdName, cmdArgs});
+            astCmds.append(std::make_shared<ASTCommand>(ASTCommand{cmdName, cmdArgs}));
         }
     }
     return astCmds;
@@ -198,6 +422,26 @@ QString Fkiss::removePrefixAndCommentOfLine(QString line) {
         }
     }
     return line;
+}
+
+void Fkiss::pairAstCommands(QVector<std::shared_ptr<ASTCommand>> &commands)
+{
+    m_evpairs.clear();
+    std::shared_ptr<ASTPairedCommands> curPair;
+    foreach (std::shared_ptr<ASTCommand> cmd, commands) {
+        if (commandIsEvent(cmd->name)) {
+            m_evpairs.append(curPair);
+            curPair = std::make_shared<ASTPairedCommands>();
+            curPair->event = cmd;
+        } else if (commandIsAction(cmd->name)) {
+            curPair->actions.append(cmd);
+        } else {
+            qWarning() << QStringLiteral("[WARNING][Fkiss] Unknown command \"%1\", skip.").arg(cmd->name);
+        }
+    }
+    if (m_evpairs.length() != 0) {
+        m_evpairs.removeFirst();
+    }
 }
 
 void Fkiss::logSyntaxError(const Token &token, QString msg)

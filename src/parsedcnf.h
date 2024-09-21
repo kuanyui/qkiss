@@ -106,6 +106,7 @@ public:
     void appendObjPos(int32_t x, int32_t y);
     void appendEmptyObjPos();
     int32_t paletteNoInKcf() const;
+    /** @see ParsedCnfSet::m_objPosList */
     const QList<ParsedCnfSetObjPos> &getObjPosList() const;
     /** if returns nullopt, it means don't specify the object position. Just leave it as (0,0) */
     const ParsedCnfSetObjPos getObjPosByObjId(int32_t objId) const;
@@ -121,6 +122,8 @@ private:
      * - Positions are listed by order of object ID number.
      * - No spaces may appear between xpos, ypos, and the comma.
      * - An aserisk ('*') means no position data is given for this object. If the object exists, a position of 0,0 is assumed.
+     *
+     * - (My note: In CNF, you should assume $<PALETTE_NO> <POS_OBJ_ID_0> <POS_OBJ_ID_1> <POS_OBJ_ID_2>... is continuous.)
      */
     QList<ParsedCnfSetObjPos> m_objPosList;
 };

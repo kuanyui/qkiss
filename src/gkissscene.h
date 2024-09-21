@@ -19,6 +19,7 @@ public:
     void addCelItem(GKissItem *item);
     std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
     void bindItemsToObjects();
+    bool moveObjectTo(size_t objId, int x, int y);
 
 private:
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
