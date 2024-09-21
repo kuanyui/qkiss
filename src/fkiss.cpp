@@ -426,21 +426,20 @@ QString Fkiss::removePrefixAndCommentOfLine(QString line) {
 void Fkiss::pairAstCommands(QVector<std::shared_ptr<ASTCommand>> &commands)
 {
     m_evpairs.clear();
-    std::shared_ptr<ASTPairedCommands> curPair;
+    std::shared_ptr<ASTPairedCommands> curPair = std::make_shared<ASTPairedCommands>();  // create sentinel
+    m_evpairs.append(curPair);   // add sentinel
     foreach (std::shared_ptr<ASTCommand> cmd, commands) {
         if (commandIsEvent(cmd->name)) {
-            m_evpairs.append(curPair);
             curPair = std::make_shared<ASTPairedCommands>();
             curPair->event = cmd;
+            m_evpairs.append(curPair);
         } else if (commandIsAction(cmd->name)) {
             curPair->actions.append(cmd);
         } else {
             qWarning() << QStringLiteral("[WARNING][Fkiss] Unknown command \"%1\", skip.").arg(cmd->name);
         }
     }
-    if (m_evpairs.length() != 0) {
-        m_evpairs.removeFirst();
-    }
+    m_evpairs.removeFirst();  // remove sentinel
 }
 
 void Fkiss::logSyntaxError(const Token &token, QString msg)
