@@ -8,7 +8,7 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_EVENT = {
     { "begin", { "begin", FkissVersion::FKiSS1, false } },
     { "end", { "end", FkissVersion::FKiSS1, false } },
     { "overflow", { "overflow", FkissVersion::FKiSS3, false } },
-    { "never", { "never", FkissVersion::FKiSS1b, false } },
+    { "never", { "never", FkissVersion::FKiSS1, false } },
 
     // ### Specific ###
     // These events are specific to sets, colors, and version.
@@ -48,28 +48,27 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_EVENT = {
     // ### Click-and-drag ###
     // These events are associated with clicking on cels as well as clicking and dragging cels around.
     { "press", { "press", FkissVersion::FKiSS1, false } },
-    { "catch", { "catch", FkissVersion::FKiSS1, false } },   // catch(target) - The catch event is triggered when the user first begins to move the target .
-    { "drop", { "drop", FkissVersion::FKiSS1, false } },   // drop(target) - The drop event is triggered when the user loses control of the target after attempting to move it .
+    { "catch", { "catch", FkissVersion::FKiSS1, false } },   // catch(target) - The catch event is triggered when the user first begins to move the target.
+    { "drop", { "drop", FkissVersion::FKiSS1, false } },   // drop(target) - The drop event is triggered when the user loses control of the target after attempting to move it.
 
-    { "release", { "release", FkissVersion::Unknown, false } },
-    { "fixcatch", { "fixcatch", FkissVersion::Unknown, false } },
-    { "fixdrop", { "fixdrop", FkissVersion::Unknown, false } },
+    { "release", { "release", FkissVersion::FKiSS1, false } },
+    { "fixcatch", { "fixcatch", FkissVersion::FKiSS1, false } },
+    { "fixdrop", { "fixdrop", FkissVersion::FKiSS1, false } },
 
     // ### Fix ###
     // These events are associated with the fix value of an object.
-    { "unfix", { "unfix", FkissVersion::Unknown, false } },
-    { "fixcatch", { "fixcatch", FkissVersion::Unknown, false } },
-    { "fixdrop", { "fixdrop", FkissVersion::Unknown, false } },
+    { "unfix", { "unfix", FkissVersion::FKiSS1, false } },
 
     // ### Attachment ###
     // This event is associated with detaching a target from a parent object.
-    { "detached", { "detached", FkissVersion::Unknown, false  }}
+    { "detached", { "detached", FkissVersion::Unknown, false } }
 };
+
 const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
     // ### Alarms ###
     // These actions set up alarms, which are events triggered when certain conditions occur, such as a timer going off.
-    { "timer", { "timer", FkissVersion::Unknown, false } },
-    { "randomtimer", { "randomtimer", FkissVersion::Unknown, false } },
+    { "timer", { "timer", FkissVersion::FKiSS1, false } },
+    { "randomtimer", { "randomtimer", FkissVersion::FKiSS1, false } },
     { "lettimer", { "lettimer", FkissVersion::Unknown, false } },
     { "iffixed", { "iffixed", FkissVersion::Unknown, false } },
     { "ifmapped", { "ifmapped", FkissVersion::Unknown, false } },
@@ -90,14 +89,14 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
 
     // ### Mapping ###
     // These actions control the visibility of a cel. A mapped cel is visible while an unmapped cel is not visible.
-    { "map", { "map", FkissVersion::Unknown, false } },
-    { "unmap", { "unmap", FkissVersion::Unknown, false } },
-    { "altmap", { "altmap", FkissVersion::Unknown, false } },
+    { "map", { "map", FkissVersion::FKiSS1, false } },
+    { "unmap", { "unmap", FkissVersion::FKiSS1, false } },
+    { "altmap", { "altmap", FkissVersion::FKiSS1, false } },
     { "letmapped", { "letmapped", FkissVersion::Unknown, false } },
 
     // ### Movement and Position ###
     // These actions control the position of a target and allow an action to move a cel in response to an event.
-    { "move", { "move", FkissVersion::Unknown, false } },
+    { "move", { "move", FkissVersion::FKiSS1, false } },
     { "moveto", { "moveto", FkissVersion::Unknown, false } },
     { "movebyx", { "movebyx", FkissVersion::Unknown, false } },
     { "movebyy", { "movebyy", FkissVersion::Unknown, false } },
@@ -114,18 +113,18 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
 
     // ### Message ###
     // These actions show messages to the user or trigger a shell command.
-    { "debug", { "debug", FkissVersion::Unknown, false } },
+    { "debug", { "debug", FkissVersion::FKiSS1, false } },
     { "notify", { "notify", FkissVersion::Unknown, false } },
-    { "shell", { "shell", FkissVersion::Unknown, false } },
+    { "shell", { "shell", FkissVersion::FKiSS1, false } },
 
     // ### Sound and Music ###
     // These actions control music and sound.
     { "music", { "music", FkissVersion::Unknown, false } },
-    { "sound", { "sound", FkissVersion::Unknown, false } },
+    { "sound", { "sound", FkissVersion::FKiSS1, false } },
 
     // ### Translucency ###
     // These actions control the translucency of a target.
-    { "transparent", { "transparent", FkissVersion::Unknown, false } },
+    { "transparent", { "transparent", FkissVersion::FKiSS1, false } },
     { "lettransparent", { "lettransparent", FkissVersion::Unknown, false } },
 
     // ### Attachment ###
@@ -188,20 +187,20 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
 
     // ### Environment ###
     // These actions affect the environment, set, or play field.
-    { "changecol", { "changecol", FkissVersion::Unknown, false } },
-    { "changeset", { "changeset", FkissVersion::Unknown, false } },
+    { "changecol", { "changecol", FkissVersion::FKiSS1, false } },
+    { "changeset", { "changeset", FkissVersion::FKiSS1, false } },
     { "letpal", { "letpal", FkissVersion::Unknown, false } },
     { "letset", { "letset", FkissVersion::Unknown, false } },
 
     // ### Viewport ###
     // These actions control the size of the window and view on that window.
-    { "windowsize", { "windowsize", FkissVersion::Unknown, false } },
-    { "viewport", { "viewport", FkissVersion::Unknown, false } },
+    { "windowsize", { "windowsize", FkissVersion::FKiSS1, false } },
+    { "viewport", { "viewport", FkissVersion::FKiSS1, false } },
 
     // ### Miscellaneous ###
     // These actions fall in no particular category.
-    { "nop", { "nop", FkissVersion::Unknown, false } },
-    { "quit", { "quit", FkissVersion::Unknown, false } },
+    { "nop", { "nop", FkissVersion::FKiSS1, false } },
+    { "quit", { "quit", FkissVersion::FKiSS1, false } },
 
     // ### Pool Values ###
     // These actions control access to value pools.
@@ -212,9 +211,8 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
 
     // ### Variables ###
     // These actions affect variables.
-    { "let", { "let", FkissVersion::Unknown, false  }}
+    { "let", { "let", FkissVersion::Unknown, false } }
 };
-
 Fkiss::Fkiss(QObject *parent)
     : QObject{parent}
 {
