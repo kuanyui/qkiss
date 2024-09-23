@@ -1,4 +1,5 @@
 #include "gkissitem.h"
+#include "gkissscene.h"
 using namespace Qt::Literals::StringLiterals;
 
 
@@ -93,6 +94,25 @@ void GKissItem::renderColorBasedImage()
 void GKissItem::setFix(int32_t newFix)
 {
     m_fix = newFix;
+}
+
+QVariant GKissItem::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if (change == GraphicsItemChange::ItemSceneChange) {
+        m_cachedKissScene = qobject_cast<GKissScene *>(scene());
+    }
+    return value;
+}
+
+GKissScene *GKissItem::kissScene()
+{
+    return m_cachedKissScene;
+}
+
+void GKissItem::dispatchUserEvent()
+{
+    if (!m_cachedKissScene) { return; }
+
 }
 
 ParsedCnfCel *GKissItem::cnfCel() const

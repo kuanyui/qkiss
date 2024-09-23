@@ -113,6 +113,32 @@ private:
 signals:
 };
 
+/** The Fkiss event triggered by user interaction. Should be sent from QGraphicsItem. */
+enum class FkissUserMovementEvent {
+    /// The user clicks the mouse button on an object:
+    Press,
+    /// The user moves the mouse:
+    Catch,
+    Fixcatch,
+    Unfix,
+    /**
+     * The user releases the mouse button:
+
+    The object's original position (before dragging) is checked to see if it has collided with other objects or
+    The object's new position (after dragging) is checked to see if it has collided with other objects
+
+    And the following events are triggered:
+    */
+    Collide,
+    Apart,
+    In,
+    Stillin,
+    Out,
+    Stillout,
+    Release,
+    Drop,
+    Fixdrop
+};
 
 
 

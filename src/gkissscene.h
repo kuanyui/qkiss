@@ -9,6 +9,7 @@
 
 class GKissScene : public QGraphicsScene
 {
+    Q_OBJECT   // For qobject_cast
 public:
     explicit GKissScene (QObject *parent = nullptr);
     // explicit GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);

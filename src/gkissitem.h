@@ -11,12 +11,16 @@
 #include "parsedkcf.h"
 #include "parsedcel.h"
 #include "parsedcnf.h"
+#include "fkiss.h"
+
+class GKissScene;
 
 class GKissItem : public QGraphicsPixmapItem
 {
 public:
     enum { Type = UserType + 1 };
     virtual int type() const override { return Type; }
+
     GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, ParsedKcf *kcf, uint16_t paletteNoInKcf = 0, QGraphicsItem *parent = nullptr);
     GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, QGraphicsItem *parent = nullptr);
     void rerenderImage();
@@ -29,8 +33,11 @@ public:
     ParsedCnfCel *cnfCel() const;
     void addSibling(GKissItem* item);
     QVector<GKissItem*>* siblings();
-
     void setFix(int32_t newFix);
+    virtual QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
+    /// May be a nullptr.
+    GKissScene *kissScene();
+    void dispatchUserEvent();
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -50,6 +57,8 @@ private:
     int32_t m_fix;
     QPointF m_dragStartPosition;
     QVector<GKissItem*> m_siblings;
+    /// cache of casted scene()
+    GKissScene *m_cachedKissScene = nullptr;
 };
 
 QDebug operator<<(QDebug dbg, const GKissItem &item);
