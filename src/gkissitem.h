@@ -38,7 +38,7 @@ public:
     virtual QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
     /// May be a nullptr.
     GKissScene *kissScene();
-    void dispatchUserEvent(GKissItem &item, FkissUserMovementEvent evtType);
+    void dispatchUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

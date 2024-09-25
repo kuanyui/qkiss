@@ -21,7 +21,7 @@ public:
     std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
     void bindItemsToObjects();
     bool moveObjectTo(size_t objId, int x, int y);
-    void receiveUserEventFromItem(GKissItem &item, FkissUserMovementEvent evtType);
+    void receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
 
 private:
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
