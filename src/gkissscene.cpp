@@ -131,3 +131,8 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
     }
 }
 
+void GKissScene::receiveUserEventFromItem(GKissItem &item, FkissUserMovementEvent evtType)
+{
+
+}
+

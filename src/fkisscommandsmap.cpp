@@ -46,17 +46,17 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_EVENT = {
 
     // ### Click-and-drag ###
     // These events are associated with clicking on cels as well as clicking and dragging cels around.
-    { FKK::PRESS            , { FKK::PRESS            , FkissVersion::FKiSS1, false } }, // press(target) - Triggered when the user clicks on the target.
-    { FKK::CATCH            , { FKK::CATCH            , FkissVersion::FKiSS1, false } },   // catch(target) - The catch event is triggered when the user first begins to move the target.
-    { FKK::DROP             , { FKK::DROP             , FkissVersion::FKiSS1, false } },   // drop(target) - The drop event is triggered when the user loses control of the target after attempting to move it.
+    { FKK::PRESS            , { FKK::PRESS            , FkissVersion::FKiSS1, 1 } }, // press(target) - Triggered when the user clicks on the target.
+    { FKK::CATCH            , { FKK::CATCH            , FkissVersion::FKiSS1, 1 } }, // catch(target) - The catch event is triggered when the user first begins to move the target.
+    { FKK::DROP             , { FKK::DROP             , FkissVersion::FKiSS1, 1 } }, // drop(target) - The drop event is triggered when the user loses control of the target after attempting to move it.
 
-    { FKK::RELEASE          , { FKK::RELEASE          , FkissVersion::FKiSS1, false } }, // release(target) - Triggered when the user releases the mouse button after having clicked on the target.
-    { FKK::FIXCATCH         , { FKK::FIXCATCH         , FkissVersion::FKiSS1, false } }, // fixcatch(target) - Triggered when the user first begins to move a target which has a non-zero fix value.
-    { FKK::FIXDROP          , { FKK::FIXDROP          , FkissVersion::FKiSS1, false } }, // fixdrop(target) - Triggered when the user loses control of the target after attempting to move it due to the fix value of the object.
+    { FKK::RELEASE          , { FKK::RELEASE          , FkissVersion::FKiSS1, 1 } }, // release(target) - Triggered when the user releases the mouse button after having clicked on the target.
+    { FKK::FIXCATCH         , { FKK::FIXCATCH         , FkissVersion::FKiSS1, 1 } }, // fixcatch(target) - Triggered when the user first begins to move a target which has a non-zero fix value.
+    { FKK::FIXDROP          , { FKK::FIXDROP          , FkissVersion::FKiSS1, 1 } }, // fixdrop(target) - Triggered when the user loses control of the target after attempting to move it due to the fix value of the object.
 
     // ### Fix ###
     // These events are associated with the fix value of an object.
-    { FKK::UNFIX            , { FKK::UNFIX            , FkissVersion::FKiSS1, false } }, // unfix(target) - Triggered when the target's fix value reaches 0.
+    { FKK::UNFIX            , { FKK::UNFIX            , FkissVersion::FKiSS1, 1 } }, // unfix(target) - Triggered when the target's fix value reaches 0.
 
     // ### Attachment ###
     // This event is associated with detaching a target from a parent object.

@@ -96,6 +96,12 @@ void GKissItem::setFix(int32_t newFix)
     m_fix = newFix;
 }
 
+void GKissItem::decreaseFix()
+{
+    if (m_fix <= 0) { return; }
+    m_fix--;
+}
+
 QVariant GKissItem::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == GraphicsItemChange::ItemSceneChange) {
@@ -109,10 +115,10 @@ GKissScene *GKissItem::kissScene()
     return m_cachedKissScene;
 }
 
-void GKissItem::dispatchUserEvent()
+void GKissItem::dispatchUserEvent(GKissItem &item, FkissUserMovementEvent evtType)
 {
     if (!m_cachedKissScene) { return; }
-
+    m_cachedKissScene->receiveUserEventFromItem(item, evtType);
 }
 
 ParsedCnfCel *GKissItem::cnfCel() const
@@ -135,6 +141,7 @@ void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     event->accept();  // NOTE: Important!!! Otherwise mouseMoveEvent will not be triggered!
     qDebug() << "[DEBUG] mousePressEvent " << this;
     m_dragStartPosition = event->pos();
+    dispatchUserEvent(*this, FkissUserMovementEvent::Press);   // press(target) - Triggered when the user clicks on the target.
     if (event->button() == Qt::RightButton) {
         m_fix = 0;
         foreach (GKissItem *sib, m_siblings) {
@@ -148,7 +155,17 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     bool hasCtrl = event->modifiers() & Qt::ControlModifier;
     bool hasShift = event->modifiers() & Qt::ControlModifier;
+
+    dispatchUserEvent(*this, FkissUserMovementEvent::Catch);  // catch(target) - The catch event is triggered when the user first begins to move the target.
+    if (m_fix > 1) {
+        dispatchUserEvent(*this, FkissUserMovementEvent::Fixcatch);  // fixcatch(target) - Triggered when the user first begins to move a target which has a non-zero fix value.
+    } else if (m_fix == 1) {
+        dispatchUserEvent(*this, FkissUserMovementEvent::Unfix);  // unfix(target) - Triggered when the target's fix value reaches 0.
+    }
+    decreaseFix();
+    m_fixDecreasedWhileMouseMoveEvent = true;
     if (m_fix > 0) { return; }
+
     QPointF delta = event->pos() - m_dragStartPosition;
     setPos(pos() + delta);
     if (!hasCtrl) {
@@ -161,8 +178,18 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (m_fix <= 0) { return; }
-    m_fix--;
+
+    dispatchUserEvent(*this, FkissUserMovementEvent::Release);
+    if (!m_fixDecreasedWhileMouseMoveEvent) {
+        decreaseFix();
+        m_fixDecreasedWhileMouseMoveEvent = false;
+    }
+    if (m_fix == 0) {
+        dispatchUserEvent(*this, FkissUserMovementEvent::Drop);
+    } else {
+        dispatchUserEvent(*this, FkissUserMovementEvent::Fixdrop);
+    }
+
     for (GKissItem* sib: m_siblings) {
         sib->setFix(m_fix);
     }

@@ -113,30 +113,52 @@ private:
 signals:
 };
 
-/** The Fkiss event triggered by user interaction. Should be sent from QGraphicsItem. */
+/**
+ * The Fkiss event triggered by user interaction. Should be sent from QGraphicsItem.
+ * The events are triggered order-sensitive. Please see the docstrings of each field.
+ */
 enum class FkissUserMovementEvent {
-    /// The user clicks the mouse button on an object:
+    // ===============================================================
+    // The user clicks the mouse button on an object:
+    // ===============================================================
     Press,
-    /// The user moves the mouse:
+    // ===============================================================
+    // The user moves the mouse:
+    // ===============================================================
+    /// 1. catch(target) event is triggered
     Catch,
+    /// 2. fixcatch(target) event is triggered, if fix value of object is greater than 1
     Fixcatch,
+    /// 3. unfix(target) event is triggered, if fix value of object is equal to 1
     Unfix,
-    /**
-     * The user releases the mouse button:
+    /// (4. If the fix value of the object is greater than 0 but less than the max fix value, the fix value is reduced by 1.)
 
-    The object's original position (before dragging) is checked to see if it has collided with other objects or
-    The object's new position (after dragging) is checked to see if it has collided with other objects
 
-    And the following events are triggered:
-    */
+    // ===============================================================
+    // The user releases the mouse button:
+    //
+    // The object's original position (before dragging) is checked to see if it has collided with other objects or
+    // The object's new position (after dragging) is checked to see if it has collided with other objects
+    //
+    // And the following events are triggered:
+    // ===============================================================
+    /// TODO: collide(target1, target2) - Triggered when pixels of target1 overlap pixels of target2 and previously did not.
     Collide,
+    /// TODO: apart(target1, target2) - Triggered when pixels of target1 no longer overlap pixels of target2 and previously did.
     Apart,
+    /// TODO: in(target1, target2) - Triggered when target1 overlaps target2 and previously did not.
     In,
+    /// TODO: stillin(target1, target2) - Triggered when target1 still overlaps target2, regardless of previous state.
     Stillin,
+    /// TODO: out(target1, target2) - Triggered when target1 no longer overlaps target2 and previously did.
     Out,
+    /// stillout(target1, target2) - Triggered when target1 still does not overlap target2, regardless of previous state.
     Stillout,
+    /// release(target)
     Release,
+    /// drop(target) event is triggered, if fix value of object is equal to 0
     Drop,
+    /// fixdrop(target) event is triggered, if fix value of object is greater than 0
     Fixdrop
 };
 

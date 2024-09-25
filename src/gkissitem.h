@@ -34,10 +34,11 @@ public:
     void addSibling(GKissItem* item);
     QVector<GKissItem*>* siblings();
     void setFix(int32_t newFix);
+    void decreaseFix();
     virtual QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
     /// May be a nullptr.
     GKissScene *kissScene();
-    void dispatchUserEvent();
+    void dispatchUserEvent(GKissItem &item, FkissUserMovementEvent evtType);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -59,6 +60,7 @@ private:
     QVector<GKissItem*> m_siblings;
     /// cache of casted scene()
     GKissScene *m_cachedKissScene = nullptr;
+    bool m_fixDecreasedWhileMouseMoveEvent = false;
 };
 
 QDebug operator<<(QDebug dbg, const GKissItem &item);
