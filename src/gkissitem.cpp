@@ -154,7 +154,7 @@ void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     bool hasCtrl = event->modifiers() & Qt::ControlModifier;
-    bool hasShift = event->modifiers() & Qt::ControlModifier;
+    // bool hasShift = event->modifiers() & Qt::ControlModifier;
 
     dispatchUserEvent(FkissUserMovementEvent::Catch, { this });  // catch(target) - The catch event is triggered when the user first begins to move the target.
     if (m_fix > 1) {
@@ -178,21 +178,37 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-
+    Q_UNUSED(event);
+    // Pixel overlapping checking (collide / apart)
+    QVector<GKissItem *> currentPixelOverlappedItems;
+    foreach (QGraphicsItem *x, collidingItems(Qt::IntersectsItemShape)) {
+        GKissItem *item = qgraphicsitem_cast<GKissItem *>(x);
+        if (item == nullptr) { continue; }
+        currentPixelOverlappedItems.append(item);
+    }
+    // Bounding rectangle overlapping checking (in / stillin / out / stillout)
+    QVector<GKissItem *> currentBoundingRectOverlappedItems;
+    foreach (QGraphicsItem *x, collidingItems(Qt::IntersectsItemShape)) {
+        GKissItem *item = qgraphicsitem_cast<GKissItem *>(x);
+        if (item == nullptr) { continue; }
+        currentBoundingRectOverlappedItems.append(item);
+    }
+    // Other events
     dispatchUserEvent(FkissUserMovementEvent::Release, { this });
     if (!m_fixDecreasedWhileMouseMoveEvent) {
         decreaseFix();
         m_fixDecreasedWhileMouseMoveEvent = false;
     }
     if (m_fix == 0) {
-        dispatchUserEvent(FkissUserMovementEvent::Drop, { this });
+        dispatchUserEvent(FkissUserMovementEvent::Drop, { this });  // drop(target) event is triggered, if fix value of object is equal to 0
     } else {
-        dispatchUserEvent(FkissUserMovementEvent::Fixdrop, { this });
+        dispatchUserEvent(FkissUserMovementEvent::Fixdrop, { this });  // fixdrop(target) event is triggered, if fix value of object is greater than 0
     }
 
-    for (GKissItem* sib: m_siblings) {
+    foreach (GKissItem* sib, m_siblings) {
         sib->setFix(m_fix);
     }
+    recordOriginalOverlappedItems();
     // QGraphicsItem::mouseReleaseEvent(event);
 }
 
@@ -222,6 +238,21 @@ int32_t GKissItem::fix() const
     return m_fix;
 }
 
+void GKissItem::recordOriginalOverlappedItems()
+{
+    m_originalPixelOverlappedItems.clear();
+    foreach (QGraphicsItem *x, collidingItems(Qt::IntersectsItemShape)) {
+        GKissItem *item = qgraphicsitem_cast<GKissItem *>(x);
+        if (item == nullptr) { continue; }
+        m_originalPixelOverlappedItems.append(item);
+    }
+    m_originalBoundingRectOverlappedItems.clear();
+    foreach (QGraphicsItem *x, collidingItems(Qt::IntersectsItemBoundingRect)) {
+        GKissItem *item = qgraphicsitem_cast<GKissItem *>(x);
+        if (item == nullptr) { continue; }
+        m_originalBoundingRectOverlappedItems.append(item);
+    }
+}
 
 QDebug operator<<(QDebug dbg, const GKissItem &item) {
     dbg.nospace().noquote() << QString("GKissItem { objId: #%1, \tcelFileName: '%2', \tpos: (%3, %4), \tvisible: %5 }")
@@ -232,3 +263,5 @@ QDebug operator<<(QDebug dbg, const GKissItem &item) {
                            .arg(item.isVisible());
     return dbg;
 };
+
+

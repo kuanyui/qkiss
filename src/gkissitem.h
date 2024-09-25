@@ -39,6 +39,7 @@ public:
     /// May be a nullptr.
     GKissScene *kissScene();
     void dispatchUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
+    void recordOriginalOverlappedItems();
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -61,6 +62,8 @@ private:
     /// cache of casted scene()
     GKissScene *m_cachedKissScene = nullptr;
     bool m_fixDecreasedWhileMouseMoveEvent = false;
+    QVector<GKissItem*> m_originalPixelOverlappedItems;
+    QVector<GKissItem*> m_originalBoundingRectOverlappedItems;
 };
 
 QDebug operator<<(QDebug dbg, const GKissItem &item);
