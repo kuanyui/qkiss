@@ -38,17 +38,16 @@ QDebug operator<<(QDebug debug, const Token::Type& tokenType);
 // AST0 (flat, no nested structure (e.g. `alert() ...`, `ifeq() ...` ) )
 // ================================================
 
-using Variant = FkissVariant;
-
 /** Without semantic of command */
 struct ASTCommand {
     QString name;
-    QList<Variant> args;
+    QList<FkissVariant> args;
 };
+using FkissProcedure = QVector<std::shared_ptr<ASTCommand>>;
 
 struct ASTPairedCommands {
     std::shared_ptr<ASTCommand> event;
-    QVector<std::shared_ptr<ASTCommand>> actions;
+    FkissProcedure actions;
 };
 
 

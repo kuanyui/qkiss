@@ -14,7 +14,7 @@ void Fkiss::compileScriptLines(const QList<FkissLineInfo> &lineInfoList)
     // foreach (Token token, tokens) {
     //     qDebug() << "[Fkiss]" << token;
     // }
-    QVector<std::shared_ptr<ASTCommand>> ast0 = parse0(tokens);
+    FkissProcedure ast0 = parse0(tokens);
     // foreach (ASTCommand astNode, ast0) {
     //     qDebug() << "[Fkiss]" << astNode;
     // }
@@ -105,9 +105,9 @@ QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
     return tokens;
 }
 
-QVector<std::shared_ptr<ASTCommand>> Fkiss::parse0(const QVector<Token> &tokens)
+FkissProcedure Fkiss::parse0(const QVector<Token> &tokens)
 {
-    QVector<std::shared_ptr<ASTCommand>> astCmds;
+    FkissProcedure astCmds;
     bool bodyStarted = false;
     for (int i = 0; i < tokens.length(); i++) {
         const Token &token = tokens[i];
@@ -147,7 +147,7 @@ QVector<std::shared_ptr<ASTCommand>> Fkiss::parse0(const QVector<Token> &tokens)
                 }
                 argsTokensWithoutParensAndSpaces.append(tk);
             }
-            QVector<Variant> cmdArgs;
+            QVector<FkissVariant> cmdArgs;
             bool waitComma = false;
             for (int j = 0; j < argsTokensWithoutParensAndSpaces.length(); j++) {
                 const Token *tk = argsTokensWithoutParensAndSpaces[j];
@@ -158,13 +158,13 @@ QVector<std::shared_ptr<ASTCommand>> Fkiss::parse0(const QVector<Token> &tokens)
                         logSyntaxError(*tk, "Comma must be a separator between two args.");
                     }
                 } else  if (tk->type == Token::Type::Integer) {
-                    cmdArgs.append(Variant::fromInt(tk->value));
+                    cmdArgs.append(FkissVariant::fromInt(tk->value));
                     waitComma = true;
                 } else if (tk->type == Token::Type::String) {
-                    cmdArgs.append(Variant::fromString(tk->value));
+                    cmdArgs.append(FkissVariant::fromString(tk->value));
                     waitComma = true;
                 } else if (tk->type == Token::Type::ObjectID) {
-                    cmdArgs.append(Variant::fromObjectId(tk->value));
+                    cmdArgs.append(FkissVariant::fromObjectId(tk->value));
                     waitComma = true;
                 } else if (tk->type == Token::Type::Identifier) {
                     logSyntaxError(*tk, "Currently FKiSS3 variable, or FKiSS4 named label, is not supported.");
@@ -210,7 +210,7 @@ QString Fkiss::removePrefixAndCommentOfLine(QString line) {
     return line;
 }
 
-void Fkiss::pairAstCommands(QVector<std::shared_ptr<ASTCommand>> &commands)
+void Fkiss::pairAstCommands(FkissProcedure &commands)
 {
     m_evpairs.clear();
     std::shared_ptr<ASTPairedCommands> curPair = std::make_shared<ASTPairedCommands>();  // create sentinel
