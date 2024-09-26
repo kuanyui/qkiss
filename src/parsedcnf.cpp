@@ -262,6 +262,11 @@ uint32_t ParsedCnf::outsideBorderColor() const
     return m_outsideColor;
 }
 
+Fkiss *ParsedCnf::fkiss()
+{
+    return m_fkiss;
+}
+
 QString ParsedCnf::fileName() const
 {
     return m_fileName;

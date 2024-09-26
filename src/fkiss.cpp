@@ -31,6 +31,26 @@ bool Fkiss::commandIsAction(const QString &command)
     return Fkiss::KEYWORDS_ACTION.contains(command);
 }
 
+void Fkiss::receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items)
+{
+    switch (evtType) {
+    case FkissUserMovementEvent::Press:
+    case FkissUserMovementEvent::Catch:
+    case FkissUserMovementEvent::Fixcatch:
+    case FkissUserMovementEvent::Unfix:
+    case FkissUserMovementEvent::Collide:
+    case FkissUserMovementEvent::Apart:
+    case FkissUserMovementEvent::In:
+    case FkissUserMovementEvent::Stillin:
+    case FkissUserMovementEvent::Out:
+    case FkissUserMovementEvent::Stillout:
+    case FkissUserMovementEvent::Release:
+    case FkissUserMovementEvent::Drop:
+    case FkissUserMovementEvent::Fixdrop:
+        return;
+    }
+}
+
 QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
     QVector<Token> tokens;
     for (int r = 0; r < lineInfoList.length(); ++r) {  // row index (line index)
@@ -237,6 +257,8 @@ void Fkiss::logSyntaxError(const Token &token, QString msg)
                 .arg(token.columnNo())
                 .arg(token.value);
 }
+
+
 
 QDebug operator<<(QDebug debug, const Token &token) {
     return debug.nospace() << QStringLiteral("Token { type: %1, value: %2, line: %3, col: %4 }")

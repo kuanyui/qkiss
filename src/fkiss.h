@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QList>
 #include <QHash>
+#include <QTimer>
 #include "fkissvariant.h"
 // ================================================
 // Token
@@ -45,6 +46,7 @@ struct ASTCommand {
 };
 using FkissProcedure = QVector<std::shared_ptr<ASTCommand>>;
 
+/// ASTPairedCommands
 struct ASTPairedCommands {
     std::shared_ptr<ASTCommand> event;
     FkissProcedure actions;
@@ -85,31 +87,6 @@ struct FkissKeywordInfo {
     FkissVersion fkissVersion;
     bool implemented;
     // QString specUrl;
-};
-
-class Fkiss : public QObject
-{
-    Q_OBJECT
-public:
-    explicit Fkiss(QObject *parent = nullptr);
-    void compileScriptLines(const QList<FkissLineInfo> &lineInfoList);
-    static bool commandIsEvent(const QString &command);
-    static bool commandIsAction(const QString &command);
-private:
-    /** source code -> tokens */
-    QVector<Token> tokenize(const QList<FkissLineInfo> &lineInfoList);
-    /** tokens -> AST (flat, no semantic, so no nested structure (e.g. `alert() ...`, `ifeq() ...` )  */
-    QVector<std::shared_ptr<ASTCommand> > parse0(const QVector<Token> &tokens);
-    /** Returns the index of nearest Token. If not found, returns -1. */
-    int findNearestToken(QVector<Token> tokens, Token::Type type, int fromIndex);
-    /** Remove `;@` prefix and `; comment` suffix. */
-    QString removePrefixAndCommentOfLine(QString line);
-    void pairAstCommands(QVector<std::shared_ptr<ASTCommand> > &commands);
-    void logSyntaxError(const Token &token, QString msg);
-    QVector<std::shared_ptr<ASTPairedCommands>> m_evpairs;
-    static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
-    static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
-signals:
 };
 
 /**
@@ -160,6 +137,49 @@ enum class FkissUserMovementEvent {
     /// fixdrop(target) event is triggered, if fix value of object is greater than 0
     Fixdrop
 };
+
+/// Event:  alarm(alarmId)
+/// Action: timer(alarmId, delayMs) - Sets the timer for an alarm
+struct FkissAlarmTimer {
+    /// Primary key.
+    /// If a timer for that alarm is already counting down, the new delay time will replace it, resetting the alarm's timer.
+    int alarmId;
+    std::unique_ptr<QTimer> qTimer;
+    std::shared_ptr<ASTPairedCommands> triggedTimer;
+};
+
+class GKissItem;
+
+class Fkiss : public QObject
+{
+    Q_OBJECT
+public:
+    explicit Fkiss(QObject *parent = nullptr);
+    void compileScriptLines(const QList<FkissLineInfo> &lineInfoList);
+    static bool commandIsEvent(const QString &command);
+    static bool commandIsAction(const QString &command);
+    void receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem*> items);
+private:
+    /** source code -> tokens */
+    QVector<Token> tokenize(const QList<FkissLineInfo> &lineInfoList);
+    /** tokens -> AST (flat, no semantic, so no nested structure (e.g. `alert() ...`, `ifeq() ...` )  */
+    QVector<std::shared_ptr<ASTCommand> > parse0(const QVector<Token> &tokens);
+    /** Returns the index of nearest Token. If not found, returns -1. */
+    int findNearestToken(QVector<Token> tokens, Token::Type type, int fromIndex);
+    /** Remove `;@` prefix and `; comment` suffix. */
+    QString removePrefixAndCommentOfLine(QString line);
+    /// Traverse across all commands, bind each event + its action(s) (procedure) pair, and store to pairs list.
+    void pairAstCommands(QVector<std::shared_ptr<ASTCommand> > &commands);
+    void logSyntaxError(const Token &token, QString msg);
+    QVector<std::shared_ptr<ASTPairedCommands>> m_evpairs;
+    /// Key is alarmId
+    QHash<int, std::shared_ptr<FkissAlarmTimer>> m_alarmTimerPool;
+    static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
+    static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
+signals:
+    void fkissRunProcedure(const FkissProcedure &fkissProcedure);
+};
+
 
 /// Fkiss Keywords
 namespace FKK {

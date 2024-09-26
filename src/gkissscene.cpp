@@ -135,6 +135,6 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
 
 void GKissScene::receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem*> items)
 {
-
+    m_cnf->fkiss()->receiveUserEventFromItem(evtType, items);
 }
 

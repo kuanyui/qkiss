@@ -150,7 +150,8 @@ public:
     size_t kcfFilesAmount() const;
     QString fileName() const;
     uint32_t outsideBorderColor() const;
-
+    /// Fkiss script engine
+    Fkiss *fkiss();
     const QList<int32_t> &sortedObjIdList() const;
 
 private:
