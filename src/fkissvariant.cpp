@@ -48,6 +48,16 @@ int FkissVariant::getObjectId() const
 
 FkissVariant::Type FkissVariant::type() const { return m_type; }
 
+bool FkissVariant::operator==(const FkissVariant &other) const
+{
+    if (m_type != other.type()) { return false; }
+    switch (m_type) {
+    case Type::Int: return getInt() == other.getInt();
+    case Type::Object: return getObjectId() == other.getObjectId();
+    case Type::String: return getString() == other.getString();
+    }
+}
+
 
 QDebug operator<<(QDebug debug, const FkissVariant &arg) {
     switch (arg.type()) {

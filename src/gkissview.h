@@ -33,6 +33,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
 private:
     ArchivedFile *m_archivedFile;
+    /// Each set is stored in its scene.
     QVector<GKissScene *> m_scenes;
     uint8_t m_curSceneIdx = 0;
     GKissItem *m_curHoveredCelItem;

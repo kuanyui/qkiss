@@ -24,6 +24,7 @@ public:
     int getObjectId() const;
     Type type() const;
     operator QString() const;
+    bool operator==(const FkissVariant &other) const;
 
 private:
     Type m_type;
