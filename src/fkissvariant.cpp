@@ -73,3 +73,12 @@ QDebug operator<<(QDebug debug, const FkissVariant &arg) {
     }
     return debug.space();
 }
+
+size_t qHash(const FkissVariant &key, size_t seed)
+{
+    switch (key.type()) {
+    case FkissVariant::Type::String: return qHash(key.getString(), seed);
+    case FkissVariant::Type::Int: return qHash(key.getInt(), seed);
+    case FkissVariant::Type::Object: return qHash(key.getObjectId(), seed);
+    }
+}

@@ -51,6 +51,28 @@ void Fkiss::receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKi
     }
 }
 
+void Fkiss::runMap(FkissVariant target)
+{
+    m_rtCelObjVisibilityState.insert(target, true);
+}
+
+void Fkiss::runUnmap(FkissVariant target)
+{
+    m_rtCelObjVisibilityState.insert(target, false);
+}
+
+void Fkiss::runAltmap(FkissVariant target)
+{
+    m_rtCelObjVisibilityState.insert(target, getMap(target));
+}
+
+bool Fkiss::getMap(FkissVariant target)
+{
+    return m_rtCelObjVisibilityState.value(target, true);
+}
+
+
+
 QVector<Token> Fkiss::tokenize(const QList<FkissLineInfo> &lineInfoList) {
     QVector<Token> tokens;
     for (int r = 0; r < lineInfoList.length(); ++r) {  // row index (line index)

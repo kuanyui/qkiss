@@ -38,6 +38,7 @@ public:
     virtual QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
     /// May be a nullptr.
     GKissScene *kissScene();
+    /// Emit event: Item -> Scene -> Scene.cnf().fkiss()
     void dispatchUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
     void recordOriginalOverlappedItems();
 
