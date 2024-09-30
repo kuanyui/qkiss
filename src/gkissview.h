@@ -16,10 +16,9 @@ public:
     GKissView(ArchivedFile *archivedFile, QWidget *parent=nullptr);
     bool loadArchivedFile(ArchivedFile *archivedFile);
     void unloadArchivedFile();
-    void deleteAllScenes();
     bool setCurCnf(QString cnfFileName);
     uint8_t scenesAmount() const;
-    bool showSceneByIndex(uint8_t setIndex);
+    bool showKissSceneByIndex(uint8_t setIndex);
     void scaleAbs(qreal targetScale);
     GKissScene *curKissScene();
     /** create scenes & items according to current CNF. */
@@ -32,6 +31,7 @@ signals:
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
 private:
+    void deleteAllScenes();
     ArchivedFile *m_archivedFile;
     /// Each set is stored in its scene.
     QVector<GKissScene *> m_scenes;

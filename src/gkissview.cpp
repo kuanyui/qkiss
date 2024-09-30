@@ -39,14 +39,7 @@ void GKissView::unloadArchivedFile()
     // m_archivedFile = nullptr;   // DON'T DO THIS!
 }
 
-void GKissView::deleteAllScenes()
-{
-    setScene(nullptr);
-    for (GKissScene *s : m_scenes) {
-        delete s;
-    }
-    m_scenes.clear();
-}
+
 
 bool GKissView::setCurCnf(QString cnfFileName)
 {
@@ -64,7 +57,7 @@ uint8_t GKissView::scenesAmount() const
     return m_scenes.length();
 }
 
-bool GKissView::showSceneByIndex(uint8_t setIndex)
+bool GKissView::showKissSceneByIndex(uint8_t setIndex)
 {
     if (scenesAmount() == 0) {
         qWarning() << QString("[WARNING][View] only $1 scenes in this view but you ask for sceneIndex $2")
@@ -81,7 +74,9 @@ bool GKissView::showSceneByIndex(uint8_t setIndex)
         return false;
     }
     m_curSceneIdx = setIndex;
-    setScene(m_scenes[setIndex]);
+    GKissScene *kissScene = m_scenes[setIndex];
+    setScene(kissScene);
+    m_archivedFile->curCnf()->fkiss()->setCurKissScene(kissScene);
     return true;
 }
 
@@ -152,7 +147,7 @@ bool GKissView::renderCurCnfAllSets()
         scene->bindItemsToObjects();
 
     }
-    return showSceneByIndex(0);
+    return showKissSceneByIndex(0);
 }
 
 
@@ -180,4 +175,13 @@ void GKissView::mouseMoveEvent(QMouseEvent *event)
     }
     // Handle other events
     QGraphicsView::mouseMoveEvent(event);
+}
+
+void GKissView::deleteAllScenes()
+{
+    setScene(nullptr);
+    for (GKissScene *s : m_scenes) {
+        delete s;
+    }
+    m_scenes.clear();
 }

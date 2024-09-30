@@ -1,5 +1,8 @@
 #include "fkiss.h"
+#include "gkissitem.h"
+#include "gkissscene.h"
 #include <QRegularExpression>
+#include <QHashIterator>
 
 Fkiss::Fkiss(QObject *parent)
     : QObject{parent}
@@ -278,6 +281,35 @@ void Fkiss::logSyntaxError(const Token &token, QString msg)
                 .arg(token.lineNo())
                 .arg(token.columnNo())
                 .arg(token.value);
+}
+
+GKissScene *Fkiss::curKissScene() const
+{
+    return m_curKissScene;
+}
+
+void Fkiss::setCurKissScene(GKissScene *newCurKissScene)
+{
+    m_curKissScene = newCurKissScene;
+    if (m_curKissScene == nullptr) { return; }
+    QHashIterator<FkissVariant, bool> it(m_rtCelObjVisibilityState);
+    while (it.hasNext()) {
+        it.next();
+        const FkissVariant &key = it.key();
+        bool visible = it.value();
+        if (key.type() == FkissVariant::Type::String) {
+            auto _item = m_curKissScene->getItemByCelName(key.getString());
+            if (!_item.has_value()) { qDebug() << "WTF???"; continue; }
+            _item.value()->setVisible(visible);
+        } else if (key.type() == FkissVariant::Type::Object) {
+            std::optional<QVector<GKissItem *> *> _items = m_curKissScene->getItemsByObjId(key.getObjectId());
+            if (!_items.has_value()) { qDebug() << "WTF???"; continue; }
+            auto *items = _items.value();
+            foreach (auto *item, *items) {
+                item->setVisible(visible);
+            }
+        }
+    }
 }
 
 

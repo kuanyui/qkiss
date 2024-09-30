@@ -149,6 +149,7 @@ struct FkissAlarmTimer {
 };
 
 class GKissItem;
+class GKissScene;
 
 class Fkiss : public QObject
 {
@@ -165,6 +166,9 @@ public:
     void runAltmap(FkissVariant target);
     /// for map(), unmap(), altmap()
     bool getMap(FkissVariant target);
+    GKissScene *curKissScene() const;
+    void setCurKissScene(GKissScene *newCurKissScene);
+
 private:
     /** source code -> tokens */
     QVector<Token> tokenize(const QList<FkissLineInfo> &lineInfoList);
@@ -180,6 +184,8 @@ private:
     QVector<std::shared_ptr<ASTPairedCommands>> m_evpairs;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
+    /// Currently active scene, all operations and manipulations will be applied on this scene.
+    GKissScene *m_curKissScene = nullptr;
     /// Key is alarmId. Runtime.
     QHash<int, std::shared_ptr<FkissAlarmTimer>> m_rtAlarmTimerPool;
     /// Store the visibility modified via FKiSS script (e.g. map(), unmap()). May be a cel or an obj.

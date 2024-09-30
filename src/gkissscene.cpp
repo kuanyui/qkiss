@@ -59,6 +59,9 @@ void GKissScene::drawCurSetBackground()
 void GKissScene::addCelItem(GKissItem *item)
 {
     addItem(item);
+    if (!m_celNameToItemMap.contains(item->celFileName())) {
+        m_celNameToItemMap.insert(item->celFileName(), item);
+    }
     if (m_objIdToItemsMap.contains(item->objId())) {
         QVector<GKissItem*> * itemsOfObj = m_objIdToItemsMap[item->objId()];
         foreach (GKissItem* sibling, *itemsOfObj) {
@@ -80,6 +83,12 @@ std::optional<QVector<GKissItem *> *>GKissScene::getItemsByObjId(int32_t objId)
         return std::nullopt;
     }
     return tmp;
+}
+
+std::optional<GKissItem *> GKissScene::getItemByCelName(const QString &celFileName)
+{
+    GKissItem *tmp = m_celNameToItemMap.value(celFileName);
+    return tmp == nullptr ? std::nullopt : std::optional<GKissItem *>(tmp);
 }
 
 void GKissScene::bindItemsToObjects()
