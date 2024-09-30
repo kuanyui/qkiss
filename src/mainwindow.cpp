@@ -33,9 +33,18 @@ MainWindow::MainWindow(QWidget *parent)
             QToolButton *btn = new QToolButton(m_toolbarPageSets);
             btn->setText(QString::number(sceneIdx));
             connect(btn, &QAbstractButton::pressed, [=](){
-                m_kissView->showSceneByIndex(sceneIdx) ;
+                m_kissView->showKissSceneByIndex(sceneIdx) ;
             });
             m_toolbarPageSets->addWidget(btn);
+        }
+        m_toolbarColorSets->clear();
+        for (size_t paletteIdx = 0; paletteIdx < m_archivedFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
+            QToolButton *btn = new QToolButton(m_toolbarPageSets);
+            btn->setText(QString::number(paletteIdx));
+            connect(btn, &QAbstractButton::pressed, [=](){
+                m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx) ;
+            });
+            m_toolbarColorSets->addWidget(btn);
         }
     });
     connect(m_kissView, &GKissView::hoveredItemChanged, [=](GKissItem *item, GKissScene *scene) {

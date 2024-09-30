@@ -21,7 +21,7 @@ public:
     uint8_t scenesAmount() const;
     bool showSceneByIndex(uint8_t setIndex);
     void scaleAbs(qreal targetScale);
-    GKissScene *curScene();
+    GKissScene *curKissScene();
     /** create scenes & items according to current CNF. */
     bool renderCurCnfAllSets();
     // bool renderCurCnfSet(uint8_t setNo);

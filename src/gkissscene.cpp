@@ -138,3 +138,18 @@ void GKissScene::receiveUserEventFromItem(FkissUserMovementEvent evtType, QVecto
     m_cnf->fkiss()->receiveUserEventFromItem(evtType, items);
 }
 
+uint8_t GKissScene::paletteNoInKcf() const
+{
+    return m_paletteNoInKcf;
+}
+
+void GKissScene::setPaletteNoInKcf(uint8_t newPaletteNoInKcf)
+{
+    m_paletteNoInKcf = newPaletteNoInKcf;
+    foreach (QGraphicsItem *_item, items()) {
+        GKissItem *item = qgraphicsitem_cast<GKissItem *>(_item);
+        if (item == nullptr) { continue; }
+        item->setPaletteNoInKcf(newPaletteNoInKcf);
+    }
+}
+

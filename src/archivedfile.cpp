@@ -234,6 +234,13 @@ void ArchivedFile::setCurPaletteNo(uint8_t newCurPaletteNo)
     m_curPaletteNo = newCurPaletteNo;
 }
 
+size_t ArchivedFile::paletteAmountOfFirstKcfInCurCnf() const
+{
+    if (m_curCnf == nullptr) { return 0; }
+    if (m_curCnfOrderedParsedKcfList.length() == 0) { return 0; }
+    return m_curCnfOrderedParsedKcfList[0]->paletteAmounts();
+}
+
 void ArchivedFile::setCurCnfSetNo(uint8_t newCurCnfSetNo)
 {
     m_curCnfSetNo = newCurCnfSetNo;

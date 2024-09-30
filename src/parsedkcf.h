@@ -56,6 +56,7 @@ public:
 
     ParsedKcfPalette *getPaletteInKcf(uint16_t paletteIdxInKcf = 0);  // REFACTOR: Use reference?
     uint8_t bitsPerColor() const;
+    uint16_t paletteAmounts() const;
 
 private:
     void parseModernKcf(QByteArray data);

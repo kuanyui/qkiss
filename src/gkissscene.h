@@ -23,11 +23,16 @@ public:
     bool moveObjectTo(size_t objId, int x, int y);
     void receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
 
+    uint8_t paletteNoInKcf() const;
+    void setPaletteNoInKcf(uint8_t newPaletteNoInKcf);
+
 private:
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
     ArchivedFile *m_archivedFile;
     ParsedCnf* m_cnf;
     ParsedCnfSet *m_cnfSet;
+    /// Read from CNF file ($), and can be overritten from UI.
+    uint8_t m_paletteNoInKcf = 0;
 };
 
 #endif // GKISSSCENE_H

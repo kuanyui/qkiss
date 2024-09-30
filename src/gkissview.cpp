@@ -92,7 +92,7 @@ void GKissView::scaleAbs(qreal targetScale)
     scale(scaleFactor, scaleFactor);
 }
 
-GKissScene *GKissView::curScene()
+GKissScene *GKissView::curKissScene()
 {
     return m_scenes[m_curSceneIdx];  // TODO: Check range.
 }
@@ -165,7 +165,7 @@ void GKissView::mouseMoveEvent(QMouseEvent *event)
         if (curItemRaw != nullptr && curItemRaw->type() == GKissItem::Type) {
             GKissItem *curItem = static_cast<GKissItem *>(curItemRaw);
             m_curHoveredCelItem = curItem;
-            emit hoveredItemChanged(curItem, curScene());
+            emit hoveredItemChanged(curItem, curKissScene());
             qDebug() << QString("File: %1, Pos: (%2, %3), Size: (%4, %5), Fix: %6")
                                                  .arg(curItem->celFileName())
                                                  .arg(curItem->x())
@@ -174,7 +174,7 @@ void GKissView::mouseMoveEvent(QMouseEvent *event)
                                                  .arg(curItem->cel()->height())
                                                  .arg(curItem->fix());
         } else {
-            emit hoveredItemChanged(nullptr, curScene());
+            emit hoveredItemChanged(nullptr, curKissScene());
             m_curHoveredCelItem = nullptr;
         }
     }

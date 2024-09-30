@@ -99,6 +99,11 @@ void ParsedKcf::parseLegacyKcf(QByteArray data)
     }
 }
 
+uint16_t ParsedKcf::paletteAmounts() const
+{
+    return m_paletteAmounts;
+}
+
 uint8_t ParsedKcf::bitsPerColor() const
 {
     return m_bitsPerColor;

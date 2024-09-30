@@ -38,6 +38,8 @@ public:
     void setCurCnfSetNo(uint8_t newCurCnfSetNo);
     uint8_t curPaletteNo() const;
     void setCurPaletteNo(uint8_t newCurPaletteNo);
+    /// Get the first KCF file, and return the palette amount of this KCF file.
+    size_t paletteAmountOfFirstKcfInCurCnf() const;
 
 private slots:
     void onQProcessReadyRead();
