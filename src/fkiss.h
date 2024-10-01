@@ -123,9 +123,9 @@ enum class FkissUserMovementEvent {
     // And the following events are triggered:
     // ===============================================================
 
-    /// TODO: collide(target1, target2) - (Pixel) Triggered when pixels of target1 overlap pixels of target2 and previously did not.
+    /// collide(target1, target2) - (Pixel) Triggered when pixels of target1 overlap pixels of target2 and previously did not.
     Collide,
-    /// TODO: apart(target1, target2) - (Pixel) Triggered when pixels of target1 no longer overlap pixels of target2 and previously did.
+    /// apart(target1, target2) - (Pixel) Triggered when pixels of target1 no longer overlap pixels of target2 and previously did.
     Apart,
     /// TODO: in(target1, target2) - (Bounding-rect) Triggered when target1 overlaps target2 and previously did not.
     In,

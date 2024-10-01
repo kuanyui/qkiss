@@ -116,7 +116,7 @@ void GKissScene::bindItemsToObjects()
             maxFix = qMax(item->fix(), maxFix);
             item->setPos(objPos.x() + item->cel()->x(),
                          objPos.y() + item->cel()->y());
-            item->recordOriginalOverlappedItems();
+            item->storeCurrentOverlappedItems();
         }
         // The fix value for an object is the maximum value for all member cels.
         foreach (GKissItem *item, *items) {
@@ -138,7 +138,7 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
     foreach (GKissItem *item, *items) {
         item->setPos(x + item->cel()->x(),
                      y + item->cel()->y());
-        item->recordOriginalOverlappedItems();
+        item->storeCurrentOverlappedItems();
     }
 }
 

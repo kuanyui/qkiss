@@ -8,6 +8,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QApplication>
 #include <QDebug>
+#include <QSet>
 #include "parsedkcf.h"
 #include "parsedcel.h"
 #include "parsedcnf.h"
@@ -40,7 +41,7 @@ public:
     GKissScene *kissScene();
     /// Emit event: Item -> Scene -> Scene.cnf().fkiss()
     void dispatchFkissUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
-    void recordOriginalOverlappedItems();
+    void storeCurrentOverlappedItems();
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -65,10 +66,10 @@ private:
     bool m_fixDecreasedWhileMouseMoveEvent = false;
     /// @borrowed
     /// For collide(), apart()
-    QVector<GKissItem*> m_originalPixelOverlappedItems;
+    QSet<GKissItem*> m_originalPixelOverlappedItems;
     /// @borrowed
     /// For in(), stillin(), out(), stillout()
-    QVector<GKissItem*> m_originalBoundingRectOverlappedItems;
+    QSet<GKissItem*> m_originalBoundingRectOverlappedItems;
 };
 
 QDebug operator<<(QDebug dbg, const GKissItem &item);
