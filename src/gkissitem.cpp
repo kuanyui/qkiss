@@ -204,17 +204,20 @@ void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     // Bounding rectangle overlapping checking (in / stillin / out / stillout)
     // =======================================================================
     QSet<GKissItem *> currentBoundingRectOverlappedItems;
-    foreach (QGraphicsItem *x, collidingItems(Qt::IntersectsItemBoundingRect)) {
-        GKissItem *item = qgraphicsitem_cast<GKissItem *>(x);
-        if (item == nullptr) { continue; }
-        currentBoundingRectOverlappedItems.insert(item);
+    QSet<GKissItem *> currentBoundingRectNonOverlappedItems;
+    foreach (GKissItem *item, m_cachedKissScene->allItems()) {
+        if (item->collidesWithItem(this, Qt::IntersectsItemBoundingRect)) {
+            currentBoundingRectOverlappedItems.insert(item);
+        } else {
+            currentBoundingRectNonOverlappedItems.insert(item);
+        }
     }
     QSet<GKissItem *> newlyRectOverlappedItems = currentPixelOverlappedItems;
     newlyRectOverlappedItems.subtract(m_originalBoundingRectOverlappedItems);
     foreach (auto item, newlyRectOverlappedItems) {
         dispatchFkissUserEvent(FkissUserMovementEvent::In, { this, item });
     }
-    foreach (auto item, currentPixelOverlappedItems) {
+    foreach (auto item, currentBoundingRectOverlappedItems) {
         dispatchFkissUserEvent(FkissUserMovementEvent::Stillin, { this, item });
     }
     QSet<GKissItem *> newlyRectApartedItems = m_originalBoundingRectOverlappedItems;
@@ -222,11 +225,9 @@ void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     foreach (auto item, newlyRectApartedItems) {
         dispatchFkissUserEvent(FkissUserMovementEvent::Out, { this, item });
     }
-
-    // =======================================================================
-    // update all overlapped items
-    // =======================================================================
-    QSet<GKissItem *> allEffectedItems;
+    foreach (auto item, currentBoundingRectNonOverlappedItems) {
+        dispatchFkissUserEvent(FkissUserMovementEvent::Stillin, { this, item });
+    }
     // =======================================================================
     // Other events
     // =======================================================================
@@ -244,7 +245,16 @@ void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     foreach (GKissItem* sib, m_siblings) {
         sib->setFix(m_fix);
     }
+    // =======================================================================
+    // update all overlapped items
+    // =======================================================================
     storeCurrentOverlappedItems();
+    QSet<GKissItem *> allEffectedItems;
+    allEffectedItems.unite(m_originalBoundingRectOverlappedItems);
+    allEffectedItems.unite(currentBoundingRectOverlappedItems);
+    for (auto item: allEffectedItems) {
+        item->storeCurrentOverlappedItems();
+    }
     // QGraphicsItem::mouseReleaseEvent(event);
 }
 

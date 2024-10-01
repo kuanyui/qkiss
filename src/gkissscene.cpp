@@ -147,6 +147,11 @@ void GKissScene::receiveFkissUserEventFromItem(FkissUserMovementEvent evtType, Q
     m_cnf->fkiss()->receiveUserEventFromItem(evtType, items);
 }
 
+QList<GKissItem *> GKissScene::allItems()
+{
+    return m_celNameToItemMap.values();
+}
+
 uint8_t GKissScene::paletteNoInKcf() const
 {
     return m_paletteNoInKcf;

@@ -23,13 +23,13 @@ public:
     void bindItemsToObjects();
     bool moveObjectTo(size_t objId, int x, int y);
     void receiveFkissUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
-
+    QList<GKissItem *> allItems();
     uint8_t paletteNoInKcf() const;
     void setPaletteNoInKcf(uint8_t newPaletteNoInKcf);
 
 private:
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
-    QHash<QString, GKissItem*> m_celNameToItemMap;
+    QHash<QString, GKissItem *> m_celNameToItemMap;
     ArchivedFile *m_archivedFile;
     ParsedCnf* m_cnf;
     ParsedCnfSet *m_cnfSet;
