@@ -131,6 +131,7 @@ private:
 
 /**
  * Represent a parsed .CNF file.
+ * @owner ArchivedFile
  */
 class ParsedCnf
 {
@@ -199,6 +200,7 @@ private:
     QList<ParsedCnfSet *> m_sets;
     /** ObjectID may be not continuous (?), and CNF's set (starts with $) is sorted by the value of ObjectID. */
     QList<int32_t> m_sortedObjIdList;   // DEPRECATED: Unused and unneededanymore.
+    /// @owner
     Fkiss *m_fkiss;
 };
 

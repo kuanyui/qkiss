@@ -1,5 +1,6 @@
 #include "gkissitem.h"
 #include "gkissscene.h"
+#include <QSet>
 using namespace Qt::Literals::StringLiterals;
 
 
@@ -115,9 +116,9 @@ GKissScene *GKissItem::kissScene()
     return m_cachedKissScene;
 }
 
-void GKissItem::dispatchUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem*> items) {
+void GKissItem::dispatchFkissUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem*> items) {
     if (!m_cachedKissScene) { return; }
-    m_cachedKissScene->receiveUserEventFromItem(evtType, items);
+    m_cachedKissScene->receiveFkissUserEventFromItem(evtType, items);
 }
 
 
@@ -141,7 +142,7 @@ void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     event->accept();  // NOTE: Important!!! Otherwise mouseMoveEvent will not be triggered!
     qDebug() << "[DEBUG] mousePressEvent " << this;
     m_dragStartPosition = event->pos();
-    dispatchUserEvent(FkissUserMovementEvent::Press, { this });   // press(target) - Triggered when the user clicks on the target.
+    dispatchFkissUserEvent(FkissUserMovementEvent::Press, { this });   // press(target) - Triggered when the user clicks on the target.
     if (event->button() == Qt::RightButton) {
         m_fix = 0;
         foreach (GKissItem *sib, m_siblings) {
@@ -156,11 +157,11 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     bool hasCtrl = event->modifiers() & Qt::ControlModifier;
     // bool hasShift = event->modifiers() & Qt::ControlModifier;
 
-    dispatchUserEvent(FkissUserMovementEvent::Catch, { this });  // catch(target) - The catch event is triggered when the user first begins to move the target.
+    dispatchFkissUserEvent(FkissUserMovementEvent::Catch, { this });  // catch(target) - The catch event is triggered when the user first begins to move the target.
     if (m_fix > 1) {
-        dispatchUserEvent(FkissUserMovementEvent::Fixcatch, { this });  // fixcatch(target) - Triggered when the user first begins to move a target which has a non-zero fix value.
+        dispatchFkissUserEvent(FkissUserMovementEvent::Fixcatch, { this });  // fixcatch(target) - Triggered when the user first begins to move a target which has a non-zero fix value.
     } else if (m_fix == 1) {
-        dispatchUserEvent(FkissUserMovementEvent::Unfix, { this });  // unfix(target) - Triggered when the target's fix value reaches 0.
+        dispatchFkissUserEvent(FkissUserMovementEvent::Unfix, { this });  // unfix(target) - Triggered when the target's fix value reaches 0.
     }
     decreaseFix();
     m_fixDecreasedWhileMouseMoveEvent = true;
@@ -194,15 +195,15 @@ void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         currentBoundingRectOverlappedItems.append(item);
     }
     // Other events
-    dispatchUserEvent(FkissUserMovementEvent::Release, { this });
+    dispatchFkissUserEvent(FkissUserMovementEvent::Release, { this });
     if (!m_fixDecreasedWhileMouseMoveEvent) {
         decreaseFix();
         m_fixDecreasedWhileMouseMoveEvent = false;
     }
     if (m_fix == 0) {
-        dispatchUserEvent(FkissUserMovementEvent::Drop, { this });  // drop(target) event is triggered, if fix value of object is equal to 0
+        dispatchFkissUserEvent(FkissUserMovementEvent::Drop, { this });  // drop(target) event is triggered, if fix value of object is equal to 0
     } else {
-        dispatchUserEvent(FkissUserMovementEvent::Fixdrop, { this });  // fixdrop(target) event is triggered, if fix value of object is greater than 0
+        dispatchFkissUserEvent(FkissUserMovementEvent::Fixdrop, { this });  // fixdrop(target) event is triggered, if fix value of object is greater than 0
     }
 
     foreach (GKissItem* sib, m_siblings) {

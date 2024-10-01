@@ -39,7 +39,7 @@ public:
     /// May be a nullptr.
     GKissScene *kissScene();
     /// Emit event: Item -> Scene -> Scene.cnf().fkiss()
-    void dispatchUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
+    void dispatchFkissUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
     void recordOriginalOverlappedItems();
 
 protected:
@@ -63,7 +63,11 @@ private:
     /// cache of casted scene()
     GKissScene *m_cachedKissScene = nullptr;
     bool m_fixDecreasedWhileMouseMoveEvent = false;
+    /// @borrowed
+    /// For collide(), apart()
     QVector<GKissItem*> m_originalPixelOverlappedItems;
+    /// @borrowed
+    /// For in(), stillin(), out(), stillout()
     QVector<GKissItem*> m_originalBoundingRectOverlappedItems;
 };
 

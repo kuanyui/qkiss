@@ -36,22 +36,63 @@ bool Fkiss::commandIsAction(const QString &command)
 
 void Fkiss::receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items)
 {
+    // All events are generated from GKissItem (instead of FKiSS script), so the items counts should not need to be checked here.
     switch (evtType) {
-    case FkissUserMovementEvent::Press:
-    case FkissUserMovementEvent::Catch:
-    case FkissUserMovementEvent::Fixcatch:
-    case FkissUserMovementEvent::Unfix:
-    case FkissUserMovementEvent::Collide:
-    case FkissUserMovementEvent::Apart:
-    case FkissUserMovementEvent::In:
-    case FkissUserMovementEvent::Stillin:
-    case FkissUserMovementEvent::Out:
-    case FkissUserMovementEvent::Stillout:
-    case FkissUserMovementEvent::Release:
-    case FkissUserMovementEvent::Drop:
-    case FkissUserMovementEvent::Fixdrop:
-        return;
+    case FkissUserMovementEvent::Press: {
+        tryToRunActionsByEvent(FKK::PRESS, { FkissVariant::fromCelName(items[0]->celFileName()) });
+        tryToRunActionsByEvent(FKK::PRESS, { FkissVariant::fromObjectId(items[0]->objId()) });
+        break;
     }
+    case FkissUserMovementEvent::Catch: {
+        tryToRunActionsByEvent(FKK::CATCH, { FkissVariant::fromCelName(items[0]->celFileName()) });
+        tryToRunActionsByEvent(FKK::CATCH, { FkissVariant::fromObjectId(items[0]->objId()) });
+        break;
+    }
+    case FkissUserMovementEvent::Fixcatch: {
+        tryToRunActionsByEvent(FKK::FIXCATCH, { FkissVariant::fromCelName(items[0]->celFileName()) });
+        tryToRunActionsByEvent(FKK::FIXCATCH, { FkissVariant::fromObjectId(items[0]->objId()) });
+        break;
+    }
+    case FkissUserMovementEvent::Unfix: {
+        tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromCelName(items[0]->celFileName()) });
+        tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromObjectId(items[0]->objId()) });
+        break;
+    }
+    case FkissUserMovementEvent::Collide: {
+        break;  // TODO
+    }
+    case FkissUserMovementEvent::Apart: {
+        break;  // TODO
+    }
+    case FkissUserMovementEvent::In: {
+        break;  // TODO
+    }
+    case FkissUserMovementEvent::Stillin:{
+        break;  // TODO
+    }
+    case FkissUserMovementEvent::Out:{
+        break;  // TODO
+    }
+    case FkissUserMovementEvent::Stillout:{
+        break;  // TODO
+    }
+    case FkissUserMovementEvent::Release:{
+        tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromCelName(items[0]->celFileName()) });
+        tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromObjectId(items[0]->objId()) });
+        break;
+    }
+    case FkissUserMovementEvent::Drop:{
+        tryToRunActionsByEvent(FKK::DROP, { FkissVariant::fromCelName(items[0]->celFileName()) });
+        tryToRunActionsByEvent(FKK::DROP, { FkissVariant::fromObjectId(items[0]->objId()) });
+        break;
+    }
+    case FkissUserMovementEvent::Fixdrop:{
+        tryToRunActionsByEvent(FKK::FIXDROP, { FkissVariant::fromCelName(items[0]->celFileName()) });
+        tryToRunActionsByEvent(FKK::FIXDROP, { FkissVariant::fromObjectId(items[0]->objId()) });
+        break;
+    }
+    }
+    return;
 }
 
 void Fkiss::runMap(FkissVariant target)
@@ -282,6 +323,25 @@ void Fkiss::logSyntaxError(const Token &token, QString msg)
                 .arg(token.columnNo())
                 .arg(token.value);
 }
+
+std::shared_ptr<ASTPairedCommands> Fkiss::getEventActionPair(const QString &eventName, const QList<FkissVariant> &args)
+{
+    foreach (std::shared_ptr<ASTPairedCommands> pair, m_evpairs) {
+        if (pair->event->name == eventName) {
+            if (pair->event->args == args) {
+                return pair;
+            }
+        }
+    }
+    return nullptr;
+}
+
+bool Fkiss::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &args)
+{
+
+}
+
+
 
 GKissScene *Fkiss::curKissScene() const
 {

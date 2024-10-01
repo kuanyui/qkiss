@@ -94,13 +94,17 @@ struct FkissKeywordInfo {
  * The events are triggered order-sensitive. Please see the docstrings of each field.
  */
 enum class FkissUserMovementEvent {
+
     // ===============================================================
     // The user clicks the mouse button on an object:
     // ===============================================================
+
     Press,
+
     // ===============================================================
     // The user moves the mouse:
     // ===============================================================
+
     /// 1. catch(target) event is triggered
     Catch,
     /// 2. fixcatch(target) event is triggered, if fix value of object is greater than 1
@@ -111,13 +115,14 @@ enum class FkissUserMovementEvent {
 
 
     // ===============================================================
-    // The user releases the mouse button:
+    // The user **releases** the mouse button:
     //
     // The object's original position (before dragging) is checked to see if it has collided with other objects or
     // The object's new position (after dragging) is checked to see if it has collided with other objects
     //
     // And the following events are triggered:
     // ===============================================================
+
     /// TODO: collide(target1, target2) - (Pixel) Triggered when pixels of target1 overlap pixels of target2 and previously did not.
     Collide,
     /// TODO: apart(target1, target2) - (Pixel) Triggered when pixels of target1 no longer overlap pixels of target2 and previously did.
@@ -181,10 +186,13 @@ private:
     /// Traverse across all commands, bind each event + its action(s) (procedure) pair, and store to pairs list.
     void pairAstCommands(QVector<std::shared_ptr<ASTCommand> > &commands);
     void logSyntaxError(const Token &token, QString msg);
+    std::shared_ptr<ASTPairedCommands> getEventActionPair(const QString &eventName, const QList<FkissVariant> &args);
+    bool tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &args);
     QVector<std::shared_ptr<ASTPairedCommands>> m_evpairs;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
     /// Currently active scene, all operations and manipulations will be applied on this scene.
+    /// @borrowed
     GKissScene *m_curKissScene = nullptr;
     /// Key is alarmId. Runtime.
     QHash<int, std::shared_ptr<FkissAlarmTimer>> m_rtAlarmTimerPool;

@@ -22,7 +22,7 @@ public:
     std::optional<GKissItem *> getItemByCelName(const QString &celFileName);
     void bindItemsToObjects();
     bool moveObjectTo(size_t objId, int x, int y);
-    void receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
+    void receiveFkissUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
 
     uint8_t paletteNoInKcf() const;
     void setPaletteNoInKcf(uint8_t newPaletteNoInKcf);
