@@ -241,7 +241,7 @@ void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     foreach (auto otherObjId, currentBoundingRectNonOverlappedObjectIds) {
         // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
-        dispatchFkissUserEventToScene(FkissUserMovementEvent::Stillin, { FV::fromObjectId(this->objId()), FV::fromObjectId(otherObjId) });
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Stillout, { FV::fromObjectId(this->objId()), FV::fromObjectId(otherObjId) });
     }
     // =======================================================================
     // Other events
