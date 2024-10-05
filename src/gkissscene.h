@@ -23,7 +23,7 @@ public:
     void bindItemsToObjects();
     bool moveObjectTo(size_t objId, int x, int y);
     void receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
-    QList<GKissItem *> allItems();
+    QList<GKissItem *> allKissItems();
     uint8_t paletteNoInKcf() const;
     void setPaletteNoInKcf(uint8_t newPaletteNoInKcf);
 

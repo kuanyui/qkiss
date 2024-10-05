@@ -148,7 +148,7 @@ void GKissScene::receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtTy
 
 }
 
-QList<GKissItem *> GKissScene::allItems()
+QList<GKissItem *> GKissScene::allKissItems()
 {
     return m_celNameToItemMap.values();
 }

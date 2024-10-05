@@ -69,7 +69,8 @@ private:
     QSet<GKissItem*> m_originalPixelOverlappedItems;
     /// @borrowed
     /// For in(), stillin(), out(), stillout()
-    QSet<GKissItem*> m_originalBoundingRectOverlappedItems;
+    // QSet<GKissItem*> m_originalBoundingRectOverlappedItems;
+    QSet<int> m_originalBoundingRectOverlappedObjIds;
 };
 
 QDebug operator<<(QDebug dbg, const GKissItem &item);
