@@ -20,6 +20,9 @@ public:
     void addCelItem(GKissItem *item);
     std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
     std::optional<GKissItem *> getItemByCelName(const QString &celFileName);
+    void setItemsVisibility(const FkissVariant &target, bool visibility);
+    void setItemsVisibilityByObjId(int32_t objId, bool visibility);
+    void setItemVisibilityByCelName(const QString &celFileName, bool visibility);
     void bindItemsToObjects();
     bool moveObjectTo(size_t objId, int x, int y);
     void receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);

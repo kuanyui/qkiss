@@ -187,7 +187,9 @@ private:
     void pairAstCommands(QVector<std::shared_ptr<ASTCommand> > &commands);
     void logSyntaxError(const Token &token, QString msg);
     std::shared_ptr<ASTPairedCommands> getEventActionPair(const QString &eventName, const QList<FkissVariant> &args);
-    bool tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &args);
+    bool tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs);
+    /// ATTENTION: may return nullptr.   // FIXME: Use std::optional?
+    std::optional<std::shared_ptr<ASTPairedCommands>> findEvpair(const QString &eventName, const QList<FkissVariant> &args);
     QVector<std::shared_ptr<ASTPairedCommands>> m_evpairs;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
@@ -197,7 +199,7 @@ private:
     /// Key is alarmId. Runtime.
     QHash<int, std::shared_ptr<FkissAlarmTimer>> m_rtAlarmTimerPool;
     /// Store the visibility modified via FKiSS script (e.g. map(), unmap()). May be a cel or an obj.
-    QHash<FkissVariant, bool> m_rtCelObjVisibilityState;
+    QHash<FkissVariant, bool> m_rtMapState;
 signals:
     void fkissRunProcedure(const FkissProcedure &fkissProcedure);
 };

@@ -91,6 +91,33 @@ std::optional<GKissItem *> GKissScene::getItemByCelName(const QString &celFileNa
     return tmp == nullptr ? std::nullopt : std::optional<GKissItem *>(tmp);
 }
 
+void GKissScene::setItemsVisibility(const FkissVariant &target, bool visibility)
+{
+    switch (target.type()) {
+    case FkissVariant::Type::Object: return setItemsVisibilityByObjId(target.getObjectId(), visibility);
+    case FkissVariant::Type::Int: return;
+    case FkissVariant::Type::String: return;
+    case FkissVariant::Type::Cel: return setItemVisibilityByCelName(target.getCelName(), visibility);
+        break;
+    }
+}
+
+void GKissScene::setItemsVisibilityByObjId(int32_t objId, bool visibility)
+{
+    QList<GKissItem *> *items = m_objIdToItemsMap.value(objId);
+    if (items == nullptr) { return; }
+    foreach (GKissItem *item, *items) {
+        item->setVisible(visibility);
+    }
+}
+
+void GKissScene::setItemVisibilityByCelName(const QString &celFileName, bool visibility)
+{
+    GKissItem *item = m_celNameToItemMap.value(celFileName);
+    if (item == nullptr) { return; }
+    item->setVisible(visibility);
+}
+
 void GKissScene::bindItemsToObjects()
 {
     // /** (In the CEL list (#)) ordered by the value of ObjectID . Length is always larger than object potitions list ($) */

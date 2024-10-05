@@ -3,6 +3,7 @@
 #include "gkissscene.h"
 #include <QRegularExpression>
 #include <QHashIterator>
+using namespace Qt::Literals::StringLiterals;
 
 Fkiss::Fkiss(QObject *parent)
     : QObject{parent}
@@ -22,6 +23,7 @@ void Fkiss::compileScriptLines(const QList<FkissLineInfo> &lineInfoList)
     //     qDebug() << "[Fkiss]" << astNode;
     // }
     pairAstCommands(ast0);
+    tryToRunActionsByEvent(FKK::INITIALIZE, {});
 }
 
 bool Fkiss::commandIsEvent(const QString &command)
@@ -57,22 +59,33 @@ void Fkiss::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVe
 
 void Fkiss::runMap(FkissVariant target)
 {
-    m_rtCelObjVisibilityState.insert(target, true);
+    m_rtMapState.insert(target, true);
+    if (m_curKissScene) {
+        m_curKissScene->setItemsVisibility(target, true);
+    }
 }
 
 void Fkiss::runUnmap(FkissVariant target)
 {
-    m_rtCelObjVisibilityState.insert(target, false);
+    m_rtMapState.insert(target, false);
+    if (m_curKissScene) {
+        m_curKissScene->setItemsVisibility(target, false);
+    }
 }
 
 void Fkiss::runAltmap(FkissVariant target)
 {
-    m_rtCelObjVisibilityState.insert(target, getMap(target));
+    bool oldVal = getMap(target);
+    bool newVal = !oldVal;
+    m_rtMapState.insert(target, newVal);
+    if (m_curKissScene) {
+        m_curKissScene->setItemsVisibility(target, newVal);
+    }
 }
 
 bool Fkiss::getMap(FkissVariant target)
 {
-    return m_rtCelObjVisibilityState.value(target, true);
+    return m_rtMapState.value(target, true);
 }
 
 
@@ -296,9 +309,55 @@ std::shared_ptr<ASTPairedCommands> Fkiss::getEventActionPair(const QString &even
     return nullptr;
 }
 
-bool Fkiss::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &args)
+bool Fkiss::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs)
 {
+    qDebug() << "[Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
+    auto _evpair = findEvpair(eventName, eventArgs);
+    if (!_evpair.has_value()) { return false; }
+    auto evpair = _evpair.value();
+    foreach (auto act, evpair->actions) {
+        auto actArgs = act->args;
+        if (act->name == FKK::MAP) {
+            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid map() args count, skip."_L1; continue; }
+            runMap(actArgs[0]);
+        } else if (act->name == FKK::UNMAP) {
+            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid unmap() args count, skip."_L1; continue; }
+            runUnmap(act->args[0]);
+        } else if (act->name == FKK::ALTMAP) {
+            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid altmap() args count, skip."_L1; continue; }
+            runAltmap(act->args[0]);
+        }
+    }
     return true;
+}
+
+std::optional<std::shared_ptr<ASTPairedCommands>> Fkiss::findEvpair(const QString &eventName, const QList<FkissVariant> &args)
+{
+    static QStringList EVENTS_WITH_ORDER_INSENSITIVE_ARGS {
+        FKK::COLLIDE,
+        FKK::APART,
+        FKK::IN,
+        FKK::STILLIN,
+        FKK::OUT,
+        FKK::STILLOUT
+    };
+    bool isOrderInsensitiveArgs = EVENTS_WITH_ORDER_INSENSITIVE_ARGS.contains(eventName);
+    // TODO: some events' args are order-insensitive. e.g. collide(), in()
+    foreach (auto evpair, m_evpairs) {
+        if (evpair->event->name != eventName) { continue; }
+        if (evpair->event->args == args) {
+            return evpair;
+        }
+        // TODO: optimize this shit, please.
+        if (isOrderInsensitiveArgs && evpair->event->args.length() == args.length()) {
+            QSet<FkissVariant> s1 { evpair->event->args.begin(), evpair->event->args.end() };
+            QSet<FkissVariant> s2 { args.begin(), args.end() };
+            if (s1 == s2) {
+                return evpair;
+            }
+        }
+    }
+    return std::nullopt;
 }
 
 
@@ -312,7 +371,7 @@ void Fkiss::setCurKissScene(GKissScene *newCurKissScene)
 {
     m_curKissScene = newCurKissScene;
     if (m_curKissScene == nullptr) { return; }
-    QHashIterator<FkissVariant, bool> it(m_rtCelObjVisibilityState);
+    QHashIterator<FkissVariant, bool> it(m_rtMapState);
     while (it.hasNext()) {
         it.next();
         const FkissVariant &key = it.key();
