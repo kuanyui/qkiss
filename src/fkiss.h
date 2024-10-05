@@ -164,7 +164,7 @@ public:
     void compileScriptLines(const QList<FkissLineInfo> &lineInfoList);
     static bool commandIsEvent(const QString &command);
     static bool commandIsAction(const QString &command);
-    void receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<GKissItem*> items);
+    void receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
     /// run map(), unmap(), altmap()
     void runMap(FkissVariant target);
     void runUnmap(FkissVariant target);

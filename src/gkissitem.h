@@ -40,7 +40,7 @@ public:
     /// May be a nullptr.
     GKissScene *kissScene();
     /// Emit event: Item -> Scene -> Scene.cnf().fkiss()
-    void dispatchFkissUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem *> items);
+    void dispatchFkissUserEventToScene(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
     void storeCurrentOverlappedItems();
 
 protected:

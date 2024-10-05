@@ -34,91 +34,23 @@ bool Fkiss::commandIsAction(const QString &command)
     return Fkiss::KEYWORDS_ACTION.contains(command);
 }
 
-void Fkiss::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items)
+void Fkiss::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)
 {
     // All events are generated from GKissItem (instead of FKiSS script), so the items counts should not need to be checked here.
     switch (evtType) {
-    case FkissUserMovementEvent::Press: {
-        tryToRunActionsByEvent(FKK::PRESS, { FkissVariant::fromCelName(items[0]->celFileName()) });
-        tryToRunActionsByEvent(FKK::PRESS, { FkissVariant::fromObjectId(items[0]->objId()) });
-        break;
-    }
-    case FkissUserMovementEvent::Catch: {
-        tryToRunActionsByEvent(FKK::CATCH, { FkissVariant::fromCelName(items[0]->celFileName()) });
-        tryToRunActionsByEvent(FKK::CATCH, { FkissVariant::fromObjectId(items[0]->objId()) });
-        break;
-    }
-    case FkissUserMovementEvent::Fixcatch: {
-        tryToRunActionsByEvent(FKK::FIXCATCH, { FkissVariant::fromCelName(items[0]->celFileName()) });
-        tryToRunActionsByEvent(FKK::FIXCATCH, { FkissVariant::fromObjectId(items[0]->objId()) });
-        break;
-    }
-    case FkissUserMovementEvent::Unfix: {
-        tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromCelName(items[0]->celFileName()) });
-        tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromObjectId(items[0]->objId()) });
-        break;
-    }
-    case FkissUserMovementEvent::Collide: {   // In FKiSS2 to FKiSS3, both target1 and target2 must be a cel.
-        tryToRunActionsByEvent(FKK::COLLIDE, {
-                                   FkissVariant::fromCelName(items[0]->celFileName()),
-                                   FkissVariant::fromCelName(items[1]->celFileName())
-                              });
-        break;
-    }
-    case FkissUserMovementEvent::Apart: {    // In FKiSS2 to FKiSS3, both target1 and target2 must be a cel.
-        tryToRunActionsByEvent(FKK::APART, {
-                                    FkissVariant::fromCelName(items[0]->celFileName()),
-                                    FkissVariant::fromCelName(items[1]->celFileName())
-                               });
-        break;
-    }
-    case FkissUserMovementEvent::In: {  // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
-        if (items[0]->objId() == items[1]->objId()) { break; }
-        tryToRunActionsByEvent(FKK::IN, {
-                                    FkissVariant::fromObjectId(items[0]->objId()),
-                                    FkissVariant::fromObjectId(items[1]->objId())
-                               });
-        break;
-    }
-    case FkissUserMovementEvent::Stillin:{   // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
-        if (items[0]->objId() == items[1]->objId()) { break; }
-        tryToRunActionsByEvent(FKK::STILLIN, {
-                                    FkissVariant::fromObjectId(items[0]->objId()),
-                                    FkissVariant::fromObjectId(items[1]->objId())
-                               });
-        break;
-    }
-    case FkissUserMovementEvent::Out:{   // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
-        if (items[0]->objId() == items[1]->objId()) { break; }
-        tryToRunActionsByEvent(FKK::OUT, {
-                                    FkissVariant::fromObjectId(items[0]->objId()),
-                                    FkissVariant::fromObjectId(items[1]->objId())
-                               });
-        break;
-    }
-    case FkissUserMovementEvent::Stillout:{   // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
-        if (items[0]->objId() == items[1]->objId()) { break; }
-        tryToRunActionsByEvent(FKK::STILLOUT, {
-                                    FkissVariant::fromObjectId(items[0]->objId()),
-                                    FkissVariant::fromObjectId(items[1]->objId())
-                               });
-        break;
-    }
-    case FkissUserMovementEvent::Release:{
-        tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromCelName(items[0]->celFileName()) });
-        tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromObjectId(items[0]->objId()) });
-        break;
-    }
-    case FkissUserMovementEvent::Drop:{
-        tryToRunActionsByEvent(FKK::DROP, { FkissVariant::fromCelName(items[0]->celFileName()) });
-        tryToRunActionsByEvent(FKK::DROP, { FkissVariant::fromObjectId(items[0]->objId()) });
-        break;
-    }
-    case FkissUserMovementEvent::Fixdrop:{
-        tryToRunActionsByEvent(FKK::FIXDROP, { FkissVariant::fromCelName(items[0]->celFileName()) });
-        tryToRunActionsByEvent(FKK::FIXDROP, { FkissVariant::fromObjectId(items[0]->objId()) });
-        break;
-    }
+    case FkissUserMovementEvent::Press:    tryToRunActionsByEvent(FKK::PRESS, vars); break;
+    case FkissUserMovementEvent::Catch:    tryToRunActionsByEvent(FKK::CATCH, vars); break;
+    case FkissUserMovementEvent::Fixcatch: tryToRunActionsByEvent(FKK::FIXCATCH, vars); break;
+    case FkissUserMovementEvent::Unfix:    tryToRunActionsByEvent(FKK::UNFIX, vars); break;
+    case FkissUserMovementEvent::Collide:  tryToRunActionsByEvent(FKK::COLLIDE, vars); break;
+    case FkissUserMovementEvent::Apart:    tryToRunActionsByEvent(FKK::APART, vars); break;
+    case FkissUserMovementEvent::In:       tryToRunActionsByEvent(FKK::IN, vars); break;
+    case FkissUserMovementEvent::Stillin:  tryToRunActionsByEvent(FKK::STILLIN, vars); break;
+    case FkissUserMovementEvent::Out:      tryToRunActionsByEvent(FKK::OUT, vars); break;
+    case FkissUserMovementEvent::Stillout: tryToRunActionsByEvent(FKK::STILLOUT, vars); break;
+    case FkissUserMovementEvent::Release:  tryToRunActionsByEvent(FKK::RELEASE, vars); break;
+    case FkissUserMovementEvent::Drop:     tryToRunActionsByEvent(FKK::DROP, vars); break;
+    case FkissUserMovementEvent::Fixdrop:  tryToRunActionsByEvent(FKK::FIXDROP, vars); break;
     }
     return;
 }

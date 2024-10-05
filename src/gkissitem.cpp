@@ -2,6 +2,7 @@
 #include "gkissscene.h"
 #include <QSet>
 using namespace Qt::Literals::StringLiterals;
+using FV = FkissVariant;
 
 
 GKissItem::GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, ParsedKcf *kcf, uint16_t paletteNoInKcf, QGraphicsItem *parent):
@@ -116,9 +117,10 @@ GKissScene *GKissItem::kissScene()
     return m_cachedKissScene;
 }
 
-void GKissItem::dispatchFkissUserEvent(FkissUserMovementEvent evtType, QVector<GKissItem*> items) {
+void GKissItem::dispatchFkissUserEventToScene(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)
+{
     if (!m_cachedKissScene) { return; }
-    m_cachedKissScene->receiveFkissUserEventFromItem(evtType, items);
+    m_cachedKissScene->receiveFkissUserEventFromSceneItem(evtType, vars);
 }
 
 
@@ -142,7 +144,8 @@ void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     event->accept();  // NOTE: Important!!! Otherwise mouseMoveEvent will not be triggered!
     qDebug() << "[DEBUG] mousePressEvent " << this;
     m_dragStartPosition = event->pos();
-    dispatchFkissUserEvent(FkissUserMovementEvent::Press, { this });   // press(target) - Triggered when the user clicks on the target.
+    dispatchFkissUserEventToScene(FkissUserMovementEvent::Press, { FV::fromCelName(this->celFileName()) });
+    dispatchFkissUserEventToScene(FkissUserMovementEvent::Press, { FV::fromObjectId(this->objId()) }); // press(target) - Triggered when the user clicks on the target.
     if (event->button() == Qt::RightButton) {
         m_fix = 0;
         foreach (GKissItem *sib, m_siblings) {
@@ -157,11 +160,17 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     bool hasCtrl = event->modifiers() & Qt::ControlModifier;
     // bool hasShift = event->modifiers() & Qt::ControlModifier;
 
-    dispatchFkissUserEvent(FkissUserMovementEvent::Catch, { this });  // catch(target) - The catch event is triggered when the user first begins to move the target.
+    // catch(target) - The catch event is triggered when the user first begins to move the target.
+    dispatchFkissUserEventToScene(FkissUserMovementEvent::Catch, { FV::fromCelName(this->celFileName()) });
+    dispatchFkissUserEventToScene(FkissUserMovementEvent::Catch, { FV::fromObjectId(this->objId()) });
     if (m_fix > 1) {
-        dispatchFkissUserEvent(FkissUserMovementEvent::Fixcatch, { this });  // fixcatch(target) - Triggered when the user first begins to move a target which has a non-zero fix value.
+        // fixcatch(target) - Triggered when the user first begins to move a target which has a non-zero fix value.
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Fixcatch, { FV::fromCelName(this->celFileName()) });
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Fixcatch, { FV::fromObjectId(this->objId()) });
     } else if (m_fix == 1) {
-        dispatchFkissUserEvent(FkissUserMovementEvent::Unfix, { this });  // unfix(target) - Triggered when the target's fix value reaches 0.
+        // unfix(target) - Triggered when the target's fix value reaches 0.
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Unfix, { FV::fromCelName(this->celFileName()) });
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Unfix, { FV::fromObjectId(this->objId()) });
     }
     decreaseFix();
     m_fixDecreasedWhileMouseMoveEvent = true;
@@ -176,7 +185,6 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
     // QGraphicsItem::mouseMoveEvent(event);
 }
-
 void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
@@ -192,12 +200,14 @@ void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QSet<GKissItem *> newlyPixelOverlappedItems = currentPixelOverlappedItems;
     newlyPixelOverlappedItems.subtract(m_originalPixelOverlappedItems);
     foreach (auto item, newlyPixelOverlappedItems) {
-        dispatchFkissUserEvent(FkissUserMovementEvent::Collide, { this, item });
+        // In FKiSS2 to FKiSS3, both target1 and target2 must be a cel.
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Collide, { FV::fromCelName(this->celFileName()), FV::fromCelName(item->celFileName()) });
     }
     QSet<GKissItem *> newlyPixelApartedItems = m_originalPixelOverlappedItems;
     newlyPixelApartedItems.subtract(currentPixelOverlappedItems);
     foreach (auto item, newlyPixelApartedItems) {
-        dispatchFkissUserEvent(FkissUserMovementEvent::Apart, { this, item });
+         // In FKiSS2 to FKiSS3, both target1 and target2 must be a cel.
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Apart, { FV::fromCelName(this->celFileName()), FV::fromCelName(item->celFileName()) });
     }
 
     // =======================================================================
@@ -215,31 +225,40 @@ void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QSet<GKissItem *> newlyRectOverlappedItems = currentBoundingRectOverlappedItems;
     newlyRectOverlappedItems.subtract(m_originalBoundingRectOverlappedItems);
     foreach (auto item, newlyRectOverlappedItems) {
-        dispatchFkissUserEvent(FkissUserMovementEvent::In, { this, item });
+        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::In, { FV::fromObjectId(this->objId()), FV::fromObjectId(item->objId()) });
     }
     foreach (auto item, currentBoundingRectOverlappedItems) {
-        dispatchFkissUserEvent(FkissUserMovementEvent::Stillin, { this, item });
+        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Stillin, { FV::fromObjectId(this->objId()), FV::fromObjectId(item->objId()) });
     }
     QSet<GKissItem *> newlyRectApartedItems = m_originalBoundingRectOverlappedItems;
     newlyRectApartedItems.subtract(currentPixelOverlappedItems);
     foreach (auto item, newlyRectApartedItems) {
-        dispatchFkissUserEvent(FkissUserMovementEvent::Out, { this, item });
+        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Out, { FV::fromObjectId(this->objId()), FV::fromObjectId(item->objId()) });
     }
     foreach (auto item, currentBoundingRectNonOverlappedItems) {
-        dispatchFkissUserEvent(FkissUserMovementEvent::Stillin, { this, item });
+        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Stillin, { FV::fromObjectId(this->objId()), FV::fromObjectId(item->objId()) });
     }
     // =======================================================================
     // Other events
     // =======================================================================
-    dispatchFkissUserEvent(FkissUserMovementEvent::Release, { this });
+    dispatchFkissUserEventToScene(FkissUserMovementEvent::Release, { FV::fromCelName(this->celFileName()) });
+    dispatchFkissUserEventToScene(FkissUserMovementEvent::Release, { FV::fromObjectId(this->objId()) });
     if (!m_fixDecreasedWhileMouseMoveEvent) {
         decreaseFix();
         m_fixDecreasedWhileMouseMoveEvent = false;
     }
     if (m_fix == 0) {
-        dispatchFkissUserEvent(FkissUserMovementEvent::Drop, { this });  // drop(target) event is triggered, if fix value of object is equal to 0
+        // drop(target) event is triggered, if fix value of object is equal to 0
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Drop, { FV::fromCelName(this->celFileName()) });
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Drop, { FV::fromObjectId(this->objId()) });
     } else {
-        dispatchFkissUserEvent(FkissUserMovementEvent::Fixdrop, { this });  // fixdrop(target) event is triggered, if fix value of object is greater than 0
+        // fixdrop(target) event is triggered, if fix value of object is greater than 0
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Fixdrop, { FV::fromCelName(this->celFileName()) });
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Fixdrop, { FV::fromObjectId(this->objId()) });
     }
 
     foreach (GKissItem* sib, m_siblings) {
