@@ -338,7 +338,7 @@ std::shared_ptr<ASTPairedCommands> Fkiss::getEventActionPair(const QString &even
 
 bool Fkiss::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &args)
 {
-
+    return true;
 }
 
 
