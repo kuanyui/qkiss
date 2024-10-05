@@ -60,9 +60,13 @@ private:
     QImage *m_image;
     int32_t m_fix;
     QPointF m_dragStartPosition;
+    /// catch(), fixcatch(), unfix() should be emitted only once in a continuous mouseMoveEvent(s).
+    bool m_mouseMoveFkissEventIsAlreadyEmitted = false;
     QVector<GKissItem*> m_siblings;
     /// cache of casted scene()
     GKissScene *m_cachedKissScene = nullptr;
+    /// According to FKiSS spec, `fix` can be decreased by mouse-move.
+    /// However, I feel this is too annoying, so makes mouse-click (press + release) also able to decrease `fix`.
     bool m_fixDecreasedWhileMouseMoveEvent = false;
     /// @borrowed
     /// For collide(), apart()

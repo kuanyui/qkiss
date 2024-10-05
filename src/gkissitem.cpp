@@ -144,6 +144,7 @@ void GKissItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     event->accept();  // NOTE: Important!!! Otherwise mouseMoveEvent will not be triggered!
     qDebug() << "[DEBUG] mousePressEvent " << this;
     m_dragStartPosition = event->pos();
+    m_fixDecreasedWhileMouseMoveEvent = false;
     dispatchFkissUserEventToScene(FkissUserMovementEvent::Press, { FV::fromCelName(this->celFileName()) });
     dispatchFkissUserEventToScene(FkissUserMovementEvent::Press, { FV::fromObjectId(this->objId()) }); // press(target) - Triggered when the user clicks on the target.
     if (event->button() == Qt::RightButton) {
@@ -159,21 +160,23 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     bool hasCtrl = event->modifiers() & Qt::ControlModifier;
     // bool hasShift = event->modifiers() & Qt::ControlModifier;
-
-    // catch(target) - The catch event is triggered when the user first begins to move the target.
-    dispatchFkissUserEventToScene(FkissUserMovementEvent::Catch, { FV::fromCelName(this->celFileName()) });
-    dispatchFkissUserEventToScene(FkissUserMovementEvent::Catch, { FV::fromObjectId(this->objId()) });
-    if (m_fix > 1) {
-        // fixcatch(target) - Triggered when the user first begins to move a target which has a non-zero fix value.
-        dispatchFkissUserEventToScene(FkissUserMovementEvent::Fixcatch, { FV::fromCelName(this->celFileName()) });
-        dispatchFkissUserEventToScene(FkissUserMovementEvent::Fixcatch, { FV::fromObjectId(this->objId()) });
-    } else if (m_fix == 1) {
-        // unfix(target) - Triggered when the target's fix value reaches 0.
-        dispatchFkissUserEventToScene(FkissUserMovementEvent::Unfix, { FV::fromCelName(this->celFileName()) });
-        dispatchFkissUserEventToScene(FkissUserMovementEvent::Unfix, { FV::fromObjectId(this->objId()) });
+    if (!m_mouseMoveFkissEventIsAlreadyEmitted) {
+        m_mouseMoveFkissEventIsAlreadyEmitted = true;
+        // catch(target) - The catch event is triggered when the user first begins to move the target.
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Catch, { FV::fromCelName(this->celFileName()) });
+        dispatchFkissUserEventToScene(FkissUserMovementEvent::Catch, { FV::fromObjectId(this->objId()) });
+        if (m_fix > 1) {
+            // fixcatch(target) - Triggered when the user first begins to move a target which has a non-zero fix value.
+            dispatchFkissUserEventToScene(FkissUserMovementEvent::Fixcatch, { FV::fromCelName(this->celFileName()) });
+            dispatchFkissUserEventToScene(FkissUserMovementEvent::Fixcatch, { FV::fromObjectId(this->objId()) });
+        } else if (m_fix == 1) {
+            // unfix(target) - Triggered when the target's fix value reaches 0.
+            dispatchFkissUserEventToScene(FkissUserMovementEvent::Unfix, { FV::fromCelName(this->celFileName()) });
+            dispatchFkissUserEventToScene(FkissUserMovementEvent::Unfix, { FV::fromObjectId(this->objId()) });
+        }
+        decreaseFix();
+        m_fixDecreasedWhileMouseMoveEvent = true;
     }
-    decreaseFix();
-    m_fixDecreasedWhileMouseMoveEvent = true;
     if (m_fix > 0) { return; }
 
     QPointF delta = event->pos() - m_dragStartPosition;
@@ -188,6 +191,7 @@ void GKissItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
+    m_mouseMoveFkissEventIsAlreadyEmitted = false;
     // =======================================================================
     // Pixel overlapping checking (collide / apart)
     // =======================================================================
@@ -250,7 +254,6 @@ void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     dispatchFkissUserEventToScene(FkissUserMovementEvent::Release, { FV::fromObjectId(this->objId()) });
     if (!m_fixDecreasedWhileMouseMoveEvent) {
         decreaseFix();
-        m_fixDecreasedWhileMouseMoveEvent = false;
     }
     if (m_fix == 0) {
         // drop(target) event is triggered, if fix value of object is equal to 0
