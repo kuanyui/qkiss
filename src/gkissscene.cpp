@@ -96,7 +96,7 @@ void GKissScene::setItemsVisibility(const FkissVariant &target, bool visibility)
     switch (target.type()) {
     case FkissVariant::Type::Object: return setItemsVisibilityByObjId(target.getObjectId(), visibility);
     case FkissVariant::Type::Int: return;
-    case FkissVariant::Type::String: return;
+    case FkissVariant::Type::String: return setItemVisibilityByCelName(target.getString(), visibility);
     case FkissVariant::Type::Cel: return setItemVisibilityByCelName(target.getCelName(), visibility);
         break;
     }

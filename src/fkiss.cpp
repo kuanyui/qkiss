@@ -316,6 +316,7 @@ bool Fkiss::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVa
     if (!_evpair.has_value()) { return false; }
     auto evpair = _evpair.value();
     foreach (auto act, evpair->actions) {
+        qDebug() << "[Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
         auto actArgs = act->args;
         if (act->name == FKK::MAP) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid map() args count, skip."_L1; continue; }
