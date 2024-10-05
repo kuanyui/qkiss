@@ -34,7 +34,7 @@ bool Fkiss::commandIsAction(const QString &command)
     return Fkiss::KEYWORDS_ACTION.contains(command);
 }
 
-void Fkiss::receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items)
+void Fkiss::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<GKissItem *> items)
 {
     // All events are generated from GKissItem (instead of FKiSS script), so the items counts should not need to be checked here.
     switch (evtType) {
@@ -58,23 +58,51 @@ void Fkiss::receiveUserEventFromItem(FkissUserMovementEvent evtType, QVector<GKi
         tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromObjectId(items[0]->objId()) });
         break;
     }
-    case FkissUserMovementEvent::Collide: {
-        break;  // TODO
+    case FkissUserMovementEvent::Collide: {   // In FKiSS2 to FKiSS3, both target1 and target2 must be a cel.
+        tryToRunActionsByEvent(FKK::COLLIDE, {
+                                   FkissVariant::fromCelName(items[0]->celFileName()),
+                                   FkissVariant::fromCelName(items[1]->celFileName())
+                              });
+        break;
     }
-    case FkissUserMovementEvent::Apart: {
-        break;  // TODO
+    case FkissUserMovementEvent::Apart: {    // In FKiSS2 to FKiSS3, both target1 and target2 must be a cel.
+        tryToRunActionsByEvent(FKK::APART, {
+                                    FkissVariant::fromCelName(items[0]->celFileName()),
+                                    FkissVariant::fromCelName(items[1]->celFileName())
+                               });
+        break;
     }
-    case FkissUserMovementEvent::In: {
-        break;  // TODO
+    case FkissUserMovementEvent::In: {  // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        if (items[0]->objId() == items[1]->objId()) { break; }
+        tryToRunActionsByEvent(FKK::IN, {
+                                    FkissVariant::fromObjectId(items[0]->objId()),
+                                    FkissVariant::fromObjectId(items[1]->objId())
+                               });
+        break;
     }
-    case FkissUserMovementEvent::Stillin:{
-        break;  // TODO
+    case FkissUserMovementEvent::Stillin:{   // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        if (items[0]->objId() == items[1]->objId()) { break; }
+        tryToRunActionsByEvent(FKK::STILLIN, {
+                                    FkissVariant::fromObjectId(items[0]->objId()),
+                                    FkissVariant::fromObjectId(items[1]->objId())
+                               });
+        break;
     }
-    case FkissUserMovementEvent::Out:{
-        break;  // TODO
+    case FkissUserMovementEvent::Out:{   // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        if (items[0]->objId() == items[1]->objId()) { break; }
+        tryToRunActionsByEvent(FKK::OUT, {
+                                    FkissVariant::fromObjectId(items[0]->objId()),
+                                    FkissVariant::fromObjectId(items[1]->objId())
+                               });
+        break;
     }
-    case FkissUserMovementEvent::Stillout:{
-        break;  // TODO
+    case FkissUserMovementEvent::Stillout:{   // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        if (items[0]->objId() == items[1]->objId()) { break; }
+        tryToRunActionsByEvent(FKK::STILLOUT, {
+                                    FkissVariant::fromObjectId(items[0]->objId()),
+                                    FkissVariant::fromObjectId(items[1]->objId())
+                               });
+        break;
     }
     case FkissUserMovementEvent::Release:{
         tryToRunActionsByEvent(FKK::UNFIX, { FkissVariant::fromCelName(items[0]->celFileName()) });
