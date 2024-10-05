@@ -212,7 +212,7 @@ void GKissItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             currentBoundingRectNonOverlappedItems.insert(item);
         }
     }
-    QSet<GKissItem *> newlyRectOverlappedItems = currentPixelOverlappedItems;
+    QSet<GKissItem *> newlyRectOverlappedItems = currentBoundingRectOverlappedItems;
     newlyRectOverlappedItems.subtract(m_originalBoundingRectOverlappedItems);
     foreach (auto item, newlyRectOverlappedItems) {
         dispatchFkissUserEvent(FkissUserMovementEvent::In, { this, item });
