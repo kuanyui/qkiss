@@ -106,7 +106,7 @@ void GKissItem::decreaseFix()
 QVariant GKissItem::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == GraphicsItemChange::ItemSceneChange) {
-        m_cachedKissScene = qobject_cast<GKissScene *>(scene());
+        m_cachedKissScene = value.value<GKissScene *>();
     }
     return value;
 }
