@@ -41,12 +41,6 @@ public:
     GKissScene *kissScene();
     /// Emit event: Item -> Scene -> Scene.cnf().fkiss()
     void dispatchFkissUserEventToScene(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
-    void storeCurrentOverlappedItems();
-
-protected:
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     void init();
@@ -59,22 +53,13 @@ private:
     // ==========================
     QImage *m_image;
     int32_t m_fix;
-    QPointF m_dragStartPosition;
-    /// catch(), fixcatch(), unfix() should be emitted only once in a continuous mouseMoveEvent(s).
-    bool m_mouseMoveFkissEventIsAlreadyEmitted = false;
+    // QPointF m_dragStartPosition;
+    /// CEL items with same Object ID
     QVector<GKissItem*> m_siblings;
     /// cache of casted scene()
     GKissScene *m_cachedKissScene = nullptr;
-    /// According to FKiSS spec, `fix` can be decreased by mouse-move.
-    /// However, I feel this is too annoying, so makes mouse-click (press + release) also able to decrease `fix`.
-    bool m_fixDecreasedWhileMouseMoveEvent = false;
-    /// @borrowed
-    /// For collide(), apart()
-    QSet<GKissItem*> m_originalPixelOverlappedItems;
-    /// @borrowed
-    /// For in(), stillin(), out(), stillout()
-    // QSet<GKissItem*> m_originalBoundingRectOverlappedItems;
-    QSet<int> m_originalBoundingRectOverlappedObjIds;
+
+
 };
 
 QDebug operator<<(QDebug dbg, const GKissItem &item);
