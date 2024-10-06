@@ -116,14 +116,26 @@ enum class FkissUserMovementEvent {
     Fixdrop
 };
 
-/// Event:  alarm(alarmId)
-/// Action: timer(alarmId, delayMs) - Sets the timer for an alarm
+/**
+* [Event]    alarm(alarmId)
+* [Action]   timer(alarmId, delayMs) - Sets the timer for an alarm
+* @example
+* ```
+* initialize()
+*   timer(5, 1000)  ; call alarm(5) after 1000ms
+*
+* alarm(5)   ; event
+*   sound("bells.wav")
+*
+* ```
+*/
 struct FkissAlarmTimer {
     /// Primary key.
     /// If a timer for that alarm is already counting down, the new delay time will replace it, resetting the alarm's timer.
     int alarmId;
     std::unique_ptr<QTimer> qTimer;
-    std::shared_ptr<ASTPairedCommands> triggedTimer;
+    /// The event of this pair must be an alarm()
+    /// std::shared_ptr<ASTPairedCommands> triggeredAlarm;
 };
 
 class GKissItem;
@@ -154,6 +166,7 @@ private:
 
 /// Fkiss Keywords
 namespace FKK {
+    // Events
     inline const QString INITIALIZE        = QStringLiteral("initialize");
     inline const QString BEGIN             = QStringLiteral("begin");
     inline const QString END               = QStringLiteral("end");
@@ -182,6 +195,7 @@ namespace FKK {
     inline const QString FIXDROP           = QStringLiteral("fixdrop");
     inline const QString UNFIX             = QStringLiteral("unfix");
     inline const QString DETACHED          = QStringLiteral("detached");
+    // Actions
     inline const QString TIMER             = QStringLiteral("timer");
     inline const QString RANDOMTIMER       = QStringLiteral("randomtimer");
     inline const QString LETTIMER          = QStringLiteral("lettimer");

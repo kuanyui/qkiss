@@ -1,10 +1,16 @@
 #include "fkissruntime.h"
 #include "gkissscene.h"
+#include <QRandomGenerator>
 using namespace Qt::Literals::StringLiterals;
 
 FkissRuntime::FkissRuntime()
 {
 
+}
+
+FkissRuntime::~FkissRuntime()
+{
+    unloadFkissScript();
 }
 
 void FkissRuntime::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)
@@ -26,6 +32,45 @@ void FkissRuntime::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtTy
     case FkissUserMovementEvent::Fixdrop:  tryToRunActionsByEvent(FKK::FIXDROP, vars); break;
     }
     return;
+}
+
+
+void FkissRuntime::setCurKissScene(GKissScene *newCurKissScene)
+{
+    m_curKissScene = newCurKissScene;
+    if (m_curKissScene == nullptr) { return; }
+    QHashIterator<FkissVariant, bool> it(m_mapState);
+    while (it.hasNext()) {
+        it.next();
+        const FkissVariant &key = it.key();
+        bool visible = it.value();
+        if (key.type() == FkissVariant::Type::String) {
+            auto _item = m_curKissScene->getItemByCelName(key.getString());
+            if (!_item.has_value()) { qDebug() << "WTF???"; continue; }
+            _item.value()->setVisible(visible);
+        } else if (key.type() == FkissVariant::Type::Object) {
+            std::optional<QVector<GKissItem *> *> _items = m_curKissScene->getItemsByObjId(key.getObjectId());
+            if (!_items.has_value()) { qDebug() << "WTF???"; continue; }
+            auto *items = _items.value();
+            foreach (auto *item, *items) {
+                item->setVisible(visible);
+            }
+        }
+    }
+}
+
+void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedCommands> > parsedFkissScript)
+{
+    m_evpairs = parsedFkissScript;
+    tryToRunActionsByEvent(FKK::INITIALIZE, {});
+    tryToRunActionsByEvent(FKK::BEGIN, {});
+}
+
+void FkissRuntime::unloadFkissScript()
+{
+    foreach (auto x, m_alarmTimerPool.values()) {
+        x->qTimer->stop();
+    }
 }
 
 void FkissRuntime::runMap(FkissVariant target)
@@ -59,41 +104,71 @@ bool FkissRuntime::getMap(FkissVariant target)
     return m_mapState.value(target, true);
 }
 
+void FkissRuntime::runTimer(FkissVariant alarmID, FkissVariant delay)
+{
+    if (alarmID.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][WARNING] currently, the alarmID in timer() must be an integer. Skip."_L1;
+        return;
+    }
+    if (delay.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][ERROR] delay in timer() must be an interger. Skip."_L1;
+        return;
+    }
+    getOrCreateAlarmTimer(alarmID, delay.getInt());
+}
+void FkissRuntime::runRandomtimer(FkissVariant alarmID, FkissVariant delay, FkissVariant range)
+{
+    if (alarmID.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][WARNING] currently, the alarmID in randomtimer() must be an integer. Skip."_L1;
+        return;
+    }
+    if (delay.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][ERROR] delay in randomtimer() must be an interger. Skip."_L1;
+        return;
+    }
+    if (range.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][ERROR] range in randomtimer() must be an interger. Skip."_L1;
+        return;
+    }
+    int from = delay.getInt();
+    int to = from + range.getInt();
+    int realDelay = QRandomGenerator::global()->bounded(from, to);
+    getOrCreateAlarmTimer(alarmID, realDelay);
+}
+
+void FkissRuntime::runActionsInAlarm(FkissVariant alarmID)
+{
+    qDebug() << "[fkissruntime] runActionsInAlarm" << alarmID;
+    tryToRunActionsByEvent(FKK::ALARM, { alarmID });
+}
+
+std::shared_ptr<FkissAlarmTimer> FkissRuntime::getOrCreateAlarmTimer(FkissVariant alarmID, int delay)
+{
+    if (m_alarmTimerPool.contains(alarmID)) {
+        std::shared_ptr<FkissAlarmTimer> tmp = m_alarmTimerPool.value(alarmID);
+        tmp->qTimer->stop();
+        tmp->qTimer->start(delay);
+        return tmp;
+    } else {
+        std::shared_ptr<FkissAlarmTimer> tmp = std::make_shared<FkissAlarmTimer>();
+        m_alarmTimerPool.insert(alarmID, tmp);
+        tmp->alarmId = alarmID.getInt();
+        tmp->qTimer = std::make_unique<QTimer>();
+        tmp->qTimer->setSingleShot(true);
+        tmp->qTimer->setInterval(delay);
+        connect(tmp->qTimer.get(), &QTimer::timeout, [=]() {
+            runActionsInAlarm(alarmID);
+        });
+        tmp->qTimer->start();
+        return tmp;
+    }
+}
+
 GKissScene *FkissRuntime::curKissScene() const
 {
     return m_curKissScene;
 }
 
-void FkissRuntime::setCurKissScene(GKissScene *newCurKissScene)
-{
-    m_curKissScene = newCurKissScene;
-    if (m_curKissScene == nullptr) { return; }
-    QHashIterator<FkissVariant, bool> it(m_mapState);
-    while (it.hasNext()) {
-        it.next();
-        const FkissVariant &key = it.key();
-        bool visible = it.value();
-        if (key.type() == FkissVariant::Type::String) {
-            auto _item = m_curKissScene->getItemByCelName(key.getString());
-            if (!_item.has_value()) { qDebug() << "WTF???"; continue; }
-            _item.value()->setVisible(visible);
-        } else if (key.type() == FkissVariant::Type::Object) {
-            std::optional<QVector<GKissItem *> *> _items = m_curKissScene->getItemsByObjId(key.getObjectId());
-            if (!_items.has_value()) { qDebug() << "WTF???"; continue; }
-            auto *items = _items.value();
-            foreach (auto *item, *items) {
-                item->setVisible(visible);
-            }
-        }
-    }
-}
-
-void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedCommands> > parsedFkissScript)
-{
-    m_evpairs = parsedFkissScript;
-    tryToRunActionsByEvent(FKK::INITIALIZE, {});
-    tryToRunActionsByEvent(FKK::BEGIN, {});
-}
 
 std::shared_ptr<ASTPairedCommands> FkissRuntime::getEventActionPair(const QString &eventName, const QList<FkissVariant> &args)
 {
@@ -115,16 +190,23 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
     auto evpair = _evpair.value();
     foreach (auto act, evpair->actions) {
         qDebug() << "[Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
+        auto actName = act->name;
         auto actArgs = act->args;
-        if (act->name == FKK::MAP) {
+        if (actName == FKK::MAP) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid map() args count, skip."_L1; continue; }
             runMap(actArgs[0]);
-        } else if (act->name == FKK::UNMAP) {
+        } else if (actName == FKK::UNMAP) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid unmap() args count, skip."_L1; continue; }
-            runUnmap(act->args[0]);
-        } else if (act->name == FKK::ALTMAP) {
+            runUnmap(actArgs[0]);
+        } else if (actName == FKK::ALTMAP) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid altmap() args count, skip."_L1; continue; }
-            runAltmap(act->args[0]);
+            runAltmap(actArgs[0]);
+        } else if (actName == FKK::TIMER) {
+            if (actArgs.length() != 2) { qDebug() << "[Fkiss] invalid timer(alarmID, delayMs) args count, skip."_L1; continue; }
+            runTimer(actArgs[0], actArgs[1]);
+        } else if (actName == FKK::RANDOMTIMER) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid randomtimer(alarmID, delay, range) args count, skip."_L1; continue; }
+            runRandomtimer(actArgs[0], actArgs[1], actArgs[2]);
         }
     }
     return true;
@@ -158,3 +240,5 @@ std::optional<std::shared_ptr<ASTPairedCommands> > FkissRuntime::findEvpair(cons
     }
     return std::nullopt;
 }
+
+
