@@ -50,7 +50,7 @@ private:
     // ==========================================================================
     /// For Press / Drag / Release
     GKissItem *m_draggingItem = nullptr;
-    QPointF m_dragStartPosition;
+    QPointF m_dragStartMouseScenePos;
     /// catch(), fixcatch(), unfix() should be emitted only once in a continuous mouseMoveEvent(s).
     bool m_dragRelatedFkissEventsAreAlreadyEmitted = false;
     /// According to FKiSS spec, `fix` can be decreased by mouse-move.

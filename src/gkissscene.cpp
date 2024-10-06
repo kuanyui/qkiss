@@ -204,7 +204,7 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     m_draggingItem = item;
     storeCurrentOverlappedItems(item);
     qDebug() << "[DEBUG] mousePressEvent " << item << event->scenePos();
-    m_dragStartPosition = event->pos();
+    m_dragStartMouseScenePos = event->scenePos();
     m_fixDecreasedWhileDraggingItem = false;
     receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Press, { FV::fromCelName(m_draggingItem->celFileName()) });
     receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Press, { FV::fromObjectId(m_draggingItem->objId()) }); // press(target) - Triggered when the user clicks on the target.
@@ -240,12 +240,11 @@ void GKissScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         m_fixDecreasedWhileDraggingItem = true;
     }
     if (m_draggingItem->fix() > 0) { return; }
-    qDebug() << "[DEBUG] mouseMoveEvent " << event->pos();
-    QPointF delta = event->pos() - m_dragStartPosition;
-    m_draggingItem->setPos(m_draggingItem->pos() + delta);
+    QPointF mouseDelta = event->scenePos() - event->lastScenePos();
+    m_draggingItem->setPos(m_draggingItem->pos() + mouseDelta);
     if (!hasCtrl) {
         foreach (GKissItem *sib, *m_draggingItem->siblings()) {
-            sib->setPos(sib->pos() + delta);
+            sib->setPos(sib->pos() + mouseDelta);
         }
     }
     // QGraphicsItem::mouseMoveEvent(event);
