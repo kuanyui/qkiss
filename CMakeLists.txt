@@ -52,7 +52,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/globalstate.h src/globalstate.cpp
         src/fkiss.h src/fkiss.cpp
         src/fkissvariant.h src/fkissvariant.cpp
-        src/fkisscommandsmap.cpp
+
         src/fkissparser.h src/fkissparser.cpp
         src/fkissruntime.h src/fkissruntime.cpp
 
