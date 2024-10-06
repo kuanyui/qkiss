@@ -25,6 +25,11 @@ void Fkiss::loadFkissScript(QList<FkissLineInfo> fkissScriptLines)
     m_runtime->loadParsedFkissScript(parsedScript);
 }
 
+void Fkiss::unloadFkissScript()
+{
+    m_runtime->unloadFkissScript();
+}
+
 FkissRuntime *Fkiss::runtime()
 {
     return m_runtime;

@@ -152,6 +152,7 @@ public:
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
     void loadFkissScript(QList<FkissLineInfo> fkissScriptLines);
+    void unloadFkissScript();
     FkissRuntime *runtime();
 
     FkissParser *parser();

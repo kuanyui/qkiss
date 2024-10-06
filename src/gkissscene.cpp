@@ -6,7 +6,7 @@ using FV = FkissVariant;
 GKissScene::GKissScene(QObject *parent):
     QGraphicsScene(parent)
 {
-
+    qDebug() << "[scene] ctor!";
 }
 
 // GKissScene::GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent):
@@ -80,7 +80,7 @@ void GKissScene::addCelItem(GKissItem *item)
 
 std::optional<QVector<GKissItem *> *>GKissScene::getItemsByObjId(int32_t objId)
 {
-    QList<GKissItem *> *tmp = m_objIdToItemsMap.value(objId);
+    QList<GKissItem *> *tmp = m_objIdToItemsMap.value(objId, nullptr);
     if (tmp == nullptr) {
         return std::nullopt;
     }
@@ -106,7 +106,7 @@ void GKissScene::setItemsVisibility(const FkissVariant &target, bool visibility)
 
 void GKissScene::setItemsVisibilityByObjId(int32_t objId, bool visibility)
 {
-    QList<GKissItem *> *items = m_objIdToItemsMap.value(objId);
+    QList<GKissItem *> *items = m_objIdToItemsMap.value(objId, nullptr);
     if (items == nullptr) { return; }
     foreach (GKissItem *item, *items) {
         item->setVisible(visibility);
@@ -115,7 +115,7 @@ void GKissScene::setItemsVisibilityByObjId(int32_t objId, bool visibility)
 
 void GKissScene::setItemVisibilityByCelName(const QString &celFileName, bool visibility)
 {
-    GKissItem *item = m_celNameToItemMap.value(celFileName);
+    GKissItem *item = m_celNameToItemMap.value(celFileName, nullptr);
     if (item == nullptr) { return; }
     item->setVisible(visibility);
 }

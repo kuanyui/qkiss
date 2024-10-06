@@ -71,6 +71,8 @@ void FkissRuntime::unloadFkissScript()
     foreach (auto x, m_alarmTimerPool.values()) {
         x->qTimer->stop();
     }
+    m_alarmTimerPool.clear();
+    m_evpairs.clear();
 }
 
 void FkissRuntime::runMap(FkissVariant target)
