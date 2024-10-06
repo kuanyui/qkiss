@@ -99,6 +99,40 @@ void FkissRuntime::runAltmap(FkissVariant target)
     }
 }
 
+void FkissRuntime::runMove(FkissVariant target, FkissVariant dx, FkissVariant dy)
+{
+    if (target.type() != FkissVariant::Type::Object) {
+        qDebug() << "[fkissruntime][WARNING] currently, the target in move() must be an object ID. Skip."_L1;
+        return;
+    }
+    if (dx.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][ERROR] the `dx` in move() must be an object ID. Skip."_L1;
+        return;
+    }
+    if (dy.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][ERROR] the `dy` in move() must be an object ID. Skip."_L1;
+        return;
+    }
+    m_curKissScene->moveObjectBy(target.getObjectId(), dx.getInt(), dy.getInt());
+}
+
+void FkissRuntime::runMoveto(FkissVariant target, FkissVariant x, FkissVariant y)
+{
+    if (target.type() != FkissVariant::Type::Object) {
+        qDebug() << "[fkissruntime][WARNING] currently, the `target` in moveto() must be an object ID. Skip."_L1;
+        return;
+    }
+    if (x.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][ERROR] the `x` in moveto() must be an object ID. Skip."_L1;
+        return;
+    }
+    if (y.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][ERROR] the `y` in moveto() must be an object ID. Skip."_L1;
+        return;
+    }
+    m_curKissScene->moveObjectTo(target.getObjectId(), x.getInt(), y.getInt());
+}
+
 bool FkissRuntime::getMap(FkissVariant target)
 {
     return m_mapState.value(target, true);
@@ -195,18 +229,36 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
         if (actName == FKK::MAP) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid map() args count, skip."_L1; continue; }
             runMap(actArgs[0]);
-        } else if (actName == FKK::UNMAP) {
+            continue;
+        }
+        if (actName == FKK::UNMAP) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid unmap() args count, skip."_L1; continue; }
             runUnmap(actArgs[0]);
-        } else if (actName == FKK::ALTMAP) {
+            continue;
+        }
+        if (actName == FKK::ALTMAP) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid altmap() args count, skip."_L1; continue; }
             runAltmap(actArgs[0]);
-        } else if (actName == FKK::TIMER) {
+            continue;
+        }
+        if (actName == FKK::MOVE) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid move() args count, skip."_L1; continue; }
+            runMove(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }        if (actName == FKK::MOVETO) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid moveto() args count, skip."_L1; continue; }
+            runMoveto(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::TIMER) {
             if (actArgs.length() != 2) { qDebug() << "[Fkiss] invalid timer(alarmID, delayMs) args count, skip."_L1; continue; }
             runTimer(actArgs[0], actArgs[1]);
-        } else if (actName == FKK::RANDOMTIMER) {
+            continue;
+        }
+        if (actName == FKK::RANDOMTIMER) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid randomtimer(alarmID, delay, range) args count, skip."_L1; continue; }
             runRandomtimer(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
         }
     }
     return true;

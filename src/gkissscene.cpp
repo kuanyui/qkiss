@@ -170,6 +170,22 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
     return true;
 }
 
+bool GKissScene::moveObjectBy(size_t objId, int dx, int dy)
+{
+    qDebug() << "moveObjectBy()" << objId << dx << dy;
+    auto _items = getItemsByObjId(objId);
+    if (!_items.has_value()) {
+        qWarning() << QStringLiteral("[Scene] WTF, objectId %1 has no item??? Skip.").arg(objId);
+        return false;
+    }
+    auto items = _items.value();
+    foreach (GKissItem *item, *items) {
+        item->setPos(dx + item->x(),
+                     dy + item->y());
+    }
+    return true;
+}
+
 void GKissScene::receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)
 {
     m_cnf->fkiss()->runtime()->receiveUserEventFromGraphicsItem(evtType, vars);

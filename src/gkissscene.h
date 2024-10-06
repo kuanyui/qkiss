@@ -25,6 +25,7 @@ public:
     void setItemVisibilityByCelName(const QString &celFileName, bool visibility);
     void bindItemsToObjects();
     bool moveObjectTo(size_t objId, int x, int y);
+    bool moveObjectBy(size_t objId, int dx, int dy);
     void receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
     QList<GKissItem *> allKissItems();
     uint8_t paletteNoInKcf() const;

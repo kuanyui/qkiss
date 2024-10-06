@@ -19,6 +19,8 @@ private:
     void runMap(FkissVariant target);
     void runUnmap(FkissVariant target);
     void runAltmap(FkissVariant target);
+    void runMove(FkissVariant target, FkissVariant dx, FkissVariant dy);
+    void runMoveto(FkissVariant target, FkissVariant x, FkissVariant y);
     /// for map(), unmap(), altmap()
     bool getMap(FkissVariant target);
     void runTimer(FkissVariant alarmID, FkissVariant delay);
