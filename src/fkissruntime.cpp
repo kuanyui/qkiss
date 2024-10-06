@@ -30,7 +30,7 @@ void FkissRuntime::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtTy
 
 void FkissRuntime::runMap(FkissVariant target)
 {
-    m_rtMapState.insert(target, true);
+    m_mapState.insert(target, true);
     if (m_curKissScene) {
         m_curKissScene->setItemsVisibility(target, true);
     }
@@ -38,7 +38,7 @@ void FkissRuntime::runMap(FkissVariant target)
 
 void FkissRuntime::runUnmap(FkissVariant target)
 {
-    m_rtMapState.insert(target, false);
+    m_mapState.insert(target, false);
     if (m_curKissScene) {
         m_curKissScene->setItemsVisibility(target, false);
     }
@@ -48,7 +48,7 @@ void FkissRuntime::runAltmap(FkissVariant target)
 {
     bool oldVal = getMap(target);
     bool newVal = !oldVal;
-    m_rtMapState.insert(target, newVal);
+    m_mapState.insert(target, newVal);
     if (m_curKissScene) {
         m_curKissScene->setItemsVisibility(target, newVal);
     }
@@ -56,7 +56,7 @@ void FkissRuntime::runAltmap(FkissVariant target)
 
 bool FkissRuntime::getMap(FkissVariant target)
 {
-    return m_rtMapState.value(target, true);
+    return m_mapState.value(target, true);
 }
 
 GKissScene *FkissRuntime::curKissScene() const
@@ -68,7 +68,7 @@ void FkissRuntime::setCurKissScene(GKissScene *newCurKissScene)
 {
     m_curKissScene = newCurKissScene;
     if (m_curKissScene == nullptr) { return; }
-    QHashIterator<FkissVariant, bool> it(m_rtMapState);
+    QHashIterator<FkissVariant, bool> it(m_mapState);
     while (it.hasNext()) {
         it.next();
         const FkissVariant &key = it.key();
@@ -92,6 +92,7 @@ void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedComman
 {
     m_evpairs = parsedFkissScript;
     tryToRunActionsByEvent(FKK::INITIALIZE, {});
+    tryToRunActionsByEvent(FKK::BEGIN, {});
 }
 
 std::shared_ptr<ASTPairedCommands> FkissRuntime::getEventActionPair(const QString &eventName, const QList<FkissVariant> &args)

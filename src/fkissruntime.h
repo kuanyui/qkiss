@@ -28,9 +28,9 @@ private:
     /// @borrowed
     GKissScene *m_curKissScene = nullptr;
     /// Key is alarmId. Runtime.
-    QHash<int, std::shared_ptr<FkissAlarmTimer>> m_rtAlarmTimerPool;
+    QHash<int, std::shared_ptr<FkissAlarmTimer>> m_alarmTimerPool;
     /// Store the visibility modified via FKiSS script (e.g. map(), unmap()). May be a cel or an obj.
-    QHash<FkissVariant, bool> m_rtMapState;
+    QHash<FkissVariant, bool> m_mapState;
 };
 
 #endif // FKISSRUNTIME_H
