@@ -1,0 +1,36 @@
+#ifndef FKISSRUNTIME_H
+#define FKISSRUNTIME_H
+
+#include <QObject>
+#include "fkiss.h"
+
+class FkissRuntime
+{
+public:
+    FkissRuntime();
+    void receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
+    /// run map(), unmap(), altmap()
+    void runMap(FkissVariant target);
+    void runUnmap(FkissVariant target);
+    void runAltmap(FkissVariant target);
+    /// for map(), unmap(), altmap()
+    bool getMap(FkissVariant target);
+    GKissScene *curKissScene() const;
+    void setCurKissScene(GKissScene *newCurKissScene);
+    void loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedCommands>> parsedFkissScript);
+private:
+    std::shared_ptr<ASTPairedCommands> getEventActionPair(const QString &eventName, const QList<FkissVariant> &args);
+    bool tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs);
+    /// ATTENTION: may return nullptr.   // FIXME: Use std::optional?
+    std::optional<std::shared_ptr<ASTPairedCommands>> findEvpair(const QString &eventName, const QList<FkissVariant> &args);
+    QVector<std::shared_ptr<ASTPairedCommands>> m_evpairs;
+    /// Currently active scene, all operations and manipulations will be applied on this scene.
+    /// @borrowed
+    GKissScene *m_curKissScene = nullptr;
+    /// Key is alarmId. Runtime.
+    QHash<int, std::shared_ptr<FkissAlarmTimer>> m_rtAlarmTimerPool;
+    /// Store the visibility modified via FKiSS script (e.g. map(), unmap()). May be a cel or an obj.
+    QHash<FkissVariant, bool> m_rtMapState;
+};
+
+#endif // FKISSRUNTIME_H

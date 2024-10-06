@@ -25,7 +25,6 @@ public:
     bool renderCurCnfAllSets();
     // bool renderCurCnfSet(uint8_t setNo);
 
-
 signals:
     void hoveredItemChanged(GKissItem *item, GKissScene *scene);
 protected:

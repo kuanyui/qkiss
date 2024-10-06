@@ -3,6 +3,7 @@
 #include "parsedcnf.h"
 #include "parsedkcf.h"
 #include "parsedcel.h"
+#include "fkissruntime.h"
 #include <QString>
 #include <QMouseEvent>
 
@@ -76,7 +77,7 @@ bool GKissView::showKissSceneByIndex(uint8_t setIndex)
     m_curSceneIdx = setIndex;
     GKissScene *kissScene = m_scenes[setIndex];
     setScene(kissScene);
-    m_archivedFile->curCnf()->fkiss()->setCurKissScene(kissScene);
+    m_archivedFile->curCnf()->fkiss()->runtime()->setCurKissScene(kissScene);
     return true;
 }
 

@@ -210,7 +210,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
         // }
     }
     qDebug() << m_readableComments;
-    m_fkiss->compileScriptLines(fkissScriptLines);
+    m_fkiss->loadFkissScript(fkissScriptLines);
     m_lines.clear();
 }
 

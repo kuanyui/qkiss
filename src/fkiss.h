@@ -6,33 +6,6 @@
 #include <QHash>
 #include <QTimer>
 #include "fkissvariant.h"
-// ================================================
-// Token
-// ================================================
-
-struct Token {
-    enum class Type {
-        Identifier, // CommandName | VariableName
-        Space,
-        LParen,
-        RParen,
-        Comma,
-        String,
-        Integer,
-        ObjectID,
-        EndOfLine
-    };
-    Token(Type tokenType, const QString& value, int lineIdx, int columnIdx) : type(tokenType), value(value), lineIdx(lineIdx), columnIdx(columnIdx) {}
-    static QString stringifyType(Type type);
-    int lineNo() const { return lineIdx + 1; }
-    int columnNo() const { return columnIdx + 1; }
-    Type type;
-    QString value;
-    int lineIdx;
-    int columnIdx;
-};
-QDebug operator<<(QDebug debug, const Token& token);
-QDebug operator<<(QDebug debug, const Token::Type& tokenType);
 
 
 // ================================================
@@ -155,53 +128,27 @@ struct FkissAlarmTimer {
 
 class GKissItem;
 class GKissScene;
+class FkissParser;
+class FkissRuntime;
 
 class Fkiss : public QObject
 {
     Q_OBJECT
 public:
     explicit Fkiss(QObject *parent = nullptr);
-    void compileScriptLines(const QList<FkissLineInfo> &lineInfoList);
-    static bool commandIsEvent(const QString &command);
-    static bool commandIsAction(const QString &command);
-    void receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
-    /// run map(), unmap(), altmap()
-    void runMap(FkissVariant target);
-    void runUnmap(FkissVariant target);
-    void runAltmap(FkissVariant target);
-    /// for map(), unmap(), altmap()
-    bool getMap(FkissVariant target);
-    GKissScene *curKissScene() const;
-    void setCurKissScene(GKissScene *newCurKissScene);
-
-private:
-    /** source code -> tokens */
-    QVector<Token> tokenize(const QList<FkissLineInfo> &lineInfoList);
-    /** tokens -> AST (flat, no semantic, so no nested structure (e.g. `alert() ...`, `ifeq() ...` )  */
-    QVector<std::shared_ptr<ASTCommand> > parse0(const QVector<Token> &tokens);
-    /** Returns the index of nearest Token. If not found, returns -1. */
-    int findNearestToken(QVector<Token> tokens, Token::Type type, int fromIndex);
-    /** Remove `;@` prefix and `; comment` suffix. */
-    QString removePrefixAndCommentOfLine(QString line);
-    /// Traverse across all commands, bind each event + its action(s) (procedure) pair, and store to pairs list.
-    void pairAstCommands(QVector<std::shared_ptr<ASTCommand> > &commands);
-    void logSyntaxError(const Token &token, QString msg);
-    std::shared_ptr<ASTPairedCommands> getEventActionPair(const QString &eventName, const QList<FkissVariant> &args);
-    bool tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs);
-    /// ATTENTION: may return nullptr.   // FIXME: Use std::optional?
-    std::optional<std::shared_ptr<ASTPairedCommands>> findEvpair(const QString &eventName, const QList<FkissVariant> &args);
-    QVector<std::shared_ptr<ASTPairedCommands>> m_evpairs;
+    ~Fkiss();
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
-    /// Currently active scene, all operations and manipulations will be applied on this scene.
-    /// @borrowed
-    GKissScene *m_curKissScene = nullptr;
-    /// Key is alarmId. Runtime.
-    QHash<int, std::shared_ptr<FkissAlarmTimer>> m_rtAlarmTimerPool;
-    /// Store the visibility modified via FKiSS script (e.g. map(), unmap()). May be a cel or an obj.
-    QHash<FkissVariant, bool> m_rtMapState;
+    void loadFkissScript(QList<FkissLineInfo> fkissScriptLines);
+    FkissRuntime *runtime();
+
+    FkissParser *parser();
+
 signals:
     void fkissRunProcedure(const FkissProcedure &fkissProcedure);
+private:
+    FkissParser *m_parser;
+    FkissRuntime *m_runtime;
 };
 
 

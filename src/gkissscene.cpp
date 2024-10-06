@@ -1,4 +1,5 @@
 #include "gkissscene.h"
+#include "fkissruntime.h"
 using FV = FkissVariant;
 
 
@@ -129,8 +130,8 @@ void GKissScene::bindItemsToObjects()
     // qDebug() << QStringLiteral("[DEBUG][Scene] sortedObjIdList (Length = %1)").arg(sortedObjIdList.length()) << sortedObjIdList;  // FIXME: Misunderstood. Unneeded anymore. Should remove it.
     // qDebug() << QStringLiteral("[DEBUG][Scene] ObjPosList (Length = %1)").arg(objPosList.length());
     // Iterate by objId (small to large)
-    for (size_t objId = 0; objId < objPosList.length(); objId ++) {
-        auto _objPos = objPosList[objId ];
+    for (int objId = 0; objId < objPosList.length(); objId ++) {
+        auto _objPos = objPosList[objId];
         QPoint objPos = _objPos.has_value() ? _objPos.value() : QPoint(0, 0);
         // qDebug() << QStringLiteral("[DEBUG][Scene] index: %1,   objId: %2,   objPos: (%3, %4)").arg(i).arg(objId).arg(objPos.x()).arg(objPos.y());
         auto _items = this->getItemsByObjId(objId);
@@ -166,11 +167,12 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
         item->setPos(x + item->cel()->x(),
                      y + item->cel()->y());
     }
+    return true;
 }
 
 void GKissScene::receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)
 {
-    m_cnf->fkiss()->receiveUserEventFromGraphicsItem(evtType, vars);
+    m_cnf->fkiss()->runtime()->receiveUserEventFromGraphicsItem(evtType, vars);
 
 }
 
