@@ -103,10 +103,13 @@ ParsedCnf::~ParsedCnf()
     delete m_fkiss;
 }
 
-void ParsedCnf::error(const QString &msg)
+void ParsedCnf::error(const QString &msg, int lineIdx)
 {
-    QString &line = m_lines[m_lineIdx];
-    qCritical() << "[ERROR]" << m_fileName << ":" << m_lineIdx + 1 << ": " << msg << " ===>" << line;
+    if (lineIdx == -1) {
+        lineIdx = m_lineIdx;
+    }
+    QString &line = m_lines[lineIdx];
+    qCritical() << "[ERROR]" << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
 QString ParsedCnf::removeComment(const QString &line)
@@ -251,7 +254,7 @@ void ParsedCnf::startToParseSetLines()
             } else if (QRegularExpressionMatch m = rePos.match(seg); m.hasMatch()) {
                 set->appendObjPos(m.captured(1).toInt(), m.captured(2).toInt());
             } else {
-                error("Wrong objPos format");
+                error("Wrong objPos format", m_lineIdx + 1);
             }
         }
         m_lineIdx++;
