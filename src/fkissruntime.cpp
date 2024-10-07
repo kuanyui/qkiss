@@ -64,6 +64,10 @@ void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedComman
 {
     unloadFkissScript();
     m_evpairs = parsedFkissScript;
+    qDebug() << "load =========================";
+    foreach (auto pair, parsedFkissScript) {
+        qDebug() << pair->event->name << pair->event->args;
+    }
     tryToRunActionsByEvent(FKK::INITIALIZE, {});
     tryToRunActionsByEvent(FKK::BEGIN, {});
 }
@@ -225,12 +229,12 @@ std::shared_ptr<ASTPairedCommands> FkissRuntime::getEventActionPair(const QStrin
 
 bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs)
 {
-    // qDebug() << "[Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
+    qDebug() << "[Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
     auto _evpair = findEvpair(eventName, eventArgs);
     if (!_evpair.has_value()) { return false; }
     auto evpair = _evpair.value();
     foreach (auto act, evpair->actions) {
-        // qDebug() << "[Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
+        qDebug() << "[Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
         auto actName = act->name;
         auto actArgs = act->args;
         if (actName == FKK::MAP) {
@@ -275,11 +279,11 @@ std::optional<std::shared_ptr<ASTPairedCommands> > FkissRuntime::findEvpair(cons
 {
     static QStringList EVENTS_WITH_ORDER_INSENSITIVE_ARGS {
         FKK::COLLIDE,
-                FKK::APART,
-                FKK::IN,
-                FKK::STILLIN,
-                FKK::OUT,
-                FKK::STILLOUT
+        FKK::APART,
+        FKK::IN,
+        FKK::STILLIN,
+        FKK::OUT,
+        FKK::STILLOUT
     };
     bool isOrderInsensitiveArgs = EVENTS_WITH_ORDER_INSENSITIVE_ARGS.contains(eventName);
     // TODO: some events' args are order-insensitive. e.g. collide(), in()
