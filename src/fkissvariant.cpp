@@ -58,7 +58,7 @@ int FkissVariant::getObjectId() const
 
 FkissVariant::Type FkissVariant::type() const { return m_type; }
 
-bool FkissVariant::operator==(const FkissVariant &other) const
+bool FkissVariant::strictEq(const FkissVariant &other) const
 {
     if (m_type != other.type()) { return false; }
     switch (m_type) {
@@ -66,6 +66,20 @@ bool FkissVariant::operator==(const FkissVariant &other) const
     case Type::Object: return getObjectId() == other.getObjectId();
     case Type::String: return getString() == other.getString();
     case Type::Cel: return getString() == other.getString();
+    }
+}
+
+bool FkissVariant::operator==(const FkissVariant &other) const
+{
+    switch (m_type) {
+    case Type::Int:
+        return m_type == other.type() && getInt() == other.getInt();
+    case Type::Object:
+        return m_type == other.type() && getObjectId() == other.getObjectId();
+    case Type::String:
+    case Type::Cel:
+        return (other.type() == Type::String || other.type() == Type::Cel) &&
+                getString() == other.getString();
     }
 }
 bool FkissVariant::operator!=(const FkissVariant &other) const

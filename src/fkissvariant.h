@@ -30,6 +30,11 @@ public:
     int getObjectId() const;
     Type type() const;
     operator QString() const;
+    bool strictEq(const FkissVariant &other) const;
+    /// Make FkissVariant::operator== treat Cel and String as same type, for convenience.
+    /// Because currently, for String and Cel, when parsing FKiSS script, I doesn't do extra type checking for each event/action and cast to corresponding type,
+    /// but when interpreting in FKiSS runtime, a type checking is done.
+    /// TODO: do type checking everywhere for consistency?
     bool operator==(const FkissVariant &other) const;
     bool operator!=(const FkissVariant &other) const;
 private:
