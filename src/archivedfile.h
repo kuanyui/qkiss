@@ -46,7 +46,7 @@ private slots:
     void onQProcessFinished();
 signals:
     void newLogLine(QString line);
-    void archivedFilesUncompressAndParseFinished(bool success);
+    void archivedFilesUncompressAndParseFinished(bool success, QString errmsg);
     // void curCnfSetNoChanged(uint8_t nv);
 private:
     QtKISS::Case m_caseSensitivity;

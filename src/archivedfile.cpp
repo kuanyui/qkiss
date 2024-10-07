@@ -217,12 +217,17 @@ void ArchivedFile::onQProcessFinished()
         }
         f.close();
     }
+    delete m_tmpDir;
     qDebug() << "<=== all archived files parsing finished!";
+    if (m_parsedCnfFiles->isEmpty()) {
+        emit archivedFilesUncompressAndParseFinished(false, "No CNF found in this archive file.");
+        unloadLzh();
+        return;
+    }
     m_curCnf = m_parsedCnfFiles->first();
     m_curCnfSetNo = 0;
     m_curPaletteNo = 0;
-    delete m_tmpDir;
-    emit archivedFilesUncompressAndParseFinished(true);
+    emit archivedFilesUncompressAndParseFinished(true, "Success");
 }
 
 uint8_t ArchivedFile::curPaletteNo() const

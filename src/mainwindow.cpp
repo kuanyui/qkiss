@@ -25,7 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
     // m_archivedFile->loadLzh("samples/kis_aki.lzh", QtKISS::Case::Insensitive);     // Debugging for wrong object positions
 
     m_kissView = new GKissView(this);
-    connect(m_archivedFile, &ArchivedFile::archivedFilesUncompressAndParseFinished, [=]() {
+    connect(m_archivedFile, &ArchivedFile::archivedFilesUncompressAndParseFinished, [=](bool success, QString errmsg) {
+        if (!success) {
+            return;
+        }
         m_kissView->unloadArchivedFile();
         m_kissView->loadArchivedFile(m_archivedFile);
         m_toolbarPageSets->clear();
