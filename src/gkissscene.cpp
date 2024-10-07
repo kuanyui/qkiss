@@ -3,10 +3,11 @@
 using FV = FkissVariant;
 
 
-GKissScene::GKissScene(QObject *parent):
-    QGraphicsScene(parent)
+GKissScene::GKissScene(int setIdx, QObject *parent):
+    QGraphicsScene(parent),
+    m_setIndex(setIdx)
 {
-    qDebug() << "[scene] ctor!";
+    qDebug() << "[scene] ctor!" << m_setIndex;
 }
 
 // GKissScene::GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent):
@@ -17,6 +18,7 @@ GKissScene::GKissScene(QObject *parent):
 
 GKissScene::~GKissScene()
 {
+    qDebug() << "[scene] dtor!" << m_setIndex;
     for (QVector<GKissItem*> *vec : m_objIdToItemsMap.values()) {
         delete vec;
     }

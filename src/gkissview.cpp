@@ -24,6 +24,7 @@ GKissView::GKissView(ArchivedFile *archivedFile, QWidget *parent):
 
 bool GKissView::loadArchivedFile(ArchivedFile *archivedFile)
 {
+    unloadArchivedFile();
     m_archivedFile = archivedFile;
     QStringList cnfFileNameList = m_archivedFile->getCnfNameList();
     if (cnfFileNameList.isEmpty()) {
@@ -100,7 +101,7 @@ bool GKissView::renderCurCnfAllSets()
     QStringList kcfFileNamesInCnf = cnf->kcfFileNames();
     for (size_t cnfSetIdx = 0; cnfSetIdx < cnf->sets().length(); cnfSetIdx++) {
         ParsedCnfSet *cnfSet = cnf->sets().at(cnfSetIdx);
-        GKissScene *scene = new GKissScene(this);
+        GKissScene *scene = new GKissScene(cnfSetIdx, this);
         scene->setEssentialContext(m_archivedFile, cnf, cnfSet);
         scene->drawCurSetBackground();
         m_scenes.append(scene);

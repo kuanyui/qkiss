@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_archivedFile, &ArchivedFile::archivedFilesUncompressAndParseFinished, [=]() {
         m_kissView->unloadArchivedFile();
         m_kissView->loadArchivedFile(m_archivedFile);
-        m_kissView->setCurCnf(m_archivedFile->getCnfNameList().first());
         m_toolbarPageSets->clear();
         for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
             QToolButton *btn = new QToolButton(m_toolbarPageSets);

@@ -61,6 +61,7 @@ void FkissRuntime::setCurKissScene(GKissScene *newCurKissScene)
 
 void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedCommands> > parsedFkissScript)
 {
+    unloadFkissScript();
     m_evpairs = parsedFkissScript;
     tryToRunActionsByEvent(FKK::INITIALIZE, {});
     tryToRunActionsByEvent(FKK::BEGIN, {});
@@ -174,7 +175,7 @@ void FkissRuntime::runRandomtimer(FkissVariant alarmID, FkissVariant delay, Fkis
 
 void FkissRuntime::runActionsInAlarm(FkissVariant alarmID)
 {
-    qDebug() << "[fkissruntime] runActionsInAlarm" << alarmID;
+    // qDebug() << "[fkissruntime] runActionsInAlarm" << alarmID;
     tryToRunActionsByEvent(FKK::ALARM, { alarmID });
 }
 
@@ -220,12 +221,12 @@ std::shared_ptr<ASTPairedCommands> FkissRuntime::getEventActionPair(const QStrin
 
 bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs)
 {
-    qDebug() << "[Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
+    // qDebug() << "[Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
     auto _evpair = findEvpair(eventName, eventArgs);
     if (!_evpair.has_value()) { return false; }
     auto evpair = _evpair.value();
     foreach (auto act, evpair->actions) {
-        qDebug() << "[Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
+        // qDebug() << "[Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
         auto actName = act->name;
         auto actArgs = act->args;
         if (actName == FKK::MAP) {

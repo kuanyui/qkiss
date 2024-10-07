@@ -11,7 +11,7 @@ class GKissScene : public QGraphicsScene
 {
     Q_OBJECT   // For qobject_cast
 public:
-    explicit GKissScene (QObject *parent = nullptr);
+    explicit GKissScene (int setIdx, QObject *parent = nullptr);
     // explicit GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
     ~GKissScene();
     /** Call this */
@@ -42,6 +42,7 @@ private:
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
     QHash<QString, GKissItem *> m_celNameToItemMap;
     ArchivedFile *m_archivedFile;
+    int m_setIndex;
     ParsedCnf* m_cnf;
     ParsedCnfSet *m_cnfSet;
     /// Read from CNF file ($), and can be overritten from UI.
