@@ -160,7 +160,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
 
             // More tolerant filename... Because I encountered a CNF data write like this: `#0.999 body011.cel:0 1 2 3 4 5 6 7 8 9; 身体`
-            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+([^ :]+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
+            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+([^ :\t]+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
