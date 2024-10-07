@@ -279,7 +279,8 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid move() args count, skip."_L1; continue; }
             runMove(actArgs[0], actArgs[1], actArgs[2]);
             continue;
-        }        if (actName == FKK::MOVETO) {
+        }
+        if (actName == FKK::MOVETO) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid moveto() args count, skip."_L1; continue; }
             runMoveto(actArgs[0], actArgs[1], actArgs[2]);
             continue;
