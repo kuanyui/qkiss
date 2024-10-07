@@ -92,6 +92,31 @@ void GKissItem::renderColorBasedImage()
     setPixmap(QPixmap::fromImage(*m_image));
 }
 
+uint8_t GKissItem::kissTranslucency() const
+{
+    return m_kissTranslucency;
+}
+
+void GKissItem::setKissTranslucency(int newKissTranscluency)
+{
+    /// QGraphicsItem::setOpacity(qreal opacity)  0.0 (transparent) ~ 1.0 (opaque)
+    /// FKiSS transparent(int)                    0 (opaque) ~ 255 (transparent)
+    if (newKissTranscluency > 255) {
+        newKissTranscluency = 255;
+    } else if (newKissTranscluency < 0) {
+        newKissTranscluency = 0;
+    }
+    m_kissTranslucency = newKissTranscluency;
+    qreal inversedKissTranscluency = 255 - newKissTranscluency;
+    qreal newOpacity = inversedKissTranscluency / 255;
+    setOpacity(newOpacity);
+}
+
+void GKissItem::addKissTranslucency(int delta)
+{
+    setKissTranslucency(m_kissTranslucency + delta);
+}
+
 void GKissItem::setFix(int32_t newFix)
 {
     m_fix = newFix;

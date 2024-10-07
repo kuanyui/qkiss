@@ -84,6 +84,11 @@ void FkissRuntime::unloadFkissScript()
     m_evpairs.clear();
 }
 
+bool FkissRuntime::getMap(FkissVariant target)
+{
+    return m_mapState.value(target, true);
+}
+
 void FkissRuntime::runMap(FkissVariant target)
 {
     m_mapState.insert(target, true);
@@ -144,10 +149,22 @@ void FkissRuntime::runMoveto(FkissVariant target, FkissVariant x, FkissVariant y
     m_curKissScene->moveObjectTo(target.getObjectId(), x.getInt(), y.getInt());
 }
 
-bool FkissRuntime::getMap(FkissVariant target)
+void FkissRuntime::runTransparent(FkissVariant target, FkissVariant delta)
 {
-    return m_mapState.value(target, true);
+    if (!delta.isInt()) {
+        qDebug() << "[fkissruntime][ERROR] the `translucency` in transparent() must be an object ID. Skip."_L1;
+        return;
+    }
+    switch (target.type()) {
+    case FkissVariant::Type::Object: m_curKissScene->executeTransparentOnObj(target.getObjectId(), delta.getInt()); return;
+    case FkissVariant::Type::Cel: m_curKissScene->executeTransparentOnCel(target.getCelName(), delta.getInt()); return;
+    case FkissVariant::Type::String: m_curKissScene->executeTransparentOnCel(target.getString(), delta.getInt()); return;
+    default:
+        qDebug() << "[fkissruntime][WARNING] currently, the `target` in transparent() must be an cel or object. Skip."_L1;
+    }
 }
+
+
 
 void FkissRuntime::runTimer(FkissVariant alarmID, FkissVariant delay)
 {
@@ -259,6 +276,11 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
         }        if (actName == FKK::MOVETO) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid moveto() args count, skip."_L1; continue; }
             runMoveto(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::TRANSPARENT) {
+            if (actArgs.length() != 2) { qDebug() << "[Fkiss] invalid transparent(target, N) args count, skip."_L1; continue; }
+            runTransparent(actArgs[0], actArgs[1]);
             continue;
         }
         if (actName == FKK::TIMER) {

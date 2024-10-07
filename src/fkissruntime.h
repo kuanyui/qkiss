@@ -15,14 +15,15 @@ public:
     void loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedCommands>> parsedFkissScript);
     void unloadFkissScript();
 private:
+    /// for map(), unmap(), altmap()
+    bool getMap(FkissVariant target);
     /// run map(), unmap(), altmap()
     void runMap(FkissVariant target);
     void runUnmap(FkissVariant target);
     void runAltmap(FkissVariant target);
     void runMove(FkissVariant target, FkissVariant dx, FkissVariant dy);
     void runMoveto(FkissVariant target, FkissVariant x, FkissVariant y);
-    /// for map(), unmap(), altmap()
-    bool getMap(FkissVariant target);
+    void runTransparent(FkissVariant target, FkissVariant delta);
     void runTimer(FkissVariant alarmID, FkissVariant delay);
     void runRandomtimer(FkissVariant alarmID, FkissVariant delay, FkissVariant range);
     /// Should be called by QTimer.

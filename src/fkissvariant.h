@@ -9,10 +9,10 @@ class FkissVariant
 {
 public:
     enum class Type {
-        Int,      // 2147483647
-        String,   // "Hello!"
-        Cel,      // "RIBBON.CEL"
-        Object,   // #123
+        Int = 1,      // 2147483647
+        String = 2,   // "Hello!"
+        Cel = 4,      // "RIBBON.CEL"
+        Object = 8,   // #123
         // Group,    // !groupName   // Fkiss4 only, unused currently
     };
 private:
@@ -24,6 +24,12 @@ public:
     static FkissVariant fromInt(const QString &value);
     static FkissVariant fromObjectId(const QString &value);
     static FkissVariant fromObjectId(int value);
+    bool isInt() const;
+    bool isString() const;
+    bool isCelName() const;
+    /// Workaround for convenience.
+    bool isStringOrCelName() const;
+    bool isObjectId() const;
     int getInt() const;
     QString getString() const;
     QString getCelName() const;

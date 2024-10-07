@@ -41,7 +41,12 @@ public:
     GKissScene *kissScene();
     /// Emit event: Item -> Scene -> Scene.cnf().fkiss()
     void dispatchFkissUserEventToScene(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
-
+    /// FKiSS: 0 (opaque) ~ 255 (transparent).
+    uint8_t kissTranslucency() const;
+    /// FKiSS: 0 (opaque) ~ 255 (transparent). Value will be automatically-trimmed to 0~255 if out-of-range.
+    void setKissTranslucency(int newKissTranscluency);
+    /// -255 ~ 255
+    void addKissTranslucency(int delta);
 private:
     void init();
     void renderPaletteBasedImage();
@@ -53,6 +58,8 @@ private:
     // ==========================
     QImage *m_image;
     int32_t m_fix;
+    /// The translucency of a cel is in the range 0 to 255. 0 is fully opaque (the default). 255 is fully invisible.
+    uint8_t m_kissTranslucency = 0;
     // QPointF m_dragStartPosition;
     /// CEL items with same Object ID
     QVector<GKissItem*> m_siblings;

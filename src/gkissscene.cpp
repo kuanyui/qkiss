@@ -106,6 +106,13 @@ void GKissScene::setItemsVisibility(const FkissVariant &target, bool visibility)
     }
 }
 
+void GKissScene::setItemVisibilityByCelName(const QString &celFileName, bool visibility)
+{
+    GKissItem *item = m_celNameToItemMap.value(celFileName, nullptr);
+    if (item == nullptr) { return; }
+    item->setVisible(visibility);
+}
+
 void GKissScene::setItemsVisibilityByObjId(int32_t objId, bool visibility)
 {
     QList<GKissItem *> *items = m_objIdToItemsMap.value(objId, nullptr);
@@ -115,12 +122,7 @@ void GKissScene::setItemsVisibilityByObjId(int32_t objId, bool visibility)
     }
 }
 
-void GKissScene::setItemVisibilityByCelName(const QString &celFileName, bool visibility)
-{
-    GKissItem *item = m_celNameToItemMap.value(celFileName, nullptr);
-    if (item == nullptr) { return; }
-    item->setVisible(visibility);
-}
+
 
 void GKissScene::bindItemsToObjects()
 {
@@ -186,6 +188,33 @@ bool GKissScene::moveObjectBy(size_t objId, int dx, int dy)
                      dy + item->y());
     }
     return true;
+}
+
+void GKissScene::executeTransparent(const FkissVariant &target, int delta)
+{
+    if (target.isObjectId()) {
+        executeTransparentOnObj(target.getObjectId(), delta);
+    } else if (target.isCelName()) {
+        executeTransparentOnCel(target.getCelName(), delta);
+    } else if (target.isString()) {
+        executeTransparentOnCel(target.getString(), delta);
+    }
+}
+
+void GKissScene::executeTransparentOnCel(QString celFileName, int delta)
+{
+    GKissItem *item = m_celNameToItemMap.value(celFileName, nullptr);
+    if (item == nullptr) { return; }
+    item->addKissTranslucency(delta);
+}
+
+void GKissScene::executeTransparentOnObj(int32_t objId, int delta)
+{
+    QList<GKissItem *> *items = m_objIdToItemsMap.value(objId, nullptr);
+    if (items == nullptr) { return; }
+    foreach (GKissItem *item, *items) {
+        item->addKissTranslucency(delta);
+    }
 }
 
 void GKissScene::receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)

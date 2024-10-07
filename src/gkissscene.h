@@ -21,11 +21,14 @@ public:
     std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
     std::optional<GKissItem *> getItemByCelName(const QString &celFileName);
     void setItemsVisibility(const FkissVariant &target, bool visibility);
-    void setItemsVisibilityByObjId(int32_t objId, bool visibility);
     void setItemVisibilityByCelName(const QString &celFileName, bool visibility);
+    void setItemsVisibilityByObjId(int32_t objId, bool visibility);
     void bindItemsToObjects();
     bool moveObjectTo(size_t objId, int x, int y);
     bool moveObjectBy(size_t objId, int dx, int dy);
+    void executeTransparent(const FkissVariant &target, int delta);
+    void executeTransparentOnCel(QString celFileName, int delta);
+    void executeTransparentOnObj(int32_t objId, int delta);
     void receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
     QList<GKissItem *> allKissItems();
     uint8_t paletteNoInKcf() const;

@@ -36,6 +36,31 @@ FkissVariant FkissVariant::fromObjectId(int value)
     return FkissVariant { Type::Object, value };
 }
 
+bool FkissVariant::isInt() const
+{
+    return m_type == Type::Int;
+}
+
+bool FkissVariant::isString() const
+{
+    return m_type == Type::String;
+}
+
+bool FkissVariant::isCelName() const
+{
+    return m_type == Type::Cel;
+}
+
+bool FkissVariant::isStringOrCelName() const
+{
+    return isString() || isCelName();
+}
+
+bool FkissVariant::isObjectId() const
+{
+    return m_type == Type::Object;
+}
+
 int FkissVariant::getInt() const
 {
     return m_intValue;
