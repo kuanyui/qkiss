@@ -209,6 +209,9 @@ std::shared_ptr<FkissAlarmTimer> FkissRuntime::getOrCreateAlarmTimer(FkissVarian
     if (m_alarmTimerPool.contains(alarmID)) {
         std::shared_ptr<FkissAlarmTimer> tmp = m_alarmTimerPool.value(alarmID);
         tmp->qTimer->stop();
+        if (delay == 0) {   // delay = 0 means cancel the timer.
+            return tmp;
+        }
         tmp->qTimer->start(delay);
         return tmp;
     } else {
@@ -221,6 +224,9 @@ std::shared_ptr<FkissAlarmTimer> FkissRuntime::getOrCreateAlarmTimer(FkissVarian
         connect(tmp->qTimer.get(), &QTimer::timeout, [=]() {
             runActionsInAlarm(alarmID);
         });
+        if (delay == 0) {
+            return tmp;
+        }
         tmp->qTimer->start();
         return tmp;
     }
