@@ -10,11 +10,12 @@ Fkiss::Fkiss(QObject *parent)
       m_parser{new FkissParser()},
       m_runtime(new FkissRuntime())
 {
-
+    qDebug() << "[fkiss] ctor";
 }
 
 Fkiss::~Fkiss()
 {
+    qDebug() << "[fkiss] dtor";
     delete m_parser;
     delete m_runtime;
 }

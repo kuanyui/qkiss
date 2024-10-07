@@ -5,11 +5,12 @@ using namespace Qt::Literals::StringLiterals;
 
 FkissRuntime::FkissRuntime()
 {
-
+    qDebug() << "[fkissruntime] ctor()";
 }
 
 FkissRuntime::~FkissRuntime()
 {
+    qDebug() << "[fkissruntime] dtor()";
     unloadFkissScript();
 }
 
@@ -69,8 +70,11 @@ void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedComman
 
 void FkissRuntime::unloadFkissScript()
 {
+    qDebug() << "[fkissruntime] unloadFkissScript()";
     foreach (auto x, m_alarmTimerPool.values()) {
         x->qTimer->stop();
+        // disconnect(x->qTimer.get(), nullptr, nullptr, nullptr);
+        x->qTimer->disconnect();
     }
     m_alarmTimerPool.clear();
     m_evpairs.clear();

@@ -29,6 +29,7 @@ ArchivedFile::~ArchivedFile()
 
 bool ArchivedFile::loadLzh(const QString &filePath, QtKISS::Case caseSensitivity)
 {
+    unloadLzh();
     if (!QFileInfo::exists(filePath)) {
         qCritical() << QStringLiteral("[ERROR][ArchivedFile] archive file path '%1' doesn't exist, abort.").arg(filePath);
         return false;
