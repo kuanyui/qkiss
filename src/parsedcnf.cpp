@@ -109,6 +109,11 @@ void ParsedCnf::error(const QString &msg)
     qCritical() << "[ERROR]" << m_fileName << ":" << m_lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
+QString ParsedCnf::removeComment(const QString &line)
+{
+    return line.split(';').first();
+}
+
 void ParsedCnf::log(const QString &msg)
 {
     QString &line = m_lines[m_lineIdx];
@@ -152,8 +157,10 @@ void ParsedCnf::parseLines(const QStringList &lines)
             if (!m.hasMatch()) { error("Wrong outsideColor format."); continue; }
             m_outsideColor = line.mid(1).toUInt();
         } else if (line.startsWith("#"_L1)) {
-            // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)\s+(?:[*](\d+))?\s+(?:[:]([\d\s]+))?)#");
-            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
+            // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
+
+            // More tolerant filename... Because I encountered a CNF data write like this: `#0.999 body011.cel:0 1 2 3 4 5 6 7 8 9; 身体`
+            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+([^ :]+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
@@ -216,12 +223,12 @@ void ParsedCnf::parseLines(const QStringList &lines)
 
 void ParsedCnf::startToParseSetLines()
 {
-    QString line = m_lines[m_lineIdx].trimmed();
+    QString line = removeComment(m_lines[m_lineIdx].trimmed());
     qDebug() << "SET START ======" << line;
     QStringList segs = line.split(" "_L1);
     int32_t paletteNoInPaletteFile = segs[0].mid(1).toInt();
     ParsedCnfSet *set = new ParsedCnfSet { paletteNoInPaletteFile };
-    static QRegularExpression rePos(R"#(^(\d+),(\d+)$)#");
+    static QRegularExpression rePos(R"#(^([0-9-]+),([0-9-]+)$)#");   // some CNF contains x,y whose value < 0
     for (uint32_t i = 1; i < segs.length(); i++) {
         QString &seg = segs[i];
         if (seg == "*"_L1) {
@@ -233,7 +240,7 @@ void ParsedCnf::startToParseSetLines()
         }
     }
     while (m_lineIdx + 1 < m_lines.length()) {
-        line = m_lines[m_lineIdx + 1];
+        line = removeComment(m_lines[m_lineIdx + 1]);
         qDebug() << "======" << line;
         if (!line.startsWith(" "_L1)) { break; }
         segs = line.trimmed().split(" "_L1);

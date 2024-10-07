@@ -160,6 +160,7 @@ private:
     void warn(const QString &line);
     void error(const QString &msg);
 private:
+    static QString removeComment(const QString &line);
     void parseLines(const QStringList &lines);
     void startToParseSetLines();
     uint32_t m_errCount;
