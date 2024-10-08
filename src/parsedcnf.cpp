@@ -11,9 +11,9 @@ ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int3
     m_fix(fix),
     m_celFileName(celFileName),
     m_kcfFileIndex(kcfFileIndex),
-    m_setsIndexes(),
-    m_comment(comment)
+    m_setsIndexes()
 {
+    setComment(comment);
     for (int32_t x: setsIndexes) {
         m_setsIndexes.append(x);
     }
@@ -47,6 +47,30 @@ QList<uint8_t> ParsedCnfCel::setsIndexes() const
 QString ParsedCnfCel::comment() const
 {
     return m_comment;
+}
+
+void ParsedCnfCel::setComment(QString rawComment)
+{
+    qDebug() << "SET COMMENT: " << rawComment;
+    static QRegularExpression re(R"#(%t(\d+))#");
+    QRegularExpressionMatch m = re.match(rawComment);
+    if (!m.hasMatch()) {
+        m_comment = rawComment;
+        return;
+    }
+    int val = m.captured(1).toInt();
+    if (val > 256) {
+        val = 256;
+    } else if (val < 0) {
+        val = 0;
+    }
+    m_translucency = val;
+    m_comment = rawComment.replace(re, ""_L1);
+}
+
+int16_t ParsedCnfCel::translucency() const
+{
+    return m_translucency;
 }
 
 ParsedCnfSet::ParsedCnfSet(int32_t paletteNoInKcf):

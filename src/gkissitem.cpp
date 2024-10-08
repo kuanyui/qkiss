@@ -69,6 +69,7 @@ void GKissItem::renderPaletteBasedImage()
     }
     end:
     setPixmap(QPixmap::fromImage(*m_image));
+    setKissTranslucency(m_cnfCel->translucency());
 }
 
 
@@ -90,6 +91,7 @@ void GKissItem::renderColorBasedImage()
     }
     end:
     setPixmap(QPixmap::fromImage(*m_image));
+    setKissTranslucency(m_cnfCel->translucency());
 }
 
 uint8_t GKissItem::kissTranslucency() const
@@ -105,6 +107,11 @@ void GKissItem::setKissTranslucency(int newKissTranscluency)
         newKissTranscluency = 255;
     } else if (newKissTranscluency < 0) {
         newKissTranscluency = 0;
+    }
+    if (newKissTranscluency == 0) {   // totally visible
+        setOpacity(1);
+    } else if (newKissTranscluency == 255) {  // totally transparent
+        setOpacity(0);
     }
     m_kissTranslucency = newKissTranscluency;
     qreal inversedKissTranscluency = 255 - newKissTranscluency;

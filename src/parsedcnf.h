@@ -50,7 +50,19 @@ public:
     QList<uint8_t> setsIndexes() const;
     QString comment() const;
 
+    int16_t translucency() const;
+
 private:
+    /**
+     *  Handle translucency notation in comment.
+     *
+     *  https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/COMMENT.HTM
+     *
+     *  %t128
+     *  透明度指定です。コメントを表示するための「;」の直後、 「"」の前に記入します。
+     *  数値は0から256までの整数で、0なら%tを指定しないのと同じ全表示、 256なら全透明です。
+    */
+    void setComment(QString comment);
     /*! Cels with the same object ID are members of the same object and will move together as a unit. */
     int32_t m_objId;
     /**
@@ -76,6 +88,9 @@ private:
      * If omitted, this cel is drawn in all sets.
      */
     QList<uint8_t> m_setsIndexes;
+    /// 数値は0から256までの整数で、0なら%tを指定しないのと同じ全表示、 256なら全透明です。
+    /// WARNING: Why not 0~255? Typo?
+    int16_t m_translucency = 0;
     QString m_comment;
 };
 
