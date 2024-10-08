@@ -103,6 +103,7 @@ bool FkissVariant::operator==(const FkissVariant &other) const
         return m_type == other.type() && getObjectId() == other.getObjectId();
     case Type::String:
     case Type::Cel:
+        // FIXME: Some CNF use different cases in CEL file declaraction against FKiSS Script... e.g. `#0 BODY.CEL` and `map("body.cel")`
         return (other.type() == Type::String || other.type() == Type::Cel) &&
                 getString() == other.getString();
     }
