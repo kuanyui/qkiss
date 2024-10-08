@@ -125,7 +125,7 @@ QVector<Token> FkissParser::tokenize(const QList<FkissLineInfo> &lineInfoList) {
                 }
                 tokens.append(Token(Token::Type::Integer, line.mid(begC, c - begC), oriLineNo, begC));
             } else {
-                qCritical() << QStringLiteral("[ERROR][Fkiss::Tokenizer] Unexpected character [%1:%2]: %3").arg(lineInfo.lineNoInCnf).arg(c).arg(lineInfo.line);
+                qCritical() << QStringLiteral("[ERROR][Fkiss::Tokenizer] Ignore this character because it is unexpected [%1:%2]: `%3`").arg(lineInfo.lineNoInCnf).arg(c).arg(lineInfo.line);
                 c++;
             }
         }
