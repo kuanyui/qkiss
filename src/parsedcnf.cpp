@@ -167,7 +167,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
                 m_readableComments.append(line);
             }
         } else if (line.startsWith("("_L1)) {
-            static QRegularExpression rePlayFieldSize(R"#(^\((\d+) *?, *?(\d+))#");
+            static QRegularExpression rePlayFieldSize(R"#(^\((\d+) *?[,.] *?(\d+))#");   // Actually, the standard spec is `(x,y`, but some CNF wrongly wrote as `(x.y`
             QRegularExpressionMatch m = rePlayFieldSize.match(line);
             if (!m.hasMatch()) { error("Wrong playFieldSize format."); continue; }
             m_playFieldSize.setWidth(m.captured(1).toInt());
@@ -186,8 +186,10 @@ void ParsedCnf::parseLines(const QStringList &lines)
         } else if (line.startsWith("#"_L1)) {
             // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
 
-            // More tolerant filename... Because I encountered a CNF data write like this: `#0.999 body011.cel:0 1 2 3 4 5 6 7 8 9; 身体`
-            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+([^ :\t]+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
+            // More tolerance for some common mistakes:
+            // - No spaces befor `:`             `#0.999 body011.cel:0 1 2 3 4 5 6 7 8 9; 身体`
+            // - A `.` without fix number        `#40.      Mess00A_.cel *2  :                  9 ;`
+            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^ :\t]+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
