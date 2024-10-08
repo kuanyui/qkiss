@@ -29,7 +29,7 @@ ArchivedFile::~ArchivedFile()
 
 bool ArchivedFile::loadLzh(const QString &filePath, QtKISS::Case caseSensitivity)
 {
-    unloadLzh();
+    unloadLzh();   // FIXME: Critical bug. Should never unloadLzh() before ensure the to-load LZH file is a valid KiSS file. Should extract LZH first.
     if (!QFileInfo::exists(filePath)) {
         qCritical() << QStringLiteral("[ERROR][ArchivedFile] archive file path '%1' doesn't exist, abort.").arg(filePath);
         return false;
