@@ -24,8 +24,8 @@ void ParsedKcf::parseModernKcf(QByteArray data)
         qCritical() << "[ERROR] Invalid bitsPerColor (12 or 24): " << m_bitsPerColor; return;
     }
     m_colorAmountsInOnePalette = (static_cast<uint16_t>(udata[9]) << 8) | udata[8];
-    if (m_colorAmountsInOnePalette != 16 && m_colorAmountsInOnePalette != 256) {
-        qCritical() << "[ERROR] Invalid colorAmountsInOnePalette (16 or 256): " << m_colorAmountsInOnePalette; return;
+    if (m_colorAmountsInOnePalette < 1 || m_colorAmountsInOnePalette > 256) {
+        qCritical() << "[ERROR] Invalid colorAmountsInOnePalette (1 ~ 256): " << m_colorAmountsInOnePalette; return;
     }
     m_paletteAmounts = (static_cast<uint16_t>(udata[11]) << 8) | udata[10];
     if (m_bitsPerColor == 12) {
@@ -97,6 +97,11 @@ void ParsedKcf::parseLegacyKcf(QByteArray data)
         }
         m_palettesList.append(palette);
     }
+}
+
+uint16_t ParsedKcf::colorAmountsInOnePalette() const
+{
+    return m_colorAmountsInOnePalette;
 }
 
 uint16_t ParsedKcf::paletteAmounts() const

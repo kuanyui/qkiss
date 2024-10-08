@@ -25,6 +25,14 @@ std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(Pars
         if (colorNo == 0) {  // means transparent
             colorizedPixels->append(qRgba(0, 0, 0, 0));
         } else {
+            // if (colorNo >= kcf.colorAmountsInOnePalette()) {
+            //     // NOTE: This is a dirty tolerance... Encountered a strange KiSS file which KCF declare it has 255 colors (?) and CEL requires colorNo=255...
+            //     colorNo = kcf.colorAmountsInOnePalette() - 1;
+            // }
+            if (colorNo >= paletteInKcf->length()) {
+                // For memory safe... Some malformed KiSS files containing out-of-range pixelPaletteColorNo
+                colorNo = paletteInKcf->length() - 1;
+            }
             colorizedPixels->append(paletteInKcf->at(colorNo));
             // if (true) {
             //     qDebug() << "[VERBOSE] colorNo of pixel = " << colorNo << ", real color of pixel = " << paletteInKcf->at(colorNo);

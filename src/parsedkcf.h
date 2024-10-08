@@ -58,6 +58,8 @@ public:
     uint8_t bitsPerColor() const;
     uint16_t paletteAmounts() const;
 
+    uint16_t colorAmountsInOnePalette() const;
+
 private:
     void parseModernKcf(QByteArray data);
     void parseLegacyKcf(QByteArray data);
@@ -68,8 +70,22 @@ private:
      */
     uint8_t m_bitsPerColor;
     /**
+     * == [ATTENTION] ===============
+     *
+     * Otakuworld's KiSS spec said this:
+     *
+     * ```
      * - 16 or 256 colors
      * - Offset +8, 2 bytes (+8 low, +9 high)
+     * ```
+     *
+     * But the KISS/GS spec in https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html (元祖 fkiss) is conflicted with it:
+     *
+     * ```
+     *  +8	W(L,H)	１パレット組内の色数 ( 1 ... 256 )
+     * ```
+     *
+     * And the latter one seems more generic, so take this.
      */
     uint16_t m_colorAmountsInOnePalette;
     /**

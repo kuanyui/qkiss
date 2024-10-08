@@ -64,10 +64,11 @@ void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedComman
 {
     unloadFkissScript();
     m_evpairs = parsedFkissScript;
-    qDebug() << "load =========================";
+    qDebug() << "loadParsedFkissScript begins here =========================>";
     foreach (auto pair, parsedFkissScript) {
         qDebug() << pair->event->name << pair->event->args;
     }
+    qDebug() << "loadParsedFkissScript ends here <=========================";
     tryToRunActionsByEvent(FKK::INITIALIZE, {});
     tryToRunActionsByEvent(FKK::BEGIN, {});
 }
