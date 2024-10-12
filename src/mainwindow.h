@@ -34,6 +34,7 @@ private:
     QToolBar *m_toolbarColorSets;
     QComboBox *m_cboxZoomScale;
     ArchivedFile *m_archivedFile;
+    ArchiveProcessor *m_archiveProcessor;
     GKissView *m_kissView;
 };
 #endif // MAINWINDOW_H

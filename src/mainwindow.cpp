@@ -12,21 +12,23 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setupToolBars();
-    qDebug() << ArchivedFile::checkLhaCommandAvailability();
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
+    m_archiveProcessor = new ArchiveProcessor{this};
     m_archivedFile = new ArchivedFile{this};
-    // m_archivedFile->loadLzh("samples/MIO_H/frkismi4.lzh", QtKISS::Case::Insensitive);     // 4bits modern palatte
-    // m_archivedFile->loadLzh("samples/KKRSV071.LZH", QtKISS::Case::Insensitive);     // 4bits modern palatte
-    m_archivedFile->loadLzh("samples/tyouda_mise/RJ047634_trial.lzh", QtKISS::Case::Insensitive);    // 32bits full-color
-    // m_archivedFile->loadLzh("samples/tyouda_mise/FA1280B.lzh", QtKISS::Case::Insensitive);     // 32bits full-color
-    // m_archivedFile->loadLzh("samples/Yuki.lzh", QtKISS::Case::Insensitive);     // 4bits legacy palatte
-    // m_archivedFile->loadLzh("samples/kb-ran.lzh", QtKISS::Case::Insensitive);     // 24bits modern palatte
-    // m_archivedFile->loadLzh("samples/pk_ask33.lzh", QtKISS::Case::Insensitive);     // 24bits modern palatte
-    // m_archivedFile->loadLzh("samples/kis_aki.lzh", QtKISS::Case::Insensitive);     // Debugging for wrong object positions
+    // m_archiveProcessor->extractLzh("samples/MIO_H/frkismi4.lzh");     // 4bits modern palatte
+    // m_archiveProcessor->extractLzh("samples/KKRSV071.LZH");     // 4bits modern palatte
+    m_archiveProcessor->extractLzh("samples/tyouda_mise/RJ047634_trial.lzh");    // 32bits full-color
+    // m_archiveProcessor->extractLzh("samples/tyouda_mise/FA1280B.lzh");     // 32bits full-color
+    // m_archiveProcessor->extractLzh("samples/Yuki.lzh");     // 4bits legacy palatte
+    // m_archiveProcessor->extractLzh("samples/kb-ran.lzh");     // 24bits modern palatte
+    // m_archiveProcessor->extractLzh("samples/pk_ask33.lzh");     // 24bits modern palatte
+    // m_archiveProcessor->extractLzh("samples/kis_aki.lzh");     // Debugging for wrong object positions
 
     m_kissView = new GKissView(this);
-    connect(m_archivedFile, &ArchivedFile::archivedFilesUncompressAndParseFinished, [=](bool success, QString errmsg) {
-        if (!success) {
+    connect(m_archiveProcessor, &ArchiveProcessor::extractSuccess, [=](QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles) {
+        bool kissFilesLoadedOk = m_archivedFile->loadKissFiles(extractedRawFiles, compressedFilePath);
+        if (!kissFilesLoadedOk) {
+            qWarning() << "Not a valid KiSS file. Aborted.";
             return;
         }
         m_kissView->unloadArchivedFile();
@@ -50,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
             m_toolbarColorSets->addWidget(btn);
         }
     });
+
     connect(m_kissView, &GKissView::hoveredItemChanged, [=](GKissItem *item, GKissScene *scene) {
         if (item == nullptr) {
             statusBar()->clearMessage();
@@ -170,7 +173,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                 QString filePath = url.toLocalFile();
                 qDebug() << "Dropped file:" << filePath;
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
-                m_archivedFile->loadLzh(filePath, QtKISS::Case::Insensitive);
+                m_archiveProcessor->extractLzh(filePath);
             }
         }
     }

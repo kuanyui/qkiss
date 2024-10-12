@@ -4,23 +4,28 @@
 #include "enums.h"
 #include <QObject>
 #include <QString>
-#include <QProcess>
 #include <QHash>
-#include <QTemporaryDir>
 #include <QVector>
 #include "parsedcnf.h"
 #include "parsedkcf.h"
 #include "parsedcel.h"
+#include "archiveprocessor.h"
 
 class ArchivedFile: public QObject
 {
     Q_OBJECT
 public:
+    enum class LoadingState {
+        Idle,
+        Decompressing,
+        ParsingFiles,
+        Rendering,
+    };
+
     ArchivedFile(QObject *parent = nullptr);
     ~ArchivedFile();
-    bool loadLzh(const QString &filePath, QtKISS::Case caseSensitivity);
-    void unloadLzh();
-    static bool checkLhaCommandAvailability();
+    bool loadKissFiles (std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, QString lzhFilePath);
+    void unloadKissFiles();
     QStringList getCnfNameList();
     QStringList getOtherFileNameList();
     /** Auto handling case sensitivity. */
@@ -41,20 +46,22 @@ public:
     /// Get the first KCF file, and return the palette amount of this KCF file.
     size_t paletteAmountOfFirstKcfInCurCnf() const;
 
+    LoadingState loadingState() const;
+    void setLoadingState(LoadingState newLoadingState);
+
 private slots:
-    void onQProcessReadyRead();
-    void onQProcessFinished();
+
 signals:
     void newLogLine(QString line);
-    void archivedFilesUncompressAndParseFinished(bool success, QString errmsg);
+    // void archivedFilesUncompressAndParseFinished(bool success, QString errmsg);
     // void curCnfSetNoChanged(uint8_t nv);
 private:
     QtKISS::Case m_caseSensitivity;
-    QProcess *m_process;
-    QTemporaryDir *m_tmpDir;
     QMap<QString, ParsedCnf*> *m_parsedCnfFiles;
     QHash<QString, ParsedKcf*> *m_parsedKcfFiles;
     QHash<QString, ParsedCel*> *m_parsedCelFiles;
+    QHash<QString, QString> *m_docFiles;
+    /// *.DOC, *.PCM, ... etc.
     QMap<QString, QByteArray> *m_otherFiles;
     QString m_archiveFilePath;
     // ==========================================
@@ -74,6 +81,8 @@ private:
     uint8_t m_curCnfSetNo;
     /** これは ` $<パレット組>` のあれ「パレット組」。KCF ごと N 個パレット組がある。*/
     uint8_t m_curPaletteNo;
+    ArchiveProcessor *m_archiveExtractor;
+    LoadingState m_loadingState;
 };
 
 #endif // ARCHIVEDFILE_H
