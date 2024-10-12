@@ -194,7 +194,7 @@ private:
      * - Syntax: (<horizontal size>,<vertical size>
      * - Defines the size of the play field. If omitted, "(448,320" is assumed for KISS v2.18 compatibility.
      */
-    QSize m_playFieldSize;
+    QSize m_playFieldSize = {448, 320};
     /**
      * - Syntax: %<palette filename>
      * - Declares a palette file. Palette files are numbered as 0, 1, 2... by order listed.
