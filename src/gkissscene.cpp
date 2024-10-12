@@ -47,7 +47,10 @@ void GKissScene::drawCurSetBackground()
         qCritical() << "[ERROR][Scene] No palette in this KCF. Abort.";
         return;
     }
-    QRgb borderColor = firstPaletteInFirstKcfInCnf->at(m_archivedFile->curCnf()->outsideBorderColor());
+    // Some wrong CNF declared a wrong border bolor which index out of "palette_colors_count - 1".
+    int borderColorIdx = qMin(static_cast<uint32_t>(firstPaletteInFirstKcfInCnf->length() - 1),
+                              m_archivedFile->curCnf()->outsideBorderColor());
+    QRgb borderColor = firstPaletteInFirstKcfInCnf->at(borderColorIdx);
     setBackgroundBrush(QBrush(borderColor));
     // play field background
     ParsedKcfPalette *paletteOfCnfSet = firstKcfInCnf->getPaletteInKcf(m_cnfSet->paletteNoInKcf());
