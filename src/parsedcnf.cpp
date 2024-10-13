@@ -167,7 +167,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
                 m_readableComments.append(line);
             }
         } else if (line.startsWith("("_L1)) {
-            static QRegularExpression rePlayFieldSize(R"#(^\((\d+) *?[,.] *?(\d+))#");   // Actually, the standard spec is `(x,y`, but some CNF wrongly wrote as `(x.y`
+            static QRegularExpression rePlayFieldSize(R"#(^\((\d+) *?[,.*] *?(\d+))#");   // Actually, the standard spec is `(x,y`, but some CNF wrongly wrote as `(x.y` even `(x*y`...`
             QRegularExpressionMatch m = rePlayFieldSize.match(line);
             if (!m.hasMatch()) { error("Wrong playFieldSize format."); continue; }
             m_playFieldSize.setWidth(m.captured(1).toInt());
