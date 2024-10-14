@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setupToolBars();
+    setupDockWindows();
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
     m_archiveProcessor = new ArchiveProcessor{this};
     m_archivedFile = new ArchivedFile{this};
@@ -144,7 +145,8 @@ void MainWindow::setupToolBars()
 
 void MainWindow::setupDockWindows()
 {
-
+    FileSystemBrowser *fsBrowser = new FileSystemBrowser(this);
+    ui->dockWidget_fileSystemBrowser->setWidget(fsBrowser);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

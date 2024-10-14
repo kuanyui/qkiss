@@ -6,6 +6,7 @@
 #include <QToolBar>
 #include "archivedfile.h"
 #include "gkissview.h"
+#include "filesystembrowser.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,5 +37,6 @@ private:
     ArchivedFile *m_archivedFile;
     ArchiveProcessor *m_archiveProcessor;
     GKissView *m_kissView;
+    FileSystemBrowser *m_fsBrowser;
 };
 #endif // MAINWINDOW_H
