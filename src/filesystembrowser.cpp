@@ -56,16 +56,17 @@ void FileSystemBrowser::setupUi()
     m_model->setColumnCount(3);
     m_model->setHorizontalHeaderLabels({ tr("File Name"), tr("Size"), tr("Delete") });  // model.clear() will also delete headers... WTF...
 
-    m_view = new QTableView(this);
+    m_view = new QTreeView(this);
     m_view->setModel(m_model);
-    m_view->verticalHeader()->hide();
     m_view->setEditTriggers(QAbstractItemView::NoEditTriggers);  // Make cells read-only
     m_view->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_view->horizontalHeader()->setDefaultSectionSize(30);
-    m_view->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-    m_view->horizontalHeader()->resizeSection(0, 150);
-    m_view->horizontalHeader()->resizeSection(1, 30);
-    m_view->horizontalHeader()->resizeSection(2, 30);
+    m_view->setRootIsDecorated(false);
+    m_view->header()->setStretchLastSection(false);
+    m_view->header()->setDefaultSectionSize(30);
+    m_view->header()->setSectionResizeMode(QHeaderView::Interactive);
+    m_view->header()->resizeSection(0, 150);
+    m_view->header()->resizeSection(1, 30);
+    m_view->header()->resizeSection(2, 30);
 
     int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
     m_btnGoUp = new QToolButton(this);
@@ -92,7 +93,7 @@ void FileSystemBrowser::setupUi()
 
     connect(m_btnGoUp, &QPushButton::clicked, this, &FileSystemBrowser::goUp);
     connect(m_btnRefresh, &QPushButton::clicked, this, &FileSystemBrowser::refresh);
-    connect(m_view, &QTableView::clicked, this, &FileSystemBrowser::onItemClicked);
+    connect(m_view, &QTreeView::clicked, this, &FileSystemBrowser::onItemClicked);
 }
 
 void FileSystemBrowser::updateModel()

@@ -2,7 +2,7 @@
 #define FILESYSTEMBROWSER_H
 
 #include <QWidget>
-#include <QTableView>
+#include <QTreeView>
 #include <QPushButton>
 #include <QToolButton>
 #include <QStandardItemModel>
@@ -34,7 +34,7 @@ signals:
     void selectFile(QString filePath, bool loadAsPatch);
 private:
     QStandardItemModel *m_model;
-    QTableView *m_view;
+    QTreeView *m_view;
     QToolButton *m_btnGoUp;
     QToolButton *m_btnRefresh;
     QString m_curDirPath;
