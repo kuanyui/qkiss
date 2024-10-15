@@ -16,16 +16,19 @@ MainWindow::MainWindow(QWidget *parent)
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
     m_archiveProcessor = new ArchiveProcessor{this};
     m_archivedFile = new ArchivedFile{this};
+    m_kissView = new GKissView(this);
+    m_fileSystemBrowser->setDirPath(QDir(QDir::currentPath()).absoluteFilePath("samples"));
     // m_archiveProcessor->extractLzh("samples/MIO_H/frkismi4.lzh");     // 4bits modern palatte
     // m_archiveProcessor->extractLzh("samples/KKRSV071.LZH");     // 4bits modern palatte,  // LOTS of challenges for tolerance
-    m_archiveProcessor->extractLzh("samples/tyouda_mise/RJ047634_trial.lzh");    // 32bits full-color
+    // m_archiveProcessor->extractLzh("samples/tyouda_mise/RJ047634_trial.lzh");    // 32bits full-color
     // m_archiveProcessor->extractLzh("samples/tyouda_mise/FA1280B.lzh");     // 32bits full-color
     // m_archiveProcessor->extractLzh("samples/Yuki.lzh");     // 4bits legacy palatte
     // m_archiveProcessor->extractLzh("samples/kb-ran.lzh");     // 24bits modern palatte
     // m_archiveProcessor->extractLzh("samples/pk_ask33.lzh");     // 24bits modern palatte
     // m_archiveProcessor->extractLzh("samples/kis_aki.lzh");     // Debugging for wrong object positions
-
-    m_kissView = new GKissView(this);
+    connect(m_fileSystemBrowser, &FileSystemBrowser::selectFile, [=](QString filePath, bool loadAsPatch) {
+        m_archiveProcessor->extractLzh(filePath);
+    });
     connect(m_archiveProcessor, &ArchiveProcessor::extractSuccess, [=](QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles) {
         bool kissFilesLoadedOk = m_archivedFile->loadKissFiles(extractedRawFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
@@ -145,8 +148,8 @@ void MainWindow::setupToolBars()
 
 void MainWindow::setupDockWindows()
 {
-    FileSystemBrowser *fsBrowser = new FileSystemBrowser(this);
-    ui->dockWidget_fileSystemBrowser->setWidget(fsBrowser);
+    m_fileSystemBrowser = new FileSystemBrowser(this);
+    ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

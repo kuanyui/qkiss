@@ -37,6 +37,6 @@ private:
     ArchivedFile *m_archivedFile;
     ArchiveProcessor *m_archiveProcessor;
     GKissView *m_kissView;
-    FileSystemBrowser *m_fsBrowser;
+    FileSystemBrowser *m_fileSystemBrowser;
 };
 #endif // MAINWINDOW_H

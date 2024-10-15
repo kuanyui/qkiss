@@ -21,7 +21,10 @@ FileSystemBrowser::~FileSystemBrowser()
 bool FileSystemBrowser::setDirPathByFileName(QString filePath)
 {
     QFileInfo fInfo {filePath};
-    if (!fInfo.exists() || !fInfo.isFile()) { return false; }
+    if (!fInfo.exists() || !fInfo.isFile()) {
+        qWarning() << "[ERROR][filesystembrowser] Invalid file path, aborted.";
+        return false;
+    }
     QDir dir = fInfo.dir();
     m_curDirPath = dir.absolutePath();
     m_labelCurDirName->setText(dir.dirName());
@@ -33,7 +36,10 @@ bool FileSystemBrowser::setDirPathByFileName(QString filePath)
 bool FileSystemBrowser::setDirPath(QString dirPath)
 {
     QFileInfo dInfo {dirPath};
-    if (!dInfo.exists() || !dInfo.isDir()) { return false; }
+    if (!dInfo.exists() || !dInfo.isDir()) {
+        qWarning() << "[ERROR][filesystembrowser] Invalid dir path, aborted.";
+        return false;
+    }
     m_curDirPath = dInfo.absoluteFilePath();
     m_labelCurDirName->setText(dInfo.fileName());
     updateModel();
