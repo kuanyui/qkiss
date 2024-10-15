@@ -45,7 +45,7 @@ void GKissView::unloadArchivedFile()
 
 bool GKissView::setCurCnf(QString cnfFileName)
 {
-    bool ok = m_archivedFile->setCurCnf(cnfFileName);
+    bool ok = m_archivedFile->setCurCnfByName(cnfFileName);
     if (!ok) {
         qCritical() << "[ERROR][View] No CNF file named " << cnfFileName << " found in this archivedFile.";
         return false;

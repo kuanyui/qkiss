@@ -37,7 +37,9 @@ public:
     std::optional<ParsedKcf *>getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf);
     /** Auto handling case sensitivity. */
     std::optional<QByteArray> getOtherFile(QString celFileName) const;
-    bool setCurCnf(QString cnfFileName);
+    QMap<QString, ParsedCnf *> *parsedCnfFiles() const;
+    /// This should be called by GKissView. This won't trigger rendering of GKissView.
+    bool setCurCnfByName(QString cnfFileName);
     ParsedCnf *curCnf() const;
     uint8_t curCnfSetNo() const;
     void setCurCnfSetNo(uint8_t newCurCnfSetNo);

@@ -26,8 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
     // m_archiveProcessor->extractLzh("samples/pk_ask33.lzh");     // 24bits modern palatte
     // m_archiveProcessor->extractLzh("samples/kis_aki.lzh");     // Debugging for wrong object positions
     connect(m_fileSystemBrowser, &FileSystemBrowser::selectFile, [=](QString filePath, bool loadAsPatch) {
-        ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath](std::shared_ptr<QMap<QString, QByteArray>> result) {
-            tryToLoadFilesAsKissFiles(filePath, result);
+        ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath, loadAsPatch](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
+            tryToLoadFilesAsKissFiles(filePath, filesMap);
         });
     });
 
@@ -76,6 +76,7 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
     }
     m_kissView->unloadArchivedFile();
     m_kissView->loadArchivedFile(m_archivedFile);
+    reloadCnfFileBrowser();
     m_toolbarPageSets->clear();
     for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarPageSets);
@@ -93,6 +94,14 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
             m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx);
         });
         m_toolbarColorSets->addWidget(btn);
+    }
+}
+
+void MainWindow::reloadCnfFileBrowser()
+{
+    m_cnfFileBrowser->clear();
+    foreach (const QString &cnfFileName, m_archivedFile->getCnfNameList()) {
+        m_cnfFileBrowser->addItem(cnfFileName);
     }
 }
 
@@ -153,6 +162,12 @@ void MainWindow::setupDockWindows()
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
+    m_cnfFileBrowser = new QListWidget(this);
+    ui->dockWidget_cnfFileSelector->setWidget(m_cnfFileBrowser);
+    connect(m_cnfFileBrowser, &QListWidget::itemClicked, [=](QListWidgetItem *item) {
+        m_kissView->setCurCnf(item->text());
+        // m_archivedFile->setCurCnfByName(item->text());
+    });
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

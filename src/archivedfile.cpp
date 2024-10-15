@@ -165,7 +165,12 @@ std::optional<QByteArray> ArchivedFile::getOtherFile(QString fileName) const
     return std::nullopt;
 }
 
-bool ArchivedFile::setCurCnf(QString cnfFileName)
+QMap<QString, ParsedCnf *> *ArchivedFile::parsedCnfFiles() const
+{
+    return m_parsedCnfFiles;
+}
+
+bool ArchivedFile::setCurCnfByName(QString cnfFileName)
 {
     auto _cnf = getParsedCnf(cnfFileName);
     if (!_cnf.has_value()) {

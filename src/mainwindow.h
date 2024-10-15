@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QComboBox>
 #include <QToolBar>
+#include <QListWidget>
 #include "archivedfile.h"
 #include "gkissview.h"
 #include "filesystembrowser.h"
@@ -22,8 +23,7 @@ public:
 
 private:
     void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles);;
-
-
+    void reloadCnfFileBrowser();
     void setupToolBars();
     void setupDockWindows();
     void setupCenterArea();
@@ -40,5 +40,6 @@ private:
     ArchivedFile *m_archivedFile;
     GKissView *m_kissView;
     FileSystemBrowser *m_fileSystemBrowser;
+    QListWidget *m_cnfFileBrowser;
 };
 #endif // MAINWINDOW_H
