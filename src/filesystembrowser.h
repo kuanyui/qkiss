@@ -8,6 +8,7 @@
 #include <QStandardItemModel>
 #include <QHeaderView>
 #include <QLabel>
+#include <QFileIconProvider>
 
 class FileSystemBrowser : public QWidget
 {
@@ -17,6 +18,7 @@ class FileSystemBrowser : public QWidget
     };
 public:
     FileSystemBrowser(QWidget *parent = nullptr);
+    ~FileSystemBrowser();
     bool setDirPathByFileName(QString filePath);
     bool setDirPath(QString dirPath);
 private:
@@ -37,6 +39,7 @@ private:
     QToolButton *m_btnRefresh;
     QString m_curDirPath;
     QLabel *m_labelCurDirName;
+    QFileIconProvider *m_fileIconProvider;
 };
 
 

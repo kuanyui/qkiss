@@ -13,6 +13,11 @@ FileSystemBrowser::FileSystemBrowser(QWidget *parent):
     setDirPath(QDir::currentPath());
 }
 
+FileSystemBrowser::~FileSystemBrowser()
+{
+    delete m_fileIconProvider;
+}
+
 bool FileSystemBrowser::setDirPathByFileName(QString filePath)
 {
     QFileInfo fInfo {filePath};
@@ -28,11 +33,9 @@ bool FileSystemBrowser::setDirPathByFileName(QString filePath)
 bool FileSystemBrowser::setDirPath(QString dirPath)
 {
     QFileInfo dInfo {dirPath};
-    qDebug() << "1";
     if (!dInfo.exists() || !dInfo.isDir()) { return false; }
     m_curDirPath = dInfo.absoluteFilePath();
     m_labelCurDirName->setText(dInfo.fileName());
-    qDebug() << "2" << m_curDirPath;
     updateModel();
     return true;
 }
@@ -41,19 +44,24 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
 
 void FileSystemBrowser::setupUi()
 {
+    m_fileIconProvider = new QFileIconProvider();
+
     m_model = new QStandardItemModel(this);
     m_model->setColumnCount(3);
+    m_model->setHorizontalHeaderLabels({ tr("File Name"), tr("Size"), tr("Delete") });  // model.clear() will also delete headers... WTF...
 
     m_view = new QTableView(this);
     m_view->setModel(m_model);
-    m_view->setEditTriggers(QAbstractItemView::NoEditTriggers);  // Make cells read-only
-    // m_view->viewport()->update();
-    m_view->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_view->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-    m_view->horizontalHeader()->setVisible(true);
     m_view->verticalHeader()->hide();
-    int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
+    m_view->setEditTriggers(QAbstractItemView::NoEditTriggers);  // Make cells read-only
+    m_view->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_view->horizontalHeader()->setDefaultSectionSize(30);
+    m_view->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    m_view->horizontalHeader()->resizeSection(0, 150);
+    m_view->horizontalHeader()->resizeSection(1, 30);
+    m_view->horizontalHeader()->resizeSection(2, 30);
 
+    int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
     m_btnGoUp = new QToolButton(this);
     m_btnGoUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
     m_btnGoUp->setToolTip("Go Up");
@@ -83,14 +91,15 @@ void FileSystemBrowser::setupUi()
 
 void FileSystemBrowser::updateModel()
 {
-    m_model->clear();
-    m_model->setHorizontalHeaderLabels({ "File Name", "Size", "Delete" });  // model.clear() will also delete headers... WTF...
+    // m_model->clear();   // DO NOT USE THIS. This will clear header title, header size...etc
+    m_model->removeRows(0, m_model->rowCount());
     QDir dir { m_curDirPath };
     QFileInfoList fInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     foreach (const QFileInfo &fInfo, fInfoList) {
         QList<QStandardItem *> rowItems;
         QStandardItem *fileNameItem = new QStandardItem(fInfo.fileName());
         fileNameItem->setData(fInfo.filePath(), ThisRole::FileNameRole);
+        fileNameItem->setIcon(m_fileIconProvider->icon(fInfo));
         rowItems << fileNameItem;
         rowItems << new QStandardItem(formatFileSize(fInfo.size()));
         rowItems << new QStandardItem();   // preserved for button
@@ -130,7 +139,6 @@ void FileSystemBrowser::onItemClicked(const QModelIndex &index) {
     if (!index.isValid()) return;
     QModelIndex fileNameIndex = m_model->index(index.row(), 0);  // choose the first column (col = 0)
     QString filePath = m_model->data(fileNameIndex, ThisRole::FileNameRole).toString();
-    qDebug() << "[filesystembrowser] click on row: " << filePath;
     QFileInfo fileInfo { filePath };
     if (fileInfo.isDir()) {
         setDirPath(filePath);
