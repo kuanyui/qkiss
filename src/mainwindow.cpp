@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent)
     setupToolBars();
     setupDockWindows();
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
-    m_archiveProcessor = new ArchiveProcessor{this};
     m_archivedFile = new ArchivedFile{this};
     m_kissView = new GKissView(this);
     m_fileSystemBrowser->setDirPath(QDir(QDir::currentPath()).absoluteFilePath("samples"));
@@ -27,34 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
     // m_archiveProcessor->extractLzh("samples/pk_ask33.lzh");     // 24bits modern palatte
     // m_archiveProcessor->extractLzh("samples/kis_aki.lzh");     // Debugging for wrong object positions
     connect(m_fileSystemBrowser, &FileSystemBrowser::selectFile, [=](QString filePath, bool loadAsPatch) {
-        m_archiveProcessor->extractLzh(filePath);
-    });
-    connect(m_archiveProcessor, &ArchiveProcessor::extractSuccess, [=](QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles) {
-        bool kissFilesLoadedOk = m_archivedFile->loadKissFiles(extractedRawFiles, compressedFilePath);
-        if (!kissFilesLoadedOk) {
-            qWarning() << "Not a valid KiSS file. Aborted.";
-            return;
-        }
-        m_kissView->unloadArchivedFile();
-        m_kissView->loadArchivedFile(m_archivedFile);
-        m_toolbarPageSets->clear();
-        for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
-            QToolButton *btn = new QToolButton(m_toolbarPageSets);
-            btn->setText(QString::number(sceneIdx));
-            connect(btn, &QAbstractButton::pressed, [=](){
-                m_kissView->showKissSceneByIndex(sceneIdx) ;
-            });
-            m_toolbarPageSets->addWidget(btn);
-        }
-        m_toolbarColorSets->clear();
-        for (size_t paletteIdx = 0; paletteIdx < m_archivedFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
-            QToolButton *btn = new QToolButton(m_toolbarPageSets);
-            btn->setText(QString::number(paletteIdx));
-            connect(btn, &QAbstractButton::pressed, [=](){
-                m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx);
-            });
-            m_toolbarColorSets->addWidget(btn);
-        }
+        ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath](std::shared_ptr<QMap<QString, QByteArray>> result) {
+            tryToLoadFilesAsKissFiles(filePath, result);
+        });
     });
 
     connect(m_kissView, &GKissView::hoveredItemChanged, [=](GKissItem *item, GKissScene *scene) {
@@ -79,19 +53,47 @@ MainWindow::MainWindow(QWidget *parent)
                                      );
         }
     });
-    // m_kissView->scale(2, 2);
     connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=](const QString &text) {
        int targetScale = text.toFloat();
        m_kissView->scaleAbs(targetScale);
     });
 
     setCentralWidget(m_kissView);
-    // resize(920, 560);
+    m_kissView->scale(0.5, 0.5);
+    resize(800, 600);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles) {
+    bool kissFilesLoadedOk = m_archivedFile->loadKissFiles(extractedRawFiles, compressedFilePath);
+    if (!kissFilesLoadedOk) {
+        qWarning() << "Not a valid KiSS file. Aborted.";
+        return;
+    }
+    m_kissView->unloadArchivedFile();
+    m_kissView->loadArchivedFile(m_archivedFile);
+    m_toolbarPageSets->clear();
+    for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
+        QToolButton *btn = new QToolButton(m_toolbarPageSets);
+        btn->setText(QString::number(sceneIdx));
+        connect(btn, &QAbstractButton::pressed, [=](){
+            m_kissView->showKissSceneByIndex(sceneIdx) ;
+        });
+        m_toolbarPageSets->addWidget(btn);
+    }
+    m_toolbarColorSets->clear();
+    for (size_t paletteIdx = 0; paletteIdx < m_archivedFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
+        QToolButton *btn = new QToolButton(m_toolbarPageSets);
+        btn->setText(QString::number(paletteIdx));
+        connect(btn, &QAbstractButton::pressed, [=](){
+            m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx);
+        });
+        m_toolbarColorSets->addWidget(btn);
+    }
 }
 
 void MainWindow::setupToolBars()
@@ -150,6 +152,7 @@ void MainWindow::setupDockWindows()
 {
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
+    // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
@@ -178,7 +181,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                 QString filePath = url.toLocalFile();
                 qDebug() << "Dropped file:" << filePath;
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
-                m_archiveProcessor->extractLzh(filePath);
+                // m_archiveProcessor->extractLzh(filePath);
             }
         }
     }

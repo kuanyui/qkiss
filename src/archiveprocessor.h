@@ -4,6 +4,10 @@
 #include <QObject>
 #include <QProcess>
 #include <QTemporaryDir>
+#include <QPromise>
+#include <QFuture>
+
+using RawFilesMap = QMap<QString, QByteArray>;
 
 class ArchiveProcessor : public QObject
 {
@@ -12,8 +16,9 @@ public:
     explicit ArchiveProcessor(QObject *parent = nullptr);
     static bool checkLhaCommandAvailability();
     bool extractLzh(const QString &lzhFilePath);
+    static QFuture<std::shared_ptr<RawFilesMap>> extractFileAsPromise(const QString &lzhFilePath);
 signals:
-    void extractSuccess(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles);
+    void extractSuccess(QString compressedFilePath, std::shared_ptr<RawFilesMap> extractedRawFiles);
     void extractFail(QString compressedFilePath, QString errMsg);
 
 private slots:

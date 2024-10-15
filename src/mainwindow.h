@@ -21,6 +21,9 @@ public:
     ~MainWindow();
 
 private:
+    void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles);;
+
+
     void setupToolBars();
     void setupDockWindows();
     void setupCenterArea();
@@ -35,7 +38,6 @@ private:
     QToolBar *m_toolbarColorSets;
     QComboBox *m_cboxZoomScale;
     ArchivedFile *m_archivedFile;
-    ArchiveProcessor *m_archiveProcessor;
     GKissView *m_kissView;
     FileSystemBrowser *m_fileSystemBrowser;
 };

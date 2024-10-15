@@ -43,6 +43,31 @@ bool ArchiveProcessor::extractLzh(const QString &lzhFilePath)
     return true;
 }
 
+QFuture<std::shared_ptr<RawFilesMap> > ArchiveProcessor::extractFileAsPromise(const QString &lzhFilePath)
+{
+    QPromise<std::shared_ptr<RawFilesMap>> *promise = new QPromise<std::shared_ptr<RawFilesMap>>();
+    QFuture<std::shared_ptr<RawFilesMap>> future = promise->future();
+    promise->start();
+    ArchiveProcessor *process = new ArchiveProcessor();
+    process->extractLzh(lzhFilePath);
+    QObject::connect(process, &ArchiveProcessor::extractFail, [process, promise](QString compressedFilePath, QString errMsg) {
+        Q_UNUSED(compressedFilePath);
+        promise->setException(std::make_exception_ptr(
+            std::runtime_error(QString("Process failed with exit code: %1").arg(errMsg).toStdString())
+        ));
+        delete promise;
+        process->deleteLater();
+    });
+    QObject::connect(process, &ArchiveProcessor::extractSuccess, [process, promise](QString compressedFilePath, std::shared_ptr<RawFilesMap> extractedRawFiles) {
+        Q_UNUSED(compressedFilePath);
+        promise->addResult(extractedRawFiles);
+        promise->finish();
+        delete promise;
+        process->deleteLater();
+    });
+    return future;
+}
+
 void ArchiveProcessor::onQProcessReadyRead()
 {
     qsizetype prefixLen {m_tmpDir->path().length() + 1};
