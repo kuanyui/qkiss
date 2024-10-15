@@ -1,11 +1,16 @@
 #include "filesystembrowser.h"
-
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QFileInfo>
+#include <QDir>
 #include <QFile>
+
 
 FileSystemBrowser::FileSystemBrowser(QWidget *parent):
     QWidget{parent}
 {
     setupUi();
+    setDirPath(QDir::currentPath());
 }
 
 bool FileSystemBrowser::setDirPathByFileName(QString filePath)
@@ -13,38 +18,55 @@ bool FileSystemBrowser::setDirPathByFileName(QString filePath)
     QFileInfo fInfo {filePath};
     if (!fInfo.exists() || !fInfo.isFile()) { return false; }
     QDir dir = fInfo.dir();
-    m_model->setRootPath(dir.absolutePath());
+    m_curDirPath = dir.absolutePath();
+    m_labelCurDirName->setText(dir.dirName());
+    updateModel();
     return true;
 }
 
 
 bool FileSystemBrowser::setDirPath(QString dirPath)
 {
-    QFileInfo info {dirPath};
-    if (!info.exists() || !info.isDir()) { return false; }
-    m_model->setRootPath(info.absolutePath());
+    QFileInfo dInfo {dirPath};
+    qDebug() << "1";
+    if (!dInfo.exists() || !dInfo.isDir()) { return false; }
+    m_curDirPath = dInfo.absoluteFilePath();
+    m_labelCurDirName->setText(dInfo.fileName());
+    qDebug() << "2" << m_curDirPath;
+    updateModel();
     return true;
 }
 
+
+
 void FileSystemBrowser::setupUi()
 {
-    m_model = new QFileSystemModel(this);
-    m_model->setRootPath(QDir::rootPath());
+    m_model = new QStandardItemModel(this);
+    m_model->setColumnCount(3);
 
     m_view = new QTableView(this);
     m_view->setModel(m_model);
-    m_view->setRootIndex(m_model->index(QDir::rootPath()));
-
-    m_view->setColumnHidden(1, true);
-    m_view->setColumnHidden(3, true);
-    m_view->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    m_view->setEditTriggers(QAbstractItemView::NoEditTriggers);  // Make cells read-only
+    // m_view->viewport()->update();
+    m_view->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_view->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    m_view->horizontalHeader()->setVisible(true);
     m_view->verticalHeader()->hide();
+    int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
 
-    m_btnGoUp = new QPushButton("Up", this);
-    m_btnRefresh = new QPushButton("Refresh", this);
+    m_btnGoUp = new QToolButton(this);
+    m_btnGoUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
+    m_btnGoUp->setToolTip("Go Up");
+    m_btnGoUp->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+    m_btnRefresh = new QToolButton(this);
+    m_btnRefresh->setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
+    m_btnRefresh->setToolTip("Refresh");
+    m_btnRefresh->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
     m_labelCurDirName = new QLabel(this);
+    // m_labelCurDirName->setSizePolicy()
 
-    // 創建 layout
     QHBoxLayout *btnLayout = new QHBoxLayout();
     btnLayout->addWidget(m_btnGoUp);
     btnLayout->addWidget(m_btnRefresh);
@@ -57,29 +79,62 @@ void FileSystemBrowser::setupUi()
     connect(m_btnGoUp, &QPushButton::clicked, this, &FileSystemBrowser::goUp);
     connect(m_btnRefresh, &QPushButton::clicked, this, &FileSystemBrowser::refresh);
     connect(m_view, &QTableView::clicked, this, &FileSystemBrowser::onItemClicked);
-    connect(m_model, &QFileSystemModel::rootPathChanged, [=](const QString &newPath) {
-        QDir dir {newPath};
-        m_labelCurDirName->setText(dir.dirName());
-    });
 }
 
-void FileSystemBrowser::goUp() {
-    QModelIndex currentIndex = m_view->rootIndex();
-    QModelIndex parentIndex = currentIndex.parent();
-    if (parentIndex.isValid()) {
-        m_view->setRootIndex(parentIndex);
+void FileSystemBrowser::updateModel()
+{
+    m_model->clear();
+    m_model->setHorizontalHeaderLabels({ "File Name", "Size", "Delete" });  // model.clear() will also delete headers... WTF...
+    QDir dir { m_curDirPath };
+    QFileInfoList fInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+    foreach (const QFileInfo &fInfo, fInfoList) {
+        QList<QStandardItem *> rowItems;
+        QStandardItem *fileNameItem = new QStandardItem(fInfo.fileName());
+        fileNameItem->setData(fInfo.filePath(), ThisRole::FileNameRole);
+        rowItems << fileNameItem;
+        rowItems << new QStandardItem(formatFileSize(fInfo.size()));
+        rowItems << new QStandardItem();   // preserved for button
+        QPushButton *deleteBtn = new QPushButton("delete");
+        m_view->setIndexWidget(m_model->index(m_model->rowCount()-1, 2), deleteBtn);
+        m_model->appendRow(rowItems);
     }
 }
 
+QString FileSystemBrowser::formatFileSize(qint64 bytes) {
+    const qint64 kb = 1024;
+    const qint64 mb = 1024 * kb;
+    const qint64 gb = 1024 * mb;
+
+    if (bytes >= gb) {
+        return QString::number(double(bytes) / gb, 'f', 1) + " GB";
+    } else if (bytes >= mb) {
+        return QString::number(double(bytes) / mb, 'f', 0) + " MB";
+    } else if (bytes >= kb) {
+        return QString::number(double(bytes) / kb, 'f', 0) + " KB";
+    } else {
+        return QString::number(bytes) + " B";
+    }
+}
+
+void FileSystemBrowser::goUp() {
+    QDir dir { m_curDirPath };
+    dir.cdUp();
+    setDirPath(dir.path());
+}
+
 void FileSystemBrowser::refresh() {
-    m_model->setRootPath(m_model->filePath(m_view->rootIndex()));
+    updateModel();
 }
 
 void FileSystemBrowser::onItemClicked(const QModelIndex &index) {
-    QString chosenPath = m_model->filePath(index);
-    if (m_model->isDir(index)) {
-        setDirPath(chosenPath);
+    if (!index.isValid()) return;
+    QModelIndex fileNameIndex = m_model->index(index.row(), 0);  // choose the first column (col = 0)
+    QString filePath = m_model->data(fileNameIndex, ThisRole::FileNameRole).toString();
+    qDebug() << "[filesystembrowser] click on row: " << filePath;
+    QFileInfo fileInfo { filePath };
+    if (fileInfo.isDir()) {
+        setDirPath(filePath);
     } else {
-
+        emit selectFile(filePath, false);
     }
 }

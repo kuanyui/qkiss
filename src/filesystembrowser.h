@@ -4,32 +4,40 @@
 #include <QWidget>
 #include <QTableView>
 #include <QPushButton>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QFileSystemModel>
+#include <QToolButton>
+#include <QStandardItemModel>
 #include <QHeaderView>
 #include <QLabel>
 
 class FileSystemBrowser : public QWidget
 {
     Q_OBJECT
+    enum ThisRole {
+        FileNameRole = Qt::UserRole + 1
+    };
 public:
     FileSystemBrowser(QWidget *parent = nullptr);
     bool setDirPathByFileName(QString filePath);
     bool setDirPath(QString dirPath);
 private:
     void setupUi();
+    void updateModel();
+    static QString formatFileSize(qint64 bytes);
+
 private slots:
     void goUp();
     void refresh();
     void onItemClicked(const QModelIndex &index);
-
+signals:
+    void selectFile(QString filePath, bool loadAsPatch);
 private:
-    QFileSystemModel *m_model;
+    QStandardItemModel *m_model;
     QTableView *m_view;
-    QPushButton *m_btnGoUp;
-    QPushButton *m_btnRefresh;
+    QToolButton *m_btnGoUp;
+    QToolButton *m_btnRefresh;
+    QString m_curDirPath;
     QLabel *m_labelCurDirName;
 };
+
 
 #endif // FILESYSTEMBROWSER_H
