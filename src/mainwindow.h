@@ -24,6 +24,7 @@ public:
 private:
     void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles);;
     void reloadCnfFileBrowser();
+    void rerenderSetPaletteButtons();
     void setupToolBars();
     void setupDockWindows();
     void setupCenterArea();

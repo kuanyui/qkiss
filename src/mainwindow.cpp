@@ -77,6 +77,19 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
     m_kissView->unloadArchivedFile();
     m_kissView->loadArchivedFile(m_archivedFile);
     reloadCnfFileBrowser();
+    rerenderSetPaletteButtons();
+}
+
+void MainWindow::reloadCnfFileBrowser()
+{
+    m_cnfFileBrowser->clear();
+    foreach (const QString &cnfFileName, m_archivedFile->getCnfNameList()) {
+        m_cnfFileBrowser->addItem(cnfFileName);
+    }
+}
+
+void MainWindow::rerenderSetPaletteButtons()
+{
     m_toolbarPageSets->clear();
     for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarPageSets);
@@ -94,14 +107,6 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
             m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx);
         });
         m_toolbarColorSets->addWidget(btn);
-    }
-}
-
-void MainWindow::reloadCnfFileBrowser()
-{
-    m_cnfFileBrowser->clear();
-    foreach (const QString &cnfFileName, m_archivedFile->getCnfNameList()) {
-        m_cnfFileBrowser->addItem(cnfFileName);
     }
 }
 
@@ -167,6 +172,7 @@ void MainWindow::setupDockWindows()
     connect(m_cnfFileBrowser, &QListWidget::itemClicked, [=](QListWidgetItem *item) {
         m_kissView->setCurCnf(item->text());
         // m_archivedFile->setCurCnfByName(item->text());
+        rerenderSetPaletteButtons();
     });
 }
 
