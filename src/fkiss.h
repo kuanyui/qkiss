@@ -151,8 +151,9 @@ public:
     ~Fkiss();
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
-    void loadFkissScript(QList<FkissLineInfo> fkissScriptLines);
-    void unloadFkissScript();
+    void parseAndCacheFkissScript(QList<FkissLineInfo> fkissScriptLines);
+    void startRuntime(GKissScene *kissScene);
+    void stopRuntime();
     FkissRuntime *runtime();
 
     FkissParser *parser();
@@ -162,6 +163,7 @@ signals:
 private:
     FkissParser *m_parser;
     FkissRuntime *m_runtime;
+    QVector<std::shared_ptr<ASTPairedCommands>> m_parsedScriptCache;
 };
 
 

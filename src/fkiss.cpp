@@ -20,16 +20,25 @@ Fkiss::~Fkiss()
     delete m_runtime;
 }
 
-void Fkiss::loadFkissScript(QList<FkissLineInfo> fkissScriptLines)
+void Fkiss::parseAndCacheFkissScript(QList<FkissLineInfo> fkissScriptLines)
 {
-    QVector<std::shared_ptr<ASTPairedCommands>> parsedScript = m_parser->parseScriptLines(fkissScriptLines);
-    m_runtime->loadParsedFkissScript(parsedScript);
+    m_parsedScriptCache = m_parser->parseScriptLines(fkissScriptLines);
 }
 
-void Fkiss::unloadFkissScript()
+void Fkiss::startRuntime(GKissScene *kissScene)
 {
-    m_runtime->unloadFkissScript();
+    m_runtime->loadParsedFkissScript(m_parsedScriptCache);
+    m_runtime->setCurKissScene(kissScene);
+    m_runtime->triggerInitializeAndBegin();
 }
+
+void Fkiss::stopRuntime()
+{
+    m_runtime->triggerEnd();
+    m_runtime->stopTimersAndUnloadFkissScript();
+    m_runtime->setCurKissScene(nullptr);
+}
+
 
 FkissRuntime *Fkiss::runtime()
 {

@@ -45,13 +45,22 @@ void GKissView::unloadArchivedFile()
 
 bool GKissView::setCurCnf(QString cnfFileName)
 {
+    if (m_archivedFile->curCnf()) {
+        m_archivedFile->curCnf()->fkiss()->stopRuntime();
+    }
     bool ok = m_archivedFile->setCurCnfByName(cnfFileName);
     if (!ok) {
         qCritical() << "[ERROR][View] No CNF file named " << cnfFileName << " found in this archivedFile.";
         return false;
     }
-    qDebug() << "[LOG][View] Set currtent cnfFileName as " << cnfFileName;
-    return renderCurCnfAllSets();
+    qDebug() << "[LOG][View] Set current cnfFileName as " << cnfFileName;
+    ok = renderCurCnfAllSets();
+    if (!ok) { return false; }
+    if (m_scenes.length() == 0) { return false; }
+    ok = showKissSceneByIndex(0);
+    if (!ok) { return false; }
+    m_archivedFile->curCnf()->fkiss()->startRuntime(curKissScene());
+    return true;
 }
 
 uint8_t GKissView::scenesAmount() const
@@ -147,9 +156,12 @@ bool GKissView::renderCurCnfAllSets()
         //qDebug() << "[DEBUG][View] scene.items().length() ==" << scene->items().length();
         // All CEL are rendered as items. Now bound items into obj (according to objId), and handle events.
         scene->bindItemsToObjects();
-
     }
-    return showKissSceneByIndex(0);
+    if (m_scenes.length() == 0) {
+        qCritical() << QString("[ERROR][View] no scene found. Aborted");
+        return false;
+    }
+    return true;
 }
 
 

@@ -11,7 +11,7 @@ FkissRuntime::FkissRuntime()
 FkissRuntime::~FkissRuntime()
 {
     qDebug() << "[fkissruntime] dtor()";
-    unloadFkissScript();
+    stopTimersAndUnloadFkissScript();
 }
 
 void FkissRuntime::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)
@@ -62,18 +62,16 @@ void FkissRuntime::setCurKissScene(GKissScene *newCurKissScene)
 
 void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedCommands> > parsedFkissScript)
 {
-    unloadFkissScript();
+    stopTimersAndUnloadFkissScript();
     m_evpairs = parsedFkissScript;
-    qDebug() << "loadParsedFkissScript begins here =========================>";
-    foreach (auto pair, parsedFkissScript) {
-        qDebug() << pair->event->name << pair->event->args;
-    }
-    qDebug() << "loadParsedFkissScript ends here <=========================";
-    tryToRunActionsByEvent(FKK::INITIALIZE, {});
-    tryToRunActionsByEvent(FKK::BEGIN, {});
+    // qDebug() << "loadParsedFkissScript begins here =========================>";
+    // foreach (auto pair, parsedFkissScript) {
+    //     qDebug() << pair->event->name << pair->event->args;
+    // }
+    // qDebug() << "loadParsedFkissScript ends here <=========================";
 }
 
-void FkissRuntime::unloadFkissScript()
+void FkissRuntime::stopTimersAndUnloadFkissScript()
 {
     qDebug() << "[fkissruntime] unloadFkissScript()";
     foreach (auto x, m_alarmTimerPool.values()) {
@@ -83,6 +81,17 @@ void FkissRuntime::unloadFkissScript()
     }
     m_alarmTimerPool.clear();
     m_evpairs.clear();
+}
+
+void FkissRuntime::triggerInitializeAndBegin()
+{
+    tryToRunActionsByEvent(FKK::INITIALIZE, {});
+    tryToRunActionsByEvent(FKK::BEGIN, {});
+}
+
+void FkissRuntime::triggerEnd()
+{
+    tryToRunActionsByEvent(FKK::END, {});
 }
 
 bool FkissRuntime::getMap(FkissVariant target)
@@ -118,6 +127,7 @@ void FkissRuntime::runAltmap(FkissVariant target)
 
 void FkissRuntime::runMove(FkissVariant target, FkissVariant dx, FkissVariant dy)
 {
+    if (m_curKissScene == nullptr) { return; }
     if (target.type() != FkissVariant::Type::Object) {
         qDebug() << "[fkissruntime][WARNING] currently, the target in move() must be an object ID. Skip."_L1;
         return;
@@ -135,6 +145,7 @@ void FkissRuntime::runMove(FkissVariant target, FkissVariant dx, FkissVariant dy
 
 void FkissRuntime::runMoveto(FkissVariant target, FkissVariant x, FkissVariant y)
 {
+    if (m_curKissScene == nullptr) { return; }
     if (target.type() != FkissVariant::Type::Object) {
         qDebug() << "[fkissruntime][WARNING] currently, the `target` in moveto() must be an object ID. Skip."_L1;
         return;
@@ -152,6 +163,7 @@ void FkissRuntime::runMoveto(FkissVariant target, FkissVariant x, FkissVariant y
 
 void FkissRuntime::runTransparent(FkissVariant target, FkissVariant delta)
 {
+    if (m_curKissScene == nullptr) { return; }
     if (!delta.isInt()) {
         qDebug() << "[fkissruntime][ERROR] the `translucency` in transparent() must be an object ID. Skip."_L1;
         return;

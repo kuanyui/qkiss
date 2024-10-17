@@ -12,12 +12,17 @@ public:
     void receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
     GKissScene *curKissScene() const;
     void setCurKissScene(GKissScene *newCurKissScene);
+    /// Load parsed FKiSS scripts (AST). You need to call initializeAndBegin() later.
     void loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedCommands>> parsedFkissScript);
-    void unloadFkissScript();
+    void stopTimersAndUnloadFkissScript();
+    /// Trigger the events `initialize()` and `begin()`. You should set curKissScene() before calling this.
+    void triggerInitializeAndBegin();
+    /// Trigger the event `end()`. You should set curKissScene() before calling this.
+    void triggerEnd();
 private:
     /// for map(), unmap(), altmap()
     bool getMap(FkissVariant target);
-    /// run map(), unmap(), altmap()
+    /// run action map()
     void runMap(FkissVariant target);
     void runUnmap(FkissVariant target);
     void runAltmap(FkissVariant target);
