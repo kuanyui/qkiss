@@ -103,6 +103,10 @@ void FileSystemBrowser::updateModel()
     QDir dir { m_curDirPath };
     QFileInfoList fInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     foreach (const QFileInfo &fInfo, fInfoList) {
+        const QString ext = fInfo.fileName().toUpper();
+        if (!fInfo.isDir() && (!ext.endsWith(".LZH") && !ext.endsWith(".CNF"))) {
+            continue;
+        }
         QList<QStandardItem *> rowItems;
         QStandardItem *fileNameItem = new QStandardItem(fInfo.fileName());
         fileNameItem->setData(fInfo.filePath(), ThisRole::FileNameRole);

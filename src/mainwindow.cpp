@@ -16,7 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
     m_archivedFile = new ArchivedFile{this};
     m_kissView = new GKissView(this);
-    m_fileSystemBrowser->setDirPath(QDir(QDir::currentPath()).absoluteFilePath("samples"));
+    // m_fileSystemBrowser->setDirPath(QDir(QDir::currentPath()).absoluteFilePath("samples"));
+    m_fileSystemBrowser->setDirPath(QDir(QDir::homePath()).absoluteFilePath("tmp/kissdata"));
     // m_archiveProcessor->extractLzh("samples/MIO_H/frkismi4.lzh");     // 4bits modern palatte
     // m_archiveProcessor->extractLzh("samples/KKRSV071.LZH");     // 4bits modern palatte,  // LOTS of challenges for tolerance
     // m_archiveProcessor->extractLzh("samples/tyouda_mise/RJ047634_trial.lzh");    // 32bits full-color
