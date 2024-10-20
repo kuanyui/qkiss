@@ -84,12 +84,25 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
 void MainWindow::reloadCnfFileBrowser()
 {
     m_cnfFileBrowser->clear();
-    QString curCnfNameInArchive = m_archivedFile->curCnf() ? m_archivedFile->curCnf()->fileName() : "";
     foreach (const QString &cnfFileName, m_archivedFile->getCnfNameList()) {
         QListWidgetItem *item = new QListWidgetItem(cnfFileName);
         m_cnfFileBrowser->addItem(item);
-        if (cnfFileName == curCnfNameInArchive) {
+    }
+    QString curCnfFileName = m_archivedFile->curCnf() ? m_archivedFile->curCnf()->fileName() : "";
+    highlightItemInCnfFileBrowser(curCnfFileName);
+}
+
+void MainWindow::highlightItemInCnfFileBrowser(QString cnfFileName)
+{
+    QListWidgetItem *curItem = m_cnfFileBrowser->currentItem();
+    if (curItem) {
+        if (curItem->text() == cnfFileName) { return; } // prevent loop
+    }
+    for (int i = 0; i < m_cnfFileBrowser->count(); i++) {
+        QListWidgetItem *item = m_cnfFileBrowser->item(i);
+        if (item->text() == cnfFileName) {
             m_cnfFileBrowser->setCurrentItem(item);
+            break;
         }
     }
 }
@@ -180,16 +193,7 @@ void MainWindow::setupDockWindows()
         // m_archivedFile->setCurCnfByName(item->text());
         rerenderSetPaletteButtons();
     });
-    connect(m_archivedFile, &ArchivedFile::curCnfChanged, [=](QString newCnfFileName){
-        if (m_cnfFileBrowser->currentItem() != nullptr && m_cnfFileBrowser->currentItem()->text() == newCnfFileName) { return; }
-        for (int i = 0; i < m_cnfFileBrowser->count(); i++) {
-            QListWidgetItem* item = m_cnfFileBrowser->item(i);
-            if (item->text() == newCnfFileName) {
-                m_cnfFileBrowser->setCurrentItem(item);
-                break;
-            }
-        }
-    });
+    connect(m_archivedFile, &ArchivedFile::curCnfChanged, this, &MainWindow::highlightItemInCnfFileBrowser);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
