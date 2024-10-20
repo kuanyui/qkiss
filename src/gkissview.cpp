@@ -192,6 +192,16 @@ void GKissView::mouseMoveEvent(QMouseEvent *event)
     QGraphicsView::mouseMoveEvent(event);
 }
 
+void GKissView::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->ignore();
+}
+
+void GKissView::dropEvent(QDropEvent *event)
+{
+    event->ignore();
+}
+
 void GKissView::deleteAllScenes()
 {
     setScene(nullptr);

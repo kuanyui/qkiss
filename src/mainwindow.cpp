@@ -60,8 +60,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     setCentralWidget(m_kissView);
-    m_kissView->scale(0.5, 0.5);
-    resize(800, 600);
+    // m_kissView->scale(0.5, 0.5);
+    // resize(800, 600);
 }
 
 MainWindow::~MainWindow()
@@ -203,6 +203,9 @@ void MainWindow::dropEvent(QDropEvent *event)
                 QString filePath = url.toLocalFile();
                 qDebug() << "Dropped file:" << filePath;
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
+                ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
+                    tryToLoadFilesAsKissFiles(filePath, filesMap);
+                });
                 // m_archiveProcessor->extractLzh(filePath);
             }
         }

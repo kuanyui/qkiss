@@ -29,6 +29,8 @@ signals:
     void hoveredItemChanged(GKissItem *item, GKissScene *scene);
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual void dragEnterEvent(QDragEnterEvent *event) override;
+    virtual void dropEvent(QDropEvent *event) override;
 private:
     void deleteAllScenes();
     ArchivedFile *m_archivedFile;
@@ -36,6 +38,9 @@ private:
     QVector<GKissScene *> m_scenes;
     uint8_t m_curSceneIdx = 0;
     GKissItem *m_curHoveredCelItem;
+
+    // QWidget interface
+
 };
 
 #endif // GKISSVIEW_H
