@@ -168,6 +168,7 @@ bool GKissView::renderCurCnfAllSets()
 
 void GKissView::mouseMoveEvent(QMouseEvent *event)
 {
+    if (scene() == nullptr) { return; }
     QPointF scenePos = mapToScene(event->pos());
     QGraphicsItem *curItemRaw = scene()->itemAt(scenePos, QTransform());
     if (curItemRaw != m_curHoveredCelItem) {
