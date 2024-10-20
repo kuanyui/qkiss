@@ -191,6 +191,7 @@ bool ArchivedFile::setCurCnfByName(QString cnfFileName)
         m_curCnfOrderedParsedKcfList.append(_kcf.value());
     }
     m_curCnfSetNo = 0;
+    emit curCnfChanged(cnfFileName);
     return true;
 }
 

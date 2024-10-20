@@ -11,11 +11,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    m_archivedFile = new ArchivedFile{this};
+    m_kissView = new GKissView(this);
     setupToolBars();
     setupDockWindows();
     // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
-    m_archivedFile = new ArchivedFile{this};
-    m_kissView = new GKissView(this);
     // m_fileSystemBrowser->setDirPath(QDir(QDir::currentPath()).absoluteFilePath("samples"));
     m_fileSystemBrowser->setDirPath(QDir(QDir::homePath()).absoluteFilePath("tmp/kissdata"));
     // m_archiveProcessor->extractLzh("samples/MIO_H/frkismi4.lzh");     // 4bits modern palatte
@@ -84,8 +84,13 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
 void MainWindow::reloadCnfFileBrowser()
 {
     m_cnfFileBrowser->clear();
+    QString curCnfNameInArchive = m_archivedFile->curCnf() ? m_archivedFile->curCnf()->fileName() : "";
     foreach (const QString &cnfFileName, m_archivedFile->getCnfNameList()) {
-        m_cnfFileBrowser->addItem(cnfFileName);
+        QListWidgetItem *item = new QListWidgetItem(cnfFileName);
+        m_cnfFileBrowser->addItem(item);
+        if (cnfFileName == curCnfNameInArchive) {
+            m_cnfFileBrowser->setCurrentItem(item);
+        }
     }
 }
 
@@ -170,10 +175,20 @@ void MainWindow::setupDockWindows()
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
     m_cnfFileBrowser = new QListWidget(this);
     ui->dockWidget_cnfFileSelector->setWidget(m_cnfFileBrowser);
-    connect(m_cnfFileBrowser, &QListWidget::itemClicked, [=](QListWidgetItem *item) {
+    connect(m_cnfFileBrowser, &QListWidget::itemActivated, [=](QListWidgetItem *item) {
         m_kissView->setCurCnf(item->text());
         // m_archivedFile->setCurCnfByName(item->text());
         rerenderSetPaletteButtons();
+    });
+    connect(m_archivedFile, &ArchivedFile::curCnfChanged, [=](QString newCnfFileName){
+        if (m_cnfFileBrowser->currentItem() != nullptr && m_cnfFileBrowser->currentItem()->text() == newCnfFileName) { return; }
+        for (int i = 0; i < m_cnfFileBrowser->count(); i++) {
+            QListWidgetItem* item = m_cnfFileBrowser->item(i);
+            if (item->text() == newCnfFileName) {
+                m_cnfFileBrowser->setCurrentItem(item);
+                break;
+            }
+        }
     });
 }
 
