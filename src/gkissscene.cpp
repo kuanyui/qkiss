@@ -266,6 +266,7 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             sib->setFix(0);
         }
     }
+    emit highlightedItemChanged(m_draggingItem);
     // QGraphicsItem::mousePressEvent(event);
 }
 
@@ -299,6 +300,7 @@ void GKissScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             sib->setPos(sib->pos() + mouseDelta);
         }
     }
+    emit highlightedItemChanged(m_draggingItem);
     // QGraphicsItem::mouseMoveEvent(event);
 }
 void GKissScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -382,6 +384,7 @@ void GKissScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     foreach (GKissItem *sib, *m_draggingItem->siblings()) {
         sib->setFix(m_draggingItem->fix());
     }
+    emit highlightedItemChanged(m_draggingItem);
     // =======================================================================
     // update all overlapped items
     // =======================================================================

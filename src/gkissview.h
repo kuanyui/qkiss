@@ -26,7 +26,8 @@ public:
     // bool renderCurCnfSet(uint8_t setNo);
 
 signals:
-    void hoveredItemChanged(GKissItem *item, GKissScene *scene);
+    /// e.g. hovered item changed, no longer hovering any item (pass nullptr)... etc.
+    void highlightedItemChanged(GKissItem *item);
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void dragEnterEvent(QDragEnterEvent *event) override;

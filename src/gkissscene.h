@@ -34,6 +34,9 @@ public:
     uint8_t paletteNoInKcf() const;
     void setPaletteNoInKcf(uint8_t newPaletteNoInKcf);
 
+signals:
+    void highlightedItemChanged(GKissItem *item);
+
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;

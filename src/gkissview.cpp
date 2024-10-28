@@ -111,6 +111,7 @@ bool GKissView::renderCurCnfAllSets()
     for (size_t cnfSetIdx = 0; cnfSetIdx < cnf->sets().length(); cnfSetIdx++) {
         ParsedCnfSet *cnfSet = cnf->sets().at(cnfSetIdx);
         GKissScene *scene = new GKissScene(cnfSetIdx, this);
+        connect(scene, &GKissScene::highlightedItemChanged, this, &GKissView::highlightedItemChanged);   // REFACTOR: naming is too ugly...
         scene->setEssentialContext(m_archivedFile, cnf, cnfSet);
         scene->drawCurSetBackground();
         m_scenes.append(scene);
@@ -175,17 +176,10 @@ void GKissView::mouseMoveEvent(QMouseEvent *event)
         if (curItemRaw != nullptr && curItemRaw->type() == GKissItem::Type) {
             GKissItem *curItem = static_cast<GKissItem *>(curItemRaw);
             m_curHoveredCelItem = curItem;
-            emit hoveredItemChanged(curItem, curKissScene());
-            qDebug() << QString("File: %1, Pos: (%2, %3), Size: (%4, %5), Fix: %6")
-                                                 .arg(curItem->celFileName())
-                                                 .arg(curItem->x())
-                                                 .arg(curItem->y())
-                                                 .arg(curItem->cel()->width())
-                                                 .arg(curItem->cel()->height())
-                                                 .arg(curItem->fix());
+            emit highlightedItemChanged(curItem);
         } else {
-            emit hoveredItemChanged(nullptr, curKissScene());
             m_curHoveredCelItem = nullptr;
+            emit highlightedItemChanged(nullptr);
         }
     }
     // Handle other events
@@ -194,11 +188,13 @@ void GKissView::mouseMoveEvent(QMouseEvent *event)
 
 void GKissView::dragEnterEvent(QDragEnterEvent *event)
 {
+    // dragging LZH file into QMainWindow can load this LZH file, but QGraphicsView stops it so ignore this event here.
     event->ignore();
 }
 
 void GKissView::dropEvent(QDropEvent *event)
 {
+    // dragging LZH file into QMainWindow can load this LZH file, but QGraphicsView stops it so ignore this event here.
     event->ignore();
 }
 

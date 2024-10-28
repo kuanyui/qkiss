@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
         });
     });
 
-    connect(m_kissView, &GKissView::hoveredItemChanged, [=](GKissItem *item, GKissScene *scene) {
+    connect(m_kissView, &GKissView::highlightedItemChanged, [=](GKissItem *item) {
         if (item == nullptr) {
             statusBar()->clearMessage();
         } else {
