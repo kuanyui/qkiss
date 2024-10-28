@@ -246,6 +246,13 @@ void GKissScene::setPaletteNoInKcf(uint8_t newPaletteNoInKcf)
     }
 }
 
+void GKissScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    // In FKiSS, there's no double click event. So just make this repeat press event 2 times.
+    mousePressEvent(event);
+    mousePressEvent(event);
+}
+
 void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();  // NOTE: Important!!! Otherwise mouseMoveEvent will not be triggered!

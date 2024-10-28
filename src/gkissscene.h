@@ -38,6 +38,7 @@ signals:
     void highlightedItemChanged(GKissItem *item);
 
 protected:
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
