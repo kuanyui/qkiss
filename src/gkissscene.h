@@ -72,6 +72,10 @@ private:
     /// For in(), stillin(), out(), stillout()
     // QSet<GKissItem*> m_originalBoundingRectOverlappedItems;
     QSet<int> m_originalBoundingRectOverlappedObjIds;
+    /// force drag cel instead of object.
+    bool m_draggingWithCtrl = false;
+    /// pause any fkiss events triggered by user press/drag.
+    bool m_draggingWithShift = false;
 };
 
 #endif // GKISSSCENE_H

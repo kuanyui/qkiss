@@ -222,6 +222,7 @@ void GKissScene::executeTransparentOnObj(int32_t objId, int delta)
 
 void GKissScene::receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)
 {
+    if (m_draggingWithShift) { return; }
     m_cnf->fkiss()->runtime()->receiveUserEventFromGraphicsItem(evtType, vars);
 
 }
@@ -260,6 +261,8 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (!_item) { return; }
     GKissItem *item = qgraphicsitem_cast<GKissItem *>(_item);
     if (!item) { return; }
+    m_draggingWithCtrl = event->modifiers() & Qt::ControlModifier;
+    m_draggingWithShift = event->modifiers() & Qt::ShiftModifier;
     m_draggingItem = item;
     storeCurrentOverlappedItems(item);
     qDebug() << "[DEBUG] mousePressEvent " << item << event->scenePos();
@@ -280,8 +283,8 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void GKissScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (m_draggingItem == nullptr) { return; }
-    bool hasCtrl = event->modifiers() & Qt::ControlModifier;
-    // bool hasShift = event->modifiers() & Qt::ControlModifier;
+    // bool hasCtrl = event->modifiers() & Qt::ControlModifier;
+    // bool hasShift = event->modifiers() & Qt::ShiftModifier;
     if (!m_dragRelatedFkissEventsAreAlreadyEmitted) {
         m_dragRelatedFkissEventsAreAlreadyEmitted = true;
         // catch(target) - The catch event is triggered when the user first begins to move the target.
@@ -302,7 +305,7 @@ void GKissScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (m_draggingItem->fix() > 0) { return; }
     QPointF mouseDelta = event->scenePos() - event->lastScenePos();
     m_draggingItem->setPos(m_draggingItem->pos() + mouseDelta);
-    if (!hasCtrl) {
+    if (!m_draggingWithCtrl) {
         foreach (GKissItem *sib, *m_draggingItem->siblings()) {
             sib->setPos(sib->pos() + mouseDelta);
         }
