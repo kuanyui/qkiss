@@ -109,18 +109,27 @@ void MainWindow::highlightItemInCnfFileBrowser(QString cnfFileName)
 
 void MainWindow::rerenderSetPaletteButtons()
 {
-    m_toolbarPageSets->clear();
+    // Page sets
+    m_toolbarPageSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
     for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarPageSets);
+        m_btnGroupPageSets->addButton(btn);
+        btn->setCheckable(true);   // Make it act like radio button
+        if (sceneIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(sceneIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
             m_kissView->showKissSceneByIndex(sceneIdx) ;
+            btn->setDown(true);
         });
         m_toolbarPageSets->addWidget(btn);
     }
-    m_toolbarColorSets->clear();
+    // Color sets
+    m_toolbarColorSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
     for (size_t paletteIdx = 0; paletteIdx < m_archivedFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarPageSets);
+        m_btnGroupColorSets->addButton(btn);
+        btn->setCheckable(true);   // Make it act like radio button
+        if (paletteIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(paletteIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
             m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx);
@@ -159,6 +168,8 @@ void MainWindow::setupToolBars()
     m_toolbarWindows->addAction(ui->action_window_logs);
     // Page Sets
     m_toolbarPageSets = new QToolBar(this);
+    m_btnGroupPageSets = new QButtonGroup(m_toolbarPageSets);
+    m_btnGroupPageSets->setExclusive(true);   // Radio-button liked
     m_toolbarPageSets->setWindowTitle(tr("Page Sets"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarPageSets);
     m_toolbarPageSets->addWidget(new QLabel(tr("Page Set"), m_toolbarPageSets));
@@ -170,6 +181,8 @@ void MainWindow::setupToolBars()
     }
     // Color Sets
     m_toolbarColorSets = new QToolBar(this);
+    m_btnGroupColorSets = new QButtonGroup(m_toolbarColorSets);
+    m_btnGroupColorSets->setExclusive(true);   // Radio-button liked
     m_toolbarColorSets->setWindowTitle(tr("Color Sets"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarColorSets);
     m_toolbarColorSets->addWidget(new QLabel(tr("Color Set"), m_toolbarColorSets));

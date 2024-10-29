@@ -5,6 +5,8 @@
 #include <QComboBox>
 #include <QToolBar>
 #include <QListWidget>
+#include <QButtonGroup>
+
 #include "archivedfile.h"
 #include "gkissview.h"
 #include "filesystembrowser.h"
@@ -25,6 +27,7 @@ private:
     void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles);;
     void reloadCnfFileBrowser();
     void highlightItemInCnfFileBrowser(QString cnfFileName);
+    /// Note: this will activate the first button.
     void rerenderSetPaletteButtons();
     void setupToolBars();
     void setupDockWindows();
@@ -38,6 +41,8 @@ private:
     QToolBar *m_toolbarWindows;
     QToolBar *m_toolbarPageSets;
     QToolBar *m_toolbarColorSets;
+    QButtonGroup *m_btnGroupPageSets;
+    QButtonGroup *m_btnGroupColorSets;
     QComboBox *m_cboxZoomScale;
     ArchivedFile *m_archivedFile;
     GKissView *m_kissView;
