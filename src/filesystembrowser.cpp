@@ -71,12 +71,12 @@ void FileSystemBrowser::setupUi()
     int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
     m_btnGoUp = new QToolButton(this);
     m_btnGoUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
-    m_btnGoUp->setToolTip("Go Up");
+    m_btnGoUp->setToolTip(tr("Go Up"));
     m_btnGoUp->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     m_btnRefresh = new QToolButton(this);
     m_btnRefresh->setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
-    m_btnRefresh->setToolTip("Refresh");
+    m_btnRefresh->setToolTip(tr("Refresh"));
     m_btnRefresh->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     m_labelCurDirName = new QLabel(this);
@@ -114,8 +114,12 @@ void FileSystemBrowser::updateModel()
         rowItems << fileNameItem;
         rowItems << new QStandardItem(formatFileSize(fInfo.size()));
         rowItems << new QStandardItem();   // preserved for button
-        QPushButton *deleteBtn = new QPushButton("delete");
-        m_view->setIndexWidget(m_model->index(m_model->rowCount()-1, 2), deleteBtn);
+        QPushButton *patchBtn = new QPushButton(tr("Patch"));
+        patchBtn->setToolTip(tr("Load this file as patch"));
+        connect(patchBtn, &QPushButton::pressed, [=](){
+            emit requestLoadFile(fInfo.filePath(), true);
+        });
+        m_view->setIndexWidget(m_model->index(m_model->rowCount()-1, 2), patchBtn);
         m_model->appendRow(rowItems);
     }
 }
@@ -154,6 +158,6 @@ void FileSystemBrowser::onItemClicked(const QModelIndex &index) {
     if (fileInfo.isDir()) {
         setDirPath(filePath);
     } else {
-        emit selectFile(filePath, false);
+        emit requestLoadFile(filePath, false);
     }
 }

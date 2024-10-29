@@ -24,7 +24,7 @@ public:
     ~MainWindow();
 
 private:
-    void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles);;
+    void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles);
     void reloadCnfFileBrowser();
     void highlightItemInCnfFileBrowser(QString cnfFileName);
     /// Note: this will activate the first button.

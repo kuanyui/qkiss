@@ -31,7 +31,7 @@ private slots:
     void refresh();
     void onItemClicked(const QModelIndex &index);
 signals:
-    void selectFile(QString filePath, bool loadAsPatch);
+    void requestLoadFile(QString filePath, bool loadAsPatch);
 private:
     QStandardItemModel *m_model;
     QTreeView *m_view;

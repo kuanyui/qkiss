@@ -15,7 +15,7 @@ ArchivedFile::ArchivedFile(QObject *parent):
     m_parsedCnfFiles(new QMap<QString, ParsedCnf*>),
     m_parsedKcfFiles(new QHash<QString, ParsedKcf*>),
     m_parsedCelFiles(new QHash<QString, ParsedCel*>),
-    m_docFiles(new QHash<QString, QString>),
+    m_docFiles(new QMap<QString, QString>),
     m_otherFiles(new QMap<QString, QByteArray>()),
     m_archiveExtractor(new ArchiveProcessor(this))
 {
@@ -27,15 +27,10 @@ ArchivedFile::~ArchivedFile()
     unloadKissFiles();
 }
 
-bool ArchivedFile::loadKissFiles(std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, QString lzhFilePath)
+std::unique_ptr<KissFilesParsingResult> ArchivedFile::parseKissFiles(std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, QString lzhFilePath)
 {
+    std::unique_ptr<KissFilesParsingResult> res = std::make_unique<KissFilesParsingResult>();
     QtKISS::Case caseSensitivity = QtKISS::Case::Insensitive;  // TODO: Global Variable.
-    setLoadingState(LoadingState::ParsingFiles);
-    QMap<QString, ParsedCnf*> parsedCnfFiles;
-    QHash<QString, ParsedKcf*> parsedKcfFiles;
-    QHash<QString, ParsedCel*> parsedCelFiles;
-    QHash<QString, QString> docFiles;
-    QMap<QString, QByteArray> otherFiles;
     for (const auto &[fileName, fileRawContent] : extractedRawFiles->asKeyValueRange()) {
     QString fileNameKey = fileName;
     QString fileNameUpper = fileName.toUpper();
@@ -44,38 +39,58 @@ bool ArchivedFile::loadKissFiles(std::shared_ptr<QMap<QString, QByteArray> > ext
     }
     QtKISS::Encoding encoding = QtKISS::Encoding::SJIS;
     if (fileNameUpper.endsWith(".CNF")) {
-        parsedCnfFiles.insert(fileNameKey, new ParsedCnf {fileNameKey, fileRawContent, encoding});   // TODO: Check parse result, if invalid, delete it.
+        res->parsedCnfFiles.insert(fileNameKey, std::make_unique<ParsedCnf>(fileNameKey, fileRawContent, encoding));   // TODO: Check parse result, if invalid, delete it.
     } else if (fileNameUpper.endsWith(".KCF")) {
-        parsedKcfFiles.insert(fileNameKey, new ParsedKcf {fileNameKey, fileRawContent});
+        res->parsedKcfFiles.insert(fileNameKey, std::make_unique<ParsedKcf>(fileNameKey, fileRawContent));
     } else if (fileNameUpper.endsWith(".CEL")) {
-        parsedCelFiles.insert(fileNameKey, new ParsedCel {fileNameKey, fileRawContent});
+        res->parsedCelFiles.insert(fileNameKey, std::make_unique<ParsedCel>(fileNameKey, fileRawContent));
     } else if (fileNameUpper.endsWith(".DOC") || fileNameUpper.endsWith(".TXT") || fileNameUpper == "README") {
-        docFiles.insert(fileNameKey, Encoding::toUtf8(fileRawContent, encoding));
+        res->docFiles.insert(fileNameKey, Encoding::toUtf8(fileRawContent, encoding));
     } else {
-        otherFiles.insert(fileNameKey, fileRawContent);
+        res->otherFiles.insert(fileNameKey, fileRawContent);
     }
     }
-    if (!parsedCnfFiles.isEmpty() && !parsedCelFiles.isEmpty()) {
-        setLoadingState(LoadingState::Rendering);
+    return res;
+}
+
+bool ArchivedFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath)
+{
+    QtKISS::Case caseSensitivity = QtKISS::Case::Insensitive;  // TODO: Global Variable.
+    setLoadingState(LoadingState::ParsingFiles);  // UNUSED
+    if (!parseRes.parsedCnfFiles.isEmpty() && !parseRes.parsedCelFiles.isEmpty()) {
+        setLoadingState(LoadingState::Rendering);  // UNUSED
         unloadKissFiles();
         m_archiveFilePath = lzhFilePath;
         m_caseSensitivity = caseSensitivity;
-        *m_parsedCnfFiles = parsedCnfFiles;
-        *m_parsedKcfFiles = parsedKcfFiles;
-        *m_parsedCelFiles = parsedCelFiles;
-        *m_docFiles = docFiles;
-        *m_otherFiles = otherFiles;
+
+        m_parsedCnfFiles->clear();
+        for (auto it = parseRes.parsedCnfFiles.begin(); it != parseRes.parsedCnfFiles.end(); ++it) {
+            m_parsedCnfFiles->insert(it.key(), it.value().release());
+        }
+        m_parsedKcfFiles->clear();
+        for (auto it = parseRes.parsedKcfFiles.begin(); it != parseRes.parsedKcfFiles.end(); ++it) {
+            m_parsedKcfFiles->insert(it.key(), it.value().release());
+        }
+        m_parsedCelFiles->clear();
+        for (auto it = parseRes.parsedCelFiles.begin(); it != parseRes.parsedCelFiles.end(); ++it) {
+            m_parsedCelFiles->insert(it.key(), it.value().release());
+        }
+
+        *m_docFiles = parseRes.docFiles;
+        *m_otherFiles = parseRes.otherFiles;
         m_curCnf = m_parsedCnfFiles->first();
         m_curCnfSetNo = 0;
         m_curPaletteNo = 0;
         return true;
     } else {
-        setLoadingState(LoadingState::Idle);
-        for (ParsedCnf *x : parsedCnfFiles) { delete x; }  // TODO: Use std::unique_ptr ?
-        for (ParsedKcf *x : parsedKcfFiles) { delete x; }  // TODO: Use std::unique_ptr ?
-        for (ParsedCel *x : parsedCelFiles) { delete x; }  // TODO: Use std::unique_ptr ?
+        setLoadingState(LoadingState::Idle);  // UNUSED
         return false;
     }
+
+}
+
+bool ArchivedFile::loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString lzhFilePath)
+{
 
 }
 

@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     // m_archiveProcessor->extractLzh("samples/kb-ran.lzh");     // 24bits modern palatte
     // m_archiveProcessor->extractLzh("samples/pk_ask33.lzh");     // 24bits modern palatte
     // m_archiveProcessor->extractLzh("samples/kis_aki.lzh");     // Debugging for wrong object positions
-    connect(m_fileSystemBrowser, &FileSystemBrowser::selectFile, [=](QString filePath, bool loadAsPatch) {
+    connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, bool loadAsPatch) {
         ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath, loadAsPatch](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
             tryToLoadFilesAsKissFiles(filePath, filesMap);
         });
@@ -60,8 +60,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     setCentralWidget(m_kissView);
-    // m_kissView->scale(0.5, 0.5);
-    // resize(800, 600);
+    m_kissView->scale(0.3, 0.3);
+    resize(800, 600);
 }
 
 MainWindow::~MainWindow()
@@ -70,7 +70,8 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles) {
-    bool kissFilesLoadedOk = m_archivedFile->loadKissFiles(extractedRawFiles, compressedFilePath);
+    std::unique_ptr<KissFilesParsingResult> parsedKissFiles = ArchivedFile::parseKissFiles(extractedRawFiles, compressedFilePath);
+    bool kissFilesLoadedOk = m_archivedFile->loadKissFiles(*parsedKissFiles, compressedFilePath);
     if (!kissFilesLoadedOk) {
         qWarning() << "Not a valid KiSS file. Aborted.";
         return;

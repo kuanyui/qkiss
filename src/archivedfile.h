@@ -11,6 +11,14 @@
 #include "parsedcel.h"
 #include "archiveprocessor.h"
 
+struct KissFilesParsingResult {
+    QMap<QString,  std::unique_ptr<ParsedCnf>> parsedCnfFiles;
+    QHash<QString, std::unique_ptr<ParsedKcf>> parsedKcfFiles;
+    QHash<QString, std::unique_ptr<ParsedCel>> parsedCelFiles;
+    QMap<QString, QString> docFiles;
+    QMap<QString, QByteArray> otherFiles;
+};
+
 class ArchivedFile: public QObject
 {
     Q_OBJECT
@@ -24,7 +32,9 @@ public:
 
     ArchivedFile(QObject *parent = nullptr);
     ~ArchivedFile();
-    bool loadKissFiles (std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, QString lzhFilePath);
+    static std::unique_ptr<KissFilesParsingResult> parseKissFiles(std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, QString lzhFilePath);
+    bool loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath);
+    bool loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString lzhFilePath);
     void unloadKissFiles();
     QStringList getCnfNameList();
     QStringList getOtherFileNameList();
@@ -63,7 +73,7 @@ private:
     QMap<QString, ParsedCnf*> *m_parsedCnfFiles;
     QHash<QString, ParsedKcf*> *m_parsedKcfFiles;
     QHash<QString, ParsedCel*> *m_parsedCelFiles;
-    QHash<QString, QString> *m_docFiles;
+    QMap<QString, QString> *m_docFiles;
     /// *.DOC, *.PCM, ... etc.
     QMap<QString, QByteArray> *m_otherFiles;
     QString m_archiveFilePath;
