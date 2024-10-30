@@ -8,6 +8,22 @@
 #include <QFile>
 #include <QFileInfo>
 
+
+void KissFilesParsingResult::deleteAllObjects()
+{
+    for (auto it = parsedCnfFiles.begin(); it != parsedCnfFiles.end(); it++) {
+        delete it.value();
+    }
+    parsedCnfFiles.clear();
+    for (auto it = parsedKcfFiles.begin(); it != parsedKcfFiles.end(); it++) {
+        delete it.value();
+    }
+    parsedKcfFiles.clear();
+    for (auto it = parsedCelFiles.begin(); it != parsedCelFiles.end(); it++) {
+        delete it.value();
+    }
+    parsedCelFiles.clear();
+}
 // #include <QStringConverter>  // Qt6. In Qt5 this is <QTextCodec>.  http://mochiuwiki.e2.valueserver.jp/index.php?title=Qt%E3%81%AE%E5%9F%BA%E7%A4%8E_-_%E6%96%87%E5%AD%97%E3%82%B3%E3%83%BC%E3%83%89
 
 ArchivedFile::ArchivedFile(QObject *parent):
@@ -27,9 +43,9 @@ ArchivedFile::~ArchivedFile()
     unloadKissFiles();
 }
 
-std::unique_ptr<KissFilesParsingResult> ArchivedFile::parseKissFiles(std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, QString lzhFilePath)
+KissFilesParsingResult ArchivedFile::parseKissFiles(std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, QString lzhFilePath)
 {
-    std::unique_ptr<KissFilesParsingResult> res = std::make_unique<KissFilesParsingResult>();
+    KissFilesParsingResult res = KissFilesParsingResult();
     QtKISS::Case caseSensitivity = QtKISS::Case::Insensitive;  // TODO: Global Variable.
     for (const auto &[fileName, fileRawContent] : extractedRawFiles->asKeyValueRange()) {
     QString fileNameKey = fileName;
@@ -39,15 +55,16 @@ std::unique_ptr<KissFilesParsingResult> ArchivedFile::parseKissFiles(std::shared
     }
     QtKISS::Encoding encoding = QtKISS::Encoding::SJIS;
     if (fileNameUpper.endsWith(".CNF")) {
-        res->parsedCnfFiles.insert(fileNameKey, std::make_unique<ParsedCnf>(fileNameKey, fileRawContent, encoding));   // TODO: Check parse result, if invalid, delete it.
+        // TODO: Check parse result, if invalid, delete it.
+        res.parsedCnfFiles.insert(fileNameKey, new ParsedCnf {fileNameKey, fileRawContent, encoding});
     } else if (fileNameUpper.endsWith(".KCF")) {
-        res->parsedKcfFiles.insert(fileNameKey, std::make_unique<ParsedKcf>(fileNameKey, fileRawContent));
+        res.parsedKcfFiles.insert(fileNameKey, new ParsedKcf {fileNameKey, fileRawContent});
     } else if (fileNameUpper.endsWith(".CEL")) {
-        res->parsedCelFiles.insert(fileNameKey, std::make_unique<ParsedCel>(fileNameKey, fileRawContent));
+        res.parsedCelFiles.insert(fileNameKey, new ParsedCel {fileNameKey, fileRawContent});
     } else if (fileNameUpper.endsWith(".DOC") || fileNameUpper.endsWith(".TXT") || fileNameUpper == "README") {
-        res->docFiles.insert(fileNameKey, Encoding::toUtf8(fileRawContent, encoding));
+        res.docFiles.insert(fileNameKey, Encoding::toUtf8(fileRawContent, encoding));
     } else {
-        res->otherFiles.insert(fileNameKey, fileRawContent);
+        res.otherFiles.insert(fileNameKey, fileRawContent);
     }
     }
     return res;
@@ -62,20 +79,9 @@ bool ArchivedFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFi
         unloadKissFiles();
         m_archiveFilePath = lzhFilePath;
         m_caseSensitivity = caseSensitivity;
-
-        m_parsedCnfFiles->clear();
-        for (auto it = parseRes.parsedCnfFiles.begin(); it != parseRes.parsedCnfFiles.end(); ++it) {
-            m_parsedCnfFiles->insert(it.key(), it.value().release());
-        }
-        m_parsedKcfFiles->clear();
-        for (auto it = parseRes.parsedKcfFiles.begin(); it != parseRes.parsedKcfFiles.end(); ++it) {
-            m_parsedKcfFiles->insert(it.key(), it.value().release());
-        }
-        m_parsedCelFiles->clear();
-        for (auto it = parseRes.parsedCelFiles.begin(); it != parseRes.parsedCelFiles.end(); ++it) {
-            m_parsedCelFiles->insert(it.key(), it.value().release());
-        }
-
+        *m_parsedCnfFiles = parseRes.parsedCnfFiles;
+        *m_parsedKcfFiles = parseRes.parsedKcfFiles;
+        *m_parsedCelFiles = parseRes.parsedCelFiles;
         *m_docFiles = parseRes.docFiles;
         *m_otherFiles = parseRes.otherFiles;
         m_curCnf = m_parsedCnfFiles->first();
@@ -252,3 +258,5 @@ ParsedCnf *ArchivedFile::curCnf() const
 {
     return m_curCnf;
 }
+
+
