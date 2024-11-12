@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QElapsedTimer>
+#include <QSet>
 
 void KissFilesParsingResult::deleteAllObjects()
 {
@@ -76,9 +77,7 @@ KissFilesParsingResult ArchivedFile::parseKissFiles(std::shared_ptr<QMap<QString
 bool ArchivedFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath)
 {
     QtKISS::Case caseSensitivity = QtKISS::Case::Insensitive;  // TODO: Global Variable.
-    setLoadingState(LoadingState::ParsingFiles);  // UNUSED
     if (!parseRes.parsedCnfFiles.isEmpty() && !parseRes.parsedCelFiles.isEmpty()) {
-        setLoadingState(LoadingState::Rendering);  // UNUSED
         unloadKissFiles();
         m_archiveFilePath = lzhFilePath;
         m_caseSensitivity = caseSensitivity;
@@ -92,7 +91,6 @@ bool ArchivedFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFi
         m_curPaletteNo = 0;
         return true;
     } else {
-        setLoadingState(LoadingState::Idle);  // UNUSED
         return false;
     }
 
@@ -100,16 +98,47 @@ bool ArchivedFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFi
 
 bool ArchivedFile::loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString lzhFilePath)
 {
+    QtKISS::Case caseSensitivity = QtKISS::Case::Insensitive;  // TODO: Global Variable.
+    if (parseRes.parsedCnfFiles.isEmpty() && parseRes.parsedCelFiles.isEmpty() && parseRes.parsedKcfFiles.isEmpty()) {
+        qWarning() << "[WARNING][ArchivedFile] Try to load this file as patch, but it contains no any CNF/CEL/KCF file, abort.";
+        return false;
+    }
+    m_archiveFilePath = lzhFilePath;
+    m_caseSensitivity = caseSensitivity;
+    for (auto it = parseRes.parsedCnfFiles.begin(); it != parseRes.parsedCnfFiles.end(); it++) {
+        if (m_parsedCnfFiles->contains(it.key())) {
+            delete m_parsedCnfFiles->value(it.key());
+        }
+        m_parsedCnfFiles->insert(it.key(), it.value());
+    }
+    for (auto it = parseRes.parsedKcfFiles.begin(); it != parseRes.parsedKcfFiles.end(); it++) {
+        if (m_parsedKcfFiles->contains(it.key())) {
+            delete m_parsedKcfFiles->value(it.key());
+        }
+        m_parsedKcfFiles->insert(it.key(), it.value());
+    }
+    for (auto it = parseRes.parsedCelFiles.begin(); it != parseRes.parsedCelFiles.end(); it++) {
+        if (m_parsedCelFiles->contains(it.key())) {
+            delete m_parsedCelFiles->value(it.key());
+        }
+        m_parsedCelFiles->insert(it.key(), it.value());
+    }
 
+    m_docFiles->insert(parseRes.docFiles);
+    m_otherFiles->insert(parseRes.otherFiles);
+    m_curCnf = m_parsedCnfFiles->first();
+    m_curCnfSetNo = 0;
+    m_curPaletteNo = 0;
+    return true;
 }
 
 void ArchivedFile::unloadKissFiles()
 {
-    for (ParsedCnf *x : *m_parsedCnfFiles) { delete x; }
+    foreach (ParsedCnf *x, *m_parsedCnfFiles) { delete x; }
     m_parsedCnfFiles->clear();
-    for (ParsedKcf *x : *m_parsedKcfFiles) { delete x; }
+    foreach (ParsedKcf *x, *m_parsedKcfFiles) { delete x; }
     m_parsedKcfFiles->clear();
-    for (ParsedCel *x : *m_parsedCelFiles) { delete x; }
+    foreach (ParsedCel *x, *m_parsedCelFiles) { delete x; }
     m_parsedCelFiles->clear();
     m_docFiles->clear();
     m_otherFiles->clear();

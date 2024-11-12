@@ -18,13 +18,13 @@ GKissView::GKissView(QWidget *parent):
 GKissView::GKissView(ArchivedFile *archivedFile, QWidget *parent):
     QGraphicsView(parent)
 {
-    loadArchivedFile(archivedFile);
+    setArchiveFile(archivedFile);
 }
 
 
-bool GKissView::loadArchivedFile(ArchivedFile *archivedFile)
+bool GKissView::setArchiveFile(ArchivedFile *archivedFile)
 {
-    unloadArchivedFile();
+    // deleteAllScenes();  /// FIXME: Unnecessary? Should not be done here?
     m_archivedFile = archivedFile;
     QStringList cnfFileNameList = m_archivedFile->getCnfNameList();
     if (cnfFileNameList.isEmpty()) {
@@ -35,12 +35,14 @@ bool GKissView::loadArchivedFile(ArchivedFile *archivedFile)
     return true;
 }
 
-void GKissView::unloadArchivedFile()
+void GKissView::deleteAllScenes()
 {
-    deleteAllScenes();
-    // m_archivedFile = nullptr;   // DON'T DO THIS!
+    setScene(nullptr);
+    for (GKissScene *s : m_scenes) {
+        delete s;
+    }
+    m_scenes.clear();
 }
-
 
 
 bool GKissView::setCurCnf(QString cnfFileName)
@@ -199,13 +201,4 @@ void GKissView::dropEvent(QDropEvent *event)
 {
     // dragging LZH file into QMainWindow can load this LZH file, but QGraphicsView stops it so ignore this event here.
     event->ignore();
-}
-
-void GKissView::deleteAllScenes()
-{
-    setScene(nullptr);
-    for (GKissScene *s : m_scenes) {
-        delete s;
-    }
-    m_scenes.clear();
 }

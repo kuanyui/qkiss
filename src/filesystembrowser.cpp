@@ -119,8 +119,8 @@ void FileSystemBrowser::updateModel()
         connect(patchBtn, &QPushButton::pressed, [=](){
             emit requestLoadFile(fInfo.filePath(), true);
         });
-        m_view->setIndexWidget(m_model->index(m_model->rowCount()-1, 2), patchBtn);
         m_model->appendRow(rowItems);
+        m_view->setIndexWidget(m_model->index(m_model->rowCount() - 1, 2), patchBtn);
     }
 }
 

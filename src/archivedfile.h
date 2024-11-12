@@ -71,11 +71,12 @@ signals:
     // void curCnfSetNoChanged(uint8_t nv);
 private:
     QtKISS::Case m_caseSensitivity;
-    QMap<QString, ParsedCnf*> *m_parsedCnfFiles;
-    QHash<QString, ParsedKcf*> *m_parsedKcfFiles;
-    QHash<QString, ParsedCel*> *m_parsedCelFiles;
-    QMap<QString, QString> *m_docFiles;
-    /// *.DOC, *.PCM, ... etc.
+    QMap<QString, ParsedCnf*> *m_parsedCnfFiles;   /// this class owns these two pointers
+    QHash<QString, ParsedKcf*> *m_parsedKcfFiles;  /// this class owns these two pointers
+    QHash<QString, ParsedCel*> *m_parsedCelFiles;  /// this class owns these two pointers
+    QMap<QString, QString> *m_docFiles;   /// this class owns these two pointers
+    /// - *.DOC, *.PCM, ... etc.
+    /// - this class owns these two pointers
     QMap<QString, QByteArray> *m_otherFiles;
     QString m_archiveFilePath;
     // ==========================================
