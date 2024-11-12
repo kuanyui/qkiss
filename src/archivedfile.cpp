@@ -7,7 +7,7 @@
 #include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
-
+#include <QElapsedTimer>
 
 void KissFilesParsingResult::deleteAllObjects()
 {
@@ -47,26 +47,29 @@ KissFilesParsingResult ArchivedFile::parseKissFiles(std::shared_ptr<QMap<QString
 {
     KissFilesParsingResult res = KissFilesParsingResult();
     QtKISS::Case caseSensitivity = QtKISS::Case::Insensitive;  // TODO: Global Variable.
+    QElapsedTimer elapsedTimer;
+    elapsedTimer.start();
     for (const auto &[fileName, fileRawContent] : extractedRawFiles->asKeyValueRange()) {
-    QString fileNameKey = fileName;
-    QString fileNameUpper = fileName.toUpper();
-    if (caseSensitivity == QtKISS::Case::Insensitive) {
-        fileNameKey = fileNameKey.toUpper();
+        QString fileNameKey = fileName;
+        QString fileNameUpper = fileName.toUpper();
+        if (caseSensitivity == QtKISS::Case::Insensitive) {
+            fileNameKey = fileNameKey.toUpper();
+        }
+        QtKISS::Encoding encoding = QtKISS::Encoding::SJIS;
+        if (fileNameUpper.endsWith(".CNF")) {
+            // TODO: Check parse result, if invalid, delete it.
+            res.parsedCnfFiles.insert(fileNameKey, new ParsedCnf {fileNameKey, fileRawContent, encoding});
+        } else if (fileNameUpper.endsWith(".KCF")) {
+            res.parsedKcfFiles.insert(fileNameKey, new ParsedKcf {fileNameKey, fileRawContent});
+        } else if (fileNameUpper.endsWith(".CEL")) {
+            res.parsedCelFiles.insert(fileNameKey, new ParsedCel {fileNameKey, fileRawContent});
+        } else if (fileNameUpper.endsWith(".DOC") || fileNameUpper.endsWith(".TXT") || fileNameUpper == "README") {
+            res.docFiles.insert(fileNameKey, Encoding::toUtf8(fileRawContent, encoding));
+        } else {
+            res.otherFiles.insert(fileNameKey, fileRawContent);
+        }
     }
-    QtKISS::Encoding encoding = QtKISS::Encoding::SJIS;
-    if (fileNameUpper.endsWith(".CNF")) {
-        // TODO: Check parse result, if invalid, delete it.
-        res.parsedCnfFiles.insert(fileNameKey, new ParsedCnf {fileNameKey, fileRawContent, encoding});
-    } else if (fileNameUpper.endsWith(".KCF")) {
-        res.parsedKcfFiles.insert(fileNameKey, new ParsedKcf {fileNameKey, fileRawContent});
-    } else if (fileNameUpper.endsWith(".CEL")) {
-        res.parsedCelFiles.insert(fileNameKey, new ParsedCel {fileNameKey, fileRawContent});
-    } else if (fileNameUpper.endsWith(".DOC") || fileNameUpper.endsWith(".TXT") || fileNameUpper == "README") {
-        res.docFiles.insert(fileNameKey, Encoding::toUtf8(fileRawContent, encoding));
-    } else {
-        res.otherFiles.insert(fileNameKey, fileRawContent);
-    }
-    }
+    qDebug().noquote() << QStringLiteral("[LOG][Benchmark][ArchiveFile] parsing all CNF, KCF, CEL files in \"%1\" spent %2 ms").arg(lzhFilePath).arg(elapsedTimer.elapsed());
     return res;
 }
 

@@ -54,7 +54,7 @@ void FileSystemBrowser::setupUi()
 
     m_model = new QStandardItemModel(this);
     m_model->setColumnCount(3);
-    m_model->setHorizontalHeaderLabels({ tr("File Name"), tr("Size"), tr("Delete") });  // model.clear() will also delete headers... WTF...
+    m_model->setHorizontalHeaderLabels({ tr("File Name"), tr("Size"), tr("Patch") });  // model.clear() will also delete headers... WTF...
 
     m_view = new QTreeView(this);
     m_view->setModel(m_model);

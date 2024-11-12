@@ -108,6 +108,8 @@ bool GKissView::renderCurCnfAllSets()
     deleteAllScenes();
     ParsedCnf *cnf = m_archivedFile->curCnf();
     QStringList kcfFileNamesInCnf = cnf->kcfFileNames();
+    QElapsedTimer elapsedTimer;
+    elapsedTimer.start();
     for (size_t cnfSetIdx = 0; cnfSetIdx < cnf->sets().length(); cnfSetIdx++) {
         ParsedCnfSet *cnfSet = cnf->sets().at(cnfSetIdx);
         GKissScene *scene = new GKissScene(cnfSetIdx, this);
@@ -158,6 +160,7 @@ bool GKissView::renderCurCnfAllSets()
         // All CEL are rendered as items. Now bound items into obj (according to objId), and handle events.
         scene->bindItemsToObjects();
     }
+    qDebug().noquote() << QStringLiteral("[LOG][Benchmark][KissView] Creating all graphics items in %1 scene(s) cost %2 ms").arg(cnf->sets().length()).arg(elapsedTimer.elapsed());
     if (m_scenes.length() == 0) {
         qCritical() << QString("[ERROR][View] no scene found. Aborted");
         return false;
