@@ -93,7 +93,7 @@ void FileSystemBrowser::setupUi()
 
     connect(m_btnGoUp, &QPushButton::clicked, this, &FileSystemBrowser::goUp);
     connect(m_btnRefresh, &QPushButton::clicked, this, &FileSystemBrowser::refresh);
-    connect(m_view, &QTreeView::clicked, this, &FileSystemBrowser::onItemClicked);
+    connect(m_view, &QTreeView::doubleClicked, this, &FileSystemBrowser::onItemClicked);
 }
 
 void FileSystemBrowser::updateModel()
