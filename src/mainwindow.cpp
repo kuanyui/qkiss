@@ -177,6 +177,7 @@ void MainWindow::setupToolBars()
     m_toolbarWindows->addAction(ui->action_window_fileSystemBrowser);
     m_toolbarWindows->addAction(ui->action_window_cnfSelector);
     m_toolbarWindows->addAction(ui->action_window_logs);
+    ui->dockWidget_cnfFileSelector->setMaximumHeight(300);   // TODO: instead of a fixed height, remember its height during QMainWindow resizing.
     // Page Sets
     m_toolbarPageSets = new QToolBar(this);
     m_btnGroupPageSets = new QButtonGroup(m_toolbarPageSets);
