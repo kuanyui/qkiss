@@ -76,6 +76,7 @@ void GKissItem::renderPaletteBasedImage()
 void GKissItem::renderColorBasedImage()
 {
     QVector<QRgb> *celPixelsData = m_cel->getColorBasedPixels();
+    if (celPixelsData == nullptr) { return; }
     uint32_t i = 0;
     if (m_cel->celType() == ParsedCel::Type::FullColor) {
         for (int y = 0; y < m_cel->height(); ++y) {
