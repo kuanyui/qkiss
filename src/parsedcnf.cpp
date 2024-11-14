@@ -245,7 +245,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
         //     }
         // }
     }
-    qDebug() << m_readableComments;
+    qInfo() << m_readableComments;
     m_fkiss->parseAndCacheFkissScript(fkissScriptLines);
     m_lines.clear();
 }

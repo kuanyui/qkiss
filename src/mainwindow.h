@@ -10,6 +10,7 @@
 #include "archivedfile.h"
 #include "gkissview.h"
 #include "filesystembrowser.h"
+#include "logviewer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,6 +23,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg);
 
 private:
     void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, bool loadAsPatch);
@@ -47,6 +49,7 @@ private:
     ArchivedFile *m_archivedFile;
     GKissView *m_kissView;
     FileSystemBrowser *m_fileSystemBrowser;
+    LogViewer *m_logViewer;
     QListWidget *m_cnfFileBrowser;
 };
 #endif // MAINWINDOW_H

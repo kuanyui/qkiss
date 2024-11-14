@@ -5,8 +5,25 @@
 #include <QTranslator>
 #include <QFile>
 
+
+QtMessageHandler originalMessageHandler = nullptr;
+MainWindow *mainWindow = nullptr;
+
+void customizedMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    if (mainWindow != nullptr && type != QtMsgType::QtDebugMsg) {
+        QString message = qFormatLogMessage(type, context, msg);
+        mainWindow->receiveMsgFromCustomQtDebugMessageHandler(type, msg);
+    }
+    if (originalMessageHandler) {
+        (*originalMessageHandler)(type, context, msg);
+    }
+}
+
+
 int main(int argc, char *argv[])
 {
+    originalMessageHandler = qInstallMessageHandler(customizedMessageHandler);
     QApplication app(argc, argv);
     QFile qssFile(":/styles/main.qss");
     qssFile.open(QFile::ReadOnly);
@@ -21,7 +38,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
-    MainWindow w;
-    w.show();
+    mainWindow = new MainWindow();
+    mainWindow->show();
     return app.exec();
 }

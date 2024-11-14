@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     // m_archiveProcessor->extractLzh("samples/kis_aki.lzh");     // Debugging for wrong object positions
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, bool loadAsPatch) {
         ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath, loadAsPatch](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
+            m_logViewer->clearAllLogs();
             tryToLoadFilesAsKissFiles(filePath, filesMap, loadAsPatch);
         });
     });
@@ -69,6 +70,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg)
+{
+    m_logViewer->appendLog(type, msg);
+}
+
 void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, bool loadAsPatch) {
     KissFilesParsingResult parsedKissFiles = ArchivedFile::parseKissFiles(extractedRawFiles, compressedFilePath);
     if (loadAsPatch) {
@@ -90,6 +96,7 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
     m_kissView->setArchiveFile(m_archivedFile);
     reloadCnfFileBrowser();
     rerenderSetPaletteButtons();
+    m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("File loaded: %1").arg(compressedFilePath));
 }
 
 void MainWindow::reloadCnfFileBrowser()
@@ -213,6 +220,8 @@ void MainWindow::setupDockWindows()
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
     m_cnfFileBrowser = new QListWidget(this);
     ui->dockWidget_cnfFileSelector->setWidget(m_cnfFileBrowser);
+    m_logViewer = new LogViewer(this);
+    ui->dockWidget_logOutput->setWidget(m_logViewer);
     connect(m_cnfFileBrowser, &QListWidget::itemActivated, [=](QListWidgetItem *item) {
         m_kissView->setCurCnf(item->text());
         // m_archivedFile->setCurCnfByName(item->text());
