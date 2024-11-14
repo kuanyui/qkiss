@@ -169,6 +169,7 @@ public:
     /// Fkiss script engine
     Fkiss *fkiss();
     const QList<int32_t> &sortedObjIdList() const;
+    QStringList readableComments() const;
 
 private:
     void log(const QString &line);

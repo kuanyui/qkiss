@@ -245,7 +245,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
         //     }
         // }
     }
-    qInfo() << m_readableComments;
+    qDebug() << m_readableComments;
     m_fkiss->parseAndCacheFkissScript(fkissScriptLines);
     m_lines.clear();
 }
@@ -286,6 +286,11 @@ void ParsedCnf::startToParseSetLines()
         m_lineIdx++;
     }
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
+}
+
+QStringList ParsedCnf::readableComments() const
+{
+    return m_readableComments;
 }
 
 const QList<int32_t> &ParsedCnf::sortedObjIdList() const

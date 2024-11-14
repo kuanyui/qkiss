@@ -96,7 +96,7 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
     m_kissView->setArchiveFile(m_archivedFile);
     reloadCnfFileBrowser();
     rerenderSetPaletteButtons();
-    m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("File loaded: %1").arg(compressedFilePath));
+    m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("File loaded: %1").arg(QFileInfo(compressedFilePath).fileName()));
 }
 
 void MainWindow::reloadCnfFileBrowser()
@@ -228,6 +228,10 @@ void MainWindow::setupDockWindows()
         rerenderSetPaletteButtons();
     });
     connect(m_archivedFile, &ArchivedFile::curCnfChanged, this, &MainWindow::highlightItemInCnfFileBrowser);
+    connect(m_archivedFile, &ArchivedFile::curCnfChanged, [=](){
+        QString fmtLinesStr = m_archivedFile->curCnf()->readableComments().join("\n");
+        m_logViewer->appendLog(QtMsgType::QtInfoMsg, fmtLinesStr);
+    });
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
