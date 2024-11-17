@@ -152,7 +152,7 @@ class ParsedCnf
 {
 public:
     /** fileName is the relative file name in archive file. */
-    ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding encode);
+    ParsedCnf(QString fileName, QByteArray rawData, QKiSS::Encoding encode);
     ~ParsedCnf();
     QSize playFieldSize() const;
     QList<ParsedCnfCel *> cels() const;

@@ -70,7 +70,7 @@ signals:
     // void archivedFilesUncompressAndParseFinished(bool success, QString errmsg);
     // void curCnfSetNoChanged(uint8_t nv);
 private:
-    QtKISS::Case m_caseSensitivity;
+    QKiSS::Case m_caseSensitivity;
     QMap<QString, ParsedCnf*> *m_parsedCnfFiles;   /// this class owns these two pointers
     QHash<QString, ParsedKcf*> *m_parsedKcfFiles;  /// this class owns these two pointers
     QHash<QString, ParsedCel*> *m_parsedCelFiles;  /// this class owns these two pointers

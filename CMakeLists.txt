@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(qtkiss VERSION 0.1 LANGUAGES CXX)
+project(qkiss VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -24,7 +24,7 @@ if(ICU_FOUND)
     include_directories(${ICU_INCLUDE_DIRS})
 endif()
 
-set(TS_FILES qtkiss_en_US.ts)
+set(TS_FILES qkiss_en_US.ts)
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -37,7 +37,7 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(qtkiss
+    qt_add_executable(qkiss
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resources/application.qrc
@@ -61,20 +61,20 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET qtkiss APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET qkiss APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 else()
     if(ANDROID)
-        add_library(qtkiss SHARED
+        add_library(qkiss SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(qtkiss
+        add_executable(qkiss
             ${PROJECT_SOURCES}
         )
     endif()
@@ -83,15 +83,15 @@ else()
 endif()
 
 
-target_link_libraries(qtkiss PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${ICU_LIBRARIES})
+target_link_libraries(qkiss PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${ICU_LIBRARIES})
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.qtkiss)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.qkiss)
 endif()
-set_target_properties(qtkiss PROPERTIES
+set_target_properties(qkiss PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -100,7 +100,7 @@ set_target_properties(qtkiss PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS qtkiss
+install(TARGETS qkiss
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -109,5 +109,5 @@ file(COPY
     samples DESTINATION ${CMAKE_BINARY_DIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(qtkiss)
+    qt_finalize_executable(qkiss)
 endif()

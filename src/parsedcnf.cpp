@@ -3,7 +3,7 @@
 
 #include "parsedcnf.h"
 #include "encoding.h"
-// Q_LOGGING_CATEGORY(CnfParser, "qtkiss.parser.cnf")
+// Q_LOGGING_CATEGORY(CnfParser, "qkiss.parser.cnf")
 using namespace Qt::Literals::StringLiterals;
 
 ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment):
@@ -110,7 +110,7 @@ const ParsedCnfSetObjPos ParsedCnfSet::getObjPosByObjId(int32_t objId) const
 
 
 
-ParsedCnf::ParsedCnf(QString fileName, QByteArray rawData, QtKISS::Encoding encode):
+ParsedCnf::ParsedCnf(QString fileName, QByteArray rawData, QKiSS::Encoding encode):
     m_errCount(0),
     m_fileName(fileName),
     m_fkiss(new Fkiss())

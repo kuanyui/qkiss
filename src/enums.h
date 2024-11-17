@@ -2,7 +2,7 @@
 #define ENUMS_H
 #include <qnamespace.h>
 
-namespace QtKISS {
+namespace QKiSS {
     enum class Case {
         Sensitive = Qt::CaseSensitive,
         Insensitive = Qt::CaseInsensitive
