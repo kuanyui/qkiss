@@ -222,8 +222,7 @@ void MainWindow::setupDockWindows()
     m_cnfFileBrowser = new QListWidget(this);
     ui->dockWidget_cnfFileSelector->setWidget(m_cnfFileBrowser);
     m_logViewer = new LogViewer(this);
-    ui->dockWidget_logOutput->setWidget(m_logViewer);
-    addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_logOutput);
+    ui->dockWidget_logViewer->setWidget(m_logViewer);
     connect(m_cnfFileBrowser, &QListWidget::itemActivated, [=](QListWidgetItem *item) {
         m_kissView->setCurCnf(item->text());
         // m_archivedFile->setCurCnfByName(item->text());

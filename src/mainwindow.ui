@@ -81,7 +81,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_2"/>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_logOutput">
+  <widget class="QDockWidget" name="dockWidget_logViewer">
    <property name="minimumSize">
     <size>
      <width>120</width>
@@ -92,7 +92,7 @@
     <string>Logs</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>2</number>
+    <number>8</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_3"/>
   </widget>
