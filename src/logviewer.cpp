@@ -47,6 +47,7 @@ void LogViewer::setupLayout()
     m_treeWidget->setRootIsDecorated(false);
     m_treeWidget->setColumnCount(2);
     m_treeWidget->setHeaderLabels({"Severity", "Message"});
+    m_treeWidget->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);   // Let user can scroll to the middle of a row, if the row contains multiple lines.
     // m_treeWidget->setHeaderLabels({tr""});
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(m_treeWidget);
