@@ -215,6 +215,7 @@ void MainWindow::setupToolBars()
 
 void MainWindow::setupDockWindows()
 {
+    setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);  // Make bottom dock cannot stretch to bottom-left corner.
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
@@ -222,6 +223,7 @@ void MainWindow::setupDockWindows()
     ui->dockWidget_cnfFileSelector->setWidget(m_cnfFileBrowser);
     m_logViewer = new LogViewer(this);
     ui->dockWidget_logOutput->setWidget(m_logViewer);
+    addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_logOutput);
     connect(m_cnfFileBrowser, &QListWidget::itemActivated, [=](QListWidgetItem *item) {
         m_kissView->setCurCnf(item->text());
         // m_archivedFile->setCurCnfByName(item->text());
