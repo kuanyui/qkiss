@@ -72,6 +72,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg)
 {
+    if (m_logViewer == nullptr) { return; }
     m_logViewer->appendLog(type, msg);
 }
 
