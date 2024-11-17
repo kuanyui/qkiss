@@ -15,21 +15,26 @@ void LogViewer::appendLog(QtMsgType type, const QString &msg)
     QTreeWidgetItem *item = new QTreeWidgetItem();
     switch (type) {
         case QtMsgType::QtDebugMsg:
-        item->setText(0, "🐛 Debug");
+        item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
+        item->setText(0, "Debug");  // 🐛
         item->setForeground(0, QBrush(Qt::gray));
         case QtMsgType::QtInfoMsg:
-        item->setText(0, "ℹ️ Info");
+        item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxInformation));
+        item->setText(0, "Info");  // ℹ️
         item->setForeground(0, QBrush(QColor("#61AFEF")));
         break;
         case QtMsgType::QtWarningMsg:
-        item->setText(0, "⚠️ Warning");
+        item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxWarning));
+        item->setText(0, "Warning");   // ⚠️
         item->setForeground(0, QBrush(Qt::yellow));
         break;
         case QtMsgType::QtCriticalMsg:
-        item->setText(0, "⛔ Error");
+        item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
+        item->setText(0, "Error");   // ⛔
         item->setForeground(0, QBrush(Qt::red));
         case QtMsgType::QtFatalMsg:
-        item->setText(0, "⛔ Fatal");
+        item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
+        item->setText(0, "Fatal");  // ⛔
         item->setForeground(0, QBrush(Qt::red));
         break;
     }
