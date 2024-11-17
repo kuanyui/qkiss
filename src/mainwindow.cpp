@@ -263,6 +263,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                 qDebug() << "Dropped file:" << filePath;
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
                 ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
+                    m_logViewer->clearAllLogs();
                     tryToLoadFilesAsKissFiles(filePath, filesMap, false);
                 });
                 // m_archiveProcessor->extractLzh(filePath);
