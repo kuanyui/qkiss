@@ -217,6 +217,7 @@ void MainWindow::setupToolBars()
 void MainWindow::setupDockWindows()
 {
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);  // Make bottom dock cannot stretch to bottom-left corner.
+    tabifyDockWidget(ui->dockWidget_logViewer, ui->dockWidget_textFileViewer);
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
