@@ -18,6 +18,7 @@ void LogViewer::appendLog(QtMsgType type, const QString &msg)
         item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
         item->setText(0, "Debug");  // 🐛
         item->setForeground(0, QBrush(Qt::gray));
+        break;
         case QtMsgType::QtInfoMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxInformation));
         item->setText(0, "Info");  // ℹ️
@@ -32,6 +33,7 @@ void LogViewer::appendLog(QtMsgType type, const QString &msg)
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
         item->setText(0, "Error");   // ⛔
         item->setForeground(0, QBrush(Qt::red));
+        break;
         case QtMsgType::QtFatalMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
         item->setText(0, "Fatal");  // ⛔

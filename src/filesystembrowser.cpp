@@ -68,7 +68,7 @@ void FileSystemBrowser::setupUi()
     m_view->header()->resizeSection(1, 30);
     m_view->header()->resizeSection(2, 30);
 
-    int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
+    // int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
     m_btnGoUp = new QToolButton(this);
     m_btnGoUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
     m_btnGoUp->setToolTip(tr("Go Up"));

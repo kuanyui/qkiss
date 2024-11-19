@@ -32,6 +32,7 @@ FilesSummaryList ArchiveProcessor::getFileSizeList(const QString &lzhFilePath)
         }
     });
     connect(&process, &QProcess::finished, [&ok](int exitCode, QProcess::ExitStatus exitStatus){
+        Q_UNUSED(exitCode);
         ok = exitStatus == QProcess::NormalExit;
     });
     process.start("lha",

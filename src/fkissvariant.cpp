@@ -91,6 +91,7 @@ bool FkissVariant::strictEq(const FkissVariant &other) const
     case Type::Object: return getObjectId() == other.getObjectId();
     case Type::String: return getString() == other.getString();
     case Type::Cel: return getString() == other.getString();
+    default: return false;
     }
 }
 
@@ -106,6 +107,7 @@ bool FkissVariant::operator==(const FkissVariant &other) const
         // FIXME: Some CNF use different cases in CEL file declaraction against FKiSS Script... e.g. `#0 BODY.CEL` and `map("body.cel")`
         return (other.type() == Type::String || other.type() == Type::Cel) &&
                 getString() == other.getString();
+    default: return false;
     }
 }
 bool FkissVariant::operator!=(const FkissVariant &other) const
@@ -139,5 +141,6 @@ size_t qHash(const FkissVariant &key, size_t seed)
     case FkissVariant::Type::Cel: return qHash(key.getCelName(), seed);
     case FkissVariant::Type::Int: return qHash(key.getInt(), seed);
     case FkissVariant::Type::Object: return qHash(key.getObjectId(), seed);
+    default: return qHash(0, seed);
     }
 }

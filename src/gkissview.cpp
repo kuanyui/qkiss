@@ -112,7 +112,7 @@ bool GKissView::renderCurCnfAllSets()
     QStringList kcfFileNamesInCnf = cnf->kcfFileNames();
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
-    for (size_t cnfSetIdx = 0; cnfSetIdx < cnf->sets().length(); cnfSetIdx++) {
+    for (int cnfSetIdx = 0; cnfSetIdx < cnf->sets().length(); cnfSetIdx++) {
         ParsedCnfSet *cnfSet = cnf->sets().at(cnfSetIdx);
         GKissScene *scene = new GKissScene(cnfSetIdx, this);
         connect(scene, &GKissScene::highlightedItemChanged, this, &GKissView::highlightedItemChanged);   // REFACTOR: naming is too ugly...

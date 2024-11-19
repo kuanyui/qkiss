@@ -48,4 +48,5 @@ QString Encoding::toUtf8(const QByteArray &input, QKiSS::Encoding encoding)
     case QKiSS::Encoding::EUC_JP: return toUtf8(input, "EUC-JP");
     case QKiSS::Encoding::ISO_2022_JP: return toUtf8(input, "ISO-2022-JP");
     }
+    return QString::fromLatin1(input);
 }

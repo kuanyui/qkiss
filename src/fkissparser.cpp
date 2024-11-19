@@ -28,8 +28,8 @@ QString Token::stringifyType(Type type)
     case Type::ObjectID: return QStringLiteral("ObjectID");
     case Type::EndOfLine: return QStringLiteral("EndOfLine");
     }
+    return QStringLiteral("[UnknownType]");
 }
-
 
 FkissParser::FkissParser()
 {

@@ -38,8 +38,9 @@ MainWindow::MainWindow(QWidget *parent)
             statusBar()->clearMessage();
         } else {
             QStringList itemsOfObj;
+            itemsOfObj.append(item->celFileName());
             for (auto sibling: *item->siblings()) {
-                itemsOfObj.append(item->celFileName());
+                itemsOfObj.append(sibling->celFileName());
             }
             statusBar()->showMessage(QString("File: %1, ObjId: %2, CelPos: (%3, %4), Size: (%5, %6), Fix: %7, Comment: %8     Object items (%9): [ %10 ]")
                                      .arg(item->celFileName())
