@@ -96,36 +96,11 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
     }
     m_kissView->deleteAllScenes();
     m_kissView->setArchiveFile(m_archivedFile);
-    reloadCnfFileBrowser();
+    m_innerFilesBrowser->rerenderFileList(m_archivedFile);
     rerenderSetPaletteButtons();
     m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("File loaded: %1").arg(QFileInfo(compressedFilePath).fileName()));
 }
 
-void MainWindow::reloadCnfFileBrowser()
-{
-    m_cnfFileBrowser->clear();
-    foreach (const QString &cnfFileName, m_archivedFile->getCnfNameList()) {
-        QListWidgetItem *item = new QListWidgetItem(cnfFileName);
-        m_cnfFileBrowser->addItem(item);
-    }
-    QString curCnfFileName = m_archivedFile->curCnf() ? m_archivedFile->curCnf()->fileName() : "";
-    highlightItemInCnfFileBrowser(curCnfFileName);
-}
-
-void MainWindow::highlightItemInCnfFileBrowser(QString cnfFileName)
-{
-    QListWidgetItem *curItem = m_cnfFileBrowser->currentItem();
-    if (curItem) {
-        if (curItem->text() == cnfFileName) { return; } // prevent loop
-    }
-    for (int i = 0; i < m_cnfFileBrowser->count(); i++) {
-        QListWidgetItem *item = m_cnfFileBrowser->item(i);
-        if (item->text() == cnfFileName) {
-            m_cnfFileBrowser->setCurrentItem(item);
-            break;
-        }
-    }
-}
 
 void MainWindow::rerenderSetPaletteButtons()
 {
@@ -224,16 +199,17 @@ void MainWindow::setupDockWindows()
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
-    m_cnfFileBrowser = new QListWidget(this);
-    ui->dockWidget_cnfFileSelector->setWidget(m_cnfFileBrowser);
+    m_innerFilesBrowser = new InnerFilesBrowser(this);
+    ui->dockWidget_cnfFileSelector->setWidget(m_innerFilesBrowser);
     m_logViewer = new LogViewer(this);
     ui->dockWidget_logViewer->setWidget(m_logViewer);
-    connect(m_cnfFileBrowser, &QListWidget::itemActivated, [=](QListWidgetItem *item) {
-        m_kissView->setCurCnf(item->text());
-        // m_archivedFile->setCurCnfByName(item->text());
-        rerenderSetPaletteButtons();
+    connect(m_innerFilesBrowser, &InnerFilesBrowser::itemActivated, [=](QTreeWidgetItem *item) {
+        if (item->type() == InnerFilesBrowser::CustomItemCnfFileType) {
+            m_kissView->setCurCnf(item->text(0));
+            // m_archivedFile->setCurCnfByName(item->text());
+            rerenderSetPaletteButtons();
+        }
     });
-    connect(m_archivedFile, &ArchiveFile::curCnfChanged, this, &MainWindow::highlightItemInCnfFileBrowser);
     connect(m_archivedFile, &ArchiveFile::curCnfChanged, [=](){
         QString fmtLinesStr = m_archivedFile->curCnf()->readableComments().join("\n");
         m_logViewer->appendLog(QtMsgType::QtInfoMsg, fmtLinesStr);

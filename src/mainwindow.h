@@ -5,12 +5,12 @@
 #include <QComboBox>
 #include <QToolBar>
 #include <QButtonGroup>
-#include <QListWidget>
 
 #include "archivefile.h"
 #include "gkissview.h"
 #include "filesystembrowser.h"
 #include "logviewer.h"
+#include "innerfilesbrowser.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,8 +27,6 @@ public:
 
 private:
     void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, bool loadAsPatch);
-    void reloadCnfFileBrowser();
-    void highlightItemInCnfFileBrowser(QString cnfFileName);
     /// Note: this will activate the first button.
     void rerenderSetPaletteButtons();
     void setupToolBars();
@@ -50,6 +48,6 @@ private:
     GKissView *m_kissView;
     FileSystemBrowser *m_fileSystemBrowser;
     LogViewer *m_logViewer;
-    QListWidget *m_cnfFileBrowser;
+    InnerFilesBrowser *m_innerFilesBrowser;
 };
 #endif // MAINWINDOW_H

@@ -39,6 +39,7 @@ public:
     void unloadKissFiles();
     QStringList getCnfNameList();
     QStringList getOtherFileNameList();
+    QStringList getDocFileNameList();
     /** Auto handling case sensitivity. */
     std::optional<ParsedCnf *> getParsedCnf(QString cnfFileName) const;
     /** Auto handling case sensitivity. */

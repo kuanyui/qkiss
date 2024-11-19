@@ -160,6 +160,11 @@ QStringList ArchiveFile::getOtherFileNameList()
     return m_otherFiles->keys();
 }
 
+QStringList ArchiveFile::getDocFileNameList()
+{
+    return m_docFiles->keys();
+}
+
 
 std::optional<ParsedCnf *> ArchiveFile::getParsedCnf(QString cnfFileName) const
 {
