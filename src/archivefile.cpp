@@ -1,4 +1,4 @@
-#include "archivedfile.h"
+#include "archivefile.h"
 #include "encoding.h"
 
 #include <QStringList>
@@ -27,7 +27,7 @@ void KissFilesParsingResult::deleteAllObjects()
 }
 // #include <QStringConverter>  // Qt6. In Qt5 this is <QTextCodec>.  http://mochiuwiki.e2.valueserver.jp/index.php?title=Qt%E3%81%AE%E5%9F%BA%E7%A4%8E_-_%E6%96%87%E5%AD%97%E3%82%B3%E3%83%BC%E3%83%89
 
-ArchivedFile::ArchivedFile(QObject *parent):
+ArchiveFile::ArchiveFile(QObject *parent):
     QObject(parent),
     m_parsedCnfFiles(new QMap<QString, ParsedCnf*>),
     m_parsedKcfFiles(new QHash<QString, ParsedKcf*>),
@@ -39,12 +39,12 @@ ArchivedFile::ArchivedFile(QObject *parent):
 
 }
 
-ArchivedFile::~ArchivedFile()
+ArchiveFile::~ArchiveFile()
 {
     unloadKissFiles();
 }
 
-KissFilesParsingResult ArchivedFile::parseKissFiles(std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, QString lzhFilePath)
+KissFilesParsingResult ArchiveFile::parseKissFiles(std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, QString lzhFilePath)
 {
     KissFilesParsingResult res = KissFilesParsingResult();
     QKiSS::Case caseSensitivity = QKiSS::Case::Insensitive;  // TODO: Global Variable.
@@ -74,7 +74,7 @@ KissFilesParsingResult ArchivedFile::parseKissFiles(std::shared_ptr<QMap<QString
     return res;
 }
 
-bool ArchivedFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath)
+bool ArchiveFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath)
 {
     QKiSS::Case caseSensitivity = QKiSS::Case::Insensitive;  // TODO: Global Variable.
     if (!parseRes.parsedCnfFiles.isEmpty() && !parseRes.parsedCelFiles.isEmpty()) {
@@ -96,7 +96,7 @@ bool ArchivedFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFi
 
 }
 
-bool ArchivedFile::loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString lzhFilePath)
+bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString lzhFilePath)
 {
     QKiSS::Case caseSensitivity = QKiSS::Case::Insensitive;  // TODO: Global Variable.
     if (parseRes.parsedCnfFiles.isEmpty() && parseRes.parsedCelFiles.isEmpty() && parseRes.parsedKcfFiles.isEmpty()) {
@@ -132,7 +132,7 @@ bool ArchivedFile::loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString
     return true;
 }
 
-void ArchivedFile::unloadKissFiles()
+void ArchiveFile::unloadKissFiles()
 {
     foreach (ParsedCnf *x, *m_parsedCnfFiles) { delete x; }
     m_parsedCnfFiles->clear();
@@ -150,18 +150,18 @@ void ArchivedFile::unloadKissFiles()
 
 
 
-QStringList ArchivedFile::getCnfNameList()
+QStringList ArchiveFile::getCnfNameList()
 {
     return m_parsedCnfFiles->keys();
 }
 
-QStringList ArchivedFile::getOtherFileNameList()
+QStringList ArchiveFile::getOtherFileNameList()
 {
     return m_otherFiles->keys();
 }
 
 
-std::optional<ParsedCnf *> ArchivedFile::getParsedCnf(QString cnfFileName) const
+std::optional<ParsedCnf *> ArchiveFile::getParsedCnf(QString cnfFileName) const
 {
     if (m_caseSensitivity == QKiSS::Case::Insensitive) {
         cnfFileName = cnfFileName.toUpper();
@@ -172,7 +172,7 @@ std::optional<ParsedCnf *> ArchivedFile::getParsedCnf(QString cnfFileName) const
     return std::nullopt;
 }
 
-std::optional<ParsedKcf *> ArchivedFile::getParsedKcf(QString kcfFileName) const
+std::optional<ParsedKcf *> ArchiveFile::getParsedKcf(QString kcfFileName) const
 {
     if (m_caseSensitivity == QKiSS::Case::Insensitive) {
         kcfFileName = kcfFileName.toUpper();
@@ -183,7 +183,7 @@ std::optional<ParsedKcf *> ArchivedFile::getParsedKcf(QString kcfFileName) const
     return std::nullopt;
 }
 
-std::optional<ParsedCel *> ArchivedFile::getParsedCel(QString celFileName) const
+std::optional<ParsedCel *> ArchiveFile::getParsedCel(QString celFileName) const
 {
     if (m_caseSensitivity == QKiSS::Case::Insensitive) {
         celFileName = celFileName.toUpper();
@@ -194,7 +194,7 @@ std::optional<ParsedCel *> ArchivedFile::getParsedCel(QString celFileName) const
     return std::nullopt;
 }
 
-std::optional<ParsedKcf *> ArchivedFile::getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf)
+std::optional<ParsedKcf *> ArchiveFile::getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf)
 {
     if (m_curCnfOrderedParsedKcfList.length() == 0) {
         qDebug() << QStringLiteral("[ERROR][ArchivedFile] Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.");
@@ -207,7 +207,7 @@ std::optional<ParsedKcf *> ArchivedFile::getParsedKcfByOrderedIndexInCurrentCnf(
     return m_curCnfOrderedParsedKcfList[kcfIndexInCurrentCnf];
 }
 
-std::optional<QByteArray> ArchivedFile::getOtherFile(QString fileName) const
+std::optional<QByteArray> ArchiveFile::getOtherFile(QString fileName) const
 {
     if (m_caseSensitivity == QKiSS::Case::Insensitive) {
         fileName = fileName.toUpper();
@@ -218,12 +218,12 @@ std::optional<QByteArray> ArchivedFile::getOtherFile(QString fileName) const
     return std::nullopt;
 }
 
-QMap<QString, ParsedCnf *> *ArchivedFile::parsedCnfFiles() const
+QMap<QString, ParsedCnf *> *ArchiveFile::parsedCnfFiles() const
 {
     return m_parsedCnfFiles;
 }
 
-bool ArchivedFile::setCurCnfByName(QString cnfFileName)
+bool ArchiveFile::setCurCnfByName(QString cnfFileName)
 {
     auto _cnf = getParsedCnf(cnfFileName);
     if (!_cnf.has_value()) {
@@ -249,44 +249,44 @@ bool ArchivedFile::setCurCnfByName(QString cnfFileName)
 }
 
 
-uint8_t ArchivedFile::curPaletteNo() const
+uint8_t ArchiveFile::curPaletteNo() const
 {
     return m_curPaletteNo;
 }
 
-void ArchivedFile::setCurPaletteNo(uint8_t newCurPaletteNo)
+void ArchiveFile::setCurPaletteNo(uint8_t newCurPaletteNo)
 {
     m_curPaletteNo = newCurPaletteNo;
 }
 
-size_t ArchivedFile::paletteAmountOfFirstKcfInCurCnf() const
+size_t ArchiveFile::paletteAmountOfFirstKcfInCurCnf() const
 {
     if (m_curCnf == nullptr) { return 0; }
     if (m_curCnfOrderedParsedKcfList.length() == 0) { return 0; }
     return m_curCnfOrderedParsedKcfList[0]->paletteAmounts();
 }
 
-ArchivedFile::LoadingState ArchivedFile::loadingState() const
+ArchiveFile::LoadingState ArchiveFile::loadingState() const
 {
     return m_loadingState;
 }
 
-void ArchivedFile::setLoadingState(LoadingState newLoadingState)
+void ArchiveFile::setLoadingState(LoadingState newLoadingState)
 {
     m_loadingState = newLoadingState;
 }
 
-void ArchivedFile::setCurCnfSetNo(uint8_t newCurCnfSetNo)
+void ArchiveFile::setCurCnfSetNo(uint8_t newCurCnfSetNo)
 {
     m_curCnfSetNo = newCurCnfSetNo;
 }
 
-uint8_t ArchivedFile::curCnfSetNo() const
+uint8_t ArchiveFile::curCnfSetNo() const
 {
     return m_curCnfSetNo;
 }
 
-ParsedCnf *ArchivedFile::curCnf() const
+ParsedCnf *ArchiveFile::curCnf() const
 {
     return m_curCnf;
 }

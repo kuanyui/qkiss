@@ -4,7 +4,7 @@
 #include <QGraphicsScene>
 #include <QHash>
 #include <QVector>
-#include "archivedfile.h"
+#include "archivefile.h"
 #include "gkissitem.h"
 
 class GKissScene : public QGraphicsScene
@@ -15,7 +15,7 @@ public:
     // explicit GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
     ~GKissScene();
     /** Call this */
-    void setEssentialContext(ArchivedFile *archivedFile, ParsedCnf* cnf, ParsedCnfSet *cnfSet);
+    void setEssentialContext(ArchiveFile *archivedFile, ParsedCnf* cnf, ParsedCnfSet *cnfSet);
     void drawCurSetBackground();
     void addCelItem(GKissItem *item);
     std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
@@ -48,7 +48,7 @@ private:
     void storeCurrentOverlappedItems(GKissItem *targetItem);
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
     QHash<QString, GKissItem *> m_celNameToItemMap;
-    ArchivedFile *m_archivedFile;
+    ArchiveFile *m_archivedFile;
     int m_setIndex;
     ParsedCnf* m_cnf;
     ParsedCnfSet *m_cnfSet;

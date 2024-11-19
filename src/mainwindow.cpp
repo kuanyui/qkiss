@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    m_archivedFile = new ArchivedFile{this};
+    m_archivedFile = new ArchiveFile{this};
     m_kissView = new GKissView(this);
     setupToolBars();
     setupDockWindows();
@@ -78,7 +78,7 @@ void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const
 }
 
 void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, bool loadAsPatch) {
-    KissFilesParsingResult parsedKissFiles = ArchivedFile::parseKissFiles(extractedRawFiles, compressedFilePath);
+    KissFilesParsingResult parsedKissFiles = ArchiveFile::parseKissFiles(extractedRawFiles, compressedFilePath);
     if (loadAsPatch) {
         bool kissFilesLoadedOk = m_archivedFile->loadKissFilesAsPatch(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
@@ -219,6 +219,8 @@ void MainWindow::setupDockWindows()
 {
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);  // Make bottom dock cannot stretch to bottom-left corner.
     tabifyDockWidget(ui->dockWidget_logViewer, ui->dockWidget_textFileViewer);
+    ui->dockWidget_logViewer->raise();  // activate "logs viewer" tab.
+
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
@@ -231,8 +233,8 @@ void MainWindow::setupDockWindows()
         // m_archivedFile->setCurCnfByName(item->text());
         rerenderSetPaletteButtons();
     });
-    connect(m_archivedFile, &ArchivedFile::curCnfChanged, this, &MainWindow::highlightItemInCnfFileBrowser);
-    connect(m_archivedFile, &ArchivedFile::curCnfChanged, [=](){
+    connect(m_archivedFile, &ArchiveFile::curCnfChanged, this, &MainWindow::highlightItemInCnfFileBrowser);
+    connect(m_archivedFile, &ArchiveFile::curCnfChanged, [=](){
         QString fmtLinesStr = m_archivedFile->curCnf()->readableComments().join("\n");
         m_logViewer->appendLog(QtMsgType::QtInfoMsg, fmtLinesStr);
     });

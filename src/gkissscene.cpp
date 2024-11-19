@@ -24,7 +24,7 @@ GKissScene::~GKissScene()
     }
 }
 
-void GKissScene::setEssentialContext(ArchivedFile *archivedFile, ParsedCnf *cnf, ParsedCnfSet *cnfSet)
+void GKissScene::setEssentialContext(ArchiveFile *archivedFile, ParsedCnf *cnf, ParsedCnfSet *cnfSet)
 {
     m_archivedFile = archivedFile;
     m_cnf = cnf;

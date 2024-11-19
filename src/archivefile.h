@@ -1,5 +1,5 @@
-#ifndef ARCHIVEDFILE_H
-#define ARCHIVEDFILE_H
+#ifndef ARCHIVEFILE_H
+#define ARCHIVEFILE_H
 
 #include "enums.h"
 #include <QObject>
@@ -20,7 +20,7 @@ struct KissFilesParsingResult {
     QMap<QString, QByteArray> otherFiles;
 };
 
-class ArchivedFile: public QObject
+class ArchiveFile: public QObject
 {
     Q_OBJECT
 public:
@@ -31,8 +31,8 @@ public:
         Rendering,
     };
 
-    ArchivedFile(QObject *parent = nullptr);
-    ~ArchivedFile();
+    ArchiveFile(QObject *parent = nullptr);
+    ~ArchiveFile();
     static KissFilesParsingResult parseKissFiles(std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, QString lzhFilePath);
     bool loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath);
     bool loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString lzhFilePath);
@@ -100,4 +100,4 @@ private:
     LoadingState m_loadingState;
 };
 
-#endif // ARCHIVEDFILE_H
+#endif // ARCHIVEFILE_H

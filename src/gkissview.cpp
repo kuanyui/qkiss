@@ -15,14 +15,14 @@ GKissView::GKissView(QWidget *parent):
 
 }
 
-GKissView::GKissView(ArchivedFile *archivedFile, QWidget *parent):
+GKissView::GKissView(ArchiveFile *archivedFile, QWidget *parent):
     QGraphicsView(parent)
 {
     setArchiveFile(archivedFile);
 }
 
 
-bool GKissView::setArchiveFile(ArchivedFile *archivedFile)
+bool GKissView::setArchiveFile(ArchiveFile *archivedFile)
 {
     // deleteAllScenes();  /// FIXME: Unnecessary? Should not be done here?
     m_archivedFile = archivedFile;

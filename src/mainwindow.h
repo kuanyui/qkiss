@@ -4,10 +4,10 @@
 #include <QMainWindow>
 #include <QComboBox>
 #include <QToolBar>
-#include <QListWidget>
 #include <QButtonGroup>
+#include <QListWidget>
 
-#include "archivedfile.h"
+#include "archivefile.h"
 #include "gkissview.h"
 #include "filesystembrowser.h"
 #include "logviewer.h"
@@ -46,7 +46,7 @@ private:
     QButtonGroup *m_btnGroupPageSets;
     QButtonGroup *m_btnGroupColorSets;
     QComboBox *m_cboxZoomScale;
-    ArchivedFile *m_archivedFile;
+    ArchiveFile *m_archivedFile;
     GKissView *m_kissView;
     FileSystemBrowser *m_fileSystemBrowser;
     LogViewer *m_logViewer;

@@ -13,8 +13,8 @@ class GKissView : public QGraphicsView
     Q_OBJECT;
 public:
     GKissView(QWidget *parent=nullptr);
-    GKissView(ArchivedFile *archivedFile, QWidget *parent=nullptr);
-    bool setArchiveFile(ArchivedFile *archivedFile);
+    GKissView(ArchiveFile *archivedFile, QWidget *parent=nullptr);
+    bool setArchiveFile(ArchiveFile *archivedFile);
     void deleteAllScenes();
     bool setCurCnf(QString cnfFileName);
     uint8_t scenesAmount() const;
@@ -33,7 +33,7 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dropEvent(QDropEvent *event) override;
 private:
-    ArchivedFile *m_archivedFile;
+    ArchiveFile *m_archivedFile;
     /// Each set is stored in its scene.
     QVector<GKissScene *> m_scenes;
     uint8_t m_curSceneIdx = 0;

@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include "archivedfile.h"
+#include "archivefile.h"
 
 class GlobalState : public QObject
 {
