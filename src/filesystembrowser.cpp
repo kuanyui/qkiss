@@ -101,7 +101,7 @@ void FileSystemBrowser::updateModel()
     // m_model->clear();   // DO NOT USE THIS. This will clear header title, header size...etc
     m_model->removeRows(0, m_model->rowCount());
     QDir dir { m_curDirPath };
-    QFileInfoList fInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+    QFileInfoList fInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::IgnoreCase);
     foreach (const QFileInfo &fInfo, fInfoList) {
         const QString ext = fInfo.fileName().toUpper();
         if (!fInfo.isDir() && (!ext.endsWith(".LZH") && !ext.endsWith(".CNF"))) {
