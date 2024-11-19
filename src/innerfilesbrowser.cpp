@@ -5,16 +5,18 @@ using namespace Qt::Literals::StringLiterals;
 InnerFilesBrowser::InnerFilesBrowser(QWidget *parent)
     : QTreeWidget{parent}
 {
-
+    setHeaderHidden(true);
 }
 
 void InnerFilesBrowser::rerenderFileList(ArchiveFile *archiveFile)
 {
     clear();
     QTreeWidgetItem *rootCnfFolder = new QTreeWidgetItem(this, CustomItemType::CustomItemFolderType);
+    rootCnfFolder->setExpanded(true);
     rootCnfFolder->setText(0, tr("CNF files"));
     rootCnfFolder->setIcon(0, style()->standardIcon(QStyle::SP_DirIcon));
     QTreeWidgetItem *rootDocFolder = new QTreeWidgetItem(this, CustomItemType::CustomItemFolderType);
+    rootDocFolder->setExpanded(true);
     rootDocFolder->setText(0, tr("Document files"));
     rootDocFolder->setIcon(0, style()->standardIcon(QStyle::SP_DirIcon));
     addTopLevelItems({ rootCnfFolder, rootDocFolder });
@@ -31,4 +33,13 @@ void InnerFilesBrowser::rerenderFileList(ArchiveFile *archiveFile)
     }
     rootDocFolder->setText(0, rootDocFolder->text(0) + " (%1)"_L1.arg(QString::number(rootDocFolder->childCount())));
     QString curCnfFileName = archiveFile->curCnf() ? archiveFile->curCnf()->fileName() : "";
+    if (!curCnfFileName.isEmpty()) {
+        for (int i = 0; i < rootCnfFolder->childCount(); i++) {
+            auto item = rootCnfFolder->child(i);
+            if (item->text(0) == curCnfFileName) {
+                setCurrentItem(item);
+                break;
+            }
+        }
+    }
 }
