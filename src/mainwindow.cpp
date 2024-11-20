@@ -97,6 +97,7 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
     m_kissView->deleteAllScenes();
     m_kissView->setArchiveFile(m_archivedFile);
     m_innerFilesBrowser->rerenderFileList(m_archivedFile);
+    m_codeEditor->setPlainText(m_archivedFile->getCnfFileAsString(m_archivedFile->curCnf()->fileName()));
     rerenderSetPaletteButtons();
     m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("File loaded: %1").arg(QFileInfo(compressedFilePath).fileName()));
 }
