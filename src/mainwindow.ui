@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>24</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -50,8 +50,8 @@
     </property>
     <addaction name="action_window_fileSystemBrowser"/>
     <addaction name="action_window_innerFilesBrowser"/>
-    <addaction name="action_window_logViewer"/>
     <addaction name="action_window_codeViewer"/>
+    <addaction name="action_window_logViewer"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
@@ -88,6 +88,9 @@
      <width>120</width>
      <height>46</height>
     </size>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
    </property>
    <property name="windowTitle">
     <string>Logs</string>
@@ -161,7 +164,10 @@
     <iconset theme="QIcon::ThemeIcon::DocumentProperties"/>
    </property>
    <property name="text">
-    <string>&amp;CNF Selector</string>
+    <string>&amp;Inner File Selector</string>
+   </property>
+   <property name="toolTip">
+    <string>Inner File Selector</string>
    </property>
   </action>
   <action name="action_window_logViewer">
@@ -213,7 +219,7 @@
     <iconset theme="QIcon::ThemeIcon::DocumentPrintPreview"/>
    </property>
    <property name="text">
-    <string>Text File Viewer</string>
+    <string>&amp;Text File Viewer</string>
    </property>
   </action>
  </widget>
