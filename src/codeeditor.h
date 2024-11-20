@@ -63,6 +63,7 @@
 #include <QPlainTextEdit>
 #include <QWidget>
 #include "codeeditorlinenumberarea.h"
+#include "codeeditorsyntaxhighlighter.h"
 
 class CodeEditor : public QPlainTextEdit
 {
@@ -84,6 +85,7 @@ private slots:
 private:
     QFont m_font;
     CodeEditorLineNumberArea *m_lineNumberArea;
+    CodeEditorSyntaxHighlighter *m_syntaxHighlighter;
 };
 
 

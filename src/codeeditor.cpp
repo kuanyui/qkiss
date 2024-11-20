@@ -61,12 +61,12 @@
 #include <QTextBlock>
 
 #include "codeeditor.h"
-#include "codeeditorlinenumberarea.h"
 
 CodeEditor::CodeEditor(QWidget *parent):
     QPlainTextEdit{parent}
 {
     m_lineNumberArea = new CodeEditorLineNumberArea(this);
+    m_syntaxHighlighter = new CodeEditorSyntaxHighlighter(this->document());
     m_font = QFont {"Monospace"};
     m_font.setStyleHint(QFont::TypeWriter);
     setFont(m_font);
