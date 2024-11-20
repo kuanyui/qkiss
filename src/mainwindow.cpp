@@ -73,6 +73,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg)
 {
+    if (ui == nullptr) { return; }
     if (m_logViewer == nullptr) { return; }
     m_logViewer->appendLog(type, msg);
 }
@@ -160,8 +161,9 @@ void MainWindow::setupToolBars()
     m_toolbarWindows->setWindowTitle(tr("Windows"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarWindows);
     m_toolbarWindows->addAction(ui->action_window_fileSystemBrowser);
-    m_toolbarWindows->addAction(ui->action_window_cnfSelector);
-    m_toolbarWindows->addAction(ui->action_window_logs);
+    m_toolbarWindows->addAction(ui->action_window_innerFilesBrowser);
+    m_toolbarWindows->addAction(ui->action_window_logViewer);
+    m_toolbarWindows->addAction(ui->action_window_codeViewer);
     // Page Sets
     m_toolbarPageSets = new QToolBar(this);
     m_btnGroupPageSets = new QButtonGroup(m_toolbarPageSets);
@@ -195,7 +197,7 @@ void MainWindow::setupDockWindows()
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);  // Make bottom dock cannot stretch to bottom-left corner.
     // tabifyDockWidget(ui->dockWidget_logViewer, ui->dockWidget_textFileViewer);
     // ui->dockWidget_logViewer->raise();  // activate "logs viewer" tab.
-    addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_textFileViewer);
+    addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_codeViewer);
     addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_logViewer);
     // ==================================================
     // File System Browser
@@ -217,7 +219,7 @@ void MainWindow::setupDockWindows()
     // Code Editor
     // ==================================================
     m_codeEditor = new CodeEditor(this);
-    ui->dockWidget_textFileViewer->setWidget(m_codeEditor);
+    ui->dockWidget_codeViewer->setWidget(m_codeEditor);
     // ==================================================
     // (Signals)
     // ==================================================
@@ -231,7 +233,7 @@ void MainWindow::setupDockWindows()
         } else if (item->type() == InnerFilesBrowser::CustomItemDocFileType) {
             QString docFileName = item->text(0);
             m_codeEditor->setPlainText(m_archivedFile->getDocFileAsString(docFileName));
-            ui->dockWidget_textFileViewer->raise();
+            ui->dockWidget_codeViewer->raise();
         }
     });
     connect(m_archivedFile, &ArchiveFile::curCnfChanged, [=](){
