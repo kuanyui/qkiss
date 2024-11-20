@@ -82,6 +82,7 @@ private slots:
     void updateLineNumberArea(const QRect &rect, int dy);
 
 private:
+    QFont m_font;
     CodeEditorLineNumberArea *m_lineNumberArea;
 };
 

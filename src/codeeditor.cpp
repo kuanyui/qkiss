@@ -67,6 +67,9 @@ CodeEditor::CodeEditor(QWidget *parent):
     QPlainTextEdit{parent}
 {
     m_lineNumberArea = new CodeEditorLineNumberArea(this);
+    m_font = QFont {"Monospace"};
+    m_font.setStyleHint(QFont::TypeWriter);
+    setFont(m_font);
     setReadOnly(true);
 
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateLineNumberAreaWidth);
@@ -139,6 +142,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     QPainter painter{qobject_cast<QWidget*>(m_lineNumberArea)};
     painter.fillRect(event->rect(), Qt::lightGray);
+    painter.setFont(m_font);
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
     int top = qRound(blockBoundingGeometry(block).translated(contentOffset()).top());
