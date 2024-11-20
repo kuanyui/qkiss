@@ -90,20 +90,20 @@ CodeEditorSyntaxHighlighter::CodeEditorSyntaxHighlighter(QTextDocument *parent)
     m_highlightingRules.append(rule);
 
     m_quotationFormat.setForeground(Qt::darkGreen);
-    rule.pattern = QRegularExpression(QStringLiteral("\".*\""));
+    rule.pattern = QRegularExpression(QStringLiteral("\".*?\""));
     rule.format = m_quotationFormat;
     m_highlightingRules.append(rule);
 
-    m_functionFormat.setFontItalic(true);
-    m_functionFormat.setForeground(Qt::blue);
+    // m_functionFormat.setFontItalic(true);
+    m_functionFormat.setForeground(QColor::fromString("#2880B9"));
     rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
     rule.format = m_functionFormat;
     m_highlightingRules.append(rule);
 
 
 
-    m_singleLineCommentFormat.setForeground(Qt::red);
-    rule.pattern = QRegularExpression(QStringLiteral("//[^\n]*"));
+    m_singleLineCommentFormat.setForeground(Qt::gray);
+    rule.pattern = QRegularExpression(QStringLiteral(";[^@]*"));
     rule.format = m_singleLineCommentFormat;
     m_highlightingRules.append(rule);
 
