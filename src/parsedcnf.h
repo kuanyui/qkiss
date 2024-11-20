@@ -170,6 +170,7 @@ public:
     Fkiss *fkiss();
     const QList<int32_t> &sortedObjIdList() const;
     QStringList readableComments() const;
+    QString fileContentText() const;
 
 private:
     void log(const QString &line);

@@ -63,6 +63,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/filesystembrowser.h src/filesystembrowser.cpp
         src/logviewer.h src/logviewer.cpp
         src/innerfilesbrowser.h src/innerfilesbrowser.cpp
+        src/codeeditor.h src/codeeditor.cpp
+        src/codeeditorlinenumberarea.h src/codeeditorlinenumberarea.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -288,6 +288,11 @@ void ParsedCnf::startToParseSetLines()
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
 }
 
+QString ParsedCnf::fileContentText() const
+{
+    return m_fileContentText;
+}
+
 QStringList ParsedCnf::readableComments() const
 {
     return m_readableComments;

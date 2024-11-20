@@ -195,19 +195,41 @@ void MainWindow::setupDockWindows()
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);  // Make bottom dock cannot stretch to bottom-left corner.
     tabifyDockWidget(ui->dockWidget_logViewer, ui->dockWidget_textFileViewer);
     ui->dockWidget_logViewer->raise();  // activate "logs viewer" tab.
-
+    // ==================================================
+    // File System Browser
+    // ==================================================
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
+    // ==================================================
+    // Inner Files Browser
+    // ==================================================
     m_innerFilesBrowser = new InnerFilesBrowser(this);
     ui->dockWidget_cnfFileSelector->setWidget(m_innerFilesBrowser);
+    // ==================================================
+    // Log Viewer
+    // ==================================================
     m_logViewer = new LogViewer(this);
     ui->dockWidget_logViewer->setWidget(m_logViewer);
+    // ==================================================
+    // Code Editor
+    // ==================================================
+    m_codeEditor = new CodeEditor(this);
+    ui->dockWidget_textFileViewer->setWidget(m_codeEditor);
+    // ==================================================
+    // (Signals)
+    // ==================================================
     connect(m_innerFilesBrowser, &InnerFilesBrowser::itemActivated, [=](QTreeWidgetItem *item) {
         if (item->type() == InnerFilesBrowser::CustomItemCnfFileType) {
-            m_kissView->setCurCnf(item->text(0));
+            QString cnfFileName = item->text(0);
+            m_kissView->setCurCnf(cnfFileName);
             // m_archivedFile->setCurCnfByName(item->text());
             rerenderSetPaletteButtons();
+            m_codeEditor->setPlainText(m_archivedFile->getCnfFileAsString(cnfFileName));
+        } else if (item->type() == InnerFilesBrowser::CustomItemDocFileType) {
+            QString docFileName = item->text(0);
+            m_codeEditor->setPlainText(m_archivedFile->getDocFileAsString(docFileName));
+            ui->dockWidget_textFileViewer->raise();
         }
     });
     connect(m_archivedFile, &ArchiveFile::curCnfChanged, [=](){

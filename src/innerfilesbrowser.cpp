@@ -27,7 +27,7 @@ void InnerFilesBrowser::rerenderFileList(ArchiveFile *archiveFile)
     }
     rootCnfFolder->setText(0, rootCnfFolder->text(0) + " (%1)"_L1.arg(QString::number(rootCnfFolder->childCount())));
     foreach (const QString &docFileName, archiveFile->getDocFileNameList()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(rootDocFolder, CustomItemType::CustomItemCnfFileType);
+        QTreeWidgetItem *item = new QTreeWidgetItem(rootDocFolder, CustomItemType::CustomItemDocFileType);
         item->setText(0, docFileName);
         item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
     }

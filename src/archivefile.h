@@ -48,7 +48,13 @@ public:
     std::optional<ParsedCel *> getParsedCel(QString celFileName) const;
     std::optional<ParsedKcf *>getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf);
     /** Auto handling case sensitivity. */
-    std::optional<QByteArray> getOtherFile(QString celFileName) const;
+    std::optional<QString> getDocFile(QString docFileName) const;
+    /** Auto handling case sensitivity. */
+    std::optional<QByteArray> getOtherFile(QString fileName) const;
+    /// Auto handling case sensitivity. Return empty string if failed
+    QString getCnfFileAsString(QString cnfFileName) const;
+    /// Auto handling case sensitivity. Return empty string if failed
+    QString getDocFileAsString(QString docFileName) const;
     QMap<QString, ParsedCnf *> *parsedCnfFiles() const;
     /// This should be called by GKissView. This won't trigger rendering of GKissView.
     bool setCurCnfByName(QString cnfFileName);

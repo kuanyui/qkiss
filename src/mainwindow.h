@@ -11,6 +11,7 @@
 #include "filesystembrowser.h"
 #include "logviewer.h"
 #include "innerfilesbrowser.h"
+#include "codeeditor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -49,5 +50,6 @@ private:
     FileSystemBrowser *m_fileSystemBrowser;
     LogViewer *m_logViewer;
     InnerFilesBrowser *m_innerFilesBrowser;
+    CodeEditor *m_codeEditor;
 };
 #endif // MAINWINDOW_H

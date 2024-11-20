@@ -212,6 +212,17 @@ std::optional<ParsedKcf *> ArchiveFile::getParsedKcfByOrderedIndexInCurrentCnf(u
     return m_curCnfOrderedParsedKcfList[kcfIndexInCurrentCnf];
 }
 
+std::optional<QString> ArchiveFile::getDocFile(QString docFileName) const
+{
+    if (m_caseSensitivity == QKiSS::Case::Insensitive) {
+        docFileName = docFileName.toUpper();
+    }
+    if (m_docFiles->contains(docFileName)) {
+        return std::optional<QString>(m_docFiles->value(docFileName));
+    }
+    return std::nullopt;
+}
+
 std::optional<QByteArray> ArchiveFile::getOtherFile(QString fileName) const
 {
     if (m_caseSensitivity == QKiSS::Case::Insensitive) {
@@ -221,6 +232,24 @@ std::optional<QByteArray> ArchiveFile::getOtherFile(QString fileName) const
         return std::optional<QByteArray>(m_otherFiles->value(fileName));
     }
     return std::nullopt;
+}
+
+QString ArchiveFile::getCnfFileAsString(QString cnfFileName) const
+{
+    auto tmp = getParsedCnf(cnfFileName);
+    if (tmp.has_value()) {
+        return tmp.value()->fileContentText();
+    }
+    return QString();
+}
+
+QString ArchiveFile::getDocFileAsString(QString docFileName) const
+{
+    auto tmp = getDocFile(docFileName);
+    if (tmp.has_value()) {
+        return tmp.value();
+    }
+    return QString();
 }
 
 QMap<QString, ParsedCnf *> *ArchiveFile::parsedCnfFiles() const
