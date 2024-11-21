@@ -122,8 +122,8 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
     it = reSet0.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch m = it.next();
-        setFormat(m.capturedStart(1), m.capturedLength(1), plt().yellow);
-        setFormat(m.capturedStart(2), m.capturedLength(2), plt().orange);
+        setFormat(m.capturedStart(1), m.capturedLength(1), plt().orange);
+        setFormat(m.capturedStart(2), m.capturedLength(2), plt().magenta);
     }
 
     // quoteation
