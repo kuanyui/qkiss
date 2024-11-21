@@ -117,6 +117,15 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
         setFormat(m.capturedStart(2), m.capturedLength(2), plt().blue);
     }
 
+    // set
+    static QRegularExpression reSet0(QStringLiteral(R"#(^(\$)([0-9]))#"));
+    it = reSet0.globalMatch(text);
+    while (it.hasNext()) {
+        QRegularExpressionMatch m = it.next();
+        setFormat(m.capturedStart(1), m.capturedLength(1), plt().yellow);
+        setFormat(m.capturedStart(2), m.capturedLength(2), plt().orange);
+    }
+
     // quoteation
     static QRegularExpression reQuotes(QStringLiteral("\".*?\""));
     it = reQuotes.globalMatch(text);
