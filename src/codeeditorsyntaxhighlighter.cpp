@@ -58,89 +58,91 @@
 **************************************************************************/
 #include "codeeditorsyntaxhighlighter.h"
 
+using namespace Qt::Literals::StringLiterals;
 
 CodeEditorSyntaxHighlighter::CodeEditorSyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter{parent}
 {
-    HighlightingRule rule;
+    m_pltDark.magenta.setForeground(QColor::fromString("#ff4ea3"_L1));
+    m_pltDark.red.setForeground(QColor::fromString("#ef2929"_L1));
+    m_pltDark.orange.setForeground(QColor::fromString("#ff8700"_L1));
+    m_pltDark.yellow.setForeground(QColor::fromString("#ffd700"_L1));
+    m_pltDark.green.setForeground(QColor::fromString("#afff00"_L1));
+    m_pltDark.cyan.setForeground(QColor::fromString("#87ffff"_L1));
+    m_pltDark.blue.setForeground(QColor::fromString("#5fafd7"_L1));
+    m_pltDark.purple.setForeground(QColor::fromString("#af5fff"_L1));
+    m_pltDark.gray.setForeground(QColor::fromString("#767676"_L1));
 
-    m_keywordFormat.setForeground(Qt::darkBlue);
-    m_keywordFormat.setFontWeight(QFont::Bold);
-    const QString keywordPatterns[] = {
-        QStringLiteral("\\bchar\\b"), QStringLiteral("\\bclass\\b"), QStringLiteral("\\bconst\\b"),
-        QStringLiteral("\\bdouble\\b"), QStringLiteral("\\benum\\b"), QStringLiteral("\\bexplicit\\b"),
-        QStringLiteral("\\bfriend\\b"), QStringLiteral("\\binline\\b"), QStringLiteral("\\bint\\b"),
-        QStringLiteral("\\blong\\b"), QStringLiteral("\\bnamespace\\b"), QStringLiteral("\\boperator\\b"),
-        QStringLiteral("\\bprivate\\b"), QStringLiteral("\\bprotected\\b"), QStringLiteral("\\bpublic\\b"),
-        QStringLiteral("\\bshort\\b"), QStringLiteral("\\bsignals\\b"), QStringLiteral("\\bsigned\\b"),
-        QStringLiteral("\\bslots\\b"), QStringLiteral("\\bstatic\\b"), QStringLiteral("\\bstruct\\b"),
-        QStringLiteral("\\btemplate\\b"), QStringLiteral("\\btypedef\\b"), QStringLiteral("\\btypename\\b"),
-        QStringLiteral("\\bunion\\b"), QStringLiteral("\\bunsigned\\b"), QStringLiteral("\\bvirtual\\b"),
-        QStringLiteral("\\bvoid\\b"), QStringLiteral("\\bvolatile\\b"), QStringLiteral("\\bbool\\b")
-    };
-    for (const QString &pattern : keywordPatterns) {
-        rule.pattern = QRegularExpression(pattern);
-        rule.format = m_keywordFormat;
-        m_highlightingRules.append(rule);
-    }
-    m_classFormat.setFontWeight(QFont::Bold);
-    m_classFormat.setForeground(Qt::darkMagenta);
-    rule.pattern = QRegularExpression(QStringLiteral("\\bQ[A-Za-z]+\\b"));
-    rule.format = m_classFormat;
-    m_highlightingRules.append(rule);
+    m_pltLight.magenta.setForeground(QColor::fromString("#ff1f8b"_L1));
+    m_pltLight.red.setForeground(QColor::fromString("#cc0000"_L1));
+    m_pltLight.orange.setForeground(QColor::fromString("#ff5d17"_L1));
+    m_pltLight.yellow.setForeground(QColor::fromString("#c4a000"_L1));
+    m_pltLight.green.setForeground(QColor::fromString("#008700"_L1));
+    m_pltLight.cyan.setForeground(QColor::fromString("#18b2b2"_L1));
+    m_pltLight.blue.setForeground(QColor::fromString("#005faf"_L1));
+    m_pltLight.purple.setForeground(QColor::fromString("#b218b2"_L1));
+    m_pltLight.gray.setForeground(QColor::fromString("#b2b2b2"_L1));
 
-    m_quotationFormat.setForeground(Qt::darkGreen);
-    rule.pattern = QRegularExpression(QStringLiteral("\".*?\""));
-    rule.format = m_quotationFormat;
-    m_highlightingRules.append(rule);
-
-    // m_functionFormat.setFontItalic(true);
-    m_functionFormat.setForeground(QColor::fromString("#2880B9"));
-    rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
-    rule.format = m_functionFormat;
-    m_highlightingRules.append(rule);
-
-
-
-    m_singleLineCommentFormat.setForeground(Qt::gray);
-    rule.pattern = QRegularExpression(QStringLiteral(";[^@]*"));
-    rule.format = m_singleLineCommentFormat;
-    m_highlightingRules.append(rule);
-
-    m_multiLineCommentFormat.setForeground(Qt::red);
-
-    m_commentStartExpression = QRegularExpression(QStringLiteral("/\\*"));
-    m_commentEndExpression = QRegularExpression(QStringLiteral("\\*/"));
 }
 
 
 void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
 {
-    for (const HighlightingRule &rule : std::as_const(m_highlightingRules)) {
-        QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
-        while (matchIterator.hasNext()) {
-            QRegularExpressionMatch match = matchIterator.next();
-            setFormat(match.capturedStart(), match.capturedLength(), rule.format);
-        }
+    static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^ :\t]+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
+    QRegularExpressionMatchIterator itCel = reCel.globalMatch(text);
+    while (itCel.hasNext()) {
+        QRegularExpressionMatch m = itCel.next();
+        setFormat(m.capturedStart(1), m.capturedLength(1), plt().blue);
+        setFormat(m.capturedStart(2), m.capturedLength(2), plt().red);
+        setFormat(m.capturedStart(3), m.capturedLength(3), plt().green);
+        setFormat(m.capturedStart(4), m.capturedLength(4), plt().purple);
+        setFormat(m.capturedStart(5), m.capturedLength(5), plt().orange);
     }
-    setCurrentBlockState(0);
 
-    int startIndex = 0;
-    if (previousBlockState() != 1)
-        startIndex = text.indexOf(m_commentStartExpression);
-
-    while (startIndex >= 0) {
-        QRegularExpressionMatch match = m_commentEndExpression.match(text, startIndex);
-        int endIndex = match.capturedStart();
-        int commentLength = 0;
-        if (endIndex == -1) {
-            setCurrentBlockState(1);
-            commentLength = text.length() - startIndex;
-        } else {
-            commentLength = endIndex - startIndex
-                            + match.capturedLength();
-        }
-        setFormat(startIndex, commentLength, m_multiLineCommentFormat);
-        startIndex = text.indexOf(m_commentStartExpression, startIndex + commentLength);
+    // quoteation
+    static QRegularExpression reQuotes(QStringLiteral("\".*?\""));
+    auto itQuotes = reQuotes.globalMatch(text);
+    while (itQuotes.hasNext()) {
+        QRegularExpressionMatch m = itQuotes.next();
+        setFormat(m.capturedStart(0), m.capturedLength(0), plt().cyan);
     }
+    // command
+    static QRegularExpression reCmd(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
+    auto itCmd = reCmd.globalMatch(text);
+    while (itCmd.hasNext()) {
+        QRegularExpressionMatch m = itCmd.next();
+        setFormat(m.capturedStart(0), m.capturedLength(0), plt().green);
+    }
+    // comment
+    static QRegularExpression reComment(QStringLiteral(";[^@]*"));
+    auto itComment = reComment.globalMatch(text);
+    while (itComment.hasNext()) {
+        QRegularExpressionMatch m = itComment.next();
+        setFormat(m.capturedStart(0), m.capturedLength(0), plt().gray);
+    }
+    // setCurrentBlockState(0);
+
+    // int startIndex = 0;
+    // if (previousBlockState() != 1)
+    //     startIndex = text.indexOf(m_commentStartExpression);
+
+    // while (startIndex >= 0) {
+    //     QRegularExpressionMatch match = m_commentEndExpression.match(text, startIndex);
+    //     int endIndex = match.capturedStart();
+    //     int commentLength = 0;
+    //     if (endIndex == -1) {
+    //         setCurrentBlockState(1);
+    //         commentLength = text.length() - startIndex;
+    //     } else {
+    //         commentLength = endIndex - startIndex
+    //                         + match.capturedLength();
+    //     }
+    //     setFormat(startIndex, commentLength, m_multiLineCommentFormat);
+    //     startIndex = text.indexOf(m_commentStartExpression, startIndex + commentLength);
+    // }
+}
+
+const CodeEditorSyntaxHighlighter::ThemePalette &CodeEditorSyntaxHighlighter::plt() const
+{
+    return m_pltDark;
 }

@@ -63,6 +63,7 @@
 #include <QObject>
 #include <QRegularExpression>
 
+
 class CodeEditorSyntaxHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -71,24 +72,23 @@ public:
 
 protected:
     void highlightBlock(const QString &text) override;
-
 private:
-    struct HighlightingRule
-    {
-        QRegularExpression pattern;
-        QTextCharFormat format;
+    struct ThemePalette {
+        QTextCharFormat magenta;
+        QTextCharFormat red;
+        QTextCharFormat orange;
+        QTextCharFormat yellow;
+        QTextCharFormat green;
+        QTextCharFormat cyan;
+        QTextCharFormat blue;
+        QTextCharFormat purple;
+        QTextCharFormat gray;
     };
-    QList<HighlightingRule> m_highlightingRules;
-
-    QRegularExpression m_commentStartExpression;
-    QRegularExpression m_commentEndExpression;
+    const ThemePalette &plt() const;
 
     QTextCharFormat m_keywordFormat;
-    QTextCharFormat m_classFormat;
-    QTextCharFormat m_singleLineCommentFormat;
-    QTextCharFormat m_multiLineCommentFormat;
-    QTextCharFormat m_quotationFormat;
-    QTextCharFormat m_functionFormat;
+    ThemePalette m_pltDark;
+    ThemePalette m_pltLight;
 };
 
 #endif // CODEEDITORSYNTAXHIGHLIGHTER_H
