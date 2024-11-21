@@ -88,10 +88,19 @@ CodeEditorSyntaxHighlighter::CodeEditorSyntaxHighlighter(QTextDocument *parent)
 
 void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
 {
+    // Kcf line
+    static QRegularExpression reKcf(R"#(^%(\S+))#");
+    QRegularExpressionMatchIterator it = reKcf.globalMatch(text);
+    while (it.hasNext()) {
+        QRegularExpressionMatch m = it.next();
+        setFormat(m.capturedStart(1), m.capturedLength(1), plt().green);
+    }
+
+    // Cel line
     static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^ :\t]+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
-    QRegularExpressionMatchIterator itCel = reCel.globalMatch(text);
-    while (itCel.hasNext()) {
-        QRegularExpressionMatch m = itCel.next();
+    it = reCel.globalMatch(text);
+    while (it.hasNext()) {
+        QRegularExpressionMatch m = it.next();
         setFormat(m.capturedStart(1), m.capturedLength(1), plt().blue);
         setFormat(m.capturedStart(2), m.capturedLength(2), plt().red);
         setFormat(m.capturedStart(3), m.capturedLength(3), plt().green);
@@ -99,25 +108,34 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
         setFormat(m.capturedStart(5), m.capturedLength(5), plt().orange);
     }
 
+    // Obj Id
+    static QRegularExpression reObjId(R"#((#)([0-9]+))#");
+    it = reObjId.globalMatch(text);
+    while (it.hasNext()) {
+        QRegularExpressionMatch m = it.next();
+        setFormat(m.capturedStart(1), m.capturedLength(1), plt().yellow);
+        setFormat(m.capturedStart(2), m.capturedLength(2), plt().blue);
+    }
+
     // quoteation
     static QRegularExpression reQuotes(QStringLiteral("\".*?\""));
-    auto itQuotes = reQuotes.globalMatch(text);
-    while (itQuotes.hasNext()) {
-        QRegularExpressionMatch m = itQuotes.next();
+    it = reQuotes.globalMatch(text);
+    while (it.hasNext()) {
+        QRegularExpressionMatch m = it.next();
         setFormat(m.capturedStart(0), m.capturedLength(0), plt().cyan);
     }
     // command
     static QRegularExpression reCmd(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
-    auto itCmd = reCmd.globalMatch(text);
-    while (itCmd.hasNext()) {
-        QRegularExpressionMatch m = itCmd.next();
+    it = reCmd.globalMatch(text);
+    while (it.hasNext()) {
+        QRegularExpressionMatch m = it.next();
         setFormat(m.capturedStart(0), m.capturedLength(0), plt().green);
     }
     // comment
-    static QRegularExpression reComment(QStringLiteral(";[^@]*"));
-    auto itComment = reComment.globalMatch(text);
-    while (itComment.hasNext()) {
-        QRegularExpressionMatch m = itComment.next();
+    static QRegularExpression reComment(QStringLiteral(";[^@].*"));
+    it = reComment.globalMatch(text);
+    while (it.hasNext()) {
+        QRegularExpressionMatch m = it.next();
         setFormat(m.capturedStart(0), m.capturedLength(0), plt().gray);
     }
     // setCurrentBlockState(0);
