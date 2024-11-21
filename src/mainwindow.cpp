@@ -236,9 +236,7 @@ void MainWindow::setupDockWindows()
             ui->dockWidget_codeViewer->raise();
         }
     });
-    connect(m_archivedFile, &ArchiveFile::curCnfChanged, [=](){
-        QString fmtLinesStr = m_archivedFile->curCnf()->readableComments().join("\n");
-        m_logViewer->appendLog(QtMsgType::QtInfoMsg, fmtLinesStr);
+    connect(m_archivedFile, &ArchiveFile::curCnfChangedAndLoaded, [=](){
     });
 }
 
