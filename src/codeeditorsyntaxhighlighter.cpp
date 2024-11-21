@@ -93,7 +93,7 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
     QRegularExpressionMatchIterator it = reKcf.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch m = it.next();
-        setFormat(m.capturedStart(1), m.capturedLength(1), plt().green);
+        setFormat(m.capturedStart(1), m.capturedLength(1), plt().purple);
     }
 
     // Cel line
@@ -131,13 +131,21 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
         QRegularExpressionMatch m = it.next();
         setFormat(m.capturedStart(0), m.capturedLength(0), plt().green);
     }
+
     // comment
-    static QRegularExpression reComment(QStringLiteral(";[^@].*"));
-    it = reComment.globalMatch(text);
-    while (it.hasNext()) {
-        QRegularExpressionMatch m = it.next();
-        setFormat(m.capturedStart(0), m.capturedLength(0), plt().gray);
+    QList<QRegularExpression> reComments {
+        QRegularExpression{";[^@].*"},
+        QRegularExpression{"^;@?"}
+    };
+    for (auto re : std::as_const(reComments)) {
+        it = re.globalMatch(text);
+        while (it.hasNext()) {
+            QRegularExpressionMatch m = it.next();
+            setFormat(m.capturedStart(0), m.capturedLength(0), plt().gray);
+        }
     }
+
+
     // setCurrentBlockState(0);
 
     // int startIndex = 0;
