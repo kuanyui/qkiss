@@ -51,7 +51,9 @@
     <addaction name="action_window_fileSystemBrowser"/>
     <addaction name="action_window_innerFilesBrowser"/>
     <addaction name="action_window_codeViewer"/>
+    <addaction name="action_window_docViewer"/>
     <addaction name="action_window_logViewer"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
@@ -100,17 +102,26 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_3"/>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_codeViewer">
+  <widget class="QDockWidget" name="dockWidget_cnfCodeViewer">
    <property name="floating">
     <bool>false</bool>
    </property>
    <property name="windowTitle">
-    <string>Text File Viewer</string>
+    <string>CNF Code Viewer</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_5"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_docViewer">
+   <property name="windowTitle">
+    <string>Document Viewer</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_6"/>
   </widget>
   <action name="action_openFile">
    <property name="icon">
@@ -136,7 +147,7 @@
     <string>&amp;Quit</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::QuitRole</enum>
+    <enum>QAction::QuitRole</enum>
    </property>
   </action>
   <action name="action_window_fileSystemBrowser">
@@ -219,7 +230,27 @@
     <iconset theme="QIcon::ThemeIcon::DocumentPrintPreview"/>
    </property>
    <property name="text">
-    <string>&amp;Text File Viewer</string>
+    <string>&amp;CNF Code Viewer</string>
+   </property>
+   <property name="toolTip">
+    <string>To view the currently opened CNF file.</string>
+   </property>
+  </action>
+  <action name="action_window_docViewer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentOpen"/>
+   </property>
+   <property name="text">
+    <string>&amp;Document Viewer</string>
+   </property>
+   <property name="toolTip">
+    <string>To view any human-readable text files (e.g. README) inside this LZH file.</string>
    </property>
   </action>
  </widget>
@@ -292,7 +323,7 @@
   <connection>
    <sender>action_window_codeViewer</sender>
    <signal>toggled(bool)</signal>
-   <receiver>dockWidget_codeViewer</receiver>
+   <receiver>dockWidget_cnfCodeViewer</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -300,8 +331,24 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1081</x>
-     <y>852</y>
+     <x>960</x>
+     <y>874</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_window_docViewer</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>dockWidget_docViewer</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1126</x>
+     <y>851</y>
     </hint>
    </hints>
   </connection>

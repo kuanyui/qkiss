@@ -197,7 +197,7 @@ void MainWindow::setupDockWindows()
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);  // Make bottom dock cannot stretch to bottom-left corner.
     // tabifyDockWidget(ui->dockWidget_logViewer, ui->dockWidget_textFileViewer);
     // ui->dockWidget_logViewer->raise();  // activate "logs viewer" tab.
-    addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_codeViewer);
+    addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_cnfCodeViewer);
     addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_logViewer);
     // ==================================================
     // File System Browser
@@ -219,7 +219,7 @@ void MainWindow::setupDockWindows()
     // Code Editor
     // ==================================================
     m_codeEditor = new CodeEditor(this);
-    ui->dockWidget_codeViewer->setWidget(m_codeEditor);
+    ui->dockWidget_cnfCodeViewer->setWidget(m_codeEditor);
     // ==================================================
     // (Signals)
     // ==================================================
@@ -233,7 +233,7 @@ void MainWindow::setupDockWindows()
         } else if (item->type() == InnerFilesBrowser::CustomItemDocFileType) {
             QString docFileName = item->text(0);
             m_codeEditor->setPlainText(m_archivedFile->getDocFileAsString(docFileName));
-            ui->dockWidget_codeViewer->raise();
+            ui->dockWidget_cnfCodeViewer->raise();
         }
     });
     connect(m_archivedFile, &ArchiveFile::curCnfChangedAndLoaded, [=](){
