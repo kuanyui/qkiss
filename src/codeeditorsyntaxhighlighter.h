@@ -63,6 +63,7 @@
 #include <QObject>
 #include <QRegularExpression>
 
+#include "thememanager.h"
 
 class CodeEditorSyntaxHighlighter : public QSyntaxHighlighter
 {
@@ -73,22 +74,7 @@ public:
 protected:
     void highlightBlock(const QString &text) override;
 private:
-    struct ThemePalette {
-        QTextCharFormat magenta;
-        QTextCharFormat red;
-        QTextCharFormat orange;
-        QTextCharFormat yellow;
-        QTextCharFormat green;
-        QTextCharFormat cyan;
-        QTextCharFormat blue;
-        QTextCharFormat purple;
-        QTextCharFormat gray;
-    };
-    const ThemePalette &plt() const;
-
-    QTextCharFormat m_keywordFormat;
-    ThemePalette m_pltDark;
-    ThemePalette m_pltLight;
+    ThemeManager &m_themeManager = ThemeManager::instance();
 };
 
 #endif // CODEEDITORSYNTAXHIGHLIGHTER_H

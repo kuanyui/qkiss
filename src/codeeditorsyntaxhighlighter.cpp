@@ -63,37 +63,19 @@ using namespace Qt::Literals::StringLiterals;
 CodeEditorSyntaxHighlighter::CodeEditorSyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter{parent}
 {
-    m_pltDark.magenta.setForeground(QColor::fromString("#ff4ea3"_L1));
-    m_pltDark.red.setForeground(QColor::fromString("#ef2929"_L1));
-    m_pltDark.orange.setForeground(QColor::fromString("#ff8700"_L1));
-    m_pltDark.yellow.setForeground(QColor::fromString("#ffd700"_L1));
-    m_pltDark.green.setForeground(QColor::fromString("#afff00"_L1));
-    m_pltDark.cyan.setForeground(QColor::fromString("#87ffff"_L1));
-    m_pltDark.blue.setForeground(QColor::fromString("#5fafd7"_L1));
-    m_pltDark.purple.setForeground(QColor::fromString("#af5fff"_L1));
-    m_pltDark.gray.setForeground(QColor::fromString("#767676"_L1));
-
-    m_pltLight.magenta.setForeground(QColor::fromString("#ff1f8b"_L1));
-    m_pltLight.red.setForeground(QColor::fromString("#cc0000"_L1));
-    m_pltLight.orange.setForeground(QColor::fromString("#ff5d17"_L1));
-    m_pltLight.yellow.setForeground(QColor::fromString("#c4a000"_L1));
-    m_pltLight.green.setForeground(QColor::fromString("#008700"_L1));
-    m_pltLight.cyan.setForeground(QColor::fromString("#18b2b2"_L1));
-    m_pltLight.blue.setForeground(QColor::fromString("#005faf"_L1));
-    m_pltLight.purple.setForeground(QColor::fromString("#b218b2"_L1));
-    m_pltLight.gray.setForeground(QColor::fromString("#b2b2b2"_L1));
 
 }
 
 
 void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
 {
+    auto stxPlt = m_themeManager.syntaxFormatPalette();
     // Kcf line
     static QRegularExpression reKcf(R"#(^%(\S+))#");
     QRegularExpressionMatchIterator it = reKcf.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch m = it.next();
-        setFormat(m.capturedStart(1), m.capturedLength(1), plt().purple);
+        setFormat(m.capturedStart(1), m.capturedLength(1), stxPlt.purple);
     }
 
     // Cel line
@@ -101,11 +83,11 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
     it = reCel.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch m = it.next();
-        setFormat(m.capturedStart(1), m.capturedLength(1), plt().blue);
-        setFormat(m.capturedStart(2), m.capturedLength(2), plt().red);
-        setFormat(m.capturedStart(3), m.capturedLength(3), plt().green);
-        setFormat(m.capturedStart(4), m.capturedLength(4), plt().purple);
-        setFormat(m.capturedStart(5), m.capturedLength(5), plt().orange);
+        setFormat(m.capturedStart(1), m.capturedLength(1), stxPlt.blue);
+        setFormat(m.capturedStart(2), m.capturedLength(2), stxPlt.red);
+        setFormat(m.capturedStart(3), m.capturedLength(3), stxPlt.green);
+        setFormat(m.capturedStart(4), m.capturedLength(4), stxPlt.purple);
+        setFormat(m.capturedStart(5), m.capturedLength(5), stxPlt.orange);
     }
 
     // Obj Id
@@ -113,8 +95,8 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
     it = reObjId.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch m = it.next();
-        setFormat(m.capturedStart(1), m.capturedLength(1), plt().yellow);
-        setFormat(m.capturedStart(2), m.capturedLength(2), plt().blue);
+        setFormat(m.capturedStart(1), m.capturedLength(1), stxPlt.yellow);
+        setFormat(m.capturedStart(2), m.capturedLength(2), stxPlt.blue);
     }
 
     // set
@@ -122,8 +104,8 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
     it = reSet0.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch m = it.next();
-        setFormat(m.capturedStart(1), m.capturedLength(1), plt().orange);
-        setFormat(m.capturedStart(2), m.capturedLength(2), plt().magenta);
+        setFormat(m.capturedStart(1), m.capturedLength(1), stxPlt.orange);
+        setFormat(m.capturedStart(2), m.capturedLength(2), stxPlt.magenta);
     }
 
     // quoteation
@@ -131,14 +113,14 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
     it = reQuotes.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch m = it.next();
-        setFormat(m.capturedStart(0), m.capturedLength(0), plt().cyan);
+        setFormat(m.capturedStart(0), m.capturedLength(0), stxPlt.cyan);
     }
     // command
     static QRegularExpression reCmd(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
     it = reCmd.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch m = it.next();
-        setFormat(m.capturedStart(0), m.capturedLength(0), plt().green);
+        setFormat(m.capturedStart(0), m.capturedLength(0), stxPlt.green);
     }
 
     // comment
@@ -150,7 +132,7 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
         it = re.globalMatch(text);
         while (it.hasNext()) {
             QRegularExpressionMatch m = it.next();
-            setFormat(m.capturedStart(0), m.capturedLength(0), plt().gray);
+            setFormat(m.capturedStart(0), m.capturedLength(0), stxPlt.gray);
         }
     }
 
@@ -177,7 +159,4 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
     // }
 }
 
-const CodeEditorSyntaxHighlighter::ThemePalette &CodeEditorSyntaxHighlighter::plt() const
-{
-    return m_pltDark;
-}
+

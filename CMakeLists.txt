@@ -66,6 +66,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/codeeditor.h src/codeeditor.cpp
         src/codeeditorlinenumberarea.h src/codeeditorlinenumberarea.cpp
         src/codeeditorsyntaxhighlighter.h src/codeeditorsyntaxhighlighter.cpp
+        src/thememanager.h src/thememanager.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
