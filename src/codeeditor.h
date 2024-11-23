@@ -64,6 +64,7 @@
 #include <QWidget>
 #include "codeeditorlinenumberarea.h"
 #include "codeeditorsyntaxhighlighter.h"
+#include "thememanager.h"
 
 class CodeEditor : public QPlainTextEdit
 {
@@ -83,9 +84,11 @@ private slots:
     void updateLineNumberArea(const QRect &rect, int dy);
 
 private:
+    static const int LINENUM_HORI_PAD = 4;
     QFont m_font;
     CodeEditorLineNumberArea *m_lineNumberArea;
     CodeEditorSyntaxHighlighter *m_syntaxHighlighter;
+    ThemeManager &m_themeManager = ThemeManager::instance();
 };
 
 

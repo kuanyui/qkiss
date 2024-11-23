@@ -53,6 +53,7 @@ const ThemeManager::SyntaxFormat &ThemeManager::syntaxFormatPalette() const
 ThemeManager::ThemeManager(QObject *parent)
     : QObject{parent}
 {
+    qDebug() << "ThemeManager ctor()";
     m_pltDark.magenta.setForeground(QColor::fromString("#ff4ea3"_L1));
     m_pltDark.red.setForeground(QColor::fromString("#ef2929"_L1));
     m_pltDark.orange.setForeground(QColor::fromString("#ff8700"_L1));

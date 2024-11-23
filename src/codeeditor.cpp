@@ -81,7 +81,6 @@ CodeEditor::CodeEditor(QWidget *parent):
 
 int CodeEditor::lineNumberAreaWidth()
 {
-    // static int horizontalPad = 4;
     int digits = 1;
     int max = qMax(1, blockCount());
     while (max >= 10) {
@@ -89,7 +88,7 @@ int CodeEditor::lineNumberAreaWidth()
         ++digits;
     }
 
-    int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
+    int space = (LINENUM_HORI_PAD * 2) + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 
     return space;
 }
@@ -118,7 +117,7 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
     QPlainTextEdit::resizeEvent(e);
 
     QRect cr = contentsRect();
-    m_lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+    m_lineNumberArea->setGeometry(QRect(cr.x(), cr.y(), lineNumberAreaWidth(), cr.height()));
 }
 
 void CodeEditor::highlightCurrentLine()
@@ -151,8 +150,8 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
             painter.setPen(Qt::black);
-            painter.drawText(0, top, m_lineNumberArea->width(), fontMetrics().height(),
-                             Qt::AlignRight, number);
+            painter.drawText(0, top, m_lineNumberArea->width() - LINENUM_HORI_PAD, fontMetrics().height(),
+                             Qt::AlignRight, number);  // AlignRight, so the text drawing should be x=0, and width should -= PAD
         }
 
         block = block.next();
