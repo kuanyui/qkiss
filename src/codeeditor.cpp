@@ -123,25 +123,23 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
 void CodeEditor::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
-
-    if (!isReadOnly()) {
-        QTextEdit::ExtraSelection selection;
-        QColor lineColor = QColor(Qt::yellow).lighter(160);
-        selection.format.setBackground(lineColor);
-        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-        selection.cursor = textCursor();
-        selection.cursor.clearSelection();
-        extraSelections.append(selection);
-    }
+    QTextEdit::ExtraSelection selection;
+    auto clrplt = m_themeManager.syntaxFormatPalette();
+    QColor lineColor = QColor(clrplt.curLineHlBg);
+    selection.format.setBackground(lineColor);
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    selection.cursor = textCursor();
+    selection.cursor.clearSelection();
+    extraSelections.append(selection);
 
     setExtraSelections(extraSelections);
 }
 
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+    auto clrplt = m_themeManager.syntaxFormatPalette();
     QPainter painter{qobject_cast<QWidget*>(m_lineNumberArea)};
-    painter.fillRect(event->rect(), Qt::lightGray);
-    painter.setFont(m_font);
+    painter.fillRect(event->rect(), clrplt.lineNumBg);
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
     int top = qRound(blockBoundingGeometry(block).translated(contentOffset()).top());
@@ -149,7 +147,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(Qt::black);
+            painter.setPen(clrplt.lineNumFg);
             painter.drawText(0, top, m_lineNumberArea->width() - LINENUM_HORI_PAD, fontMetrics().height(),
                              Qt::AlignRight, number);  // AlignRight, so the text drawing should be x=0, and width should -= PAD
         }

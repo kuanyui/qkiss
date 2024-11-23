@@ -36,6 +36,9 @@ class ThemeManager : public QObject
         QTextCharFormat blue;
         QTextCharFormat purple;
         QTextCharFormat gray;
+        QColor curLineHlBg;
+        QColor lineNumBg;
+        QColor lineNumFg;
     };
 public:
     enum class ThemeType {
