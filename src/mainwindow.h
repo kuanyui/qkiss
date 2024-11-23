@@ -51,5 +51,6 @@ private:
     LogViewer *m_logViewer;
     InnerFilesBrowser *m_innerFilesBrowser;
     CodeEditor *m_codeEditor;
+    QPlainTextEdit *m_docViewer;
 };
 #endif // MAINWINDOW_H

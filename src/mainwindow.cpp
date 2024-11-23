@@ -99,6 +99,13 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
     m_kissView->setArchiveFile(m_archivedFile);
     m_innerFilesBrowser->rerenderFileList(m_archivedFile);
     m_codeEditor->setPlainText(m_archivedFile->getCnfFileAsString(m_archivedFile->curCnf()->fileName()));
+    if (m_archivedFile->getDocFileNameList().length() == 0) {
+        m_docViewer->setPlainText("");
+    } else {
+        QString docFileName = m_archivedFile->getDocFileNameList()[0];
+        m_docViewer->setPlainText(m_archivedFile->getDocFileAsString(docFileName));
+        ui->dockWidget_docViewer->raise();
+    }
     rerenderSetPaletteButtons();
     m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("File loaded: %1").arg(QFileInfo(compressedFilePath).fileName()));
 }
@@ -221,6 +228,15 @@ void MainWindow::setupDockWindows()
     m_codeEditor = new CodeEditor(this);
     ui->dockWidget_cnfCodeViewer->setWidget(m_codeEditor);
     // ==================================================
+    // Doc Viewer
+    // ==================================================
+    QFont fontMono {"Monospace"};
+    fontMono.setStyleHint(QFont::TypeWriter);
+    m_docViewer= new QPlainTextEdit(this);
+    m_docViewer->setReadOnly(true);
+    m_docViewer->setFont(fontMono);
+    ui->dockWidget_docViewer->setWidget(m_docViewer);
+    // ==================================================
     // (Signals)
     // ==================================================
     connect(m_innerFilesBrowser, &InnerFilesBrowser::itemActivated, [=](QTreeWidgetItem *item) {
@@ -232,8 +248,8 @@ void MainWindow::setupDockWindows()
             m_codeEditor->setPlainText(m_archivedFile->getCnfFileAsString(cnfFileName));
         } else if (item->type() == InnerFilesBrowser::CustomItemDocFileType) {
             QString docFileName = item->text(0);
-            m_codeEditor->setPlainText(m_archivedFile->getDocFileAsString(docFileName));
-            ui->dockWidget_cnfCodeViewer->raise();
+            m_docViewer->setPlainText(m_archivedFile->getDocFileAsString(docFileName));
+            ui->dockWidget_docViewer->raise();
         }
     });
     connect(m_archivedFile, &ArchiveFile::curCnfChangedAndLoaded, [=](){
