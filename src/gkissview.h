@@ -36,6 +36,7 @@ private:
     ArchiveFile *m_archivedFile;
     /// Each set is stored in its scene.
     QVector<GKissScene *> m_scenes;
+    /// REFACTOR: Wait... Why not just use `ArchiveFile::curCnfSetNo` ???
     uint8_t m_curSceneIdx = 0;
     GKissItem *m_curHoveredCelItem;
 

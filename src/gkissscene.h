@@ -14,6 +14,7 @@ public:
     explicit GKissScene (int setIdx, QObject *parent = nullptr);
     // explicit GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
     ~GKissScene();
+    std::optional<ArchiveFile *> archivedFile() const;
     /** Call this */
     void setEssentialContext(ArchiveFile *archivedFile, ParsedCnf* cnf, ParsedCnfSet *cnfSet);
     void drawCurSetBackground();
@@ -35,6 +36,7 @@ public:
     void setPaletteNoInKcf(uint8_t newPaletteNoInKcf);
 
 signals:
+    /// The Item which is being pressed / dragged... etc.
     void highlightedItemChanged(GKissItem *item);
 
 protected:

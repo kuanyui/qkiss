@@ -22,6 +22,7 @@ public:
     static FkissVariant fromString(const QString &value);
     static FkissVariant fromCelName(const QString &value);
     static FkissVariant fromInt(const QString &value);
+    static FkissVariant fromInt(const int &value);
     static FkissVariant fromObjectId(const QString &value);
     static FkissVariant fromObjectId(int value);
     bool isInt() const;

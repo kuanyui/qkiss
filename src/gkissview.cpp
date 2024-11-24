@@ -116,7 +116,7 @@ bool GKissView::renderCurCnfAllSets()
         ParsedCnfSet *cnfSet = cnf->sets().at(cnfSetIdx);
         GKissScene *scene = new GKissScene(cnfSetIdx, this);
         connect(scene, &GKissScene::highlightedItemChanged, this, &GKissView::highlightedItemChanged);   // REFACTOR: naming is too ugly...
-        scene->setEssentialContext(m_archivedFile, cnf, cnfSet);
+        scene->setEssentialContext(m_archivedFile, cnf, cnfSet);   // FIXME: Is this really necessary? Why not do this in Scene's ctor directly?
         scene->drawCurSetBackground();
         m_scenes.append(scene);
         // Create cels

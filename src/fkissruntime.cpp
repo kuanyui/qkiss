@@ -47,11 +47,11 @@ void FkissRuntime::setCurKissScene(GKissScene *newCurKissScene)
         bool visible = it.value();
         if (key.type() == FkissVariant::Type::String) {
             auto _item = m_curKissScene->getItemByCelName(key.getString());
-            if (!_item.has_value()) { qDebug() << "WTF???"; continue; }
+            if (!_item.has_value()) { qDebug() << "[DEBUG] FkissRuntime::setCurKissScene(), m_mapState has CEL '%1', but current cannot find this CEL in this scene..."_L1.arg(key.getCelName()); continue; }
             _item.value()->setVisible(visible);
         } else if (key.type() == FkissVariant::Type::Object) {
             std::optional<QVector<GKissItem *> *> _items = m_curKissScene->getItemsByObjId(key.getObjectId());
-            if (!_items.has_value()) { qDebug() << "WTF???"; continue; }
+            if (!_items.has_value()) { qDebug() << "[DEBUG] FkissRuntime::setCurKissScene(), m_mapState has ObjectId '%1', but current cannot find this ObjectId in this scene..."_L1.arg(QString::number(key.getObjectId())); continue; }
             auto *items = _items.value();
             foreach (auto *item, *items) {
                 item->setVisible(visible);
@@ -92,6 +92,16 @@ void FkissRuntime::triggerInitializeAndBegin()
 void FkissRuntime::triggerEnd()
 {
     tryToRunActionsByEvent(FKK::END, {});
+}
+
+void FkissRuntime::triggerSet(uint8_t setNo)
+{
+    tryToRunActionsByEvent(FKK::SET, { FkissVariant::fromInt(setNo) });
+}
+
+void FkissRuntime::triggerCol(uint8_t paletteNo)
+{
+    tryToRunActionsByEvent(FKK::COL, { FkissVariant::fromInt(paletteNo) });
 }
 
 bool FkissRuntime::getMap(FkissVariant target)
@@ -211,6 +221,32 @@ void FkissRuntime::runRandomtimer(FkissVariant alarmID, FkissVariant delay, Fkis
     getOrCreateAlarmTimer(alarmID, realDelay);
 }
 
+void FkissRuntime::runChangeset(FkissVariant pageNo)
+{
+    if (pageNo.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][WARNING] currently, the pageNo in changeset(pageNo) must be an integer. Skip."_L1;
+        return;
+    }
+    int setNo = pageNo.getInt();
+    auto archiveFile = m_curKissScene->archivedFile();
+    if (archiveFile.has_value()) {
+        archiveFile.value()->setCurCnfSetNo(setNo);
+    }
+}
+
+void FkissRuntime::runChangecol(FkissVariant paletteNoInKcf)
+{
+    if (paletteNoInKcf.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][WARNING] currently, the paletteNoInKcf in changecol(paletteNoInKcf) must be an integer. Skip."_L1;
+        return;
+    }
+    int paletteNoInKcfInt = paletteNoInKcf.getInt();
+    auto archiveFile = m_curKissScene->archivedFile();
+    if (archiveFile.has_value()) {
+        archiveFile.value()->setCurPaletteNo(paletteNoInKcfInt);
+    }
+}
+
 void FkissRuntime::runActionsInAlarm(FkissVariant alarmID)
 {
     // qDebug() << "[fkissruntime] runActionsInAlarm" << alarmID;
@@ -311,6 +347,16 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
         if (actName == FKK::RANDOMTIMER) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid randomtimer(alarmID, delay, range) args count, skip."_L1; continue; }
             runRandomtimer(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::CHANGESET) {
+            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid changeset(pageNo) args count, skip."_L1; continue; }
+            runChangeset(actArgs[0]);
+            continue;
+        }
+        if (actName == FKK::CHANGECOL) {
+            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid changecol(paletteNo) args count, skip."_L1; continue; }
+            runChangecol(actArgs[0]);
             continue;
         }
     }

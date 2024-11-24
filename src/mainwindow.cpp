@@ -122,8 +122,14 @@ void MainWindow::rerenderSetPaletteButtons()
         if (sceneIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(sceneIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
-            m_kissView->showKissSceneByIndex(sceneIdx) ;
+            m_archivedFile->setCurCnfSetNo(sceneIdx);   // FIXME: It seems m_archivedFile stores a setNo, but m_kissView itself also stores a setNo (more precisely, sceneIdx). Should keep a singleton here.
+            m_kissView->showKissSceneByIndex(sceneIdx);
             btn->setDown(true);
+        });
+        connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurCnfSetNo){
+            if (sceneIdx == newCurCnfSetNo) {
+                btn->setDown(true);
+            }
         });
         m_toolbarPageSets->addWidget(btn);
     }
@@ -136,7 +142,13 @@ void MainWindow::rerenderSetPaletteButtons()
         if (paletteIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(paletteIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
+            m_archivedFile->setCurPaletteNo(paletteIdx);    // FIXME: It seems m_archivedFile stores a setNo, but m_kissView->curKissScene() itself also stores a paletteNo. Should keep a singleton here.
             m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx);
+        });
+        connect(m_archivedFile, &ArchiveFile::curPaletteNoChanged, [=](uint8_t newCurPaletteNo){
+            if (paletteIdx == newCurPaletteNo) {
+                btn->setDown(true);
+            }
         });
         m_toolbarColorSets->addWidget(btn);
     }

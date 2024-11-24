@@ -24,6 +24,12 @@ GKissScene::~GKissScene()
     }
 }
 
+std::optional<ArchiveFile *> GKissScene::archivedFile() const
+{
+    if (m_archivedFile == nullptr) { return std::nullopt; }
+    return m_archivedFile;
+}
+
 void GKissScene::setEssentialContext(ArchiveFile *archivedFile, ParsedCnf *cnf, ParsedCnfSet *cnfSet)
 {
     m_archivedFile = archivedFile;
@@ -31,6 +37,14 @@ void GKissScene::setEssentialContext(ArchiveFile *archivedFile, ParsedCnf *cnf, 
     m_cnfSet = cnfSet;
     auto pf = m_cnf->playFieldSize();
     setSceneRect(0, 0, pf.width(), pf.height());
+    // FIXME: If switch m_cnf, how to deal with this?
+    // FIXME: When loading a new LZH file, should trigger both event after fkiss runtime is ready.
+    connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurCnfSetNo) {
+        m_cnf->fkiss()->runtime()->triggerSet(newCurCnfSetNo);
+    });
+    connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurPaletteNo) {
+        m_cnf->fkiss()->runtime()->triggerCol(newCurPaletteNo);
+    });
 }
 
 void GKissScene::drawCurSetBackground()
@@ -430,3 +444,5 @@ void GKissScene::storeCurrentOverlappedItems(GKissItem *targetItem)
         m_originalBoundingRectOverlappedObjIds.insert(item->objId());
     }
 }
+
+

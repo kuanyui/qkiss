@@ -19,6 +19,10 @@ public:
     void triggerInitializeAndBegin();
     /// Trigger the event `end()`. You should set curKissScene() before calling this.
     void triggerEnd();
+    /// Trigger the event `set(setNo)`
+    void triggerSet(uint8_t setNo);
+    /// Trigger the event `col(paletteNo)`
+    void triggerCol(uint8_t paletteNo);
 private:
     /// for map(), unmap(), altmap()
     bool getMap(FkissVariant target);
@@ -31,6 +35,8 @@ private:
     void runTransparent(FkissVariant target, FkissVariant delta);
     void runTimer(FkissVariant alarmID, FkissVariant delay);
     void runRandomtimer(FkissVariant alarmID, FkissVariant delay, FkissVariant range);
+    void runChangeset(FkissVariant pageNo);
+    void runChangecol(FkissVariant paletteNoInKcf);
     /// Should be called by QTimer.
     void runActionsInAlarm(FkissVariant alarmID);
     std::shared_ptr<FkissAlarmTimer> getOrCreateAlarmTimer(FkissVariant alarmID, int delay);

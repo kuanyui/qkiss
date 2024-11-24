@@ -62,7 +62,7 @@ public:
     uint8_t curCnfSetNo() const;
     void setCurCnfSetNo(uint8_t newCurCnfSetNo);
     uint8_t curPaletteNo() const;
-    void setCurPaletteNo(uint8_t newCurPaletteNo);
+    void setCurPaletteNo(uint8_t newPaletteNo);
     /// Get the first KCF file, and return the palette amount of this KCF file.
     size_t paletteAmountOfFirstKcfInCurCnf() const;
 
@@ -74,6 +74,8 @@ private slots:
 signals:
     void newLogLine(QString line);
     void curCnfChangedAndLoaded(QString newCnfFileName);
+    void curCnfSetNoChanged(uint8_t newCurCnfSetNo);
+    void curPaletteNoChanged(uint8_t newCurPaletteNo);
     // void archivedFilesUncompressAndParseFinished(bool success, QString errmsg);
     // void curCnfSetNoChanged(uint8_t nv);
 private:

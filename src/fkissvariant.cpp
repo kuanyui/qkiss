@@ -20,6 +20,11 @@ FkissVariant FkissVariant::fromInt(const QString &value)
     return FkissVariant(Type::Int, value.toInt());
 }
 
+FkissVariant FkissVariant::fromInt(const int &value)
+{
+    return FkissVariant(Type::Int, value);
+}
+
 FkissVariant FkissVariant::fromObjectId(const QString &value)
 {
     if (value.startsWith('#')) {

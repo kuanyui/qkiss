@@ -10,6 +10,8 @@
 #include <QElapsedTimer>
 #include <QSet>
 
+using namespace Qt::Literals::StringLiterals;
+
 void KissFilesParsingResult::deleteAllObjects()
 {
     for (auto it = parsedCnfFiles.begin(); it != parsedCnfFiles.end(); it++) {
@@ -288,9 +290,13 @@ uint8_t ArchiveFile::curPaletteNo() const
     return m_curPaletteNo;
 }
 
-void ArchiveFile::setCurPaletteNo(uint8_t newCurPaletteNo)
+void ArchiveFile::setCurPaletteNo(uint8_t newPaletteNo)
 {
-    m_curPaletteNo = newCurPaletteNo;
+    if (m_curPaletteNo != newPaletteNo) {
+        m_curPaletteNo = newPaletteNo;
+        qDebug() << "emit ArchiveFile::curPaletteNoChanged(%1)"_L1.arg(QString::number(newPaletteNo));
+        emit curPaletteNoChanged(newPaletteNo);
+    }
 }
 
 size_t ArchiveFile::paletteAmountOfFirstKcfInCurCnf() const
@@ -312,7 +318,11 @@ void ArchiveFile::setLoadingState(LoadingState newLoadingState)
 
 void ArchiveFile::setCurCnfSetNo(uint8_t newCurCnfSetNo)
 {
-    m_curCnfSetNo = newCurCnfSetNo;
+    if (m_curCnfSetNo != newCurCnfSetNo) {
+        m_curCnfSetNo = newCurCnfSetNo;
+        qDebug() << "emit ArchiveFile::curCnfSetNoChanged(%1)"_L1.arg(QString::number(newCurCnfSetNo));
+        emit curCnfSetNoChanged(newCurCnfSetNo);
+    }
 }
 
 uint8_t ArchiveFile::curCnfSetNo() const
