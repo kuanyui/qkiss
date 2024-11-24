@@ -40,6 +40,6 @@ int main(int argc, char *argv[])
     }
     mainWindow = new MainWindow();
     mainWindow->show();
-    qInstallMessageHandler(originalMessageHandler);
+    // qInstallMessageHandler(originalMessageHandler);
     return app.exec();
 }

@@ -84,14 +84,14 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
         bool kissFilesLoadedOk = m_archivedFile->loadKissFilesAsPatch(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
             parsedKissFiles.deleteAllObjects();  // FIXME: This is too dangerous... If return value contains allocated pointer, should use smart pointer to avoid user from forgotting to delete... But std::unique_ptr cannot be placed in QHash because of CoW...
-            qWarning() << "Not a valid KiSS file. Aborted.";
+            qWarning() << tr("Not a valid KiSS patch file. Aborted.");
             return;
         }
     } else {
         bool kissFilesLoadedOk = m_archivedFile->loadKissFiles(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
             parsedKissFiles.deleteAllObjects();  // FIXME: This is too dangerous... If return value contains allocated pointer, should use smart pointer to avoid user from forgotting to delete... But std::unique_ptr cannot be placed in QHash because of CoW...
-            qWarning() << "Not a valid KiSS file. Aborted.";
+            qWarning() << tr("Not a valid KiSS file. Aborted.");
             return;
         }
     }
