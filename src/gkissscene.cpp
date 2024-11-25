@@ -15,17 +15,6 @@ GKissScene::GKissScene(ArchiveFile* archiveFile, ParsedCnf* cnf, int setIdx, QOb
 
     auto pf = m_cnf->playFieldSize();
     setSceneRect(0, 0, pf.width(), pf.height());
-    // FIXME: If switch m_cnf, how to deal with this? ( -> connect() in ArchiveFile ?)
-    // FIXME: When loading a new LZH file, should trigger both event after fkiss runtime is ready.
-    // NOTE: These connections should be satisfied with:
-    //    1. destroy when the scene is destroy.
-    //    2. check if the cnf still exists. (optional?)
-    connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurCnfSetNo) {
-        m_cnf->fkiss()->runtime()->triggerSet(newCurCnfSetNo);
-    });
-    connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurPaletteNo) {
-        m_cnf->fkiss()->runtime()->triggerCol(newCurPaletteNo);
-    });
 }
 
 // GKissScene::GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent):

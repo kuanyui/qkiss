@@ -12,7 +12,15 @@ using namespace Qt::Literals::StringLiterals;
 GKissView::GKissView(QWidget *parent):
     QGraphicsView(parent)
 {
-
+    // FIXME: This connect() will explode because m_archiveFile is nullptr currently. (Maybe I should make archiveFile a reference instead of a pointer in a view...)
+    //        I also have considered to move this connect() into ArchiveFile itself but the semantic looks too weird....
+    // NOTE: When loading a new LZH file, should trigger both event after fkiss runtime is ready.
+    connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurCnfSetNo) {
+        m_archiveFile->curCnf()->fkiss()->runtime()->triggerSet(newCurCnfSetNo);
+    });
+    connect(m_archiveFile, &ArchiveFile::curPaletteNoChanged, [this](uint8_t newCurPaletteNo) {
+        m_archiveFile->curCnf()->fkiss()->runtime()->triggerCol(newCurPaletteNo);
+    });
 }
 
 GKissView::GKissView(ArchiveFile *archiveFile, QWidget *parent):

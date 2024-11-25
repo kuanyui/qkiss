@@ -35,7 +35,9 @@ private:
     void runTransparent(FkissVariant target, FkissVariant delta);
     void runTimer(FkissVariant alarmID, FkissVariant delay);
     void runRandomtimer(FkissVariant alarmID, FkissVariant delay, FkissVariant range);
+    /// Tiny reminder: trigger this after view + scene + FKiSS runtime is ready.
     void runChangeset(FkissVariant pageNo);
+    /// Tiny reminder: trigger this after view + scene + FKiSS runtime is ready.
     void runChangecol(FkissVariant paletteNoInKcf);
     /// Should be called by QTimer.
     void runActionsInAlarm(FkissVariant alarmID);
