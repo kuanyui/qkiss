@@ -113,7 +113,9 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
 
 void MainWindow::rerenderSetPaletteButtons()
 {
+    // =====================================================
     // Page sets
+    // =====================================================
     m_toolbarPageSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
     for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarPageSets);
@@ -133,7 +135,9 @@ void MainWindow::rerenderSetPaletteButtons()
         });
         m_toolbarPageSets->addWidget(btn);
     }
+    // =====================================================
     // Color sets
+    // =====================================================
     m_toolbarColorSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
     for (size_t paletteIdx = 0; paletteIdx < m_archiveFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarPageSets);
@@ -254,7 +258,7 @@ void MainWindow::setupDockWindows()
     connect(m_innerFilesBrowser, &InnerFilesBrowser::itemActivated, [=](QTreeWidgetItem *item) {
         if (item->type() == InnerFilesBrowser::CustomItemCnfFileType) {
             QString cnfFileName = item->text(0);
-            m_kissView->setCurCnf(cnfFileName);
+            m_kissView->setCurCnfAndRenderScenes(cnfFileName);
             // m_archiveFile->setCurCnfByName(item->text());
             rerenderSetPaletteButtons();
             m_codeEditor->setPlainText(m_archiveFile->getCnfFileAsString(cnfFileName));

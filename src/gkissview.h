@@ -16,7 +16,7 @@ public:
     GKissView(ArchiveFile *archiveFile, QWidget *parent=nullptr);
     bool setArchiveFile(ArchiveFile *archiveFile);
     void deleteAllScenes();
-    bool setCurCnf(QString cnfFileName);
+    bool setCurCnfAndRenderScenes(QString cnfFileName);
     uint8_t scenesAmount() const;
     bool showKissSceneByIndex(uint8_t setIndex);
     void scaleAbs(qreal targetScale);

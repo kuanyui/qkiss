@@ -31,7 +31,7 @@ bool GKissView::setArchiveFile(ArchiveFile *archiveFile)
         qCritical() << "[ERROR][View] No CNF file found in this archive file.";
         return false;
     }
-    setCurCnf(cnfFileNameList.first());
+    setCurCnfAndRenderScenes(cnfFileNameList.first());
     return true;
 }
 
@@ -45,12 +45,12 @@ void GKissView::deleteAllScenes()
 }
 
 
-bool GKissView::setCurCnf(QString cnfFileName)
+bool GKissView::setCurCnfAndRenderScenes(QString cnfFileName)
 {
     if (m_archiveFile->curCnf()) {
         m_archiveFile->curCnf()->fkiss()->stopRuntime();
     }
-    bool ok = m_archiveFile->setCurCnfByName(cnfFileName);
+    bool ok = m_archiveFile->setCurCnfByName(cnfFileName);   // REFACTOR: So counterintuitive... Why do this in View???
     if (!ok) {
         qCritical() << "[ERROR][View] No CNF file named " << cnfFileName << " found in this archive file.";
         return false;
