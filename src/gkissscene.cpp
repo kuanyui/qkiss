@@ -3,11 +3,26 @@
 using FV = FkissVariant;
 
 
-GKissScene::GKissScene(int setIdx, QObject *parent):
-    QGraphicsScene(parent),
-    m_setIndex(setIdx)
+GKissScene::GKissScene(ArchiveFile* archiveFile, ParsedCnf* cnf, int setIdx, QObject *parent):
+    QGraphicsScene(parent)
 {
     qDebug() << "[scene] ctor!" << m_setIndex;
+    qDebug() << "[DEBUG] Scene::setEssentialContext" << archiveFile << cnf << m_cnfSet;
+    m_archivedFile = archiveFile;
+    m_cnf = cnf;
+    m_setIndex = setIdx;
+    m_cnfSet = cnf->sets()[setIdx];
+
+    auto pf = m_cnf->playFieldSize();
+    setSceneRect(0, 0, pf.width(), pf.height());
+    // FIXME: If switch m_cnf, how to deal with this? ( -> connect() in ArchiveFile ?)
+    // FIXME: When loading a new LZH file, should trigger both event after fkiss runtime is ready.
+    connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurCnfSetNo) {
+        m_cnf->fkiss()->runtime()->triggerSet(newCurCnfSetNo);
+    });
+    connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurPaletteNo) {
+        m_cnf->fkiss()->runtime()->triggerCol(newCurPaletteNo);
+    });
 }
 
 // GKissScene::GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent):
@@ -30,22 +45,6 @@ std::optional<ArchiveFile *> GKissScene::archivedFile() const
     return m_archivedFile;
 }
 
-void GKissScene::setEssentialContext(ArchiveFile *archivedFile, ParsedCnf *cnf, ParsedCnfSet *cnfSet)
-{
-    m_archivedFile = archivedFile;
-    m_cnf = cnf;
-    m_cnfSet = cnfSet;
-    auto pf = m_cnf->playFieldSize();
-    setSceneRect(0, 0, pf.width(), pf.height());
-    // FIXME: If switch m_cnf, how to deal with this?
-    // FIXME: When loading a new LZH file, should trigger both event after fkiss runtime is ready.
-    connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurCnfSetNo) {
-        m_cnf->fkiss()->runtime()->triggerSet(newCurCnfSetNo);
-    });
-    connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurPaletteNo) {
-        m_cnf->fkiss()->runtime()->triggerCol(newCurPaletteNo);
-    });
-}
 
 void GKissScene::drawCurSetBackground()
 {

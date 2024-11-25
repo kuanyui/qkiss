@@ -11,12 +11,10 @@ class GKissScene : public QGraphicsScene
 {
     Q_OBJECT   // For qobject_cast
 public:
-    explicit GKissScene (int setIdx, QObject *parent = nullptr);
+    explicit GKissScene (ArchiveFile *archiveFile, ParsedCnf *cnf, int setIdx, QObject *parent = nullptr);
     // explicit GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
     ~GKissScene();
     std::optional<ArchiveFile *> archivedFile() const;
-    /** Call this */
-    void setEssentialContext(ArchiveFile *archivedFile, ParsedCnf* cnf, ParsedCnfSet *cnfSet);
     void drawCurSetBackground();
     void addCelItem(GKissItem *item);
     std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
