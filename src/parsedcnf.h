@@ -146,7 +146,7 @@ private:
 
 /**
  * Represent a parsed .CNF file.
- * @owner ArchivedFile
+ * @owner ArchiveFile
  */
 class ParsedCnf
 {

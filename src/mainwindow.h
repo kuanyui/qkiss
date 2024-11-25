@@ -45,7 +45,7 @@ private:
     QButtonGroup *m_btnGroupPageSets;
     QButtonGroup *m_btnGroupColorSets;
     QComboBox *m_cboxZoomScale;
-    ArchiveFile *m_archivedFile;
+    ArchiveFile *m_archiveFile;
     GKissView *m_kissView;
     FileSystemBrowser *m_fileSystemBrowser;
     LogViewer *m_logViewer;

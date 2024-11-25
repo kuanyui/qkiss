@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    m_archivedFile = new ArchiveFile{this};
+    m_archiveFile = new ArchiveFile{this};
     m_kissView = new GKissView(this);
     setupToolBars();
     setupDockWindows();
@@ -81,14 +81,14 @@ void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const
 void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, bool loadAsPatch) {
     KissFilesParsingResult parsedKissFiles = ArchiveFile::parseKissFiles(extractedRawFiles, compressedFilePath);
     if (loadAsPatch) {
-        bool kissFilesLoadedOk = m_archivedFile->loadKissFilesAsPatch(parsedKissFiles, compressedFilePath);
+        bool kissFilesLoadedOk = m_archiveFile->loadKissFilesAsPatch(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
             parsedKissFiles.deleteAllObjects();  // FIXME: This is too dangerous... If return value contains allocated pointer, should use smart pointer to avoid user from forgotting to delete... But std::unique_ptr cannot be placed in QHash because of CoW...
             qWarning() << tr("Not a valid KiSS patch file. Aborted.");
             return;
         }
     } else {
-        bool kissFilesLoadedOk = m_archivedFile->loadKissFiles(parsedKissFiles, compressedFilePath);
+        bool kissFilesLoadedOk = m_archiveFile->loadKissFiles(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
             parsedKissFiles.deleteAllObjects();  // FIXME: This is too dangerous... If return value contains allocated pointer, should use smart pointer to avoid user from forgotting to delete... But std::unique_ptr cannot be placed in QHash because of CoW...
             qWarning() << tr("Not a valid KiSS file. Aborted.");
@@ -96,14 +96,14 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
         }
     }
     m_kissView->deleteAllScenes();
-    m_kissView->setArchiveFile(m_archivedFile);
-    m_innerFilesBrowser->rerenderFileList(m_archivedFile);
-    m_codeEditor->setPlainText(m_archivedFile->getCnfFileAsString(m_archivedFile->curCnf()->fileName()));
-    if (m_archivedFile->getDocFileNameList().length() == 0) {
+    m_kissView->setArchiveFile(m_archiveFile);
+    m_innerFilesBrowser->rerenderFileList(m_archiveFile);
+    m_codeEditor->setPlainText(m_archiveFile->getCnfFileAsString(m_archiveFile->curCnf()->fileName()));
+    if (m_archiveFile->getDocFileNameList().length() == 0) {
         m_docViewer->setPlainText("");
     } else {
-        QString docFileName = m_archivedFile->getDocFileNameList()[0];
-        m_docViewer->setPlainText(m_archivedFile->getDocFileAsString(docFileName));
+        QString docFileName = m_archiveFile->getDocFileNameList()[0];
+        m_docViewer->setPlainText(m_archiveFile->getDocFileAsString(docFileName));
         ui->dockWidget_docViewer->raise();
     }
     rerenderSetPaletteButtons();
@@ -123,10 +123,10 @@ void MainWindow::rerenderSetPaletteButtons()
         btn->setText(QString::number(sceneIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
             m_kissView->showKissSceneByIndex(sceneIdx);
-            m_archivedFile->setCurCnfSetNo(sceneIdx);   // FIXME: It seems m_archivedFile stores a setNo, but m_kissView itself also stores a setNo (more precisely, sceneIdx). Should keep a singleton here.
+            m_archiveFile->setCurCnfSetNo(sceneIdx);   // FIXME: It seems m_archiveFile stores a setNo, but m_kissView itself also stores a setNo (more precisely, sceneIdx). Should keep a singleton here.
             btn->setDown(true);
         });
-        connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurCnfSetNo){
+        connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurCnfSetNo){
             if (sceneIdx == newCurCnfSetNo) {
                 btn->setDown(true);
             }
@@ -135,7 +135,7 @@ void MainWindow::rerenderSetPaletteButtons()
     }
     // Color sets
     m_toolbarColorSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
-    for (size_t paletteIdx = 0; paletteIdx < m_archivedFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
+    for (size_t paletteIdx = 0; paletteIdx < m_archiveFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarPageSets);
         m_btnGroupColorSets->addButton(btn);
         btn->setCheckable(true);   // Make it act like radio button
@@ -143,9 +143,9 @@ void MainWindow::rerenderSetPaletteButtons()
         btn->setText(QString::number(paletteIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
             m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx);
-            m_archivedFile->setCurPaletteNo(paletteIdx);    // FIXME: It seems m_archivedFile stores a setNo, but m_kissView->curKissScene() itself also stores a paletteNo. Should keep a singleton here.
+            m_archiveFile->setCurPaletteNo(paletteIdx);    // FIXME: It seems m_archiveFile stores a setNo, but m_kissView->curKissScene() itself also stores a paletteNo. Should keep a singleton here.
         });
-        connect(m_archivedFile, &ArchiveFile::curPaletteNoChanged, [=](uint8_t newCurPaletteNo){
+        connect(m_archiveFile, &ArchiveFile::curPaletteNoChanged, [=](uint8_t newCurPaletteNo){
             if (paletteIdx == newCurPaletteNo) {
                 btn->setDown(true);
             }
@@ -255,16 +255,16 @@ void MainWindow::setupDockWindows()
         if (item->type() == InnerFilesBrowser::CustomItemCnfFileType) {
             QString cnfFileName = item->text(0);
             m_kissView->setCurCnf(cnfFileName);
-            // m_archivedFile->setCurCnfByName(item->text());
+            // m_archiveFile->setCurCnfByName(item->text());
             rerenderSetPaletteButtons();
-            m_codeEditor->setPlainText(m_archivedFile->getCnfFileAsString(cnfFileName));
+            m_codeEditor->setPlainText(m_archiveFile->getCnfFileAsString(cnfFileName));
         } else if (item->type() == InnerFilesBrowser::CustomItemDocFileType) {
             QString docFileName = item->text(0);
-            m_docViewer->setPlainText(m_archivedFile->getDocFileAsString(docFileName));
+            m_docViewer->setPlainText(m_archiveFile->getDocFileAsString(docFileName));
             ui->dockWidget_docViewer->raise();
         }
     });
-    connect(m_archivedFile, &ArchiveFile::curCnfChangedAndLoaded, [=](){
+    connect(m_archiveFile, &ArchiveFile::curCnfChangedAndLoaded, [=](){
     });
 }
 

@@ -228,7 +228,7 @@ void FkissRuntime::runChangeset(FkissVariant pageNo)
         return;
     }
     int setNo = pageNo.getInt();
-    auto archiveFile = m_curKissScene->archivedFile();
+    auto archiveFile = m_curKissScene->archiveFile();
     if (archiveFile.has_value()) {
         archiveFile.value()->setCurCnfSetNo(setNo);
     }
@@ -241,7 +241,7 @@ void FkissRuntime::runChangecol(FkissVariant paletteNoInKcf)
         return;
     }
     int paletteNoInKcfInt = paletteNoInKcf.getInt();
-    auto archiveFile = m_curKissScene->archivedFile();
+    auto archiveFile = m_curKissScene->archiveFile();
     if (archiveFile.has_value()) {
         archiveFile.value()->setCurPaletteNo(paletteNoInKcfInt);
     }

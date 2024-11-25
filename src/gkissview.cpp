@@ -15,20 +15,20 @@ GKissView::GKissView(QWidget *parent):
 
 }
 
-GKissView::GKissView(ArchiveFile *archivedFile, QWidget *parent):
+GKissView::GKissView(ArchiveFile *archiveFile, QWidget *parent):
     QGraphicsView(parent)
 {
-    setArchiveFile(archivedFile);
+    setArchiveFile(archiveFile);
 }
 
 
-bool GKissView::setArchiveFile(ArchiveFile *archivedFile)
+bool GKissView::setArchiveFile(ArchiveFile *archiveFile)
 {
     // deleteAllScenes();  /// FIXME: Unnecessary? Should not be done here?
-    m_archivedFile = archivedFile;
-    QStringList cnfFileNameList = m_archivedFile->getCnfNameList();
+    m_archiveFile = archiveFile;
+    QStringList cnfFileNameList = m_archiveFile->getCnfNameList();
     if (cnfFileNameList.isEmpty()) {
-        qCritical() << "[ERROR][View] No CNF file found in this archivedFile.";
+        qCritical() << "[ERROR][View] No CNF file found in this archive file.";
         return false;
     }
     setCurCnf(cnfFileNameList.first());
@@ -47,12 +47,12 @@ void GKissView::deleteAllScenes()
 
 bool GKissView::setCurCnf(QString cnfFileName)
 {
-    if (m_archivedFile->curCnf()) {
-        m_archivedFile->curCnf()->fkiss()->stopRuntime();
+    if (m_archiveFile->curCnf()) {
+        m_archiveFile->curCnf()->fkiss()->stopRuntime();
     }
-    bool ok = m_archivedFile->setCurCnfByName(cnfFileName);
+    bool ok = m_archiveFile->setCurCnfByName(cnfFileName);
     if (!ok) {
-        qCritical() << "[ERROR][View] No CNF file named " << cnfFileName << " found in this archivedFile.";
+        qCritical() << "[ERROR][View] No CNF file named " << cnfFileName << " found in this archive file.";
         return false;
     }
     qDebug() << "[LOG][View] Set current cnfFileName as " << cnfFileName;
@@ -61,7 +61,7 @@ bool GKissView::setCurCnf(QString cnfFileName)
     if (m_scenes.length() == 0) { return false; }
     ok = showKissSceneByIndex(0);
     if (!ok) { return false; }
-    m_archivedFile->curCnf()->fkiss()->startRuntime(curKissScene());
+    m_archiveFile->curCnf()->fkiss()->startRuntime(curKissScene());
     return true;
 }
 
@@ -89,7 +89,7 @@ bool GKissView::showKissSceneByIndex(uint8_t setIndex)
     m_curSceneIdx = setIndex;
     GKissScene *kissScene = m_scenes[setIndex];
     setScene(kissScene);
-    m_archivedFile->curCnf()->fkiss()->runtime()->setCurKissScene(kissScene);
+    m_archiveFile->curCnf()->fkiss()->runtime()->setCurKissScene(kissScene);
     return true;
 }
 
@@ -108,12 +108,12 @@ GKissScene *GKissView::curKissScene()
 bool GKissView::renderCurCnfAllSets()
 {
     deleteAllScenes();
-    ParsedCnf *cnf = m_archivedFile->curCnf();
+    ParsedCnf *cnf = m_archiveFile->curCnf();
     QStringList kcfFileNamesInCnf = cnf->kcfFileNames();
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
     for (int cnfSetIdx = 0; cnfSetIdx < cnf->sets().length(); cnfSetIdx++) {
-        GKissScene *scene = new GKissScene(m_archivedFile, cnf, cnfSetIdx, this);
+        GKissScene *scene = new GKissScene(m_archiveFile, cnf, cnfSetIdx, this);
         connect(scene, &GKissScene::highlightedItemChanged, this, &GKissView::highlightedItemChanged);   // REFACTOR: naming is too ugly...
         scene->drawCurSetBackground();
         m_scenes.append(scene);
@@ -124,7 +124,7 @@ bool GKissView::renderCurCnfAllSets()
             if (!cnfCel->setsIndexes().isEmpty() && !cnfCel->setsIndexes().contains(cnfSetIdx)) {
                 continue;
             }
-            auto _cel = m_archivedFile->getParsedCel(cnfCel->celFileName());
+            auto _cel = m_archiveFile->getParsedCel(cnfCel->celFileName());
             if (!_cel.has_value()) {
                 qCritical() << QStringLiteral("[ERROR] CNF requires a CEL '%1', but not found in this archived file: ")
                                .arg(cnfCel->celFileName());
@@ -133,7 +133,7 @@ bool GKissView::renderCurCnfAllSets()
             ParsedCel *cel = _cel.value();
             GKissItem *item;
             if (cel->celType() == ParsedCel::Type::PaletteBased) {
-                auto _kcf = m_archivedFile->getParsedKcfByOrderedIndexInCurrentCnf(cnfCel->kcfFileIndex());
+                auto _kcf = m_archiveFile->getParsedKcfByOrderedIndexInCurrentCnf(cnfCel->kcfFileIndex());
                 if (!_kcf.has_value()) {
                     qCritical() << "[ERROR] In CNF '%1', the CEL '%2' requires KCF index %3, but no KCF file available in this CNF."_L1
                                    .arg(cnf->fileName())
@@ -142,7 +142,7 @@ bool GKissView::renderCurCnfAllSets()
                     continue;
                 }
                 ParsedKcf *kcf = _kcf.value();
-                item = new GKissItem(cnfCel, cel, kcf, m_archivedFile->curPaletteNo());
+                item = new GKissItem(cnfCel, cel, kcf, m_archiveFile->curPaletteNo());
             } else if (cel->celType() == ParsedCel::Type::FullColor) {
                 item = new GKissItem(cnfCel, cel);
             } else {

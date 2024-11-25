@@ -14,7 +14,7 @@ public:
     explicit GKissScene (ArchiveFile *archiveFile, ParsedCnf *cnf, int setIdx, QObject *parent = nullptr);
     // explicit GKissScene(qreal x, qreal y, qreal width, qreal height, QObject *parent = nullptr);
     ~GKissScene();
-    std::optional<ArchiveFile *> archivedFile() const;
+    std::optional<ArchiveFile *> archiveFile() const;
     void drawCurSetBackground();
     void addCelItem(GKissItem *item);
     std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
@@ -48,7 +48,7 @@ private:
     void storeCurrentOverlappedItems(GKissItem *targetItem);
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
     QHash<QString, GKissItem *> m_celNameToItemMap;
-    ArchiveFile *m_archivedFile;
+    ArchiveFile *m_archiveFile;
     int m_setIndex;
     ParsedCnf* m_cnf;
     ParsedCnfSet *m_cnfSet;

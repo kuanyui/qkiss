@@ -13,8 +13,8 @@ class GKissView : public QGraphicsView
     Q_OBJECT;
 public:
     GKissView(QWidget *parent=nullptr);
-    GKissView(ArchiveFile *archivedFile, QWidget *parent=nullptr);
-    bool setArchiveFile(ArchiveFile *archivedFile);
+    GKissView(ArchiveFile *archiveFile, QWidget *parent=nullptr);
+    bool setArchiveFile(ArchiveFile *archiveFile);
     void deleteAllScenes();
     bool setCurCnf(QString cnfFileName);
     uint8_t scenesAmount() const;
@@ -33,7 +33,7 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dropEvent(QDropEvent *event) override;
 private:
-    ArchiveFile *m_archivedFile;
+    ArchiveFile *m_archiveFile;
     /// Each set is stored in its scene.
     QVector<GKissScene *> m_scenes;
     /// REFACTOR: Wait... Why not just use `ArchiveFile::curCnfSetNo` ???

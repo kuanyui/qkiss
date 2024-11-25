@@ -8,7 +8,7 @@ GKissScene::GKissScene(ArchiveFile* archiveFile, ParsedCnf* cnf, int setIdx, QOb
 {
     qDebug() << "[scene] ctor!" << m_setIndex;
     qDebug() << "[DEBUG] Scene::setEssentialContext" << archiveFile << cnf << m_cnfSet;
-    m_archivedFile = archiveFile;
+    m_archiveFile = archiveFile;
     m_cnf = cnf;
     m_setIndex = setIdx;
     m_cnfSet = cnf->sets()[setIdx];
@@ -17,10 +17,10 @@ GKissScene::GKissScene(ArchiveFile* archiveFile, ParsedCnf* cnf, int setIdx, QOb
     setSceneRect(0, 0, pf.width(), pf.height());
     // FIXME: If switch m_cnf, how to deal with this? ( -> connect() in ArchiveFile ?)
     // FIXME: When loading a new LZH file, should trigger both event after fkiss runtime is ready.
-    connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurCnfSetNo) {
+    connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurCnfSetNo) {
         m_cnf->fkiss()->runtime()->triggerSet(newCurCnfSetNo);
     });
-    connect(m_archivedFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurPaletteNo) {
+    connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurPaletteNo) {
         m_cnf->fkiss()->runtime()->triggerCol(newCurPaletteNo);
     });
 }
@@ -39,16 +39,16 @@ GKissScene::~GKissScene()
     }
 }
 
-std::optional<ArchiveFile *> GKissScene::archivedFile() const
+std::optional<ArchiveFile *> GKissScene::archiveFile() const
 {
-    if (m_archivedFile == nullptr) { return std::nullopt; }
-    return m_archivedFile;
+    if (m_archiveFile == nullptr) { return std::nullopt; }
+    return m_archiveFile;
 }
 
 
 void GKissScene::drawCurSetBackground()
 {
-    auto _firstKcf = m_archivedFile->getParsedKcfByOrderedIndexInCurrentCnf(0);
+    auto _firstKcf = m_archiveFile->getParsedKcfByOrderedIndexInCurrentCnf(0);
     if (!_firstKcf.has_value()) {
         qCritical() << "[ERROR][Scene] No KCF found in this CNF, abort.";
         return;
@@ -62,7 +62,7 @@ void GKissScene::drawCurSetBackground()
     }
     // Some wrong CNF declared a wrong border bolor which index out of "palette_colors_count - 1".
     int borderColorIdx = qMin(static_cast<uint32_t>(firstPaletteInFirstKcfInCnf->length() - 1),
-                              m_archivedFile->curCnf()->outsideBorderColor());
+                              m_archiveFile->curCnf()->outsideBorderColor());
     QRgb borderColor = firstPaletteInFirstKcfInCnf->at(borderColorIdx);
     setBackgroundBrush(QBrush(borderColor));
     // play field background

@@ -102,7 +102,7 @@ bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString 
 {
     QKiSS::Case caseSensitivity = QKiSS::Case::Insensitive;  // TODO: Global Variable.
     if (parseRes.parsedCnfFiles.isEmpty() && parseRes.parsedCelFiles.isEmpty() && parseRes.parsedKcfFiles.isEmpty()) {
-        qWarning() << "[WARNING][ArchivedFile] Try to load this file as patch, but it contains no any CNF/CEL/KCF file, abort.";
+        qWarning() << "[WARNING][ArchiveFile] Try to load this file as patch, but it contains no any CNF/CEL/KCF file, abort.";
         return false;
     }
     m_archiveFilePath = lzhFilePath;
@@ -204,11 +204,11 @@ std::optional<ParsedCel *> ArchiveFile::getParsedCel(QString celFileName) const
 std::optional<ParsedKcf *> ArchiveFile::getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf)
 {
     if (m_curCnfOrderedParsedKcfList.length() == 0) {
-        qDebug() << QStringLiteral("[ERROR][ArchivedFile] Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.");
+        qDebug() << QStringLiteral("[ERROR][ArchiveFile] Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.");
         return std::nullopt;
     }
     if (kcfIndexInCurrentCnf >= m_curCnfOrderedParsedKcfList.length()) {
-        qDebug() << QStringLiteral("[WARN][ArchivedFile] Need to get ParsedKcf of current CNF at index %1, but out of index, so fallback to 0.");
+        qDebug() << QStringLiteral("[WARN][ArchiveFile] Need to get ParsedKcf of current CNF at index %1, but out of index, so fallback to 0.");
         return m_curCnfOrderedParsedKcfList[0];
     }
     return m_curCnfOrderedParsedKcfList[kcfIndexInCurrentCnf];
@@ -263,12 +263,12 @@ bool ArchiveFile::setCurCnfByName(QString cnfFileName)
 {
     auto _cnf = getParsedCnf(cnfFileName);
     if (!_cnf.has_value()) {
-        qCritical() << "[ERROR] Set current CNF failed; no CNF named " << cnfFileName << " in this archivedFile.";
+        qCritical() << "[ERROR] Set current CNF failed; no CNF named " << cnfFileName << " in this archive file.";
         return false;
     }
     m_curCnf = _cnf.value();
     m_curCnfOrderedParsedKcfList.clear();
-    qDebug() << QStringLiteral("[LOG][ArchivedFile] The CNF '%1' requires %2 KCF files.").arg(cnfFileName).arg(m_curCnf->kcfFileNames().length());
+    qDebug() << QStringLiteral("[LOG][ArchiveFile] The CNF '%1' requires %2 KCF files.").arg(cnfFileName).arg(m_curCnf->kcfFileNames().length());
     for (const QString &kcfFileName : m_curCnf->kcfFileNames()) {
         auto _kcf = getParsedKcf(kcfFileName);
         if (!_kcf.has_value()) {
