@@ -2,6 +2,8 @@
 
 #include <QDirIterator>
 
+using namespace Qt::Literals::StringLiterals;
+
 ArchiveProcessor::ArchiveProcessor(QObject *parent)
     : QObject{parent},
       m_process{new QProcess(this)}
@@ -83,10 +85,10 @@ PERMISSION  UID  GID      SIZE  RATIO     STAMP           NAME
     return fileSizeSummary;
 }
 
-bool ArchiveProcessor::extractLzh(const QString &lzhFilePath)
+bool ArchiveProcessor::callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath)
 {
     if (!QFileInfo::exists(lzhFilePath)) {
-        qCritical() << QStringLiteral("[ERROR] archive file path '%1' doesn't exist, abort.").arg(lzhFilePath);
+        qCritical() << tr("Archive file path '%1' doesn't exist, abort.").arg(lzhFilePath);
         return false;
     }
     m_elapsedTimer.start();
@@ -101,23 +103,37 @@ bool ArchiveProcessor::extractLzh(const QString &lzhFilePath)
     return true;
 }
 
-QFuture<std::shared_ptr<RawFilesMap> > ArchiveProcessor::extractFileAsPromise(const QString &lzhFilePath)
+
+
+QFuture<std::shared_ptr<RawFilesMap> > ArchiveProcessor::extractFileAsPromise(const QString &lzhOrCnfFilePath)
 {
     QPromise<std::shared_ptr<RawFilesMap>> *promise = new QPromise<std::shared_ptr<RawFilesMap>>();
     QFuture<std::shared_ptr<RawFilesMap>> future = promise->future();
+    QFileInfo fileInfo {lzhOrCnfFilePath};
+    QString fileName = fileInfo.fileName();
     promise->start();
+    if (lzhOrCnfFilePath.toUpper().endsWith(".CNF"_L1)) {
+        qInfo().noquote() << tr("Reading a CNF file \"%1\" directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...").arg(lzhOrCnfFilePath);
+        promise->addResult(getRelatedFilesInTheSameFolder(lzhOrCnfFilePath));
+        promise->finish();
+        delete promise;
+        return future;
+    }
     ArchiveProcessor *process = new ArchiveProcessor();
-    process->extractLzh(lzhFilePath);
-    QObject::connect(process, &ArchiveProcessor::extractFail, [process, promise](QString compressedFilePath, QString errMsg) {
+    qInfo().noquote() << tr("Trying to extract LZH file \"%1\"...").arg(fileName);
+    process->callExternalProgramOrLibraryToExtractLzh(lzhOrCnfFilePath);
+    QObject::connect(process, &ArchiveProcessor::extractFail, [process, promise, fileName](QString compressedFilePath, QString errMsg) {
+        qCritical().noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);
         Q_UNUSED(compressedFilePath);
         promise->setException(std::make_exception_ptr(
-            std::runtime_error(QString("Process failed with exit code: %1").arg(errMsg).toStdString())
+            std::runtime_error("Process failed with exit code: %1"_L1.arg(errMsg).toStdString())
         ));
         delete promise;
         process->deleteLater();
     });
-    QObject::connect(process, &ArchiveProcessor::extractSuccess, [process, promise](QString compressedFilePath, std::shared_ptr<RawFilesMap> extractedRawFiles) {
+    QObject::connect(process, &ArchiveProcessor::extractSuccess, [process, promise, fileName](QString compressedFilePath, std::shared_ptr<RawFilesMap> extractedRawFiles) {
         Q_UNUSED(compressedFilePath);
+        qInfo().noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
         promise->addResult(extractedRawFiles);
         promise->finish();
         delete promise;
@@ -172,4 +188,20 @@ void ArchiveProcessor::onProcessErrorOccurred(QProcess::ProcessError error)
     case QProcess::UnknownError:
         return;
     }
+}
+
+std::shared_ptr<RawFilesMap> ArchiveProcessor::getRelatedFilesInTheSameFolder(const QString &cnfFilePath)
+{
+    auto fileContents = std::make_shared<QMap<QString, QByteArray>>();
+    QFileInfo cnfFileInfo(cnfFilePath);
+    QDir dir = cnfFileInfo.dir();
+
+    for (const QFileInfo &info : dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Readable)) {
+        QFile file(info.absoluteFilePath());
+        if (file.open(QIODevice::ReadOnly)) {
+            fileContents->insert(info.fileName(), file.readAll());
+            file.close();
+        }
+    }
+    return fileContents;
 }

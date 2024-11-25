@@ -27,8 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     // m_archiveProcessor->extractLzh("samples/pk_ask33.lzh");     // 24bits modern palatte
     // m_archiveProcessor->extractLzh("samples/kis_aki.lzh");     // Debugging for wrong object positions
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, bool loadAsPatch) {
+        m_logViewer->clearAllLogs();
         ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath, loadAsPatch](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-            m_logViewer->clearAllLogs();
             tryToLoadFilesAsKissFiles(filePath, filesMap, loadAsPatch);
         });
     });
@@ -79,22 +79,24 @@ void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const
 }
 
 void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, bool loadAsPatch) {
+    qInfo().noquote() << tr("Start to parse CNF / KCF / CEL files...");
     KissFilesParsingResult parsedKissFiles = ArchiveFile::parseKissFiles(extractedRawFiles, compressedFilePath);
     if (loadAsPatch) {
         bool kissFilesLoadedOk = m_archiveFile->loadKissFilesAsPatch(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
             parsedKissFiles.deleteAllObjects();  // FIXME: This is too dangerous... If return value contains allocated pointer, should use smart pointer to avoid user from forgotting to delete... But std::unique_ptr cannot be placed in QHash because of CoW...
-            qWarning() << tr("Not a valid KiSS patch file. Aborted.");
+            qWarning().noquote() << tr("\"%1\" is not a valid KiSS patch file. Aborted.").arg(compressedFilePath);
             return;
         }
     } else {
         bool kissFilesLoadedOk = m_archiveFile->loadKissFiles(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
             parsedKissFiles.deleteAllObjects();  // FIXME: This is too dangerous... If return value contains allocated pointer, should use smart pointer to avoid user from forgotting to delete... But std::unique_ptr cannot be placed in QHash because of CoW...
-            qWarning() << tr("Not a valid KiSS file. Aborted.");
+            qWarning().noquote() << tr("\"%1\"is not a valid KiSS file. Aborted.").arg(compressedFilePath);
             return;
         }
     }
+    qInfo().noquote() << tr("Parsing finished. Now rendering...");
     m_kissView->deleteAllScenes();
     m_kissView->setArchiveFile(m_archiveFile);
     m_innerFilesBrowser->rerenderFileList(m_archiveFile);
@@ -107,7 +109,8 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
         ui->dockWidget_docViewer->raise();
     }
     rerenderSetPaletteButtons();
-    m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("File loaded: %1").arg(QFileInfo(compressedFilePath).fileName()));
+    qInfo().noquote() << tr("KiSS files rendered successfully: %1").arg(QFileInfo(compressedFilePath).fileName());
+    // m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("KiSS files rendered successfully: %1").arg(QFileInfo(compressedFilePath).fileName()));
 }
 
 
@@ -298,8 +301,8 @@ void MainWindow::dropEvent(QDropEvent *event)
                 QString filePath = url.toLocalFile();
                 qDebug() << "Dropped file:" << filePath;
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
+                m_logViewer->clearAllLogs();
                 ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-                    m_logViewer->clearAllLogs();
                     tryToLoadFilesAsKissFiles(filePath, filesMap, false);
                 });
                 // m_archiveProcessor->extractLzh(filePath);
