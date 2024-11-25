@@ -39,6 +39,7 @@ private:
     /// REFACTOR: Wait... Why not just use `ArchiveFile::curCnfSetNo` ???
     uint8_t m_curSceneIdx = 0;
     GKissItem *m_curHoveredCelItem;
+    QList<QMetaObject::Connection> m_connectionsOfArchiveFile;
 
     // QWidget interface
 
