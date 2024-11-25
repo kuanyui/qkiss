@@ -62,6 +62,8 @@ bool GKissView::setCurCnfAndRenderScenes(QString cnfFileName)
     ok = showKissSceneByIndex(0);
     if (!ok) { return false; }
     m_archiveFile->curCnf()->fkiss()->startRuntime(curKissScene());
+    m_archiveFile->curCnf()->fkiss()->runtime()->triggerSet(0);   // REFACTOR: triggering set(), col() in here is ... so ugly.
+    m_archiveFile->curCnf()->fkiss()->runtime()->triggerCol(0);
     return true;
 }
 
