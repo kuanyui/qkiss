@@ -49,6 +49,7 @@ private:
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
     QHash<QString, GKissItem *> m_celNameToItemMap;
     ArchiveFile *m_archiveFile;
+    /// Each set will create a new scene. This is the setIndex (setNo, counted from 0) of this scene.
     int m_setIndex;
     ParsedCnf* m_cnf;
     ParsedCnfSet *m_cnfSet;
