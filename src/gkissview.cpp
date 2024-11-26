@@ -47,7 +47,7 @@ bool GKissView::setArchiveFile(ArchiveFile *archiveFile)
 
 void GKissView::deleteAllScenes()
 {
-    setScene(nullptr);
+    setScene(nullptr);    // This is native `QGraphicsScene::setScene()`
     foreach (GKissScene *s, m_scenes) {
         delete s;
     }
@@ -95,12 +95,12 @@ bool GKissView::showKissSceneByIndex(uint8_t setIndex)
                       .arg(scenesAmount())
                       .arg(setIndex);
         m_curSceneIdx = 0;
-        setScene(m_scenes[0]);
+        setScene(m_scenes[0]);   // This is native `QGraphicsScene::setScene()`
         return false;
     }
     m_curSceneIdx = setIndex;
     GKissScene *kissScene = m_scenes[setIndex];
-    setScene(kissScene);
+    setScene(kissScene);   // This is native `QGraphicsScene::setScene()`
     m_archiveFile->curCnf()->fkiss()->runtime()->setCurKissScene(kissScene);
     return true;
 }

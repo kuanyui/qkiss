@@ -223,6 +223,7 @@ void FkissRuntime::runRandomtimer(FkissVariant alarmID, FkissVariant delay, Fkis
 
 void FkissRuntime::runChangeset(FkissVariant pageNo)
 {
+    if (m_curKissScene == nullptr) { return; }
     if (pageNo.type() != FkissVariant::Type::Int) {
         qDebug() << "[fkissruntime][WARNING] currently, the pageNo in changeset(pageNo) must be an integer. Skip."_L1;
         return;
@@ -236,6 +237,7 @@ void FkissRuntime::runChangeset(FkissVariant pageNo)
 
 void FkissRuntime::runChangecol(FkissVariant paletteNoInKcf)
 {
+    if (m_curKissScene == nullptr) { return; }
     if (paletteNoInKcf.type() != FkissVariant::Type::Int) {
         qDebug() << "[fkissruntime][WARNING] currently, the paletteNoInKcf in changecol(paletteNoInKcf) must be an integer. Skip."_L1;
         return;

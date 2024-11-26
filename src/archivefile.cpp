@@ -98,36 +98,39 @@ bool ArchiveFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFil
 
 }
 
-bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString lzhFilePath)
+bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult patchFiles, QString lzhFilePath)
 {
     QKiSS::Case caseSensitivity = QKiSS::Case::Insensitive;  // TODO: Global Variable.
-    if (parseRes.parsedCnfFiles.isEmpty() && parseRes.parsedCelFiles.isEmpty() && parseRes.parsedKcfFiles.isEmpty()) {
+    if (patchFiles.parsedCnfFiles.isEmpty() && patchFiles.parsedCelFiles.isEmpty() && patchFiles.parsedKcfFiles.isEmpty()) {
         qWarning() << "[WARNING][ArchiveFile] Try to load this file as patch, but it contains no any CNF/CEL/KCF file, abort.";
         return false;
     }
     m_archiveFilePath = lzhFilePath;
     m_caseSensitivity = caseSensitivity;
-    for (auto it = parseRes.parsedCnfFiles.begin(); it != parseRes.parsedCnfFiles.end(); it++) {
-        if (m_parsedCnfFiles->contains(it.key())) {
-            delete m_parsedCnfFiles->value(it.key());
+    for (auto itPatch = patchFiles.parsedCnfFiles.begin(); itPatch != patchFiles.parsedCnfFiles.end(); itPatch++) {
+        if (m_parsedCnfFiles->contains(itPatch.key())) {
+            qDebug() << "[loadKissFilesAsPatch] detele ParsedCnf and replace with the patched version." << itPatch.key();
+            delete m_parsedCnfFiles->value(itPatch.key());
         }
-        m_parsedCnfFiles->insert(it.key(), it.value());
+        m_parsedCnfFiles->insert(itPatch.key(), itPatch.value());
     }
-    for (auto it = parseRes.parsedKcfFiles.begin(); it != parseRes.parsedKcfFiles.end(); it++) {
-        if (m_parsedKcfFiles->contains(it.key())) {
-            delete m_parsedKcfFiles->value(it.key());
+    for (auto itPatch = patchFiles.parsedKcfFiles.begin(); itPatch != patchFiles.parsedKcfFiles.end(); itPatch++) {
+        if (m_parsedKcfFiles->contains(itPatch.key())) {
+            qDebug() << "[loadKissFilesAsPatch] detele ParsedKcf and replace with the patched version." << itPatch.key();
+            delete m_parsedKcfFiles->value(itPatch.key());
         }
-        m_parsedKcfFiles->insert(it.key(), it.value());
+        m_parsedKcfFiles->insert(itPatch.key(), itPatch.value());
     }
-    for (auto it = parseRes.parsedCelFiles.begin(); it != parseRes.parsedCelFiles.end(); it++) {
-        if (m_parsedCelFiles->contains(it.key())) {
-            delete m_parsedCelFiles->value(it.key());
+    for (auto itPatch = patchFiles.parsedCelFiles.begin(); itPatch != patchFiles.parsedCelFiles.end(); itPatch++) {
+        if (m_parsedCelFiles->contains(itPatch.key())) {
+            qDebug() << "[loadKissFilesAsPatch] detele ParsedCel and replace with the patched version." << itPatch.key();
+            delete m_parsedCelFiles->value(itPatch.key());
         }
-        m_parsedCelFiles->insert(it.key(), it.value());
+        m_parsedCelFiles->insert(itPatch.key(), itPatch.value());
     }
 
-    m_docFiles->insert(parseRes.docFiles);
-    m_otherFiles->insert(parseRes.otherFiles);
+    m_docFiles->insert(patchFiles.docFiles);
+    m_otherFiles->insert(patchFiles.otherFiles);
     m_curCnf = m_parsedCnfFiles->first();
     m_curCnfSetNo = 0;
     m_curPaletteNo = 0;
