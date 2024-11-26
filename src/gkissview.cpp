@@ -48,7 +48,7 @@ bool GKissView::setArchiveFile(ArchiveFile *archiveFile)
 void GKissView::deleteAllScenes()
 {
     setScene(nullptr);
-    for (GKissScene *s : m_scenes) {
+    foreach (GKissScene *s, m_scenes) {
         delete s;
     }
     m_scenes.clear();

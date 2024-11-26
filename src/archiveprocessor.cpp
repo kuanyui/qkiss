@@ -85,23 +85,7 @@ PERMISSION  UID  GID      SIZE  RATIO     STAMP           NAME
     return fileSizeSummary;
 }
 
-bool ArchiveProcessor::callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath)
-{
-    if (!QFileInfo::exists(lzhFilePath)) {
-        qCritical() << tr("Archive file path '%1' doesn't exist, abort.").arg(lzhFilePath);
-        return false;
-    }
-    m_elapsedTimer.start();
-    m_archiveFilePath = lzhFilePath;
-    m_filesSummaryList = getFileSizeList(lzhFilePath);
-    m_buffer.clear();
-    m_process->start("lha",
-                     { "-p",   // print the content of the archived files to stdout.
-                       "-q",   // quiet (use along with `-p`; don't display filename header)
-                       lzhFilePath
-                     });
-    return true;
-}
+
 
 
 
@@ -188,6 +172,24 @@ void ArchiveProcessor::onProcessErrorOccurred(QProcess::ProcessError error)
     case QProcess::UnknownError:
         return;
     }
+}
+
+bool ArchiveProcessor::callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath)
+{
+    if (!QFileInfo::exists(lzhFilePath)) {
+        qCritical() << tr("Archive file path '%1' doesn't exist, abort.").arg(lzhFilePath);
+        return false;
+    }
+    m_elapsedTimer.start();
+    m_archiveFilePath = lzhFilePath;
+    m_filesSummaryList = getFileSizeList(lzhFilePath);
+    m_buffer.clear();
+    m_process->start("lha",
+                     { "-p",   // print the content of the archived files to stdout.
+                       "-q",   // quiet (use along with `-p`; don't display filename header)
+                       lzhFilePath
+                     });
+    return true;
 }
 
 std::shared_ptr<RawFilesMap> ArchiveProcessor::getRelatedFilesInTheSameFolder(const QString &cnfFilePath)

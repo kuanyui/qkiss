@@ -21,7 +21,6 @@ public:
     explicit ArchiveProcessor(QObject *parent = nullptr);
     static bool checkLhaCommandAvailability();
     static FilesSummaryList getFileSizeList(const QString &lzhFilePath);
-    bool callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath);
     /// This function merely extract a LZH file, doesn't do any other checks.
     /// TODO: Should be able to accept a CNF file. Should rename this function.
     static QFuture<std::shared_ptr<RawFilesMap>> extractFileAsPromise(const QString &lzhOrCnfFilePath);
@@ -34,6 +33,7 @@ private slots:
     void onQProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void onProcessErrorOccurred(QProcess::ProcessError error);
 private:
+    bool callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath);
     static std::shared_ptr<RawFilesMap> getRelatedFilesInTheSameFolder(const QString &cnfFilePath);
     QProcess *m_process;
     QString m_archiveFilePath;
