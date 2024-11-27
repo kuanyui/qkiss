@@ -47,6 +47,13 @@ bool GKissView::setArchiveFile(ArchiveFile *archiveFile)
 
 void GKissView::deleteAllScenes()
 {
+    if (m_archiveFile != nullptr) {
+        auto cnfs = m_archiveFile->parsedCnfFiles();
+        for (auto it = cnfs->begin(); it != cnfs->end(); it++) {
+            ParsedCnf *cnf = it.value();
+            cnf->fkiss()->stopRuntime();
+        }
+    }
     setScene(nullptr);    // This is native `QGraphicsScene::setScene()`
     foreach (GKissScene *s, m_scenes) {
         delete s;
@@ -54,7 +61,7 @@ void GKissView::deleteAllScenes()
     m_scenes.clear();
 }
 
-
+// FIXME: separate setCurCnfAndRenderScenes(), create startFkiss() / stopFkiss()
 bool GKissView::setCurCnfAndRenderScenes(QString cnfFileName)
 {
     if (m_archiveFile->curCnf()) {

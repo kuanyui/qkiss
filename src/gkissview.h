@@ -33,7 +33,7 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dropEvent(QDropEvent *event) override;
 private:
-    ArchiveFile *m_archiveFile;
+    ArchiveFile *m_archiveFile = nullptr;
     /// Each set is stored in its scene.
     QVector<GKissScene *> m_scenes;
     /// REFACTOR: Wait... Why not just use `ArchiveFile::curCnfSetNo` ???
