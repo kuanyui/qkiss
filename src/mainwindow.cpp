@@ -68,7 +68,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    m_logViewer = nullptr;  // NOTE: I don't sure if I can set it to nullptr in dtor, or QObject will relys on it.
     delete ui;
+    ui = nullptr;   // To prevent customized QtDebug message handler from segfault.
 }
 
 void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg)
@@ -96,9 +98,9 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
             return;
         }
     }
-    qInfo().noquote() << tr("Parsing finished. Now rendering...");
     m_kissView->deleteAllScenes();
     m_kissView->setArchiveFile(m_archiveFile);
+    qInfo().noquote() << tr("Parsing finished. Now rendering scenes...");
     m_innerFilesBrowser->rerenderFileList(m_archiveFile);
     m_codeEditor->setPlainText(m_archiveFile->getCnfFileAsString(m_archiveFile->curCnf()->fileName()));
     if (m_archiveFile->getDocFileNameList().length() == 0) {
