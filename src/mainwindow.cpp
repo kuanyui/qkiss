@@ -15,17 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_kissView = new GKissView(this);
     setupToolBars();
     setupDockWindows();
-    // NOTE: `new` is required. Otherwise, the life-cycle of it is not long enough to extract archived file.
-    // m_fileSystemBrowser->setDirPath(QDir(QDir::currentPath()).absoluteFilePath("samples"));
     m_fileSystemBrowser->setDirPath(QDir(QDir::homePath()).absoluteFilePath("tmp/kissdata"));
-    // m_archiveProcessor->extractLzh("samples/MIO_H/frkismi4.lzh");     // 4bits modern palatte
-    // m_archiveProcessor->extractLzh("samples/KKRSV071.LZH");     // 4bits modern palatte,  // LOTS of challenges for tolerance
-    // m_archiveProcessor->extractLzh("samples/tyouda_mise/RJ047634_trial.lzh");    // 32bits full-color
-    // m_archiveProcessor->extractLzh("samples/tyouda_mise/FA1280B.lzh");     // 32bits full-color
-    // m_archiveProcessor->extractLzh("samples/Yuki.lzh");     // 4bits legacy palatte
-    // m_archiveProcessor->extractLzh("samples/kb-ran.lzh");     // 24bits modern palatte
-    // m_archiveProcessor->extractLzh("samples/pk_ask33.lzh");     // 24bits modern palatte
-    // m_archiveProcessor->extractLzh("samples/kis_aki.lzh");     // Debugging for wrong object positions
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, bool loadAsPatch) {
         m_logViewer->clearAllLogs();
         ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath, loadAsPatch](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
