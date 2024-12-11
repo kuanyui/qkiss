@@ -13,6 +13,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     m_archiveFile = new ArchiveFile{this};
     m_kissView = new GKissView(this);
+    QIcon::setThemeSearchPaths({ ":/foo/src/humanity_0.4.6" });
+    // QIcon::setFallbackSearchPaths({ ":/icons/light" });
+    QIcon::setThemeName("Humanity");    // folder name under any of QIcon::themeSearchPaths (:/src/humanity_0.4.6)
+    // setWindowIcon(QIcon::fromTheme("paprefs"));
+    setWindowIcon(QIcon::fromTheme("paprefs"));
+    qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupToolBars();
     setupDockWindows();
     m_fileSystemBrowser->setDirPath(QDir(QDir::homePath()).absoluteFilePath("tmp/kissdata"));

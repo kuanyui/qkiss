@@ -45,6 +45,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resources/application.qrc
+        resources/humanity_icons/entry.qrc
         src/parsedcnf.h src/parsedcnf.cpp
         src/enums.h
         src/encoding.h src/encoding.cpp
