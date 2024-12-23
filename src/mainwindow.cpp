@@ -65,7 +65,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg)
 {
-    if (ui == nullptr) { return; }
     if (m_logViewer == nullptr) { return; }
     m_logViewer->appendLog(type, msg);
 }
@@ -302,4 +301,10 @@ void MainWindow::dropEvent(QDropEvent *event)
         }
     }
     event->acceptProposedAction();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    m_logViewer = nullptr;   // Avoid potential segfault when closing window
+    QMainWindow::closeEvent(event);
 }
