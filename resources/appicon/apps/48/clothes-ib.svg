@@ -25,7 +25,7 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:current-layer="g24"><inkscape:grid
+     inkscape:current-layer="g19-2"><inkscape:grid
        id="grid1"
        units="px"
        originx="0"
@@ -264,7 +264,7 @@
        gradientUnits="userSpaceOnUse" /><linearGradient
        id="linearGradient6"
        inkscape:collect="always"><stop
-         style="stop-color:#274046;stop-opacity:1;"
+         style="stop-color:#462727;stop-opacity:1;"
          offset="0"
          id="stop6" /><stop
          style="stop-color:#395259;stop-opacity:0.36545947;"
@@ -801,7 +801,7 @@
          transform="translate(-8.469544,-81.675983)"
          style="mix-blend-mode:normal;fill:#566227;fill-opacity:1;stroke:none;stroke-width:1.21271;filter:url(#filter36)"><path
            id="path5-6"
-           style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#566227;fill-opacity:1;stroke:none;stroke-width:1.21271;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none"
+           style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#496227;fill-opacity:1;stroke:none;stroke-width:1.21271;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none"
            d="m 22.999782,17.000865 c -0.315923,0.645926 -0.626453,1.290856 -0.935547,1.935547 l -0.06445,0.06445 c -3.580952,4.941497 -6.247619,9.27483 -8,15 l 1.544922,0.386719 c -0.186895,0.538375 -0.369503,1.076982 -0.544922,1.613281 4.733254,1.351329 6.438751,4.759439 10,3 0.03852,-0.348954 0.07212,-0.69792 0.105469,-1.046875 4.160452,0.04466 6.848402,-0.795265 8.894531,-2.46289 -2.099593,-6.792873 -5.56482,-12.630259 -9,-18.490235 l -0.955078,0.238282 c -0.01571,-0.07938 -0.02894,-0.158902 -0.04492,-0.238282 z"
            transform="translate(24.101195,26.829809)" /></g><g
          id="g19"
