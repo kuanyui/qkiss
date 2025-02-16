@@ -13,12 +13,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     m_archiveFile = new ArchiveFile{this};
     m_kissView = new GKissView(this);
-    QIcon::setThemeSearchPaths({ ":/foo/src/humanity_0.4.6" });
+    QIcon::setThemeSearchPaths({ ":/xdg_icon_themes" });
     // QIcon::setFallbackSearchPaths({ ":/icons/light" });
-    QIcon::setThemeName("Humanity");    // folder name under any of QIcon::themeSearchPaths (:/src/humanity_0.4.6)
+    QIcon::setThemeName("CustomizedTango");    // folder name under any of QIcon::themeSearchPaths (:/src/humanity_0.4.6)
     // setWindowIcon(QIcon::fromTheme("paprefs"));
-    setWindowIcon(QIcon::fromTheme("paprefs"));
-    qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
+    setWindowIcon(QIcon::fromTheme("qkiss"));
+    ui->action_window_fileSystemBrowser->setIcon(QIcon::fromTheme("system-file-manager"));
+    ui->action_window_logViewer->setIcon(QIcon::fromTheme("logviewer", QIcon::fromTheme("utilities-system-monitor")));
+    ui->action_window_codeViewer->setIcon(QIcon::fromTheme("applications-development"));
+    ui->action_window_innerFilesBrowser->setIcon(QIcon::fromTheme("package-x-generic"));
+    ui->action_window_docViewer->setIcon(QIcon::fromTheme("text-x-readme", QIcon::fromTheme("accessories-text-editor")));
+    // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupToolBars();
     setupDockWindows();
     m_fileSystemBrowser->setDirPath(QDir(QDir::homePath()).absoluteFilePath("tmp/kissdata"));

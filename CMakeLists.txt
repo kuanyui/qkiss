@@ -24,6 +24,19 @@ find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools)
 find_package(ICU REQUIRED COMPONENTS uc i18n data)
 
+### Build Icons
+find_package(Python3 REQUIRED Interpreter)
+set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
+set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-collection")
+set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} ${ICON_BUILD_SCRIPT} --included-icon-file "${RESOURCES_DIR}/included_icons.txt" --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon" --output-theme-name "CustomizedTango"
+
+)
+set_property(
+    DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${RESOURCES_DIR}/included_icons.txt"
+)
+
 if(ICU_FOUND)
     include_directories(${ICU_INCLUDE_DIRS})
 endif()
@@ -45,7 +58,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resources/application.qrc
-        resources/humanity_icons/entry.qrc
+        resources/tango-icon-collection/dist/04_FINAL_PNG_THEME/CustomizedTango/index.qrc   # REFACTOR: path
         src/parsedcnf.h src/parsedcnf.cpp
         src/enums.h
         src/encoding.h src/encoding.cpp

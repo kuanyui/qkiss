@@ -1,0 +1,18 @@
+# This is comment
+# Main
+AppIcon	qkiss	apps/qkiss
+AppIcon	clothes	apps/clothes
+Gnome	preferences-desktop-theme	apps/palettes
+Gnome	folder	apps/system-file-manager
+Gnome	utilities-system-monitor	apps/utility-system-monitor
+Gnome	code-viewer-c-liked	applications-development
+Gnome	package-x-generic	package-x-generic
+Gnome	text-x-readme	text-x-readme
+Gnome	logviewer	logviewer
+
+Gnome	zoom-in
+Gnome	zoom-out
+Gnome	zoom-original
+
+Tango	go-up	go-up
+Tango	view-refresh	view-refresh

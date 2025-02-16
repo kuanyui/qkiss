@@ -1,0 +1,3 @@
+[submodule "resources/tango-icon-collection"]
+	path = resources/tango-icon-collection
+	url = git@github.com:kuanyui/tango-icon-collection.git
