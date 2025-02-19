@@ -26,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent)
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupToolBars();
     setupDockWindows();
-    m_fileSystemBrowser->setDirPath(QDir(QDir::homePath()).absoluteFilePath("tmp/kissdata"));
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, bool loadAsPatch) {
         m_logViewer->clearAllLogs();
         ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath, loadAsPatch](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
@@ -78,6 +77,11 @@ void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const
 {
     if (m_logViewer == nullptr) { return; }
     m_logViewer->appendLog(type, msg);
+}
+
+void MainWindow::loadPath(const QString &dirOrFilePath)
+{
+    m_fileSystemBrowser->setPath(dirOrFilePath);
 }
 
 void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, bool loadAsPatch) {

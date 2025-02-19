@@ -20,7 +20,8 @@ class FileSystemBrowser : public QWidget
 public:
     FileSystemBrowser(QWidget *parent = nullptr);
     ~FileSystemBrowser();
-    bool setDirPathByFileName(QString filePath);
+    /// File name, not dir name
+    bool setPath(QString filePath);
     bool setDirPath(QString dirPath);
 private:
     void setupUi();

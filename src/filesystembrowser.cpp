@@ -20,18 +20,28 @@ FileSystemBrowser::~FileSystemBrowser()
     delete m_fileIconProvider;
 }
 
-bool FileSystemBrowser::setDirPathByFileName(QString filePath)
+bool FileSystemBrowser::setPath(QString filePath)
 {
     QFileInfo fInfo {filePath};
-    if (!fInfo.exists() || !fInfo.isFile()) {
-        qWarning() << "[ERROR][filesystembrowser] Invalid file path, aborted.";
+    if (!fInfo.exists()) {
+        qWarning() << "[ERROR][filesystembrowser] file path not found, aborted.";
         return false;
     }
-    QDir dir = fInfo.dir();
-    m_curDirPath = dir.absolutePath();
-    m_labelCurDirName->setText(dir.dirName());
-    updateModel();
-    return true;
+    if (fInfo.isFile()) {
+        QDir dir = fInfo.dir();
+        m_curDirPath = dir.absolutePath();
+        m_labelCurDirName->setText(dir.dirName());
+        updateModel();
+        return true;
+    }
+    if (fInfo.isDir()) {
+        m_curDirPath = fInfo.absolutePath();
+        m_labelCurDirName->setText(fInfo.fileName());
+        updateModel();
+        return true;
+    }
+    qCritical() << "[ERROR] unhandled error.";
+    return false;
 }
 
 

@@ -57,8 +57,8 @@ PERMISSION  UID  GID      SIZE  RATIO     STAMP           NAME
      */
     int sizeTitleIdx = lines[0].indexOf(QStringLiteral("SIZE"));
     int nameTitleIdx = lines[0].indexOf(QStringLiteral("NAME"));
-    int sizeColIdxFrom, sizeColWidth;
-    int nameColIdxFrom, nameColWidth;
+    int sizeColIdxFrom = 0, sizeColWidth = 0;
+    int nameColIdxFrom = 0, nameColWidth = 0;
     QStringList seperators = lines[1].split(" ");
     int curColFrom = 0;
     for (const QString &sep : seperators) {

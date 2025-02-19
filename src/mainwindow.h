@@ -25,7 +25,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg);
-
+    void loadPath(const QString &dirOrFilePath);
 private:
     void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, bool loadAsPatch);
     /// Note: this will activate the first button.
