@@ -23,13 +23,19 @@ void InnerFilesBrowser::rerenderFileList(ArchiveFile *archiveFile)
     foreach (const QString &cnfFileName, archiveFile->getCnfNameList()) {
         QTreeWidgetItem *item = new QTreeWidgetItem(rootCnfFolder, CustomItemType::CustomItemCnfFileType);
         item->setText(0, cnfFileName);
-        item->setIcon(0, style()->standardIcon(QStyle::SP_FileLinkIcon));
+        item->setIcon(0, QIcon::fromTheme("text-x-ini"));
+        // item->setIcon(0, style()->standardIcon(QStyle::SP_FileLinkIcon));
     }
     rootCnfFolder->setText(0, rootCnfFolder->text(0) + " (%1)"_L1.arg(QString::number(rootCnfFolder->childCount())));
     foreach (const QString &docFileName, archiveFile->getDocFileNameList()) {
         QTreeWidgetItem *item = new QTreeWidgetItem(rootDocFolder, CustomItemType::CustomItemDocFileType);
         item->setText(0, docFileName);
-        item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
+        if (docFileName.toUpper().contains("README") || docFileName.toUpper().endsWith("DOC")) {
+            item->setIcon(0, QIcon::fromTheme("text-x-readme"));
+        } else {
+            item->setIcon(0, QIcon::fromTheme("text-x-generic"));
+        }
+        // item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
     }
     rootDocFolder->setText(0, rootDocFolder->text(0) + " (%1)"_L1.arg(QString::number(rootDocFolder->childCount())));
     QString curCnfFileName = archiveFile->curCnf() ? archiveFile->curCnf()->fileName() : "";

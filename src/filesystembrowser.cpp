@@ -1,4 +1,5 @@
 #include "filesystembrowser.h"
+#include "fileiconprovider.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFileInfo>
@@ -7,7 +8,8 @@
 
 
 FileSystemBrowser::FileSystemBrowser(QWidget *parent):
-    QWidget{parent}
+    QWidget{parent},
+    m_fileIconProvider{ new FileIconProvider() }
 {
     setupUi();
     setDirPath(QDir::currentPath());
@@ -50,7 +52,6 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
 
 void FileSystemBrowser::setupUi()
 {
-    m_fileIconProvider = new QFileIconProvider();
 
     m_model = new QStandardItemModel(this);
     m_model->setColumnCount(3);

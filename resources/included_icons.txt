@@ -3,7 +3,7 @@
 AppIcon	qkiss	apps/qkiss
 AppIcon	clothes	apps/clothes
 Gnome	preferences-desktop-theme	apps/palettes
-Gnome	folder	apps/system-file-manager
+Gnome	apps/system-file-manager
 Gnome	utilities-system-monitor	apps/utility-system-monitor
 Gnome	code-viewer-c-liked	applications-development
 Gnome	package-x-generic	package-x-generic
@@ -14,5 +14,19 @@ Gnome	zoom-in
 Gnome	zoom-out
 Gnome	zoom-original
 
+# File Browser
 Tango	go-up	go-up
 Tango	view-refresh	view-refresh
+
+Gnome	devices/computer
+Gnome	mimetypes/text-x-preview
+Tango	places/user-trash
+Gnome	places/network-workgroup
+Gnome	devices/media-optical
+Tango	places/folder
+Tango	places/folder-remote
+Gnome	emblems/emblem-package	package-x-generics
+
+Gnome	mimetypes/text-x-ini
+Gnome	mimetypes/text-x-readme
+Gnome	mimetypes/text-x-generic
