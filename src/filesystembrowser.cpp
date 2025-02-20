@@ -1,11 +1,11 @@
-#include "filesystembrowser.h"
-#include "fileiconprovider.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFileInfo>
 #include <QDir>
 #include <QFile>
-
+#include "filesystembrowser.h"
+#include "fileiconprovider.h"
+#include "iconbuttondelegate.h"
 
 FileSystemBrowser::FileSystemBrowser(QWidget *parent):
     QWidget{parent},
@@ -83,6 +83,19 @@ void FileSystemBrowser::setupUi()
     m_view->header()->resizeSection(1, 30);
     m_view->header()->resizeSection(2, 30);
 
+    // Delegate
+    IconButtonDelegate *patchDelegate = new IconButtonDelegate(m_view);
+    m_view->setItemDelegateForColumn(2, patchDelegate);
+    connect(patchDelegate, &IconButtonDelegate::pressed, [=](const QModelIndex& index){
+        QString filePath = m_model->data(index, ThisRole::FileNameRole).toString();
+        QFileInfo fileInfo {filePath};
+        if (fileInfo.isDir()) {
+            // TODO: load folder as patch
+        } else {
+            emit requestLoadFile(filePath, true);
+        }
+    });
+
     // int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
     m_btnGoUp = new QToolButton(this);
     m_btnGoUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
@@ -119,7 +132,10 @@ void FileSystemBrowser::updateModel()
     QFileInfoList fInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::IgnoreCase);
     foreach (const QFileInfo &fInfo, fInfoList) {
         const QString ext = fInfo.fileName().toUpper();
-        if (!fInfo.isDir() && (!ext.endsWith(".LZH") && !ext.endsWith(".CNF"))) {
+        bool isDir = fInfo.isDir();
+        bool isLzh = ext.endsWith(".LZH");
+        bool isCnf = ext.endsWith(".CNF");
+        if (!isDir && (!isLzh && !isCnf)) {
             continue;
         }
         QList<QStandardItem *> rowItems;
@@ -128,14 +144,15 @@ void FileSystemBrowser::updateModel()
         fileNameItem->setIcon(m_fileIconProvider->icon(fInfo));
         rowItems << fileNameItem;
         rowItems << new QStandardItem(formatFileSize(fInfo.size()));
-        rowItems << new QStandardItem();   // preserved for button
-        QPushButton *patchBtn = new QPushButton(tr("Patch"));
-        patchBtn->setToolTip(tr("Load this file as patch"));
-        connect(patchBtn, &QPushButton::pressed, [=](){
-            emit requestLoadFile(fInfo.filePath(), true);
-        });
+        if (isLzh) {
+            QStandardItem *item = new QStandardItem(tr("Patch"));
+            QIcon patchIcon = QIcon::fromTheme("application-x-addon");
+            item->setIcon(patchIcon);
+            item->setToolTip(tr("Click to load this file as patch"));
+            item->setData(fInfo.filePath(), ThisRole::FileNameRole);    // REFACTOR: Redundant data, consider how to reuse it.
+            rowItems << item;
+        }
         m_model->appendRow(rowItems);
-        m_view->setIndexWidget(m_model->index(m_model->rowCount() - 1, 2), patchBtn);
     }
 }
 

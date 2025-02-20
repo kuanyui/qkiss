@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
         }
     }
     mainWindow = new MainWindow();
-    // mainWindow->loadPath(QDir(QDir::homePath()).absoluteFilePath("tmp/kissdata"));
-    mainWindow->loadPath(QDir(QDir::homePath()).absoluteFilePath("projects/copy-as-org-mode"));
+    mainWindow->loadPath(QDir(QDir::homePath()).absoluteFilePath("tmp/kissdata"));
+    // mainWindow->loadPath(QDir(QDir::homePath()).absoluteFilePath("projects/copy-as-org-mode"));
     mainWindow->show();
     // qInstallMessageHandler(originalMessageHandler);
     return app.exec();

@@ -30,3 +30,5 @@ Gnome	emblems/emblem-package	package-x-generics
 Gnome	mimetypes/text-x-ini
 Gnome	mimetypes/text-x-readme
 Gnome	mimetypes/text-x-generic
+
+Gnome	application-x-addon
