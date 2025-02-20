@@ -35,6 +35,10 @@ bool FileSystemBrowser::setPath(QString filePath)
         return true;
     }
     if (fInfo.isDir()) {
+        // FileInfo::absolutePath() is wrong when `dirPath` in `FileInfo(dirPath)` is not ends with `/`.
+        if (!filePath.endsWith("/")) {
+            fInfo = QFileInfo(filePath + "/");
+        }
         m_curDirPath = fInfo.absolutePath();
         m_labelCurDirName->setText(fInfo.fileName());
         updateModel();
