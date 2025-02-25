@@ -7,8 +7,43 @@ IconButtonDelegate::IconButtonDelegate(QObject *parent)
 
 }
 
+QSize IconButtonDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    // When implement sizeHint, should not use `option.rect` (which is effected by user dragging header columns)
+    if (!index.isValid()) {
+        return QSize{0, 0};
+    }
+    QVariant iconVariant = index.data(Qt::DecorationRole);
+    QVariant textVariant = index.data(Qt::DisplayRole);
+    QIcon icon = qvariant_cast<QIcon>(iconVariant);
+    QString text = textVariant.toString();
+
+    static int padHori = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+    static int padVert = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
+    // Get font metrics
+    QFontMetrics fm(option.font);
+    int textWidth = fm.horizontalAdvance(text);
+    int textHeight = fm.height();
+    QSize iconSize {};
+    if (!icon.isNull()) {
+        iconSize = QSize{
+                fm.height() + padHori * 2,
+                fm.height() + padVert * 2
+        };
+    }
+    QSize textSize = QSize {
+            textWidth + padHori * 2,
+            textHeight + padVert * 2
+    };
+    return QSize {
+        iconSize.width() + textSize.width(),
+        qMax(iconSize.height(), textSize.height())
+    };
+}
+
 
 void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+    // https://doc.qt.io/qt-6/qstyleditemdelegate.html#paint
     if (!index.isValid()) {
         return;
     }
@@ -19,6 +54,12 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     if (icon.isNull() && text.isEmpty()) {
         return;
     }
+    static int padHori = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+    static int padVert = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
+    int itemHeight = option.rect.height();
+    int iconSize = itemHeight - padVert * 2;
+    QRect iconRect;
+    QRect textRect;
     // Draw button background
     QStyleOptionButton buttonOption;
     buttonOption.rect = option.rect;
@@ -33,15 +74,26 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
 
     QApplication::style()->drawControl(QStyle::CE_PushButton, &buttonOption, painter);
 
-    // REFACTOR: Magic number
-    QRect iconRect = option.rect.adjusted(5, 5, -5, -5);
-    QRect textRect = option.rect.adjusted(30, 0, -5, 0);
-
     if (!icon.isNull()) {
-        QPixmap pixmap = icon.pixmap(20, 20);
+        iconRect = option.rect.adjusted(padHori, padVert, 0, 0);
+        iconRect.setHeight(iconSize);
+        iconRect.setWidth(iconSize);
+        QPixmap pixmap = icon.pixmap(iconSize, iconSize);
         painter->drawPixmap(iconRect.topLeft(), pixmap);
     }
-    painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, text);
+    if (!text.isEmpty()) {
+        // Calculate text width
+        QFontMetrics fm(option.font);
+        int textWidth = fm.horizontalAdvance(text);
+        int textHeight = fm.height();
+
+        textRect.setX(option.rect.x() + iconRect.width());
+        textRect.setY(option.rect.y() + padVert);
+        textRect.setWidth(textWidth);
+        textRect.setHeight(textHeight);
+        painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, text);
+    }
+    qDebug() << option.rect << iconRect << textRect;
 }
 
 bool IconButtonDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) {
