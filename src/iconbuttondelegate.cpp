@@ -18,8 +18,8 @@ QSize IconButtonDelegate::sizeHint(const QStyleOptionViewItem &option, const QMo
     QIcon icon = qvariant_cast<QIcon>(iconVariant);
     QString text = textVariant.toString();
 
-    static int padHori = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-    static int padVert = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
+    static int padHori = option.widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+    static int padVert = option.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
     // Get font metrics
     QFontMetrics fm(option.font);
     int textWidth = fm.horizontalAdvance(text);
@@ -54,10 +54,11 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     if (icon.isNull() && text.isEmpty()) {
         return;
     }
-    static int padHori = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-    static int padVert = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
+    static int padHori = option.widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+    static int padVert = option.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
+    qDebug() << padHori << padVert;
     int itemHeight = option.rect.height();
-    int iconSize = itemHeight - padVert * 2;
+    int itemIconSize = itemHeight - padVert * 2;
     QRect iconRect;
     QRect textRect;
     // Draw button background
@@ -76,9 +77,9 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
 
     if (!icon.isNull()) {
         iconRect = option.rect.adjusted(padHori, padVert, 0, 0);
-        iconRect.setHeight(iconSize);
-        iconRect.setWidth(iconSize);
-        QPixmap pixmap = icon.pixmap(iconSize, iconSize);
+        iconRect.setHeight(itemIconSize);
+        iconRect.setWidth(itemIconSize);
+        QPixmap pixmap = icon.pixmap(itemIconSize, itemIconSize);
         painter->drawPixmap(iconRect.topLeft(), pixmap);
     }
     if (!text.isEmpty()) {
@@ -91,7 +92,7 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         textRect.setY(option.rect.y() + padVert);
         textRect.setWidth(textWidth);
         textRect.setHeight(textHeight);
-        painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, text);
+        painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignHCenter, text);
     }
     qDebug() << option.rect << iconRect << textRect;
 }
