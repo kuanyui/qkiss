@@ -81,7 +81,8 @@ void FileSystemBrowser::setupUi()
     m_view->header()->setSectionResizeMode(QHeaderView::Interactive);
     m_view->header()->resizeSection(0, 150);
     m_view->header()->resizeSection(1, 30);
-    m_view->resizeColumnToContents(2);
+    // m_view->resizeColumnToContents(2);
+    m_view->header()->setSectionResizeMode(2, QHeaderView::ResizeMode::ResizeToContents);
 
     // Delegate
     IconButtonDelegate *patchDelegate = new IconButtonDelegate(m_view);
