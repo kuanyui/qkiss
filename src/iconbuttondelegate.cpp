@@ -22,23 +22,27 @@ QSize IconButtonDelegate::sizeHint(const QStyleOptionViewItem &option, const QMo
     static int padVert = option.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
     // Get font metrics
     QFontMetrics fm(option.font);
-    int textWidth = fm.horizontalAdvance(text);
     int textHeight = fm.height();
+    int textWidth = fm.horizontalAdvance(text);
     QSize iconSize {};
     if (!icon.isNull()) {
-        iconSize = QSize{
+        iconSize = QSize {
                 fm.height() + padHori * 2,
                 fm.height() + padVert * 2
         };
     }
-    QSize textSize = QSize {
+    QSize textSize {};
+    if (!text.isEmpty()) {
+        textSize = QSize {
             textWidth + padHori * 2,
             textHeight + padVert * 2
-    };
-    return QSize {
+        };
+    }
+    QSize hint {
         iconSize.width() + textSize.width(),
         qMax(iconSize.height(), textSize.height())
     };
+    return hint;
 }
 
 
@@ -73,6 +77,7 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         buttonOption.state |= QStyle::State_Sunken;
     }
 
+    // Draw according to standard style of QStyle::ControlElement::PushButton
     QApplication::style()->drawControl(QStyle::CE_PushButton, &buttonOption, painter);
 
     if (!icon.isNull()) {
