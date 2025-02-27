@@ -58,8 +58,8 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     if (icon.isNull() && text.isEmpty()) {
         return;
     }
-    static int padHori = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-    static int padVert = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
+     int padHori = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+     int padVert = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
     qDebug() << padHori << padVert;
     int itemHeight = opt.rect.height();
     int itemIconSize = itemHeight - padVert * 2;
@@ -74,7 +74,7 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     if (opt.state & QStyle::State_MouseOver) {
         buttonOption.state |= QStyle::State_MouseOver;
     }
-    if (opt.state & QStyle::State_Selected) {
+    if (index == m_pressedIndex && index == m_hoveredIndex) {
         buttonOption.state |= QStyle::State_Sunken;
     }
 
@@ -104,13 +104,56 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
 }
 
 bool IconButtonDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) {
-    if (event->type() == QEvent::MouseButtonRelease) {
-        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-        if (option.rect.contains(mouseEvent->pos())) {
-            emit pressed(index);
-            return true;
+    if (event->type() == QEvent::MouseButtonPress) {
+        auto *mouseEvent = static_cast<QMouseEvent *>(event);
+        if (mouseEvent->button() == Qt::LeftButton) {
+            m_pressedIndex = index;
+            m_hoveredIndex = index;
         }
+        mouseEvent->accept();
+        return true;
+    } else if (event->type() == QEvent::MouseMove) {
+        auto *mouseEvent = static_cast<QMouseEvent *>(event);
+        if (option.rect.contains(mouseEvent->pos()) && m_pressedIndex.isValid()) {
+            m_hoveredIndex = index;
+        } else {
+            m_hoveredIndex = QModelIndex();
+        }
+        mouseEvent->accept();
+    } else if (event->type() == QEvent::MouseButtonRelease) {
+        auto *mouseEvent = static_cast<QMouseEvent *>(event);
+        if (mouseEvent->button() == Qt::LeftButton && m_pressedIndex == index) {
+            emit pressed(index);
+            mouseEvent->accept();
+        }
+        m_hoveredIndex = QModelIndex();
+        m_pressedIndex = QModelIndex();
+        return true;
     }
+    // if (event->type() == QEvent::TouchBegin) {
+    //     auto *touchEvent = static_cast<QTouchEvent *>(event);
+    //     if (!touchEvent->points().isEmpty()) {
+    //         const QTouchEvent::TouchPoint &point = touchEvent->points().first();
+    //         if (option.rect.contains(point.position().toPoint())) {
+    //             m_pressedIndex = index;
+    //             touchEvent->accept();
+    //             return true;
+    //         }
+    //     }
+    // } else if (event->type() == QEvent::TouchUpdate) {
+    //     auto *touchEvent = static_cast<QTouchEvent *>(event);
+    //     if (!touchEvent->points().isEmpty()) {
+    //         const QTouchEvent::TouchPoint &point = touchEvent->points().first();
+    //         if (!option.rect.contains(point.position().toPoint()) && m_pressedIndex.isValid()) {
+    //             m_pressedIndex = QModelIndex();
+    //         }
+    //     }
+    // } else if (event->type() == QEvent::TouchEnd) {
+    //     m_pressedIndex = QModelIndex();
+    //     event->accept();
+    //     return true;
+    // }
+
     return QStyledItemDelegate::editorEvent(event, model, option, index);
 }
 
