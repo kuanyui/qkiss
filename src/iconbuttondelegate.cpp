@@ -70,14 +70,16 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     QStyleOptionButton buttonOption;
     buttonOption.rect = opt.rect;
     buttonOption.state = QStyle::State_Enabled;
-
     if (opt.state & QStyle::State_MouseOver) {
-        buttonOption.state |= QStyle::State_MouseOver;
+        if (index == m_origPressedIndex && index == m_draggedOnIndex) {
+            buttonOption.state |= QStyle::State_MouseOver;
+        } else if (index == m_origPressedIndex) {
+            buttonOption.state |= QStyle::State_MouseOver;
+        }
     }
-    if (index == m_pressedIndex && index == m_hoveredIndex) {
+    if (index == m_origPressedIndex && index == m_draggedOnIndex) {
         buttonOption.state |= QStyle::State_Sunken;
     }
-
     // Draw according to standard style of QStyle::ControlElement::PushButton
     QApplication::style()->drawControl(QStyle::CE_PushButton, &buttonOption, painter);
 
@@ -104,30 +106,29 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
 }
 
 bool IconButtonDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) {
+    qDebug() << event->type();
     if (event->type() == QEvent::MouseButtonPress) {
         auto *mouseEvent = static_cast<QMouseEvent *>(event);
         if (mouseEvent->button() == Qt::LeftButton) {
-            m_pressedIndex = index;
-            m_hoveredIndex = index;
+            m_origPressedIndex = index;
+            m_draggedOnIndex = index;
         }
         mouseEvent->accept();
         return true;
     } else if (event->type() == QEvent::MouseMove) {
         auto *mouseEvent = static_cast<QMouseEvent *>(event);
-        if (option.rect.contains(mouseEvent->pos()) && m_pressedIndex.isValid()) {
-            m_hoveredIndex = index;
-        } else {
-            m_hoveredIndex = QModelIndex();
-        }
+        m_draggedOnIndex = index;
         mouseEvent->accept();
+        return true;
     } else if (event->type() == QEvent::MouseButtonRelease) {
         auto *mouseEvent = static_cast<QMouseEvent *>(event);
-        if (mouseEvent->button() == Qt::LeftButton && m_pressedIndex == index) {
+        if (mouseEvent->button() == Qt::LeftButton && m_origPressedIndex == index) {
             emit pressed(index);
             mouseEvent->accept();
         }
-        m_hoveredIndex = QModelIndex();
-        m_pressedIndex = QModelIndex();
+        m_draggedOnIndex = QModelIndex();
+        m_origPressedIndex = QModelIndex();
+
         return true;
     }
     // if (event->type() == QEvent::TouchBegin) {

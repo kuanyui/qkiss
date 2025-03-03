@@ -20,8 +20,8 @@ signals:
     void pressed(const QModelIndex& index) const;
 private:
     /// Default ctor() creates an invalid index.
-    QModelIndex m_pressedIndex;
-    QModelIndex m_hoveredIndex;
+    QModelIndex m_origPressedIndex;
+    QModelIndex m_draggedOnIndex;
 };
 
 
