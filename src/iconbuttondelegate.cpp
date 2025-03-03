@@ -60,7 +60,7 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     }
      int padHori = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
      int padVert = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
-    qDebug() << padHori << padVert;
+    // qDebug() << padHori << padVert;
     int itemHeight = opt.rect.height();
     int itemIconSize = itemHeight - padVert * 2;
     QRect iconRect;
@@ -71,14 +71,16 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     buttonOption.rect = opt.rect;
     buttonOption.state = QStyle::State_Enabled;
     if (opt.state & QStyle::State_MouseOver) {
-        if (index == m_origPressedIndex && index == m_draggedOnIndex) {
+        if (index == m_hoveredOnIndex) {
             buttonOption.state |= QStyle::State_MouseOver;
         } else if (index == m_origPressedIndex) {
             buttonOption.state |= QStyle::State_MouseOver;
         }
     }
-    if (index == m_origPressedIndex && index == m_draggedOnIndex) {
+    if (index == m_origPressedIndex && index == m_hoveredOnIndex) {
         buttonOption.state |= QStyle::State_Sunken;
+    } else {
+        buttonOption.state &= ~QStyle::State_Sunken;
     }
     // Draw according to standard style of QStyle::ControlElement::PushButton
     QApplication::style()->drawControl(QStyle::CE_PushButton, &buttonOption, painter);
@@ -102,22 +104,33 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         textRect.setHeight(textHeight);
         painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignHCenter, text);
     }
-    qDebug() << opt.rect << iconRect << textRect;
+    // qDebug() << opt.rect << iconRect << textRect;
 }
 
 bool IconButtonDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) {
-    qDebug() << event->type();
+    /// NOTE: 1. QStyledItemDelegate::editorEvent doesn't trigger `QEvent::MouseLeave`.
+    /// NOTE: 2. Assume delegate is applied only on column 2, then the editorEvent() is only triggered when current pixel and previous pixel are both on column 2.
+    /// NOTE: 3. View must call `QWidget ::setMouseTracking(true)` if you wants QEvent::MouseMove event without pressing.
+    /// NOTE: 4. With mouse, only 3 events are triggered: MouseButtonPress, MouseMove, MouseButtonRelease
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
     if (event->type() == QEvent::MouseButtonPress) {
         auto *mouseEvent = static_cast<QMouseEvent *>(event);
         if (mouseEvent->button() == Qt::LeftButton) {
             m_origPressedIndex = index;
-            m_draggedOnIndex = index;
+            m_hoveredOnIndex = index;
         }
         mouseEvent->accept();
         return true;
     } else if (event->type() == QEvent::MouseMove) {
         auto *mouseEvent = static_cast<QMouseEvent *>(event);
-        m_draggedOnIndex = index;
+        // qDebug() << "QEvent.pos" << mouseEvent->pos();
+        if (opt.rect.contains(mouseEvent->pos())) {
+            m_hoveredOnIndex = index;
+        } else {
+            m_hoveredOnIndex = QModelIndex();
+        }
+        m_hoveredOnIndex = index;
         mouseEvent->accept();
         return true;
     } else if (event->type() == QEvent::MouseButtonRelease) {
@@ -126,7 +139,7 @@ bool IconButtonDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             emit pressed(index);
             mouseEvent->accept();
         }
-        m_draggedOnIndex = QModelIndex();
+        m_hoveredOnIndex = QModelIndex();
         m_origPressedIndex = QModelIndex();
 
         return true;

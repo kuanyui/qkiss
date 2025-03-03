@@ -83,13 +83,15 @@ void FileSystemBrowser::setupUi()
     m_view->header()->resizeSection(1, 30);
     // m_view->resizeColumnToContents(2);
     m_view->header()->setSectionResizeMode(2, QHeaderView::ResizeMode::ResizeToContents);
-
+    m_view->setMouseTracking(true);   // NOTE: Set to true to make QStyledItemDelegate::editorEvent accepts QEvent::MouseMove without QEvent::MouseButtonPress
     // Delegate
     IconButtonDelegate *patchDelegate = new IconButtonDelegate(m_view);
     m_view->setItemDelegateForColumn(2, patchDelegate);
     connect(patchDelegate, &IconButtonDelegate::pressed, [=](const QModelIndex& index){
         QString filePath = m_model->data(index, ThisRole::FileNameRole).toString();
+        if (filePath.isEmpty()) { return; }
         QFileInfo fileInfo {filePath};
+        qDebug() << "debug" << filePath;
         if (fileInfo.isDir()) {
             // TODO: load folder as patch
         } else {

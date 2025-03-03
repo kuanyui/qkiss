@@ -21,7 +21,7 @@ signals:
 private:
     /// Default ctor() creates an invalid index.
     QModelIndex m_origPressedIndex;
-    QModelIndex m_draggedOnIndex;
+    QModelIndex m_hoveredOnIndex;
 };
 
 
