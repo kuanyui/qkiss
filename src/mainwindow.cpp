@@ -135,27 +135,25 @@ void MainWindow::rerenderSetPaletteButtons()
     cycleToggleSceneSetBtn->setIcon(QIcon::fromTheme("clothes"));
     cycleToggleSceneSetBtn->setText(tr("Scene Sets"));
     cycleToggleSceneSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
+    m_toolbarSceneSets->addWidget(cycleToggleSceneSetBtn);
     connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, [=](bool checked){
         Q_UNUSED(checked)
         if (m_archiveFile->curCnfSetsAmount() == 0) { return; }
         uint8_t curSceneNo = m_archiveFile->curCnfSetNo();
         uint8_t nextSceneNo = (curSceneNo + 1) % m_archiveFile->curCnfSetsAmount();
-        // m_kissView->showKissSceneByIndex(nextSceneNo);
-        // m_archiveFile->setCurCnfSetNo(nextSceneNo);
         QAbstractButton *btn = m_btnGroupSceneSets->button(nextSceneNo);
         btn->click();
     });
-    m_toolbarSceneSets->addWidget(cycleToggleSceneSetBtn);
     for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarSceneSets);
-        m_btnGroupSceneSets->addButton(btn, sceneIdx);   // Assign sceneIdx as `id` in this group, then can be access later directly.
+        m_btnGroupSceneSets->addButton(btn, sceneIdx);   // Assign sceneIdx as `id` in this group, then can be access via QButtonGroup::button() later directly.
         btn->setCheckable(true);   // Make it act like radio button
         if (sceneIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(sceneIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
             m_kissView->showKissSceneByIndex(sceneIdx);
             m_archiveFile->setCurCnfSetNo(sceneIdx);   // FIXME: It seems m_archiveFile stores a setNo, but m_kissView itself also stores a setNo (more precisely, sceneIdx). Should keep a singleton here.
-            btn->setChecked(true);   // NOTE: DO NOT USE setDown() here, it's merely a visual state, not exclusive in group, and doesn't effect `checked` state.
+            btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
         });
         connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurCnfSetNo){
             if (sceneIdx == newCurCnfSetNo) {
@@ -170,24 +168,33 @@ void MainWindow::rerenderSetPaletteButtons()
     m_toolbarColorSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
     m_toolbarColorSets->setWindowTitle(tr("Palette Sets"));   // Show in context menu of this ToolBar
     // m_toolbarColorSets->setWindowIcon(QIcon::fromTheme("palettes"));
-    QToolButton *paletteSetBtn = new QToolButton(m_toolbarColorSets);
-    paletteSetBtn->setIcon(QIcon::fromTheme("palettes"));
-    paletteSetBtn->setText(tr("Palette Sets"));
-    paletteSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
-    m_toolbarColorSets->addWidget(paletteSetBtn);
+    QToolButton *cycleTogglePaletteSetBtn = new QToolButton(m_toolbarColorSets);
+    cycleTogglePaletteSetBtn->setIcon(QIcon::fromTheme("palettes"));
+    cycleTogglePaletteSetBtn->setText(tr("Palette Sets"));
+    cycleTogglePaletteSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
+    m_toolbarColorSets->addWidget(cycleTogglePaletteSetBtn);
+    connect(cycleTogglePaletteSetBtn, &QAbstractButton::clicked, [=](bool checked){
+        Q_UNUSED(checked)
+        if (m_archiveFile->paletteAmountOfFirstKcfInCurCnf() == 0) { return; }
+        uint8_t curPaletteNo = m_archiveFile->curPaletteNo();
+        uint8_t nextPaletteNo = (curPaletteNo + 1) % m_archiveFile->paletteAmountOfFirstKcfInCurCnf();
+        QAbstractButton *btn = m_btnGroupColorSets->button(nextPaletteNo);
+        btn->click();
+    });
     for (size_t paletteIdx = 0; paletteIdx < m_archiveFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarColorSets);
-        m_btnGroupColorSets->addButton(btn);
+        m_btnGroupColorSets->addButton(btn, paletteIdx);    // Assign paletteIdx as `id` in this group, then can be access via QButtonGroup::button() later directly.
         btn->setCheckable(true);   // Make it act like radio button
         if (paletteIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(paletteIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
             m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx);
             m_archiveFile->setCurPaletteNo(paletteIdx);    // FIXME: It seems m_archiveFile stores a setNo, but m_kissView->curKissScene() itself also stores a paletteNo. Should keep a singleton here.
+            btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
         });
         connect(m_archiveFile, &ArchiveFile::curPaletteNoChanged, [=](uint8_t newCurPaletteNo){
             if (paletteIdx == newCurPaletteNo) {
-                btn->setDown(true);
+                btn->setChecked(true);
             }
         });
         m_toolbarColorSets->addWidget(btn);
