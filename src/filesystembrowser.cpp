@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QFile>
+#include <QSet>
 #include "filesystembrowser.h"
 #include "fileiconprovider.h"
 #include "iconbuttondelegate.h"
@@ -62,7 +63,32 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
     return true;
 }
 
-
+void FileSystemBrowser::markPathAsLoaded(QString path, QKiSS::FileLoadMode fileLoadMode)
+{
+    QStringList oriLoadedKissFilePaths = m_loadedKissFilePaths;
+    switch (fileLoadMode) {
+    case QKiSS::FileLoadMode::LoadAsIndependent: {
+        m_loadedKissFilePaths.clear();
+        m_loadedKissFilePaths.append(path);
+        break;
+    }
+    case QKiSS::FileLoadMode::LoadAsPatch: {
+        m_loadedKissFilePaths.append(path);
+        break;
+    }
+    }
+    QSet<QString> oriPaths = { oriLoadedKissFilePaths.begin(), oriLoadedKissFilePaths.end() };
+    QSet<QString> newPaths = { m_loadedKissFilePaths.begin(), m_loadedKissFilePaths.end() };
+    QSet<QString> newlyUnmarkedPaths = oriPaths - newPaths;
+    QSet<QString> newlyMarkedPaths = newPaths - oriPaths;
+    for (int r = 0; r < m_model->rowCount(); r++) {
+        QStandardItem *item = m_model->item(r, 0);
+        QString itemFilePath = item->data(ThisRole::FilePathRole).toString();
+        if (newlyMarkedPaths.contains(itemFilePath) || newlyUnmarkedPaths.contains(itemFilePath)) {
+            item->setIcon(getFileIcon(itemFilePath));
+        }
+    }
+}
 
 void FileSystemBrowser::setupUi()
 {
@@ -88,7 +114,7 @@ void FileSystemBrowser::setupUi()
     IconButtonDelegate *patchDelegate = new IconButtonDelegate(m_view);
     m_view->setItemDelegateForColumn(2, patchDelegate);
     connect(patchDelegate, &IconButtonDelegate::pressed, [=](const QModelIndex& index){
-        QString filePath = m_model->data(index, ThisRole::FileNameRole).toString();
+        QString filePath = m_model->data(index, ThisRole::FilePathRole).toString();
         if (filePath.isEmpty()) { return; }
         QFileInfo fileInfo {filePath};
         qDebug() << "debug" << filePath;
@@ -143,8 +169,8 @@ void FileSystemBrowser::updateModel()
         }
         QList<QStandardItem *> rowItems;
         QStandardItem *fileNameItem = new QStandardItem(fInfo.fileName());
-        fileNameItem->setData(fInfo.filePath(), ThisRole::FileNameRole);
-        fileNameItem->setIcon(m_fileIconProvider->icon(fInfo));
+        fileNameItem->setData(fInfo.filePath(), ThisRole::FilePathRole);
+        fileNameItem->setIcon(getFileIcon(fInfo));
         rowItems << fileNameItem;
         rowItems << new QStandardItem(formatFileSize(fInfo.size()));
         if (isLzh) {
@@ -152,7 +178,7 @@ void FileSystemBrowser::updateModel()
             QIcon patchIcon = QIcon::fromTheme("application-x-addon");
             item->setIcon(patchIcon);
             item->setToolTip(tr("Click to load this file as patch"));
-            item->setData(fInfo.filePath(), ThisRole::FileNameRole);    // REFACTOR: Redundant data, consider how to reuse it.
+            item->setData(fInfo.filePath(), ThisRole::FilePathRole);    // REFACTOR: Redundant data, consider how to reuse it.
             rowItems << item;
         }
         m_model->appendRow(rowItems);
@@ -175,6 +201,32 @@ QString FileSystemBrowser::formatFileSize(qint64 bytes) {
     }
 }
 
+QIcon FileSystemBrowser::getFileIcon(const QFileInfo &fileInfo) const
+{
+    QString absPath = fileInfo.absoluteFilePath();
+    if (m_loadedKissFilePaths.contains(absPath)) {
+        bool isLzh = absPath.toUpper().endsWith(".LZH");
+        if (isLzh) {
+            return QIcon::fromTheme("package-unzipped");
+        }
+        if (fileInfo.isDir()) {
+            return QIcon::fromTheme("folder-open");
+        }
+    }
+    return m_fileIconProvider->icon(fileInfo);
+}
+
+QIcon FileSystemBrowser::getFileIcon(const QString &filePath) const
+{
+    return getFileIcon(QFileInfo{filePath});
+}
+
+QIcon FileSystemBrowser::getLoadStateIcon(const QFileInfo &fileInfo) const
+{
+    Q_UNUSED(fileInfo);
+    return QIcon::fromTheme("qkiss");
+}
+
 void FileSystemBrowser::goUp() {
     QDir dir { m_curDirPath };
     dir.cdUp();
@@ -188,7 +240,7 @@ void FileSystemBrowser::refresh() {
 void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
     if (!index.isValid()) return;
     QModelIndex fileNameIndex = m_model->index(index.row(), 0);  // choose the first column (col = 0)
-    QString filePath = m_model->data(fileNameIndex, ThisRole::FileNameRole).toString();
+    QString filePath = m_model->data(fileNameIndex, ThisRole::FilePathRole).toString();
     QFileInfo fileInfo { filePath };
     if (fileInfo.isDir()) {
         setDirPath(filePath);

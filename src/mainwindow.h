@@ -27,7 +27,7 @@ public:
     void receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg);
     void loadPath(const QString &dirOrFilePath);
 private:
-    void tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, QKiSS::FileLoadMode fileLoadMode);
+    void tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, QKiSS::FileLoadMode fileLoadMode);
     /// Note: this will activate the first button.
     void rerenderSetPaletteButtons();
     void setupToolBars();

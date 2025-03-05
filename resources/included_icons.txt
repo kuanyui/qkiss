@@ -6,7 +6,8 @@ Gnome	preferences-desktop-theme	apps/palettes
 Gnome	apps/system-file-manager
 Gnome	utilities-system-monitor	apps/utility-system-monitor
 Gnome	code-viewer-c-liked	applications-development
-Gnome	package-x-generic	package-x-generic
+Gnome	package-x-generic	package-unzipped
+Gnome	emblems/emblem-package	package-zipped
 Gnome	text-x-readme	text-x-readme
 Gnome	logviewer	logviewer
 
@@ -18,14 +19,14 @@ Gnome	zoom-original
 Tango	go-up	go-up
 Tango	view-refresh	view-refresh
 
-Gnome	devices/computer
-Gnome	mimetypes/text-x-preview
-Tango	places/user-trash
-Gnome	places/network-workgroup
-Gnome	devices/media-optical
-Tango	places/folder
-Tango	places/folder-remote
-Gnome	emblems/emblem-package	package-x-generics
+#Gnome	devices/computer
+#Gnome	mimetypes/text-x-preview
+#Tango	places/user-trash
+#Gnome	places/network-workgroup
+#Gnome	devices/media-optical
+Tango	places/document-open	folder-open
+Tango	places/folder	folder
+#Tango	places/folder-remote	folder-remote
 
 Gnome	mimetypes/text-x-ini
 Gnome	mimetypes/text-x-readme

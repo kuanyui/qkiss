@@ -11,12 +11,13 @@
 #include <QLabel>
 
 class FileIconProvider;
+class QFileInfo;
 
 class FileSystemBrowser : public QWidget
 {
     Q_OBJECT
     enum ThisRole {
-        FileNameRole = Qt::UserRole + 1
+        FilePathRole = Qt::UserRole + 1
     };
 public:
     FileSystemBrowser(QWidget *parent = nullptr);
@@ -24,11 +25,15 @@ public:
     /// File name, not dir name
     bool setPath(QString filePath);
     bool setDirPath(QString dirPath);
+    void markPathAsLoaded(QString path, QKiSS::FileLoadMode fileLoadMode);
 private:
     void setupUi();
     void updateModel();
     static QString formatFileSize(qint64 bytes);
-
+    QIcon getFileIcon(const QFileInfo &fileInfo) const;
+    QIcon getFileIcon(const QString &filePath) const;
+    QIcon getLoadStateIcon(const QFileInfo &fileInfo) const;
+    QIcon getLoadStateIcon(const QString &filePath) const;
 private slots:
     void goUp();
     void refresh();
@@ -43,6 +48,10 @@ private:
     QString m_curDirPath;
     QLabel *m_labelCurDirName;
     FileIconProvider *m_fileIconProvider;
+    /// First element is main archive path, the rests are patches' paths.
+    /// Can be a LZH file path, or folder (not supported yet.)
+    QList<QString> m_loadedKissFilePaths;
+
 };
 
 

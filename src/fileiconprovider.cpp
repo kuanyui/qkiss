@@ -24,7 +24,7 @@ QIcon FileIconProvider::icon(IconType type) const
 QIcon FileIconProvider::icon(const QFileInfo &info) const
 {
     if (info.suffix().toUpper() == "LZH") {
-        return QIcon::fromTheme("package-x-generics");
+        return QIcon::fromTheme("package-zipped");
     }
     if (info.isDir()) {
         return icon(IconType::Folder);

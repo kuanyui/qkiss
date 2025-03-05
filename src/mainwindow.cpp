@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->action_window_fileSystemBrowser->setIcon(QIcon::fromTheme("system-file-manager"));
     ui->action_window_logViewer->setIcon(QIcon::fromTheme("logviewer", QIcon::fromTheme("utilities-system-monitor")));
     ui->action_window_codeViewer->setIcon(QIcon::fromTheme("applications-development"));
-    ui->action_window_innerFilesBrowser->setIcon(QIcon::fromTheme("package-x-generic"));
+    ui->action_window_innerFilesBrowser->setIcon(QIcon::fromTheme("package-unzipped"));
     ui->action_window_docViewer->setIcon(QIcon::fromTheme("text-x-readme", QIcon::fromTheme("accessories-text-editor")));
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupToolBars();
@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
         m_logViewer->clearAllLogs();
         ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-            tryToLoadFilesAsKissFiles(filePath, filesMap, fileLoadMode);
+            tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, fileLoadMode);
         });
     });
 
@@ -84,7 +84,7 @@ void MainWindow::loadPath(const QString &dirOrFilePath)
     m_fileSystemBrowser->setPath(dirOrFilePath);
 }
 
-void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles,  QKiSS::FileLoadMode fileLoadMode) {
+void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles,  QKiSS::FileLoadMode fileLoadMode) {
     qInfo().noquote() << tr("Start to parse CNF / KCF / CEL files...");
     KissFilesParsingResult parsedKissFiles = ArchiveFile::parseKissFiles(extractedRawFiles, compressedFilePath);
     if (fileLoadMode == QKiSS::FileLoadMode::LoadAsPatch) {
@@ -105,6 +105,7 @@ void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shar
     m_kissView->deleteAllScenes();
     m_kissView->setArchiveFile(m_archiveFile);
     qInfo().noquote() << tr("Parsing finished. Now rendering scenes...");
+    m_fileSystemBrowser->markPathAsLoaded(compressedFilePath, fileLoadMode);
     m_innerFilesBrowser->rerenderFileList(m_archiveFile);
     m_codeEditor->setPlainText(m_archiveFile->getCnfFileAsString(m_archiveFile->curCnf()->fileName()));
     if (m_archiveFile->getDocFileNameList().length() == 0) {
@@ -329,7 +330,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
                 m_logViewer->clearAllLogs();
                 ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-                    tryToLoadFilesAsKissFiles(filePath, filesMap, QKiSS::FileLoadMode::LoadAsIndependent);
+                    tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, QKiSS::FileLoadMode::LoadAsIndependent);
                 });
                 // m_archiveProcessor->extractLzh(filePath);
             }

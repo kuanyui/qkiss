@@ -11,6 +11,7 @@
 #include "parsedcel.h"
 #include "archiveprocessor.h"
 
+/// Attention: Remember to call deleteAllObjects() to release memory.
 struct KissFilesParsingResult {
     void deleteAllObjects();
     QMap<QString,  ParsedCnf*> parsedCnfFiles;
