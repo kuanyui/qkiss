@@ -42,9 +42,9 @@ protected:
     QToolBar *m_toolbarFiles;
     QToolBar *m_toolbarZooms;
     QToolBar *m_toolbarWindows;
-    QToolBar *m_toolbarPageSets;
+    QToolBar *m_toolbarSceneSets;
     QToolBar *m_toolbarColorSets;
-    QButtonGroup *m_btnGroupPageSets;
+    QButtonGroup *m_btnGroupSceneSets;
     QButtonGroup *m_btnGroupColorSets;
     QComboBox *m_cboxZoomScale;
     ArchiveFile *m_archiveFile;
@@ -55,4 +55,7 @@ protected:
     CodeEditor *m_codeEditor;
     QPlainTextEdit *m_docViewer;
 };
+
+
+
 #endif // MAINWINDOW_H

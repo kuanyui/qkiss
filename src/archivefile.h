@@ -61,6 +61,7 @@ public:
     ParsedCnf *curCnf() const;
     uint8_t curCnfSetNo() const;
     void setCurCnfSetNo(uint8_t newCurCnfSetNo);
+    uint8_t curCnfSetsAmount() const;
     uint8_t curPaletteNo() const;
     void setCurPaletteNo(uint8_t newPaletteNo);
     /// Get the first KCF file, and return the palette amount of this KCF file.
@@ -90,7 +91,7 @@ private:
     QString m_archiveFilePath;
     // ==========================================
     /** currently renderred CNF */
-    ParsedCnf *m_curCnf;
+    ParsedCnf *m_curCnf = nullptr;
     /**
      * - A CNF file would specify the used KCF files as an ordered list.
      * - In this CNF file, each CEL line would specify this CEL should be rendered with which KCF file.

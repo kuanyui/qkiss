@@ -328,6 +328,12 @@ void ArchiveFile::setCurCnfSetNo(uint8_t newCurCnfSetNo)
     }
 }
 
+uint8_t ArchiveFile::curCnfSetsAmount() const
+{
+    if (m_curCnf == nullptr) { return 0; }
+    return m_curCnf->sets().length();
+}
+
 uint8_t ArchiveFile::curCnfSetNo() const
 {
     return m_curCnfSetNo;

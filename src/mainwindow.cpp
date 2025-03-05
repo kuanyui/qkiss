@@ -125,31 +125,58 @@ void MainWindow::rerenderSetPaletteButtons()
     // =====================================================
     // Page sets
     // =====================================================
-    m_toolbarPageSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
+    for (auto *btn: m_btnGroupSceneSets->buttons()) {
+        m_btnGroupSceneSets->removeButton(btn);   // NOTE: This is crucial here and not clearly documented in Qt. Without it, cycleToggleSceneSetBtn acts wrongly.
+    }
+    m_toolbarSceneSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
+    m_toolbarSceneSets->setWindowTitle(tr("Scene Sets"));   // Show in context menu of this ToolBar
+    // m_toolbarSceneSets->setWindowIcon(QIcon::fromTheme("clothes"));
+    QToolButton *cycleToggleSceneSetBtn = new QToolButton(m_toolbarSceneSets);
+    cycleToggleSceneSetBtn->setIcon(QIcon::fromTheme("clothes"));
+    cycleToggleSceneSetBtn->setText(tr("Scene Sets"));
+    cycleToggleSceneSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
+    connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, [=](bool checked){
+        Q_UNUSED(checked)
+        if (m_archiveFile->curCnfSetsAmount() == 0) { return; }
+        uint8_t curSceneNo = m_archiveFile->curCnfSetNo();
+        uint8_t nextSceneNo = (curSceneNo + 1) % m_archiveFile->curCnfSetsAmount();
+        // m_kissView->showKissSceneByIndex(nextSceneNo);
+        // m_archiveFile->setCurCnfSetNo(nextSceneNo);
+        QAbstractButton *btn = m_btnGroupSceneSets->button(nextSceneNo);
+        btn->click();
+    });
+    m_toolbarSceneSets->addWidget(cycleToggleSceneSetBtn);
     for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
-        QToolButton *btn = new QToolButton(m_toolbarPageSets);
-        m_btnGroupPageSets->addButton(btn);
+        QToolButton *btn = new QToolButton(m_toolbarSceneSets);
+        m_btnGroupSceneSets->addButton(btn, sceneIdx);   // Assign sceneIdx as `id` in this group, then can be access later directly.
         btn->setCheckable(true);   // Make it act like radio button
         if (sceneIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(sceneIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
             m_kissView->showKissSceneByIndex(sceneIdx);
             m_archiveFile->setCurCnfSetNo(sceneIdx);   // FIXME: It seems m_archiveFile stores a setNo, but m_kissView itself also stores a setNo (more precisely, sceneIdx). Should keep a singleton here.
-            btn->setDown(true);
+            btn->setChecked(true);   // NOTE: DO NOT USE setDown() here, it's merely a visual state, not exclusive in group, and doesn't effect `checked` state.
         });
         connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurCnfSetNo){
             if (sceneIdx == newCurCnfSetNo) {
-                btn->setDown(true);
+                btn->setChecked(true);
             }
         });
-        m_toolbarPageSets->addWidget(btn);
+        m_toolbarSceneSets->addWidget(btn);
     }
     // =====================================================
     // Color sets
     // =====================================================
     m_toolbarColorSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
+    m_toolbarColorSets->setWindowTitle(tr("Palette Sets"));   // Show in context menu of this ToolBar
+    // m_toolbarColorSets->setWindowIcon(QIcon::fromTheme("palettes"));
+    QToolButton *paletteSetBtn = new QToolButton(m_toolbarColorSets);
+    paletteSetBtn->setIcon(QIcon::fromTheme("palettes"));
+    paletteSetBtn->setText(tr("Palette Sets"));
+    paletteSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
+    m_toolbarColorSets->addWidget(paletteSetBtn);
     for (size_t paletteIdx = 0; paletteIdx < m_archiveFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
-        QToolButton *btn = new QToolButton(m_toolbarPageSets);
+        QToolButton *btn = new QToolButton(m_toolbarColorSets);
         m_btnGroupColorSets->addButton(btn);
         btn->setCheckable(true);   // Make it act like radio button
         if (paletteIdx == 0) { btn->setChecked(true); }
@@ -176,6 +203,7 @@ void MainWindow::setupToolBars()
     m_toolbarFiles->addAction(ui->action_openFile);
     m_toolbarFiles->addAction(ui->action_openDirectory);
     // Zoom
+    ui->action_resetScale->setIcon(QIcon::fromTheme("zoom-original"));
     m_toolbarZooms = new QToolBar(this);
     m_toolbarZooms->setWindowTitle(tr("Zooming Tools"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarZooms);
@@ -197,31 +225,16 @@ void MainWindow::setupToolBars()
     m_toolbarWindows->addAction(ui->action_window_logViewer);
     m_toolbarWindows->addAction(ui->action_window_codeViewer);
     // Page Sets
-    m_toolbarPageSets = new QToolBar(this);
-    m_btnGroupPageSets = new QButtonGroup(m_toolbarPageSets);
-    m_btnGroupPageSets->setExclusive(true);   // Radio-button liked
-    m_toolbarPageSets->setWindowTitle(tr("Page Sets"));
-    this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarPageSets);
-    m_toolbarPageSets->addWidget(new QLabel(tr("Page Set"), m_toolbarPageSets));
-    for (int i = 0; i < 9; i++) {
-        QToolButton *btn = new QToolButton(m_toolbarPageSets);
-        btn->setText(QString::number(i+1));
-        btn->setCheckable(true);
-        m_toolbarPageSets->addWidget(btn);
-    }
+    m_toolbarSceneSets = new QToolBar(this);
+    this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarSceneSets);
+    m_btnGroupSceneSets = new QButtonGroup(m_toolbarSceneSets);
+    m_btnGroupSceneSets->setExclusive(true);   // Radio-button liked
     // Color Sets
     m_toolbarColorSets = new QToolBar(this);
+    this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarColorSets);
     m_btnGroupColorSets = new QButtonGroup(m_toolbarColorSets);
     m_btnGroupColorSets->setExclusive(true);   // Radio-button liked
-    m_toolbarColorSets->setWindowTitle(tr("Color Sets"));
-    this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarColorSets);
-    m_toolbarColorSets->addWidget(new QLabel(tr("Color Set"), m_toolbarColorSets));
-    for (int i = 0; i < 9; i++) {
-        QToolButton *btn = new QToolButton(m_toolbarColorSets);
-        btn->setText(QString::number(i+1));
-        btn->setCheckable(true);
-        m_toolbarColorSets->addWidget(btn);
-    }
+    rerenderSetPaletteButtons();
 }
 
 void MainWindow::setupDockWindows()
