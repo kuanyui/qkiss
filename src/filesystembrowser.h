@@ -1,6 +1,7 @@
 #ifndef FILESYSTEMBROWSER_H
 #define FILESYSTEMBROWSER_H
 
+#include "enums.h"
 #include <QWidget>
 #include <QTreeView>
 #include <QPushButton>
@@ -31,9 +32,9 @@ private:
 private slots:
     void goUp();
     void refresh();
-    void onItemClicked(const QModelIndex &index);
+    void onItemDbClicked(const QModelIndex &index);
 signals:
-    void requestLoadFile(QString filePath, bool loadAsPatch);
+    void requestLoadFile(QString filePath, QKiSS::FileLoadMode fileLoadMode);
 private:
     QStandardItemModel *m_model;
     QTreeView *m_view;

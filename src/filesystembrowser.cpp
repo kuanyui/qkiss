@@ -95,7 +95,7 @@ void FileSystemBrowser::setupUi()
         if (fileInfo.isDir()) {
             // TODO: load folder as patch
         } else {
-            emit requestLoadFile(filePath, true);
+            emit requestLoadFile(filePath, QKiSS::FileLoadMode::LoadAsPatch);
         }
     });
 
@@ -124,7 +124,7 @@ void FileSystemBrowser::setupUi()
 
     connect(m_btnGoUp, &QPushButton::clicked, this, &FileSystemBrowser::goUp);
     connect(m_btnRefresh, &QPushButton::clicked, this, &FileSystemBrowser::refresh);
-    connect(m_view, &QTreeView::doubleClicked, this, &FileSystemBrowser::onItemClicked);
+    connect(m_view, &QTreeView::doubleClicked, this, &FileSystemBrowser::onItemDbClicked);
 }
 
 void FileSystemBrowser::updateModel()
@@ -185,7 +185,7 @@ void FileSystemBrowser::refresh() {
     updateModel();
 }
 
-void FileSystemBrowser::onItemClicked(const QModelIndex &index) {
+void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
     if (!index.isValid()) return;
     QModelIndex fileNameIndex = m_model->index(index.row(), 0);  // choose the first column (col = 0)
     QString filePath = m_model->data(fileNameIndex, ThisRole::FileNameRole).toString();
@@ -193,6 +193,6 @@ void FileSystemBrowser::onItemClicked(const QModelIndex &index) {
     if (fileInfo.isDir()) {
         setDirPath(filePath);
     } else {
-        emit requestLoadFile(filePath, false);
+        emit requestLoadFile(filePath, QKiSS::FileLoadMode::LoadAsIndependent);
     }
 }

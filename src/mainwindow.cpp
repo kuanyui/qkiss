@@ -26,10 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupToolBars();
     setupDockWindows();
-    connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, bool loadAsPatch) {
+    connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
         m_logViewer->clearAllLogs();
-        ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath, loadAsPatch](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-            tryToLoadFilesAsKissFiles(filePath, filesMap, loadAsPatch);
+        ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
+            tryToLoadFilesAsKissFiles(filePath, filesMap, fileLoadMode);
         });
     });
 
@@ -84,10 +84,10 @@ void MainWindow::loadPath(const QString &dirOrFilePath)
     m_fileSystemBrowser->setPath(dirOrFilePath);
 }
 
-void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, bool loadAsPatch) {
+void MainWindow::tryToLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles,  QKiSS::FileLoadMode fileLoadMode) {
     qInfo().noquote() << tr("Start to parse CNF / KCF / CEL files...");
     KissFilesParsingResult parsedKissFiles = ArchiveFile::parseKissFiles(extractedRawFiles, compressedFilePath);
-    if (loadAsPatch) {
+    if (fileLoadMode == QKiSS::FileLoadMode::LoadAsPatch) {
         bool kissFilesLoadedOk = m_archiveFile->loadKissFilesAsPatch(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
             parsedKissFiles.deleteAllObjects();  // FIXME: This is too dangerous... If return value contains allocated pointer, should use smart pointer to avoid user from forgotting to delete... But std::unique_ptr cannot be placed in QHash because of CoW...
@@ -329,7 +329,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
                 m_logViewer->clearAllLogs();
                 ArchiveProcessor::extractFileAsPromise(filePath).then([this, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-                    tryToLoadFilesAsKissFiles(filePath, filesMap, false);
+                    tryToLoadFilesAsKissFiles(filePath, filesMap, QKiSS::FileLoadMode::LoadAsIndependent);
                 });
                 // m_archiveProcessor->extractLzh(filePath);
             }

@@ -16,6 +16,10 @@ namespace QKiSS {
         EUC_JP,
         ISO_2022_JP
     };
+    enum class FileLoadMode {
+        LoadAsIndependent,
+        LoadAsPatch,
+    };
 }
 
 #endif // ENUMS_H
