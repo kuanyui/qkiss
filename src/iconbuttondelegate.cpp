@@ -58,8 +58,8 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     if (icon.isNull() && text.isEmpty()) {
         return;
     }
-     int padHori = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-     int padVert = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
+    int padHori = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+    int padVert = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
     // qDebug() << padHori << padVert;
     int itemHeight = opt.rect.height();
     int itemIconSize = itemHeight - padVert * 2;

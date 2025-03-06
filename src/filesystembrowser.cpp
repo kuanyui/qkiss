@@ -82,10 +82,13 @@ void FileSystemBrowser::markPathAsLoaded(QString path, QKiSS::FileLoadMode fileL
     QSet<QString> newlyUnmarkedPaths = oriPaths - newPaths;
     QSet<QString> newlyMarkedPaths = newPaths - oriPaths;
     for (int r = 0; r < m_model->rowCount(); r++) {
-        QStandardItem *item = m_model->item(r, 0);
-        QString itemFilePath = item->data(ThisRole::FilePathRole).toString();
+        QStandardItem *firstCol = m_model->item(r, 0);
+        QStandardItem *stateIconItem = m_model->item(r, ColumnIdx::ColIdxStateIcon);
+        QStandardItem *fileNameItem = m_model->item(r, ColumnIdx::ColIdxFileName);
+        QString itemFilePath = firstCol->data(ThisRole::FilePathRole).toString();
         if (newlyMarkedPaths.contains(itemFilePath) || newlyUnmarkedPaths.contains(itemFilePath)) {
-            item->setIcon(getFileIcon(itemFilePath));
+            fileNameItem->setIcon(getFileIcon(itemFilePath));
+            stateIconItem->setIcon(getLoadStateIcon(itemFilePath));
         }
     }
 }
@@ -94,8 +97,8 @@ void FileSystemBrowser::setupUi()
 {
 
     m_model = new QStandardItemModel(this);
-    m_model->setColumnCount(3);
-    m_model->setHorizontalHeaderLabels({ tr("File Name"), tr("Size"), tr("Patch") });  // model.clear() will also delete headers... WTF...
+    m_model->setColumnCount(4);
+    m_model->setHorizontalHeaderLabels({ "", tr("File Name"), tr("Size"), tr("Patch") });  // model.clear() will also delete headers... WTF...
 
     m_view = new QTreeView(this);
     m_view->setModel(m_model);
@@ -104,15 +107,18 @@ void FileSystemBrowser::setupUi()
     m_view->setRootIsDecorated(false);
     m_view->header()->setStretchLastSection(false);
     m_view->header()->setDefaultSectionSize(30);
+    m_view->header()->setMinimumSectionSize(10);
     m_view->header()->setSectionResizeMode(QHeaderView::Interactive);
-    m_view->header()->resizeSection(0, 150);
-    m_view->header()->resizeSection(1, 30);
+    m_view->header()->resizeSection(ColumnIdx::ColIdxStateIcon, 22);
+    m_view->header()->resizeSection(ColumnIdx::ColIdxFileName, 150);
+    m_view->header()->resizeSection(ColumnIdx::ColIdxSize, 50);
     // m_view->resizeColumnToContents(2);
-    m_view->header()->setSectionResizeMode(2, QHeaderView::ResizeMode::ResizeToContents);
+    m_view->header()->setSectionResizeMode(ColumnIdx::ColIdxStateIcon, QHeaderView::ResizeMode::Fixed);
+    m_view->header()->setSectionResizeMode(ColumnIdx::ColIdxPatchBtn, QHeaderView::ResizeMode::ResizeToContents);
     m_view->setMouseTracking(true);   // NOTE: Set to true to make QStyledItemDelegate::editorEvent accepts QEvent::MouseMove without QEvent::MouseButtonPress
     // Delegate
     IconButtonDelegate *patchDelegate = new IconButtonDelegate(m_view);
-    m_view->setItemDelegateForColumn(2, patchDelegate);
+    m_view->setItemDelegateForColumn(ColumnIdx::ColIdxPatchBtn, patchDelegate);
     connect(patchDelegate, &IconButtonDelegate::pressed, [=](const QModelIndex& index){
         QString filePath = m_model->data(index, ThisRole::FilePathRole).toString();
         if (filePath.isEmpty()) { return; }
@@ -161,6 +167,7 @@ void FileSystemBrowser::updateModel()
     QFileInfoList fInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::IgnoreCase);
     foreach (const QFileInfo &fInfo, fInfoList) {
         const QString ext = fInfo.fileName().toUpper();
+        QString fileAbsPath = fInfo.absoluteFilePath();
         bool isDir = fInfo.isDir();
         bool isLzh = ext.endsWith(".LZH");
         bool isCnf = ext.endsWith(".CNF");
@@ -168,14 +175,17 @@ void FileSystemBrowser::updateModel()
             continue;
         }
         QList<QStandardItem *> rowItems;
+        QStandardItem *stateItem = new QStandardItem();
+        stateItem->setData(fileAbsPath, ThisRole::FilePathRole);
+        stateItem->setIcon(getLoadStateIcon(fileAbsPath));
+        rowItems << stateItem;
         QStandardItem *fileNameItem = new QStandardItem(fInfo.fileName());
-        fileNameItem->setData(fInfo.filePath(), ThisRole::FilePathRole);
         fileNameItem->setIcon(getFileIcon(fInfo));
         rowItems << fileNameItem;
         rowItems << new QStandardItem(formatFileSize(fInfo.size()));
         if (isLzh) {
             QStandardItem *item = new QStandardItem(tr("Patch"));
-            QIcon patchIcon = QIcon::fromTheme("application-x-addon");
+            QIcon patchIcon = QIcon::fromTheme("addon");
             item->setIcon(patchIcon);
             item->setToolTip(tr("Click to load this file as patch"));
             item->setData(fInfo.filePath(), ThisRole::FilePathRole);    // REFACTOR: Redundant data, consider how to reuse it.
@@ -223,9 +233,22 @@ QIcon FileSystemBrowser::getFileIcon(const QString &filePath) const
 
 QIcon FileSystemBrowser::getLoadStateIcon(const QFileInfo &fileInfo) const
 {
-    Q_UNUSED(fileInfo);
-    return QIcon::fromTheme("qkiss");
+    return getLoadStateIcon(fileInfo.absoluteFilePath());
 }
+
+QIcon FileSystemBrowser::getLoadStateIcon(const QString &filePath) const
+{
+    int idx = m_loadedKissFilePaths.indexOf(filePath);
+    if (idx == -1) {
+        return QIcon();
+    } else if (idx == 0) {
+        return QIcon::fromTheme("qkiss");
+    } else {
+        return QIcon::fromTheme("addon");
+    }
+}
+
+
 
 void FileSystemBrowser::goUp() {
     QDir dir { m_curDirPath };
@@ -239,8 +262,8 @@ void FileSystemBrowser::refresh() {
 
 void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
     if (!index.isValid()) return;
-    QModelIndex fileNameIndex = m_model->index(index.row(), 0);  // choose the first column (col = 0)
-    QString filePath = m_model->data(fileNameIndex, ThisRole::FilePathRole).toString();
+    QModelIndex indexOfFirstCol = m_model->index(index.row(), 0);  // choose the first column (col = 0)
+    QString filePath = m_model->data(indexOfFirstCol, ThisRole::FilePathRole).toString();
     QFileInfo fileInfo { filePath };
     if (fileInfo.isDir()) {
         setDirPath(filePath);

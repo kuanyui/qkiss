@@ -19,6 +19,14 @@ class FileSystemBrowser : public QWidget
     enum ThisRole {
         FilePathRole = Qt::UserRole + 1
     };
+private:
+    enum ColumnIdx {
+        ColIdxStateIcon,
+        ColIdxFileName,
+        ColIdxSize,
+        ColIdxPatchBtn
+    };
+
 public:
     FileSystemBrowser(QWidget *parent = nullptr);
     ~FileSystemBrowser();

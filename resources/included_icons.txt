@@ -32,4 +32,4 @@ Gnome	mimetypes/text-x-ini
 Gnome	mimetypes/text-x-readme
 Gnome	mimetypes/text-x-generic
 
-Gnome	application-x-addon
+Gnome	application-x-addon	addon
