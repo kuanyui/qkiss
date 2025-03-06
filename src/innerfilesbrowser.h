@@ -16,9 +16,13 @@ public:
     };
     explicit InnerFilesBrowser(QWidget *parent = nullptr);
     void rerenderFileList(ArchiveFile *archiveFile);
-
+    void markItemAsLoaded(QTreeWidgetItem *item);
 signals:
 
+private:
+    bool isReadme(const QString &fileName) const;
+    QString m_curCnfFileName;
+    QString m_curDocFileName;
 };
 
 #endif // INNERFILESBROWSER_H

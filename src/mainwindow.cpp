@@ -286,6 +286,7 @@ void MainWindow::setupDockWindows()
     // (Signals)
     // ==================================================
     connect(m_innerFilesBrowser, &InnerFilesBrowser::itemActivated, [=](QTreeWidgetItem *item) {
+        m_innerFilesBrowser->markItemAsLoaded(item);
         if (item->type() == InnerFilesBrowser::CustomItemCnfFileType) {
             QString cnfFileName = item->text(0);
             m_kissView->setCurCnfAndRenderScenes(cnfFileName);

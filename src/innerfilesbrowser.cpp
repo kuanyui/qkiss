@@ -23,14 +23,14 @@ void InnerFilesBrowser::rerenderFileList(ArchiveFile *archiveFile)
     foreach (const QString &cnfFileName, archiveFile->getCnfNameList()) {
         QTreeWidgetItem *item = new QTreeWidgetItem(rootCnfFolder, CustomItemType::CustomItemCnfFileType);
         item->setText(0, cnfFileName);
-        item->setIcon(0, QIcon::fromTheme("text-x-ini"));
+        item->setIcon(0, QIcon::fromTheme("text-x-cnf"));
         // item->setIcon(0, style()->standardIcon(QStyle::SP_FileLinkIcon));
     }
     rootCnfFolder->setText(0, rootCnfFolder->text(0) + " (%1)"_L1.arg(QString::number(rootCnfFolder->childCount())));
     foreach (const QString &docFileName, archiveFile->getDocFileNameList()) {
         QTreeWidgetItem *item = new QTreeWidgetItem(rootDocFolder, CustomItemType::CustomItemDocFileType);
         item->setText(0, docFileName);
-        if (docFileName.toUpper().contains("README") || docFileName.toUpper().endsWith("DOC")) {
+        if (isReadme(docFileName)) {
             item->setIcon(0, QIcon::fromTheme("text-x-readme"));
         } else {
             item->setIcon(0, QIcon::fromTheme("text-x-generic"));
@@ -48,4 +48,49 @@ void InnerFilesBrowser::rerenderFileList(ArchiveFile *archiveFile)
             }
         }
     }
+    if (rootCnfFolder->childCount() != 0) {
+        markItemAsLoaded(rootCnfFolder->child(0));
+    }
+    if (rootDocFolder->childCount() != 0) {
+        markItemAsLoaded(rootDocFolder->child(0));
+    }
+}
+
+void InnerFilesBrowser::markItemAsLoaded(QTreeWidgetItem *item)
+{
+    QTreeWidgetItem *folder = item->parent();
+    switch (item->type()) {
+    case CustomItemType::CustomItemCnfFileType: {
+        m_curCnfFileName = item->text(0);
+        for (int i = 0 ; i < folder->childCount(); i++) {
+            QTreeWidgetItem *x = folder->child(i);
+            if (x == item) {
+                x->setIcon(0, QIcon::fromTheme("play"));
+            } else {
+                x->setIcon(0, QIcon::fromTheme("text-x-cnf"));
+            }
+        }
+        break;
+    }
+    case CustomItemType::CustomItemDocFileType: {
+        m_curDocFileName = item->text(0);
+        for (int i = 0 ; i < folder->childCount(); i++) {
+            QTreeWidgetItem *x = folder->child(i);
+            if (x == item) {
+                x->setIcon(0, QIcon::fromTheme("preview-file"));
+            } else {
+                x->setIcon(0, QIcon::fromTheme(isReadme(m_curDocFileName) ? "text-x-readme" : "text-x-generic"));  // TODO
+            }
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+bool InnerFilesBrowser::isReadme(const QString &fileName) const
+{
+    QString upper = fileName.toUpper();
+    return upper.contains("README") || upper.endsWith("DOC");
 }
