@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QCoreApplication>
 #include <QLocale>
 #include <QTranslator>
 #include <QFile>
@@ -24,6 +25,9 @@ void customizedMessageHandler(QtMsgType type, const QMessageLogContext &context,
 int main(int argc, char *argv[])
 {
     originalMessageHandler = qInstallMessageHandler(customizedMessageHandler);
+    QCoreApplication::setOrganizationDomain("qkiss.io");
+    QCoreApplication::setOrganizationName("QKiSS");
+    QCoreApplication::setApplicationName("QKiSS");
     QApplication app(argc, argv);
     QFile qssFile(":/styles/main.qss");
     qssFile.open(QFile::ReadOnly);

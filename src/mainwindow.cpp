@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    m_qSettings = new QSettings { QSettings::Scope::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName() };
     ui->setupUi(this);
     m_archiveFile = new ArchiveFile{this};
     m_kissView = new GKissView(this);
@@ -18,11 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     QIcon::setThemeName("CustomizedTango");    // folder name under any of QIcon::themeSearchPaths (:/src/humanity_0.4.6)
     // setWindowIcon(QIcon::fromTheme("paprefs"));
     setWindowIcon(QIcon::fromTheme("qkiss"));
-    ui->action_window_fileSystemBrowser->setIcon(QIcon::fromTheme("system-file-manager"));
-    ui->action_window_logViewer->setIcon(QIcon::fromTheme("logviewer", QIcon::fromTheme("utilities-system-monitor")));
-    ui->action_window_codeViewer->setIcon(QIcon::fromTheme("applications-development"));
-    ui->action_window_innerFilesBrowser->setIcon(QIcon::fromTheme("package-unzipped"));
-    ui->action_window_docViewer->setIcon(QIcon::fromTheme("text-x-readme", QIcon::fromTheme("accessories-text-editor")));
+    setWindowTitle(QCoreApplication::applicationName());
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupToolBars();
     setupDockWindows();
@@ -66,8 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     setCentralWidget(m_kissView);
-    m_kissView->scale(0.3, 0.3);
-    resize(800, 600);
+    restoreWindowSettings();
 }
 
 MainWindow::~MainWindow()
@@ -208,6 +204,12 @@ void MainWindow::rerenderSetPaletteButtons()
 
 void MainWindow::setupToolBars()
 {
+    // Action Icons
+    ui->action_window_fileSystemBrowser->setIcon(QIcon::fromTheme("system-file-manager"));
+    ui->action_window_logViewer->setIcon(QIcon::fromTheme("logviewer", QIcon::fromTheme("utilities-system-monitor")));
+    ui->action_window_codeViewer->setIcon(QIcon::fromTheme("applications-development"));
+    ui->action_window_innerFilesBrowser->setIcon(QIcon::fromTheme("package-unzipped"));
+    ui->action_window_docViewer->setIcon(QIcon::fromTheme("text-x-readme", QIcon::fromTheme("accessories-text-editor")));
     // File
     m_toolbarFiles = new QToolBar(this);
     m_toolbarFiles->setWindowTitle(tr("Files"));   // The text in context menu when you right-click on toolbar.
@@ -236,8 +238,9 @@ void MainWindow::setupToolBars()
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarWindows);
     m_toolbarWindows->addAction(ui->action_window_fileSystemBrowser);
     m_toolbarWindows->addAction(ui->action_window_innerFilesBrowser);
-    m_toolbarWindows->addAction(ui->action_window_logViewer);
+    m_toolbarWindows->addAction(ui->action_window_docViewer);
     m_toolbarWindows->addAction(ui->action_window_codeViewer);
+    m_toolbarWindows->addAction(ui->action_window_logViewer);
     // Page Sets
     m_toolbarSceneSets = new QToolBar(this);
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarSceneSets);
@@ -309,6 +312,19 @@ void MainWindow::setupDockWindows()
     });
 }
 
+void MainWindow::saveWindowSettings()
+{
+    m_qSettings->setValue("MainWindow/Geometry", saveGeometry());
+    m_qSettings->setValue("MainWindow/State", saveState());
+    // m_qSettings->setValue("MainWindow/ToolbarState", m_toolbarWindows));
+}
+
+void MainWindow::restoreWindowSettings()
+{
+    restoreGeometry(m_qSettings->value("MainWindow/Geometry").toByteArray());
+    restoreState(m_qSettings->value("MainWindow/State").toByteArray());
+}
+
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasUrls()) {
@@ -348,6 +364,7 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    saveWindowSettings();
     m_logViewer = nullptr;   // Avoid potential segfault when closing window
     QMainWindow::closeEvent(event);
 }

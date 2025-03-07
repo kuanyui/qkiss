@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -50,8 +50,8 @@
     </property>
     <addaction name="action_window_fileSystemBrowser"/>
     <addaction name="action_window_innerFilesBrowser"/>
-    <addaction name="action_window_codeViewer"/>
     <addaction name="action_window_docViewer"/>
+    <addaction name="action_window_codeViewer"/>
     <addaction name="action_window_logViewer"/>
     <addaction name="separator"/>
    </widget>
@@ -147,7 +147,7 @@
     <string>&amp;Quit</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::QuitRole</enum>
+    <enum>QAction::MenuRole::QuitRole</enum>
    </property>
   </action>
   <action name="action_window_fileSystemBrowser">

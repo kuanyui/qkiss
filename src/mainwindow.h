@@ -5,6 +5,7 @@
 #include <QComboBox>
 #include <QToolBar>
 #include <QButtonGroup>
+#include <QSettings>
 
 #include "archivefile.h"
 #include "gkissview.h"
@@ -33,6 +34,8 @@ private:
     void setupToolBars();
     void setupDockWindows();
     void setupCenterArea();
+    void saveWindowSettings();
+    void restoreWindowSettings();
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dragMoveEvent(QDragMoveEvent *event) override;
@@ -54,6 +57,7 @@ protected:
     InnerFilesBrowser *m_innerFilesBrowser;
     CodeEditor *m_codeEditor;
     QPlainTextEdit *m_docViewer;
+    QSettings *m_qSettings;
 };
 
 
