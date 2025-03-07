@@ -117,6 +117,22 @@ void GKissView::scaleAbs(qreal targetScale)
     qreal currentScale = transform().m11();
     qreal scaleFactor = targetScale / currentScale;
     scale(scaleFactor, scaleFactor);
+    using RH = QPainter::RenderHint;
+    if (targetScale == std::floor(targetScale)) {   // is integer
+        setRenderHints(RH::TextAntialiasing);
+        for (auto scene : m_scenes) {
+            for (auto item : scene->allKissItems()) {
+                item->setTransformationMode(Qt::TransformationMode::FastTransformation);
+            }
+        }
+    } else {
+        setRenderHints(RH::TextAntialiasing | RH::Antialiasing | QPainter::SmoothPixmapTransform);
+        for (auto scene : m_scenes) {
+            for (auto item : scene->allKissItems()) {
+                item->setTransformationMode(Qt::TransformationMode::SmoothTransformation);
+            }
+        }
+    }
 }
 
 GKissScene *GKissView::curKissScene()

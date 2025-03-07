@@ -57,8 +57,12 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
     connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=](const QString &text) {
-       int targetScale = text.toFloat();
-       m_kissView->scaleAbs(targetScale);
+        bool ok;
+        qreal targetScale = text.toFloat(&ok);
+        if (!ok) {
+            targetScale = 1;
+        }
+        m_kissView->scaleAbs(targetScale);
     });
 
     setCentralWidget(m_kissView);
@@ -216,11 +220,13 @@ void MainWindow::setupToolBars()
     m_toolbarZooms->setWindowTitle(tr("Zooming Tools"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarZooms);
     m_cboxZoomScale = new QComboBox(m_toolbarZooms);
-    m_cboxZoomScale->addItem("1", QVariant(1));
-    m_cboxZoomScale->addItem("2", QVariant(2));
-    m_cboxZoomScale->addItem("3", QVariant(3));
-    m_cboxZoomScale->addItem("4", QVariant(4));
     m_cboxZoomScale->addItem("5", QVariant(5));
+    m_cboxZoomScale->addItem("4", QVariant(4));
+    m_cboxZoomScale->addItem("3", QVariant(3));
+    m_cboxZoomScale->addItem("2", QVariant(2));
+    m_cboxZoomScale->addItem("1", QVariant(1));
+    m_cboxZoomScale->addItem("0.5", QVariant(0.5));
+    m_cboxZoomScale->setCurrentIndex(m_cboxZoomScale->count() - 2);
     m_toolbarZooms->addAction(ui->action_zoomOut);
     m_toolbarZooms->addAction(ui->action_zoomIn);
     m_toolbarZooms->addWidget(m_cboxZoomScale);
