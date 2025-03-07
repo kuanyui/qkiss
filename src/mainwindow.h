@@ -5,7 +5,6 @@
 #include <QComboBox>
 #include <QToolBar>
 #include <QButtonGroup>
-#include <QSettings>
 
 #include "archivefile.h"
 #include "gkissview.h"
@@ -57,7 +56,6 @@ protected:
     InnerFilesBrowser *m_innerFilesBrowser;
     CodeEditor *m_codeEditor;
     QPlainTextEdit *m_docViewer;
-    QSettings *m_qSettings;
 };
 
 

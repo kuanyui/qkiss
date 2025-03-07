@@ -5,12 +5,12 @@
 #include <QLabel>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    m_qSettings = new QSettings { QSettings::Scope::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName() };
     ui->setupUi(this);
     m_archiveFile = new ArchiveFile{this};
     m_kissView = new GKissView(this);
@@ -241,6 +241,7 @@ void MainWindow::setupToolBars()
     m_toolbarWindows->addAction(ui->action_window_docViewer);
     m_toolbarWindows->addAction(ui->action_window_codeViewer);
     m_toolbarWindows->addAction(ui->action_window_logViewer);
+    m_toolbarWindows->setObjectName("MainWindowDocksToolbar");   // For QMainWindow::saveState()
     // Page Sets
     m_toolbarSceneSets = new QToolBar(this);
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarSceneSets);
@@ -314,15 +315,40 @@ void MainWindow::setupDockWindows()
 
 void MainWindow::saveWindowSettings()
 {
-    m_qSettings->setValue("MainWindow/Geometry", saveGeometry());
-    m_qSettings->setValue("MainWindow/State", saveState());
-    // m_qSettings->setValue("MainWindow/ToolbarState", m_toolbarWindows));
+    QSettings set;
+    set.setValue("MainWindow/Geometry", saveGeometry());
+    set.setValue("MainWindow/State", saveState());
+    // set.beginReadArray("MainWindow/ToolbarDockButtons");
+    // int i = 0;
+    // for (QAction *action : m_toolbarWindows->actions()) {
+    //     set.setArrayIndex(i);
+    //     set.setValue("objectName", action->objectName());
+    //     set.setValue("checked", action->isChecked());
+    //     i++;
+    // }
+    // set.endArray();
 }
 
 void MainWindow::restoreWindowSettings()
 {
-    restoreGeometry(m_qSettings->value("MainWindow/Geometry").toByteArray());
-    restoreState(m_qSettings->value("MainWindow/State").toByteArray());
+    QSettings set;
+    restoreGeometry(set.value("MainWindow/Geometry").toByteArray());
+    restoreState(set.value("MainWindow/State").toByteArray());
+    // int arrSize = set.beginReadArray("MainWindow/ToolbarDockButtons");
+    // for (int i = 0; i < arrSize; i++) {
+    //     set.setArrayIndex(i);
+    //     QString objectName = set.value("objectName").toString();
+    //     bool checked = set.value("checked").toBool();
+    //     for (QAction *act : m_toolbarWindows->actions()) {
+    //         if (act->objectName() == objectName) {
+    //             qDebug() << "fuck";
+    //             act->setCheckable(true);
+    //             act->setChecked(checked);
+    //             break;
+    //         }
+    //     }
+    // }
+    // set.endArray();
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
