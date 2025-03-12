@@ -7,6 +7,8 @@
 #include <QMimeData>
 #include <QSettings>
 
+using namespace Qt::Literals::StringLiterals;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -222,12 +224,9 @@ void MainWindow::setupToolBars()
     m_toolbarZooms->setWindowTitle(tr("Zooming Tools"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarZooms);
     m_cboxZoomScale = new QComboBox(m_toolbarZooms);
-    m_cboxZoomScale->addItem("5", QVariant(5));
-    m_cboxZoomScale->addItem("4", QVariant(4));
-    m_cboxZoomScale->addItem("3", QVariant(3));
-    m_cboxZoomScale->addItem("2", QVariant(2));
-    m_cboxZoomScale->addItem("1", QVariant(1));
-    m_cboxZoomScale->addItem("0.5", QVariant(0.5));
+    for (float s : { 4.0f, 3.5f, 3.0f, 2.5f, 2.0f, 1.5f, 1.0f, 0.5f }) {
+        m_cboxZoomScale->addItem(QString::number(s, 'g', 2), QVariant(s));
+    }
     m_cboxZoomScale->setCurrentIndex(m_cboxZoomScale->count() - 2);
     m_toolbarZooms->addAction(ui->action_zoomOut);
     m_toolbarZooms->addAction(ui->action_zoomIn);
@@ -241,7 +240,7 @@ void MainWindow::setupToolBars()
     m_toolbarWindows->addAction(ui->action_window_docViewer);
     m_toolbarWindows->addAction(ui->action_window_codeViewer);
     m_toolbarWindows->addAction(ui->action_window_logViewer);
-    m_toolbarWindows->setObjectName("MainWindowDocksToolbar");   // For QMainWindow::saveState()
+    m_toolbarWindows->setObjectName("MainWindowDocksToolbar");   // objectName is required when `QMainWindow::saveState()`
     // Page Sets
     m_toolbarSceneSets = new QToolBar(this);
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarSceneSets);
@@ -318,15 +317,12 @@ void MainWindow::saveWindowSettings()
     QSettings set;
     set.setValue("MainWindow/Geometry", saveGeometry());
     set.setValue("MainWindow/State", saveState());
-    // set.beginReadArray("MainWindow/ToolbarDockButtons");
-    // int i = 0;
-    // for (QAction *action : m_toolbarWindows->actions()) {
-    //     set.setArrayIndex(i);
-    //     set.setValue("objectName", action->objectName());
-    //     set.setValue("checked", action->isChecked());
-    //     i++;
-    // }
-    // set.endArray();
+    for (QAction *act : m_toolbarWindows->actions()) {
+        QString key = "MainWindow/ToolbarDockButtons/%1"_L1.arg(act->objectName());
+        bool checked = act->isChecked();
+        set.setValue(key, checked);
+    }
+    set.setValue("View/Zoom", m_cboxZoomScale->currentText());
 }
 
 void MainWindow::restoreWindowSettings()
@@ -334,21 +330,14 @@ void MainWindow::restoreWindowSettings()
     QSettings set;
     restoreGeometry(set.value("MainWindow/Geometry").toByteArray());
     restoreState(set.value("MainWindow/State").toByteArray());
-    // int arrSize = set.beginReadArray("MainWindow/ToolbarDockButtons");
-    // for (int i = 0; i < arrSize; i++) {
-    //     set.setArrayIndex(i);
-    //     QString objectName = set.value("objectName").toString();
-    //     bool checked = set.value("checked").toBool();
-    //     for (QAction *act : m_toolbarWindows->actions()) {
-    //         if (act->objectName() == objectName) {
-    //             qDebug() << "fuck";
-    //             act->setCheckable(true);
-    //             act->setChecked(checked);
-    //             break;
-    //         }
-    //     }
-    // }
-    // set.endArray();
+    for (QAction *act : m_toolbarWindows->actions()) {
+        QString key = "MainWindow/ToolbarDockButtons/%1"_L1.arg(act->objectName());
+        bool toChecked = set.value(key, true).toBool();
+        act->toggled(toChecked);
+        act->setChecked(toChecked);
+    }
+    m_cboxZoomScale->setCurrentText(set.value("View/Zoom", "1").toString());
+
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

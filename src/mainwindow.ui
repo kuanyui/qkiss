@@ -154,9 +154,6 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::FolderOpen"/>
    </property>
@@ -166,9 +163,6 @@
   </action>
   <action name="action_window_innerFilesBrowser">
    <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="icon">
@@ -183,9 +177,6 @@
   </action>
   <action name="action_window_logViewer">
    <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="icon">
@@ -223,9 +214,6 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::DocumentPrintPreview"/>
    </property>
@@ -238,9 +226,6 @@
   </action>
   <action name="action_window_docViewer">
    <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="icon">
