@@ -1,0 +1,38 @@
+#ifndef ARCHIVEPROCESSOREXTERNALLHA_H
+#define ARCHIVEPROCESSOREXTERNALLHA_H
+
+#include <QObject>
+#include <QProcess>
+#include <QTemporaryDir>
+#include "abstractarchiveprocessor.h"
+
+class ArchiveProcessorExternalLha : public AbstractArchiveProcessor
+{
+    Q_OBJECT
+public:
+    explicit ArchiveProcessorExternalLha(QObject *parent = nullptr);
+    /// This function merely extract a LZH file, doesn't do any other checks.
+    /// TODO: Should be able to accept a CNF file. Should rename this function.
+    virtual QFuture<std::shared_ptr<ExtractedRawFilesMap>> extractFileAsPromise(const QString &lzhOrCnfFilePath) override;
+private:
+    static bool checkLhaCommandAvailability();
+    static FilesSummaryList getFileSizeList(const QString &lzhFilePath);
+    bool callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath);
+signals:
+    void extractSuccess(QString compressedFilePath, std::shared_ptr<ExtractedRawFilesMap> extractedRawFiles);
+    void extractFail(QString compressedFilePath, QString errMsg);
+
+private slots:
+    void onQProcessReadyRead();
+    void onQProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onProcessErrorOccurred(QProcess::ProcessError error);
+private:
+    static std::shared_ptr<ExtractedRawFilesMap> getRelatedFilesInTheSameFolder(const QString &cnfFilePath);
+    QProcess *m_process;
+    QString m_archiveFilePath;
+    FilesSummaryList m_filesSummaryList;
+    QByteArray m_buffer;
+    QElapsedTimer m_elapsedTimer;
+};
+
+#endif // ARCHIVEPROCESSOREXTERNALLHA_H

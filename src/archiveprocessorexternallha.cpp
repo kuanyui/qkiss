@@ -1,19 +1,55 @@
-#include "archiveprocessor.h"
+#include "archiveprocessorexternallha.h"
 
 #include <QDirIterator>
 
 using namespace Qt::Literals::StringLiterals;
 
-ArchiveProcessor::ArchiveProcessor(QObject *parent)
-    : QObject{parent},
+ArchiveProcessorExternalLha::ArchiveProcessorExternalLha(QObject *parent)
+    : AbstractArchiveProcessor{parent},
       m_process{new QProcess(this)}
 {
-    connect(m_process, &QProcess::readyRead, this, &ArchiveProcessor::onQProcessReadyRead);
-    connect(m_process, &QProcess::finished, this, &ArchiveProcessor::onQProcessFinished);
+    connect(m_process, &QProcess::readyRead, this, &ArchiveProcessorExternalLha::onQProcessReadyRead);
+    connect(m_process, &QProcess::finished, this, &ArchiveProcessorExternalLha::onQProcessFinished);
     // connect(m_process, &QProcess::errorOccurred, this, &ArchiveProcessor::onProcessErrorOccurred);
 }
 
-bool ArchiveProcessor::checkLhaCommandAvailability()
+QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::extractFileAsPromise(const QString &lzhOrCnfFilePath)
+{
+    QPromise<std::shared_ptr<ExtractedRawFilesMap>> *promise = new QPromise<std::shared_ptr<ExtractedRawFilesMap>>();
+    QFuture<std::shared_ptr<ExtractedRawFilesMap>> future = promise->future();
+    QFileInfo fileInfo {lzhOrCnfFilePath};
+    QString fileName = fileInfo.fileName();
+    promise->start();
+    if (lzhOrCnfFilePath.toUpper().endsWith(".CNF"_L1)) {
+        qInfo().noquote() << tr("Reading a CNF file \"%1\" directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...").arg(lzhOrCnfFilePath);
+        promise->addResult(getRelatedFilesInTheSameFolder(lzhOrCnfFilePath));
+        promise->finish();
+        delete promise;
+        return future;
+    }
+    qInfo().noquote() << tr("Trying to extract LZH file \"%1\"...").arg(fileName);
+    this->callExternalProgramOrLibraryToExtractLzh(lzhOrCnfFilePath);
+    QObject::connect(this, &ArchiveProcessorExternalLha::extractFail, [this, promise, fileName](QString compressedFilePath, QString errMsg) {
+        qCritical().noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);
+        Q_UNUSED(compressedFilePath);
+        promise->setException(std::make_exception_ptr(
+                                  std::runtime_error("Process failed with exit code: %1"_L1.arg(errMsg).toStdString())
+                                  ));
+        delete promise;
+        this->deleteLater();
+    });
+    QObject::connect(this, &ArchiveProcessorExternalLha::extractSuccess, [this, promise, fileName](QString compressedFilePath, std::shared_ptr<ExtractedRawFilesMap> extractedRawFiles) {
+        Q_UNUSED(compressedFilePath);
+        qInfo().noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
+        promise->addResult(extractedRawFiles);
+        promise->finish();
+        delete promise;
+        this->deleteLater();
+    });
+    return future;
+}
+
+bool ArchiveProcessorExternalLha::checkLhaCommandAvailability()
 {
     QProcess p {};
     p.start("lha");
@@ -22,7 +58,7 @@ bool ArchiveProcessor::checkLhaCommandAvailability()
 }
 
 
-FilesSummaryList ArchiveProcessor::getFileSizeList(const QString &lzhFilePath)
+FilesSummaryList ArchiveProcessorExternalLha::getFileSizeList(const QString &lzhFilePath)
 {
     QStringList lines;
     bool ok;
@@ -89,51 +125,16 @@ PERMISSION  UID  GID      SIZE  RATIO     STAMP           NAME
 
 
 
-QFuture<std::shared_ptr<RawFilesMap> > ArchiveProcessor::extractFileAsPromise(const QString &lzhOrCnfFilePath)
-{
-    QPromise<std::shared_ptr<RawFilesMap>> *promise = new QPromise<std::shared_ptr<RawFilesMap>>();
-    QFuture<std::shared_ptr<RawFilesMap>> future = promise->future();
-    QFileInfo fileInfo {lzhOrCnfFilePath};
-    QString fileName = fileInfo.fileName();
-    promise->start();
-    if (lzhOrCnfFilePath.toUpper().endsWith(".CNF"_L1)) {
-        qInfo().noquote() << tr("Reading a CNF file \"%1\" directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...").arg(lzhOrCnfFilePath);
-        promise->addResult(getRelatedFilesInTheSameFolder(lzhOrCnfFilePath));
-        promise->finish();
-        delete promise;
-        return future;
-    }
-    ArchiveProcessor *process = new ArchiveProcessor();
-    qInfo().noquote() << tr("Trying to extract LZH file \"%1\"...").arg(fileName);
-    process->callExternalProgramOrLibraryToExtractLzh(lzhOrCnfFilePath);
-    QObject::connect(process, &ArchiveProcessor::extractFail, [process, promise, fileName](QString compressedFilePath, QString errMsg) {
-        qCritical().noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);
-        Q_UNUSED(compressedFilePath);
-        promise->setException(std::make_exception_ptr(
-            std::runtime_error("Process failed with exit code: %1"_L1.arg(errMsg).toStdString())
-        ));
-        delete promise;
-        process->deleteLater();
-    });
-    QObject::connect(process, &ArchiveProcessor::extractSuccess, [process, promise, fileName](QString compressedFilePath, std::shared_ptr<RawFilesMap> extractedRawFiles) {
-        Q_UNUSED(compressedFilePath);
-        qInfo().noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
-        promise->addResult(extractedRawFiles);
-        promise->finish();
-        delete promise;
-        process->deleteLater();
-    });
-    return future;
-}
 
-void ArchiveProcessor::onQProcessReadyRead()
+
+void ArchiveProcessorExternalLha::onQProcessReadyRead()
 {
     QByteArray tmp = m_process->readAll();
     // qDebug() << "QProcess readyRead";
     m_buffer.append(tmp);
 }
 
-void ArchiveProcessor::onQProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void ArchiveProcessorExternalLha::onQProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitCode);
     m_buffer.append(m_process->readAll());
@@ -161,7 +162,7 @@ void ArchiveProcessor::onQProcessFinished(int exitCode, QProcess::ExitStatus exi
     return;
 }
 
-void ArchiveProcessor::onProcessErrorOccurred(QProcess::ProcessError error)
+void ArchiveProcessorExternalLha::onProcessErrorOccurred(QProcess::ProcessError error)
 {
     switch (error) {
     case QProcess::FailedToStart: emit extractFail(m_archiveFilePath, "LAH process failed to start."); return;
@@ -174,7 +175,7 @@ void ArchiveProcessor::onProcessErrorOccurred(QProcess::ProcessError error)
     }
 }
 
-bool ArchiveProcessor::callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath)
+bool ArchiveProcessorExternalLha::callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath)
 {
     if (!QFileInfo::exists(lzhFilePath)) {
         qCritical() << tr("Archive file path '%1' doesn't exist, abort.").arg(lzhFilePath);
@@ -192,7 +193,7 @@ bool ArchiveProcessor::callExternalProgramOrLibraryToExtractLzh(const QString &l
     return true;
 }
 
-std::shared_ptr<RawFilesMap> ArchiveProcessor::getRelatedFilesInTheSameFolder(const QString &cnfFilePath)
+std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorExternalLha::getRelatedFilesInTheSameFolder(const QString &cnfFilePath)
 {
     auto fileContents = std::make_shared<QMap<QString, QByteArray>>();
     QFileInfo cnfFileInfo(cnfFilePath);

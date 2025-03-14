@@ -9,7 +9,7 @@
 #include "parsedcnf.h"
 #include "parsedkcf.h"
 #include "parsedcel.h"
-#include "archiveprocessor.h"
+#include "archiveprocessorexternallha.h"
 
 /// Attention: Remember to call deleteAllObjects() to release memory.
 struct KissFilesParsingResult {
@@ -107,7 +107,7 @@ private:
     uint8_t m_curCnfSetNo;
     /** これは ` $<パレット組>` のあれ「パレット組」。KCF ごと N 個パレット組がある。*/
     uint8_t m_curPaletteNo;
-    ArchiveProcessor *m_archiveExtractor;
+    ArchiveProcessorExternalLha *m_archiveExtractor;
     LoadingState m_loadingState;
 };
 

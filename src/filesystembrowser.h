@@ -33,6 +33,7 @@ public:
     /// File name, not dir name
     bool setPath(QString filePath);
     bool setDirPath(QString dirPath);
+    /// Add icon to mark this file is loaded, for UX.
     void markPathAsLoaded(QString path, QKiSS::FileLoadMode fileLoadMode);
 private:
     void setupUi();

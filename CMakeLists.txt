@@ -73,7 +73,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         src/fkissparser.h src/fkissparser.cpp
         src/fkissruntime.h src/fkissruntime.cpp
-        src/archiveprocessor.h src/archiveprocessor.cpp
+        src/archiveprocessorexternallha.h src/archiveprocessorexternallha.cpp
         src/filesystembrowser.h src/filesystembrowser.cpp
         src/logviewer.h src/logviewer.cpp
         src/innerfilesbrowser.h src/innerfilesbrowser.cpp
@@ -83,6 +83,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/thememanager.h src/thememanager.cpp
         src/fileiconprovider.h src/fileiconprovider.cpp
         src/iconbuttondelegate.h src/iconbuttondelegate.cpp
+        src/abstractarchiveprocessor.h src/abstractarchiveprocessor.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
