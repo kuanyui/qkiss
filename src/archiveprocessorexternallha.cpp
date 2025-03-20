@@ -4,6 +4,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 
+
 ArchiveProcessorExternalLha::ArchiveProcessorExternalLha(QObject *parent)
     : AbstractArchiveProcessor{parent},
       m_process{new QProcess(this)}
@@ -11,6 +12,10 @@ ArchiveProcessorExternalLha::ArchiveProcessorExternalLha(QObject *parent)
     connect(m_process, &QProcess::readyRead, this, &ArchiveProcessorExternalLha::onQProcessReadyRead);
     connect(m_process, &QProcess::finished, this, &ArchiveProcessorExternalLha::onQProcessFinished);
     // connect(m_process, &QProcess::errorOccurred, this, &ArchiveProcessor::onProcessErrorOccurred);
+}
+
+ArchiveProcessorExternalLha::~ArchiveProcessorExternalLha()
+{
 }
 
 QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::extractFileAsPromise(const QString &lzhOrCnfFilePath)
@@ -36,7 +41,6 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
                                   std::runtime_error("Process failed with exit code: %1"_L1.arg(errMsg).toStdString())
                                   ));
         delete promise;
-        this->deleteLater();
     });
     QObject::connect(this, &ArchiveProcessorExternalLha::extractSuccess, [this, promise, fileName](QString compressedFilePath, std::shared_ptr<ExtractedRawFilesMap> extractedRawFiles) {
         Q_UNUSED(compressedFilePath);
@@ -44,7 +48,6 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
         promise->addResult(extractedRawFiles);
         promise->finish();
         delete promise;
-        this->deleteLater();
     });
     return future;
 }

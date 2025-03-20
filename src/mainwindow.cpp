@@ -27,9 +27,13 @@ MainWindow::MainWindow(QWidget *parent)
     setupDockWindows();
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
         m_logViewer->clearAllLogs();
-        (new ArchiveProcessorExternalLha())->extractFileAsPromise(filePath).then([this, filePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
+        auto extractor = new ArchiveProcessorExternalLha();
+        extractor->extractFileAsPromise(filePath).then([this, extractor, filePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
             tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, fileLoadMode);
-        }).onFailed([](){ });
+            delete extractor;
+        }).onFailed([extractor](){
+            delete extractor;
+        });
     });
 
     connect(m_kissView, &GKissView::highlightedItemChanged, [=](GKissItem *item) {
@@ -367,8 +371,12 @@ void MainWindow::dropEvent(QDropEvent *event)
                 qDebug() << "Dropped file:" << filePath;
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
                 m_logViewer->clearAllLogs();
-                (new ArchiveProcessorExternalLha())->extractFileAsPromise(filePath).then([this, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
+                auto *extractor = new ArchiveProcessorExternalLha();
+                extractor->extractFileAsPromise(filePath).then([this, extractor, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
                     tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, QKiSS::FileLoadMode::LoadAsIndependent);
+                    delete extractor;
+                }).onFailed([extractor](){
+                    delete extractor;
                 });
                 // m_archiveProcessor->extractLzh(filePath);
             }

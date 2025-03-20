@@ -35,8 +35,7 @@ ArchiveFile::ArchiveFile(QObject *parent):
     m_parsedKcfFiles(new QHash<QString, ParsedKcf*>),
     m_parsedCelFiles(new QHash<QString, ParsedCel*>),
     m_docFiles(new QMap<QString, QString>),
-    m_otherFiles(new QMap<QString, QByteArray>()),
-    m_archiveExtractor(new ArchiveProcessorExternalLha(this))
+    m_otherFiles(new QMap<QString, QByteArray>())
 {
 
 }

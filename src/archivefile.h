@@ -107,7 +107,6 @@ private:
     uint8_t m_curCnfSetNo;
     /** これは ` $<パレット組>` のあれ「パレット組」。KCF ごと N 個パレット組がある。*/
     uint8_t m_curPaletteNo;
-    ArchiveProcessorExternalLha *m_archiveExtractor;
     LoadingState m_loadingState;
 };
 
