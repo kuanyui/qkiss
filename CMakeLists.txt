@@ -84,6 +84,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/fileiconprovider.h src/fileiconprovider.cpp
         src/iconbuttondelegate.h src/iconbuttondelegate.cpp
         src/abstractarchiveprocessor.h src/abstractarchiveprocessor.cpp
+        src/archiveprocessorlibarchive.h src/archiveprocessorlibarchive.cpp
+        src/archiveprocessorfactory.h src/archiveprocessorfactory.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -6,6 +6,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QSettings>
+#include "archiveprocessorfactory.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -27,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     setupDockWindows();
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
         m_logViewer->clearAllLogs();
-        auto extractor = new ArchiveProcessorExternalLha();
+        auto *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::ExternalLhaProcess);
         extractor->extractFileAsPromise(filePath).then([this, extractor, filePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
             tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, fileLoadMode);
             delete extractor;
@@ -371,7 +372,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                 qDebug() << "Dropped file:" << filePath;
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
                 m_logViewer->clearAllLogs();
-                auto *extractor = new ArchiveProcessorExternalLha();
+                auto *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::ExternalLhaProcess);
                 extractor->extractFileAsPromise(filePath).then([this, extractor, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
                     tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, QKiSS::FileLoadMode::LoadAsIndependent);
                     delete extractor;
