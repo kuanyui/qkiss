@@ -23,6 +23,7 @@ endif()
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools)
 find_package(ICU REQUIRED COMPONENTS uc i18n data)
+find_package(LibArchive REQUIRED)
 
 ### Build Icons
 find_package(Python3 REQUIRED Interpreter)
@@ -39,6 +40,10 @@ set_property(
 
 if(ICU_FOUND)
     include_directories(${ICU_INCLUDE_DIRS})
+endif()
+
+if(LibArchive_FOUND)
+    include_directories(${LibArchive_INCLUDE_DIRS})
 endif()
 
 set(TS_FILES qkiss_en_US.ts)
@@ -111,7 +116,7 @@ else()
 endif()
 
 
-target_link_libraries(qkiss PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${ICU_LIBRARIES})
+target_link_libraries(qkiss PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${ICU_LIBRARIES} LibArchive::LibArchive)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

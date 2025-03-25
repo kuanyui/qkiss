@@ -15,6 +15,9 @@ public:
     // AbstractArchiveProcessor interface
 public:
     virtual QFuture<std::shared_ptr<ExtractedRawFilesMap> > extractFileAsPromise(const QString &lzhOrCnfFilePath) override;
+
+private:
+    QHash<QString, QByteArray> extractArchive(const QByteArray &archiveData);
 };
 
 #endif // ARCHIVEPROCESSORLIBARCHIVE_H
