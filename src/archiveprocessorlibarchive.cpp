@@ -26,22 +26,33 @@ ArchiveProcessorLibarchive::~ArchiveProcessorLibarchive()
 
 QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extractFileAsPromise(const QString &lzhOrCnfFilePath)
 {
-    QPromise<std::shared_ptr<ExtractedRawFilesMap>> promise;                    // QPromise: producer; can add result or set exception.
-    QFuture<std::shared_ptr<ExtractedRawFilesMap>> future = promise.future();   // QFuture: consumer; has `.then()`
-    promise.start();
+    // QPromise: producer; can add result or set exception. (it's a move-only class https://doc.qt.io/qt-6/qpromise.html )
+    // QFuture: consumer; has `.then()`
+    QPromise<std::shared_ptr<ExtractedRawFilesMap>> *promise = new QPromise<std::shared_ptr<ExtractedRawFilesMap>>();
+    QFuture<std::shared_ptr<ExtractedRawFilesMap>> future = promise->future();
+    // QFutureWatcher<std::shared_ptr<ExtractedRawFilesMap>> *watcher = new QFutureWatcher<std::shared_ptr<ExtractedRawFilesMap>>(this);
+    promise->start();
     QFile file(lzhOrCnfFilePath);
     if (!file.open(QIODevice::OpenModeFlag::ReadOnly)) {
         qCritical() << tr("Failed to open this file, aborted.");
-        promise.setException(std::make_exception_ptr( std::runtime_error("Failed to open file \"%1\", aborted."_L1.arg(lzhOrCnfFilePath).toStdString()) ));
-        promise.finish();    // NOTE: `QPromise::finished()` is still need to be called after `QPromise::setException()`. Documentation doesn't clearly say this.
+        promise->setException(std::make_exception_ptr( std::runtime_error("Failed to open file \"%1\", aborted."_L1.arg(lzhOrCnfFilePath).toStdString()) ));
+        promise->finish();    // NOTE: `QPromise::finished()` is still need to be called after `QPromise::setException()`. Documentation doesn't clearly say this.
+        delete promise;
         return future;
     }
     QByteArray fileRawContent = file.readAll();
     file.close();
-    // Use std::move to capture QPromise instance in lambda, so no longer need to new / delete QPromise manually anymore.
-    QtConcurrent::run(extractArchive, fileRawContent).then([promise = std::move(promise)] (QFuture<std::shared_ptr<ExtractedRawFilesMap>> res) mutable {
-        promise.addResult(res.result());
-        promise.finish();     // NOTE: `QPromise::finished()` is still need to be called after `QPromise::setException()`. Documentation doesn't clearly say this.
+    QtConcurrent::run(extractArchive, fileRawContent).then([promise] (QFuture<std::shared_ptr<ExtractedRawFilesMap>> res) {
+        // ATTENTION: `QFuture::then()` will be executed in the thread where the `QPromise::finished()` was called,
+        // so force call lambda back in the main thread via QMetaObject::invokeMethod().
+        QMetaObject::invokeMethod(
+            QCoreApplication::instance(),
+            [promise, res]() {
+                promise->addResult(res.result());
+                promise->finish();
+                delete promise;
+            }
+        );
     });
     return future;
 }
