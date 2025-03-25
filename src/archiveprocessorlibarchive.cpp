@@ -76,7 +76,7 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::extractArchive
     }
 
     while (la::archive_read_next_header(arch, &entry) == ARCHIVE_OK) {
-        QString fileName = QString::fromUtf8(archive_entry_pathname(entry));
+        QString filePath = QString::fromUtf8(archive_entry_pathname(entry));
         QByteArray fileData;
         while (true) {
             const void *buf = nullptr;
@@ -92,6 +92,7 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::extractArchive
             }
             fileData.append(static_cast<const char*>(buf), static_cast<int>(size));
         }
+        QString fileName = filePath.split('/').last();
         filesDict->insert(fileName, fileData);
     }
 
