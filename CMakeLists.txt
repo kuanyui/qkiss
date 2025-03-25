@@ -20,8 +20,8 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 endif()
 
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent)
 find_package(ICU REQUIRED COMPONENTS uc i18n data)
 find_package(LibArchive REQUIRED)
 
@@ -116,7 +116,7 @@ else()
 endif()
 
 
-target_link_libraries(qkiss PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${ICU_LIBRARIES} LibArchive::LibArchive)
+target_link_libraries(qkiss PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Concurrent ${ICU_LIBRARIES} LibArchive::LibArchive)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

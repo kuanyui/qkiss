@@ -40,6 +40,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
         promise->setException(std::make_exception_ptr(
                                   std::runtime_error("Process failed with exit code: %1"_L1.arg(errMsg).toStdString())
                                   ));
+        promise->finish();
         delete promise;
     });
     QObject::connect(this, &ArchiveProcessorExternalLha::extractSuccess, [this, promise, fileName](QString compressedFilePath, std::shared_ptr<ExtractedRawFilesMap> extractedRawFiles) {
