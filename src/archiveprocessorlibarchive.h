@@ -17,7 +17,9 @@ public:
     virtual QFuture<std::shared_ptr<ExtractedRawFilesMap> > extractFileAsPromise(const QString &lzhOrCnfFilePath) override;
 
 private:
-    static std::shared_ptr<ExtractedRawFilesMap> extractArchive(const QByteArray &archiveData);
+    /// Open a new thread to extracts archive file in memory, and returns QFuture in main thread.
+    QFuture<std::shared_ptr<ExtractedRawFilesMap> > extractArchiveInMemory(const QByteArray &archiveData);
+    static std::shared_ptr<ExtractedRawFilesMap> callLibarchiveToExtractArchiveInMemory(const QByteArray &archiveData);
 };
 
 #endif // ARCHIVEPROCESSORLIBARCHIVE_H
