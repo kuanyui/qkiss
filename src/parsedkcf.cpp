@@ -1,6 +1,8 @@
 #include "parsedkcf.h"
 #include <QDebug>
 
+using namespace Qt::Literals::StringLiterals;
+
 ParsedKcf::ParsedKcf(QString fileName, QByteArray rawData):
     m_fileName(fileName)
 {
@@ -121,7 +123,7 @@ ParsedKcfPalette *ParsedKcf::getPaletteInKcf(uint16_t paletteIdxInKcf)
         return nullptr;
     }
     if (paletteIdxInKcf >= m_paletteAmounts) {
-        qCritical() << "[ERROR] paletteIdx out of actual paletteAmount, use index 0 as fallback";
+        qCritical().noquote() << "[ERROR] paletteIdx (%1) out of actual paletteAmount (%2), use index 0 as fallback"_L1.arg(QString::number((int)paletteIdxInKcf)).arg(QString::number((int)m_paletteAmounts));
         paletteIdxInKcf = 0;
     }
     return &m_palettesList[paletteIdxInKcf];

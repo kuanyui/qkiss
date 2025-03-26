@@ -1,5 +1,6 @@
 #include "gkissscene.h"
 #include "fkissruntime.h"
+using namespace Qt::Literals::StringLiterals;
 using FV = FkissVariant;
 
 
@@ -58,7 +59,15 @@ void GKissScene::drawCurSetBackground()
     QRgb borderColor = firstPaletteInFirstKcfInCnf->at(borderColorIdx);
     setBackgroundBrush(QBrush(borderColor));
     // play field background
-    ParsedKcfPalette *paletteOfCnfSet = firstKcfInCnf->getPaletteInKcf(m_cnfSet->paletteNoInKcf());
+    uint16_t paletteNoInKcf = m_cnfSet->paletteNoInKcf();
+    if (paletteNoInKcf + 1 > firstKcfInCnf->paletteAmounts()) {
+        qWarning().noquote() << "[Scene] In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF."_L1
+                      .arg(QString::number(m_setIndex))
+                      .arg(QString::number((int)paletteNoInKcf))
+                      .arg(QString::number((int)firstKcfInCnf->paletteAmounts()));
+        paletteNoInKcf = 0;
+    }
+    ParsedKcfPalette *paletteOfCnfSet = firstKcfInCnf->getPaletteInKcf(paletteNoInKcf);
     if (paletteOfCnfSet == nullptr) {
         qCritical() << "[ERROR][Scene] WTF? In CNF's set definition, not found palette in first KCF of this CNF. Abort.";
         return;

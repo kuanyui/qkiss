@@ -14,7 +14,7 @@ ParsedCel::ParsedCel(QString fileName, QByteArray rawData):
     qDebug() << "[DEBUG][ParsedCel] ctor: " << *this;
 }
 
-std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, int paletteIdxInKcf) const
+std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, uint16_t paletteIdxInKcf) const
 {
     ParsedKcfPalette *paletteInKcf = kcf.getPaletteInKcf(paletteIdxInKcf);
     std::unique_ptr<QVector<QRgb>> colorizedPixels = std::make_unique<QVector<QRgb>>();
