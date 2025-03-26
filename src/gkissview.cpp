@@ -17,11 +17,11 @@ GKissView::GKissView(QWidget *parent):
 GKissView::GKissView(ArchiveFile *archiveFile, QWidget *parent):
     QGraphicsView(parent)
 {
-    setArchiveFile(archiveFile);
+    setArchiveFileAndRenderFirstCnf(archiveFile);
 }
 
 
-bool GKissView::setArchiveFile(ArchiveFile *archiveFile)
+bool GKissView::setArchiveFileAndRenderFirstCnf(ArchiveFile *archiveFile)
 {
     // deleteAllScenes();  /// FIXME: Unnecessary? Should not be done here?
     m_archiveFile = archiveFile;

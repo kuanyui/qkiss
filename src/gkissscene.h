@@ -31,7 +31,7 @@ public:
     void receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
     QList<GKissItem *> allKissItems();
     uint8_t paletteNoInKcf() const;
-    void setPaletteNoInKcf(uint8_t newPaletteNoInKcf);
+    void setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf);
 
 signals:
     /// The Item which is being pressed / dragged... etc.

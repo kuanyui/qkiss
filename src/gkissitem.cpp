@@ -176,7 +176,7 @@ ParsedCel *GKissItem::cel() const
     return m_cel;
 }
 
-void GKissItem::setPaletteNoInKcf(uint8_t newPaletteNoInKcf)
+void GKissItem::setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf)
 {
     m_paletteNoInKcf = newPaletteNoInKcf;
     rerenderImage();

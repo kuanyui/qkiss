@@ -127,7 +127,7 @@ public:
     const ParsedCnfSetObjPos getObjPosByObjId(int32_t objId) const;
 private:
     /**
-     * - Initial palette for the set. This is the number of a palette within a KCF.
+     * - Initial palette for the set (therefore should not be modified after parsing). This is the number of a palette within a KCF.
      * - The range is based on the KCF with the greatest number of palettes. The palette number starts at 0 and goes up to one less than the greatest number of palettes.
      * - For example, if the greatest number of palettes is 8, then the range for a palette number is 0 through 7. If the greatest number of palettes is 20, then the range is 0 through 19.
      */
@@ -146,6 +146,7 @@ private:
 
 /**
  * Represent a parsed .CNF file.
+ * The data inside this class should not be modified after parsing. (for example, don't mutate `m_cels[idx]->m_paletteNoInKcf`).
  * @owner ArchiveFile
  */
 class ParsedCnf

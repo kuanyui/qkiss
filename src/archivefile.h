@@ -105,7 +105,8 @@ private:
      *    書式： $<パレット組> [<x座標,y座標> ...] 最初の指定が 0 で 9 まで、最大10個のセット情報を指定できます。
      */
     uint8_t m_curCnfSetNo;
-    /** これは ` $<パレット組>` のあれ「パレット組」。KCF ごと N 個パレット組がある。*/
+    /** <s>これは ` $<パレット組>` のあれ「パレット組」。KCF ごと N 個パレット組がある。</s>
+      This real state should be stored in each set (GKissScene), instead of this class. */
     uint8_t m_curPaletteNo;
     LoadingState m_loadingState;
 };

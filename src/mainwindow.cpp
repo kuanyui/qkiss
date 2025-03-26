@@ -111,7 +111,8 @@ void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, s
         }
     }
     m_kissView->deleteAllScenes();
-    m_kissView->setArchiveFile(m_archiveFile);
+    bool ok = m_kissView->setArchiveFileAndRenderFirstCnf(m_archiveFile);
+    if (!ok) { return; }
     qInfo().noquote() << tr("Parsing finished. Now rendering scenes...");
     m_fileSystemBrowser->markPathAsLoaded(compressedFilePath, fileLoadMode);
     m_innerFilesBrowser->rerenderFileList(m_archiveFile);
@@ -197,7 +198,7 @@ void MainWindow::rerenderSetPaletteButtons()
         if (paletteIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(paletteIdx));
         connect(btn, &QAbstractButton::pressed, [=](){
-            m_kissView->curKissScene()->setPaletteNoInKcf(paletteIdx);
+            m_kissView->curKissScene()->setPaletteNoInKcfAndRender(paletteIdx);
             m_archiveFile->setCurPaletteNo(paletteIdx);    // FIXME: It seems m_archiveFile stores a setNo, but m_kissView->curKissScene() itself also stores a paletteNo. Should keep a singleton here.
             btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
         });

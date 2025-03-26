@@ -251,7 +251,7 @@ uint8_t GKissScene::paletteNoInKcf() const
     return m_paletteNoInKcf;
 }
 
-void GKissScene::setPaletteNoInKcf(uint8_t newPaletteNoInKcf)
+void GKissScene::setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf)
 {
     m_paletteNoInKcf = newPaletteNoInKcf;
     foreach (QGraphicsItem *_item, items()) {

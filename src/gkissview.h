@@ -14,7 +14,7 @@ class GKissView : public QGraphicsView
 public:
     GKissView(QWidget *parent=nullptr);
     GKissView(ArchiveFile *archiveFile, QWidget *parent=nullptr);
-    bool setArchiveFile(ArchiveFile *archiveFile);
+    bool setArchiveFileAndRenderFirstCnf(ArchiveFile *archiveFile);
     void deleteAllScenes();
     bool setCurCnfAndRenderScenes(QString cnfFileName);
     uint8_t scenesAmount() const;

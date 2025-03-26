@@ -25,7 +25,7 @@ public:
     GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, ParsedKcf *kcf, uint16_t paletteNoInKcf = 0, QGraphicsItem *parent = nullptr);
     GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, QGraphicsItem *parent = nullptr);
     void rerenderImage();
-    void setPaletteNoInKcf(uint8_t newPaletteNoInKcf);
+    void setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf);
 
     int32_t objId() const;
     QString celFileName() const;
