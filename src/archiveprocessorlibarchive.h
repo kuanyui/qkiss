@@ -18,8 +18,8 @@ public:
 
 private:
     /// Open a new thread to extracts archive file in memory, and returns QFuture in main thread.
-    QFuture<std::shared_ptr<ExtractedRawFilesMap> > extractArchiveInMemory(const QByteArray &archiveData);
-    static std::shared_ptr<ExtractedRawFilesMap> callLibarchiveToExtractArchiveInMemory(const QByteArray &archiveData);
+    QFuture<std::shared_ptr<ExtractedRawFilesMap> > extractArchiveInMemory(const QByteArray &archiveData, std::shared_ptr<ExtractedRawFilesMap> filesDict);
+    static std::shared_ptr<ExtractedRawFilesMap> callLibarchiveToExtractArchiveInMemory(const QByteArray &archiveData, std::shared_ptr<ExtractedRawFilesMap> filesDict);
 };
 
 #endif // ARCHIVEPROCESSORLIBARCHIVE_H

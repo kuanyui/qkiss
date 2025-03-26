@@ -26,6 +26,7 @@ ArchiveProcessorLibarchive::~ArchiveProcessorLibarchive()
 
 QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extractFileAsPromise(const QString &lzhOrCnfFilePath)
 {
+    std::shared_ptr<ExtractedRawFilesMap> filesDict = std::make_shared<ExtractedRawFilesMap>();
     // QPromise: producer; can add result or set exception. (it's a move-only class https://doc.qt.io/qt-6/qpromise.html )
     // QFuture: consumer; has `.then()`
     QPromise<std::shared_ptr<ExtractedRawFilesMap>> *promise = new QPromise<std::shared_ptr<ExtractedRawFilesMap>>();
@@ -42,7 +43,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extr
     }
     QByteArray fileRawContent = file.readAll();
     file.close();
-    extractArchiveInMemory(fileRawContent).then([promise] (QFuture<std::shared_ptr<ExtractedRawFilesMap>> res) {
+    extractArchiveInMemory(fileRawContent, filesDict).then([promise] (QFuture<std::shared_ptr<ExtractedRawFilesMap>> res) {
         promise->addResult(res.result());
         promise->finish();
         delete promise;
@@ -50,30 +51,24 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extr
     return future;
 }
 
-QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extractArchiveInMemory(const QByteArray &archiveData)
+QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extractArchiveInMemory(const QByteArray &archiveData, std::shared_ptr<ExtractedRawFilesMap> filesDict)
 {
     // QPromise: producer; can add result or set exception. (it's a move-only class https://doc.qt.io/qt-6/qpromise.html )
     // QFuture: consumer; has `.then()`
     QPromise<std::shared_ptr<ExtractedRawFilesMap>> *promise = new QPromise<std::shared_ptr<ExtractedRawFilesMap>>();
     QFuture<std::shared_ptr<ExtractedRawFilesMap>> future = promise->future();
-    QtConcurrent::run(callLibarchiveToExtractArchiveInMemory, archiveData).then([promise] (QFuture<std::shared_ptr<ExtractedRawFilesMap>> res) {
-        // ATTENTION: `QFuture::then()` will be executed in the thread where the `QPromise::finished()` was called,
-        // so force call lambda back in the main thread via QMetaObject::invokeMethod().
-        QMetaObject::invokeMethod(
-            QCoreApplication::instance(),
-            [promise, res]() {
-                promise->addResult(res.result());
-                promise->finish();
-                delete promise;
-            }
-        );
+    // ATTENTION: `QFuture::then()` will be executed in the thread where the `QPromise::finished()` was called,
+    // so specify the execution context (`this`) for this lambda here.
+    QtConcurrent::run(callLibarchiveToExtractArchiveInMemory, archiveData, filesDict).then(this, [promise] (QFuture<std::shared_ptr<ExtractedRawFilesMap>> res) {
+        promise->addResult(res.result());
+        promise->finish();
+        delete promise;
     });
     return future;
 }
 
-std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchiveToExtractArchiveInMemory(const QByteArray &archiveData)
+std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchiveToExtractArchiveInMemory(const QByteArray &archiveData, std::shared_ptr<ExtractedRawFilesMap> filesDict)
 {
-    std::shared_ptr<ExtractedRawFilesMap> filesDict = std::make_shared<ExtractedRawFilesMap>();
 
     struct la::archive *arch = la::archive_read_new();
     /// an entry means a file in this archive
