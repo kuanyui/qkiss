@@ -13,6 +13,7 @@ GKissScene::GKissScene(ArchiveFile* archiveFile, ParsedCnf* cnf, int setIdx, QOb
     m_cnf = cnf;
     m_setIndex = setIdx;
     m_cnfSet = cnf->sets()[setIdx];
+    m_paletteNoInKcf = m_cnfSet->paletteNoInKcf();    // Initialize a mutable paletteNo of this set (scene), because the set's paletteNo in parsed CNF is read-only.
 
     auto pf = m_cnf->playFieldSize();
     setSceneRect(0, 0, pf.width(), pf.height());
@@ -257,7 +258,7 @@ void GKissScene::setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf)
     foreach (QGraphicsItem *_item, items()) {
         GKissItem *item = qgraphicsitem_cast<GKissItem *>(_item);
         if (item == nullptr) { continue; }
-        item->setPaletteNoInKcf(newPaletteNoInKcf);
+        item->setPaletteNoInKcfAndRender(m_paletteNoInKcf);
     }
 }
 

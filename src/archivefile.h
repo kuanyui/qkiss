@@ -64,6 +64,9 @@ public:
     void setCurCnfSetNo(uint8_t newCurCnfSetNo);
     uint8_t curCnfSetsAmount() const;
     uint8_t curPaletteNo() const;
+    /// Though ArchiveFile itself doesn't store the "real palette no. state", here is a copy of it.
+    /// (the real one should be stored by Set (GKissScene) because the `N` of `$N` in CNF is the paletteNo of that set).
+    /// Set via this method will emit `curPaletteNoChanged` signal, as an event bus.
     void setCurPaletteNo(uint8_t newPaletteNo);
     /// Get the first KCF file, and return the palette amount of this KCF file.
     size_t paletteAmountOfFirstKcfInCurCnf() const;

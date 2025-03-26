@@ -164,6 +164,8 @@ void MainWindow::rerenderSetPaletteButtons()
             m_kissView->showKissSceneByIndex(sceneIdx);
             m_archiveFile->setCurCnfSetNo(sceneIdx);   // FIXME: It seems m_archiveFile stores a setNo, but m_kissView itself also stores a setNo (more precisely, sceneIdx). Should keep a singleton here.
             btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
+            auto paletteNoInKcf = m_kissView->curKissScene()->paletteNoInKcf();
+            m_archiveFile->setCurPaletteNo(paletteNoInKcf);    // Emit signal `curPaletteNoChanged`
         });
         connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurCnfSetNo){
             if (sceneIdx == newCurCnfSetNo) {
