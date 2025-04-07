@@ -91,6 +91,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/abstractarchiveprocessor.h src/abstractarchiveprocessor.cpp
         src/archiveprocessorlibarchive.h src/archiveprocessorlibarchive.cpp
         src/archiveprocessorfactory.h src/archiveprocessorfactory.cpp
+        src/audioplayer.h src/audioplayer.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -4,6 +4,8 @@
 #include <QObject>
 #include "fkiss.h"
 
+class AudioPlayer;
+
 class FkissRuntime : public QObject
 {
 public:
@@ -35,6 +37,7 @@ private:
     void runTransparent(FkissVariant target, FkissVariant delta);
     void runTimer(FkissVariant alarmID, FkissVariant delay);
     void runRandomtimer(FkissVariant alarmID, FkissVariant delay, FkissVariant range);
+    void runSound(FkissVariant fileName);
     /// Tiny reminder: trigger this after view + scene + FKiSS runtime is ready.
     void runChangeset(FkissVariant pageNo);
     /// Tiny reminder: trigger this after view + scene + FKiSS runtime is ready.
@@ -54,6 +57,7 @@ private:
     QHash<FkissVariant, std::shared_ptr<FkissAlarmTimer>> m_alarmTimerPool;
     /// Store the visibility modified via FKiSS script (e.g. map(), unmap()). May be a cel or an obj.
     QHash<FkissVariant, bool> m_mapState;
+    AudioPlayer *m_audioPlayer;
 };
 
 #endif // FKISSRUNTIME_H

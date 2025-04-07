@@ -1,9 +1,12 @@
 #include "fkissruntime.h"
 #include "gkissscene.h"
 #include <QRandomGenerator>
+#include "audioplayer.h"
+
 using namespace Qt::Literals::StringLiterals;
 
-FkissRuntime::FkissRuntime()
+FkissRuntime::FkissRuntime() :
+    m_audioPlayer{new AudioPlayer{this}}
 {
     qDebug() << "[fkissruntime] ctor()";
 }
@@ -221,6 +224,16 @@ void FkissRuntime::runRandomtimer(FkissVariant alarmID, FkissVariant delay, Fkis
     getOrCreateAlarmTimer(alarmID, realDelay);
 }
 
+void FkissRuntime::runSound(FkissVariant fileName)
+{
+    if (m_curKissScene == nullptr) { return; }
+    auto archiveFile = m_curKissScene->archiveFile();
+    if (!archiveFile.has_value()) { return; }
+    auto audioFileData = archiveFile.value()->getOtherFile(fileName.getString());
+    if (!audioFileData.has_value()) { return; }
+    m_audioPlayer->playWavFromMemory(audioFileData.value());
+}
+
 void FkissRuntime::runChangeset(FkissVariant pageNo)
 {
     if (m_curKissScene == nullptr) { return; }
@@ -344,6 +357,11 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
         if (actName == FKK::TIMER) {
             if (actArgs.length() != 2) { qDebug() << "[Fkiss] invalid timer(alarmID, delayMs) args count, skip."_L1; continue; }
             runTimer(actArgs[0], actArgs[1]);
+            continue;
+        }
+        if (actName == FKK::SOUND) {
+            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid sound(fileName) args count, skip."_L1; continue; }
+            runSound(actArgs[0]);
             continue;
         }
         if (actName == FKK::RANDOMTIMER) {
