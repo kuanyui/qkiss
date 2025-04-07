@@ -30,6 +30,8 @@ private:
     void tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, QKiSS::FileLoadMode fileLoadMode);
     /// Note: this will activate the first button.
     void rerenderSetPaletteButtons();
+    void switchScene(uint8_t sceneIdx);
+    void switchPalette(uint8_t paletteIdx);
     void setupToolBars();
     void setupDockWindows();
     void setupCenterArea();

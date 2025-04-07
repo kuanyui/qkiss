@@ -292,12 +292,17 @@ uint8_t ArchiveFile::curPaletteNo() const
     return m_curPaletteNo;
 }
 
-void ArchiveFile::setCurPaletteNo(uint8_t newPaletteNo)
+void ArchiveFile::setPaletteNo(uint8_t newPaletteNo)
+{
+    m_curPaletteNo = newPaletteNo;
+}
+
+void ArchiveFile::setPaletteNoFromFkiss(uint8_t newPaletteNo)
 {
     if (m_curPaletteNo != newPaletteNo) {
         m_curPaletteNo = newPaletteNo;
         qDebug() << "emit ArchiveFile::curPaletteNoChanged(%1)"_L1.arg(QString::number(newPaletteNo));
-        emit curPaletteNoChanged(newPaletteNo);
+        emit fkissChangedPaletteNo(newPaletteNo);
     }
 }
 
@@ -318,12 +323,17 @@ void ArchiveFile::setLoadingState(LoadingState newLoadingState)
     m_loadingState = newLoadingState;
 }
 
-void ArchiveFile::setCurCnfSetNo(uint8_t newCurCnfSetNo)
+void ArchiveFile::setCnfSetNo(uint8_t newCurCnfSetNo)
+{
+    m_curCnfSetNo = newCurCnfSetNo;
+}
+
+void ArchiveFile::setCnfSetNoFromFkiss(uint8_t newCurCnfSetNo)
 {
     if (m_curCnfSetNo != newCurCnfSetNo) {
         m_curCnfSetNo = newCurCnfSetNo;
         qDebug() << "emit ArchiveFile::curCnfSetNoChanged(%1)"_L1.arg(QString::number(newCurCnfSetNo));
-        emit curCnfSetNoChanged(newCurCnfSetNo);
+        emit fkissChangedCnfSetNo(newCurCnfSetNo);
     }
 }
 
@@ -337,6 +347,8 @@ uint8_t ArchiveFile::curCnfSetNo() const
 {
     return m_curCnfSetNo;
 }
+
+
 
 ParsedCnf *ArchiveFile::curCnf() const
 {

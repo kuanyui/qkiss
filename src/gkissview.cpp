@@ -30,10 +30,10 @@ bool GKissView::setArchiveFileAndRenderFirstCnf(ArchiveFile *archiveFile)
     }
     // NOTE: 1. I also have considered to move this connect() into ArchiveFile itself but the semantic of context looks too weird....
     // NOTE: 2. When loading a new LZH file, should trigger both event after fkiss runtime is ready.
-    m_connectionsOfArchiveFile.append(connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [this](uint8_t newCurCnfSetNo) {
+    m_connectionsOfArchiveFile.append(connect(m_archiveFile, &ArchiveFile::fkissChangedCnfSetNo, [this](uint8_t newCurCnfSetNo) {
         m_archiveFile->curCnf()->fkiss()->runtime()->triggerSet(newCurCnfSetNo);
     }));
-    m_connectionsOfArchiveFile.append(connect(m_archiveFile, &ArchiveFile::curPaletteNoChanged, [this](uint8_t newCurPaletteNo) {
+    m_connectionsOfArchiveFile.append(connect(m_archiveFile, &ArchiveFile::fkissChangedPaletteNo, [this](uint8_t newCurPaletteNo) {
         m_archiveFile->curCnf()->fkiss()->runtime()->triggerCol(newCurPaletteNo);
     }));
     QStringList cnfFileNameList = m_archiveFile->getCnfNameList();

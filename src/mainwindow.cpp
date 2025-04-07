@@ -149,7 +149,6 @@ void MainWindow::rerenderSetPaletteButtons()
     m_toolbarSceneSets->addWidget(cycleToggleSceneSetBtn);
     connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
         Q_UNUSED(checked)
-        qDebug() << "[DEBUG] setCycleBtn clicked"_L1;
         if (m_archiveFile->curCnfSetsAmount() == 0) { return; }
         uint8_t curSceneNo = m_archiveFile->curCnfSetNo();
         uint8_t nextSceneNo = (curSceneNo + 1) % m_archiveFile->curCnfSetsAmount();
@@ -162,25 +161,16 @@ void MainWindow::rerenderSetPaletteButtons()
         btn->setCheckable(true);   // Make it act like radio button
         if (sceneIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(sceneIdx));
-        connect(btn, &QAbstractButton::clicked, this, [=](){
-            qDebug() << "[DEBUG] setBtn %1 clicked"_L1.arg(QString::number(sceneIdx));
-            m_kissView->showKissSceneByIndex(sceneIdx);
-            m_archiveFile->setCurCnfSetNo(sceneIdx);   // FIXME: It seems m_archiveFile stores a setNo, but m_kissView itself also stores a setNo (more precisely, sceneIdx). Should keep a singleton here.
-            btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
-            auto paletteNoInKcf = m_kissView->curKissScene()->paletteNoInKcf();
-            m_archiveFile->setCurPaletteNo(paletteNoInKcf);    // REFACTOR: currently use ArchiveFile as event bus... so ugly. Emit signal `curPaletteNoChanged`. Dirty and disgusting logic.
-        });
-        connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, this, [=](uint8_t newCurCnfSetNo){   // REFACTOR: currently use ArchiveFile as event bus... so ugly.
-            qDebug() << "[DEBUG] ArchiveFile::curCnfSetNoChanged" << newCurCnfSetNo;
-            if (sceneIdx == newCurCnfSetNo) {
-                btn->click();
-            }
-        });
         m_toolbarSceneSets->addWidget(btn);
+        connect(btn, &QAbstractButton::clicked, this, [=](){ switchScene(sceneIdx); });
     }
+    connect(m_archiveFile, &ArchiveFile::fkissChangedCnfSetNo, this, &MainWindow::switchScene);
     // =====================================================
     // Color sets (palettes)
     // =====================================================
+    foreach (auto *btn, m_btnGroupColorSets->buttons()) {
+        m_btnGroupColorSets->removeButton(btn);   // NOTE: This is crucial here and not clearly documented in Qt. Without it, cycleTogglePaletteSetBtn acts wrongly.
+    }
     m_toolbarColorSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
     m_toolbarColorSets->setWindowTitle(tr("Palette Sets"));   // Show in context menu of this ToolBar
     // m_toolbarColorSets->setWindowIcon(QIcon::fromTheme("palettes"));
@@ -191,7 +181,6 @@ void MainWindow::rerenderSetPaletteButtons()
     m_toolbarColorSets->addWidget(cycleTogglePaletteSetBtn);
     connect(cycleTogglePaletteSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
         Q_UNUSED(checked)
-        qDebug() << "[DEBUG] paletteCycleBtn clicked"_L1;
         if (m_archiveFile->paletteAmountOfFirstKcfInCurCnf() == 0) { return; }
         uint8_t curPaletteNo = m_archiveFile->curPaletteNo();
         uint8_t nextPaletteNo = (curPaletteNo + 1) % m_archiveFile->paletteAmountOfFirstKcfInCurCnf();
@@ -204,20 +193,30 @@ void MainWindow::rerenderSetPaletteButtons()
         btn->setCheckable(true);   // Make it act like radio button
         if (paletteIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(paletteIdx));
-        connect(btn, &QAbstractButton::clicked, this, [=](){
-            qDebug() << "[DEBUG] paletteBtn %1 clicked"_L1.arg(QString::number(paletteIdx));
-            m_kissView->curKissScene()->setPaletteNoInKcfAndRender(paletteIdx);
-            m_archiveFile->setCurPaletteNo(paletteIdx);    // FIXME: It seems m_archiveFile stores a setNo, but m_kissView->curKissScene() itself also stores a paletteNo. Should keep a singleton here.
-            btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
-        });
-        connect(m_archiveFile, &ArchiveFile::curPaletteNoChanged, this, [=](uint8_t newCurPaletteNo) {   // REFACTOR: currently use ArchiveFile as event bus... so ugly.
-            qDebug() << "[DEBUG] ArchiveFile::curPaletteNoChanged" << newCurPaletteNo;
-            if (paletteIdx == newCurPaletteNo) {
-                btn->click();
-            }
-        });
         m_toolbarColorSets->addWidget(btn);
+        connect(btn, &QAbstractButton::clicked, this, [=](){ switchPalette(paletteIdx); });
     }
+    connect(m_archiveFile, &ArchiveFile::fkissChangedPaletteNo, this, &MainWindow::switchPalette);
+}
+
+void MainWindow::switchScene(uint8_t sceneIdx)
+{
+    QAbstractButton *btn = m_btnGroupSceneSets->button(sceneIdx);
+    if (btn == nullptr) { return; }
+    btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
+    m_archiveFile->setCnfSetNo(sceneIdx);
+    m_kissView->showKissSceneByIndex(sceneIdx);
+    auto paletteNoInKcf = m_kissView->curKissScene()->paletteNoInKcf();
+    switchPalette(paletteNoInKcf);
+}
+
+void MainWindow::switchPalette(uint8_t paletteIdx)
+{
+    QAbstractButton *btn = m_btnGroupColorSets->button(paletteIdx);
+    if (btn == nullptr) { return; }
+    btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
+    m_archiveFile->setPaletteNo(paletteIdx);
+    m_kissView->curKissScene()->setPaletteNoInKcfAndRender(paletteIdx);
 }
 
 void MainWindow::setupToolBars()

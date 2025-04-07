@@ -61,13 +61,15 @@ public:
     bool setCurCnfByName(QString cnfFileName);
     ParsedCnf *curCnf() const;
     uint8_t curCnfSetNo() const;
-    void setCurCnfSetNo(uint8_t newCurCnfSetNo);
+    void setCnfSetNo(uint8_t newCurCnfSetNo);
+    void setCnfSetNoFromFkiss(uint8_t newCurCnfSetNo);
     uint8_t curCnfSetsAmount() const;
     uint8_t curPaletteNo() const;
+    void setPaletteNo(uint8_t newPaletteNo);
     /// Though ArchiveFile itself doesn't store the "real palette no. state", here is a copy of it.
     /// (the real one should be stored by Set (GKissScene) because the `N` of `$N` in CNF is the paletteNo of that set).
     /// Set via this method will emit `curPaletteNoChanged` signal, as an event bus.
-    void setCurPaletteNo(uint8_t newPaletteNo);
+    void setPaletteNoFromFkiss(uint8_t newPaletteNo);
     /// Get the first KCF file, and return the palette amount of this KCF file.
     size_t paletteAmountOfFirstKcfInCurCnf() const;
 
@@ -79,8 +81,8 @@ private slots:
 signals:
     void newLogLine(QString line);
     void curCnfChangedAndLoaded(QString newCnfFileName);
-    void curCnfSetNoChanged(uint8_t newCurCnfSetNo);
-    void curPaletteNoChanged(uint8_t newCurPaletteNo);
+    void fkissChangedCnfSetNo(uint8_t newCurCnfSetNo);
+    void fkissChangedPaletteNo(uint8_t newCurPaletteNo);
     // void archivedFilesUncompressAndParseFinished(bool success, QString errmsg);
     // void curCnfSetNoChanged(uint8_t nv);
 private:
