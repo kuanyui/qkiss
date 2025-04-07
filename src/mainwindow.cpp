@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupToolBars();
     setupDockWindows();
-    connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
+    connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, this, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
         m_logViewer->clearAllLogs();
         AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
         extractor->extractFileAsPromise(filePath).then([this, extractor, filePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
@@ -38,13 +38,13 @@ MainWindow::MainWindow(QWidget *parent)
         });
     });
 
-    connect(m_kissView, &GKissView::highlightedItemChanged, [=](GKissItem *item) {
+    connect(m_kissView, &GKissView::highlightedItemChanged, this, [=](GKissItem *item) {
         if (item == nullptr) {
             statusBar()->clearMessage();
         } else {
             QStringList itemsOfObj;
             itemsOfObj.append(item->celFileName());
-            for (auto sibling: *item->siblings()) {
+            foreach (auto sibling, *item->siblings()) {
                 itemsOfObj.append(sibling->celFileName());
             }
             statusBar()->showMessage(QString("File: %1, ObjId: %2, CelPos: (%3, %4), Size: (%5, %6), Fix: %7, Comment: %8     Object items (%9): [ %10 ]")
@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
                                      );
         }
     });
-    connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=](const QString &text) {
+    connect(m_cboxZoomScale, &QComboBox::currentTextChanged, this, [=](const QString &text) {
         bool ok;
         qreal targetScale = text.toFloat(&ok);
         if (!ok) {
@@ -117,10 +117,11 @@ void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, s
     m_fileSystemBrowser->markPathAsLoaded(compressedFilePath, fileLoadMode);
     m_innerFilesBrowser->rerenderFileList(m_archiveFile);
     m_codeEditor->setPlainText(m_archiveFile->getCnfFileAsString(m_archiveFile->curCnf()->fileName()));
-    if (m_archiveFile->getDocFileNameList().length() == 0) {
+    QStringList docFileNameList = m_archiveFile->getDocFileNameList();
+    if (docFileNameList.length() == 0) {
         m_docViewer->setPlainText("");
     } else {
-        QString docFileName = m_archiveFile->getDocFileNameList()[0];
+        QString docFileName = docFileNameList[0];
         m_docViewer->setPlainText(m_archiveFile->getDocFileAsString(docFileName));
         ui->dockWidget_docViewer->raise();
     }
@@ -135,7 +136,7 @@ void MainWindow::rerenderSetPaletteButtons()
     // =====================================================
     // Page sets
     // =====================================================
-    for (auto *btn: m_btnGroupSceneSets->buttons()) {
+    foreach (auto *btn, m_btnGroupSceneSets->buttons()) {
         m_btnGroupSceneSets->removeButton(btn);   // NOTE: This is crucial here and not clearly documented in Qt. Without it, cycleToggleSceneSetBtn acts wrongly.
     }
     m_toolbarSceneSets->clear();   // This will auto delete QPushButton, and QButtonGroup will also remove the deleted buttons from itself.
@@ -146,8 +147,9 @@ void MainWindow::rerenderSetPaletteButtons()
     cycleToggleSceneSetBtn->setText(tr("Scene Sets"));
     cycleToggleSceneSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
     m_toolbarSceneSets->addWidget(cycleToggleSceneSetBtn);
-    connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, [=](bool checked){
+    connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
         Q_UNUSED(checked)
+        qDebug() << "[DEBUG] setCycleBtn pressed"_L1;
         if (m_archiveFile->curCnfSetsAmount() == 0) { return; }
         uint8_t curSceneNo = m_archiveFile->curCnfSetNo();
         uint8_t nextSceneNo = (curSceneNo + 1) % m_archiveFile->curCnfSetsAmount();
@@ -160,14 +162,15 @@ void MainWindow::rerenderSetPaletteButtons()
         btn->setCheckable(true);   // Make it act like radio button
         if (sceneIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(sceneIdx));
-        connect(btn, &QAbstractButton::pressed, [=](){
+        connect(btn, &QAbstractButton::pressed, this, [=](){
+            qDebug() << "[DEBUG] setBtn %1 pressed"_L1.arg(QString::number(sceneIdx));
             m_kissView->showKissSceneByIndex(sceneIdx);
             m_archiveFile->setCurCnfSetNo(sceneIdx);   // FIXME: It seems m_archiveFile stores a setNo, but m_kissView itself also stores a setNo (more precisely, sceneIdx). Should keep a singleton here.
             btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
             auto paletteNoInKcf = m_kissView->curKissScene()->paletteNoInKcf();
             m_archiveFile->setCurPaletteNo(paletteNoInKcf);    // Emit signal `curPaletteNoChanged`
         });
-        connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, [=](uint8_t newCurCnfSetNo){
+        connect(m_archiveFile, &ArchiveFile::curCnfSetNoChanged, this, [=](uint8_t newCurCnfSetNo){
             if (sceneIdx == newCurCnfSetNo) {
                 btn->setChecked(true);
             }
@@ -185,8 +188,9 @@ void MainWindow::rerenderSetPaletteButtons()
     cycleTogglePaletteSetBtn->setText(tr("Palette Sets"));
     cycleTogglePaletteSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
     m_toolbarColorSets->addWidget(cycleTogglePaletteSetBtn);
-    connect(cycleTogglePaletteSetBtn, &QAbstractButton::clicked, [=](bool checked){
+    connect(cycleTogglePaletteSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
         Q_UNUSED(checked)
+        qDebug() << "[DEBUG] paletteCycleBtn pressed"_L1;
         if (m_archiveFile->paletteAmountOfFirstKcfInCurCnf() == 0) { return; }
         uint8_t curPaletteNo = m_archiveFile->curPaletteNo();
         uint8_t nextPaletteNo = (curPaletteNo + 1) % m_archiveFile->paletteAmountOfFirstKcfInCurCnf();
@@ -199,12 +203,13 @@ void MainWindow::rerenderSetPaletteButtons()
         btn->setCheckable(true);   // Make it act like radio button
         if (paletteIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(paletteIdx));
-        connect(btn, &QAbstractButton::pressed, [=](){
+        connect(btn, &QAbstractButton::pressed, this, [=](){
+            qDebug() << "[DEBUG] paletteBtn %1 pressed"_L1.arg(QString::number(paletteIdx));
             m_kissView->curKissScene()->setPaletteNoInKcfAndRender(paletteIdx);
             m_archiveFile->setCurPaletteNo(paletteIdx);    // FIXME: It seems m_archiveFile stores a setNo, but m_kissView->curKissScene() itself also stores a paletteNo. Should keep a singleton here.
             btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
         });
-        connect(m_archiveFile, &ArchiveFile::curPaletteNoChanged, [=](uint8_t newCurPaletteNo){
+        connect(m_archiveFile, &ArchiveFile::curPaletteNoChanged, this, [=](uint8_t newCurPaletteNo){
             if (paletteIdx == newCurPaletteNo) {
                 btn->setChecked(true);
             }
@@ -303,7 +308,7 @@ void MainWindow::setupDockWindows()
     // ==================================================
     // (Signals)
     // ==================================================
-    connect(m_innerFilesBrowser, &InnerFilesBrowser::itemActivated, [=](QTreeWidgetItem *item) {
+    connect(m_innerFilesBrowser, &InnerFilesBrowser::itemActivated, this, [=](QTreeWidgetItem *item) {
         m_innerFilesBrowser->markItemAsLoaded(item);
         if (item->type() == InnerFilesBrowser::CustomItemCnfFileType) {
             QString cnfFileName = item->text(0);
@@ -326,7 +331,7 @@ void MainWindow::saveWindowSettings()
     QSettings set;
     set.setValue("MainWindow/Geometry", saveGeometry());
     set.setValue("MainWindow/State", saveState());
-    for (QAction *act : m_toolbarWindows->actions()) {
+    foreach (QAction *act , m_toolbarWindows->actions()) {
         QString key = "MainWindow/ToolbarDockButtons/%1"_L1.arg(act->objectName());
         bool checked = act->isChecked();
         set.setValue(key, checked);
@@ -339,10 +344,10 @@ void MainWindow::restoreWindowSettings()
     QSettings set;
     restoreGeometry(set.value("MainWindow/Geometry").toByteArray());
     restoreState(set.value("MainWindow/State").toByteArray());
-    for (QAction *act : m_toolbarWindows->actions()) {
+    foreach (QAction *act , m_toolbarWindows->actions()) {
         QString key = "MainWindow/ToolbarDockButtons/%1"_L1.arg(act->objectName());
         bool toChecked = set.value(key, true).toBool();
-        act->toggled(toChecked);
+        emit act->toggled(toChecked);
         act->setChecked(toChecked);
     }
     m_cboxZoomScale->setCurrentText(set.value("View/Zoom", "1").toString());
@@ -370,11 +375,11 @@ void MainWindow::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         QList<QUrl> urlList = mimeData->urls();
 
-        for (const QUrl &url : urlList) {
+        foreach (const QUrl &url , urlList) {
             if (url.isLocalFile()) {
                 QString filePath = url.toLocalFile();
                 qDebug() << "Dropped file:" << filePath;
-                if (!filePath.toUpper().endsWith(".LZH")) { return; }
+                if (!filePath.endsWith(".LZH", Qt::CaseInsensitive)) { return; }
                 m_logViewer->clearAllLogs();
                 auto *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
                 extractor->extractFileAsPromise(filePath).then([this, extractor, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
