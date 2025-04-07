@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
         m_logViewer->clearAllLogs();
         AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
         extractor->extractFileAsPromise(filePath).then([this, extractor, filePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-            qDebug() << "============================" << filesMap->keys();
+            qDebug() << "Extract ============================" << filesMap->keys();
             tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, fileLoadMode);
             delete extractor;
         }).onFailed([extractor](){
@@ -376,7 +376,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                 qDebug() << "Dropped file:" << filePath;
                 if (!filePath.toUpper().endsWith(".LZH")) { return; }
                 m_logViewer->clearAllLogs();
-                auto *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::ExternalLhaProcess);
+                auto *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
                 extractor->extractFileAsPromise(filePath).then([this, extractor, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
                     tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, QKiSS::FileLoadMode::LoadAsIndependent);
                     delete extractor;
