@@ -123,7 +123,7 @@ ParsedKcfPalette *ParsedKcf::getPaletteInKcf(uint16_t paletteIdxInKcf)
         return nullptr;
     }
     if (paletteIdxInKcf >= m_paletteAmounts) {
-        qCritical().noquote() << "[ERROR] paletteIdx (%1) out of actual paletteAmount (%2), use index 0 as fallback"_L1.arg(QString::number((int)paletteIdxInKcf)).arg(QString::number((int)m_paletteAmounts));
+        qCritical().noquote() << "[ERROR] paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback"_L1.arg(QString::number((int)paletteIdxInKcf)).arg(QString::number((int)m_paletteAmounts));
         paletteIdxInKcf = 0;
     }
     return &m_palettesList[paletteIdxInKcf];

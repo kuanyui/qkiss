@@ -30,6 +30,7 @@ public:
     void executeTransparentOnObj(int32_t objId, int delta);
     void receiveFkissUserEventFromSceneItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
     QList<GKissItem *> allKissItems();
+    /// `${PALETTE_NO_IN_KCF} ...` in CNF by default, can be switched by user.
     uint8_t paletteNoInKcf() const;
     void setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf);
 
