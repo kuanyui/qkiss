@@ -34,7 +34,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extr
     promise->start();
     QFile file(lzhOrCnfFilePath);
     if (!file.open(QIODevice::OpenModeFlag::ReadOnly)) {
-        qCritical() << tr("Failed to open this file, aborted.");
+        qCritical().noquote() << tr("Failed to open this file, aborted.");
         promise->setException(std::make_exception_ptr( std::runtime_error("Failed to open file \"%1\", aborted."_L1.arg(lzhOrCnfFilePath).toStdString()) ));
         promise->finish();    // NOTE: `QPromise::finished()` is still need to be called after `QPromise::setException()`. Documentation doesn't clearly say this.
         delete promise;
@@ -94,7 +94,8 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
 
     // List contents of Archive stored in Memory   // https://github.com/libarchive/libarchive/wiki/Examples#list-contents-of-archive-stored-in-memory
     if (la::archive_read_open_memory(arch, const_cast<char*>(archiveData.constData()), static_cast<size_t>(archiveData.size())) != ARCHIVE_OK) {
-        qCritical() << tr("Error when opening this archive file. Aborted.");
+        const char *errMsg = la::archive_error_string(arch);
+        qCritical().noquote() << tr("Error when opening this archive file via LibArchive (Error message: %1). Aborted.").arg(errMsg);
         archive_read_free(arch);
         return filesDict;
     }
@@ -111,7 +112,8 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
                 break;
             }
             if (readStatus < ARCHIVE_OK) {
-                qCritical() << tr("Error when reading this archive file. Aborted.");
+                const char *errMsg = la::archive_error_string(arch);
+                qCritical().noquote() << tr("Error when reading this archive file via LibArchive (Error message: %1). Aborted.").arg(errMsg);
                 break;
             }
             fileData.append(static_cast<const char*>(buf), static_cast<int>(size));
