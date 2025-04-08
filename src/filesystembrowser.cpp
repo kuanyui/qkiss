@@ -81,14 +81,17 @@ void FileSystemBrowser::markPathAsLoaded(QString path, QKiSS::FileLoadMode fileL
     QSet<QString> newPaths = { m_loadedKissFilePaths.begin(), m_loadedKissFilePaths.end() };
     QSet<QString> newlyUnmarkedPaths = oriPaths - newPaths;
     QSet<QString> newlyMarkedPaths = newPaths - oriPaths;
+    QSet<QString> allChangedPaths = oriPaths + newPaths;
     for (int r = 0; r < m_model->rowCount(); r++) {
         QStandardItem *firstCol = m_model->item(r, 0);
         QStandardItem *stateIconItem = m_model->item(r, ColumnIdx::ColIdxStateIcon);
         QStandardItem *fileNameItem = m_model->item(r, ColumnIdx::ColIdxFileName);
         QString itemFilePath = firstCol->data(ThisRole::FilePathRole).toString();
         if (newlyMarkedPaths.contains(itemFilePath) || newlyUnmarkedPaths.contains(itemFilePath)) {
-            fileNameItem->setIcon(getFileIcon(itemFilePath));
-            stateIconItem->setIcon(getLoadStateIcon(itemFilePath));
+            fileNameItem->setIcon(getFileIcon(itemFilePath));   // packed / unpacked
+        }
+        if (allChangedPaths.contains(itemFilePath)) {
+            stateIconItem->setIcon(getLoadStateIcon(itemFilePath));    // independent / patch
         }
     }
 }
