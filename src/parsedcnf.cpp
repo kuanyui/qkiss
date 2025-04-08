@@ -54,18 +54,36 @@ void ParsedCnfCel::setComment(QString rawComment)
     qDebug() << "SET COMMENT: " << rawComment;
     static QRegularExpression re(R"#(%t(\d+))#");
     QRegularExpressionMatch m = re.match(rawComment);
-    if (!m.hasMatch()) {
-        m_comment = rawComment;
-        return;
+    if (m.hasMatch()) {
+        int val = m.captured(1).toInt();
+        if (val > 256) {
+            val = 256;
+        } else if (val < 0) {
+            val = 0;
+        }
+        m_translucency = val;
+        rawComment = rawComment.replace(re, ""_L1);
     }
-    int val = m.captured(1).toInt();
-    if (val > 256) {
-        val = 256;
-    } else if (val < 0) {
-        val = 0;
+    m_comment = removeQuotesAndNewlines(rawComment);
+}
+
+QString ParsedCnfCel::removeQuotesAndNewlines(QString &comment)
+{
+    comment = comment.trimmed();
+    if (comment.startsWith("\"") && comment.endsWith("\"")) {
+        comment = comment.slice(1, comment.length() - 2);
     }
-    m_translucency = val;
-    m_comment = rawComment.replace(re, ""_L1);
+
+    static QRegularExpression reNewline (R"#(\\n)#");
+    comment.replace(reNewline, "\n");
+
+    static QRegularExpression reQuote (R"#(\\")#");
+    comment.replace(reQuote, "\"");
+
+    static QRegularExpression reUseless (R"#(\\t")#");
+    comment.replace(reUseless, "");
+
+    return comment;
 }
 
 int16_t ParsedCnfCel::translucency() const

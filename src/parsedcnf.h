@@ -63,6 +63,7 @@ private:
      *  数値は0から256までの整数で、0なら%tを指定しないのと同じ全表示、 256なら全透明です。
     */
     void setComment(QString comment);
+    QString removeQuotesAndNewlines(QString &comment);
     /*! Cels with the same object ID are members of the same object and will move together as a unit. */
     int32_t m_objId;
     /**
