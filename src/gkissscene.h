@@ -33,7 +33,7 @@ public:
     /// `${PALETTE_NO_IN_KCF} ...` in CNF by default, can be switched by user.
     uint8_t paletteNoInKcf() const;
     void setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf);
-
+    void unfixObjectByItem(GKissItem *item);   /// REFACTOR: Move to GKissItem?
 signals:
     /// The Item which is being pressed / dragged... etc.
     void highlightedItemChanged(GKissItem *item);
@@ -43,6 +43,7 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 
 private:
     /// pass nullptr means clear

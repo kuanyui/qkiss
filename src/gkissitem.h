@@ -36,7 +36,6 @@ public:
     QVector<GKissItem*>* siblings();
     void setFix(int32_t newFix);
     void decreaseFix();
-    virtual QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
     /// May be a nullptr.
     GKissScene *kissScene();
     /// Emit event: Item -> Scene -> Scene.cnf().fkiss()
@@ -47,6 +46,11 @@ public:
     void setKissTranslucency(int newKissTranscluency);
     /// -255 ~ 255
     void addKissTranslucency(int delta);
+
+    // QGraphicsItem interface
+protected:
+    virtual QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
+
 private:
     void init();
     void renderPaletteBasedImage();

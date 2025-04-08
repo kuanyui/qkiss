@@ -1,5 +1,11 @@
 #include "gkissscene.h"
 #include "fkissruntime.h"
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
+#include <QAction>
+#include <QWidgetAction>
+#include <QLabel>
+
 using namespace Qt::Literals::StringLiterals;
 using FV = FkissVariant;
 
@@ -262,6 +268,14 @@ void GKissScene::setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf)
     }
 }
 
+void GKissScene::unfixObjectByItem(GKissItem *item)
+{
+    item->setFix(0);
+    foreach (GKissItem *sib, *(item->siblings())) {
+        sib->setFix(0);
+    }
+}
+
 void GKissScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     // In FKiSS, there's no double click event. So just make this repeat press event 2 times.
@@ -276,6 +290,9 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (!_item) { return; }
     GKissItem *item = qgraphicsitem_cast<GKissItem *>(_item);
     if (!item) { return; }
+    if (event->button() == Qt::RightButton) {
+        return;
+    }
     m_draggingWithCtrl = event->modifiers() & Qt::ControlModifier;
     m_draggingWithShift = event->modifiers() & Qt::ShiftModifier;
     m_draggingItem = item;
@@ -285,12 +302,12 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     m_fixDecreasedWhileDraggingItem = false;
     receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Press, { FV::fromCelName(m_draggingItem->celFileName()) });
     receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Press, { FV::fromObjectId(m_draggingItem->objId()) }); // press(target) - Triggered when the user clicks on the target.
-    if (event->button() == Qt::RightButton) {
-        m_draggingItem->setFix(0);
-        foreach (GKissItem *sib, *m_draggingItem->siblings()) {
-            sib->setFix(0);
-        }
-    }
+    // if (event->button() == Qt::RightButton) {
+    //     m_draggingItem->setFix(0);
+    //     foreach (GKissItem *sib, *m_draggingItem->siblings()) {
+    //         sib->setFix(0);
+    //     }
+    // }
     emit highlightedItemChanged(m_draggingItem);
     // QGraphicsItem::mousePressEvent(event);
 }
@@ -428,6 +445,41 @@ void GKissScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     // allEffectedItems.unite(m_originalPixelOverlappedItems);
     // allEffectedItems.unite(currentPixelOverlappedItems);
 }
+
+void GKissScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QGraphicsItem *_item = itemAt(event->scenePos(), QTransform());
+    if (_item == nullptr) { return; }
+    GKissItem *item = qgraphicsitem_cast<GKissItem *>(_item);
+    if (item == nullptr) { return; }
+
+    QMenu menu;
+    QAction *actUnfix = menu.addAction(tr("Unfix"));
+    // Show CEL filename
+    QAction *dummyFileName= menu.addAction(item->cnfCel()->celFileName());
+    dummyFileName->setEnabled(false);
+    // Show comment if exists
+    if (!item->cnfCel()->comment().isEmpty()) {
+        QAction *dummyComment = menu.addAction(item->cnfCel()->comment());
+        dummyComment->setEnabled(false);
+    }
+    // Show image as preview
+    QLabel *imgLabel = new QLabel{};
+    QPixmap pixmap = item->pixmap();
+    int size = qMin(pixmap.width(), pixmap.height());
+    size = qMin(size, 200);
+    imgLabel->setPixmap(pixmap.scaled(size, size, Qt::AspectRatioMode::KeepAspectRatio, Qt::TransformationMode::SmoothTransformation));
+    QWidgetAction *actImg = new QWidgetAction{&menu};
+    actImg->setDefaultWidget(imgLabel);
+    menu.addAction(actImg);
+    // Show context menu synchronously
+    QAction *selected = menu.exec(event->screenPos());
+    if (selected == actUnfix) {
+        unfixObjectByItem(item);
+    }
+}
+
+
 
 void GKissScene::storeCurrentOverlappedItems(GKissItem *targetItem)
 {
