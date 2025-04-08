@@ -78,6 +78,7 @@ bool GKissView::setCurCnfAndRenderScenes(QString cnfFileName)
     if (m_scenes.length() == 0) { return false; }
     ok = showKissSceneByIndex(0);
     if (!ok) { return false; }
+    setScaleModeForAllItems();
     m_archiveFile->curCnf()->fkiss()->startRuntime(curKissScene());
     m_archiveFile->curCnf()->fkiss()->runtime()->triggerSet(0);   // REFACTOR: triggering set(), col() in here is ... so ugly.
     m_archiveFile->curCnf()->fkiss()->runtime()->triggerCol(0);
@@ -117,18 +118,24 @@ void GKissView::scaleAbs(qreal targetScale)
     qreal currentScale = transform().m11();
     qreal scaleFactor = targetScale / currentScale;
     scale(scaleFactor, scaleFactor);
+    setScaleModeForAllItems();
+}
+
+void GKissView::setScaleModeForAllItems()
+{
+    qreal currentScale = transform().m11();
     using RH = QPainter::RenderHint;
-    if (targetScale == std::floor(targetScale)) {   // is integer
+    if (currentScale == std::floor(currentScale)) {   // is integer
         setRenderHints(RH::TextAntialiasing);
-        for (auto scene : m_scenes) {
-            for (auto item : scene->allKissItems()) {
+        foreach (auto scene , m_scenes) {
+            foreach (auto item , scene->allKissItems()) {
                 item->setTransformationMode(Qt::TransformationMode::FastTransformation);
             }
         }
     } else {
         setRenderHints(RH::TextAntialiasing | RH::Antialiasing | QPainter::SmoothPixmapTransform);
-        for (auto scene : m_scenes) {
-            for (auto item : scene->allKissItems()) {
+        foreach (auto scene , m_scenes) {
+            foreach (auto item , scene->allKissItems()) {
                 item->setTransformationMode(Qt::TransformationMode::SmoothTransformation);
             }
         }
