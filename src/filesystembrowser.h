@@ -54,7 +54,9 @@ private:
     QTreeView *m_view;
     QToolButton *m_btnGoUp;
     QToolButton *m_btnRefresh;
+    QLineEdit *m_lineEditUrl;
     QString m_curDirPath;
+    /// Unused currently.
     QLabel *m_labelCurDirName;
     FileIconProvider *m_fileIconProvider;
     /// First element is main archive path, the rests are patches' paths.

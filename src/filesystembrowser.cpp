@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QFile>
 #include <QSet>
+#include <QLineEdit>
 #include "filesystembrowser.h"
 #include "fileiconprovider.h"
 #include "iconbuttondelegate.h"
@@ -31,6 +32,7 @@ bool FileSystemBrowser::setPath(QString filePath)
     if (fInfo.isFile()) {
         QDir dir = fInfo.dir();
         m_curDirPath = dir.absolutePath();
+        m_lineEditUrl->setText(dir.absolutePath());
         m_labelCurDirName->setText(dir.dirName());
         updateModel();
         return true;
@@ -41,6 +43,7 @@ bool FileSystemBrowser::setPath(QString filePath)
             fInfo = QFileInfo(filePath + "/");
         }
         m_curDirPath = fInfo.absolutePath();
+        m_lineEditUrl->setText(fInfo.absolutePath());
         m_labelCurDirName->setText(fInfo.fileName());
         updateModel();
         return true;
@@ -54,10 +57,11 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
 {
     QFileInfo dInfo {dirPath};
     if (!dInfo.exists() || !dInfo.isDir()) {
-        qWarning() << "[ERROR][filesystembrowser] Invalid dir path, aborted.";
+        qWarning() << tr("[filesystembrowser] Invalid dir path, aborted.");
         return false;
     }
-    m_curDirPath = dInfo.absoluteFilePath();
+    m_curDirPath = dInfo.absoluteFilePath();   // instead of absolutePath() because itself is already a dir.
+    m_lineEditUrl->setText(dInfo.absoluteFilePath());
     m_labelCurDirName->setText(dInfo.fileName());
     updateModel();
     return true;
@@ -146,17 +150,20 @@ void FileSystemBrowser::setupUi()
     m_btnRefresh->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     m_labelCurDirName = new QLabel(this);
+    m_labelCurDirName->hide();
     // m_labelCurDirName->setSizePolicy()
+
+    m_lineEditUrl = new QLineEdit(this);
 
     QHBoxLayout *btnLayout = new QHBoxLayout();
     btnLayout->addWidget(m_btnGoUp);
     btnLayout->addWidget(m_btnRefresh);
-    btnLayout->addWidget(m_labelCurDirName);
+    btnLayout->addWidget(m_lineEditUrl);
+    // btnLayout->addWidget(m_labelCurDirName);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(btnLayout);
     mainLayout->addWidget(m_view);
-
     connect(m_btnGoUp, &QPushButton::clicked, this, &FileSystemBrowser::goUp);
     connect(m_btnRefresh, &QPushButton::clicked, this, &FileSystemBrowser::refresh);
     connect(m_view, &QTreeView::doubleClicked, this, &FileSystemBrowser::onItemDbClicked);
