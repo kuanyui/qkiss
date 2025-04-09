@@ -80,8 +80,8 @@ bool GKissView::setCurCnfAndRenderScenes(QString cnfFileName)
     if (!ok) { return false; }
     setScaleModeForAllItems();
     m_archiveFile->curCnf()->fkiss()->startRuntime(curKissScene());
-    m_archiveFile->curCnf()->fkiss()->runtime()->triggerSet(0);   // REFACTOR: triggering set(), col() in here is ... so ugly.
-    m_archiveFile->curCnf()->fkiss()->runtime()->triggerCol(0);
+    m_archiveFile->curCnf()->fkiss()->runtime()->triggerSet(0);   // REFACTOR: triggering set(), col() in here is ... so fucking ugly.
+    m_archiveFile->curCnf()->fkiss()->runtime()->triggerCol(curKissScene()->paletteNoInKcf());   // NOTE: The default paletteNo is defined in CNF, the lines starts with `$`.
     return true;
 }
 
@@ -159,6 +159,7 @@ bool GKissView::renderCurCnfAllSets()
         connect(scene, &GKissScene::highlightedItemChanged, this, &GKissView::highlightedItemChanged);   // REFACTOR: naming is too ugly...
         scene->drawCurSetBackground();
         m_scenes.append(scene);
+        int sceneDefaultPaletteNo = scene->paletteNoInKcf();   // This default paletteNo is defined in CNF; that is the lines starts with `$`. `SPALETTE_NO`
         // Create cels
         for (int celIdx = cnf->cels().length() - 1; celIdx >= 0; celIdx--) {
             ParsedCnfCel *cnfCel = cnf->cels()[celIdx];
@@ -184,7 +185,7 @@ bool GKissView::renderCurCnfAllSets()
                     continue;
                 }
                 ParsedKcf *kcf = _kcf.value();
-                item = new GKissItem(cnfCel, cel, kcf, m_archiveFile->curPaletteNo());
+                item = new GKissItem(cnfCel, cel, kcf, sceneDefaultPaletteNo);
             } else if (cel->celType() == ParsedCel::Type::FullColor) {
                 item = new GKissItem(cnfCel, cel);
             } else {

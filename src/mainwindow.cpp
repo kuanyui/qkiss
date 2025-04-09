@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
         AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
         extractor->extractFileAsPromise(filePath).then([this, extractor, filePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
             qDebug() << "Extract ============================" << filesMap->keys();
-            tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, fileLoadMode);
+            tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, fileLoadMode);      /// <-- entrypoint of loading a CNF
             delete extractor;
         }).onFailed([extractor](){
             delete extractor;
@@ -204,7 +204,7 @@ void MainWindow::switchScene(uint8_t sceneIdx)
     QAbstractButton *btn = m_btnGroupSceneSets->button(sceneIdx);
     if (btn == nullptr) { return; }
     btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
-    m_archiveFile->setCnfSetNo(sceneIdx);
+    m_archiveFile->setCnfSetNo(sceneIdx);   // REFACTOR: Disastrous logic. Only used by set/palette toolbar currently... I guess storing in GKissView may be enough?
     m_kissView->showKissSceneByIndex(sceneIdx);
     auto paletteNoInKcf = m_kissView->curKissScene()->paletteNoInKcf();
     switchPalette(paletteNoInKcf);
@@ -313,7 +313,7 @@ void MainWindow::setupDockWindows()
         m_innerFilesBrowser->markItemAsLoaded(item);
         if (item->type() == InnerFilesBrowser::CustomItemCnfFileType) {
             QString cnfFileName = item->text(0);
-            m_kissView->setCurCnfAndRenderScenes(cnfFileName);
+            m_kissView->setCurCnfAndRenderScenes(cnfFileName);    /// <-- entrypoint of loading a CNF
             // m_archiveFile->setCurCnfByName(item->text());
             rerenderSetPaletteButtons();
             m_codeEditor->setPlainText(m_archiveFile->getCnfFileAsString(cnfFileName));
@@ -384,7 +384,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                 m_logViewer->clearAllLogs();
                 auto *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
                 extractor->extractFileAsPromise(filePath).then([this, extractor, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-                    tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, QKiSS::FileLoadMode::LoadAsIndependent);
+                    tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, QKiSS::FileLoadMode::LoadAsIndependent);      /// <-- entrypoint of loading a CNF
                     delete extractor;
                 }).onFailed([extractor](){
                     delete extractor;
