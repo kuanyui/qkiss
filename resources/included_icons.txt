@@ -32,9 +32,9 @@ BlueHumanity	view-refresh	view-refresh
 
 #BlueHumanity	places/document-open	folder-open     # blue folder
 #BlueHumanity	places/folder	folder     #blue folder
-Gnome	document-open
-Gnome	folder-open
-Gnome	folder
+BlueGnome	document-open
+BlueGnome	folder-open
+BlueGnome	folder
 
 # Gnome	mimetypes/text-x-ini	text-x-cnf
 Gnome	mimetypes/text-x-c-liked	text-x-cnf
