@@ -95,25 +95,42 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
     // List contents of Archive stored in Memory   // https://github.com/libarchive/libarchive/wiki/Examples#list-contents-of-archive-stored-in-memory
     if (la::archive_read_open_memory(arch, const_cast<char*>(archiveData.constData()), static_cast<size_t>(archiveData.size())) != ARCHIVE_OK) {
         const char *errMsg = la::archive_error_string(arch);
-        qCritical().noquote() << tr("Error when opening this archive file via LibArchive (Error message: %1). Aborted.").arg(errMsg);
+        qCritical().noquote() << tr("[Error][LibArchive] Error when opening this archive file (%1). Aborted.").arg(errMsg);
         archive_read_free(arch);
         return filesDict;
     }
 
-    while (la::archive_read_next_header(arch, &entry) == ARCHIVE_OK) {
-        QString filePath = QString::fromUtf8(archive_entry_pathname(entry));
+    while (true) {
+        auto r = la::archive_read_next_header(arch, &entry);
+        if (r == ARCHIVE_FATAL) {
+            qCritical().noquote() << tr("[Error][LibArchive] Fatal error (%1), no more operations are possible., abort.").arg(la::archive_error_string(arch));
+            break;
+        } else if (r == ARCHIVE_FAILED) {
+            qCritical().noquote() << tr("[Warning][LibArchive] Current operation cannot complete (%1), skip.").arg(la::archive_error_string(arch));
+            break;
+        } else if (r == ARCHIVE_WARN) {
+            qWarning().noquote() << tr("[Warning][Libarchive] Partial success (%1).").arg(la::archive_error_string(arch));
+            break;
+        } else if (r == ARCHIVE_RETRY) {
+            qWarning().noquote() << tr("[Warning][Libarchive] Retry might succeed (%1)").arg(la::archive_error_string(arch));
+            continue;
+        }
+
+        QString filePath = QString::fromUtf8(la::archive_entry_pathname_utf8(entry));   // FIXME: Donno how to retrieve the raw char* containing non-ASCII code......
+        qDebug().noquote() << "[DEBUG][LibArchive] archive_read_next_header() == %1"_L1.arg(filePath);
         QByteArray fileData;
         while (true) {
             const void *buf = nullptr;
             size_t size = 0;
             la::la_int64_t offset = 0;
             int readStatus = la::archive_read_data_block(arch, &buf, &size, &offset);
-            if (readStatus == ARCHIVE_EOF) {
+            if (readStatus == ARCHIVE_EOF) {   // EOF of a file in this archive
+                // qInfo().noquote() << tr("[Info][LibArchive] EOF of archive.");
                 break;
             }
-            if (readStatus < ARCHIVE_OK) {
+            if (readStatus < ARCHIVE_OK) {   // Operation was successful
                 const char *errMsg = la::archive_error_string(arch);
-                qCritical().noquote() << tr("Error when reading this archive file via LibArchive (Error message: %1). Aborted.").arg(errMsg);
+                qCritical().noquote() << tr("[Error][LibArchive] when reading this archive file via LibArchive (Error message: %1). Aborted.").arg(errMsg);
                 break;
             }
             fileData.append(static_cast<const char*>(buf), static_cast<int>(size));
@@ -122,7 +139,7 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
         filesDict->insert(fileName, fileData);
     }
 
-    archive_read_free(arch);
+    la::archive_read_free(arch);
 
     return filesDict;
 }
