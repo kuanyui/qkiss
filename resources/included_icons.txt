@@ -2,7 +2,10 @@
 # Main
 AppIcon	qkiss	apps/qkiss
 AppIcon	clothes	apps/clothes
+
+Gnome	application-exit
 Gnome	preferences-desktop-theme	apps/palettes
+
 Gnome	apps/system-file-manager
 Gnome	utilities-system-monitor	apps/utility-system-monitor
 Gnome	code-viewer-c-liked	applications-development
@@ -16,17 +19,22 @@ Gnome	zoom-out
 Gnome	zoom-original
 
 # File Browser
-Tango	go-up	go-up
-Tango	view-refresh	view-refresh
+BlueHumanity	go-up	go-up
+BlueHumanity	view-refresh	view-refresh
 
+### XDG Places
 #Gnome	devices/computer
 #Gnome	mimetypes/text-x-preview
-#Tango	places/user-trash
+#BlueHumanity	places/user-trash
 #Gnome	places/network-workgroup
 #Gnome	devices/media-optical
-Tango	places/document-open	folder-open
-Tango	places/folder	folder
-#Tango	places/folder-remote	folder-remote
+#BlueHumanity	places/folder-remote	folder-remote
+
+#BlueHumanity	places/document-open	folder-open     # blue folder
+#BlueHumanity	places/folder	folder     #blue folder
+Gnome	document-open
+Gnome	folder-open
+Gnome	folder
 
 # Gnome	mimetypes/text-x-ini	text-x-cnf
 Gnome	mimetypes/text-x-c-liked	text-x-cnf
@@ -35,5 +43,5 @@ Gnome	mimetypes/text-x-generic
 
 Gnome	application-x-addon	addon
 
-Tango	actions/preview-file	preview-file
-Tango	actions/media-playback-start	play
+BlueHumanity	actions/preview-file	preview-file
+BlueHumanity	actions/media-playback-start	play
