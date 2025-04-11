@@ -1,5 +1,6 @@
 #include "archivefile.h"
 #include "encoding.h"
+#include "globalstate.h"
 
 #include <QStringList>
 #include <QDebug>
@@ -31,6 +32,7 @@ void KissFilesParsingResult::deleteAllObjects()
 
 ArchiveFile::ArchiveFile(QObject *parent):
     QObject(parent),
+    m_gs{GlobalState::instance()},
     m_parsedCnfFiles(new QMap<QString, ParsedCnf*>),
     m_parsedKcfFiles(new QHash<QString, ParsedKcf*>),
     m_parsedCelFiles(new QHash<QString, ParsedCel*>),
@@ -48,16 +50,16 @@ ArchiveFile::~ArchiveFile()
 KissFilesParsingResult ArchiveFile::parseKissFiles(std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, QString lzhFilePath)
 {
     KissFilesParsingResult res = KissFilesParsingResult();
-    QKiSS::Case caseSensitivity = QKiSS::Case::Insensitive;  // TODO: Global Variable.
+    GlobalState &gs = GlobalState::instance();
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
     for (const auto &[fileName, fileRawContent] : extractedRawFiles->asKeyValueRange()) {
         QString fileNameKey = fileName;
         QString fileNameUpper = fileName.toUpper();
-        if (caseSensitivity == QKiSS::Case::Insensitive) {
+        if (gs.caseSensitivity() == QKiSS::Case::Insensitive) {
             fileNameKey = fileNameKey.toUpper();
         }
-        QKiSS::Encoding encoding = QKiSS::Encoding::SJIS;
+        QKiSS::Encoding encoding = QKiSS::Encoding::SJIS;    // TODO: GlobalState
         if (fileNameUpper.endsWith(".CNF")) {
             // TODO: Check parse result, if invalid, delete it.
             res.parsedCnfFiles.insert(fileNameKey, new ParsedCnf {fileNameKey, fileRawContent, encoding});
@@ -77,11 +79,9 @@ KissFilesParsingResult ArchiveFile::parseKissFiles(std::shared_ptr<QMap<QString,
 
 bool ArchiveFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath)
 {
-    QKiSS::Case caseSensitivity = QKiSS::Case::Insensitive;  // TODO: Global Variable.
     if (!parseRes.parsedCnfFiles.isEmpty() && !parseRes.parsedCelFiles.isEmpty()) {
         unloadKissFiles();
         m_archiveFilePath = lzhFilePath;
-        m_caseSensitivity = caseSensitivity;
         *m_parsedCnfFiles = parseRes.parsedCnfFiles;
         *m_parsedKcfFiles = parseRes.parsedKcfFiles;
         *m_parsedCelFiles = parseRes.parsedCelFiles;
@@ -99,13 +99,11 @@ bool ArchiveFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFil
 
 bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult patchFiles, QString lzhFilePath)
 {
-    QKiSS::Case caseSensitivity = QKiSS::Case::Insensitive;  // TODO: Global Variable.
     if (patchFiles.parsedCnfFiles.isEmpty() && patchFiles.parsedCelFiles.isEmpty() && patchFiles.parsedKcfFiles.isEmpty()) {
         qWarning() << "[WARNING][ArchiveFile] Try to load this file as patch, but it contains no any CNF/CEL/KCF file, abort.";
         return false;
     }
     m_archiveFilePath = lzhFilePath;
-    m_caseSensitivity = caseSensitivity;
     for (auto itPatch = patchFiles.parsedCnfFiles.begin(); itPatch != patchFiles.parsedCnfFiles.end(); itPatch++) {
         if (m_parsedCnfFiles->contains(itPatch.key())) {
             qDebug() << "[loadKissFilesAsPatch] detele ParsedCnf and replace with the patched version." << itPatch.key();
@@ -172,7 +170,7 @@ QStringList ArchiveFile::getDocFileNameList()
 
 std::optional<ParsedCnf *> ArchiveFile::getParsedCnf(QString cnfFileName) const
 {
-    if (m_caseSensitivity == QKiSS::Case::Insensitive) {
+    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
         cnfFileName = cnfFileName.toUpper();
     }
     if (m_parsedCnfFiles->contains(cnfFileName)) {
@@ -183,7 +181,7 @@ std::optional<ParsedCnf *> ArchiveFile::getParsedCnf(QString cnfFileName) const
 
 std::optional<ParsedKcf *> ArchiveFile::getParsedKcf(QString kcfFileName) const
 {
-    if (m_caseSensitivity == QKiSS::Case::Insensitive) {
+    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
         kcfFileName = kcfFileName.toUpper();
     }
     if (m_parsedKcfFiles->contains(kcfFileName)) {
@@ -194,7 +192,7 @@ std::optional<ParsedKcf *> ArchiveFile::getParsedKcf(QString kcfFileName) const
 
 std::optional<ParsedCel *> ArchiveFile::getParsedCel(QString celFileName) const
 {
-    if (m_caseSensitivity == QKiSS::Case::Insensitive) {
+    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
         celFileName = celFileName.toUpper();
     }
     if (m_parsedCelFiles->contains(celFileName)) {
@@ -218,7 +216,7 @@ std::optional<ParsedKcf *> ArchiveFile::getParsedKcfByOrderedIndexInCurrentCnf(u
 
 std::optional<QString> ArchiveFile::getDocFile(QString docFileName) const
 {
-    if (m_caseSensitivity == QKiSS::Case::Insensitive) {
+    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
         docFileName = docFileName.toUpper();
     }
     if (m_docFiles->contains(docFileName)) {
@@ -229,7 +227,7 @@ std::optional<QString> ArchiveFile::getDocFile(QString docFileName) const
 
 std::optional<QByteArray> ArchiveFile::getOtherFile(QString fileName) const
 {
-    if (m_caseSensitivity == QKiSS::Case::Insensitive) {
+    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
         fileName = fileName.toUpper();
     }
     if (m_otherFiles->contains(fileName)) {

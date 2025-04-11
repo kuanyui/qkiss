@@ -133,6 +133,7 @@ ParsedCnf::ParsedCnf(QString fileName, QByteArray rawData, QKiSS::Encoding encod
     m_fileName(fileName),
     m_fkiss(new Fkiss())
 {
+    qDebug().noquote() << "[Log] Parse CNF file \"%1\""_L1.arg(fileName);
     m_fileContentText = Encoding::toUtf8(rawData, encode);
     static QRegularExpression reNewline(R"#((\r\n|\r|\n))#");
     parseLines(m_fileContentText.split(reNewline));

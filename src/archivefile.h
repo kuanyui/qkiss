@@ -11,6 +11,8 @@
 #include "parsedcel.h"
 #include "archiveprocessorexternallha.h"
 
+class GlobalState;
+
 /// Attention: Remember to call deleteAllObjects() to release memory.
 struct KissFilesParsingResult {
     void deleteAllObjects();
@@ -86,7 +88,7 @@ signals:
     // void archivedFilesUncompressAndParseFinished(bool success, QString errmsg);
     // void curCnfSetNoChanged(uint8_t nv);
 private:
-    QKiSS::Case m_caseSensitivity;
+    GlobalState &m_gs;
     QMap<QString, ParsedCnf*> *m_parsedCnfFiles;   /// this class owns these two pointers
     QHash<QString, ParsedKcf*> *m_parsedKcfFiles;  /// this class owns these two pointers
     QHash<QString, ParsedCel*> *m_parsedCelFiles;  /// this class owns these two pointers
