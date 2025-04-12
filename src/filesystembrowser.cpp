@@ -55,6 +55,7 @@ bool FileSystemBrowser::setPath(QString filePath)
 
 bool FileSystemBrowser::setDirPath(QString dirPath)
 {
+    qDebug() << "[QDebug] setDirPath()" << dirPath;
     QFileInfo dInfo {dirPath};
     if (!dInfo.exists() || !dInfo.isDir()) {
         qWarning() << tr("[filesystembrowser] Invalid dir path, aborted.");
@@ -139,6 +140,16 @@ void FileSystemBrowser::setupUi()
     });
 
     // int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
+    m_btnGoBackward = new QToolButton(this);
+    m_btnGoBackward->setIcon(style()->standardIcon(QStyle::SP_ArrowLeft));
+    m_btnGoBackward->setToolTip(tr("Go Back"));
+    m_btnGoBackward->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+    m_btnGoForward = new QToolButton(this);
+    m_btnGoForward->setIcon(style()->standardIcon(QStyle::SP_ArrowRight));
+    m_btnGoForward->setToolTip(tr("Go Forward"));
+    m_btnGoForward->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
     m_btnGoUp = new QToolButton(this);
     m_btnGoUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
     m_btnGoUp->setToolTip(tr("Go Up"));
@@ -156,6 +167,8 @@ void FileSystemBrowser::setupUi()
     m_lineEditUrl = new QLineEdit(this);
 
     QHBoxLayout *btnLayout = new QHBoxLayout();
+    btnLayout->addWidget(m_btnGoBackward);
+    btnLayout->addWidget(m_btnGoForward);
     btnLayout->addWidget(m_btnGoUp);
     btnLayout->addWidget(m_btnRefresh);
     btnLayout->addWidget(m_lineEditUrl);
@@ -164,9 +177,12 @@ void FileSystemBrowser::setupUi()
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(btnLayout);
     mainLayout->addWidget(m_view);
+    connect(m_btnGoBackward, &QPushButton::clicked, this, &FileSystemBrowser::goBackward);
+    connect(m_btnGoForward, &QPushButton::clicked, this, &FileSystemBrowser::goForward);
     connect(m_btnGoUp, &QPushButton::clicked, this, &FileSystemBrowser::goUp);
     connect(m_btnRefresh, &QPushButton::clicked, this, &FileSystemBrowser::refresh);
     connect(m_view, &QTreeView::doubleClicked, this, &FileSystemBrowser::onItemDbClicked);
+    updateAllButtonState();
 }
 
 void FileSystemBrowser::updateModel()
@@ -189,7 +205,8 @@ void FileSystemBrowser::updateModel()
         stateItem->setData(fileAbsPath, ThisRole::FilePathRole);
         stateItem->setIcon(getLoadStateIcon(fileAbsPath));
         rowItems << stateItem;
-        QStandardItem *fileNameItem = new QStandardItem(fInfo.fileName());
+        QString fileName = fInfo.fileName();
+        QStandardItem *fileNameItem = new QStandardItem(fileName);
         fileNameItem->setIcon(getFileIcon(fInfo));
         rowItems << fileNameItem;
         rowItems << new QStandardItem(formatFileSize(fInfo.size()));
@@ -258,12 +275,60 @@ QIcon FileSystemBrowser::getLoadStateIcon(const QString &filePath) const
     }
 }
 
+void FileSystemBrowser::updateAllButtonState()
+{
+    m_btnGoBackward->setEnabled(m_navBackwardStack.length() != 0);
+    m_btnGoForward->setEnabled(m_navForwardStack.length() != 0);
+}
+
 
 
 void FileSystemBrowser::goUp() {
+    QString oriDirPath { m_curDirPath };
     QDir dir { m_curDirPath };
     dir.cdUp();
-    setDirPath(dir.path());
+    bool ok = setDirPath(dir.path());
+    if (ok) {
+        m_navBackwardStack.push(oriDirPath);
+        m_navForwardStack.clear();
+        updateAllButtonState();
+    }
+}
+
+void FileSystemBrowser::goForward()
+{
+    if (m_navForwardStack.isEmpty()) {
+        return;
+    }
+    QString tmp = m_navForwardStack.pop();
+    qDebug() << "[DEBUG] goForward()" << tmp;
+    m_navBackwardStack.push(tmp);
+    setDirPath(tmp);
+    updateAllButtonState();
+}
+
+void FileSystemBrowser::goBackward()
+{
+    if (m_navBackwardStack.isEmpty()) {
+        return;
+    }
+    QString oriDirName = QFileInfo(m_curDirPath).fileName();
+    QString tmp = m_navBackwardStack.pop();
+    m_navForwardStack.push(tmp);
+    setDirPath(tmp);
+    updateAllButtonState();
+    // focus the previous folder
+    for (int r = 0; r < m_model->rowCount(); ++r) {
+        QStandardItem *item = m_model->item(r, 1);   // FIXME: Magic number
+        if (!item) {
+            continue;
+        }
+        const QString &rowFileName = item->text();
+        if (rowFileName == oriDirName) {
+            auto idx = item->index();
+            m_view->setCurrentIndex(idx);
+        }
+    }
 }
 
 void FileSystemBrowser::refresh() {
@@ -276,6 +341,9 @@ void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
     QString filePath = m_model->data(indexOfFirstCol, ThisRole::FilePathRole).toString();
     QFileInfo fileInfo { filePath };
     if (fileInfo.isDir()) {
+        m_navBackwardStack.push(m_curDirPath);
+        m_navForwardStack.clear();
+        updateAllButtonState();
         setDirPath(filePath);
     } else {
         emit requestLoadFile(filePath, QKiSS::FileLoadMode::LoadAsIndependent);

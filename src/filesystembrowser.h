@@ -9,6 +9,7 @@
 #include <QStandardItemModel>
 #include <QHeaderView>
 #include <QLabel>
+#include <QStack>
 
 class FileIconProvider;
 class QFileInfo;
@@ -43,8 +44,11 @@ private:
     QIcon getFileIcon(const QString &filePath) const;
     QIcon getLoadStateIcon(const QFileInfo &fileInfo) const;
     QIcon getLoadStateIcon(const QString &filePath) const;
+    void updateAllButtonState();
 private slots:
     void goUp();
+    void goForward();
+    void goBackward();
     void refresh();
     void onItemDbClicked(const QModelIndex &index);
 signals:
@@ -52,6 +56,8 @@ signals:
 private:
     QStandardItemModel *m_model;
     QTreeView *m_view;
+    QToolButton *m_btnGoBackward;
+    QToolButton *m_btnGoForward;
     QToolButton *m_btnGoUp;
     QToolButton *m_btnRefresh;
     QLineEdit *m_lineEditUrl;
@@ -62,7 +68,8 @@ private:
     /// First element is main archive path, the rests are patches' paths.
     /// Can be a LZH file path, or folder (not supported yet.)
     QList<QString> m_loadedKissFilePaths;
-
+    QStack<QString> m_navBackwardStack;
+    QStack<QString> m_navForwardStack;
 };
 
 
