@@ -45,3 +45,8 @@ Gnome	application-x-addon	addon
 
 BlueHumanity	actions/preview-file	preview-file
 BlueHumanity	actions/media-playback-start	play
+
+BlueGnome	changes-allow	unfix
+BlueGnome	image-x-generic	image-x-generic
+BlueHumanity	view-refresh	reset-position
+BlueGnome	help-faq	comment

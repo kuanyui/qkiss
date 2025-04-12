@@ -30,7 +30,9 @@ public:
     int32_t objId() const;
     QString celFileName() const;
     int32_t fix() const;
+    /// CEL file itself, which define (x,y) in the Object it belongs to.
     ParsedCel *cel() const;
+    /// A CEL in a CNF.
     ParsedCnfCel *cnfCel() const;
     void addSibling(GKissItem* item);
     QVector<GKissItem*>* siblings();

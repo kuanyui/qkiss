@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QWidgetAction>
 #include <QLabel>
+#include <QScreen>
 
 using namespace Qt::Literals::StringLiterals;
 using FV = FkissVariant;
@@ -152,7 +153,6 @@ void GKissScene::bindItemsToObjects()
 {
     // /** (In the CEL list (#)) ordered by the value of ObjectID . Length is always larger than object potitions list ($) */
     // const QList<int32_t> &sortedObjIdList = m_cnf->sortedObjIdList();
-    /** (In the object potitions list ($)) Ordered by the value of ObjectID. */
     const QList<ParsedCnfSetObjPos> &objPosList = m_cnfSet->getObjPosList();
     // qDebug() << "BIND FOR SCENE ====================================";
     // qDebug() << QStringLiteral("[DEBUG][Scene] sortedObjIdList (Length = %1)").arg(sortedObjIdList.length()) << sortedObjIdList;  // FIXME: Misunderstood. Unneeded anymore. Should remove it.
@@ -273,6 +273,22 @@ void GKissScene::unfixObjectByItem(GKissItem *item)
     item->setFix(0);
     foreach (GKissItem *sib, *(item->siblings())) {
         sib->setFix(0);
+    }
+}
+
+void GKissScene::resetObjectByItem(GKissItem *item)
+{
+    const auto &objPosList = m_cnfSet->getObjPosList();
+    const auto &_objPos = objPosList[item->objId()];
+    if (!_objPos.has_value()) { return; }
+    const auto &objPos = _objPos.value();
+    item->setFix(item->cnfCel()->fix());
+    item->setPos(objPos.x() + item->cel()->x(),
+                 objPos.y() + item->cel()->y());
+    foreach (auto *sib , *(item->siblings())) {
+        sib->setFix(sib->cnfCel()->fix());
+        sib->setPos(objPos.x() + sib->cel()->x(),
+                    objPos.y() + sib->cel()->y());
     }
 }
 
@@ -454,21 +470,28 @@ void GKissScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     if (item == nullptr) { return; }
 
     QMenu menu;
-    QAction *actUnfix = menu.addAction(tr("Unfix"));
+    QAction *actUnfix = menu.addAction(tr("[%1] Unfix (&U)").arg(QString::number(item->fix())));
+    actUnfix->setIcon(QIcon::fromTheme("unfix"));
+    QAction *actResetPos= menu.addAction(tr("Reset Object (&R)"));
+    actResetPos->setIcon(QIcon::fromTheme("reset-position"));
+    menu.addSection(tr("Information"));
     // Show CEL filename
     QAction *dummyFileName= menu.addAction(item->cnfCel()->celFileName());
-    dummyFileName->setEnabled(false);
+    dummyFileName->setIcon(QIcon::fromTheme("image-x-generic"));
+    // dummyFileName->setEnabled(false);
     // Show comment if exists
     if (!item->cnfCel()->comment().isEmpty()) {
         QAction *dummyComment = menu.addAction(item->cnfCel()->comment());
-        dummyComment->setEnabled(false);
+        dummyComment->setIcon(QIcon::fromTheme("comment"));
+        // dummyComment->setEnabled(false);
     }
     // Show image as preview
     QLabel *imgLabel = new QLabel{};
     QPixmap pixmap = item->pixmap();
-    int size = qMin(pixmap.width(), pixmap.height());
-    size = qMin(size, 200);
-    imgLabel->setPixmap(pixmap.scaled(size, size, Qt::AspectRatioMode::KeepAspectRatio, Qt::TransformationMode::SmoothTransformation));
+    int targetSize = qMin(pixmap.width(), pixmap.height());
+    // TODO: Scale according current zooming
+    targetSize = qMin(targetSize, 400);
+    imgLabel->setPixmap(pixmap.scaled(targetSize, targetSize, Qt::AspectRatioMode::KeepAspectRatio, Qt::TransformationMode::SmoothTransformation));
     QWidgetAction *actImg = new QWidgetAction{&menu};
     actImg->setDefaultWidget(imgLabel);
     menu.addAction(actImg);
@@ -476,6 +499,8 @@ void GKissScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     QAction *selected = menu.exec(event->screenPos());
     if (selected == actUnfix) {
         unfixObjectByItem(item);
+    } else if (selected == actResetPos) {
+        resetObjectByItem(item);
     }
 }
 

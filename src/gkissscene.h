@@ -34,6 +34,7 @@ public:
     uint8_t paletteNoInKcf() const;
     void setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf);
     void unfixObjectByItem(GKissItem *item);   /// REFACTOR: Move to GKissItem?
+    void resetObjectByItem(GKissItem *item);
 signals:
     /// The Item which is being pressed / dragged... etc.
     void highlightedItemChanged(GKissItem *item);
