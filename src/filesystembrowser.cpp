@@ -61,7 +61,11 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
         qWarning() << tr("[filesystembrowser] Invalid dir path, aborted.");
         return false;
     }
-    m_curDirPath = dInfo.absoluteFilePath();   // instead of absolutePath() because itself is already a dir.
+    QString newDirPath = dInfo.absoluteFilePath();  // instead of absolutePath() because itself is already a dir.
+    if (m_curDirPath == newDirPath) {
+        return false;
+    }
+    m_curDirPath = newDirPath;
     m_lineEditUrl->setText(dInfo.absoluteFilePath());
     m_labelCurDirName->setText(dInfo.fileName());
     updateModel();
@@ -300,10 +304,10 @@ void FileSystemBrowser::goForward()
     if (m_navForwardStack.isEmpty()) {
         return;
     }
-    QString tmp = m_navForwardStack.pop();
-    qDebug() << "[DEBUG] goForward()" << tmp;
-    m_navBackwardStack.push(tmp);
-    setDirPath(tmp);
+    QString oriDirPath = m_curDirPath;
+    QString newDirPath = m_navForwardStack.pop();
+    m_navBackwardStack.push(oriDirPath);
+    setDirPath(newDirPath);
     updateAllButtonState();
 }
 
@@ -312,10 +316,11 @@ void FileSystemBrowser::goBackward()
     if (m_navBackwardStack.isEmpty()) {
         return;
     }
-    QString oriDirName = QFileInfo(m_curDirPath).fileName();
-    QString tmp = m_navBackwardStack.pop();
-    m_navForwardStack.push(tmp);
-    setDirPath(tmp);
+    QString oriDirPath = m_curDirPath;
+    QString oriDirName = QFileInfo(oriDirPath).fileName();
+    QString newDirPath = m_navBackwardStack.pop();
+    m_navForwardStack.push(oriDirPath);
+    setDirPath(newDirPath);
     updateAllButtonState();
     // focus the previous folder
     for (int r = 0; r < m_model->rowCount(); ++r) {
