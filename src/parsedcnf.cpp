@@ -297,6 +297,10 @@ void ParsedCnf::startToParseSetLines()
     while (m_lineIdx + 1 < m_lines.length()) {
         line = removeComment(m_lines[m_lineIdx + 1]);
         qDebug() << "======" << line;
+        if (line.trimmed().isEmpty()) {
+            m_lineIdx++;
+            continue;
+        }
         if (!line.startsWith(" "_L1)) { break; }
         segs = line.trimmed().split(" "_L1);
         for (uint32_t i = 0; i < segs.length(); i++) {
