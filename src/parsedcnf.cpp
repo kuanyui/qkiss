@@ -206,9 +206,12 @@ void ParsedCnf::parseLines(const QStringList &lines)
             // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
 
             // More tolerance for some common mistakes:
-            // - No spaces befor `:`             `#0.999 body011.cel:0 1 2 3 4 5 6 7 8 9; 身体`
+            //
+            // - No spaces before `:`             #0.999 body011.cel:0 1 2 3 4 5 6 7 8 9; 身体
+            // - No spacce before `:`             #63           BERET.CEL     *1:            6
             // - A `.` without fix number        `#40.      Mess00A_.cel *2  :                  9 ;`
-            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^ :\t]+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
+            //
+            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^ :\t]+)(?:\s*[*]\s*?(\d+))?(?:\s*[:]\s*?([\d\s]+))?(?:;(.+))?)#");
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
