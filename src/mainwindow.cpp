@@ -6,6 +6,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QSettings>
+#include <QShortcut>
 #include "archiveprocessorfactory.h"
 
 using namespace Qt::Literals::StringLiterals;
@@ -26,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupToolBars();
     setupDockWindows();
+    setupShortcuts();
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, this, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
         m_logViewer->clearAllLogs();
         AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
@@ -146,6 +148,7 @@ void MainWindow::rerenderSetPaletteButtons()
     QToolButton *cycleToggleSceneSetBtn = new QToolButton(m_toolbarSceneSets);
     cycleToggleSceneSetBtn->setIcon(QIcon::fromTheme("clothes"));
     cycleToggleSceneSetBtn->setText(tr("Scene Sets"));
+    cycleToggleSceneSetBtn->setToolTip(tr("Switch scene set (F1/F2)"));
     cycleToggleSceneSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
     m_toolbarSceneSets->addWidget(cycleToggleSceneSetBtn);
     connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
@@ -174,6 +177,7 @@ void MainWindow::rerenderSetPaletteButtons()
     QToolButton *cycleTogglePaletteSetBtn = new QToolButton(m_toolbarColorSets);
     cycleTogglePaletteSetBtn->setIcon(QIcon::fromTheme("palettes"));
     cycleTogglePaletteSetBtn->setText(tr("Palette Sets"));
+    cycleTogglePaletteSetBtn->setToolTip(tr("Switch palette set (F3/F4)"));
     cycleTogglePaletteSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
     m_toolbarColorSets->addWidget(cycleTogglePaletteSetBtn);
     connect(cycleTogglePaletteSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
@@ -344,6 +348,18 @@ void MainWindow::setupDockWindows()
     });
     connect(m_archiveFile, &ArchiveFile::curCnfChangedAndLoaded, [=](){
     });
+}
+
+void MainWindow::setupShortcuts()
+{
+    QShortcut *f1 = new QShortcut(QKeySequence(Qt::Key_F1), this);
+    QShortcut *f2 = new QShortcut(QKeySequence(Qt::Key_F2), this);
+    QShortcut *f3 = new QShortcut(QKeySequence(Qt::Key_F3), this);
+    QShortcut *f4 = new QShortcut(QKeySequence(Qt::Key_F4), this);
+    connect(f1, &QShortcut::activated, this, [=](){ this->switchSceneBy(-1); });
+    connect(f2, &QShortcut::activated, this, [=](){ this->switchSceneBy(1); });
+    connect(f3, &QShortcut::activated, this, [=](){ this->switchPaletteBy(-1); });
+    connect(f4, &QShortcut::activated, this, [=](){ this->switchPaletteBy(1); });
 }
 
 void MainWindow::saveWindowSettings()

@@ -37,6 +37,7 @@ private:
     void setupToolBars();
     void setupDockWindows();
     void setupCenterArea();
+    void setupShortcuts();
     void saveWindowSettings();
     void restoreWindowSettings();
 protected:
