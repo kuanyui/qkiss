@@ -209,9 +209,13 @@ void ParsedCnf::parseLines(const QStringList &lines)
             //
             // - No spaces before `:`             #0.999 body011.cel:0 1 2 3 4 5 6 7 8 9; 身体
             // - No spacce before `:`             #63           BERET.CEL     *1:            6
-            // - A `.` without fix number        `#40.      Mess00A_.cel *2  :                  9 ;`
+            // - A `.` without fix number         #40.      Mess00A_.cel *2  :                  9 ;
+            // - full-width `;` or spaces         #5	BOU1.CEL　     ；（制服の帽子　表）
+            //   (NOTE: it seems that `\s` doesn't include full-width space `　`)
             //
-            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^ :\t]+)(?:\s*[*]\s*?(\d+))?(?:\s*[:]\s*?([\d\s]+))?(?:;(.+))?)#");
+            //                                     obj        fix         file               kcfIdx         setIdxArr             comment
+            //                                      v
+            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^\s\t　*:]+)(?:\s*[*]\s*?(\d+))?(?:\s*[:]\s*?([\d\s]+))?(?:[;；](.*))?)#");
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
