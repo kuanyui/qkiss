@@ -63,36 +63,36 @@ QDebug operator<<(QDebug debug, const ASTCommand& astCmd) {
 const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_EVENT = {
     // ### Unique ###
     // Only one of each of these events can be defined in a single KiSS Artform.
-    { FKK::INITIALIZE       , { FKK::INITIALIZE       , FkissVersion::FKiSS1, false } }, // initialize() - Called exactly once before the artform is displayed on the screen for the first time.
-    { FKK::BEGIN            , { FKK::BEGIN            , FkissVersion::FKiSS1, false } }, // begin() - Called exactly once immediately after the artform is displayed on the screen for the first time.
-    { FKK::END              , { FKK::END              , FkissVersion::FKiSS1, false } }, // end() - Called exactly once immediately before the user quits the doll.
+    { FKK::INITIALIZE       , { FKK::INITIALIZE       , FkissVersion::FKiSS1, 1 } }, // initialize() - Called exactly once before the artform is displayed on the screen for the first time.
+    { FKK::BEGIN            , { FKK::BEGIN            , FkissVersion::FKiSS1, 1 } }, // begin() - Called exactly once immediately after the artform is displayed on the screen for the first time.
+    { FKK::END              , { FKK::END              , FkissVersion::FKiSS1, 1 } }, // end() - Called exactly once immediately before the user quits the doll.
     { FKK::OVERFLOW         , { FKK::OVERFLOW         , FkissVersion::FKiSS3, false } }, // overflow() - Called when a mathematical action attempts to divide by zero or when the result would be outside the range of a 32-bit integer.
     { FKK::NEVER            , { FKK::NEVER            , FkissVersion::FKiSS1, false } }, // never() - Never called. Used to temporarily block segments of FKiSS code.
 
     // ### Specific ###
     // These events are specific to sets, colors, and version.
-    { FKK::SET              , { FKK::SET              , FkissVersion::FKiSS1, false } }, // set(page number) - Called when the viewer changes to the specified set (page).
-    { FKK::COL              , { FKK::COL              , FkissVersion::FKiSS1, false } }, // col(palette number) - Called when the viewer changes to the specified palette.
+    { FKK::SET              , { FKK::SET              , FkissVersion::FKiSS1, 1 } }, // set(page number) - Called when the viewer changes to the specified set (page).
+    { FKK::COL              , { FKK::COL              , FkissVersion::FKiSS1, 1 } }, // col(palette number) - Called when the viewer changes to the specified palette.
     { FKK::VERSION          , { FKK::VERSION          , FkissVersion::FKiSS2, false } }, // version(version number) - Called immediately after the begin event if the specified version of FKiSS is supported.
 
     // ### Named ###
     // These events are associated with named blocks of code.
-    { FKK::ALARM            , { FKK::ALARM            , FkissVersion::FKiSS1, false } }, // alarm(alarm ID) - Called when the timer for a specified alarm reaches zero.
+    { FKK::ALARM            , { FKK::ALARM            , FkissVersion::FKiSS1, 1 } }, // alarm(alarm ID) - Called when the timer for a specified alarm reaches zero.
     { FKK::LABEL            , { FKK::LABEL            , FkissVersion::FKiSS3, false } }, // label(label ID) - Defines a named block of code that can be called from other parts of the script.
 
     // ### Rectangle-based collision ###
     // These events are associated with collisions between rectangles.
     // Rectangle collision is faster than pixel-based collisions but not pixel accurate.
-    { FKK::IN               , { FKK::IN               , FkissVersion::FKiSS2, false } }, // in(target1, target2) - Triggered when target1 overlaps target2 and previously did not.
-    { FKK::OUT              , { FKK::OUT              , FkissVersion::FKiSS2, false } }, // out(target1, target2) - Triggered when target1 no longer overlaps target2 and previously did.
+    { FKK::IN               , { FKK::IN               , FkissVersion::FKiSS2, 1 } }, // in(target1, target2) - Triggered when target1 overlaps target2 and previously did not.
+    { FKK::OUT              , { FKK::OUT              , FkissVersion::FKiSS2, 1 } }, // out(target1, target2) - Triggered when target1 no longer overlaps target2 and previously did.
 
-    { FKK::STILLIN          , { FKK::STILLIN          , FkissVersion::FKiSS2, false } }, // stillin(target1, target2) - Triggered when target1 still overlaps target2, regardless of previous state.
-    { FKK::STILLOUT         , { FKK::STILLOUT         , FkissVersion::FKiSS2, false } }, // stillout(target1, target2) - Triggered when target1 still does not overlap target2, regardless of previous state.
+    { FKK::STILLIN          , { FKK::STILLIN          , FkissVersion::FKiSS2, 1 } }, // stillin(target1, target2) - Triggered when target1 still overlaps target2, regardless of previous state.
+    { FKK::STILLOUT         , { FKK::STILLOUT         , FkissVersion::FKiSS2, 1 } }, // stillout(target1, target2) - Triggered when target1 still does not overlap target2, regardless of previous state.
 
     // ### Pixel-based collision ###
     // These events are associated with collisions between pixels of cels.
-    { FKK::COLLIDE          , { FKK::COLLIDE          , FkissVersion::FKiSS2, false } }, // collide(target1, target2) - Triggered when pixels of target1 overlap pixels of target2 and previously did not.
-    { FKK::APART            , { FKK::APART            , FkissVersion::FKiSS2, false } }, // apart(target1, target2) - Triggered when pixels of target1 no longer overlap pixels of target2 and previously did.
+    { FKK::COLLIDE          , { FKK::COLLIDE          , FkissVersion::FKiSS2, 1 } }, // collide(target1, target2) - Triggered when pixels of target1 overlap pixels of target2 and previously did not.
+    { FKK::APART            , { FKK::APART            , FkissVersion::FKiSS2, 1 } }, // apart(target1, target2) - Triggered when pixels of target1 no longer overlap pixels of target2 and previously did.
 
     // ### Mouse-based collision ###
     // These events are associated with the movement of the mouse cursor.
@@ -127,8 +127,8 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_EVENT = {
 const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
     // ### Alarms ###
     // These actions set up alarms, which are events triggered when certain conditions occur, such as a timer going off.
-    { FKK::TIMER            , { FKK::TIMER            , FkissVersion::FKiSS1, false } }, // timer(alarm ID, delay) - Sets the timer for an alarm.
-    { FKK::RANDOMTIMER      , { FKK::RANDOMTIMER      , FkissVersion::FKiSS1, false } }, // randomtimer(alarm ID, delay, range) - Sets the timer for an alarm with a random delay.
+    { FKK::TIMER            , { FKK::TIMER            , FkissVersion::FKiSS1, 1 } }, // timer(alarm ID, delay) - Sets the timer for an alarm. (delay = 0 means cancel the timer)
+    { FKK::RANDOMTIMER      , { FKK::RANDOMTIMER      , FkissVersion::FKiSS1, 1 } }, // randomtimer(alarm ID, delay, range) - Sets the timer for an alarm with a random delay.
     { FKK::LETTIMER         , { FKK::LETTIMER         , FkissVersion::FKiSS4, false } }, // lettimer(variable, alarm ID) - Sets the value of variable to the amount of time remaining before the timer for alarm ID reaches zero.
     { FKK::IFFIXED          , { FKK::IFFIXED          , FkissVersion::FKiSS2, false } }, // iffixed(target, alarm ID, delay) - Sets the timer for an alarm if the fix value for the object specified by target is non-zero.
     { FKK::IFMAPPED         , { FKK::IFMAPPED         , FkissVersion::FKiSS2, false } }, // ifmapped(target, alarm ID, delay) - Sets the timer for an alarm if any cel specified by target is currently mapped.
@@ -149,15 +149,15 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
 
     // ### Mapping ###
     // These actions control the visibility of a cel. A mapped cel is visible while an unmapped cel is not visible.
-    { FKK::MAP              , { FKK::MAP              , FkissVersion::FKiSS1, false } }, // map(target) - Makes target visible on all sets in which it is present.
-    { FKK::UNMAP            , { FKK::UNMAP            , FkissVersion::FKiSS1, false } }, // unmap(target) - Makes target invisible on all sets in which it is present.
-    { FKK::ALTMAP           , { FKK::ALTMAP           , FkissVersion::FKiSS1, false } }, // altmap(target) - Toggles the visibility of target on all sets in which it is present.
+    { FKK::MAP              , { FKK::MAP              , FkissVersion::FKiSS1, 1 } }, // map(target) - Makes target visible on all sets in which it is present.
+    { FKK::UNMAP            , { FKK::UNMAP            , FkissVersion::FKiSS1, 1 } }, // unmap(target) - Makes target invisible on all sets in which it is present.
+    { FKK::ALTMAP           , { FKK::ALTMAP           , FkissVersion::FKiSS1, 1 } }, // altmap(target) - Toggles the visibility of target on all sets in which it is present.
     { FKK::LETMAPPED        , { FKK::LETMAPPED        , FkissVersion::FKiSS3, false } }, // letmapped(variable, target) - Sets the value of variable to 1 if target is mapped or to 0 if it is unmapped.
 
     // ### Movement and Position ###
     // These actions control the position of a target and allow an action to move a cel in response to an event.
-    { FKK::MOVE             , { FKK::MOVE             , FkissVersion::FKiSS1, false } }, // move(target, X, Y) - Moves target X pixels horizontally and Y pixels vertically relative to its current position.
-    { FKK::MOVETO           , { FKK::MOVETO           , FkissVersion::FKiSS2, false } }, // moveto(target, X, Y) - Moves target to absolute play field position <X, Y>.
+    { FKK::MOVE             , { FKK::MOVE             , FkissVersion::FKiSS1, 1 } }, // move(target, X, Y) - Moves target X pixels horizontally and Y pixels vertically relative to its current position.
+    { FKK::MOVETO           , { FKK::MOVETO           , FkissVersion::FKiSS2, 1 } }, // moveto(target, X, Y) - Moves target to absolute play field position <X, Y>.
     { FKK::MOVEBYX          , { FKK::MOVEBYX          , FkissVersion::FKiSS2, false } }, // movebyx(target, relative, X) - Moves target to a position X pixels horizontally from the position of object relative.
     { FKK::MOVEBYY          , { FKK::MOVEBYY          , FkissVersion::FKiSS2, false } }, // movebyy(target, relative, Y) - Moves target to a position Y pixels vertically from the position of object relative.
     { FKK::MOVETORAND       , { FKK::MOVETORAND       , FkissVersion::FKiSS2, false } }, // movetorand(target) - Moves target to a random position within the play field or its restricted range of movement.
@@ -180,11 +180,11 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
     // ### Sound and Music ###
     // These actions control music and sound.
     { FKK::MUSIC            , { FKK::MUSIC            , FkissVersion::FKiSS2, false } }, // music(filename) - Begins playback of the MIDI filename.
-    { FKK::SOUND            , { FKK::SOUND            , FkissVersion::FKiSS1, false } }, // sound(filename) - Begins playback of sound file filename.
+    { FKK::SOUND            , { FKK::SOUND            , FkissVersion::FKiSS1, 1 } }, // sound(filename) - Begins playback of sound file filename.
 
     // ### Translucency ###
     // These actions control the translucency of a target.
-    { FKK::TRANSPARENT      , { FKK::TRANSPARENT      , FkissVersion::FKiSS1b, false } },   // transparent(target, N) - The transparent action adds N to the translucency value of target.
+    { FKK::TRANSPARENT      , { FKK::TRANSPARENT      , FkissVersion::FKiSS1b, 1 } },   // transparent(target, N) - The transparent action adds N to the translucency value of target.
     { FKK::LETTRANSPARENT   , { FKK::LETTRANSPARENT   , FkissVersion::FKiSS3, false } },   // lettransparent(variable, target) - The lettransparent action sets the value of variable to the translucency value of target.
 
     // ### Attachment ###
@@ -247,8 +247,8 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
 
     // ### Environment ###
     // These actions affect the environment, set, or play field.
-    { FKK::CHANGECOL        , { FKK::CHANGECOL        , FkissVersion::FKiSS1, false } },   // changecol(N) - The changecol action sets the palette for the current page to N.
-    { FKK::CHANGESET        , { FKK::CHANGESET        , FkissVersion::FKiSS1, false } },   // changeset(N) - The changeset action changes to the set (page) specified by N.
+    { FKK::CHANGECOL        , { FKK::CHANGECOL        , FkissVersion::FKiSS1, 1 } },   // changecol(N) - The changecol action sets the palette for the current page to N.
+    { FKK::CHANGESET        , { FKK::CHANGESET        , FkissVersion::FKiSS1, 1 } },   // changeset(N) - The changeset action changes to the set (page) specified by N.
     { FKK::LETPAL           , { FKK::LETPAL           , FkissVersion::FKiSS3, false } },   // letpal(variable) - The letpal action sets the value of variable to the current palette for the current set (page).
     { FKK::LETSET           , { FKK::LETSET           , FkissVersion::FKiSS3, false } },   // letset(variable) - The letset action sets the value of variable to the current set (page).
 

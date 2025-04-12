@@ -359,14 +359,14 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
             runTimer(actArgs[0], actArgs[1]);
             continue;
         }
-        if (actName == FKK::SOUND) {
-            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid sound(fileName) args count, skip."_L1; continue; }
-            runSound(actArgs[0]);
-            continue;
-        }
         if (actName == FKK::RANDOMTIMER) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid randomtimer(alarmID, delay, range) args count, skip."_L1; continue; }
             runRandomtimer(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::SOUND) {
+            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid sound(fileName) args count, skip."_L1; continue; }
+            runSound(actArgs[0]);
             continue;
         }
         if (actName == FKK::CHANGESET) {
