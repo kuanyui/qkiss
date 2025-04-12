@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
                                      );
         }
     });
+    connect(m_kissView, &GKissView::requestSwitchingSet, this, &MainWindow::switchSceneBy);
     connect(m_cboxZoomScale, &QComboBox::currentTextChanged, this, [=](const QString &text) {
         bool ok;
         qreal targetScale = text.toFloat(&ok);
@@ -148,12 +149,8 @@ void MainWindow::rerenderSetPaletteButtons()
     cycleToggleSceneSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
     m_toolbarSceneSets->addWidget(cycleToggleSceneSetBtn);
     connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
-        Q_UNUSED(checked)
-        if (m_archiveFile->curCnfSetsAmount() == 0) { return; }
-        uint8_t curSceneNo = m_archiveFile->curCnfSetNo();
-        uint8_t nextSceneNo = (curSceneNo + 1) % m_archiveFile->curCnfSetsAmount();
-        QAbstractButton *btn = m_btnGroupSceneSets->button(nextSceneNo);
-        btn->click();
+        Q_UNUSED(checked);
+        switchSceneBy(1);
     });
     for (size_t sceneIdx = 0; sceneIdx < m_kissView->scenesAmount(); sceneIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarSceneSets);
@@ -162,9 +159,9 @@ void MainWindow::rerenderSetPaletteButtons()
         if (sceneIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(sceneIdx));
         m_toolbarSceneSets->addWidget(btn);
-        connect(btn, &QAbstractButton::clicked, this, [=](){ switchScene(sceneIdx); });
+        connect(btn, &QAbstractButton::clicked, this, [=](){ switchToScene(sceneIdx); });
     }
-    connect(m_archiveFile, &ArchiveFile::fkissChangedCnfSetNo, this, &MainWindow::switchScene);
+    connect(m_archiveFile, &ArchiveFile::fkissChangedCnfSetNo, this, &MainWindow::switchToScene);
     // =====================================================
     // Color sets (palettes)
     // =====================================================
@@ -180,12 +177,8 @@ void MainWindow::rerenderSetPaletteButtons()
     cycleTogglePaletteSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
     m_toolbarColorSets->addWidget(cycleTogglePaletteSetBtn);
     connect(cycleTogglePaletteSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
-        Q_UNUSED(checked)
-        if (m_archiveFile->paletteAmountOfFirstKcfInCurCnf() == 0) { return; }
-        uint8_t curPaletteNo = m_archiveFile->curPaletteNo();
-        uint8_t nextPaletteNo = (curPaletteNo + 1) % m_archiveFile->paletteAmountOfFirstKcfInCurCnf();
-        QAbstractButton *btn = m_btnGroupColorSets->button(nextPaletteNo);
-        btn->click();
+        Q_UNUSED(checked);
+        switchPaletteBy(1);
     });
     for (size_t paletteIdx = 0; paletteIdx < m_archiveFile->paletteAmountOfFirstKcfInCurCnf(); paletteIdx++) {
         QToolButton *btn = new QToolButton(m_toolbarColorSets);
@@ -194,12 +187,12 @@ void MainWindow::rerenderSetPaletteButtons()
         if (paletteIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(paletteIdx));
         m_toolbarColorSets->addWidget(btn);
-        connect(btn, &QAbstractButton::clicked, this, [=](){ switchPalette(paletteIdx); });
+        connect(btn, &QAbstractButton::clicked, this, [=](){ switchToPalette(paletteIdx); });
     }
-    connect(m_archiveFile, &ArchiveFile::fkissChangedPaletteNo, this, &MainWindow::switchPalette);
+    connect(m_archiveFile, &ArchiveFile::fkissChangedPaletteNo, this, &MainWindow::switchToPalette);
 }
 
-void MainWindow::switchScene(uint8_t sceneIdx)
+void MainWindow::switchToScene(uint8_t sceneIdx)
 {
     QAbstractButton *btn = m_btnGroupSceneSets->button(sceneIdx);
     if (btn == nullptr) { return; }
@@ -207,16 +200,42 @@ void MainWindow::switchScene(uint8_t sceneIdx)
     m_archiveFile->setCnfSetNo(sceneIdx);   // REFACTOR: Disastrous logic. Only used by set/palette toolbar currently... I guess storing in GKissView may be enough?
     m_kissView->showKissSceneByIndex(sceneIdx);
     auto paletteNoInKcf = m_kissView->curKissScene()->paletteNoInKcf();
-    switchPalette(paletteNoInKcf);
+    switchToPalette(paletteNoInKcf);
 }
 
-void MainWindow::switchPalette(uint8_t paletteIdx)
+void MainWindow::switchToPalette(uint8_t paletteIdx)
 {
     QAbstractButton *btn = m_btnGroupColorSets->button(paletteIdx);
     if (btn == nullptr) { return; }
     btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
     m_archiveFile->setPaletteNo(paletteIdx);
     m_kissView->curKissScene()->setPaletteNoInKcfAndRender(paletteIdx);
+}
+
+void MainWindow::switchSceneBy(int steps)
+{
+    if (m_archiveFile->curCnfSetsAmount() == 0) { return; }
+    uint8_t curSceneNo = m_archiveFile->curCnfSetNo();
+    int max = m_archiveFile->curCnfSetsAmount();
+    int nextSceneNo = (curSceneNo + steps) % max;
+    if (nextSceneNo < 0) {
+        nextSceneNo += max;
+    }
+    qDebug() << "[DEBUG] switchSceneBy()" << nextSceneNo;
+    QAbstractButton *btn = m_btnGroupSceneSets->button(nextSceneNo);
+    btn->click();
+}
+
+void MainWindow::switchPaletteBy(int steps)
+{
+    if (m_archiveFile->paletteAmountOfFirstKcfInCurCnf() == 0) { return; }
+    uint8_t curPaletteNo = m_archiveFile->curPaletteNo();
+    int nextPaletteNo = (curPaletteNo + steps) % m_archiveFile->paletteAmountOfFirstKcfInCurCnf();
+    if (nextPaletteNo < 0) {
+        nextPaletteNo = m_archiveFile->paletteAmountOfFirstKcfInCurCnf() - nextPaletteNo;
+    }
+    QAbstractButton *btn = m_btnGroupColorSets->button(nextPaletteNo);
+    btn->click();
 }
 
 void MainWindow::setupToolBars()

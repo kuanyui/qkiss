@@ -29,7 +29,12 @@ public:
 signals:
     /// e.g. hovered item changed, no longer hovering any item (pass nullptr)... etc.
     void highlightedItemChanged(GKissItem *item);
+    /// 1 means go right-ward; -1 means left.
+    void requestSwitchingSet(int steps);
+
 protected:
+
+    virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dropEvent(QDropEvent *event) override;
@@ -41,8 +46,6 @@ private:
     uint8_t m_curSceneIdx = 0;
     GKissItem *m_curHoveredCelItem;
     QList<QMetaObject::Connection> m_connectionsOfArchiveFile;
-
-    // QWidget interface
 
 };
 

@@ -211,6 +211,23 @@ bool GKissView::renderCurCnfAllSets()
     return true;
 }
 
+void GKissView::mousePressEvent(QMouseEvent *event)
+{
+    qDebug() << "[DEBUG] View::mousePressEvent() event->ignore()";
+    switch (event->button()) {
+    case Qt::MouseButton::BackButton:
+        emit requestSwitchingSet(-1);
+        break;
+    case Qt::MouseButton::ForwardButton:
+        emit requestSwitchingSet(1);
+        break;
+    default:
+        // (In Qt, the event handling ordering is View -> Scene -> Item)
+        QGraphicsView::mousePressEvent(event);  // Do what base class does (pass event to scene).
+        break;
+    }
+}
+
 
 
 void GKissView::mouseMoveEvent(QMouseEvent *event)
