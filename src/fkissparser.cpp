@@ -1,5 +1,5 @@
 #include "fkissparser.h"
-
+using namespace Qt::Literals::StringLiterals;
 
 QDebug operator<<(QDebug debug, const Token &token) {
     return debug.nospace() << QStringLiteral("Token { type: %1, value: %2, line: %3, col: %4 }")
@@ -159,9 +159,13 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
         // Parse a full command calling
         if (token.type == Token::Type::Identifier) {
             QString cmdName = token.value;
-            const Token &lPar = tokens[++i];
+            ++i;
+            const Token &lPar = tokens[i];
             if (lPar.type != Token::Type::LParen) {
-                logSyntaxError(lPar, "Command name must be followed by a left parenthesis. Abort.");
+                logSyntaxWarning(token, "Command name `%1` must be followed by a left parenthesis, so assume it has no parameter."_L1.arg(token.value));
+                astCmds.append(std::make_shared<ASTCommand>(ASTCommand{cmdName, {}}));
+                ++i;
+                continue;
             }
             // Find out args list begin & end position.
             const int parenBeg = i;
@@ -203,11 +207,11 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
                     waitComma = true;
                 }
             }
-            const auto &nextTk = tokens[i+1];
-            if (nextTk.type != Token::Type::EndOfLine && nextTk.type != Token::Type::Space) {
-                // NOTE: Comment temporarily to reduce unwanted warnings for debugging more easily...
-                // logSyntaxError(nextTk, "A command must be followed by a space or an EOL. Still runnable but this is a wrong code.");
-            }
+            // const auto &nextTk = tokens[i+1];
+            // if (nextTk.type != Token::Type::EndOfLine && nextTk.type != Token::Type::Space) {
+            //     // NOTE: Comment temporarily to reduce unnecessary warnings for debugging more easily...
+            //     // logSyntaxWarning(nextTk, "A command must be followed by a space or an EOL. Still runnable but this is a wrong code.");
+            // }
             astCmds.append(std::make_shared<ASTCommand>(ASTCommand{cmdName, cmdArgs}));
         }
     }
@@ -261,9 +265,18 @@ QVector<std::shared_ptr<ASTPairedCommands> > FkissParser::pairAstCommands(FkissP
     return evpairs;
 }
 
+void FkissParser::logSyntaxWarning(const Token &token, QString msg)
+{
+    qWarning().noquote() << QStringLiteral("[FKiSS][SyntaxWarning] %1   [L%2, C%3] %4")
+                .arg(msg)
+                .arg(token.lineNo())
+                .arg(token.columnNo())
+                .arg(token.value);
+}
+
 void FkissParser::logSyntaxError(const Token &token, QString msg)
 {
-    qDebug() << QStringLiteral("[FKiSS][SyntaxError] %1   [L%2, C%3] %4")
+    qCritical().noquote() << QStringLiteral("[FKiSS][SyntaxError] %1   [L%2, C%3] %4")
                 .arg(msg)
                 .arg(token.lineNo())
                 .arg(token.columnNo())

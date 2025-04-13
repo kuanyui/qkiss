@@ -51,6 +51,7 @@ private:
     QString removePrefixAndCommentOfLine(QString line);
     /** AST -> Commands (Event command + Action command(s)). Traverse across all commands, bind each event + its action(s) (procedure) pair, and store to pairs list. */
     QVector<std::shared_ptr<ASTPairedCommands>> pairAstCommands(FkissProcedure &commands);;
+    void logSyntaxWarning(const Token &token, QString msg);;
     void logSyntaxError(const Token &token, QString msg);;
 };
 
