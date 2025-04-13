@@ -62,6 +62,13 @@ struct FkissKeywordInfo {
     // QString specUrl;
 };
 
+enum class FkissEventSource {
+    /// interactively triggered directly by user
+    User,
+    /// programmatically triggered by FKiSS script.
+    Script
+};
+
 /**
  * The Fkiss event triggered by user interaction. Should be sent from QGraphicsItem.
  * The events are triggered order-sensitive. Please see the docstrings of each field.
