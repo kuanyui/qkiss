@@ -79,7 +79,7 @@ void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
     }
 
     // Cel line
-    static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^ :\t]+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
+    static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^\s\t　:*]+)(?:\s*[*]\s*?(\d+))?(?:\s*[:]\s*?([\d\s]+))?(?:[;；](.*))?)#");
     it = reCel.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch m = it.next();
