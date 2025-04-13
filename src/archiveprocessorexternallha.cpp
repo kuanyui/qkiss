@@ -34,7 +34,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     }
     qInfo().noquote() << tr("Trying to extract LZH file \"%1\"...").arg(fileName);
     this->callExternalProgramOrLibraryToExtractLzh(lzhOrCnfFilePath);
-    QObject::connect(this, &ArchiveProcessorExternalLha::extractFail, [this, promise, fileName](QString compressedFilePath, QString errMsg) {
+    QObject::connect(this, &ArchiveProcessorExternalLha::extractFail, [promise, fileName](QString compressedFilePath, QString errMsg) {
         qCritical().noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);
         Q_UNUSED(compressedFilePath);
         promise->setException(std::make_exception_ptr(
@@ -43,7 +43,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
         promise->finish();
         delete promise;
     });
-    QObject::connect(this, &ArchiveProcessorExternalLha::extractSuccess, [this, promise, fileName](QString compressedFilePath, std::shared_ptr<ExtractedRawFilesMap> extractedRawFiles) {
+    QObject::connect(this, &ArchiveProcessorExternalLha::extractSuccess, [promise, fileName](QString compressedFilePath, std::shared_ptr<ExtractedRawFilesMap> extractedRawFiles) {
         Q_UNUSED(compressedFilePath);
         qInfo().noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
         promise->addResult(extractedRawFiles);

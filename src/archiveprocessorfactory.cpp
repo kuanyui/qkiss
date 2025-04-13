@@ -6,6 +6,7 @@
 
 AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(Backend backend)
 {
+    backend = Backend::ExternalLhaProcess;
     switch (backend) {
     case Backend::Libarchive: return new ArchiveProcessorLibarchive();
     case Backend::ExternalLhaProcess: return new ArchiveProcessorExternalLha();
