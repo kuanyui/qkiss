@@ -113,6 +113,7 @@ void FileSystemBrowser::setupUi()
     m_model->setHorizontalHeaderLabels({ "", tr("File Name"), tr("Size"), tr("Patch") });  // model.clear() will also delete headers... WTF...
 
     m_view = new QTreeView(this);
+    m_view->viewport()->installEventFilter(this);
     m_view->setModel(m_model);
     m_view->setEditTriggers(QAbstractItemView::NoEditTriggers);  // Make cells read-only
     m_view->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -354,3 +355,28 @@ void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
         emit requestLoadFile(filePath, QKiSS::FileLoadMode::LoadAsIndependent);
     }
 }
+
+bool FileSystemBrowser::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_view->viewport() && event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        switch (mouseEvent->button()) {
+            case Qt::MouseButton::BackButton:
+                qDebug() << ">> Backward";
+                goBackward();
+                return true; // don't propagate
+            case Qt::MouseButton::ForwardButton:
+                qDebug() << ">> Forward";
+                goForward();
+                return true; // don't propagate
+            default:
+                break;
+        }
+    }
+
+    // default behavior
+    return QWidget::eventFilter(watched, event);
+}
+
+
+

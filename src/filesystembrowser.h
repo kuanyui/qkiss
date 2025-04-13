@@ -70,6 +70,14 @@ private:
     QList<QString> m_loadedKissFilePaths;
     QStack<QString> m_navBackwardStack;
     QStack<QString> m_navForwardStack;
+
+
+
+    // QObject interface
+public:
+    /// NOTE: I tried to use `mousePressEvent` before, but it seems that the click event are all catched by QTreeView, so use eventFilter instead.
+    virtual bool eventFilter(QObject *watched, QEvent *event) override;
+
 };
 
 
