@@ -51,7 +51,6 @@ QString ParsedCnfCel::comment() const
 
 void ParsedCnfCel::setComment(QString rawComment)
 {
-    qDebug() << "SET COMMENT: " << rawComment;
     static QRegularExpression re(R"#(%t(\d+))#");
     QRegularExpressionMatch m = re.match(rawComment);
     if (m.hasMatch()) {
