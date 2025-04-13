@@ -90,6 +90,10 @@ void FkissRuntime::triggerInitializeAndBegin()
 {
     tryToRunActionsByEvent(FKK::INITIALIZE, {});
     tryToRunActionsByEvent(FKK::BEGIN, {});
+    tryToRunActionsByEvent(FKK::VERSION, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS1)) });
+    tryToRunActionsByEvent(FKK::VERSION, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS1b)) });
+    tryToRunActionsByEvent(FKK::VERSION, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS2)) });
+    tryToRunActionsByEvent(FKK::VERSION, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS2_1)) });
 }
 
 void FkissRuntime::triggerEnd()

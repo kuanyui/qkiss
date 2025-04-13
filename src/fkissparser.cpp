@@ -253,7 +253,7 @@ QVector<std::shared_ptr<ASTPairedCommands> > FkissParser::pairAstCommands(FkissP
         } else if (commandIsAction(cmd->name)) {
             curPair->actions.append(cmd);
         } else {
-            qWarning() << QStringLiteral("[WARNING][Fkiss] Unknown command \"%1\", skip.").arg(cmd->name);
+            qWarning().noquote() << QStringLiteral("[WARNING][Fkiss] Unknown command \"%1\", skip.").arg(cmd->name);
         }
     }
     evpairs.removeFirst();  // remove sentinel

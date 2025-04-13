@@ -73,7 +73,7 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_EVENT = {
     // These events are specific to sets, colors, and version.
     { FKK::SET              , { FKK::SET              , FkissVersion::FKiSS1, 1 } }, // set(page number) - Called when the viewer changes to the specified set (page).
     { FKK::COL              , { FKK::COL              , FkissVersion::FKiSS1, 1 } }, // col(palette number) - Called when the viewer changes to the specified palette.
-    { FKK::VERSION          , { FKK::VERSION          , FkissVersion::FKiSS2, false } }, // version(version number) - Called immediately after the begin event if the specified version of FKiSS is supported.
+    { FKK::VERSION          , { FKK::VERSION          , FkissVersion::FKiSS2, 1 } }, // version(version number) - Called immediately after the begin event if the specified version of FKiSS is supported.
 
     // ### Named ###
     // These events are associated with named blocks of code.
