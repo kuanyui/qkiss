@@ -179,15 +179,10 @@ void ParsedCnf::parseLines(const QStringList &lines)
     for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
         QString &line = m_lines[m_lineIdx];
         // qDebug() << "===============" << line;
-        if (line.startsWith(":@"_L1)) {    // Some lunetic files has typo, colon `:` instead of semicolon `;`...
-           fkissScriptLines.append({m_lineIdx + 1, line});
-           error("Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =>  "_L1 + line);
-        } else if (line.startsWith(";"_L1)) {
-            if (line.startsWith(";@"_L1)) {
-                fkissScriptLines.append({m_lineIdx + 1, line});
-            } else {
-                m_readableComments.append(line);
-            }
+        if (line.startsWith(":@"_L1) || line.startsWith(";@"_L1)) {    // Some lunetic files has typo, colon `:` instead of semicolon `;`...
+           continue;
+        } else if (line.startsWith(";"_L1) && !line.startsWith(";@"_L1)) {
+            m_readableComments.append(line);
         } else if (line.startsWith("("_L1)) {
             static QRegularExpression rePlayFieldSize(R"#(^\((\d+) *?[,.*] *?(\d+))#");   // Actually, the standard spec is `(x,y`, but some CNF wrongly wrote as `(x.y` even `(x*y`...`
             QRegularExpressionMatch m = rePlayFieldSize.match(line);
@@ -274,7 +269,17 @@ void ParsedCnf::parseLines(const QStringList &lines)
         //     }
         // }
     }
-    qDebug() << m_readableComments;
+    qDebug() << "Readable comments in this CNF:\n" << m_readableComments;
+    for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
+        QString &line = m_lines[m_lineIdx];
+        // qDebug() << "===============" << line;
+        if (line.startsWith(":@"_L1)) {    // Some lunetic files has typo, colon `:` instead of semicolon `;`...
+           fkissScriptLines.append({m_lineIdx + 1, line});
+           error("Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =>  "_L1 + line);
+        } else if (line.startsWith(";@"_L1)) {
+            fkissScriptLines.append({m_lineIdx + 1, line});
+        }
+    }
     m_fkiss->parseAndCacheFkissScript(fkissScriptLines);
     m_lines.clear();
 }
