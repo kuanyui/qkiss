@@ -353,12 +353,12 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     m_fixDecreasedWhileDraggingItem = false;
     receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Press, { FV::fromCelName(m_draggingItem->celFileName()) });
     receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Press, { FV::fromObjectId(m_draggingItem->objId()) }); // press(target) - Triggered when the user clicks on the target.
-    // if (event->button() == Qt::RightButton) {
-    //     m_draggingItem->setFix(0);
-    //     foreach (GKissItem *sib, *m_draggingItem->siblings()) {
-    //         sib->setFix(0);
-    //     }
-    // }
+    if (event->button() == Qt::MouseButton::MiddleButton) {
+        m_draggingItem->setFix(0);
+        foreach (GKissItem *sib, *m_draggingItem->siblings()) {
+            sib->setFix(0);
+        }
+    }
     emit highlightedItemChanged(m_draggingItem);
     // QGraphicsItem::mousePressEvent(event);
 }
