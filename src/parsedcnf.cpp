@@ -252,7 +252,14 @@ void ParsedCnf::parseLines(const QStringList &lines)
         }
     }
     std::sort(m_sortedObjIdList.begin(), m_sortedObjIdList.end(), std::less<int32_t>());
-    qDebug() << m_sortedObjIdList;
+
+    // auto objPosList = m_sets.at(0)->getObjPosList();
+    // qDebug() << "[DEBUG] object pos in set 0 =================================================================";
+    // for (int i = 0; i < objPosList.length(); i++) {
+    //     qDebug() << "[DEBUG] #" << i << objPosList[i].value();
+    // }
+    // qDebug() << "[DEBUG] (ENDS) =================================================================";
+    // qDebug() << "sortedbjIdList = " << m_sortedObjIdList;
     for (int i = 0; i< m_sets.length(); i++) {
         ParsedCnfSet *set = m_sets[i];
         // qDebug() << "===================================================================";

@@ -200,7 +200,6 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
 
 bool GKissScene::moveObject(size_t objId, int dx, int dy)
 {
-    qDebug() << "moveObjectBy()" << objId << dx << dy;
     auto _items = getItemsByObjId(objId);
     if (!_items.has_value()) {
         qWarning() << QStringLiteral("[Scene] WTF, objectId %1 has no item??? Skip.").arg(objId);

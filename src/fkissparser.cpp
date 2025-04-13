@@ -138,9 +138,9 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
 {
     FkissProcedure astCmds;
     bool bodyStarted = false;
-    foreach (const Token &token , tokens) {
-        qDebug() << "[DEBUG] Current Token = " << token;
-    }
+    // foreach (const Token &token , tokens) {
+    //     qDebug() << "[DEBUG] Current Token = " << token;
+    // }
     for (int i = 0; i < tokens.length(); i++) {
         const Token &token = tokens[i];
         if (!bodyStarted) {
@@ -205,7 +205,8 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
             }
             const auto &nextTk = tokens[i+1];
             if (nextTk.type != Token::Type::EndOfLine && nextTk.type != Token::Type::Space) {
-                logSyntaxError(nextTk, "A command must be followed by a space or an EOL. Still runnable but this is a wrong code.");
+                // NOTE: Comment temporarily to reduce unwanted warnings for debugging more easily...
+                // logSyntaxError(nextTk, "A command must be followed by a space or an EOL. Still runnable but this is a wrong code.");
             }
             astCmds.append(std::make_shared<ASTCommand>(ASTCommand{cmdName, cmdArgs}));
         }

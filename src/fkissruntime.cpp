@@ -16,24 +16,23 @@ FkissRuntime::~FkissRuntime()
     qDebug() << "[fkissruntime] dtor()";
     stopTimersAndUnloadFkissScript();
 }
-
 void FkissRuntime::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)
 {
     // All events are generated from GKissItem (instead of FKiSS script), so the items counts should not need to be checked here.
     switch (evtType) {
-    case FkissUserMovementEvent::Press:    tryToRunActionsByEvent(FKK::E::PRESS, vars); break;
-    case FkissUserMovementEvent::Catch:    tryToRunActionsByEvent(FKK::E::CATCH, vars); break;
-    case FkissUserMovementEvent::Fixcatch: tryToRunActionsByEvent(FKK::E::FIXCATCH, vars); break;
-    case FkissUserMovementEvent::Unfix:    tryToRunActionsByEvent(FKK::E::UNFIX, vars); break;
-    case FkissUserMovementEvent::Collide:  tryToRunActionsByEvent(FKK::E::COLLIDE, vars); break;
-    case FkissUserMovementEvent::Apart:    tryToRunActionsByEvent(FKK::E::APART, vars); break;
-    case FkissUserMovementEvent::In:       tryToRunActionsByEvent(FKK::E::IN, vars); break;
+    case FkissUserMovementEvent::Press:    tryToRunActionsByEvent(FKK::E::PRESS, vars); qDebug() << "[DEBUG] User event " << FKK::E::PRESS << vars;  break;
+    case FkissUserMovementEvent::Catch:    tryToRunActionsByEvent(FKK::E::CATCH, vars); qDebug() << "[DEBUG] User event " << FKK::E::CATCH << vars;  break;
+    case FkissUserMovementEvent::Fixcatch: tryToRunActionsByEvent(FKK::E::FIXCATCH, vars); qDebug() << "[DEBUG] User event " << FKK::E::FIXCATCH << vars;  break;
+    case FkissUserMovementEvent::Unfix:    tryToRunActionsByEvent(FKK::E::UNFIX, vars); qDebug() << "[DEBUG] User event " << FKK::E::UNFIX << vars;  break;
+    case FkissUserMovementEvent::Collide:  tryToRunActionsByEvent(FKK::E::COLLIDE, vars); qDebug() << "[DEBUG] User event " << FKK::E::COLLIDE << vars;  break;
+    case FkissUserMovementEvent::Apart:    tryToRunActionsByEvent(FKK::E::APART, vars); qDebug() << "[DEBUG] User event " << FKK::E::APART << vars;  break;
+    case FkissUserMovementEvent::In:       tryToRunActionsByEvent(FKK::E::IN, vars); qDebug() << "[DEBUG] User event " << FKK::E::IN << vars;  break;
     case FkissUserMovementEvent::Stillin:  tryToRunActionsByEvent(FKK::E::STILLIN, vars); break;
-    case FkissUserMovementEvent::Out:      tryToRunActionsByEvent(FKK::E::OUT, vars); break;
-    case FkissUserMovementEvent::Stillout: tryToRunActionsByEvent(FKK::E::STILLOUT, vars); break;
-    case FkissUserMovementEvent::Release:  tryToRunActionsByEvent(FKK::E::RELEASE, vars); break;
-    case FkissUserMovementEvent::Drop:     tryToRunActionsByEvent(FKK::E::DROP, vars); break;
-    case FkissUserMovementEvent::Fixdrop:  tryToRunActionsByEvent(FKK::E::FIXDROP, vars); break;
+    case FkissUserMovementEvent::Out:      tryToRunActionsByEvent(FKK::E::OUT, vars); qDebug() << "[DEBUG] User event " << FKK::E::OUT << vars;  break;
+    case FkissUserMovementEvent::Stillout: tryToRunActionsByEvent(FKK::E::STILLOUT, vars);  break;
+    case FkissUserMovementEvent::Release:  tryToRunActionsByEvent(FKK::E::RELEASE, vars); qDebug() << "[DEBUG] User event " << FKK::E::RELEASE << vars;  break;
+    case FkissUserMovementEvent::Drop:     tryToRunActionsByEvent(FKK::E::DROP, vars); qDebug() << "[DEBUG] User event " << FKK::E::DROP << vars;  break;
+    case FkissUserMovementEvent::Fixdrop:  tryToRunActionsByEvent(FKK::E::FIXDROP, vars); qDebug() << "[DEBUG] User event " << FKK::E::FIXDROP << vars;  break;
     }
     return;
 }
@@ -354,12 +353,12 @@ std::shared_ptr<ASTPairedCommands> FkissRuntime::getEventActionPair(const QStrin
 
 bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs)
 {
-    qDebug() << "[Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
+    // qDebug() << "[Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
     auto _evpair = findEvpair(eventName, eventArgs);
     if (!_evpair.has_value()) { return false; }
     auto evpair = _evpair.value();
     foreach (auto act, evpair->actions) {
-        qDebug() << "[Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
+        // qDebug() << "[Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
         auto actName = act->name;
         auto actArgs = act->args;
         if (actName == FKK::A::MAP) {
