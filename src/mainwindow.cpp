@@ -225,6 +225,7 @@ void MainWindow::switchSceneBy(int steps)
     if (nextSceneNo < 0) {
         nextSceneNo += max;
     }
+    if (curSceneNo == nextSceneNo) { return; }
     qDebug() << "[DEBUG] switchSceneBy()" << nextSceneNo;
     QAbstractButton *btn = m_btnGroupSceneSets->button(nextSceneNo);
     btn->click();
@@ -238,6 +239,7 @@ void MainWindow::switchPaletteBy(int steps)
     if (nextPaletteNo < 0) {
         nextPaletteNo = m_archiveFile->paletteAmountOfFirstKcfInCurCnf() - nextPaletteNo;
     }
+    if (curPaletteNo == nextPaletteNo) { return; }
     QAbstractButton *btn = m_btnGroupColorSets->button(nextPaletteNo);
     btn->click();
 }
