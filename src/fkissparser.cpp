@@ -138,6 +138,9 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
 {
     FkissProcedure astCmds;
     bool bodyStarted = false;
+    foreach (const Token &token , tokens) {
+        qDebug() << "[DEBUG] Current Token = " << token;
+    }
     for (int i = 0; i < tokens.length(); i++) {
         const Token &token = tokens[i];
         if (!bodyStarted) {

@@ -179,7 +179,10 @@ void ParsedCnf::parseLines(const QStringList &lines)
     for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
         QString &line = m_lines[m_lineIdx];
         // qDebug() << "===============" << line;
-        if (line.startsWith(";"_L1)) {
+        if (line.startsWith(":@"_L1)) {    // Some lunetic files has typo, colon `:` instead of semicolon `;`...
+           fkissScriptLines.append({m_lineIdx + 1, line});
+           error("Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =>  "_L1 + line);
+        } else if (line.startsWith(";"_L1)) {
             if (line.startsWith(";@"_L1)) {
                 fkissScriptLines.append({m_lineIdx + 1, line});
             } else {
@@ -296,7 +299,7 @@ void ParsedCnf::startToParseSetLines()
     }
     while (m_lineIdx + 1 < m_lines.length()) {
         line = removeComment(m_lines[m_lineIdx + 1]);
-        qDebug() << "======" << line;
+        qDebug() << "(SET) ======" << line;
         if (line.trimmed().isEmpty()) {
             m_lineIdx++;
             continue;
@@ -315,6 +318,7 @@ void ParsedCnf::startToParseSetLines()
         }
         m_lineIdx++;
     }
+    qDebug() << "(SET ENDS)";
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
 }
 
