@@ -160,6 +160,10 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
         if (token.type == Token::Type::Identifier) {
             QString cmdName = token.value;
             ++i;
+            while (i+1 < tokens.length() && (tokens[i].type == Token::Type::Space)) {
+	        // Add tolerance for some lunatics who add space after command (ex: `press	("hat.cel")`)
+                ++i;
+            }
             const Token &lPar = tokens[i];
             if (lPar.type != Token::Type::LParen) {
                 logSyntaxWarning(token, "Command name `%1` must be followed by a left parenthesis, so assume it has no parameter."_L1.arg(token.value));
