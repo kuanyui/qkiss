@@ -198,7 +198,7 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
     return true;
 }
 
-bool GKissScene::moveObjectBy(size_t objId, int dx, int dy)
+bool GKissScene::moveObject(size_t objId, int dx, int dy)
 {
     qDebug() << "moveObjectBy()" << objId << dx << dy;
     auto _items = getItemsByObjId(objId);
@@ -210,6 +210,42 @@ bool GKissScene::moveObjectBy(size_t objId, int dx, int dy)
     foreach (GKissItem *item, *items) {
         item->setPos(dx + item->x(),
                      dy + item->y());
+    }
+    return true;
+}
+
+bool GKissScene::moveObjectBy(size_t targetObjId, size_t anchorObjId, int dx, int dy)
+{
+    auto _anchorObjItems = getItemsByObjId(anchorObjId);
+    if (!_anchorObjItems.has_value()) {
+        qWarning() << QStringLiteral("[Scene] WTF, anchorObjId %1 has no item??? Skip.").arg(anchorObjId);
+        return false;
+    }
+    auto anchorObjItems = _anchorObjItems.value();
+    if (anchorObjItems->empty()) {
+        qWarning() << QStringLiteral("[Scene] WTF???");
+        return false;
+    }
+    auto anchorItem = anchorObjItems->at(0);
+
+    auto _anchorObjPos = m_cnfSet->getObjPosByObjId(anchorItem->objId());
+    if (!_anchorObjPos.has_value()) {
+        qWarning() << QStringLiteral("[Scebe] WTF???");
+        return false;
+    }
+    auto anchorObjPos = _anchorObjPos.value();
+
+    auto _targetObjItems = getItemsByObjId(targetObjId);
+    if (!_targetObjItems.has_value()) {
+        qWarning() << QStringLiteral("[Scene] WTF, objectId %1 has no item??? Skip.").arg(targetObjId);
+        return false;
+    }
+    auto targetObjItems = _targetObjItems.value();
+
+
+    foreach (GKissItem *item, *targetObjItems) {
+        item->setPos(anchorObjPos.x() + item->cel()->x() + dx,
+                     anchorObjPos.y() + item->cel()->y() + dy);
     }
     return true;
 }

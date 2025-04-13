@@ -150,14 +150,14 @@ void FkissRuntime::runMove(FkissVariant target, FkissVariant dx, FkissVariant dy
         return;
     }
     if (dx.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `dx` in move() must be an object ID. Skip."_L1;
+        qDebug() << "[fkissruntime][ERROR] the `dx` in move() must be an integer. Skip."_L1;
         return;
     }
     if (dy.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `dy` in move() must be an object ID. Skip."_L1;
+        qDebug() << "[fkissruntime][ERROR] the `dy` in move() must be an integer. Skip."_L1;
         return;
     }
-    m_curKissScene->moveObjectBy(target.getObjectId(), dx.getInt(), dy.getInt());
+    m_curKissScene->moveObject(target.getObjectId(), dx.getInt(), dy.getInt());
 }
 
 void FkissRuntime::runMoveto(FkissVariant target, FkissVariant x, FkissVariant y)
@@ -168,14 +168,48 @@ void FkissRuntime::runMoveto(FkissVariant target, FkissVariant x, FkissVariant y
         return;
     }
     if (x.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `x` in moveto() must be an object ID. Skip."_L1;
+        qDebug() << "[fkissruntime][ERROR] the `x` in moveto() must be an integer. Skip."_L1;
         return;
     }
     if (y.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `y` in moveto() must be an object ID. Skip."_L1;
+        qDebug() << "[fkissruntime][ERROR] the `y` in moveto() must be an integer. Skip."_L1;
         return;
     }
     m_curKissScene->moveObjectTo(target.getObjectId(), x.getInt(), y.getInt());
+}
+
+void FkissRuntime::runMovebyx(FkissVariant target, FkissVariant relative, FkissVariant dx)
+{
+    if (target.type() != FkissVariant::Type::Object) {
+        qDebug() << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
+        return;
+    }
+    if (relative.type() != FkissVariant::Type::Object) {
+        qDebug() << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
+        return;
+    }
+    if (dx.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][ERROR] the `x` in movebyx() must be an integer. Skip."_L1;
+        return;
+    }
+    m_curKissScene->moveObjectBy(target.getObjectId(), relative.getObjectId(), dx.getInt(), 0);
+}
+
+void FkissRuntime::runMovebyy(FkissVariant target, FkissVariant relative, FkissVariant dy)
+{
+    if (target.type() != FkissVariant::Type::Object) {
+        qDebug() << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
+        return;
+    }
+    if (relative.type() != FkissVariant::Type::Object) {
+        qDebug() << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
+        return;
+    }
+    if (dy.type() != FkissVariant::Type::Int) {
+        qDebug() << "[fkissruntime][ERROR] the `y` in movebyy() must be an integer. Skip."_L1;
+        return;
+    }
+    m_curKissScene->moveObjectBy(target.getObjectId(), relative.getObjectId(), 0, dy.getInt());
 }
 
 void FkissRuntime::runTransparent(FkissVariant target, FkissVariant delta)
@@ -351,6 +385,16 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
         if (actName == FKK::A::MOVETO) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid moveto() args count, skip."_L1; continue; }
             runMoveto(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::A::MOVEBYX) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid movebyx() args count, skip."_L1; continue; }
+            runMovebyx(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::A::MOVEBYY) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid movebyy() args count, skip."_L1; continue; }
+            runMovebyy(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::TRANSPARENT) {

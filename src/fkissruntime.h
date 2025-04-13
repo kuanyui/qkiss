@@ -34,6 +34,8 @@ private:
     void runAltmap(FkissVariant target);
     void runMove(FkissVariant target, FkissVariant dx, FkissVariant dy);
     void runMoveto(FkissVariant target, FkissVariant x, FkissVariant y);
+    void runMovebyx(FkissVariant target, FkissVariant relative, FkissVariant dx);
+    void runMovebyy(FkissVariant target, FkissVariant relative, FkissVariant dy);
     void runTransparent(FkissVariant target, FkissVariant delta);
     void runTimer(FkissVariant alarmID, FkissVariant delay);
     void runRandomtimer(FkissVariant alarmID, FkissVariant delay, FkissVariant range);

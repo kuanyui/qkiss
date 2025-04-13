@@ -158,8 +158,8 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
     // These actions control the position of a target and allow an action to move a cel in response to an event.
     { FKK::A::MOVE             , { FKK::A::MOVE             , FkissVersion::FKiSS1, 1 } }, // move(target, X, Y) - Moves target X pixels horizontally and Y pixels vertically relative to its current position.
     { FKK::A::MOVETO           , { FKK::A::MOVETO           , FkissVersion::FKiSS2, 1 } }, // moveto(target, X, Y) - Moves target to absolute play field position <X, Y>.
-    { FKK::A::MOVEBYX          , { FKK::A::MOVEBYX          , FkissVersion::FKiSS2, false } }, // movebyx(target, relative, X) - Moves target to a position X pixels horizontally from the position of object relative.
-    { FKK::A::MOVEBYY          , { FKK::A::MOVEBYY          , FkissVersion::FKiSS2, false } }, // movebyy(target, relative, Y) - Moves target to a position Y pixels vertically from the position of object relative.
+    { FKK::A::MOVEBYX          , { FKK::A::MOVEBYX          , FkissVersion::FKiSS2, false } }, // movebyx(target, relative, X) - Moves target (obj only) to a position X pixels horizontally from the position of object relative.
+    { FKK::A::MOVEBYY          , { FKK::A::MOVEBYY          , FkissVersion::FKiSS2, false } }, // movebyy(target, relative, Y) - Moves target (obj only) to a position Y pixels vertically from the position of object relative.
     { FKK::A::MOVETORAND       , { FKK::A::MOVETORAND       , FkissVersion::FKiSS2, false } }, // movetorand(target) - Moves target to a random position within the play field or its restricted range of movement.
     { FKK::A::MOVERANDX        , { FKK::A::MOVERANDX        , FkissVersion::FKiSS2, false } }, // moverandx(target, min, max) - Moves target by a random horizontal distance in the range min to max relative to its current position.
     { FKK::A::MOVERANDY        , { FKK::A::MOVERANDY        , FkissVersion::FKiSS2, false } }, // moverandy(target, min, max) - Moves target by a random vertical distance in the range min to max relative to its current position.

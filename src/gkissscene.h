@@ -23,8 +23,12 @@ public:
     void setItemVisibilityByCelName(const QString &celFileName, bool visibility);
     void setItemsVisibilityByObjId(int32_t objId, bool visibility);
     void bindItemsToObjects();
+    /// moveto() in FKiSS2
     bool moveObjectTo(size_t objId, int x, int y);
-    bool moveObjectBy(size_t objId, int dx, int dy);
+    /// move() in FKiSS1
+    bool moveObject(size_t objId, int dx, int dy);
+    /// movebyx(), movebyy() in FKiSS2
+    bool moveObjectBy(size_t targetObjId, size_t anchorObjId, int dx, int dy);
     void executeTransparent(const FkissVariant &target, int delta);
     void executeTransparentOnCel(QString celFileName, int delta);
     void executeTransparentOnObj(int32_t objId, int delta);
