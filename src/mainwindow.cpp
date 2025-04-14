@@ -29,15 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     setupDockWindows();
     setupShortcuts();
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, this, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
-        m_logViewer->clearAllLogs();
-        AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
-        extractor->extractFileAsPromise(filePath).then([this, extractor, filePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-            qDebug() << "Extract ============================" << filesMap->keys();
-            tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, fileLoadMode);      /// <-- entrypoint of loading a CNF
-            delete extractor;
-        }).onFailed([extractor](){
-            delete extractor;
-        });
+        tryToLoadKissFilePath(filePath, fileLoadMode);
     });
 
     connect(m_kissView, &GKissView::highlightedItemChanged, this, [=](GKissItem *item) {
@@ -90,9 +82,24 @@ void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const
     m_logViewer->appendLog(type, msg);
 }
 
-void MainWindow::loadPath(const QString &dirOrFilePath)
+void MainWindow::loadAnyPath(const QString &dirOrFilePath)
 {
     m_fileSystemBrowser->setPath(dirOrFilePath);
+    tryToLoadKissFilePath(dirOrFilePath, QKiSS::FileLoadMode::LoadAsIndependent);
+}
+
+void MainWindow::tryToLoadKissFilePath(const QString &kissArchiveFilePath, QKiSS::FileLoadMode fileLoadMode)
+{
+    if (!kissArchiveFilePath.endsWith(".LZH", Qt::CaseInsensitive)) { return; }
+    m_logViewer->clearAllLogs();
+    AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
+    extractor->extractFileAsPromise(kissArchiveFilePath).then([this, extractor, kissArchiveFilePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
+        qDebug() << "Extract ============================" << filesMap->keys();
+        tryToParseAndLoadFilesAsKissFiles(kissArchiveFilePath, filesMap, fileLoadMode);      /// <-- entrypoint of loading a CNF
+        delete extractor;
+    }).onFailed([extractor](){
+        delete extractor;
+    });
 }
 
 void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles,  QKiSS::FileLoadMode fileLoadMode) {
@@ -409,7 +416,7 @@ void MainWindow::renderRecentFiles()
     foreach (const QString &path, m_recentFiles) {
         QAction *act = new QAction(menuRecentFiles);
         act->setText(path);
-        connect(act, &QAction::triggered, this, [=]() { loadPath(path); });
+        connect(act, &QAction::triggered, this, [=]() { loadAnyPath(path); });
         menuRecentFiles->addAction(act);
     }
     menuRecentFiles->addSeparator();
@@ -426,7 +433,7 @@ void MainWindow::renderRecentFiles()
     foreach (const QString &path, m_recentDirs) {
         QAction *act = new QAction(menuRecentDirs);
         act->setText(path);
-        connect(act, &QAction::triggered, this, [=]() { loadPath(path); });
+        connect(act, &QAction::triggered, this, [=]() { loadAnyPath(path); });
         menuRecentDirs->addAction(act);
     }
     menuRecentDirs->addSeparator();
@@ -496,15 +503,7 @@ void MainWindow::dropEvent(QDropEvent *event)
             if (url.isLocalFile()) {
                 QString filePath = url.toLocalFile();
                 qDebug() << "Dropped file:" << filePath;
-                if (!filePath.endsWith(".LZH", Qt::CaseInsensitive)) { return; }
-                m_logViewer->clearAllLogs();
-                auto *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::Libarchive);
-                extractor->extractFileAsPromise(filePath).then([this, extractor, filePath](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-                    tryToParseAndLoadFilesAsKissFiles(filePath, filesMap, QKiSS::FileLoadMode::LoadAsIndependent);      /// <-- entrypoint of loading a CNF
-                    delete extractor;
-                }).onFailed([extractor](){
-                    delete extractor;
-                });
+                tryToLoadKissFilePath(filePath, QKiSS::FileLoadMode::LoadAsIndependent);
                 // m_archiveProcessor->extractLzh(filePath);
             }
         }
