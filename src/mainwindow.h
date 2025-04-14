@@ -40,6 +40,11 @@ private:
     void setupShortcuts();
     void saveWindowSettings();
     void restoreWindowSettings();
+    void renderRecentFiles();
+    void addToRecentFiles(QString filePath);
+private slots:
+    void clearRecentFiles();
+    void clearRecentDirs();
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dragMoveEvent(QDragMoveEvent *event) override;
@@ -61,6 +66,8 @@ protected:
     InnerFilesBrowser *m_innerFilesBrowser;
     CodeEditor *m_codeEditor;
     QPlainTextEdit *m_docViewer;
+    QStringList m_recentFiles;
+    QStringList m_recentDirs;
 };
 
 

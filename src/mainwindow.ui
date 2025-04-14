@@ -31,8 +31,26 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <widget class="QMenu" name="menu_openRecentDirectory">
+     <property name="title">
+      <string>Open Recent Directory</string>
+     </property>
+     <addaction name="action_clearAll_2"/>
+    </widget>
+    <widget class="QMenu" name="menu_openRecentFile">
+     <property name="title">
+      <string>Open Recent File</string>
+     </property>
+     <property name="icon">
+      <iconset theme="QIcon::ThemeIcon::AppointmentNew"/>
+     </property>
+     <addaction name="action_clearAll"/>
+    </widget>
     <addaction name="action_openFile"/>
     <addaction name="action_openDirectory"/>
+    <addaction name="separator"/>
+    <addaction name="menu_openRecentFile"/>
+    <addaction name="menu_openRecentDirectory"/>
     <addaction name="separator"/>
     <addaction name="action_quit"/>
    </widget>
@@ -236,6 +254,16 @@
    </property>
    <property name="toolTip">
     <string>To view any human-readable text files (e.g. README) inside this LZH file.</string>
+   </property>
+  </action>
+  <action name="action_clearAll">
+   <property name="text">
+    <string>Clear All</string>
+   </property>
+  </action>
+  <action name="action_clearAll_2">
+   <property name="text">
+    <string>Clear All</string>
    </property>
   </action>
  </widget>

@@ -116,6 +116,7 @@ void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, s
     m_kissView->deleteAllScenes();
     bool ok = m_kissView->setArchiveFileAndRenderFirstCnf(m_archiveFile);
     if (!ok) { return; }
+    addToRecentFiles(compressedFilePath);
     qInfo().noquote() << tr("Parsing finished. Now rendering scenes...");
     m_fileSystemBrowser->markPathAsLoaded(compressedFilePath, fileLoadMode);
     m_innerFilesBrowser->rerenderFileList(m_archiveFile);
@@ -375,6 +376,8 @@ void MainWindow::saveWindowSettings()
         set.setValue(key, checked);
     }
     set.setValue("View/Zoom", m_cboxZoomScale->currentText());
+    set.setValue("File/RecentFiles", m_recentFiles);
+    set.setValue("File/RecentDirs", m_recentDirs);
 }
 
 void MainWindow::restoreWindowSettings()
@@ -389,7 +392,83 @@ void MainWindow::restoreWindowSettings()
         act->setChecked(toChecked);
     }
     m_cboxZoomScale->setCurrentText(set.value("View/Zoom", "1").toString());
+    m_recentFiles = set.value("File/RecentFiles", {}).toStringList();
+    m_recentDirs = set.value("File/RecentDirs", {}).toStringList();
+    renderRecentFiles();
+}
 
+const int RECENTS_MAX_COUNT = 12;
+
+void MainWindow::renderRecentFiles()
+{
+    // Files
+    auto menuRecentFiles = ui->menu_openRecentFile;
+    qDebug() << "[Render] Recent File = " << m_recentFiles;
+    menuRecentFiles->setIcon(QIcon::fromTheme("recents"));
+    menuRecentFiles->clear();
+    foreach (const QString &path, m_recentFiles) {
+        QAction *act = new QAction(menuRecentFiles);
+        act->setText(path);
+        connect(act, &QAction::triggered, this, [=]() { loadPath(path); });
+        menuRecentFiles->addAction(act);
+    }
+    menuRecentFiles->addSeparator();
+    QAction *actClearFile = new QAction(menuRecentFiles);
+    actClearFile->setText(tr("Clear All"));
+    actClearFile->setIcon(QIcon::fromTheme("edit-clear"));
+    connect(actClearFile, &QAction::triggered, this, &MainWindow::clearRecentFiles);
+    menuRecentFiles->addAction(actClearFile);
+    // Dirs
+    qDebug() << "[Render] Recent Dirs = " << m_recentDirs;
+    auto menuRecentDirs = ui->menu_openRecentDirectory;
+    // menuRecentDirs->setIcon(QIcon::fromTheme("recents"));
+    menuRecentDirs->clear();
+    foreach (const QString &path, m_recentDirs) {
+        QAction *act = new QAction(menuRecentDirs);
+        act->setText(path);
+        connect(act, &QAction::triggered, this, [=]() { loadPath(path); });
+        menuRecentDirs->addAction(act);
+    }
+    menuRecentDirs->addSeparator();
+    QAction *actClearDir = new QAction(menuRecentDirs);
+    actClearDir->setText(tr("Clear All"));
+    actClearDir->setIcon(QIcon::fromTheme("edit-clear"));
+    connect(actClearDir, &QAction::triggered, this, &MainWindow::clearRecentDirs);
+    menuRecentDirs->addAction(actClearDir);
+}
+
+void MainWindow::addToRecentFiles(QString filePath)
+{
+    QFileInfo fi {filePath};
+    QString dirPath = fi.dir().absolutePath();
+    m_recentFiles.removeAll(filePath);
+    m_recentFiles.prepend(filePath);
+    while (m_recentFiles.length() > RECENTS_MAX_COUNT) {
+        m_recentFiles.removeLast();
+    }
+    m_recentDirs.removeAll(dirPath);
+    m_recentDirs.prepend(dirPath);
+    while (m_recentDirs.length() > RECENTS_MAX_COUNT) {
+        m_recentDirs.removeLast();
+    }
+    saveWindowSettings();
+    renderRecentFiles();
+}
+
+void MainWindow::clearRecentFiles()
+{
+    qDebug() << "Clear Files";
+    m_recentFiles.clear();
+    saveWindowSettings();
+    renderRecentFiles();
+}
+
+void MainWindow::clearRecentDirs()
+{
+    qDebug() << "Clear Dirs";
+    m_recentDirs.clear();
+    saveWindowSettings();
+    renderRecentFiles();
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
