@@ -254,12 +254,6 @@ void MainWindow::switchPaletteBy(int steps)
 
 void MainWindow::setupToolBars()
 {
-    // Action Icons
-    ui->action_window_fileSystemBrowser->setIcon(QIcon::fromTheme("system-file-manager"));
-    ui->action_window_logViewer->setIcon(QIcon::fromTheme("logviewer", QIcon::fromTheme("utilities-system-monitor")));
-    ui->action_window_codeViewer->setIcon(QIcon::fromTheme("applications-development"));
-    ui->action_window_innerFilesBrowser->setIcon(QIcon::fromTheme("package-unzipped"));
-    ui->action_window_docViewer->setIcon(QIcon::fromTheme("text-x-readme", QIcon::fromTheme("accessories-text-editor")));
     // File
     m_toolbarFiles = new QToolBar(this);
     m_toolbarFiles->setWindowTitle(tr("Files"));   // The text in context menu when you right-click on toolbar.
@@ -283,11 +277,11 @@ void MainWindow::setupToolBars()
     m_toolbarWindows = new QToolBar(this);
     m_toolbarWindows->setWindowTitle(tr("Windows"));
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarWindows);
-    m_toolbarWindows->addAction(ui->action_window_fileSystemBrowser);
-    m_toolbarWindows->addAction(ui->action_window_innerFilesBrowser);
-    m_toolbarWindows->addAction(ui->action_window_docViewer);
-    m_toolbarWindows->addAction(ui->action_window_codeViewer);
-    m_toolbarWindows->addAction(ui->action_window_logViewer);
+    m_toolbarWindows->addAction(ui->dockWidget_fileSystemBrowser->toggleViewAction());
+    m_toolbarWindows->addAction(ui->dockWidget_innerFileSelector->toggleViewAction());
+    m_toolbarWindows->addAction(ui->dockWidget_docViewer->toggleViewAction());
+    m_toolbarWindows->addAction(ui->dockWidget_cnfCodeViewer->toggleViewAction());
+    m_toolbarWindows->addAction(ui->dockWidget_logViewer->toggleViewAction());
     m_toolbarWindows->setObjectName("MainWindowDocksToolbar");   // objectName is required when `QMainWindow::saveState()`
     // Page Sets
     m_toolbarSceneSets = new QToolBar(this);
@@ -314,22 +308,28 @@ void MainWindow::setupDockWindows()
     // ==================================================
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
+    ui->dockWidget_fileSystemBrowser->toggleViewAction()->setIcon(QIcon::fromTheme("system-file-manager"));
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
     // ==================================================
     // Inner Files Browser
     // ==================================================
     m_innerFilesBrowser = new InnerFilesBrowser(this);
-    ui->dockWidget_cnfFileSelector->setWidget(m_innerFilesBrowser);
+    ui->dockWidget_innerFileSelector->setWidget(m_innerFilesBrowser);
+    ui->dockWidget_innerFileSelector->toggleViewAction()->setIcon(QIcon::fromTheme("package-unzipped"));
+
     // ==================================================
     // Log Viewer
     // ==================================================
     m_logViewer = new LogViewer(this);
     ui->dockWidget_logViewer->setWidget(m_logViewer);
+    ui->dockWidget_logViewer->toggleViewAction()->setIcon(QIcon::fromTheme("logviewer", QIcon::fromTheme("utilities-system-monitor")));
+
     // ==================================================
     // Code Editor
     // ==================================================
     m_codeEditor = new CodeEditor(this);
     ui->dockWidget_cnfCodeViewer->setWidget(m_codeEditor);
+    ui->dockWidget_cnfCodeViewer->toggleViewAction()->setIcon(QIcon::fromTheme("applications-development"));
     // ==================================================
     // Doc Viewer
     // ==================================================
@@ -339,6 +339,8 @@ void MainWindow::setupDockWindows()
     m_docViewer->setReadOnly(true);
     m_docViewer->setFont(fontMono);
     ui->dockWidget_docViewer->setWidget(m_docViewer);
+    ui->dockWidget_docViewer->toggleViewAction()->setIcon(QIcon::fromTheme("text-x-readme", QIcon::fromTheme("accessories-text-editor")));
+
     // ==================================================
     // (Signals)
     // ==================================================
@@ -377,11 +379,6 @@ void MainWindow::saveWindowSettings()
     QSettings set;
     set.setValue("MainWindow/Geometry", saveGeometry());
     set.setValue("MainWindow/State", saveState());
-    foreach (QAction *act , m_toolbarWindows->actions()) {
-        QString key = "MainWindow/ToolbarDockButtons/%1"_L1.arg(act->objectName());
-        bool checked = act->isChecked();
-        set.setValue(key, checked);
-    }
     set.setValue("View/Zoom", m_cboxZoomScale->currentText());
     set.setValue("File/RecentFiles", m_recentFiles);
     set.setValue("File/RecentDirs", m_recentDirs);
@@ -392,12 +389,6 @@ void MainWindow::restoreWindowSettings()
     QSettings set;
     restoreGeometry(set.value("MainWindow/Geometry").toByteArray());
     restoreState(set.value("MainWindow/State").toByteArray());
-    foreach (QAction *act , m_toolbarWindows->actions()) {
-        QString key = "MainWindow/ToolbarDockButtons/%1"_L1.arg(act->objectName());
-        bool toChecked = set.value(key, true).toBool();
-        emit act->toggled(toChecked);
-        act->setChecked(toChecked);
-    }
     m_cboxZoomScale->setCurrentText(set.value("View/Zoom", "1").toString());
     m_recentFiles = set.value("File/RecentFiles", {}).toStringList();
     m_recentDirs = set.value("File/RecentDirs", {}).toStringList();

@@ -66,12 +66,6 @@
     <property name="title">
      <string>&amp;Window</string>
     </property>
-    <addaction name="action_window_fileSystemBrowser"/>
-    <addaction name="action_window_innerFilesBrowser"/>
-    <addaction name="action_window_docViewer"/>
-    <addaction name="action_window_codeViewer"/>
-    <addaction name="action_window_logViewer"/>
-    <addaction name="separator"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
@@ -93,7 +87,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents"/>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_cnfFileSelector">
+  <widget class="QDockWidget" name="dockWidget_innerFileSelector">
    <property name="windowTitle">
     <string>Inner File Selector</string>
    </property>
@@ -168,42 +162,6 @@
     <enum>QAction::MenuRole::QuitRole</enum>
    </property>
   </action>
-  <action name="action_window_fileSystemBrowser">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset theme="QIcon::ThemeIcon::FolderOpen"/>
-   </property>
-   <property name="text">
-    <string>&amp;File System Browser</string>
-   </property>
-  </action>
-  <action name="action_window_innerFilesBrowser">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset theme="QIcon::ThemeIcon::DocumentProperties"/>
-   </property>
-   <property name="text">
-    <string>&amp;Inner File Selector</string>
-   </property>
-   <property name="toolTip">
-    <string>Inner File Selector</string>
-   </property>
-  </action>
-  <action name="action_window_logViewer">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset theme="QIcon::ThemeIcon::DialogInformation"/>
-   </property>
-   <property name="text">
-    <string>&amp;Logs</string>
-   </property>
-  </action>
   <action name="action_zoomOut">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::ZoomOut"/>
@@ -228,34 +186,6 @@
     <string>&amp;Reset Scale</string>
    </property>
   </action>
-  <action name="action_window_codeViewer">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset theme="QIcon::ThemeIcon::DocumentPrintPreview"/>
-   </property>
-   <property name="text">
-    <string>&amp;CNF Code Viewer</string>
-   </property>
-   <property name="toolTip">
-    <string>To view the currently opened CNF file.</string>
-   </property>
-  </action>
-  <action name="action_window_docViewer">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset theme="QIcon::ThemeIcon::DocumentOpen"/>
-   </property>
-   <property name="text">
-    <string>&amp;Document Viewer</string>
-   </property>
-   <property name="toolTip">
-    <string>To view any human-readable text files (e.g. README) inside this LZH file.</string>
-   </property>
-  </action>
   <action name="action_clearAll">
    <property name="text">
     <string>Clear All</string>
@@ -270,22 +200,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>action_window_fileSystemBrowser</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>dockWidget_fileSystemBrowser</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>59</x>
-     <y>338</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>action_quit</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
@@ -298,70 +212,6 @@
     <hint type="destinationlabel">
      <x>639</x>
      <y>449</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action_window_innerFilesBrowser</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>dockWidget_cnfFileSelector</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>59</x>
-     <y>741</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action_window_logViewer</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>dockWidget_logViewer</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>440</x>
-     <y>852</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action_window_codeViewer</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>dockWidget_cnfCodeViewer</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>960</x>
-     <y>874</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action_window_docViewer</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>dockWidget_docViewer</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1126</x>
-     <y>851</y>
     </hint>
    </hints>
   </connection>
