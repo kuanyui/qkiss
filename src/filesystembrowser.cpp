@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QSet>
 #include <QLineEdit>
+#include <QItemSelectionModel>
 #include "filesystembrowser.h"
 #include "fileiconprovider.h"
 #include "iconbuttondelegate.h"
@@ -101,6 +102,11 @@ void FileSystemBrowser::markPathAsLoaded(QString path, QKiSS::FileLoadMode fileL
         }
         if (allChangedPaths.contains(itemFilePath)) {
             stateIconItem->setIcon(getLoadStateIcon(itemFilePath));    // independent / patch
+        }
+        if (itemFilePath == path) {
+            auto index = firstCol->index();
+            m_view->selectionModel()->select(index, QItemSelectionModel::SelectionFlag::ClearAndSelect | QItemSelectionModel::SelectionFlag::Rows);
+            m_view->scrollTo(index);
         }
     }
 }
