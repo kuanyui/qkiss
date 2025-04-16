@@ -26,7 +26,7 @@ public:
     ~MainWindow();
     void receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg);
     /// If it's a directory, open it in file browser. If a LZH file, try to extract it and load it.
-    void loadAnyPath(const QString &dirOrFilePath);
+    void openDirOrFile(const QString &dirOrFilePath);
     void tryToLoadKissFilePath(const QString &kissArchiveFilePath, QKiSS::FileLoadMode fileLoadMode);
 private:
     void tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, QKiSS::FileLoadMode fileLoadMode);

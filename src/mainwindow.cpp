@@ -82,8 +82,9 @@ void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const
     m_logViewer->appendLog(type, msg);
 }
 
-void MainWindow::loadAnyPath(const QString &dirOrFilePath)
+void MainWindow::openDirOrFile(const QString &dirOrFilePath)
 {
+    ui->dockWidget_fileSystemBrowser->setVisible(true);
     m_fileSystemBrowser->setPath(dirOrFilePath);
     tryToLoadKissFilePath(dirOrFilePath, QKiSS::FileLoadMode::LoadAsIndependent);
 }
@@ -407,7 +408,7 @@ void MainWindow::renderRecentFiles()
     foreach (const QString &path, m_recentFiles) {
         QAction *act = new QAction(menuRecentFiles);
         act->setText(path);
-        connect(act, &QAction::triggered, this, [=]() { loadAnyPath(path); });
+        connect(act, &QAction::triggered, this, [=]() { openDirOrFile(path); });
         menuRecentFiles->addAction(act);
     }
     menuRecentFiles->addSeparator();
@@ -424,7 +425,7 @@ void MainWindow::renderRecentFiles()
     foreach (const QString &path, m_recentDirs) {
         QAction *act = new QAction(menuRecentDirs);
         act->setText(path);
-        connect(act, &QAction::triggered, this, [=]() { loadAnyPath(path); });
+        connect(act, &QAction::triggered, this, [=]() { openDirOrFile(path); });
         menuRecentDirs->addAction(act);
     }
     menuRecentDirs->addSeparator();
