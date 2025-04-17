@@ -1,5 +1,8 @@
 #include "encoding.h"
 #include <QDebug>
+
+#if defined(HAVE_ICUa)
+
 namespace icu {
 #include <unicode/ucnv.h>
 }
@@ -50,3 +53,36 @@ QString Encoding::toUtf8(const QByteArray &input, QKiSS::Encoding encoding)
     }
     return QString::fromLatin1(input);
 }
+
+#elif defined(HAVE_ICONV)
+
+namespace ic {
+extern "C" {
+#include <iconv.h>
+}
+}
+
+// Forked from https://note.com/rakko_v30/n/ncbe33ecaea13
+std::string Encoding::toUtf8(const std::string& input, const char *converterName) {
+    ic::iconv_open("UTF8", converterName);
+    return utf8_str;
+}
+
+
+QString Encoding::toUtf8(const QByteArray &input, const char *converterName) {
+    return QString::fromStdString(toUtf8(input.toStdString(), converterName));
+}
+
+QString Encoding::toUtf8(const QByteArray &input, QKiSS::Encoding encoding)
+{
+    switch (encoding) {
+    case QKiSS::Encoding::ASCII: return QString::fromLatin1(input);
+    case QKiSS::Encoding::UTF8: return QString::fromUtf8(input);
+    case QKiSS::Encoding::SJIS: return toUtf8(input, "Shift_JIS");
+    case QKiSS::Encoding::EUC_JP: return toUtf8(input, "EUC-JP");
+    case QKiSS::Encoding::ISO_2022_JP: return toUtf8(input, "ISO-2022-JP");
+    }
+    return QString::fromLatin1(input);
+}
+
+#endif
