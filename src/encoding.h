@@ -10,9 +10,10 @@
 class Encoding {
 public:
     Encoding() {};
-    static std::string toUtf8(const std::string &input, const char* converterName);
-    static QString toUtf8(const QByteArray &input, const char* converterName);
     static QString toUtf8(const QByteArray &input, QKiSS::Encoding encoding);
+private:
+    /// encoding name may be not portable for iconv, so you can pass multiple possible.
+    static std::string innerToUtf8(const std::string &input, const std::vector<std::string> &fromEncodingAlias);
 
 };
 #endif // ENCODING_H

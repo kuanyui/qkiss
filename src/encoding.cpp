@@ -1,36 +1,60 @@
 #include "encoding.h"
 #include <QDebug>
 
-#if defined(HAVE_ICUa)
+#if defined(HAVE_ICU)
+
+#define qd qDebug() << "[ICU] "
 
 namespace icu {
 #include <unicode/ucnv.h>
 }
 
+QString Encoding::toUtf8(const QByteArray &input, QKiSS::Encoding encoding)
+{
+    switch (encoding) {
+    case QKiSS::Encoding::ASCII: return QString::fromLatin1(input);
+    case QKiSS::Encoding::UTF8: return QString::fromUtf8(input);
+    case QKiSS::Encoding::SJIS: return QString::fromStdString(innerToUtf8(input.toStdString(), {"Shift_JIS"}));
+    case QKiSS::Encoding::EUC_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"EUC-JP"}));
+    case QKiSS::Encoding::ISO_2022_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"ISO-2022-JP"}));
+    }
+    return QString::fromLatin1(input);
+}
+
 // Forked from https://note.com/rakko_v30/n/ncbe33ecaea13
-std::string Encoding::toUtf8(const std::string& input, const char *converterName) {
+std::string Encoding::innerToUtf8(const std::string& input, const std::vector<std::string> &fromEncodings) {
     icu::UErrorCode error_code = icu::U_ZERO_ERROR;
-    icu::UConverter* sjis_converter = ucnv_open(converterName, &error_code);
-    if (U_FAILURE(error_code)) {
-        qDebug() << "Failed to create Shift-JIS converter" << "\n";
+    if (fromEncodings.size() == 0) {
         return "";
     }
-
-    int32_t utf8_len = ucnv_toAlgorithmic(icu::UCNV_UTF8, sjis_converter, nullptr, 0, input.c_str(), input.length(), &error_code);
+    icu::UConverter* icuConverter = nullptr;
+    bool icuOpened = false;
+    for (const std::string &fromEnc : fromEncodings) {
+        icuConverter = icu::ucnv_open(fromEnc.c_str(), &error_code);
+        if (icu::U_SUCCESS(error_code)) {
+            icuOpened = true;
+            break;
+        }
+    }
+    if (!icuOpened) {
+        qd << "Tried to open converter in this list, but failed:" << fromEncodings;
+        return "";
+    }
+    int32_t utf8_len = icu::ucnv_toAlgorithmic(icu::UCNV_UTF8, icuConverter, nullptr, 0, input.c_str(), input.length(), &error_code);
     if (error_code != icu::U_BUFFER_OVERFLOW_ERROR) {
-        qDebug() << "Failed to estimate buffer size for UTF-8 conversion" << "\n";
-        ucnv_close(sjis_converter);
+        qd << "Failed to estimate buffer size for UTF-8 conversion" << "\n";
+        icu::ucnv_close(icuConverter);
         return "";
     }
 
     error_code = icu::U_ZERO_ERROR;
     std::string utf8_str(utf8_len, '\0');
-    ucnv_toAlgorithmic(icu::UCNV_UTF8, sjis_converter, &utf8_str[0], utf8_len, input.c_str(), input.length(), &error_code);
+    icu::ucnv_toAlgorithmic(icu::UCNV_UTF8, icuConverter, &utf8_str[0], utf8_len, input.c_str(), input.length(), &error_code);
 
-    ucnv_close(sjis_converter);
+    icu::ucnv_close(icuConverter);
 
-    if (U_FAILURE(error_code)) {
-        qDebug() << "Failed to convert Shift-JIS to UTF-8" << "\n";
+    if (icu::U_FAILURE(error_code)) {
+        qd << "Failed to convert Shift-JIS to UTF-8" << "\n";
         return "";
     }
 
@@ -38,51 +62,64 @@ std::string Encoding::toUtf8(const std::string& input, const char *converterName
 }
 
 
-QString Encoding::toUtf8(const QByteArray &input, const char *converterName) {
-    return QString::fromStdString(toUtf8(input.toStdString(), converterName));
-}
-
-QString Encoding::toUtf8(const QByteArray &input, QKiSS::Encoding encoding)
-{
-    switch (encoding) {
-    case QKiSS::Encoding::ASCII: return QString::fromLatin1(input);
-    case QKiSS::Encoding::UTF8: return QString::fromUtf8(input);
-    case QKiSS::Encoding::SJIS: return toUtf8(input, "Shift_JIS");
-    case QKiSS::Encoding::EUC_JP: return toUtf8(input, "EUC-JP");
-    case QKiSS::Encoding::ISO_2022_JP: return toUtf8(input, "ISO-2022-JP");
-    }
-    return QString::fromLatin1(input);
-}
-
 #elif defined(HAVE_ICONV)
 
-namespace ic {
+#define qd qDebug() << "[iconv]"
+
 extern "C" {
 #include <iconv.h>
 }
-}
-
-// Forked from https://note.com/rakko_v30/n/ncbe33ecaea13
-std::string Encoding::toUtf8(const std::string& input, const char *converterName) {
-    ic::iconv_open("UTF8", converterName);
-    return utf8_str;
-}
-
-
-QString Encoding::toUtf8(const QByteArray &input, const char *converterName) {
-    return QString::fromStdString(toUtf8(input.toStdString(), converterName));
-}
 
 QString Encoding::toUtf8(const QByteArray &input, QKiSS::Encoding encoding)
 {
     switch (encoding) {
     case QKiSS::Encoding::ASCII: return QString::fromLatin1(input);
     case QKiSS::Encoding::UTF8: return QString::fromUtf8(input);
-    case QKiSS::Encoding::SJIS: return toUtf8(input, "Shift_JIS");
-    case QKiSS::Encoding::EUC_JP: return toUtf8(input, "EUC-JP");
-    case QKiSS::Encoding::ISO_2022_JP: return toUtf8(input, "ISO-2022-JP");
+    case QKiSS::Encoding::SJIS: return QString::fromStdString(innerToUtf8(input.toStdString(), {"SJIS", "SHIFT-JIS"}));
+    case QKiSS::Encoding::EUC_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"EUC-JP"}));
+    case QKiSS::Encoding::ISO_2022_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"ISO-2022-JP"}));
     }
     return QString::fromLatin1(input);
 }
+
+std::string Encoding::innerToUtf8(const std::string& input, const std::vector<std::string> &fromEncodings) {
+    iconv_t cd;
+    bool opened = false;
+    for (const std::string &fromEnc : fromEncodings) {
+        cd = iconv_open("UTF-8", fromEnc.c_str());
+        if (cd == (iconv_t)-1) {   // if open failed.
+            continue;
+        } else {
+            opened = true;
+            break;
+        }
+    }
+    if (!opened) {
+        qd << "iconv_open() failed. Already tried:" << fromEncodings;
+        return "";
+    }
+    // input buffer
+    size_t inBytesLeft = input.size();
+    char *inBuf = const_cast<char*>(input.data());   // don't use C-style cast here to avoid UB...
+
+    // output buffer
+    size_t outBufSize = input.size() * 4;   // std::string::size() returns size_t in bytes,
+    size_t outBytesLeft = outBufSize;
+    std::string outStr (outBytesLeft, '\0');   // init std::string filled with `\0`
+    char *outBuf = outStr.data();
+
+    // convert
+    size_t result = iconv(cd, &inBuf, &inBytesLeft, &outBuf, &outBytesLeft);
+    if (result == (size_t)-1) {
+        qd << "conversion failed.";
+        iconv_close(cd);
+        return "";
+    }
+    outStr.resize(outBufSize - outBytesLeft);
+    iconv_close(cd);
+    return outStr;
+}
+
+
 
 #endif
