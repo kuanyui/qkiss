@@ -22,29 +22,71 @@ endif()
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent Multimedia)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent Multimedia)
-find_package(ICU REQUIRED COMPONENTS uc i18n data)
-find_package(LibArchive REQUIRED)
 
+set(EXTRA_INCS)
+set(EXTRA_DEFS)
+set(EXTRA_LIBS)
+
+
+# ===============================================
+# iconv
+# ===============================================
+# find_library(ICONV_LIB NAMES iconv libiconv)    // Unreliable because may be built-in in glibc
+# find_path(ICONV_INCLUDE_DIR NAMES iconv.h)
+find_package(Iconv)
+if(Iconv_FOUND)
+  list(APPEND EXTRA_DEFS HAVE_ICONV)
+  list(APPEND EXTRA_INCS ${Iconv_INCLUDE_DIRS})
+  list(APPEND EXTRA_LIBS ${Iconv_LIBRARIES})
+else()
+    # Is this truly necessary?
+    include(CheckFunctionExists)
+    include(CheckIncludeFile)
+    check_function_exists(iconv_open ICONV_EXISTS)
+    check_include_file_cxx(iconv.h ICONV_H_EXISTS)
+    if(ICONV_EXISTS AND ICONV_H_EXISTS)
+        message(STATUS "Found iconv: ${ICONV_LIB}")
+        list(APPEND EXTRA_DEFS HAVE_ICONV)
+        list(APPEND EXTRA_INCS ${ICONV_INCLUDE_DIR})
+        list(APPEND EXTRA_LIBS ${ICONV_LIB})
+    else()
+        message(STATUS "iconv not found.")
+    endif()
+endif()
+# ===============================================
+# ICU
+# ===============================================
+find_package(ICU COMPONENTS uc i18n data)
+if(ICU_FOUND)
+    list(APPEND EXTRA_DEFS HAVE_ICU)
+    list(APPEND EXTRA_INCS ${ICU_INCLUDE_DIRS})
+    list(APPEND EXTRA_LIBS ${ICU_LIBRARIES})
+endif()
+
+# ===============================================
+# LibArchive
+# ===============================================
+find_package(LibArchive)
+if(LibArchive_FOUND)
+    list(APPEND EXTRA_DEFS HAVE_LIBARCHIVE)
+    list(APPEND EXTRA_INCS ${LibArchive_INCLUDE_DIRS})
+    list(APPEND EXTRA_LIBS LibArchive::LibArchive)
+endif()
+
+# ===============================================
 ### Build Icons
+# ===============================================
 find_package(Python3 REQUIRED Interpreter)
 set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
 set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
 set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
 execute_process(
     COMMAND ${Python3_EXECUTABLE} ${ICON_BUILD_SCRIPT} --included-icon-file "${RESOURCES_DIR}/included_icons.txt" --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon" --output-theme-name "CustomizedTango"
-
 )
 set_property(
     DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${RESOURCES_DIR}/included_icons.txt"
 )
 
-if(ICU_FOUND)
-    include_directories(${ICU_INCLUDE_DIRS})
-endif()
-
-if(LibArchive_FOUND)
-    include_directories(${LibArchive_INCLUDE_DIRS})
-endif()
 
 set(TS_FILES qkiss_en_US.ts)
 
@@ -116,13 +158,16 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
+target_compile_definitions(qkiss PRIVATE ${EXTRA_DEFS})
+target_include_directories(qkiss PRIVATE ${EXTRA_INCS})
 
 target_link_libraries(qkiss PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Concurrent
     Qt${QT_VERSION_MAJOR}::Multimedia
-    ${ICU_LIBRARIES}
-    LibArchive::LibArchive)
+    ${EXTRA_LIBS}
+    )
+
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
