@@ -2,6 +2,8 @@
 #include <QFuture>
 #include <QFutureWatcher>
 
+#ifdef HAVE_LIBARCHIVE
+
 #include "archiveprocessorlibarchive.h"
 
 namespace la {   // libarchive
@@ -21,7 +23,6 @@ ArchiveProcessorLibarchive::~ArchiveProcessorLibarchive()
 {
 
 }
-
 
 
 QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extractFileAsPromise(const QString &lzhOrCnfFilePath)
@@ -143,3 +144,5 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
 
     return filesDict;
 }
+
+#endif
