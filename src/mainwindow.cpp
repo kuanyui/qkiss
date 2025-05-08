@@ -310,6 +310,7 @@ void MainWindow::setupDockWindows()
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
     ui->dockWidget_fileSystemBrowser->toggleViewAction()->setIcon(QIcon::fromTheme("system-file-manager"));
+    ui->menu_Window->addAction(ui->dockWidget_fileSystemBrowser->toggleViewAction());
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
     // ==================================================
     // Inner Files Browser
@@ -317,6 +318,7 @@ void MainWindow::setupDockWindows()
     m_innerFilesBrowser = new InnerFilesBrowser(this);
     ui->dockWidget_innerFileSelector->setWidget(m_innerFilesBrowser);
     ui->dockWidget_innerFileSelector->toggleViewAction()->setIcon(QIcon::fromTheme("package-unzipped"));
+    ui->menu_Window->addAction(ui->dockWidget_innerFileSelector->toggleViewAction());
 
     // ==================================================
     // Log Viewer
@@ -324,6 +326,7 @@ void MainWindow::setupDockWindows()
     m_logViewer = new LogViewer(this);
     ui->dockWidget_logViewer->setWidget(m_logViewer);
     ui->dockWidget_logViewer->toggleViewAction()->setIcon(QIcon::fromTheme("logviewer", QIcon::fromTheme("utilities-system-monitor")));
+    ui->menu_Window->addAction(ui->dockWidget_logViewer->toggleViewAction());
 
     // ==================================================
     // Code Editor
@@ -331,6 +334,7 @@ void MainWindow::setupDockWindows()
     m_codeEditor = new CodeEditor(this);
     ui->dockWidget_cnfCodeViewer->setWidget(m_codeEditor);
     ui->dockWidget_cnfCodeViewer->toggleViewAction()->setIcon(QIcon::fromTheme("applications-development"));
+    ui->menu_Window->addAction(ui->dockWidget_cnfCodeViewer->toggleViewAction());
     // ==================================================
     // Doc Viewer
     // ==================================================
@@ -341,6 +345,7 @@ void MainWindow::setupDockWindows()
     m_docViewer->setFont(fontMono);
     ui->dockWidget_docViewer->setWidget(m_docViewer);
     ui->dockWidget_docViewer->toggleViewAction()->setIcon(QIcon::fromTheme("text-x-readme", QIcon::fromTheme("accessories-text-editor")));
+    ui->menu_Window->addAction(ui->dockWidget_docViewer->toggleViewAction());
 
     // ==================================================
     // (Signals)
