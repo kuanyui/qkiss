@@ -62,7 +62,7 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     int padVert = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
     // qDebug() << padHori << padVert;
     int itemHeight = opt.rect.height();
-    int itemIconSize = itemHeight - padVert * 2;
+    int itemIconSize = itemHeight - padVert * 3;   // FIXME: Magic number... Donno why 2 gives out a too-large icon after upgrade Qt...
     QRect iconRect;
     QRect textRect;
 
