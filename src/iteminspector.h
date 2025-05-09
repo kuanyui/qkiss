@@ -2,11 +2,11 @@
 #define ITEMINSPECTOR_H
 
 #include <QObject>
-#include <QTreeWidget>
+#include <QTableWidget>
 
 class GKissItem;
 
-class ItemInspector : public QTreeWidget
+class ItemInspector : public QTableWidget
 {
     Q_OBJECT
 public:
@@ -14,15 +14,15 @@ public:
     void setInspectedItem(GKissItem *item);
 signals:
 private:
-    void appendKvRow(QTreeWidgetItem **item, const QString &icon, const QString &title);
+    void appendKvRow(QTableWidgetItem **item, const QString &icon, const QString &title);
     GKissItem *m_curItem;
-    QTreeWidgetItem *m_twFix;
-    QTreeWidgetItem *m_twObjId;
-    QTreeWidgetItem *m_twCelPos;
-    QTreeWidgetItem *m_twCelName;
-    QTreeWidgetItem *m_twCelSize;
-    QTreeWidgetItem *m_twCelComment;
-    QTreeWidgetItem *m_twCelSiblings;
+    QTableWidgetItem *m_twFix;
+    QTableWidgetItem *m_twObjId;
+    QTableWidgetItem *m_twCelPos;
+    QTableWidgetItem *m_twCelName;
+    QTableWidgetItem *m_twCelSize;
+    QTableWidgetItem *m_twCelComment;
+    QTableWidgetItem *m_twCelSiblings;
 };
 
 #endif // ITEMINSPECTOR_H
