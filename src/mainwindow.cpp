@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
 #include <QToolButton>
 #include <QString>
 #include <QLabel>
@@ -8,6 +7,8 @@
 #include <QSettings>
 #include <QShortcut>
 #include "archiveprocessorfactory.h"
+#include "iteminspector.h"
+#include "src/ui_mainwindow.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -33,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(m_kissView, &GKissView::highlightedItemChanged, this, [=](GKissItem *item) {
+        m_itemInspector->setInspectedItem(item);
         if (item == nullptr) {
             statusBar()->clearMessage();
         } else {
@@ -283,6 +285,14 @@ void MainWindow::setupToolBars()
     m_toolbarWindows->addAction(ui->dockWidget_docViewer->toggleViewAction());
     m_toolbarWindows->addAction(ui->dockWidget_cnfCodeViewer->toggleViewAction());
     m_toolbarWindows->addAction(ui->dockWidget_logViewer->toggleViewAction());
+    m_toolbarWindows->addAction(ui->dockWidget_itemInspector->toggleViewAction());
+    ui->menu_Window->addAction(ui->dockWidget_fileSystemBrowser->toggleViewAction());
+    ui->menu_Window->addAction(ui->dockWidget_innerFileSelector->toggleViewAction());
+    ui->menu_Window->addAction(ui->dockWidget_docViewer->toggleViewAction());
+    ui->menu_Window->addAction(ui->dockWidget_cnfCodeViewer->toggleViewAction());
+    ui->menu_Window->addAction(ui->dockWidget_logViewer->toggleViewAction());
+    ui->menu_Window->addAction(ui->dockWidget_itemInspector->toggleViewAction());
+
     m_toolbarWindows->setObjectName("MainWindowDocksToolbar");   // objectName is required when `QMainWindow::saveState()`
     // Page Sets
     m_toolbarSceneSets = new QToolBar(this);
@@ -299,26 +309,26 @@ void MainWindow::setupToolBars()
 
 void MainWindow::setupDockWindows()
 {
-    setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);  // Make bottom dock cannot stretch to bottom-left corner.
+    setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::LeftDockWidgetArea);  // Make bottom dock cannot stretch to bottom-left corner.
     // tabifyDockWidget(ui->dockWidget_logViewer, ui->dockWidget_textFileViewer);
     // ui->dockWidget_logViewer->raise();  // activate "logs viewer" tab.
-    addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_cnfCodeViewer);
-    addDockWidget(Qt::BottomDockWidgetArea, ui->dockWidget_logViewer);
+    addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, ui->dockWidget_cnfCodeViewer);
+    addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, ui->dockWidget_logViewer);
+    addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, ui->dockWidget_itemInspector);
     // ==================================================
     // File System Browser
     // ==================================================
     m_fileSystemBrowser = new FileSystemBrowser(this);
     ui->dockWidget_fileSystemBrowser->setWidget(m_fileSystemBrowser);
     ui->dockWidget_fileSystemBrowser->toggleViewAction()->setIcon(QIcon::fromTheme("system-file-manager"));
-    ui->menu_Window->addAction(ui->dockWidget_fileSystemBrowser->toggleViewAction());
     // ui->dockWidget_fileSystemBrowser->resize(270, ui->dockWidget_fileSystemBrowser->height());
+
     // ==================================================
     // Inner Files Browser
     // ==================================================
     m_innerFilesBrowser = new InnerFilesBrowser(this);
     ui->dockWidget_innerFileSelector->setWidget(m_innerFilesBrowser);
     ui->dockWidget_innerFileSelector->toggleViewAction()->setIcon(QIcon::fromTheme("package-unzipped"));
-    ui->menu_Window->addAction(ui->dockWidget_innerFileSelector->toggleViewAction());
 
     // ==================================================
     // Log Viewer
@@ -326,7 +336,6 @@ void MainWindow::setupDockWindows()
     m_logViewer = new LogViewer(this);
     ui->dockWidget_logViewer->setWidget(m_logViewer);
     ui->dockWidget_logViewer->toggleViewAction()->setIcon(QIcon::fromTheme("logviewer", QIcon::fromTheme("utilities-system-monitor")));
-    ui->menu_Window->addAction(ui->dockWidget_logViewer->toggleViewAction());
 
     // ==================================================
     // Code Editor
@@ -334,7 +343,7 @@ void MainWindow::setupDockWindows()
     m_codeEditor = new CodeEditor(this);
     ui->dockWidget_cnfCodeViewer->setWidget(m_codeEditor);
     ui->dockWidget_cnfCodeViewer->toggleViewAction()->setIcon(QIcon::fromTheme("applications-development"));
-    ui->menu_Window->addAction(ui->dockWidget_cnfCodeViewer->toggleViewAction());
+
     // ==================================================
     // Doc Viewer
     // ==================================================
@@ -345,8 +354,13 @@ void MainWindow::setupDockWindows()
     m_docViewer->setFont(fontMono);
     ui->dockWidget_docViewer->setWidget(m_docViewer);
     ui->dockWidget_docViewer->toggleViewAction()->setIcon(QIcon::fromTheme("text-x-readme", QIcon::fromTheme("accessories-text-editor")));
-    ui->menu_Window->addAction(ui->dockWidget_docViewer->toggleViewAction());
 
+    // ==================================================
+    // Item Inspector
+    // ==================================================
+    m_itemInspector = new ItemInspector(this);
+    ui->dockWidget_itemInspector->setWidget(m_itemInspector);
+    ui->dockWidget_itemInspector->toggleViewAction()->setIcon(QIcon::fromTheme("inspector"));
     // ==================================================
     // (Signals)
     // ==================================================

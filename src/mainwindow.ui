@@ -135,6 +135,15 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_6"/>
   </widget>
+  <widget class="QDockWidget" name="dockWidget_itemInspector">
+   <property name="windowTitle">
+    <string>Item Inspector</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_9"/>
+  </widget>
   <action name="action_openFile">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::DocumentOpen"/>

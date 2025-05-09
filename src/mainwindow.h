@@ -12,6 +12,7 @@
 #include "logviewer.h"
 #include "innerfilesbrowser.h"
 #include "codeeditor.h"
+#include "iteminspector.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -67,6 +68,7 @@ protected:
     LogViewer *m_logViewer;
     InnerFilesBrowser *m_innerFilesBrowser;
     CodeEditor *m_codeEditor;
+    ItemInspector *m_itemInspector;
     QPlainTextEdit *m_docViewer;
     QStringList m_recentFiles;
     QStringList m_recentDirs;

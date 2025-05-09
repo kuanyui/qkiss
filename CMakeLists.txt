@@ -87,7 +87,6 @@ set_property(
     DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${RESOURCES_DIR}/included_icons.txt"
 )
 
-
 set(TS_FILES qkiss_en_US.ts)
 
 set(PROJECT_SOURCES
@@ -134,6 +133,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/archiveprocessorlibarchive.h src/archiveprocessorlibarchive.cpp
         src/archiveprocessorfactory.h src/archiveprocessorfactory.cpp
         src/audioplayer.h src/audioplayer.cpp
+        src/iteminspector.h src/iteminspector.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
