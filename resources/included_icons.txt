@@ -62,8 +62,8 @@ BlueGnome		sticky-note		comment
 
 # InkscapeTango		show-guides		position
 GimpDefault		gimp-resize		cel-size
-#InkscapeTango		layer-rename		cel-file-name
-Gnome		image-x-generic		cel-file-name
+InkscapeTango		layer-rename		cel-file-name
+Gnome		image-x-generic		cel-file-preview
 Gnome		tomboy-tag		obj-id
 GimpDefault		gimp-transform-3d-move	obj-pos
 InkscapeTango		distribute-randomize	obj-cels

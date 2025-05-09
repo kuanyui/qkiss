@@ -2,11 +2,12 @@
 #define ITEMINSPECTOR_H
 
 #include <QObject>
-#include <QTableWidget>
+#include <QGridLayout>
+#include <QLabel>
 
 class GKissItem;
 
-class ItemInspector : public QTableWidget
+class ItemInspector : public QWidget
 {
     Q_OBJECT
 public:
@@ -14,15 +15,17 @@ public:
     void setInspectedItem(GKissItem *item);
 signals:
 private:
-    void appendKvRow(QTableWidgetItem **item, const QString &icon, const QString &title);
+    void appendKvRow(QLabel **item, const QString &icon, const QString &title);
     GKissItem *m_curItem;
-    QTableWidgetItem *m_twFix;
-    QTableWidgetItem *m_twObjId;
-    QTableWidgetItem *m_twCelPos;
-    QTableWidgetItem *m_twCelName;
-    QTableWidgetItem *m_twCelSize;
-    QTableWidgetItem *m_twCelComment;
-    QTableWidgetItem *m_twCelSiblings;
+    QGridLayout *m_layout;
+    QLabel *m_twFix;
+    QLabel *m_twObjId;
+    QLabel *m_twCelPos;
+    QLabel *m_twCelName;
+    QLabel *m_twCelSize;
+    QLabel *m_twCelComment;
+    QLabel *m_twCelSiblings;
+    QLabel *m_twCelPreview;
 };
 
 #endif // ITEMINSPECTOR_H
