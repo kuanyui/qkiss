@@ -1,20 +1,28 @@
 #include "iteminspector.h"
 #include "gkissitem.h"
 #include <QHeaderView>
+#include <QScrollBar>
+#include <QVBoxLayout>
 
 using namespace Qt::StringLiterals;
 
 ItemInspector::ItemInspector(QWidget *parent)
-    : QWidget{parent},
-    m_layout {new QGridLayout(this)}
+    : QWidget{parent}
 {
-    static auto titleStyle = "font-weight: bold; color: gray;"_L1;
-    auto attr = new QLabel(tr("Attribute"));
-    auto val = new QLabel(tr("Value"));
-    attr->setStyleSheet(titleStyle);
-    val->setStyleSheet(titleStyle);
-    m_layout->addWidget(attr, 0, 1);
-    m_layout->addWidget(val, 0, 2);
+    QVBoxLayout *vboxLayout = new QVBoxLayout{this};
+    QScrollArea *scrollArea = new QScrollArea{};
+    QWidget *scrolledWidget = new QWidget{};
+    m_gridLayout = new QGridLayout();
+    vboxLayout->addWidget(scrollArea);
+    scrollArea->setWidget(scrolledWidget);
+    scrolledWidget->setLayout(m_gridLayout);
+
+    scrollArea->setWidgetResizable(true);  // Important!!! QLabel is invisible without this.
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_gridLayout->setColumnStretch(2, 1);    // Important!!!!!!!! Do NOT use QLabel::setSizePolicy() to expand, it breaks QScrollArea.
+    // scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    // int scrollbarWidth = scrollArea->verticalScrollBar()->sizeHint().width();
+
     appendKvRow(&m_twCelName, "cel-file-name", tr("CEL File"));
     appendKvRow(&m_twObjId, "obj-id", tr("Object ID"));
     appendKvRow(&m_twCelPos, "obj-pos", tr("CEL Position"));
@@ -23,7 +31,7 @@ ItemInspector::ItemInspector(QWidget *parent)
     appendKvRow(&m_twCelComment, "comment", tr("CEL Comment"));
     appendKvRow(&m_twCelPreview, "cel-file-preview", tr("CEL Preview"));
     appendKvRow(&m_twCelSiblings, "obj-cels", tr("CEL Siblings"));
-    m_layout->setRowStretch(m_layout->rowCount(), 1);
+    m_gridLayout->setRowStretch(m_gridLayout->rowCount(), 1);
 }
 
 #define argn(num) arg(QString::number(num))
@@ -71,23 +79,24 @@ void ItemInspector::appendKvRow(QLabel **ppLabel, const QString &icon, const QSt
     QFontMetrics metrics(defaultFont);
     int h = metrics.height();
 
-    int r = m_layout->rowCount();
+    int r = m_gridLayout->rowCount();
     auto iconLabel = new QLabel(this);
     iconLabel->setPixmap(QIcon::fromTheme(icon).pixmap(h, h));
     iconLabel->setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Minimum);
-    m_layout->addWidget(iconLabel, r, 0, Qt::AlignTop);
+    m_gridLayout->addWidget(iconLabel, r, 0, Qt::AlignTop);
 
     auto keyLabel = new QLabel(this);
     keyLabel->setText(title);
     keyLabel->setStyleSheet("font-weight: bold; color: gray;"_L1);
     keyLabel->setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Minimum);
-    m_layout->addWidget(keyLabel, r, 1, Qt::AlignTop);
+    m_gridLayout->addWidget(keyLabel, r, 1, Qt::AlignTop);
 
 
     (*ppLabel) = new QLabel(this);
     QLabel *valueLabel = (*ppLabel);
     valueLabel->setWordWrap(true);
-    valueLabel->setSizePolicy(QSizePolicy::Policy::MinimumExpanding, QSizePolicy::Policy::Minimum);
-    m_layout->addWidget(valueLabel, r, 2, Qt::AlignTop);
+    valueLabel->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Minimum);
+    m_gridLayout->addWidget(valueLabel, r, 2, Qt::AlignTop);
 
 }
+

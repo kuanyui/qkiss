@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QGridLayout>
 #include <QLabel>
+#include <QScrollArea>
+
 
 class GKissItem;
 
@@ -14,10 +16,11 @@ public:
     explicit ItemInspector(QWidget *parent = nullptr);
     void setInspectedItem(GKissItem *item);
 signals:
+
 private:
     void appendKvRow(QLabel **item, const QString &icon, const QString &title);
     GKissItem *m_curItem;
-    QGridLayout *m_layout;
+    QGridLayout *m_gridLayout;
     QLabel *m_twFix;
     QLabel *m_twObjId;
     QLabel *m_twCelPos;
@@ -26,6 +29,9 @@ private:
     QLabel *m_twCelComment;
     QLabel *m_twCelSiblings;
     QLabel *m_twCelPreview;
+
+    // QWidget interface
+protected:
 };
 
 #endif // ITEMINSPECTOR_H
