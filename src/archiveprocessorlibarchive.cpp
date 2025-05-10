@@ -65,7 +65,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extr
     QtConcurrent::run(callLibarchiveToExtractArchiveInMemory, archiveData).then([this, promise, finalExtractedFilesDict] (QFuture<std::shared_ptr<ExtractedRawFilesMap>> resFut) {
         auto libarchiveFilesDict = resFut.result();
         for (auto laIt = libarchiveFilesDict->begin(); laIt != libarchiveFilesDict->end(); laIt++) {
-            if (laIt.key().toUpper().endsWith(".LZH")) {
+            if (laIt.key().endsWith(".LZH"_L1, Qt::CaseInsensitive)) {
                 // Found another LZH in this LZH, call this method again and wait for finished.
                 auto nestedLzhFileContent = laIt.value();
                 auto nestedFuture = extractArchiveInMemory(nestedLzhFileContent);

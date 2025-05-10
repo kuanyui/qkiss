@@ -1,21 +1,26 @@
 #include "archiveprocessorexternallha.h"
 
 #include <QDirIterator>
+#include <QTemporaryDir>
 
 using namespace Qt::Literals::StringLiterals;
 
+#define argn(num) arg(QString::number(num))
 
 ArchiveProcessorExternalLha::ArchiveProcessorExternalLha(QObject *parent)
     : AbstractArchiveProcessor{parent},
-      m_process{new QProcess(this)}
+      m_process{new QProcess(this)},
+      m_extractedFiles{std::make_shared<QMap<QString, QByteArray>>()}
 {
     connect(m_process, &QProcess::readyRead, this, &ArchiveProcessorExternalLha::onQProcessReadyRead);
     connect(m_process, &QProcess::finished, this, &ArchiveProcessorExternalLha::onQProcessFinished);
+    m_tmpDir = new QTemporaryDir(QDir(QDir::tempPath()).filePath("qtkiss-extracted-XXXXXX"));
     // connect(m_process, &QProcess::errorOccurred, this, &ArchiveProcessor::onProcessErrorOccurred);
 }
 
 ArchiveProcessorExternalLha::~ArchiveProcessorExternalLha()
 {
+    delete m_tmpDir;
 }
 
 QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::extractFileAsPromise(const QString &lzhOrCnfFilePath)
@@ -24,6 +29,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     QFuture<std::shared_ptr<ExtractedRawFilesMap>> future = promise->future();
     QFileInfo fileInfo {lzhOrCnfFilePath};
     QString fileName = fileInfo.fileName();
+    m_extractedFiles = std::make_shared<QMap<QString, QByteArray>>();
     promise->start();
     if (lzhOrCnfFilePath.toUpper().endsWith(".CNF"_L1)) {
         qInfo().noquote() << tr("Reading a CNF file \"%1\" directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...").arg(lzhOrCnfFilePath);
@@ -147,7 +153,6 @@ void ArchiveProcessorExternalLha::onQProcessFinished(int exitCode, QProcess::Exi
         emit extractFail(m_archiveFilePath, "Extract failed.");
         return;
     }
-    auto filesMap = std::make_shared<QMap<QString, QByteArray>>();
     int pos = 0;
     foreach (const auto fileSummary, m_filesSummaryList)  {
         QString fileName = fileSummary.first;
@@ -158,11 +163,33 @@ void ArchiveProcessorExternalLha::onQProcessFinished(int exitCode, QProcess::Exi
         // qDebug() << "=====================================";
         // qDebug() << data;
         pos += byteSize;
-        filesMap->insert(fileName, data);
+        if (!fileName.endsWith(".LZH"_L1, Qt::CaseInsensitive)) {
+            m_extractedFiles->insert(fileName, data);
+        } else {   // Nested LZH file
+            QString tmpFilePath = m_tmpDir->filePath(fileName);
+            QFile tmpFile { tmpFilePath };
+            if (!tmpFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                    emit extractFail(m_archiveFilePath, tr("Failed when extracting nested LZH file \"%1\" (failed to open tmp file \"%2\").").arg(fileName).arg(tmpFilePath));
+                    return;
+                }
+            qint64 writtenBytes = tmpFile.write(data);
+            if (writtenBytes != data.size()) {
+                emit extractFail(m_archiveFilePath, tr("Partial write occurred. Expected: %1 bytes, actual: %2 bytes").argn(data.size()).argn(writtenBytes));
+                tmpFile.close();
+                return;
+            }
+            m_tmpNestedLzhFilePathList.append(tmpFilePath);
+            tmpFile.close();
+        }
     }
     qDebug() << "[LOG][Benchmark][ArchiveProcessor] Decompression spent " << m_elapsedTimer.elapsed() << " ms";
     m_buffer.clear();
-    emit extractSuccess(m_archiveFilePath, filesMap);
+    if (m_tmpNestedLzhFilePathList.length()) {
+        QString nextLzhFilePath = m_tmpNestedLzhFilePathList.takeLast();
+        callExternalProgramOrLibraryToExtractLzh(nextLzhFilePath);
+    } else {
+        emit extractSuccess(m_archiveFilePath, m_extractedFiles);
+    }
     return;
 }
 

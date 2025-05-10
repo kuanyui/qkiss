@@ -34,6 +34,10 @@ private:
     FilesSummaryList m_filesSummaryList;
     QByteArray m_buffer;
     QElapsedTimer m_elapsedTimer;
+    std::shared_ptr<QMap<QString, QByteArray>> m_extractedFiles;
+    QTemporaryDir *m_tmpDir;
+    /// If nested LZH file is existed, they will be written into system temporary directory (ex: /tmp/)
+    QStringList m_tmpNestedLzhFilePathList;
 };
 
 #endif // ARCHIVEPROCESSOREXTERNALLHA_H
