@@ -66,6 +66,9 @@ MainWindow::MainWindow(QWidget *parent)
         }
         m_kissView->scaleAbs(targetScale);
     });
+    connect(ui->action_zoomOut, &QAction::triggered, this, &MainWindow::zoomOut);
+    connect(ui->action_zoomIn, &QAction::triggered, this, &MainWindow::zoomIn);
+    connect(ui->action_resetScale, &QAction::triggered, this, &MainWindow::zoomReset);
 
     setCentralWidget(m_kissView);
     restoreWindowSettings();
@@ -487,6 +490,26 @@ void MainWindow::clearRecentDirs()
     m_recentDirs.clear();
     saveWindowSettings();
     renderRecentFiles();
+}
+
+void MainWindow::zoomIn()
+{
+    // Ordering: 4,3,2,1
+    int i = m_cboxZoomScale->currentIndex() - 1;
+    i = qMax(i, 0);
+    m_cboxZoomScale->setCurrentIndex(i);
+}
+
+void MainWindow::zoomOut()
+{
+    int i = m_cboxZoomScale->currentIndex() + 1;
+    i = qMin(i, m_cboxZoomScale->count() - 1);
+    m_cboxZoomScale->setCurrentIndex(i);
+}
+
+void MainWindow::zoomReset()
+{
+    m_cboxZoomScale->setCurrentText("1");
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

@@ -48,6 +48,9 @@ private:
 private slots:
     void clearRecentFiles();
     void clearRecentDirs();
+    void zoomIn();
+    void zoomOut();
+    void zoomReset();
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dragMoveEvent(QDragMoveEvent *event) override;
