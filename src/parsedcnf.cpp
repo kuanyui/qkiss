@@ -210,9 +210,9 @@ void ParsedCnf::parseLines(const QStringList &lines)
             // - full-width `;` or spaces         #5	BOU1.CEL　     ；（制服の帽子　表）
             //   (NOTE: it seems that `\s` doesn't include full-width space `　`)
             //
-            //                                     obj        fix         file               kcfIdx         setIdxArr             comment
-            //                                      v
-            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?\s+([^\s\t　*:]+)(?:\s*[*]\s*?(\d+))?(?:\s*[:]\s*?([\d\s]+))?(?:[;；](.*))?)#");
+            //                                     objId      fix            celFile                         kcfIdx                     setIdxArr         comment
+            //                                      V          V               V                               V                            V                 V
+            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?[\s　]+([^\s\t　*:]+)(?:[\s　]*[*][\s　]*?(\d+))?(?:[\s　]*[:][\s　]*?([\d\s　]+))?(?:[;；](.*))?)#");
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
@@ -222,7 +222,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             int32_t fix = m.captured(2).isEmpty() ? 0 : m.captured(2).toInt();
             QString celFileName = m.captured(3);
             int32_t kcfFileIndex =  m.captured(4).isEmpty() ? 0 :  m.captured(4).toInt();
-            static QRegularExpression reSpace("\\s+");
+            static QRegularExpression reSpace("[\\s　]+");
             QStringList setIndexesStrList;
             if (!m.captured(5).isEmpty()) {
                 setIndexesStrList = m.captured(5).trimmed().split(reSpace);
