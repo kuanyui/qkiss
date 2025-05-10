@@ -6,6 +6,7 @@
 #include <QMimeData>
 #include <QSettings>
 #include <QShortcut>
+#include <QFileDialog>
 #include "archiveprocessorfactory.h"
 #include "iteminspector.h"
 #include "src/ui_mainwindow.h"
@@ -69,7 +70,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_zoomOut, &QAction::triggered, this, &MainWindow::zoomOut);
     connect(ui->action_zoomIn, &QAction::triggered, this, &MainWindow::zoomIn);
     connect(ui->action_resetScale, &QAction::triggered, this, &MainWindow::zoomReset);
-
+    connect(ui->action_openFile, &QAction::triggered, this, &MainWindow::openFilePicker);
+    connect(ui->action_openDirectory, &QAction::triggered, this, &MainWindow::openDirPicker);
     setCentralWidget(m_kissView);
     restoreWindowSettings();
 }
@@ -424,7 +426,7 @@ void MainWindow::renderRecentFiles()
 {
     // Files
     auto menuRecentFiles = ui->menu_openRecentFile;
-    qDebug() << "[Render] Recent File = " << m_recentFiles;
+    // qDebug() << "[Render] Recent File = " << m_recentFiles;
     menuRecentFiles->setIcon(QIcon::fromTheme("recents"));
     menuRecentFiles->clear();
     foreach (const QString &path, m_recentFiles) {
@@ -440,7 +442,7 @@ void MainWindow::renderRecentFiles()
     connect(actClearFile, &QAction::triggered, this, &MainWindow::clearRecentFiles);
     menuRecentFiles->addAction(actClearFile);
     // Dirs
-    qDebug() << "[Render] Recent Dirs = " << m_recentDirs;
+    // qDebug() << "[Render] Recent Dirs = " << m_recentDirs;
     auto menuRecentDirs = ui->menu_openRecentDirectory;
     // menuRecentDirs->setIcon(QIcon::fromTheme("recents"));
     menuRecentDirs->clear();
@@ -510,6 +512,33 @@ void MainWindow::zoomOut()
 void MainWindow::zoomReset()
 {
     m_cboxZoomScale->setCurrentText("1");
+}
+
+void MainWindow::openFilePicker()
+{
+    QString filter = "LZH Files (*.lzh)";
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Open Compressed KiSS File"),
+                                                    m_fileSystemBrowser->curDirPath(),
+                                                    filter,
+                                                    nullptr,
+                                                    QFileDialog::Option::DontUseNativeDialog);
+    if (!fileName.isEmpty()) {
+        qDebug() << "===============" << fileName;
+        openDirOrFile(fileName);
+    }
+}
+
+void MainWindow::openDirPicker()
+{
+    QString dirPath = QFileDialog::getExistingDirectory(this,
+                                                    tr("Open Directory"),
+                                                    m_fileSystemBrowser->curDirPath(),
+                                                    QFileDialog::ShowDirsOnly);
+    if (!dirPath.isEmpty()) {
+        qDebug() << "===============" << dirPath;
+        openDirOrFile(dirPath);
+    }
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

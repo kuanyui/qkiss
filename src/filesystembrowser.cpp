@@ -73,6 +73,11 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
     return true;
 }
 
+QString FileSystemBrowser::curDirPath() const
+{
+    return m_curDirPath;
+}
+
 void FileSystemBrowser::markPathAsLoaded(QString path, QKiSS::FileLoadMode fileLoadMode)
 {
     QStringList oriLoadedKissFilePaths = m_loadedKissFilePaths;

@@ -51,6 +51,8 @@ private slots:
     void zoomIn();
     void zoomOut();
     void zoomReset();
+    void openFilePicker();
+    void openDirPicker();
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dragMoveEvent(QDragMoveEvent *event) override;
