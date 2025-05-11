@@ -387,31 +387,52 @@ void MainWindow::setupStatusBar()
 {
     statusBar()->showMessage(tr("QKiSS ready."));
 
-    QLabel *kbIcon = new QLabel(this);
-    QLabel *kbText = new QLabel(this);
-    QFrame *kbSeparator = new QFrame(this);
-    kbIcon->setPixmap(QIcon::fromTheme("keyboard").pixmap(16, 16));
-    kbText->setText(tr("Ctrl + Mouse Drag: Force split CEL from Object"));
-    kbSeparator->setFrameShape(QFrame::VLine);
-    kbSeparator->setFrameShadow(QFrame::Sunken);
-    statusBar()->addPermanentWidget(kbIcon);
-    statusBar()->addPermanentWidget(kbText);
-    statusBar()->addPermanentWidget(kbSeparator);
+    appendPermanentStatusBarIcon("keyboard-ctrl");
+    appendPermanentStatusBarText(tr("Ctrl+Mouse Drag: Force split CEL from Object"));
+    appendPermanentStatusBarSeparator();
+
+    appendPermanentStatusBarIcon("keyboard-shift");
+    appendPermanentStatusBarText(tr("Shift+Mouse Drag: Don't trigger FKiSS events"));
+    appendPermanentStatusBarSeparator();
 
 
-    QLabel *mouseIcon = new QLabel(this);
-    QLabel *mouseText = new QLabel(this);
-    QFrame *mouseSeparator = new QFrame(this);
-    mouseIcon->setPixmap(QIcon::fromTheme("mouse").pixmap(16, 16));
-    mouseText->setText(tr("Middle Click: Unfix. Right Click: More Actions"));
-    mouseSeparator->setFrameShape(QFrame::VLine);
-    mouseSeparator->setFrameShadow(QFrame::Sunken);
-    statusBar()->addPermanentWidget(mouseIcon);
-    statusBar()->addPermanentWidget(mouseText);
-    statusBar()->addPermanentWidget(mouseSeparator);
+    appendPermanentStatusBarIcon("mouse-middle-click", 22);
+    appendPermanentStatusBarText(tr("Middle Click: Unfix"));
+    appendPermanentStatusBarSeparator();
 
+
+    appendPermanentStatusBarIcon("mouse-right-click", 22);
+    appendPermanentStatusBarText(tr("Right Click: More Actions"));
+    appendPermanentStatusBarSeparator();
 
 }
+
+QLabel *MainWindow::appendPermanentStatusBarIcon(QString iconName, uint size)
+{
+    QLabel *iconLabel = new QLabel(this);
+    iconLabel->setPixmap(QIcon::fromTheme(iconName).pixmap(size, size));
+    statusBar()->addPermanentWidget(iconLabel);
+    return iconLabel;
+}
+
+QLabel *MainWindow::appendPermanentStatusBarText(QString text)
+{
+    QLabel *label = new QLabel(this);
+    label->setText(text);
+    statusBar()->addPermanentWidget(label);
+    return label;
+}
+
+QFrame *MainWindow::appendPermanentStatusBarSeparator()
+{
+    QFrame *separator = new QFrame(this);
+    separator->setFrameShape(QFrame::VLine);
+    separator->setFrameShadow(QFrame::Sunken);
+    statusBar()->addPermanentWidget(separator);
+    return separator;
+}
+
+
 
 void MainWindow::setupShortcuts()
 {

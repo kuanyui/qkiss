@@ -73,3 +73,9 @@ InkscapeTango		tool-pointer		inspector
 
 BlueGnome	preferences-desktop-keyboard-shortcuts	keyboard
 BlueGnome		input-mouse		mouse
+
+Gnome		keyboard-ctrl		keyboard-ctrl
+Gnome		keyboard-shift		keyboard-shift
+Gnome		mouse-right-click	mouse-right-click
+Gnome		mouse-left-click	mouse-left-click
+Gnome		mouse-middle-click	mouse-middle-click

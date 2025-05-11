@@ -40,6 +40,9 @@ private:
     void setupToolBars();
     void setupDockWindows();
     void setupStatusBar();
+    QLabel *appendPermanentStatusBarIcon(QString iconName, uint size = 16);
+    QLabel *appendPermanentStatusBarText(QString text);
+    QFrame *appendPermanentStatusBarSeparator();
     void setupCenterArea();
     void setupShortcuts();
     void saveWindowSettings();
