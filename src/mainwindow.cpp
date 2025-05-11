@@ -259,6 +259,7 @@ void MainWindow::setupToolBars()
     // File
     m_toolbarFiles = new QToolBar(this);
     m_toolbarFiles->setWindowTitle(tr("Files"));   // The text in context menu when you right-click on toolbar.
+    m_toolbarFiles->setObjectName("MainWindow_ToolBar_Files");
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarFiles);
     m_toolbarFiles->addAction(ui->action_openFile);
     m_toolbarFiles->addAction(ui->action_openDirectory);
@@ -266,6 +267,7 @@ void MainWindow::setupToolBars()
     ui->action_resetScale->setIcon(QIcon::fromTheme("zoom-original"));
     m_toolbarZooms = new QToolBar(this);
     m_toolbarZooms->setWindowTitle(tr("Zooming Tools"));
+    m_toolbarZooms->setObjectName("MainWindow_ToolBar_Zooms");
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarZooms);
     m_cboxZoomScale = new QComboBox(m_toolbarZooms);
     for (float s : { 4.0f, 3.5f, 3.0f, 2.5f, 2.0f, 1.5f, 1.0f, 0.5f }) {
@@ -278,6 +280,7 @@ void MainWindow::setupToolBars()
     // Dock Window
     m_toolbarWindows = new QToolBar(this);
     m_toolbarWindows->setWindowTitle(tr("Windows"));
+    m_toolbarWindows->setObjectName("MainWindow_ToolBar_Windows");   // objectName is required when `QMainWindow::saveState()`
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarWindows);
     m_toolbarWindows->addAction(ui->dockWidget_fileSystemBrowser->toggleViewAction());
     m_toolbarWindows->addAction(ui->dockWidget_innerFileSelector->toggleViewAction());
@@ -292,7 +295,6 @@ void MainWindow::setupToolBars()
     ui->menu_Window->addAction(ui->dockWidget_logViewer->toggleViewAction());
     ui->menu_Window->addAction(ui->dockWidget_itemInspector->toggleViewAction());
 
-    m_toolbarWindows->setObjectName("MainWindowDocksToolbar");   // objectName is required when `QMainWindow::saveState()`
     // Page Sets
     m_toolbarSceneSets = new QToolBar(this);
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarSceneSets);
