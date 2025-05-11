@@ -39,6 +39,7 @@ private:
     void switchPaletteBy(int steps);
     void setupToolBars();
     void setupDockWindows();
+    void setupStatusBar();
     void setupCenterArea();
     void setupShortcuts();
     void saveWindowSettings();

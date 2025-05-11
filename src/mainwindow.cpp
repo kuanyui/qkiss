@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupToolBars();
     setupDockWindows();
+    setupStatusBar();
     setupShortcuts();
     connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, this, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
         tryToLoadKissFilePath(filePath, fileLoadMode);
@@ -44,17 +45,10 @@ MainWindow::MainWindow(QWidget *parent)
             foreach (auto sibling, *item->siblings()) {
                 itemsOfObj.append(sibling->celFileName());
             }
-            statusBar()->showMessage(QString("File: %1, ObjId: %2, CelPos: (%3, %4), Size: (%5, %6), Fix: %7, Comment: %8     Object items (%9): [ %10 ]")
-                                     .arg(item->celFileName())
-                                     .arg(item->objId())
-                                     .arg(item->cel()->x())
-                                     .arg(item->cel()->y())
-                                     .arg(item->cel()->width())
-                                     .arg(item->cel()->height())
+            statusBar()->showMessage(tr("Fix: %1, CEL Name: %2, Comment: %3")
                                      .arg(item->fix())
+                                     .arg(item->celFileName())
                                      .arg(item->cnfCel()->comment())
-                                     .arg(itemsOfObj.length())
-                                     .arg(itemsOfObj.join(", "))
                                      );
         }
     });
@@ -385,6 +379,36 @@ void MainWindow::setupDockWindows()
     });
     connect(m_archiveFile, &ArchiveFile::curCnfChangedAndLoaded, [=](){
     });
+}
+
+void MainWindow::setupStatusBar()
+{
+    statusBar()->showMessage(tr("QKiSS ready."));
+
+    QLabel *kbIcon = new QLabel(this);
+    QLabel *kbText = new QLabel(this);
+    QFrame *kbSeparator = new QFrame(this);
+    kbIcon->setPixmap(QIcon::fromTheme("keyboard").pixmap(16, 16));
+    kbText->setText(tr("Ctrl + Mouse Drag: Force split CEL from Object"));
+    kbSeparator->setFrameShape(QFrame::VLine);
+    kbSeparator->setFrameShadow(QFrame::Sunken);
+    statusBar()->addPermanentWidget(kbIcon);
+    statusBar()->addPermanentWidget(kbText);
+    statusBar()->addPermanentWidget(kbSeparator);
+
+
+    QLabel *mouseIcon = new QLabel(this);
+    QLabel *mouseText = new QLabel(this);
+    QFrame *mouseSeparator = new QFrame(this);
+    mouseIcon->setPixmap(QIcon::fromTheme("mouse").pixmap(16, 16));
+    mouseText->setText(tr("Middle Click: Unfix. Right Click: More Actions"));
+    mouseSeparator->setFrameShape(QFrame::VLine);
+    mouseSeparator->setFrameShadow(QFrame::Sunken);
+    statusBar()->addPermanentWidget(mouseIcon);
+    statusBar()->addPermanentWidget(mouseText);
+    statusBar()->addPermanentWidget(mouseSeparator);
+
+
 }
 
 void MainWindow::setupShortcuts()

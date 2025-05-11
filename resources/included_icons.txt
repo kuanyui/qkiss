@@ -70,3 +70,6 @@ InkscapeTango		distribute-randomize	obj-cels
 GimpDefault		gimp-lock-position	obj-fix-count
 # BlueHumanity		gtk-info		inspector
 InkscapeTango		tool-pointer		inspector
+
+BlueGnome	preferences-desktop-keyboard-shortcuts	keyboard
+BlueGnome		input-mouse		mouse
