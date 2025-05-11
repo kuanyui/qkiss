@@ -426,7 +426,7 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
             runChangecol(actArgs[0]);
             continue;
         }
-        qDebug() << "[Fkiss][WARN] unsupported action `$1`, skip."_L1.arg(actName);
+        qDebug() << "[Fkiss][WARN] unsupported action `%1`, skip."_L1.arg(actName);
     }
     return true;
 }

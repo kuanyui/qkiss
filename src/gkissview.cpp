@@ -93,13 +93,13 @@ uint8_t GKissView::scenesAmount() const
 bool GKissView::showKissSceneByIndex(uint8_t setIndex)
 {
     if (scenesAmount() == 0) {
-        qWarning() << QString("[WARNING][View] only $1 scenes in this view but you ask for sceneIndex $2")
+        qWarning() << QString("[WARNING][View] only %1 scenes in this view but you ask for sceneIndex %2")
                       .arg(scenesAmount())
                       .arg(setIndex);
         return false;
     }
     if (setIndex >= scenesAmount()) {
-        qWarning() << QString("[WARNING][View] only $1 scenes in this view but you ask for sceneIndex $2")
+        qWarning() << QString("[WARNING][View] only %1 scenes in this view but you ask for sceneIndex %2")
                       .arg(scenesAmount())
                       .arg(setIndex);
         m_curSceneIdx = 0;
