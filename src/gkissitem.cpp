@@ -204,7 +204,7 @@ int32_t GKissItem::fix() const
 
 
 QDebug operator<<(QDebug dbg, const GKissItem &item) {
-    dbg.nospace().noquote() << QString("GKissItem { objId: #%1, \tcelFileName: '%2', \tpos: (%3, %4), \tvisible: %5 }")
+    dbg.nospace().noquote() << QString("GKissItem { objId: %1, \tcelFileName: '%2', \tpos: (%3, %4), \tvisible: %5 }")
                            .arg(item.objId())
                            .arg(item.celFileName())
                            .arg(item.pos().x())

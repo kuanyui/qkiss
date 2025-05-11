@@ -147,7 +147,7 @@ void GKissScene::setItemsVisibilityByObjId(int32_t objId, bool visibility)
     }
 }
 
-
+#define argnum(num) arg(QString::number(num))
 
 void GKissScene::bindItemsToObjects()
 {
@@ -161,7 +161,7 @@ void GKissScene::bindItemsToObjects()
     for (int objId = 0; objId < objPosList.length(); objId ++) {
         auto _objPos = objPosList[objId];
         QPoint objPos = _objPos.has_value() ? _objPos.value() : QPoint(0, 0);
-        // qDebug() << QStringLiteral("[DEBUG][Scene] index: %1,   objId: %2,   objPos: (%3, %4)").arg(i).arg(objId).arg(objPos.x()).arg(objPos.y());
+        // qDebug() << "[DEBUG][Scene] sceneIndex: %1,\t\t\tobjId: %2, \t\tobjPos: (%3, %4)"_L1.argnum(m_setIndex).arg(objId).argnum(objPos.x()).argnum(objPos.y());
         auto _items = this->getItemsByObjId(objId);
         if (!_items.has_value()) {
             // qDebug() << "[DEBUG][Scene] No items";
@@ -169,10 +169,12 @@ void GKissScene::bindItemsToObjects()
         }
         auto items = _items.value();
         int32_t maxFix = items->isEmpty() ? 0 : items->at(0)->fix();
+
         foreach (GKissItem *item, *items) {
             maxFix = qMax(item->fix(), maxFix);
             item->setPos(objPos.x() + item->cel()->x(),
                          objPos.y() + item->cel()->y());
+            // qDebug().noquote().nospace() << "[DEBUG][Scene] bindItemsToObjects() ===> sceneIndex: %1,\t\t\tcelFileName: %2\t\t objId: %3, \t\t itemPos: (%4, %5)"_L1.argnum(m_setIndex).arg(item->celFileName()).argnum(objId).argnum(item->x()).argnum(item->y());
         }
         // The fix value for an object is the maximum value for all member cels.
         foreach (GKissItem *item, *items) {
