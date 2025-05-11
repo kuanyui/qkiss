@@ -59,7 +59,7 @@ private:
     void renderColorBasedImage();
     ParsedCnfCel *m_cnfCel;
     ParsedCel *m_cel;
-    ParsedKcf *m_kcf;
+    ParsedKcf *m_kcf = nullptr;
     uint8_t m_paletteNoInKcf;
     // ==========================
     QImage *m_image;
