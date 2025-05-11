@@ -58,7 +58,7 @@ void ItemInspector::setInspectedItem(GKissItem *item)
     auto cel = item->cel();
     m_twCelName->setText(item->celFileName());
     m_twObjId->setText(QString::number(item->objId()));
-    m_twCelPos->setText("(%1, %2)"_L1.argn(cel->x()).argn(cel->y()));
+    m_twCelPos->setText("(%1, %2)"_L1.argn(qRound(item->x())).argn(qRound(item->y())));
     m_twCelSize->setText("%1 x %2"_L1.argn(cel->width()).argn(cel->height()));
     m_twCelComment->setText(item->cnfCel()->comment());
     m_twFix->setText(QString::number(item->fix()));
