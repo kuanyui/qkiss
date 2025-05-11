@@ -75,6 +75,10 @@ void GKissItem::renderPaletteBasedImage()
 
 void GKissItem::renderColorBasedImage()
 {
+    // if (m_cel->bitsPerPixel() != 32) {
+    //     qWarning().noquote() << "[WARNING][Item] \"%1\" claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. "_L1.arg(m_cel->fileName()).arg(QString::number(m_cel->bitsPerPixel()));
+    //     return renderPaletteBasedImage();
+    // }
     QVector<QRgb> *celPixelsData = m_cel->getColorBasedPixels();
     if (celPixelsData == nullptr) { return; }
     uint32_t i = 0;
