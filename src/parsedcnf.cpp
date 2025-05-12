@@ -294,7 +294,8 @@ void ParsedCnf::startToParseSetLines()
 {
     QString line = removeComment(m_lines[m_lineIdx].trimmed());
     qDebug() << "SET START ======" << line;
-    QStringList segs = line.split(" "_L1);
+    static QRegularExpression reSegSeparator(R"#([\s　]+)#");   // more tolerant
+    QStringList segs = line.split(reSegSeparator);
     int32_t paletteNoInPaletteFile = segs[0].mid(1).toInt();
     ParsedCnfSet *set = new ParsedCnfSet { paletteNoInPaletteFile };
     static QRegularExpression rePos(R"#(^([0-9-]+),([0-9-]+)$)#");   // some CNF contains x,y whose value < 0
@@ -316,7 +317,7 @@ void ParsedCnf::startToParseSetLines()
             continue;
         }
         if (!line.startsWith(" "_L1)) { break; }
-        segs = line.trimmed().split(" "_L1);
+        segs = line.trimmed().split(reSegSeparator);
         for (uint32_t i = 0; i < segs.length(); i++) {
             QString &seg = segs[i];
             if (seg == "*"_L1) {
