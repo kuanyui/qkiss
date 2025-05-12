@@ -76,6 +76,8 @@ BlueGnome		input-mouse		mouse
 
 Gnome		keyboard-ctrl		keyboard-ctrl
 Gnome		keyboard-shift		keyboard-shift
+Gnome		keyboard-ctrl-pressed	keyboard-ctrl-pressed
+Gnome		keyboard-shift-pressed	keyboard-shift-pressed
 Gnome		mouse-right-click	mouse-right-click
 Gnome		mouse-left-click	mouse-left-click
 Gnome		mouse-middle-click	mouse-middle-click

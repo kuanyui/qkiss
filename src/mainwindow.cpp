@@ -387,12 +387,14 @@ void MainWindow::setupStatusBar()
 {
     statusBar()->showMessage(tr("QKiSS ready."));
 
-    appendPermanentStatusBarIcon("keyboard-ctrl");
-    appendPermanentStatusBarText(tr("Ctrl+Mouse Drag: Force split CEL from Object"));
+    appendPermanentStatusBarIcon("keyboard-ctrl", 22);
+    appendPermanentStatusBarIcon("mouse-left-click", 22);
+    appendPermanentStatusBarText(tr("Ctrl+Drag: Force split CEL from Object"));
     appendPermanentStatusBarSeparator();
 
-    appendPermanentStatusBarIcon("keyboard-shift");
-    appendPermanentStatusBarText(tr("Shift+Mouse Drag: Don't trigger FKiSS events"));
+    appendPermanentStatusBarIcon("keyboard-shift", 22);
+    appendPermanentStatusBarIcon("mouse-left-click", 22);
+    appendPermanentStatusBarText(tr("Shift+Drag: Disable FKiSS events"));
     appendPermanentStatusBarSeparator();
 
 
