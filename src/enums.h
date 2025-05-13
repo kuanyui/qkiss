@@ -20,6 +20,10 @@ namespace QKiSS {
         LoadAsIndependent,
         LoadAsPatch,
     };
+    enum class LzhDecompressorBackend {
+        Libarchive,
+        ExternalLhaProcess,
+    };
 }
 
 #endif // ENUMS_H

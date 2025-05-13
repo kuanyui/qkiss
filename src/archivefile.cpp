@@ -1,6 +1,6 @@
 #include "archivefile.h"
 #include "encoding.h"
-#include "globalstate.h"
+#include "configfile.h"
 
 #include <QStringList>
 #include <QDebug>
@@ -32,7 +32,7 @@ void KissFilesParsingResult::deleteAllObjects()
 
 ArchiveFile::ArchiveFile(QObject *parent):
     QObject(parent),
-    m_gs{GlobalState::instance()},
+    m_gs{ConfigFile::instance()},
     m_parsedCnfFiles(new QMap<QString, ParsedCnf*>),
     m_parsedKcfFiles(new QHash<QString, ParsedKcf*>),
     m_parsedCelFiles(new QHash<QString, ParsedCel*>),
@@ -50,16 +50,16 @@ ArchiveFile::~ArchiveFile()
 KissFilesParsingResult ArchiveFile::parseKissFiles(std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles, QString lzhFilePath)
 {
     KissFilesParsingResult res = KissFilesParsingResult();
-    GlobalState &gs = GlobalState::instance();
+    ConfigFile &cfg = ConfigFile::instance();
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
     for (const auto &[fileName, fileRawContent] : extractedRawFiles->asKeyValueRange()) {
         QString fileNameKey = fileName;
         QString fileNameUpper = fileName.toUpper();
-        if (gs.caseSensitivity() == QKiSS::Case::Insensitive) {
+        if (cfg.caseSensitivity() == QKiSS::Case::Insensitive) {
             fileNameKey = fileNameKey.toUpper();
         }
-        QKiSS::Encoding encoding = QKiSS::Encoding::SJIS;    // TODO: GlobalState
+        QKiSS::Encoding encoding = cfg.encoding();
         if (fileNameUpper.endsWith(".CNF")) {
             // TODO: Check parse result, if invalid, delete it.
             res.parsedCnfFiles.insert(fileNameKey, new ParsedCnf {fileNameKey, fileRawContent, encoding});

@@ -13,7 +13,7 @@
 #include "innerfilesbrowser.h"
 #include "codeeditor.h"
 #include "iteminspector.h"
-
+#include "configfile.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -47,14 +47,9 @@ private:
     void setupShortcuts();
     void saveWindowSettings();
     void restoreWindowSettings();
-    void renderRecentFiles();
-    void addToRecentFiles(QString filePath);
+
 private slots:
-    void clearRecentFiles();
-    void clearRecentDirs();
-    void zoomIn();
-    void zoomOut();
-    void zoomReset();
+    void renderRecentFiles();
     void openFilePicker();
     void openDirPicker();
 protected:
@@ -79,8 +74,7 @@ protected:
     CodeEditor *m_codeEditor;
     ItemInspector *m_itemInspector;
     QPlainTextEdit *m_docViewer;
-    QStringList m_recentFiles;
-    QStringList m_recentDirs;
+    ConfigFile &m_cfg;
 };
 
 

@@ -4,18 +4,19 @@
 #include <QLabel>
 #include <QDragEnterEvent>
 #include <QMimeData>
-#include <QSettings>
 #include <QShortcut>
 #include <QFileDialog>
 #include "archiveprocessorfactory.h"
 #include "iteminspector.h"
+#include "configfile.h"
 #include "src/ui_mainwindow.h"
 
 using namespace Qt::Literals::StringLiterals;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_cfg{ ConfigFile::instance() }
 {
     ui->setupUi(this);
     m_archiveFile = new ArchiveFile{this};
@@ -61,11 +62,12 @@ MainWindow::MainWindow(QWidget *parent)
         }
         m_kissView->scaleAbs(targetScale);
     });
-    connect(ui->action_zoomOut, &QAction::triggered, this, &MainWindow::zoomOut);
-    connect(ui->action_zoomIn, &QAction::triggered, this, &MainWindow::zoomIn);
-    connect(ui->action_resetScale, &QAction::triggered, this, &MainWindow::zoomReset);
+    connect(ui->action_zoomOut, &QAction::triggered, &m_cfg, &ConfigFile::zoomOut);
+    connect(ui->action_zoomIn, &QAction::triggered, &m_cfg, &ConfigFile::zoomIn);
+    connect(ui->action_resetScale, &QAction::triggered, &m_cfg, &ConfigFile::zoomReset);
     connect(ui->action_openFile, &QAction::triggered, this, &MainWindow::openFilePicker);
     connect(ui->action_openDirectory, &QAction::triggered, this, &MainWindow::openDirPicker);
+    connect(&m_cfg, &ConfigFile::recentFilesChanged, this, &MainWindow::renderRecentFiles);
     setCentralWidget(m_kissView);
     restoreWindowSettings();
 }
@@ -94,7 +96,7 @@ void MainWindow::tryToLoadKissFilePath(const QString &kissArchiveFilePath, QKiSS
 {
     if (!kissArchiveFilePath.endsWith(".LZH", Qt::CaseInsensitive)) { return; }
     m_logViewer->clearAllLogs();
-    AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(ArchiveProcessorFactory::Backend::ExternalLhaProcess);
+    AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(m_cfg.lzhDecompressorBackend());
     extractor->extractFileAsPromise(kissArchiveFilePath).then([this, extractor, kissArchiveFilePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
         qDebug() << "Extract ============================" << filesMap->keys();
         tryToParseAndLoadFilesAsKissFiles(kissArchiveFilePath, filesMap, fileLoadMode);      /// <-- entrypoint of loading a CNF
@@ -125,7 +127,7 @@ void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, s
     m_kissView->deleteAllScenes();
     bool ok = m_kissView->setArchiveFileAndRenderFirstCnf(m_archiveFile);
     if (!ok) { return; }
-    addToRecentFiles(compressedFilePath);
+    m_cfg.appendRecentFile(compressedFilePath);
     qInfo().noquote() << tr("Parsing finished. Now rendering scenes...");
     m_fileSystemBrowser->markPathAsLoaded(compressedFilePath, fileLoadMode);
     m_innerFilesBrowser->rerenderFileList(m_archiveFile);
@@ -451,25 +453,19 @@ void MainWindow::setupShortcuts()
 void MainWindow::saveWindowSettings()
 {
     QSettings set;
-    set.setValue("MainWindow/Geometry", saveGeometry());
-    set.setValue("MainWindow/State", saveState());
-    set.setValue("View/Zoom", m_cboxZoomScale->currentText());
-    set.setValue("File/RecentFiles", m_recentFiles);
-    set.setValue("File/RecentDirs", m_recentDirs);
+    m_cfg.setMainWindowGeometry(saveGeometry());
+    m_cfg.setMainWindowState(saveState());
+    m_cfg.setZoom(m_cboxZoomScale->currentText());
 }
 
 void MainWindow::restoreWindowSettings()
 {
-    QSettings set;
-    restoreGeometry(set.value("MainWindow/Geometry").toByteArray());
-    restoreState(set.value("MainWindow/State").toByteArray());
-    m_cboxZoomScale->setCurrentText(set.value("View/Zoom", "1").toString());
-    m_recentFiles = set.value("File/RecentFiles", {}).toStringList();
-    m_recentDirs = set.value("File/RecentDirs", {}).toStringList();
+    restoreGeometry(m_cfg.mainWindowGeometry());
+    restoreState(m_cfg.mainWindowState());
+    m_cboxZoomScale->setCurrentText(m_cfg.zoom());
     renderRecentFiles();
 }
 
-const int RECENTS_MAX_COUNT = 12;
 
 void MainWindow::renderRecentFiles()
 {
@@ -478,7 +474,7 @@ void MainWindow::renderRecentFiles()
     // qDebug() << "[Render] Recent File = " << m_recentFiles;
     menuRecentFiles->setIcon(QIcon::fromTheme("recents"));
     menuRecentFiles->clear();
-    foreach (const QString &path, m_recentFiles) {
+    foreach (const QString &path, m_cfg.recentFiles()) {
         QAction *act = new QAction(menuRecentFiles);
         act->setText(path);
         connect(act, &QAction::triggered, this, [=]() { openDirOrFile(path); });
@@ -488,14 +484,14 @@ void MainWindow::renderRecentFiles()
     QAction *actClearFile = new QAction(menuRecentFiles);
     actClearFile->setText(tr("Clear All"));
     actClearFile->setIcon(QIcon::fromTheme("edit-clear"));
-    connect(actClearFile, &QAction::triggered, this, &MainWindow::clearRecentFiles);
+    connect(actClearFile, &QAction::triggered, &m_cfg, &ConfigFile::clearRecentFiles);
     menuRecentFiles->addAction(actClearFile);
     // Dirs
     // qDebug() << "[Render] Recent Dirs = " << m_recentDirs;
     auto menuRecentDirs = ui->menu_openRecentDirectory;
     // menuRecentDirs->setIcon(QIcon::fromTheme("recents"));
     menuRecentDirs->clear();
-    foreach (const QString &path, m_recentDirs) {
+    foreach (const QString &path, m_cfg.recentDirs()) {
         QAction *act = new QAction(menuRecentDirs);
         act->setText(path);
         connect(act, &QAction::triggered, this, [=]() { openDirOrFile(path); });
@@ -505,63 +501,11 @@ void MainWindow::renderRecentFiles()
     QAction *actClearDir = new QAction(menuRecentDirs);
     actClearDir->setText(tr("Clear All"));
     actClearDir->setIcon(QIcon::fromTheme("edit-clear"));
-    connect(actClearDir, &QAction::triggered, this, &MainWindow::clearRecentDirs);
+    connect(actClearDir, &QAction::triggered, &m_cfg, &ConfigFile::clearRecentDirs);
     menuRecentDirs->addAction(actClearDir);
 }
 
-void MainWindow::addToRecentFiles(QString filePath)
-{
-    QFileInfo fi {filePath};
-    QString dirPath = fi.dir().absolutePath();
-    m_recentFiles.removeAll(filePath);
-    m_recentFiles.prepend(filePath);
-    while (m_recentFiles.length() > RECENTS_MAX_COUNT) {
-        m_recentFiles.removeLast();
-    }
-    m_recentDirs.removeAll(dirPath);
-    m_recentDirs.prepend(dirPath);
-    while (m_recentDirs.length() > RECENTS_MAX_COUNT) {
-        m_recentDirs.removeLast();
-    }
-    saveWindowSettings();
-    renderRecentFiles();
-}
 
-void MainWindow::clearRecentFiles()
-{
-    qDebug() << "Clear Files";
-    m_recentFiles.clear();
-    saveWindowSettings();
-    renderRecentFiles();
-}
-
-void MainWindow::clearRecentDirs()
-{
-    qDebug() << "Clear Dirs";
-    m_recentDirs.clear();
-    saveWindowSettings();
-    renderRecentFiles();
-}
-
-void MainWindow::zoomIn()
-{
-    // Ordering: 4,3,2,1
-    int i = m_cboxZoomScale->currentIndex() - 1;
-    i = qMax(i, 0);
-    m_cboxZoomScale->setCurrentIndex(i);
-}
-
-void MainWindow::zoomOut()
-{
-    int i = m_cboxZoomScale->currentIndex() + 1;
-    i = qMin(i, m_cboxZoomScale->count() - 1);
-    m_cboxZoomScale->setCurrentIndex(i);
-}
-
-void MainWindow::zoomReset()
-{
-    m_cboxZoomScale->setCurrentText("1");
-}
 
 void MainWindow::openFilePicker()
 {

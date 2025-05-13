@@ -4,14 +4,13 @@
 
 
 
-AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(Backend backend)
+AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(QKiSS::LzhDecompressorBackend backend)
 {
-    backend = Backend::ExternalLhaProcess;
     switch (backend) {
 #ifdef HAVE_LIBARCHIVE
-    case Backend::Libarchive: return new ArchiveProcessorLibarchive();
+    case QKiSS::LzhDecompressorBackend::Libarchive: return new ArchiveProcessorLibarchive();
 #endif
-    case Backend::ExternalLhaProcess: return new ArchiveProcessorExternalLha();
+    case QKiSS::LzhDecompressorBackend::ExternalLhaProcess: return new ArchiveProcessorExternalLha();
     default: return new ArchiveProcessorLibarchive();
     }
 }

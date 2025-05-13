@@ -1,15 +1,12 @@
 #ifndef ARCHIVEPROCESSORFACTORY_H
 #define ARCHIVEPROCESSORFACTORY_H
 #include "abstractarchiveprocessor.h"
+#include "enums.h"
 
 class ArchiveProcessorFactory
 {
 public:
-    enum class Backend {
-        Libarchive,
-        ExternalLhaProcess,
-    };
-    static AbstractArchiveProcessor* newArchiveProcessor(Backend backend);
+    static AbstractArchiveProcessor* newArchiveProcessor(QKiSS::LzhDecompressorBackend backend);
 };
 
 #endif // ARCHIVEPROCESSORFACTORY_H
