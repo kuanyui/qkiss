@@ -40,6 +40,7 @@ void ConfigFile::appendRecentFile(QString filePath)
     }
     m_set.setValue(CPath::File_RecentFiles, newFiles);
     m_set.setValue(CPath::File_RecentDirs, newDirs);
+    m_set.sync();
     emit recentFilesChanged();
     emit recentDirsChanged();
 }
@@ -48,12 +49,14 @@ void ConfigFile::appendRecentFile(QString filePath)
 void ConfigFile::clearRecentFiles()
 {
     m_set.setValue(CPath::File_RecentFiles, {});
+    m_set.sync();
     emit recentFilesChanged();
 }
 
 void ConfigFile::clearRecentDirs()
 {
     m_set.setValue(CPath::File_RecentDirs, {});
+    m_set.sync();
     emit recentDirsChanged();
 }
 
@@ -65,7 +68,8 @@ QByteArray ConfigFile::mainWindowGeometry() const
 
 void ConfigFile::setMainWindowGeometry(const QByteArray &geometry)
 {
-    return m_set.setValue(CPath::MainWindow_Geometry, geometry);
+    m_set.setValue(CPath::MainWindow_Geometry, geometry);
+    m_set.sync();
 }
 
 QByteArray ConfigFile::mainWindowState() const
@@ -75,7 +79,8 @@ QByteArray ConfigFile::mainWindowState() const
 
 void ConfigFile::setMainWindowState(const QByteArray &state)
 {
-    return m_set.setValue(CPath::MainWindow_State, state);
+    m_set.setValue(CPath::MainWindow_State, state);
+    m_set.sync();
 }
 
 QKiSS::Encoding ConfigFile::encoding() const
@@ -85,10 +90,11 @@ QKiSS::Encoding ConfigFile::encoding() const
 
 void ConfigFile::setEncoding(QKiSS::Encoding newEncoding)
 {
-    m_set.setValue(CPath::Global_Encoding, static_cast<int>(newEncoding));
     if (m_encoding == newEncoding)
         return;
     m_encoding = newEncoding;
+    m_set.setValue(CPath::Global_Encoding, static_cast<int>(newEncoding));
+    m_set.sync();
     emit encodingChanged();
 }
 
@@ -99,10 +105,11 @@ QKiSS::Case ConfigFile::caseSensitivity() const
 
 void ConfigFile::setCaseSensitivity(QKiSS::Case newCaseSensitivity)
 {
-    m_set.setValue(CPath::Global_CaseSensitivity, static_cast<int>(newCaseSensitivity));
     if (m_caseSensitivity == newCaseSensitivity)
         return;
     m_caseSensitivity = newCaseSensitivity;
+    m_set.setValue(CPath::Global_CaseSensitivity, static_cast<int>(newCaseSensitivity));
+    m_set.sync();
     emit caseSensitivityChanged();
 }
 
@@ -113,10 +120,11 @@ QKiSS::LzhDecompressorBackend ConfigFile::lzhDecompressorBackend() const
 
 void ConfigFile::setLzhDecompressorBackend(QKiSS::LzhDecompressorBackend newLzhDecompressorBackend)
 {
-    m_set.setValue(CPath::Global_LzhDecompressorBackend, static_cast<int>(newLzhDecompressorBackend));
     if (m_lzhDecompressorBackend == newLzhDecompressorBackend)
         return;
     m_lzhDecompressorBackend = newLzhDecompressorBackend;
+    m_set.setValue(CPath::Global_LzhDecompressorBackend, static_cast<int>(newLzhDecompressorBackend));
+    m_set.sync();
     emit lzhDecompressorBackendChanged();
 }
 
@@ -151,6 +159,7 @@ void ConfigFile::setZoom(const QString &newZoom)
     if (zoom() == newZoom)
         return;
     m_set.setValue(CPath::View_Zoom, newZoom);
+    m_set.sync();
     emit zoomScaleChanged();
 }
 
@@ -196,5 +205,8 @@ void ConfigFile::loadAll()
 
 void ConfigFile::saveAll()
 {
-
+    m_set.setValue(CPath::Global_Encoding, static_cast<int>(m_encoding));
+    m_set.setValue(CPath::Global_CaseSensitivity, static_cast<int>(m_caseSensitivity));
+    m_set.setValue(CPath::Global_LzhDecompressorBackend, static_cast<int>(m_lzhDecompressorBackend));
+    m_set.sync();
 }

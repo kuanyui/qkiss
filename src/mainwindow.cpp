@@ -570,6 +570,7 @@ void MainWindow::dropEvent(QDropEvent *event)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     saveWindowSettings();
+    m_cfg.saveAll();
     m_logViewer = nullptr;   // Avoid potential segfault when closing window
     QMainWindow::closeEvent(event);
 }
