@@ -91,13 +91,17 @@ FilesSummaryList ArchiveProcessorExternalLha::getFileSizeList(const QString &lzh
     process.waitForFinished();
     FilesSummaryList fileSizeSummary;
     if (!ok || lines.isEmpty()) { return fileSizeSummary; }
-    // Start to parse
-    /* @example
+    /*
+     * Start to parse output of LHA command.
+     * ATTENTION: the count of `-` at column NAME may be not same with the length of the longest relative filename.
+     *
+     * @example
 PERMISSION  UID  GID      SIZE  RATIO     STAMP           NAME
 ---------- ----------- ------- ------ ------------ --------------------
 [MS-DOS]                 37608  21.3% Oct  8  2009 FA1280B/fa120001.cel
 [MS-DOS]                 59440  14.4% Oct  8  2009 FA1280B/fa120002.cel
 [MS-DOS]                 59440  14.3% Oct  8  2009 FA1280B/fa120003.cel
+[generic]                92688  12.6% May 30  2006 Haruhi_m1/Haruhi_m1.cnf
 ---------- ----------- ------- ------ ------------ --------------------
  Total       709 files 113297883  38.9% Oct  9  2009
      */
@@ -119,10 +123,11 @@ PERMISSION  UID  GID      SIZE  RATIO     STAMP           NAME
         }
         curColFrom += curColWidth + 1;  // +1 is the space between each ---
     }
+    Q_UNUSED(nameColWidth);
     for (int i = 2; i < lines.length() - 2; i++) {
         const QString& line = lines[i];
         int byte = line.mid(sizeColIdxFrom, sizeColWidth).trimmed().toInt();
-        QString relPath = line.mid(nameColIdxFrom, nameColWidth).trimmed();
+        QString relPath = line.mid(nameColIdxFrom).trimmed();
         QFileInfo fileInfo(relPath);
         QString fileName = fileInfo.fileName();
         qDebug() << "List file name: " << fileName << byte;
