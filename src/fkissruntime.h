@@ -26,17 +26,28 @@ public:
     /// Trigger the event `col(paletteNo)`
     void triggerCol(uint8_t paletteNo);
 private:
-    /// for map(), unmap(), altmap()
+    /// for map(), unmap(), altmap().
+    /// Return true if a target (cel or object) is mapped currently.
+    /// This is stored in FKiSS runtime, doesn't actually reflect the state of scene.
     bool getMap(FkissVariant target);
     /// run action map()
     void runMap(FkissVariant target);
     void runUnmap(FkissVariant target);
     void runAltmap(FkissVariant target);
+
     void runMove(FkissVariant target, FkissVariant dx, FkissVariant dy);
     void runMoveto(FkissVariant target, FkissVariant x, FkissVariant y);
     void runMovebyx(FkissVariant target, FkissVariant relative, FkissVariant dx);
     void runMovebyy(FkissVariant target, FkissVariant relative, FkissVariant dy);
     void runTransparent(FkissVariant target, FkissVariant delta);
+
+    void runIffixed(FkissVariant target, FkissVariant alarmID, FkissVariant delay);
+    void runIfnotfixed(FkissVariant target, FkissVariant alarmID, FkissVariant delay);
+    void runIfmapped(FkissVariant target, FkissVariant alarmID, FkissVariant delay);
+    void runIfnotmapped(FkissVariant target, FkissVariant alarmID, FkissVariant delay);
+    void runIfmoved(FkissVariant target, FkissVariant alarmID, FkissVariant delay);
+    void runIfnotmoved(FkissVariant target, FkissVariant alarmID, FkissVariant delay);
+
     void runTimer(FkissVariant alarmID, FkissVariant delay);
     void runRandomtimer(FkissVariant alarmID, FkissVariant delay, FkissVariant range);
     void runSound(FkissVariant fileName);

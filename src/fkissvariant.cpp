@@ -5,6 +5,16 @@ FkissVariant::FkissVariant(Type type, int value) : m_type(type), m_intValue(valu
 
 FkissVariant::FkissVariant(Type type, const QString &value) : m_type(type), m_stringValue(value) {}
 
+const char *FkissVariant::typeToString(Type type) {
+    switch (type) {
+    case Type::Int: return "Integer";
+    case Type::String: return "String";
+    case Type::Cel: return "Cel Name";
+    case Type::Object: return "Object ID";
+    }
+    return "";
+}
+
 FkissVariant FkissVariant::fromString(const QString &value)
 {
     return FkissVariant(Type::String, value);

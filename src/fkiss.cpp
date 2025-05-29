@@ -130,12 +130,12 @@ const QHash<QString, FkissKeywordInfo> Fkiss::KEYWORDS_ACTION = {
     { FKK::A::TIMER            , { FKK::A::TIMER            , FkissVersion::FKiSS1, 1 } }, // timer(alarm ID, delay) - Sets the timer for an alarm. (delay = 0 means cancel the timer)
     { FKK::A::RANDOMTIMER      , { FKK::A::RANDOMTIMER      , FkissVersion::FKiSS1, 1 } }, // randomtimer(alarm ID, delay, range) - Sets the timer for an alarm with a random delay.
     { FKK::A::LETTIMER         , { FKK::A::LETTIMER         , FkissVersion::FKiSS4, false } }, // lettimer(variable, alarm ID) - Sets the value of variable to the amount of time remaining before the timer for alarm ID reaches zero.
-    { FKK::A::IFFIXED          , { FKK::A::IFFIXED          , FkissVersion::FKiSS2, false } }, // iffixed(target, alarm ID, delay) - Sets the timer for an alarm if the fix value for the object specified by target is non-zero.
-    { FKK::A::IFMAPPED         , { FKK::A::IFMAPPED         , FkissVersion::FKiSS2, false } }, // ifmapped(target, alarm ID, delay) - Sets the timer for an alarm if any cel specified by target is currently mapped.
-    { FKK::A::IFMOVED          , { FKK::A::IFMOVED          , FkissVersion::FKiSS2, false } }, // ifmoved(target, alarm ID, delay) - Sets the timer for an alarm if the object specified by target is not in its initial position on the current set.
-    { FKK::A::IFNOTFIXED       , { FKK::A::IFNOTFIXED       , FkissVersion::FKiSS2, false } }, // ifnotfixed(target, alarm ID, delay) - Sets the timer for an alarm if the fix value for the object specified by target is zero.
-    { FKK::A::IFNOTMAPPED      , { FKK::A::IFNOTMAPPED      , FkissVersion::FKiSS2, false } }, // ifnotmapped(target, alarm ID, delay) - Sets the timer for an alarm if no cel or no cel in the object or group specified by target is currently mapped.
-    { FKK::A::IFNOTMOVED       , { FKK::A::IFNOTMOVED       , FkissVersion::FKiSS2, false } }, // ifnotmoved(target, alarm ID, delay) - Sets the timer for an alarm if the object specified by target is in its initial position on the current set.
+    { FKK::A::IFFIXED          , { FKK::A::IFFIXED          , FkissVersion::FKiSS2, 1 } }, // iffixed(target, alarm ID, delay) - Sets the timer for an alarm if the fix value for the object specified by target is non-zero.
+    { FKK::A::IFMAPPED         , { FKK::A::IFMAPPED         , FkissVersion::FKiSS2, 1 } }, // ifmapped(target, alarm ID, delay) - Sets the timer for an alarm if any cel specified by target is currently mapped.
+    { FKK::A::IFMOVED          , { FKK::A::IFMOVED          , FkissVersion::FKiSS2, 1 } }, // ifmoved(target, alarm ID, delay) - Sets the timer for an alarm if the object specified by target is not in its initial position on the current set.
+    { FKK::A::IFNOTFIXED       , { FKK::A::IFNOTFIXED       , FkissVersion::FKiSS2, 1 } }, // ifnotfixed(target, alarm ID, delay) - Sets the timer for an alarm if the fix value for the object specified by target is zero.
+    { FKK::A::IFNOTMAPPED      , { FKK::A::IFNOTMAPPED      , FkissVersion::FKiSS2, 1 } }, // ifnotmapped(target, alarm ID, delay) - Sets the timer for an alarm if no cel or no cel in the object or group specified by target is currently mapped.
+    { FKK::A::IFNOTMOVED       , { FKK::A::IFNOTMOVED       , FkissVersion::FKiSS2, 1 } }, // ifnotmoved(target, alarm ID, delay) - Sets the timer for an alarm if the object specified by target is in its initial position on the current set.
     { FKK::A::EXITEVENT        , { FKK::A::EXITEVENT        , FkissVersion::FKiSS3, false } }, // exitevent() - Exits the current event. No more code in this event will be processed.
 
     // ### Labels ###

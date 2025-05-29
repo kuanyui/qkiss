@@ -99,6 +99,16 @@ void GKissItem::renderColorBasedImage()
     setKissTranslucency(m_cnfCel->translucency());
 }
 
+QPointF GKissItem::initialPos() const
+{
+    return m_initialPos;
+}
+
+void GKissItem::setInitialPos(QPointF newInitialPos)
+{
+    m_initialPos = newInitialPos;
+}
+
 uint8_t GKissItem::kissTranslucency() const
 {
     return m_kissTranslucency;

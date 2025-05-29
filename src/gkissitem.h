@@ -49,6 +49,9 @@ public:
     /// -255 ~ 255
     void addKissTranslucency(int delta);
 
+    QPointF initialPos() const;
+    void setInitialPos(QPointF newInitialPos);
+
     // QGraphicsItem interface
 protected:
     virtual QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
@@ -72,6 +75,10 @@ private:
     /// cache of casted scene()
     GKissScene *m_cachedKissScene = nullptr;
 
+    /// Remember the initial position of this item (object pos + cel pos). Used for:
+    /// 1. resetting object's state.
+    /// 2. FKiSS's `ifmoved()`
+    QPointF m_initialPos;
 
 };
 

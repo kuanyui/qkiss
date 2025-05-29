@@ -227,6 +227,115 @@ void FkissRuntime::runTransparent(FkissVariant target, FkissVariant delta)
     }
 }
 
+// qDebug() << "[fkissruntime][WARNING] currently, the `" #paramName "` in command `" #fkissCmd "()` must be a(n) " << FkissVariant::typeToString(expectedType) << ". Skip.";
+
+#define RT_TYPE_CHECK(fkissCmd, paramName, expectedType) \
+    if ((paramName).type() != expectedType) { \
+        qDebug() << "[fkissruntime][WARNING] currently, the `" #paramName "` in command `" #fkissCmd "()` must be a(n) " << FkissVariant::typeToString(expectedType) << ". Skip."; \
+        return; \
+    }
+
+void FkissRuntime::runIffixed(FkissVariant target, FkissVariant alarmID, FkissVariant delay)
+{
+    // if (target.type() != FkissVariant::Type::Cel) {
+    //     qDebug() << "[fkissruntime][WARNING] currently, the `target` in iffixed() must be an object ID. Skip."_L1;
+    //     return;
+    // }
+    // if (alarmId.type() != FkissVariant::Type::Object) {
+    //     qDebug() << "[fkissruntime][WARNING] currently, the `alarmId` in iffixed() must be an object ID. Skip."_L1;
+    //     return;
+    // }
+    // if (delay.type() != FkissVariant::Type::Int) {
+    //     qDebug() << "[fkissruntime][ERROR] the `delay` in iffixed() must be an integer. Skip."_L1;
+    //     return;
+    // }
+    if (m_curKissScene == nullptr) { return; }
+    RT_TYPE_CHECK("iffixed", target, FkissVariant::Type::Cel)
+    RT_TYPE_CHECK("iffixed", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("iffixed", delay, FkissVariant::Type::Int)
+    QString targetCelName = target.getCelName();
+    auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
+    if (!_celItem.has_value()) { return; }
+    auto celItem = _celItem.value();
+    if (celItem->fix() > 0) {
+        getOrCreateAlarmTimer(alarmID, delay.getInt());
+    }
+}
+
+void FkissRuntime::runIfnotfixed(FkissVariant target, FkissVariant alarmID, FkissVariant delay)
+{
+    if (m_curKissScene == nullptr) { return; }
+    RT_TYPE_CHECK("iffixed", target, FkissVariant::Type::Cel)
+    RT_TYPE_CHECK("iffixed", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("iffixed", delay, FkissVariant::Type::Int)
+    QString targetCelName = target.getCelName();
+    auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
+    if (!_celItem.has_value()) { return; }
+    auto celItem = _celItem.value();
+    if (celItem->fix() == 0) {
+        getOrCreateAlarmTimer(alarmID, delay.getInt());
+    }
+}
+
+void FkissRuntime::runIfmapped(FkissVariant target, FkissVariant alarmID, FkissVariant delay)
+{
+    if (m_curKissScene == nullptr) { return; }
+    RT_TYPE_CHECK("ifmapped", target, FkissVariant::Type::Cel)
+    RT_TYPE_CHECK("ifmapped", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("ifmapped", delay, FkissVariant::Type::Int)
+    QString targetCelName = target.getCelName();
+    auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
+    if (!_celItem.has_value()) { return; }
+    auto celItem = _celItem.value();
+    if (celItem->isVisible()) {
+        getOrCreateAlarmTimer(alarmID, delay.getInt());
+    }
+}
+
+void FkissRuntime::runIfnotmapped(FkissVariant target, FkissVariant alarmID, FkissVariant delay)
+{
+    if (m_curKissScene == nullptr) { return; }
+    RT_TYPE_CHECK("ifnotmapped", target, FkissVariant::Type::Cel)
+    RT_TYPE_CHECK("ifnotmapped", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("ifnotmapped", delay, FkissVariant::Type::Int)
+    QString targetCelName = target.getCelName();
+    auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
+    if (!_celItem.has_value()) { return; }
+    auto celItem = _celItem.value();
+    if (!celItem->isVisible()) {
+        getOrCreateAlarmTimer(alarmID, delay.getInt());
+    }
+}
+
+void FkissRuntime::runIfmoved(FkissVariant target, FkissVariant alarmID, FkissVariant delay)
+{
+    if (m_curKissScene == nullptr) { return; }
+    RT_TYPE_CHECK("ifmoved", target, FkissVariant::Type::Cel)
+    RT_TYPE_CHECK("ifmoved", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("ifmoved", delay, FkissVariant::Type::Int)
+    QString targetCelName = target.getCelName();
+    auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
+    if (!_celItem.has_value()) { return; }
+    auto celItem = _celItem.value();
+    if (celItem->pos() != celItem->initialPos()) {
+        getOrCreateAlarmTimer(alarmID, delay.getInt());
+    }
+}
+
+void FkissRuntime::runIfnotmoved(FkissVariant target, FkissVariant alarmID, FkissVariant delay)
+{
+    if (m_curKissScene == nullptr) { return; }
+    RT_TYPE_CHECK("ifmoved", target, FkissVariant::Type::Cel)
+    RT_TYPE_CHECK("ifmoved", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("ifmoved", delay, FkissVariant::Type::Int)
+    QString targetCelName = target.getCelName();
+    auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
+    if (!_celItem.has_value()) { return; }
+    auto celItem = _celItem.value();
+    if (celItem->pos() == celItem->initialPos()) {
+        getOrCreateAlarmTimer(alarmID, delay.getInt());
+    }
+}
 
 
 void FkissRuntime::runTimer(FkissVariant alarmID, FkissVariant delay)
@@ -394,6 +503,36 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
         if (actName == FKK::A::MOVEBYY) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid movebyy() args count, skip."_L1; continue; }
             runMovebyy(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::A::IFFIXED) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid iffixed() args count, skip."_L1; continue; }
+            runIffixed(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::A::IFNOTFIXED) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifnotfixed() args count, skip."_L1; continue; }
+            runIfnotfixed(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::A::IFMAPPED) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifmapped() args count, skip."_L1; continue; }
+            runIfmapped(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::A::IFNOTMAPPED) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifnotmapped() args count, skip."_L1; continue; }
+            runIfnotmapped(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::A::IFMOVED) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifmoved() args count, skip."_L1; continue; }
+            runIfmoved(actArgs[0], actArgs[1], actArgs[2]);
+            continue;
+        }
+        if (actName == FKK::A::IFNOTMOVED) {
+            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifnotmoved() args count, skip."_L1; continue; }
+            runIfnotmoved(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::TRANSPARENT) {

@@ -315,17 +315,11 @@ void GKissScene::unfixObjectByItem(GKissItem *item)
 
 void GKissScene::resetObjectByItem(GKissItem *item)
 {
-    const auto &objPosList = m_cnfSet->getObjPosList();
-    const auto &_objPos = objPosList[item->objId()];
-    if (!_objPos.has_value()) { return; }
-    const auto &objPos = _objPos.value();
     item->setFix(item->cnfCel()->fix());
-    item->setPos(objPos.x() + item->cel()->x(),
-                 objPos.y() + item->cel()->y());
+    item->setPos(item->initialPos());
     foreach (auto *sib , *(item->siblings())) {
         sib->setFix(sib->cnfCel()->fix());
-        sib->setPos(objPos.x() + sib->cel()->x(),
-                    objPos.y() + sib->cel()->y());
+        item->setPos(item->initialPos());
     }
 }
 

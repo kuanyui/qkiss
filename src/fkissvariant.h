@@ -19,6 +19,7 @@ private:
     FkissVariant(Type type, int value);
     FkissVariant(Type type, const QString& value);
 public:
+    static const char* typeToString(Type type);
     static FkissVariant fromString(const QString &value);
     static FkissVariant fromCelName(const QString &value);
     static FkissVariant fromInt(const QString &value);

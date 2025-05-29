@@ -194,6 +194,7 @@ bool GKissView::renderCurCnfAllSets()
                 continue;
             }
             item->setPos(cel->x(), cel->y());
+            item->setInitialPos(item->pos());
             // qDebug() << QString("[DEBUG][View] setIdx = %1, cel = %2") .arg(cnfSetIdx) .arg(cnfCel->celFileName());
             scene->addCelItem(item);
             centerOn(item);
