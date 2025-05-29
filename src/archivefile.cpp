@@ -77,8 +77,14 @@ KissFilesParsingResult ArchiveFile::parseKissFiles(std::shared_ptr<QMap<QString,
     return res;
 }
 
+#define argnum(num) arg(QString::number(num))
+
 bool ArchiveFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath)
 {
+    qInfo().noquote() << tr("Found valid files: %1 CNF, %2 CEL, %3 KCF.")
+                          .argnum(parseRes.parsedCnfFiles.count())
+                          .argnum(parseRes.parsedCelFiles.count())
+                          .argnum(parseRes.parsedKcfFiles.count());
     if (!parseRes.parsedCnfFiles.isEmpty() && !parseRes.parsedCelFiles.isEmpty()) {
         unloadKissFiles();
         m_archiveFilePath = lzhFilePath;
@@ -99,6 +105,10 @@ bool ArchiveFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFil
 
 bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult patchFiles, QString lzhFilePath)
 {
+    qInfo().noquote() << tr("Found valid files: %1 CNF, %2 CEL, %3 KCF.")
+                          .argnum(patchFiles.parsedCnfFiles.count())
+                          .argnum(patchFiles.parsedCelFiles.count())
+                          .argnum(patchFiles.parsedKcfFiles.count());
     if (patchFiles.parsedCnfFiles.isEmpty() && patchFiles.parsedCelFiles.isEmpty() && patchFiles.parsedKcfFiles.isEmpty()) {
         qWarning() << "[WARNING][ArchiveFile] Try to load this file as patch, but it contains no any CNF/CEL/KCF file, abort.";
         return false;

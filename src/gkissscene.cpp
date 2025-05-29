@@ -51,14 +51,14 @@ void GKissScene::drawCurSetBackground()
 {
     auto _firstKcf = m_archiveFile->getParsedKcfByOrderedIndexInCurrentCnf(0);
     if (!_firstKcf.has_value()) {
-        qCritical() << "[ERROR][Scene] No KCF found in this CNF, abort.";
+        qWarning() << "[Scene] No KCF found in this CNF, don't draw set background.";
         return;
     }
     ParsedKcf *firstKcfInCnf = _firstKcf.value();
     // Border color (outside play field)
     ParsedKcfPalette *firstPaletteInFirstKcfInCnf = firstKcfInCnf->getPaletteInKcf(0);
     if (firstPaletteInFirstKcfInCnf == nullptr) {
-        qCritical() << "[ERROR][Scene] No palette in this KCF. Abort.";
+        qCritical() << "[Scene] No palette in this KCF. Abort.";
         return;
     }
     // Some wrong CNF declared a wrong border bolor which index out of "palette_colors_count - 1".
