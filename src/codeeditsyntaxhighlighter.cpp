@@ -56,18 +56,18 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 **************************************************************************/
-#include "codeeditorsyntaxhighlighter.h"
+#include "codeeditsyntaxhighlighter.h"
 
 using namespace Qt::Literals::StringLiterals;
 
-CodeEditorSyntaxHighlighter::CodeEditorSyntaxHighlighter(QTextDocument *parent)
+CodeEditSyntaxHighlighter::CodeEditSyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter{parent}
 {
 
 }
 
 
-void CodeEditorSyntaxHighlighter::highlightBlock(const QString &text)
+void CodeEditSyntaxHighlighter::highlightBlock(const QString &text)
 {
     auto stxPlt = m_themeManager.syntaxFormatPalette();
     // Kcf line

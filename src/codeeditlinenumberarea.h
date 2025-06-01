@@ -57,39 +57,27 @@
 *
 **************************************************************************/
 
-#ifndef CODEEDITOR_H
-#define CODEEDITOR_H
+#ifndef CODEEDITLINENUMBERAREA_H
+#define CODEEDITLINENUMBERAREA_H
 
-#include <QPlainTextEdit>
 #include <QWidget>
-#include "codeeditorlinenumberarea.h"
-#include "codeeditorsyntaxhighlighter.h"
-#include "thememanager.h"
 
-class CodeEditor : public QPlainTextEdit
+class CodeEdit;
+class CodeEditorLineNumberArea : public QWidget
 {
     Q_OBJECT
 public:
-    CodeEditor(QWidget *parent = nullptr);
+    explicit CodeEditorLineNumberArea(CodeEdit *parent = nullptr);
 
-    void lineNumberAreaPaintEvent(QPaintEvent *event);
-    int lineNumberAreaWidth();
+    QSize sizeHint() const override;
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
-
-private slots:
-    void updateLineNumberAreaWidth(int newBlockCount);
-    void highlightCurrentLine();
-    void updateLineNumberArea(const QRect &rect, int dy);
+    void paintEvent(QPaintEvent *event) override;
 
 private:
-    static const int LINENUM_HORI_PAD = 4;
-    QFont m_font;
-    CodeEditorLineNumberArea *m_lineNumberArea;
-    CodeEditorSyntaxHighlighter *m_syntaxHighlighter;
-    ThemeManager &m_themeManager = ThemeManager::instance();
+    CodeEdit *m_codeEdit;
+signals:
+
 };
 
-
-#endif // CODEEDITOR_H
+#endif // CODEEDITLINENUMBERAREA_H

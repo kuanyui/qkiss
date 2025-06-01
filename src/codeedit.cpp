@@ -60,26 +60,26 @@
 #include <QPainter>
 #include <QTextBlock>
 
-#include "codeeditor.h"
+#include "codeedit.h"
 
-CodeEditor::CodeEditor(QWidget *parent):
+CodeEdit::CodeEdit(QWidget *parent):
     QPlainTextEdit{parent}
 {
     m_lineNumberArea = new CodeEditorLineNumberArea(this);
-    m_syntaxHighlighter = new CodeEditorSyntaxHighlighter(this->document());
+    m_syntaxHighlighter = new CodeEditSyntaxHighlighter(this->document());
     m_font = QFont {"Monospace"};
     m_font.setStyleHint(QFont::TypeWriter);
     setFont(m_font);
     setReadOnly(true);
 
-    connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateLineNumberAreaWidth);
-    connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumberArea);
-    connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+    connect(this, &CodeEdit::blockCountChanged, this, &CodeEdit::updateLineNumberAreaWidth);
+    connect(this, &CodeEdit::updateRequest, this, &CodeEdit::updateLineNumberArea);
+    connect(this, &CodeEdit::cursorPositionChanged, this, &CodeEdit::highlightCurrentLine);
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
 }
 
-int CodeEditor::lineNumberAreaWidth()
+int CodeEdit::lineNumberAreaWidth()
 {
     int digits = 1;
     int max = qMax(1, blockCount());
@@ -94,12 +94,12 @@ int CodeEditor::lineNumberAreaWidth()
 }
 
 
-void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
+void CodeEdit::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
-void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
+void CodeEdit::updateLineNumberArea(const QRect &rect, int dy)
 {
     if (dy) {
         m_lineNumberArea->scroll(0, dy);
@@ -112,7 +112,7 @@ void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 }
 
 
-void CodeEditor::resizeEvent(QResizeEvent *e)
+void CodeEdit::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
 
@@ -120,7 +120,7 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
     m_lineNumberArea->setGeometry(QRect(cr.x(), cr.y(), lineNumberAreaWidth(), cr.height()));
 }
 
-void CodeEditor::highlightCurrentLine()
+void CodeEdit::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
     QTextEdit::ExtraSelection selection;
@@ -135,7 +135,7 @@ void CodeEditor::highlightCurrentLine()
     setExtraSelections(extraSelections);
 }
 
-void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
+void CodeEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     auto clrplt = m_themeManager.syntaxFormatPalette();
     QPainter painter{qobject_cast<QWidget*>(m_lineNumberArea)};

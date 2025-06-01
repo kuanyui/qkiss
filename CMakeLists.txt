@@ -123,9 +123,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/filesystembrowser.h src/filesystembrowser.cpp
         src/logviewer.h src/logviewer.cpp
         src/innerfilesbrowser.h src/innerfilesbrowser.cpp
-        src/codeeditor.h src/codeeditor.cpp
-        src/codeeditorlinenumberarea.h src/codeeditorlinenumberarea.cpp
-        src/codeeditorsyntaxhighlighter.h src/codeeditorsyntaxhighlighter.cpp
+        src/codeedit.h src/codeedit.cpp
+        src/codeeditlinenumberarea.h src/codeeditlinenumberarea.cpp
+        src/codeeditsyntaxhighlighter.h src/codeeditsyntaxhighlighter.cpp
         src/thememanager.h src/thememanager.cpp
         src/fileiconprovider.h src/fileiconprovider.cpp
         src/iconbuttondelegate.h src/iconbuttondelegate.cpp

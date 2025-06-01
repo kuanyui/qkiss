@@ -56,8 +56,8 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 **************************************************************************/
-#ifndef CODEEDITORSYNTAXHIGHLIGHTER_H
-#define CODEEDITORSYNTAXHIGHLIGHTER_H
+#ifndef CODEEDITSYNTAXHIGHLIGHTER_H
+#define CODEEDITSYNTAXHIGHLIGHTER_H
 
 #include <QSyntaxHighlighter>
 #include <QObject>
@@ -65,11 +65,11 @@
 
 #include "thememanager.h"
 
-class CodeEditorSyntaxHighlighter : public QSyntaxHighlighter
+class CodeEditSyntaxHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 public:
-    CodeEditorSyntaxHighlighter(QTextDocument *parent = nullptr);
+    CodeEditSyntaxHighlighter(QTextDocument *parent = nullptr);
 
 protected:
     void highlightBlock(const QString &text) override;
@@ -77,4 +77,4 @@ private:
     ThemeManager &m_themeManager = ThemeManager::instance();
 };
 
-#endif // CODEEDITORSYNTAXHIGHLIGHTER_H
+#endif // CODEEDITSYNTAXHIGHLIGHTER_H
