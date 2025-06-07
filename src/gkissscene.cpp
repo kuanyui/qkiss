@@ -6,6 +6,7 @@
 #include <QWidgetAction>
 #include <QLabel>
 #include <QScreen>
+#include <QClipboard>
 
 using namespace Qt::Literals::StringLiterals;
 using FV = FkissVariant;
@@ -507,8 +508,12 @@ void GKissScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     actResetPos->setIcon(QIcon::fromTheme("reset-position"));
     menu.addSection(tr("Information"));
     // Show CEL filename
-    QAction *dummyFileName= menu.addAction(item->cnfCel()->celFileName());
+    QAction *dummyFileName = menu.addAction(item->cnfCel()->celFileName(), [=](){
+        QClipboard *clipboard = QApplication::clipboard();
+        clipboard->setText(item->cnfCel()->celFileName());
+    });
     dummyFileName->setIcon(QIcon::fromTheme("image-x-generic"));
+    dummyFileName->setStatusTip(tr("Click to copy filename to clipboard."));  // FIXME: doesn't work... Why?
     // dummyFileName->setEnabled(false);
     // Show comment if exists
     if (!item->cnfCel()->comment().isEmpty()) {
