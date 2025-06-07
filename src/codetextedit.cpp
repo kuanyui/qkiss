@@ -98,6 +98,13 @@ int CodeTextEdit::lineNumberAreaWidth()
 
 void CodeTextEdit::searchText(const QString &keyword)
 {
+    QTextCharFormat clearFormat;
+    clearFormat.setBackground(Qt::NoBrush);
+    clearFormat.setForeground(Qt::NoBrush);
+    for (QTextCursor &cursor : m_searchOccurrences) {
+        cursor.mergeCharFormat(clearFormat);
+    }
+
     if (keyword.isEmpty()) {
         clearSearch();
         return;
