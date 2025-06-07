@@ -155,7 +155,6 @@ void CodeTextEdit::clearSearch()
     m_searchKeyword.clear();
     m_searchOccurrences.clear();
     m_searchOccurrenceIndex = -1;
-    qDebug() << "[TextEditSearcher] clearSearch!";
     renderAllSearchOccurrencesHighlights();
 }
 
@@ -226,13 +225,14 @@ void CodeTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 void CodeTextEdit::renderAllSearchOccurrencesHighlights()
 {
-    qDebug() << "[TextEditSearcher] renderAllSearchOccurrencesHighlights()";
-    // clear all search occurrences highlights
-    m_syntaxHighlighter->rehighlight();
+    // Syntax rehighlight (this will not remove merged format)
+    QSyntaxHighlighter *highlighter = findChild<QSyntaxHighlighter *>();
+    if (highlighter) {
+        highlighter->rehighlight();
+    }
 
     for (int i = 0; i < m_searchOccurrences.length(); i++) {
         auto occurredCursor = m_searchOccurrences[i];
-        qDebug() << "cursor" << i;
         if (i == m_searchOccurrenceIndex) {
             occurredCursor.mergeCharFormat(m_textCharFmtSearchCurrentOccurrence);
         } else {
