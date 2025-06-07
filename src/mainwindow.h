@@ -11,7 +11,7 @@
 #include "filesystembrowser.h"
 #include "logviewer.h"
 #include "innerfilesbrowser.h"
-#include "codeedit.h"
+#include "codeeditor.h"
 #include "iteminspector.h"
 #include "configfile.h"
 QT_BEGIN_NAMESPACE
@@ -71,7 +71,7 @@ protected:
     FileSystemBrowser *m_fileSystemBrowser;
     LogViewer *m_logViewer;
     InnerFilesBrowser *m_innerFilesBrowser;
-    CodeEdit *m_codeEditor;
+    CodeEditor *m_codeEditor;
     ItemInspector *m_itemInspector;
     QPlainTextEdit *m_docViewer;
     ConfigFile &m_cfg;

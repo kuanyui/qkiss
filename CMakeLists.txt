@@ -123,9 +123,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/filesystembrowser.h src/filesystembrowser.cpp
         src/logviewer.h src/logviewer.cpp
         src/innerfilesbrowser.h src/innerfilesbrowser.cpp
-        src/codeedit.h src/codeedit.cpp
-        src/codeeditlinenumberarea.h src/codeeditlinenumberarea.cpp
-        src/codeeditsyntaxhighlighter.h src/codeeditsyntaxhighlighter.cpp
+        src/codetextedit.h src/codetextedit.cpp
+        src/codetexteditlinenumberarea.h src/codetexteditlinenumberarea.cpp
+        src/codetexteditsyntaxhighlighter.h src/codetexteditsyntaxhighlighter.cpp
         src/thememanager.h src/thememanager.cpp
         src/fileiconprovider.h src/fileiconprovider.cpp
         src/iconbuttondelegate.h src/iconbuttondelegate.cpp
@@ -134,6 +134,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/archiveprocessorfactory.h src/archiveprocessorfactory.cpp
         src/audioplayer.h src/audioplayer.cpp
         src/iteminspector.h src/iteminspector.cpp
+        src/texteditsearchbar.h src/texteditsearchbar.cpp
+        src/codeeditor.h src/codeeditor.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -57,22 +57,22 @@
 *
 **************************************************************************/
 
-#include "codeeditlinenumberarea.h"
-#include "codeedit.h"
+#include "codetexteditlinenumberarea.h"
+#include "codetextedit.h"
 
-CodeEditorLineNumberArea::CodeEditorLineNumberArea(CodeEdit *parent)
+CodeTextEditLineNumberArea::CodeTextEditLineNumberArea(CodeTextEdit *parent)
     : QWidget{parent},
       m_codeEdit{parent}
 {
 
 }
 
-QSize CodeEditorLineNumberArea::sizeHint() const
+QSize CodeTextEditLineNumberArea::sizeHint() const
 {
     return QSize(m_codeEdit->lineNumberAreaWidth(), 0);
 }
 
-void CodeEditorLineNumberArea::paintEvent(QPaintEvent *event)
+void CodeTextEditLineNumberArea::paintEvent(QPaintEvent *event)
 {
     m_codeEdit->lineNumberAreaPaintEvent(event);
 }

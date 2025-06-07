@@ -57,23 +57,29 @@
 *
 **************************************************************************/
 
-#ifndef CODEEDIT_H
-#define CODEEDIT_H
+#ifndef CODETEXTEDIT_H
+#define CODETEXTEDIT_H
 
 #include <QPlainTextEdit>
 #include <QWidget>
-#include "codeeditlinenumberarea.h"
-#include "codeeditsyntaxhighlighter.h"
+#include "codetexteditlinenumberarea.h"
+#include "codetexteditsyntaxhighlighter.h"
 #include "thememanager.h"
 
-class CodeEdit : public QPlainTextEdit
+class CodeTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    CodeEdit(QWidget *parent = nullptr);
+    CodeTextEdit(QWidget *parent = nullptr);
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
+
+    /// Search all occurrences in document, and save these occurrences as cursors.
+    void searchText(const QString &keyword);
+    void searchNext();
+    void searchPrevious();
+    void clearSearch();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -84,12 +90,25 @@ private slots:
     void updateLineNumberArea(const QRect &rect, int dy);
 
 private:
+    // Search
+    void renderAllSearchOccurrencesHighlights();
+    void moveToSearchOccurrence(int index);
+
     static const int LINENUM_HORI_PAD = 4;
     QFont m_font;
-    CodeEditorLineNumberArea *m_lineNumberArea;
-    CodeEditSyntaxHighlighter *m_syntaxHighlighter;
+    CodeTextEditLineNumberArea *m_lineNumberArea;
+    CodeTextEditSyntaxHighlighter *m_syntaxHighlighter;
     ThemeManager &m_themeManager = ThemeManager::instance();
+
+    // Search
+    QString m_searchKeyword;
+    bool m_searchCaseSensitive;
+    bool m_searchWholeWord;
+    QList<QTextCursor> m_searchOccurrences;
+    int m_searchOccurrenceIndex = -1;
+    QTextCharFormat m_textCharFmtSearchCurrentOccurrence;
+    QTextCharFormat m_textCharFmtSearchOtherOccurrence;
 };
 
 
-#endif // CODEEDIT_H
+#endif // CODETEXTEDIT_H

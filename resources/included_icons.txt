@@ -20,9 +20,11 @@ Gnome	zoom-original
 
 # File Browser
 BlueHumanity	go-up	go-up
+BlueHumanity	go-down	go-down
 BlueHumanity	go-next	go-next
 BlueHumanity	go-previous	go-previous
 BlueHumanity	view-refresh	view-refresh
+Gnome		window-close
 
 ### XDG Places
 #Gnome	devices/computer

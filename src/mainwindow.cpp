@@ -343,7 +343,7 @@ void MainWindow::setupDockWindows()
     // ==================================================
     // Code Editor
     // ==================================================
-    m_codeEditor = new CodeEdit(this);
+    m_codeEditor = new CodeEditor(this);
     ui->dockWidget_cnfCodeViewer->setWidget(m_codeEditor);
     ui->dockWidget_cnfCodeViewer->toggleViewAction()->setIcon(QIcon::fromTheme("applications-development"));
 

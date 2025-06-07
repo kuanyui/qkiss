@@ -56,25 +56,28 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 **************************************************************************/
-#ifndef CODEEDITSYNTAXHIGHLIGHTER_H
-#define CODEEDITSYNTAXHIGHLIGHTER_H
 
-#include <QSyntaxHighlighter>
-#include <QObject>
-#include <QRegularExpression>
+#ifndef CODETEXTEDITLINENUMBERAREA_H
+#define CODETEXTEDITLINENUMBERAREA_H
 
-#include "thememanager.h"
+#include <QWidget>
 
-class CodeEditSyntaxHighlighter : public QSyntaxHighlighter
+class CodeTextEdit;
+class CodeTextEditLineNumberArea : public QWidget
 {
     Q_OBJECT
 public:
-    CodeEditSyntaxHighlighter(QTextDocument *parent = nullptr);
+    explicit CodeTextEditLineNumberArea(CodeTextEdit *parent = nullptr);
+
+    QSize sizeHint() const override;
 
 protected:
-    void highlightBlock(const QString &text) override;
+    void paintEvent(QPaintEvent *event) override;
+
 private:
-    ThemeManager &m_themeManager = ThemeManager::instance();
+    CodeTextEdit *m_codeEdit;
+signals:
+
 };
 
-#endif // CODEEDITSYNTAXHIGHLIGHTER_H
+#endif // CODETEXTEDITLINENUMBERAREA_H

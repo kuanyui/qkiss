@@ -60,26 +60,29 @@
 #include <QPainter>
 #include <QTextBlock>
 
-#include "codeedit.h"
+#include "codetextedit.h"
 
-CodeEdit::CodeEdit(QWidget *parent):
+CodeTextEdit::CodeTextEdit(QWidget *parent):
     QPlainTextEdit{parent}
 {
-    m_lineNumberArea = new CodeEditorLineNumberArea(this);
-    m_syntaxHighlighter = new CodeEditSyntaxHighlighter(this->document());
+    m_lineNumberArea = new CodeTextEditLineNumberArea(this);
+    m_syntaxHighlighter = new CodeTextEditSyntaxHighlighter(this->document());
     m_font = QFont {"Monospace"};
     m_font.setStyleHint(QFont::TypeWriter);
+    m_textCharFmtSearchCurrentOccurrence.setBackground(QColor(255, 255, 0, 200));
+    m_textCharFmtSearchCurrentOccurrence.setForeground(QColor(0, 0, 0, 255));
+    m_textCharFmtSearchOtherOccurrence.setBackground(QColor(255, 0, 255, 100));
     setFont(m_font);
     setReadOnly(true);
 
-    connect(this, &CodeEdit::blockCountChanged, this, &CodeEdit::updateLineNumberAreaWidth);
-    connect(this, &CodeEdit::updateRequest, this, &CodeEdit::updateLineNumberArea);
-    connect(this, &CodeEdit::cursorPositionChanged, this, &CodeEdit::highlightCurrentLine);
+    connect(this, &CodeTextEdit::blockCountChanged, this, &CodeTextEdit::updateLineNumberAreaWidth);
+    connect(this, &CodeTextEdit::updateRequest, this, &CodeTextEdit::updateLineNumberArea);
+    connect(this, &CodeTextEdit::cursorPositionChanged, this, &CodeTextEdit::highlightCurrentLine);
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
 }
 
-int CodeEdit::lineNumberAreaWidth()
+int CodeTextEdit::lineNumberAreaWidth()
 {
     int digits = 1;
     int max = qMax(1, blockCount());
@@ -93,13 +96,69 @@ int CodeEdit::lineNumberAreaWidth()
     return space;
 }
 
+void CodeTextEdit::searchText(const QString &keyword)
+{
+    if (keyword.isEmpty()) {
+        clearSearch();
+        return;
+    }
 
-void CodeEdit::updateLineNumberAreaWidth(int /* newBlockCount */)
+    m_searchKeyword = keyword;
+    m_searchOccurrences.clear();
+    m_searchOccurrenceIndex = -1;
+
+    QTextDocument *doc = document();   // doc holds formatted text
+    QTextCursor cursor(doc);
+
+    QTextDocument::FindFlags flags;
+    if (m_searchCaseSensitive) { flags |= QTextDocument::FindFlag::FindCaseSensitively; }
+    if (m_searchWholeWord) { flags |= QTextDocument::FindFlag::FindWholeWords; }
+
+    while (!cursor.isNull() && !cursor.atEnd()) {
+        cursor = doc->find(keyword, cursor, flags);
+        if (cursor.isNull()) { break; }
+        m_searchOccurrences.append(cursor);
+    }
+
+    if (!m_searchOccurrences.isEmpty()) {
+        m_searchOccurrenceIndex = 0;
+        moveToSearchOccurrence(0);
+    }
+    renderAllSearchOccurrencesHighlights();
+}
+
+void CodeTextEdit::searchNext()
+{
+    if (m_searchOccurrences.isEmpty()) { return; }
+    m_searchOccurrenceIndex = (m_searchOccurrenceIndex + 1) % m_searchOccurrences.length();
+    moveToSearchOccurrence(m_searchOccurrenceIndex);
+    renderAllSearchOccurrencesHighlights();
+}
+
+void CodeTextEdit::searchPrevious()
+{
+    if (m_searchOccurrences.isEmpty()) { return; }
+    m_searchOccurrenceIndex = (m_searchOccurrenceIndex - 1 + m_searchOccurrences.length()) % m_searchOccurrences.length();   // ...too show-off to understand?
+    moveToSearchOccurrence(m_searchOccurrenceIndex);
+    renderAllSearchOccurrencesHighlights();
+}
+
+void CodeTextEdit::clearSearch()
+{
+    m_searchKeyword.clear();
+    m_searchOccurrences.clear();
+    m_searchOccurrenceIndex = -1;
+    qDebug() << "[TextEditSearcher] clearSearch!";
+    renderAllSearchOccurrencesHighlights();
+}
+
+
+void CodeTextEdit::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
-void CodeEdit::updateLineNumberArea(const QRect &rect, int dy)
+void CodeTextEdit::updateLineNumberArea(const QRect &rect, int dy)
 {
     if (dy) {
         m_lineNumberArea->scroll(0, dy);
@@ -111,8 +170,7 @@ void CodeEdit::updateLineNumberArea(const QRect &rect, int dy)
     }
 }
 
-
-void CodeEdit::resizeEvent(QResizeEvent *e)
+void CodeTextEdit::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
 
@@ -120,7 +178,7 @@ void CodeEdit::resizeEvent(QResizeEvent *e)
     m_lineNumberArea->setGeometry(QRect(cr.x(), cr.y(), lineNumberAreaWidth(), cr.height()));
 }
 
-void CodeEdit::highlightCurrentLine()
+void CodeTextEdit::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
     QTextEdit::ExtraSelection selection;
@@ -135,7 +193,7 @@ void CodeEdit::highlightCurrentLine()
     setExtraSelections(extraSelections);
 }
 
-void CodeEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
+void CodeTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     auto clrplt = m_themeManager.syntaxFormatPalette();
     QPainter painter{qobject_cast<QWidget*>(m_lineNumberArea)};
@@ -158,3 +216,30 @@ void CodeEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         ++blockNumber;
     }
 }
+
+void CodeTextEdit::renderAllSearchOccurrencesHighlights()
+{
+    qDebug() << "[TextEditSearcher] renderAllSearchOccurrencesHighlights()";
+    // clear all search occurrences highlights
+    m_syntaxHighlighter->rehighlight();
+
+    for (int i = 0; i < m_searchOccurrences.length(); i++) {
+        auto occurredCursor = m_searchOccurrences[i];
+        qDebug() << "cursor" << i;
+        if (i == m_searchOccurrenceIndex) {
+            occurredCursor.mergeCharFormat(m_textCharFmtSearchCurrentOccurrence);
+        } else {
+            occurredCursor.mergeCharFormat(m_textCharFmtSearchOtherOccurrence);
+        }
+    }
+}
+
+void CodeTextEdit::moveToSearchOccurrence(int index)
+{
+    if (index < 0) { return; }
+    if (index >= m_searchOccurrences.length()) { return; }
+    m_searchOccurrenceIndex = index;
+    setTextCursor(m_searchOccurrences[index]);
+}
+
+
