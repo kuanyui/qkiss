@@ -175,6 +175,7 @@ void GKissScene::bindItemsToObjects()
             maxFix = qMax(item->fix(), maxFix);
             item->setPos(objPos.x() + item->cel()->x(),
                          objPos.y() + item->cel()->y());
+            item->setInitialPos(item->pos());
             // qDebug().noquote().nospace() << "[DEBUG][Scene] bindItemsToObjects() ===> sceneIndex: %1,\t\t\tcelFileName: %2\t\t objId: %3, \t\t itemPos: (%4, %5)"_L1.argnum(m_setIndex).arg(item->celFileName()).argnum(objId).argnum(item->x()).argnum(item->y());
         }
         // The fix value for an object is the maximum value for all member cels.
