@@ -16,6 +16,8 @@ class TextEditSearchBar : public QWidget
 public:
     explicit TextEditSearchBar(QWidget *parent = nullptr);
     void setFocus();
+    void setKeyword(const QString &keyword);
+    void clearKeyword();
 
 signals:
     void keywordChanged(const QString &text);

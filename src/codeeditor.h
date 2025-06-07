@@ -13,6 +13,7 @@ class CodeEditor : public QWidget
 public:
     explicit CodeEditor(QWidget *parent = nullptr);
     void setPlainText(const QString &text);
+
 signals:
 
 public slots:

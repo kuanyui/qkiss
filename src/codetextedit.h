@@ -81,6 +81,9 @@ public:
     void searchPrevious();
     void clearSearch();
 
+public slots:
+    void setPlainTextAndClearSearch(const QString &text);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 

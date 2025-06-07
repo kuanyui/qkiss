@@ -8,7 +8,9 @@ CodeEditor::CodeEditor(QWidget *parent)
 
 void CodeEditor::setPlainText(const QString &text)
 {
-    m_codeEdit->setPlainText(text);
+    m_searchBar->hide();
+    m_searchBar->clearKeyword();
+    m_codeEdit->setPlainTextAndClearSearch(text);
 }
 
 void CodeEditor::showSearchBar()

@@ -44,6 +44,18 @@ void TextEditSearchBar::setFocus()
     m_editKeyword->selectAll();
 }
 
+void TextEditSearchBar::setKeyword(const QString &keyword)
+{
+    m_editKeyword->setText(keyword);
+    emit keywordChanged(keyword);
+}
+
+void TextEditSearchBar::clearKeyword()
+{
+    m_editKeyword->clear();
+    emit keywordChanged(m_editKeyword->text());
+}
+
 void TextEditSearchBar::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {

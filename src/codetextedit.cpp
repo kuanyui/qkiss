@@ -158,6 +158,17 @@ void CodeTextEdit::clearSearch()
     renderAllSearchOccurrencesHighlights();
 }
 
+void CodeTextEdit::setPlainTextAndClearSearch(const QString &text)
+{
+    m_searchKeyword.clear();
+    m_searchOccurrences.clear();
+    m_searchOccurrenceIndex = -1;
+    // Clear all QTextCharFormat
+    QTextCursor cursor(document());
+    cursor.select(QTextCursor::Document);
+    cursor.setCharFormat(QTextCharFormat());
+    setPlainText(text);
+}
 
 void CodeTextEdit::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
