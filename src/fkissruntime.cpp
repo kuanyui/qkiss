@@ -231,7 +231,7 @@ void FkissRuntime::runTransparent(FkissVariant target, FkissVariant delta)
 
 #define RT_TYPE_CHECK(fkissCmd, paramName, expectedType) \
     if ((paramName).type() != expectedType) { \
-        qDebug() << "[fkissruntime][WARNING] currently, the `" #paramName "` in command `" #fkissCmd "()` must be a(n) " << FkissVariant::typeToString(expectedType) << ". Skip."; \
+        qDebug() << "[fkissruntime][WARNING] currently, the `" #paramName "` in command `" #fkissCmd "()` must be a " << FkissVariant::typeToString(expectedType) << ". Skip." << paramName; \
         return; \
     }
 
@@ -251,7 +251,7 @@ void FkissRuntime::runIffixed(FkissVariant target, FkissVariant alarmID, FkissVa
     // }
     if (m_curKissScene == nullptr) { return; }
     RT_TYPE_CHECK("iffixed", target, FkissVariant::Type::Cel)
-    RT_TYPE_CHECK("iffixed", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("iffixed", alarmID, FkissVariant::Type::Int)
     RT_TYPE_CHECK("iffixed", delay, FkissVariant::Type::Int)
     QString targetCelName = target.getCelName();
     auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
@@ -266,7 +266,7 @@ void FkissRuntime::runIfnotfixed(FkissVariant target, FkissVariant alarmID, Fkis
 {
     if (m_curKissScene == nullptr) { return; }
     RT_TYPE_CHECK("iffixed", target, FkissVariant::Type::Cel)
-    RT_TYPE_CHECK("iffixed", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("iffixed", alarmID, FkissVariant::Type::Int)
     RT_TYPE_CHECK("iffixed", delay, FkissVariant::Type::Int)
     QString targetCelName = target.getCelName();
     auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
@@ -281,7 +281,7 @@ void FkissRuntime::runIfmapped(FkissVariant target, FkissVariant alarmID, FkissV
 {
     if (m_curKissScene == nullptr) { return; }
     RT_TYPE_CHECK("ifmapped", target, FkissVariant::Type::Cel)
-    RT_TYPE_CHECK("ifmapped", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("ifmapped", alarmID, FkissVariant::Type::Int)
     RT_TYPE_CHECK("ifmapped", delay, FkissVariant::Type::Int)
     QString targetCelName = target.getCelName();
     auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
@@ -296,7 +296,7 @@ void FkissRuntime::runIfnotmapped(FkissVariant target, FkissVariant alarmID, Fki
 {
     if (m_curKissScene == nullptr) { return; }
     RT_TYPE_CHECK("ifnotmapped", target, FkissVariant::Type::Cel)
-    RT_TYPE_CHECK("ifnotmapped", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("ifnotmapped", alarmID, FkissVariant::Type::Int)
     RT_TYPE_CHECK("ifnotmapped", delay, FkissVariant::Type::Int)
     QString targetCelName = target.getCelName();
     auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
@@ -311,7 +311,7 @@ void FkissRuntime::runIfmoved(FkissVariant target, FkissVariant alarmID, FkissVa
 {
     if (m_curKissScene == nullptr) { return; }
     RT_TYPE_CHECK("ifmoved", target, FkissVariant::Type::Cel)
-    RT_TYPE_CHECK("ifmoved", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("ifmoved", alarmID, FkissVariant::Type::Int)
     RT_TYPE_CHECK("ifmoved", delay, FkissVariant::Type::Int)
     QString targetCelName = target.getCelName();
     auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
@@ -326,7 +326,7 @@ void FkissRuntime::runIfnotmoved(FkissVariant target, FkissVariant alarmID, Fkis
 {
     if (m_curKissScene == nullptr) { return; }
     RT_TYPE_CHECK("ifmoved", target, FkissVariant::Type::Cel)
-    RT_TYPE_CHECK("ifmoved", alarmID, FkissVariant::Type::Object)
+    RT_TYPE_CHECK("ifmoved", alarmID, FkissVariant::Type::Int)
     RT_TYPE_CHECK("ifmoved", delay, FkissVariant::Type::Int)
     QString targetCelName = target.getCelName();
     auto _celItem = m_curKissScene->getItemByCelName(targetCelName);
