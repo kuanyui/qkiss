@@ -317,11 +317,11 @@ void GKissScene::unfixObjectByItem(GKissItem *item)
 
 void GKissScene::resetObjectByItem(GKissItem *item)
 {
-    item->setFix(item->cnfCel()->fix());
     item->setPos(item->initialPos());
+    item->setFix(item->cnfCel()->fix());
     foreach (auto *sib , *(item->siblings())) {
+        sib->setPos(sib->initialPos());
         sib->setFix(sib->cnfCel()->fix());
-        item->setPos(item->initialPos());
     }
 }
 
