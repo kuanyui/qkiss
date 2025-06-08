@@ -394,11 +394,12 @@ QDebug operator<<(QDebug debug, const ParsedCnfCel &cnfCel) {
     foreach (auto x , cnfCel.setsIndexes()) {
         fmtSetIndexes.append(QString::number(x));
     }
-    return debug.noquote().nospace() << QString("ParsedCnfCel { objId: %1,    fix: %2,    fileName: %3,     kcfIdx: %4,     sets: [ %5 ],     comment: %6 }")
+    return debug.noquote().nospace() << QString("ParsedCnfCel { objId: %1,    fix: %2,    fileName: %3,     kcfIdx: %4,    translucency: %5,     sets: [ %6 ],     comment: %7 }")
                                         .arg(cnfCel.objId())
                                         .arg(cnfCel.fix())
                                         .arg(cnfCel.celFileName())
                                         .arg(cnfCel.kcfFileIndex())
+                                        .arg(cnfCel.translucency())
                                         .arg(fmtSetIndexes.join(", "))
                                         .arg(cnfCel.comment());
 }

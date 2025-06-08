@@ -50,6 +50,8 @@ public:
     QList<uint8_t> setsIndexes() const;
     QString comment() const;
 
+    /// 0 is fully-opacity (default)
+    /// 255 is fully transparent
     int16_t translucency() const;
 
 private:

@@ -217,12 +217,14 @@ int32_t GKissItem::fix() const
 
 
 QDebug operator<<(QDebug dbg, const GKissItem &item) {
-    dbg.nospace().noquote() << QString("GKissItem { objId: %1, \tcelFileName: '%2', \tpos: (%3, %4), \tvisible: %5 }")
+    dbg.nospace().noquote() << QString("GKissItem { objId: %1, \tcelFileName: '%2', \tpos: (%3, %4), \ttranslucency: %5, \tvisible: %6}")
                            .arg(item.objId())
                            .arg(item.celFileName())
                            .arg(item.pos().x())
                            .arg(item.pos().y())
-                           .arg(item.isVisible());
+                           .arg(item.kissTranslucency())
+                           .arg(item.isVisible())
+                               ;
     return dbg;
 };
 
