@@ -28,6 +28,8 @@ void GKissItem::init()
     // setFlag(QGraphicsItem::ItemIsSelectable);
     // setFlag(QGraphicsItem::ItemIsFocusable);
     setAcceptHoverEvents(true);
+    // setShapeMode(ShapeMode::BoundingRectShape);   // Default is 0.
+
     m_image = new QImage(m_cel->width(), m_cel->height(), QImage::Format_ARGB32);
     rerenderImage();
     m_fix = m_cnfCel->fix();
@@ -117,20 +119,21 @@ uint8_t GKissItem::kissTranslucency() const
 void GKissItem::setKissTranslucency(int newKissTranscluency)
 {
     /// QGraphicsItem::setOpacity(qreal opacity)  0.0 (transparent) ~ 1.0 (opaque)
-    /// FKiSS transparent(int)                    0 (opaque) ~ 255 (transparent)
-    if (newKissTranscluency > 255) {
-        newKissTranscluency = 255;
-    } else if (newKissTranscluency < 0) {
-        newKissTranscluency = 0;
-    }
-    if (newKissTranscluency == 0) {   // totally visible
-        setOpacity(1);
-    } else if (newKissTranscluency == 255) {  // totally transparent
-        setOpacity(0);
+    /// FKiSS action transparent(int)             0   (opaque)      ~ 255 (transparent)
+    if (newKissTranscluency >= 255) {
+        newKissTranscluency = 255;    // totally transparent
+    } else if (newKissTranscluency <= 0) {
+        newKissTranscluency = 0;      // totally opacity
     }
     m_kissTranslucency = newKissTranscluency;
     qreal inversedKissTranscluency = 255 - newKissTranscluency;
     qreal newOpacity = inversedKissTranscluency / 255;
+    // FIXME: Dirty workaround. If `QGraphicsPixmapItem::setOpacity(0), it will become totally unable be pressed. So set it to 0.01.
+    // https://stackoverflow.com/questions/25206220/how-do-i-enable-a-transparent-qgraphicspixmapitem-to-receive-mouse-click-events
+    // https://doc.qt.io/qt-6/qgraphicspixmapitem.html#ShapeMode-enum
+    if (newOpacity == 0) {
+        newOpacity = 0.01;
+    }
     setOpacity(newOpacity);
 }
 
