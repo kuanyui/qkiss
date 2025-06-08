@@ -17,6 +17,9 @@ const char *FkissVariant::typeToString(Type type) {
 
 FkissVariant FkissVariant::fromString(const QString &value)
 {
+    if (!value.contains(" ") && value.endsWith(".cel", Qt::CaseInsensitive)) {
+        return FkissVariant(Type::Cel, value);
+    }
     return FkissVariant(Type::String, value);
 }
 
