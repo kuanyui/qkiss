@@ -106,7 +106,7 @@ void GKissScene::addCelItem(GKissItem *item)
     }
 }
 
-std::optional<QVector<GKissItem *> *>GKissScene::getItemsByObjId(int32_t objId)
+std::optional<QVector<GKissItem *> *>GKissScene::getItemsByObjId(int32_t objId) const
 {
     QList<GKissItem *> *tmp = m_objIdToItemsMap.value(objId, nullptr);
     if (tmp == nullptr) {
@@ -185,6 +185,25 @@ void GKissScene::bindItemsToObjects()
     }
 }
 
+std::optional<QPoint> GKissScene::getObjectCurrentPos(size_t objId) const
+{
+    auto _objItems = getItemsByObjId(objId);
+    if (!_objItems.has_value()) {
+        qWarning() << QStringLiteral("[Scene] WTF, anchorObjId %1 has no item??? Skip.").arg(objId);
+        return std::nullopt;
+    }
+    auto objItems = _objItems.value();
+    if (objItems->empty()) {
+        qWarning() << QStringLiteral("[Scene] WTF??? Impossible, the obj #%1 has no items???").arg(objId);
+        return std::nullopt;
+    }
+    auto item = objItems->at(0);
+    QPoint itemCurPosInScene = item->pos().toPoint();
+    QPoint itemCelPos = item->cel()->pos();
+    return std::optional<QPoint>(itemCurPosInScene - itemCelPos);
+}
+
+
 bool GKissScene::moveObjectTo(size_t objId, int x, int y)
 {
     // const auto _objPos = m_cnfSet->getObjPosByObjId(objId);
@@ -216,40 +235,39 @@ bool GKissScene::moveObject(size_t objId, int dx, int dy)
     }
     return true;
 }
+#define argnum(num) arg(QString::number(num))
 
 bool GKissScene::moveObjectBy(size_t targetObjId, size_t anchorObjId, int dx, int dy)
 {
-    auto _anchorObjItems = getItemsByObjId(anchorObjId);
-    if (!_anchorObjItems.has_value()) {
-        qWarning() << QStringLiteral("[Scene] WTF, anchorObjId %1 has no item??? Skip.").arg(anchorObjId);
-        return false;
-    }
-    auto anchorObjItems = _anchorObjItems.value();
-    if (anchorObjItems->empty()) {
-        qWarning() << QStringLiteral("[Scene] WTF???");
-        return false;
-    }
-    auto anchorItem = anchorObjItems->at(0);
-
-    auto _anchorObjPos = m_cnfSet->getObjPosByObjId(anchorItem->objId());
+    auto _anchorObjPos = getObjectCurrentPos(anchorObjId);
     if (!_anchorObjPos.has_value()) {
-        qWarning() << QStringLiteral("[Scebe] WTF???");
+        qWarning() << QStringLiteral("[Scene] WTF???");
         return false;
     }
     auto anchorObjPos = _anchorObjPos.value();
 
-    auto _targetObjItems = getItemsByObjId(targetObjId);
-    if (!_targetObjItems.has_value()) {
-        qWarning() << QStringLiteral("[Scene] WTF, objectId %1 has no item??? Skip.").arg(targetObjId);
-        return false;
-    }
-    auto targetObjItems = _targetObjItems.value();
-
-
-    foreach (GKissItem *item, *targetObjItems) {
-        item->setPos(anchorObjPos.x() + item->cel()->x() + dx,
-                     anchorObjPos.y() + item->cel()->y() + dy);
-    }
+    // qDebug() << "[DEBUG] Scene::moveObjectBy(#%1, #%2, %3, %4) ----(translated)---> moveObjectTo(#%5, %6, %7)     (relative obj pos: %8, %9)"_L1
+    //             .argnum(targetObjId)
+    //             .argnum(anchorObjId)
+    //             .argnum(dx)
+    //             .argnum(dy)
+    //             .argnum(targetObjId)
+    //             .argnum(anchorObjPos.x() + dx)
+    //             .argnum(anchorObjPos.y() + dy)
+    //             .argnum(anchorObjPos.x())
+    //             .argnum(anchorObjPos.y())
+    //             ;
+    moveObjectTo(targetObjId,
+                 anchorObjPos.x() + dx,
+                 anchorObjPos.y() + dy);
+    // qDebug() << "[DEBUG] Scene::moveObjectBy(#%1, #%2, %3, %4)  --(result)-->"_L1
+    //             .argnum(targetObjId)
+    //             .argnum(anchorObjId)
+    //             .argnum(dx)
+    //             .argnum(dy)
+    //          << getObjectCurrentPos(targetObjId).value()
+    //          << "\t(relative obj pos ="
+    //          << getObjectCurrentPos(anchorObjId).value();
     return true;
 }
 
@@ -339,6 +357,7 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (!_item) { return; }
     GKissItem *item = qgraphicsitem_cast<GKissItem *>(_item);
     if (!item) { return; }
+    qDebug() << "mousePressEvent()" << item->cnfCel();
     if (event->button() == Qt::RightButton) {
         return;
     }

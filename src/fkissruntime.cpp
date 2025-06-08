@@ -462,12 +462,34 @@ std::shared_ptr<ASTPairedCommands> FkissRuntime::getEventActionPair(const QStrin
 
 bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs)
 {
-    // qDebug() << "[Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
+    bool printDebug = true;
+    if (eventName == FKK::E::ALARM) {
+        for (int i = 0; i <= 11; i++) {
+            if (eventArgs.length() != 0 && eventArgs[0] == FkissVariant::fromInt(i)) {
+                printDebug = false;
+                break;
+            }
+        }
+        for (int i = 57; i <= 59; i++) {
+            if (eventArgs.length() != 0 && eventArgs[0] == FkissVariant::fromInt(i)) {
+                printDebug = false;
+                break;
+            }
+        }
+    }
+    if (eventName == FKK::E::STILLOUT) {
+        printDebug = false;
+    }
+    if (printDebug) {
+        qDebug() << "[DEBUG][Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
+    }
     auto _evpair = findEvpair(eventName, eventArgs);
     if (!_evpair.has_value()) { return false; }
     auto evpair = _evpair.value();
     foreach (auto act, evpair->actions) {
-        // qDebug() << "[Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
+        if (printDebug) {
+            qDebug() << "[DEBUG][Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
+        }
         auto actName = act->name;
         auto actArgs = act->args;
         if (actName == FKK::A::MAP) {

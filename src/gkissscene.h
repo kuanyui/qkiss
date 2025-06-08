@@ -17,12 +17,14 @@ public:
     std::optional<ArchiveFile *> archiveFile() const;
     void drawCurSetBackground();
     void addCelItem(GKissItem *item);
-    std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId);
+    std::optional<QVector<GKissItem *> *> getItemsByObjId(int32_t objId) const;
     std::optional<GKissItem *> getItemByCelName(const QString &celFileName);
     void setItemsVisibility(const FkissVariant &target, bool visibility);
     void setItemVisibilityByCelName(const QString &celFileName, bool visibility);
     void setItemsVisibilityByObjId(int32_t objId, bool visibility);
     void bindItemsToObjects();
+    /// Get object's "current" position, instead of the position defined in CNF's set.
+    std::optional<QPoint > getObjectCurrentPos(size_t objId) const;
     /// moveto() in FKiSS2
     bool moveObjectTo(size_t objId, int x, int y);
     /// move() in FKiSS1
