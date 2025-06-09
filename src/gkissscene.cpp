@@ -237,8 +237,15 @@ bool GKissScene::moveObject(size_t objId, int dx, int dy)
 }
 #define argnum(num) arg(QString::number(num))
 
-bool GKissScene::moveObjectBy(size_t targetObjId, size_t anchorObjId, int dx, int dy)
+bool GKissScene::moveObjectByX(size_t targetObjId, size_t anchorObjId, int dx)
 {
+    auto _targetObjPos = getObjectCurrentPos(targetObjId);
+    if (!_targetObjPos.has_value()) {
+        qWarning() << QStringLiteral("[Scene] WTF???");
+        return false;
+    }
+    auto targetObjPos = _targetObjPos.value();
+
     auto _anchorObjPos = getObjectCurrentPos(anchorObjId);
     if (!_anchorObjPos.has_value()) {
         qWarning() << QStringLiteral("[Scene] WTF???");
@@ -246,28 +253,31 @@ bool GKissScene::moveObjectBy(size_t targetObjId, size_t anchorObjId, int dx, in
     }
     auto anchorObjPos = _anchorObjPos.value();
 
-    // qDebug() << "[DEBUG] Scene::moveObjectBy(#%1, #%2, %3, %4) ----(translated)---> moveObjectTo(#%5, %6, %7)     (relative obj pos: %8, %9)"_L1
-    //             .argnum(targetObjId)
-    //             .argnum(anchorObjId)
-    //             .argnum(dx)
-    //             .argnum(dy)
-    //             .argnum(targetObjId)
-    //             .argnum(anchorObjPos.x() + dx)
-    //             .argnum(anchorObjPos.y() + dy)
-    //             .argnum(anchorObjPos.x())
-    //             .argnum(anchorObjPos.y())
-    //             ;
     moveObjectTo(targetObjId,
                  anchorObjPos.x() + dx,
+                 targetObjPos.y());
+    return true;
+}
+
+bool GKissScene::moveObjectByY(size_t targetObjId, size_t anchorObjId, int dy)
+{
+    auto _targetObjPos = getObjectCurrentPos(targetObjId);
+    if (!_targetObjPos.has_value()) {
+        qWarning() << QStringLiteral("[Scene] WTF???");
+        return false;
+    }
+    auto targetObjPos = _targetObjPos.value();
+
+    auto _anchorObjPos = getObjectCurrentPos(anchorObjId);
+    if (!_anchorObjPos.has_value()) {
+        qWarning() << QStringLiteral("[Scene] WTF???");
+        return false;
+    }
+    auto anchorObjPos = _anchorObjPos.value();
+
+    moveObjectTo(targetObjId,
+                 targetObjPos.x(),
                  anchorObjPos.y() + dy);
-    // qDebug() << "[DEBUG] Scene::moveObjectBy(#%1, #%2, %3, %4)  --(result)-->"_L1
-    //             .argnum(targetObjId)
-    //             .argnum(anchorObjId)
-    //             .argnum(dx)
-    //             .argnum(dy)
-    //          << getObjectCurrentPos(targetObjId).value()
-    //          << "\t(relative obj pos ="
-    //          << getObjectCurrentPos(anchorObjId).value();
     return true;
 }
 

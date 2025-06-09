@@ -29,8 +29,10 @@ public:
     bool moveObjectTo(size_t objId, int x, int y);
     /// move() in FKiSS1
     bool moveObject(size_t objId, int dx, int dy);
-    /// movebyx(), movebyy() in FKiSS2
-    bool moveObjectBy(size_t targetObjId, size_t anchorObjId, int dx, int dy);
+    /// movebyx() in FKiSS2
+    bool moveObjectByX(size_t targetObjId, size_t anchorObjId, int dx);
+    /// movebyy() in FKiSS2
+    bool moveObjectByY(size_t targetObjId, size_t anchorObjId, int dy);
     void executeTransparent(const FkissVariant &target, int delta);
     void executeTransparentOnCel(QString celFileName, int delta);
     void executeTransparentOnObj(int32_t objId, int delta);

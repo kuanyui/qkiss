@@ -191,7 +191,7 @@ void FkissRuntime::runMovebyx(FkissVariant target, FkissVariant relative, FkissV
         qDebug() << "[fkissruntime][ERROR] the `x` in movebyx() must be an integer. Skip."_L1;
         return;
     }
-    m_curKissScene->moveObjectBy(target.getObjectId(), relative.getObjectId(), dx.getInt(), 0);
+    m_curKissScene->moveObjectByX(target.getObjectId(), relative.getObjectId(), dx.getInt());
 }
 
 void FkissRuntime::runMovebyy(FkissVariant target, FkissVariant relative, FkissVariant dy)
@@ -208,7 +208,7 @@ void FkissRuntime::runMovebyy(FkissVariant target, FkissVariant relative, FkissV
         qDebug() << "[fkissruntime][ERROR] the `y` in movebyy() must be an integer. Skip."_L1;
         return;
     }
-    m_curKissScene->moveObjectBy(target.getObjectId(), relative.getObjectId(), 0, dy.getInt());
+    m_curKissScene->moveObjectByY(target.getObjectId(), relative.getObjectId(), dy.getInt());
 }
 
 void FkissRuntime::runTransparent(FkissVariant target, FkissVariant delta)
