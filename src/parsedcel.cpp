@@ -93,6 +93,16 @@ uint16_t ParsedCel::height() const
     return m_height;
 }
 
+QPoint ParsedCel::pos() const
+{
+    return QPoint(m_x, m_y);
+}
+
+QSize ParsedCel::size() const
+{
+    return QSize(m_width, m_height);
+}
+
 uint16_t ParsedCel::width() const
 {
     return m_width;

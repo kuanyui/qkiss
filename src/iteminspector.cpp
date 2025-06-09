@@ -1,9 +1,9 @@
 #include "iteminspector.h"
 #include "gkissitem.h"
+#include "gkissscene.h"
 #include <QHeaderView>
 #include <QScrollBar>
 #include <QVBoxLayout>
-
 using namespace Qt::StringLiterals;
 
 ItemInspector::ItemInspector(QWidget *parent)
@@ -56,9 +56,14 @@ void ItemInspector::setInspectedItem(GKissItem *item)
         itemsOfObj.append(sibling->celFileName());
     }
     auto cel = item->cel();
+    auto celItemCurPos = item->pos().toPoint();
+    auto objPos = item->kissScene()->getObjectCurrentPos(item->objId()).value_or(QPoint(-1, -1));
     m_twCelName->setText(item->celFileName());
     m_twObjId->setText(QString::number(item->objId()));
-    m_twCelPos->setText("(%1, %2)"_L1.argn(qRound(item->x())).argn(qRound(item->y())));
+    m_twCelPos->setText("Obj (%1, %2) + CEL (%3, %4) = (%5, %6)"_L1
+                        .argn(objPos.x()).argn(objPos.y())
+                        .argn(cel->x()).argn(cel->y())
+                        .argn(celItemCurPos.x()).argn(celItemCurPos.y()));
     m_twCelSize->setText("%1 x %2"_L1.argn(cel->width()).argn(cel->height()));
     m_twCelComment->setText(item->cnfCel()->comment());
     m_twFix->setText(QString::number(item->fix()));

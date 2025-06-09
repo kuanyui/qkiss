@@ -33,7 +33,8 @@ public:
     uint16_t y() const;
     uint16_t width() const;
     uint16_t height() const;
-
+    QPoint pos() const;
+    QSize size() const;
     QString fileName() const;
 
 private:
