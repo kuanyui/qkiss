@@ -210,9 +210,10 @@ void ParsedCnf::parseLines(const QStringList &lines)
             // - full-width `;` or spaces         #5	BOU1.CEL　     ；（制服の帽子　表）
             //   (NOTE: it seems that `\s` doesn't include full-width space `　`)
             //
-            //                                     objId      fix            celFile                         kcfIdx                     setIdxArr         comment
-            //                                      V          V               V                               V                            V                 V
-            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?[\s　]+([^\s\t　*:]+)(?:[\s　]*[*][\s　]*?(\d+))?(?:[\s　]*[:][\s　]*?([\d\s　]+))?(?:[;；](.*))?)#");
+            //                                      1          2               3                               4               5         6               7
+            //                                     objId      fix            celFile                         kcfIdx     setPrefix    setIdxArr        comment
+            //                                      V          V               V                               V               V         V               V
+            static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?[\s　]+([^\s\t　*:]+)(?:[\s　]*[*][\s　]*?(\d+))?(?:[\s　]*([:])?([\d\s　]*))?(?:[;；](.*))?)#");
             QRegularExpressionMatch m = reCel.match(line);
             if (!m.hasMatch()) { error("Wrong cel format."); continue; }
             int32_t objId = m.captured(1).toInt();
@@ -223,23 +224,33 @@ void ParsedCnf::parseLines(const QStringList &lines)
             QString celFileName = m.captured(3);
             int32_t kcfFileIndex =  m.captured(4).isEmpty() ? 0 :  m.captured(4).toInt();
             static QRegularExpression reSpace("[\\s　]+");
-            QStringList setIndexesStrList;
-            if (!m.captured(5).isEmpty()) {
-                setIndexesStrList = m.captured(5).trimmed().split(reSpace);
-            }
+            // | Case                                       | Behavior                      | Example Code                      |
+            // |--------------------------------------------|-------------------------------|-----------------------------------|
+            // | No colon `:` prefix                        | implicitly means 0..9         | #5      C_RIBON1.CEL              |
+            // | Has colon `:` prefix, but no set indexes   | means hidden in all sets      | #5      C_RIBON1.CEL :            |
+            // | Has colon `:` prefix, and set some indexes | visible in those sets         | #5      C_RIBON1.CEL :0 1 2 5 7   |
+            bool hasSetPrefixColon = m.hasCaptured(5);
+            QString setIndexesStrRaw = m.captured(6).trimmed();
             QList<int32_t> setIndexes {};
-            for (const QString &x: std::as_const(setIndexesStrList)) {
-                setIndexes.append(x.toInt());
+            if (!hasSetPrefixColon) {
+                for (int i = 0; i <=9; i++) {
+                    setIndexes.append(i);
+                }
+            } else if (!setIndexesStrRaw.isEmpty()) {
+                QStringList setIndexesStrList = setIndexesStrRaw.split(reSpace);
+                for (const QString &x: std::as_const(setIndexesStrList)) {
+                    setIndexes.append(x.toInt());
+                }
             }
 
-            QString rawComment = m.captured(6).trimmed();
+            QString rawComment = m.captured(7).trimmed();
             // qDebug() << QString("[LOG][ParsedCnf] { objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: [%5], comment: %6 }")
             //     .arg(objId)
             //     .arg(fix)
             //     .arg(celFileName)
             //     .arg(kcfFileIndex)
             //     .arg(setIndexesStrList.join(","))
-            //     .arg(comment);
+            //     .arg(rawComment);
             ParsedCnfCel *cnfCel = new ParsedCnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes, rawComment};
             qDebug() << "[DEBUG][ParsedCnf]" << *cnfCel;
             m_cels.append(cnfCel);

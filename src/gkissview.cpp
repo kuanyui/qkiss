@@ -163,8 +163,7 @@ bool GKissView::renderCurCnfAllSets()
         // Create cels
         for (int celIdx = cnf->cels().length() - 1; celIdx >= 0; celIdx--) {   // The first CEL in CNF is on the top of all CELs. So render from the last CEL to the first one.
             ParsedCnfCel *cnfCel = cnf->cels()[celIdx];
-            // Empty setsIndexes means this CEL is used by all sets.
-            if (!cnfCel->setsIndexes().isEmpty() && !cnfCel->setsIndexes().contains(cnfSetIdx)) {
+            if (!cnfCel->setsIndexes().contains(cnfSetIdx)) {
                 continue;
             }
             auto _cel = m_archiveFile->getParsedCel(cnfCel->celFileName());
