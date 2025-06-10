@@ -10,6 +10,7 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QStack>
+#include "configfile.h"
 
 class FileIconProvider;
 class QFileInfo;
@@ -51,6 +52,9 @@ private slots:
     void goForward();
     void goBackward();
     void refresh();
+    void goHome();
+    void setCurDirAsHome();
+    void setHome(const QString &dirPath);
     void onItemDbClicked(const QModelIndex &index);
 signals:
     void requestLoadFile(QString filePath, QKiSS::FileLoadMode fileLoadMode);
@@ -61,6 +65,7 @@ private:
     QToolButton *m_btnGoForward;
     QToolButton *m_btnGoUp;
     QToolButton *m_btnRefresh;
+    QToolButton *m_btnGoHome;
     QLineEdit *m_lineEditUrl;
     QString m_curDirPath;
     /// Unused currently.
@@ -71,6 +76,7 @@ private:
     QList<QString> m_loadedKissFilePaths;
     QStack<QString> m_navBackwardStack;
     QStack<QString> m_navForwardStack;
+    ConfigFile &m_cfg;
 
 
 

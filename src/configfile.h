@@ -12,9 +12,10 @@ class ConfigFile : public QObject
     struct CPath {
         static constexpr auto MainWindow_Geometry           = "MainWindow/Geometry";
         static constexpr auto MainWindow_State              = "MainWindow/State";
+        static constexpr auto Global_UiLanguage             = "Global/UiLanguage";
+        static constexpr auto Global_Encoding               = "Global/Encoding";
         static constexpr auto Global_CaseSensitivity        = "Global/CaseSensitivity";
         static constexpr auto Global_LzhDecompressorBackend = "Global/LzhDecompressorBackend ";
-        static constexpr auto Global_Encoding               = "View/Encoding";
         static constexpr auto View_Zoom                     = "View/Zoom";
         static constexpr auto File_RecentFiles              = "File/RecentFiles";
         static constexpr auto File_RecentDirs               = "File/RecentDirs";
@@ -34,6 +35,12 @@ public:
     void setMainWindowGeometry(const QByteArray &geometry);
     QByteArray mainWindowState() const;
     void setMainWindowState(const QByteArray &state);
+
+    QString homeDirectory() const;
+    void setHomeDirectory(const QString &homeDir);
+
+    QString uiLanguage() const;
+    void setUiLanguage(const QString &langId);
 
     QKiSS::Encoding encoding() const;
     void setEncoding(QKiSS::Encoding newEncoding);

@@ -24,6 +24,8 @@ BlueHumanity	go-down	go-down
 BlueHumanity	go-next	go-next
 BlueHumanity	go-previous	go-previous
 BlueHumanity	view-refresh	view-refresh
+BlueHumanity	go-home 	go-home
+BlueHumanity	go-jump 	go-jump
 Gnome		window-close
 
 ### XDG Places
@@ -83,3 +85,7 @@ Gnome		keyboard-shift-pressed	keyboard-shift-pressed
 Gnome		mouse-right-click	mouse-right-click
 Gnome		mouse-left-click	mouse-left-click
 Gnome		mouse-middle-click	mouse-middle-click
+
+# Settings
+Gnome		preferences-desktop-font		encoding
+Gnome		preferences-desktop-locale		language

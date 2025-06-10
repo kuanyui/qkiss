@@ -83,6 +83,28 @@ void ConfigFile::setMainWindowState(const QByteArray &state)
     m_set.sync();
 }
 
+QString ConfigFile::homeDirectory() const
+{
+    return m_set.value(CPath::File_HomeDirectory, QDir::homePath()).toString();
+}
+
+void ConfigFile::setHomeDirectory(const QString &homeDir)
+{
+    m_set.setValue(CPath::File_HomeDirectory, homeDir);
+    m_set.sync();
+}
+
+QString ConfigFile::uiLanguage() const
+{
+    return m_set.value(CPath::Global_UiLanguage, "en_US").toString();;
+}
+
+void ConfigFile::setUiLanguage(const QString &langId)
+{
+    m_set.setValue(CPath::Global_UiLanguage, langId);
+    m_set.sync();
+}
+
 QKiSS::Encoding ConfigFile::encoding() const
 {
     return m_encoding;

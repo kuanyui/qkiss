@@ -6,16 +6,18 @@
 #include <QSet>
 #include <QLineEdit>
 #include <QItemSelectionModel>
+#include <QMenu>
 #include "filesystembrowser.h"
 #include "fileiconprovider.h"
 #include "iconbuttondelegate.h"
 
 FileSystemBrowser::FileSystemBrowser(QWidget *parent):
     QWidget{parent},
-    m_fileIconProvider{ new FileIconProvider() }
+    m_fileIconProvider{ new FileIconProvider() },
+    m_cfg{ConfigFile::instance()}
 {
     setupUi();
-    setDirPath(QDir::currentPath());
+    setDirPath(m_cfg.homeDirectory());
 }
 
 FileSystemBrowser::~FileSystemBrowser()
@@ -176,6 +178,16 @@ void FileSystemBrowser::setupUi()
     m_btnRefresh->setToolTip(tr("Refresh"));
     m_btnRefresh->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
+    m_btnGoHome = new QToolButton(this);
+    m_btnGoHome->setIcon(QIcon::fromTheme("go-home"));
+    m_btnGoHome->setToolTip(tr("Home"));
+    m_btnGoHome->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    m_btnGoHome->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *btnGoHomeMenu = new QMenu(m_btnGoHome);
+    QAction *actSetCurDirAsHome = btnGoHomeMenu->addAction(tr("Set current folder as Home"));
+    m_btnGoHome->setMenu(btnGoHomeMenu);
+
+
     m_labelCurDirName = new QLabel(this);
     m_labelCurDirName->hide();
     // m_labelCurDirName->setSizePolicy()
@@ -187,15 +199,22 @@ void FileSystemBrowser::setupUi()
     btnLayout->addWidget(m_btnGoForward);
     btnLayout->addWidget(m_btnGoUp);
     btnLayout->addWidget(m_btnRefresh);
-    btnLayout->addWidget(m_lineEditUrl);
+    btnLayout->addStretch();
+    btnLayout->addWidget(m_btnGoHome);
+
+    QHBoxLayout *urlBarLayout = new QHBoxLayout();
+    urlBarLayout->addWidget(m_lineEditUrl);
     // btnLayout->addWidget(m_labelCurDirName);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(btnLayout);
+    mainLayout->addLayout(urlBarLayout);
     mainLayout->addWidget(m_view);
     connect(m_btnGoBackward, &QPushButton::clicked, this, &FileSystemBrowser::goBackward);
     connect(m_btnGoForward, &QPushButton::clicked, this, &FileSystemBrowser::goForward);
     connect(m_btnGoUp, &QPushButton::clicked, this, &FileSystemBrowser::goUp);
+    connect(m_btnGoHome, &QPushButton::clicked, this, &FileSystemBrowser::goHome);
+    connect(actSetCurDirAsHome, &QAction::triggered, this, &FileSystemBrowser::setCurDirAsHome);
     connect(m_btnRefresh, &QPushButton::clicked, this, &FileSystemBrowser::refresh);
     connect(m_view, &QTreeView::doubleClicked, this, &FileSystemBrowser::onItemDbClicked);
     updateAllButtonState();
@@ -258,7 +277,7 @@ QIcon FileSystemBrowser::getFileIcon(const QFileInfo &fileInfo) const
 {
     QString absPath = fileInfo.absoluteFilePath();
     if (m_loadedKissFilePaths.contains(absPath)) {
-        bool isLzh = absPath.toUpper().endsWith(".LZH");
+        bool isLzh = absPath.endsWith(".LZH", Qt::CaseInsensitive);
         if (isLzh) {
             return QIcon::fromTheme("package-unzipped");
         }
@@ -350,6 +369,27 @@ void FileSystemBrowser::goBackward()
 
 void FileSystemBrowser::refresh() {
     updateModel();
+}
+
+void FileSystemBrowser::goHome()
+{
+    qDebug() << "m_curDirPath" << m_curDirPath;
+    qDebug() << "cfg home" << m_cfg.homeDirectory();
+    if (m_curDirPath == m_cfg.homeDirectory()) { return; }
+    m_navBackwardStack.push(m_curDirPath);
+    m_navForwardStack.clear();
+    updateAllButtonState();
+    setDirPath(m_cfg.homeDirectory());
+}
+
+void FileSystemBrowser::setCurDirAsHome()
+{
+    setHome(m_curDirPath);
+}
+
+void FileSystemBrowser::setHome(const QString &dirPath)
+{
+    m_cfg.setHomeDirectory(dirPath);
 }
 
 void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
