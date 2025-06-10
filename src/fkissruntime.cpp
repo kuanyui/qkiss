@@ -462,22 +462,8 @@ std::shared_ptr<ASTPairedCommands> FkissRuntime::getEventActionPair(const QStrin
 
 bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs)
 {
-    bool printDebug = true;
-    if (eventName == FKK::E::ALARM) {
-        for (int i = 0; i <= 11; i++) {
-            if (eventArgs.length() != 0 && eventArgs[0] == FkissVariant::fromInt(i)) {
-                printDebug = false;
-                break;
-            }
-        }
-        for (int i = 57; i <= 59; i++) {
-            if (eventArgs.length() != 0 && eventArgs[0] == FkissVariant::fromInt(i)) {
-                printDebug = false;
-                break;
-            }
-        }
-    }
-    if (eventName == FKK::E::STILLOUT) {
+    bool printDebug = false;
+    if (eventName == FKK::E::STILLOUT) {  // Stillout() generate too many logs
         printDebug = false;
     }
     if (printDebug) {
