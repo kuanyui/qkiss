@@ -12,12 +12,12 @@
 
 // Q_DECLARE_LOGGING_CATEGORY(CnfParser)
 
+class ParsedCnf;
 /*
  * Docstrings are mainly copied from:
  *
  * - https://otakuworld.com/kiss/kisshelp/DIRECTKISSKISS_General_Specification.htm
  */
-
 /**
  * Represent a referenced .CEL (a line starts with #) in a parsed .CNF file
  *
@@ -41,10 +41,12 @@
  */
 class ParsedCnfCel
 {
+    friend class ParsedCnf;
 public:
     ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment);
     int32_t objId() const;
     int16_t fix() const;
+
     QString celFileName() const;
     int16_t kcfFileIndex() const;
     QList<uint8_t> setsIndexes() const;
@@ -55,6 +57,8 @@ public:
     int16_t translucency() const;
 
 private:
+    /// Should be only used when maximum fix in this object is unknown.
+    void setFix(int16_t newFix);
     /**
      *  Handle translucency notation in comment.
      *

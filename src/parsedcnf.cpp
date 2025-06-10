@@ -90,6 +90,11 @@ int16_t ParsedCnfCel::translucency() const
     return m_translucency;
 }
 
+void ParsedCnfCel::setFix(int16_t newFix)
+{
+    m_fix = newFix;
+}
+
 ParsedCnfSet::ParsedCnfSet(int32_t paletteNoInKcf):
     m_paletteNoInKcf(paletteNoInKcf)
 {
@@ -261,6 +266,15 @@ void ParsedCnf::parseLines(const QStringList &lines)
             continue;
         }
     }
+    // The fix value for an object is the maximum value for all member cels.
+    QHash<int32_t, int32_t> objMaxFixes {};
+    for (auto &cel : m_cels) {
+        objMaxFixes[cel->objId()] = qMax(objMaxFixes[cel->objId()], cel->fix());
+    }
+    for (auto &cel : m_cels) {
+        cel->setFix(objMaxFixes[cel->objId()]);
+    }
+
     std::sort(m_sortedObjIdList.begin(), m_sortedObjIdList.end(), std::less<int32_t>());
 
     // auto objPosList = m_sets.at(0)->getObjPosList();
