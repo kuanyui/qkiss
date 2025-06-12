@@ -54,6 +54,8 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
     connect(m_kissView, &GKissView::requestSwitchingSet, this, &MainWindow::switchSceneBy);
+
+    // Zooming
     connect(m_cboxZoomScale, &QComboBox::currentTextChanged, this, &MainWindow::applyViewZoomByText);
     connect(ui->action_zoomOut, &QAction::triggered, &m_cfg, [=](){
         m_cfg.zoomOut();
@@ -67,9 +69,18 @@ MainWindow::MainWindow(QWidget *parent)
         m_cfg.zoomReset();
         m_cboxZoomScale->setCurrentText(m_cfg.zoom());
     });
+    ui->action_zoomIn->setDisabled(!m_cfg.canZoomIn());    // REFACTOR: How to DRY?
+    ui->action_zoomOut->setDisabled(!m_cfg.canZoomOut());    // REFACTOR: How to DRY?
+    connect(&m_cfg, &ConfigFile::zoomScaleChanged, this, [=] () {
+        ui->action_zoomIn->setDisabled(!m_cfg.canZoomIn());
+        ui->action_zoomOut->setDisabled(!m_cfg.canZoomOut());
+    });
+
+    // Other
     connect(ui->action_openFile, &QAction::triggered, this, &MainWindow::openFilePicker);
     connect(ui->action_openDirectory, &QAction::triggered, this, &MainWindow::openDirPicker);
     connect(&m_cfg, &ConfigFile::recentFilesChanged, this, &MainWindow::renderRecentFiles);
+
     setCentralWidget(m_kissView);
     restoreWindowSettings();
 }
