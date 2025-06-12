@@ -6,6 +6,7 @@
 #include <QMimeData>
 #include <QShortcut>
 #include <QFileDialog>
+#include <QActionGroup>
 #include "archiveprocessorfactory.h"
 #include "iteminspector.h"
 #include "configfile.h"
@@ -272,7 +273,32 @@ void MainWindow::switchPaletteBy(int steps)
 
 void MainWindow::setupMenuBar()
 {
-    // ui->menu_encoding->addAction(QKiSS::Encoding)
+    const QStringList &allEncodingNames = QKiSS::encodingNames();
+    QActionGroup *encodingsGroup = new QActionGroup {ui->menu_encoding};    // NOTE: `new` is required. A local instance will act not as you've expected.
+    for (int i = 0; i < allEncodingNames.length(); i++) {
+        QKiSS::Encoding enumVal = static_cast<QKiSS::Encoding>(i);
+        const QString &encName = allEncodingNames[i];
+        QAction * act = ui->menu_encoding->addAction(encName);
+        encodingsGroup->addAction(act);
+        act->setCheckable(true);
+        if (m_cfg.encoding() == enumVal) {
+            act->setChecked(true);
+        }
+        connect(act, &QAction::toggled, this, [=] () { setFileEncoding(enumVal); });
+    }
+
+    const auto &allLangs = m_cfg.allLanguages();
+    QActionGroup *langsGroup = new QActionGroup {ui->menu_uiLanguage};
+    for (const auto &lang : allLangs) {
+        const QString langLabel = QStringLiteral("%1 %2").arg(lang.flag).arg(lang.label);
+        QAction * act = ui->menu_uiLanguage->addAction(langLabel);
+        langsGroup->addAction(act);
+        act->setCheckable(true);
+        if (m_cfg.uiLanguage() == lang.id) {
+            act->setChecked(true);
+        }
+        connect(act, &QAction::toggled, this, [=] () { setUiLanguage(lang.id); });
+    }
 }
 
 void MainWindow::setupToolBars()
@@ -563,6 +589,16 @@ void MainWindow::applyViewZoomByText(QString zoomText)
     }
     m_kissView->scaleAbs(targetScale);
     m_cfg.setZoom(zoomText);
+}
+
+void MainWindow::setUiLanguage(QString langId)
+{
+    m_cfg.setUiLanguage(langId);
+}
+
+void MainWindow::setFileEncoding(QKiSS::Encoding enc)
+{
+    m_cfg.setEncoding(enc);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

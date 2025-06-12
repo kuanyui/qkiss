@@ -18,6 +18,7 @@ public:
 private:
     static bool checkLhaCommandAvailability();
     static FilesSummaryList getFileSizeList(const QString &lzhFilePath);
+    static const char *getEncodingParam();
     bool callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath);
 signals:
     void extractSuccess(QString compressedFilePath, std::shared_ptr<ExtractedRawFilesMap> extractedRawFiles);

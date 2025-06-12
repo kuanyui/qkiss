@@ -1,8 +1,8 @@
 #include "archiveprocessorexternallha.h"
+#include "configfile.h"
 
 #include <QDirIterator>
 #include <QTemporaryDir>
-
 using namespace Qt::Literals::StringLiterals;
 
 #define argn(num) arg(QString::number(num))
@@ -31,7 +31,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     QString fileName = fileInfo.fileName();
     m_extractedFiles = std::make_shared<QMap<QString, QByteArray>>();
     promise->start();
-    if (lzhOrCnfFilePath.toUpper().endsWith(".CNF"_L1)) {
+    if (lzhOrCnfFilePath.endsWith(".CNF"_L1, Qt::CaseInsensitive)) {
         qInfo().noquote() << tr("Reading a CNF file \"%1\" directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...").arg(lzhOrCnfFilePath);
         promise->addResult(getRelatedFilesInTheSameFolder(lzhOrCnfFilePath));
         promise->finish();
@@ -85,7 +85,7 @@ FilesSummaryList ArchiveProcessorExternalLha::getFileSizeList(const QString &lzh
     });
     process.start("lha",
                   { "l",  // list files
-                    "--archive-kanji-code=sjis",
+                    "--archive-kanji-code=%1"_L1.arg(getEncodingParam()),
                     lzhFilePath
                   });
     process.waitForFinished();
@@ -109,7 +109,7 @@ PERMISSION  UID  GID      SIZE  RATIO     STAMP           NAME
     int nameTitleIdx = lines[0].indexOf(QStringLiteral("NAME"));
     int sizeColIdxFrom = 0, sizeColWidth = 0;
     int nameColIdxFrom = 0, nameColWidth = 0;
-    QStringList seperators = lines[1].split(" ");
+    const QStringList seperators = lines[1].split(" ");
     int curColFrom = 0;
     for (const QString &sep : seperators) {
         int curColWidth = sep.length();
@@ -170,7 +170,7 @@ void ArchiveProcessorExternalLha::onQProcessFinished(int exitCode, QProcess::Exi
         pos += byteSize;
         if (!fileName.endsWith(".LZH"_L1, Qt::CaseInsensitive)) {
             m_extractedFiles->insert(fileName, data);
-        } else {   // Nested LZH file
+        } else {   // Nested LZH file, extract the inner LZH file into tmp folder and extract it recursively.
             QString tmpFilePath = m_tmpDir->filePath(fileName);
             QFile tmpFile { tmpFilePath };
             if (!tmpFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -227,6 +227,18 @@ bool ArchiveProcessorExternalLha::callExternalProgramOrLibraryToExtractLzh(const
                        lzhFilePath
                      });
     return true;
+}
+
+const char *ArchiveProcessorExternalLha::getEncodingParam()
+{
+    ConfigFile &cfg = ConfigFile::instance();
+    switch (cfg.encoding()) {
+        case QKiSS::Encoding::SJIS: return "sjis";
+        case QKiSS::Encoding::EUC_JP: return "euc";
+        case QKiSS::Encoding::UTF8: return "utf8";
+        case QKiSS::Encoding::ASCII: return "utf8";
+        default: return "sjis";
+    }
 }
 
 std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorExternalLha::getRelatedFilesInTheSameFolder(const QString &cnfFilePath)

@@ -23,6 +23,12 @@ class ConfigFile : public QObject
     };
     static const int RECENTS_MAX_COUNT = 16;
     inline static QStringList ZOOM_LIST = { "4", "3.5", "3", "2.5", "2", "1.5", "1", "0.5" };
+    struct LangInfo {
+        const char* id;
+        const char* flag;
+        const QString label;
+    };
+
     Q_OBJECT
 public:
     // static constexpr std::array<float, 8> ZOOM_ALL { 4.0f, 3.5f, 3.0f, 2.5f, 2.0f, 1.5f, 1.0f, 0.5f };
@@ -38,7 +44,8 @@ public:
 
     QString homeDirectory() const;
     void setHomeDirectory(const QString &homeDir);
-
+    /// QPair("ja_JP", "Japanese")
+    static const QList<LangInfo> allLanguages();
     QString uiLanguage() const;
     void setUiLanguage(const QString &langId);
 

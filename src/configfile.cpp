@@ -94,9 +94,19 @@ void ConfigFile::setHomeDirectory(const QString &homeDir)
     m_set.sync();
 }
 
+const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
+{
+    return {
+        {"", "", tr("System Language")},
+        {"ja_JP", "🇯🇵", QString("日本語")},
+        {"en_US", "🇺🇸", QString("American English")},
+        {"zh_TW", "🇹🇼", QString("台灣繁體")},
+    };
+}
+
 QString ConfigFile::uiLanguage() const
 {
-    return m_set.value(CPath::Global_UiLanguage, "en_US").toString();;
+    return m_set.value(CPath::Global_UiLanguage, "").toString();;
 }
 
 void ConfigFile::setUiLanguage(const QString &langId)

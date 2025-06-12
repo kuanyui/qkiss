@@ -1,8 +1,12 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 #include <qnamespace.h>
+#include <QCoreApplication>
 
-namespace QKiSS {
+class QKiSS {
+    Q_DECLARE_TR_FUNCTIONS(QKiSS)   // Use tr() without Q_OBJECT
+
+public:
     enum class Case {
         Sensitive = Qt::CaseSensitive,
         Insensitive = Qt::CaseInsensitive
@@ -14,7 +18,6 @@ namespace QKiSS {
         // Japanese
         SJIS,
         EUC_JP,
-        ISO_2022_JP
     };
     enum class FileLoadMode {
         LoadAsIndependent,
@@ -24,6 +27,14 @@ namespace QKiSS {
         Libarchive,
         ExternalLhaProcess,
     };
-}
+    static const QStringList encodingNames() {
+        return {
+            tr("ASCII"),
+            tr("UTF-8"),
+            tr("Shift JIS (Default)"),
+            tr("EUC-JP")
+        };
+    };
+};
 
 #endif // ENUMS_H

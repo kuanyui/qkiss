@@ -16,7 +16,7 @@ QString Encoding::toUtf8(const QByteArray &input, QKiSS::Encoding encoding)
     case QKiSS::Encoding::UTF8: return QString::fromUtf8(input);
     case QKiSS::Encoding::SJIS: return QString::fromStdString(innerToUtf8(input.toStdString(), {"Shift_JIS"}));
     case QKiSS::Encoding::EUC_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"EUC-JP"}));
-    case QKiSS::Encoding::ISO_2022_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"ISO-2022-JP"}));
+    // case QKiSS::Encoding::ISO_2022_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"ISO-2022-JP"}));
     }
     return QString::fromLatin1(input);
 }
@@ -77,7 +77,7 @@ QString Encoding::toUtf8(const QByteArray &input, QKiSS::Encoding encoding)
     case QKiSS::Encoding::UTF8: return QString::fromUtf8(input);
     case QKiSS::Encoding::SJIS: return QString::fromStdString(innerToUtf8(input.toStdString(), {"SJIS", "SHIFT-JIS"}));
     case QKiSS::Encoding::EUC_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"EUC-JP"}));
-    case QKiSS::Encoding::ISO_2022_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"ISO-2022-JP"}));
+    // case QKiSS::Encoding::ISO_2022_JP: return QString::fromStdString(innerToUtf8(input.toStdString(), {"ISO-2022-JP"}));
     }
     return QString::fromLatin1(input);
 }
