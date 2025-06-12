@@ -60,7 +60,7 @@
     </property>
     <addaction name="action_zoomOut"/>
     <addaction name="action_zoomIn"/>
-    <addaction name="action_resetScale"/>
+    <addaction name="action_zoomReset"/>
    </widget>
    <widget class="QMenu" name="menu_Window">
     <property name="title">
@@ -187,7 +187,7 @@
     <string>Zoom &amp;In</string>
    </property>
   </action>
-  <action name="action_resetScale">
+  <action name="action_zoomReset">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::ZoomFitBest"/>
    </property>

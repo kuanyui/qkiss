@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
         m_cfg.zoomIn();
         m_cboxZoomScale->setCurrentText(m_cfg.zoom());
     });
-    connect(ui->action_resetScale, &QAction::triggered, &m_cfg, [=](){
+    connect(ui->action_zoomReset, &QAction::triggered, &m_cfg, [=](){
         m_cfg.zoomReset();
         m_cboxZoomScale->setCurrentText(m_cfg.zoom());
     });
@@ -279,7 +279,7 @@ void MainWindow::setupToolBars()
     m_toolbarFiles->addAction(ui->action_openFile);
     m_toolbarFiles->addAction(ui->action_openDirectory);
     // Zoom
-    ui->action_resetScale->setIcon(QIcon::fromTheme("zoom-original"));
+    ui->action_zoomReset->setIcon(QIcon::fromTheme("zoom-original"));
     m_toolbarZooms = new QToolBar(this);
     m_toolbarZooms->setWindowTitle(tr("Zooming Tools"));
     m_toolbarZooms->setObjectName("MainWindow_ToolBar_Zooms");
