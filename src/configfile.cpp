@@ -161,7 +161,7 @@ EnumClassT ConfigFile::getEnumClassFromSettings(const QString& cfgKey, EnumClass
     return static_cast<EnumClassT>(val);
 }
 
-QStringList ConfigFile::zoomList() const
+const QStringList &ConfigFile::zoomList() const
 {
     return ZOOM_LIST;
 }
@@ -185,9 +185,26 @@ void ConfigFile::setZoom(const QString &newZoom)
     emit zoomScaleChanged();
 }
 
-void ConfigFile::zoomReset()
+bool ConfigFile::canZoomIn() const
+{
+    QString val = zoom();
+    int idx = ZOOM_LIST.indexOf(val);
+    if (idx == 0) { return false; }
+    return true;
+}
+
+bool ConfigFile::canZoomOut() const
+{
+    QString val = zoom();
+    int idx = ZOOM_LIST.indexOf(val);
+    if (idx == ZOOM_LIST.length() - 1) { return false; }
+    return true;
+}
+
+QString ConfigFile::zoomReset()
 {
     setZoom("1");
+    return "1";
 }
 
 QString ConfigFile::zoomIn()

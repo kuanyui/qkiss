@@ -55,12 +55,15 @@ public:
     QStringList recentDirs() const;
     void appendRecentFile(QString filePath);
 
-    QStringList zoomList() const;
+    const QStringList &zoomList() const;
     QString zoom() const;
     void setZoom(const QString &newZoom);
 
+    bool canZoomIn() const;
+    bool canZoomOut() const;
+
 public slots:
-    void zoomReset();
+    QString zoomReset();
     QString zoomIn();
     QString zoomOut();
 

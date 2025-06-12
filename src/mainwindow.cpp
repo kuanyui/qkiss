@@ -54,17 +54,19 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
     connect(m_kissView, &GKissView::requestSwitchingSet, this, &MainWindow::switchSceneBy);
-    connect(m_cboxZoomScale, &QComboBox::currentTextChanged, this, [=](const QString &text) {
-        bool ok;
-        qreal targetScale = text.toFloat(&ok);
-        if (!ok) {
-            targetScale = 1;
-        }
-        m_kissView->scaleAbs(targetScale);
+    connect(m_cboxZoomScale, &QComboBox::currentTextChanged, this, &MainWindow::applyViewZoomByText);
+    connect(ui->action_zoomOut, &QAction::triggered, &m_cfg, [=](){
+        m_cfg.zoomOut();
+        m_cboxZoomScale->setCurrentText(m_cfg.zoom());
     });
-    connect(ui->action_zoomOut, &QAction::triggered, &m_cfg, &ConfigFile::zoomOut);
-    connect(ui->action_zoomIn, &QAction::triggered, &m_cfg, &ConfigFile::zoomIn);
-    connect(ui->action_resetScale, &QAction::triggered, &m_cfg, &ConfigFile::zoomReset);
+    connect(ui->action_zoomIn, &QAction::triggered, &m_cfg, [=](){
+        m_cfg.zoomIn();
+        m_cboxZoomScale->setCurrentText(m_cfg.zoom());
+    });
+    connect(ui->action_resetScale, &QAction::triggered, &m_cfg, [=](){
+        m_cfg.zoomReset();
+        m_cboxZoomScale->setCurrentText(m_cfg.zoom());
+    });
     connect(ui->action_openFile, &QAction::triggered, this, &MainWindow::openFilePicker);
     connect(ui->action_openDirectory, &QAction::triggered, this, &MainWindow::openDirPicker);
     connect(&m_cfg, &ConfigFile::recentFilesChanged, this, &MainWindow::renderRecentFiles);
@@ -272,8 +274,8 @@ void MainWindow::setupToolBars()
     m_toolbarZooms->setObjectName("MainWindow_ToolBar_Zooms");
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarZooms);
     m_cboxZoomScale = new QComboBox(m_toolbarZooms);
-    for (float s : { 4.0f, 3.5f, 3.0f, 2.5f, 2.0f, 1.5f, 1.0f, 0.5f }) {
-        m_cboxZoomScale->addItem(QString::number(s, 'g', 2), QVariant(s));
+    for (const QString &s : m_cfg.zoomList()) {
+        m_cboxZoomScale->addItem(s, QVariant(s));
     }
     m_cboxZoomScale->setCurrentIndex(m_cboxZoomScale->count() - 2);
     m_toolbarZooms->addAction(ui->action_zoomOut);
@@ -532,6 +534,18 @@ void MainWindow::openDirPicker()
         qDebug() << "===============" << dirPath;
         openDirOrFile(dirPath);
     }
+}
+
+void MainWindow::applyViewZoomByText(QString zoomText)
+{
+    bool ok;
+    qreal targetScale = zoomText.toFloat(&ok);
+    if (!ok) {
+        targetScale = 1;
+        zoomText = "1";
+    }
+    m_kissView->scaleAbs(targetScale);
+    m_cfg.setZoom(zoomText);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
