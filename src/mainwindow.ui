@@ -58,18 +58,43 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <widget class="QMenu" name="menu_encoding">
+     <property name="title">
+      <string>Encoding</string>
+     </property>
+     <property name="icon">
+      <iconset theme="encoding"/>
+     </property>
+    </widget>
     <addaction name="action_zoomOut"/>
     <addaction name="action_zoomIn"/>
     <addaction name="action_zoomReset"/>
+    <addaction name="separator"/>
+    <addaction name="menu_encoding"/>
    </widget>
    <widget class="QMenu" name="menu_Window">
     <property name="title">
      <string>&amp;Window</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menu_Settings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <widget class="QMenu" name="menu_uiLanguage">
+     <property name="title">
+      <string>Language</string>
+     </property>
+     <property name="icon">
+      <iconset theme="language"/>
+     </property>
+    </widget>
+    <addaction name="menu_uiLanguage"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Window"/>
+   <addaction name="menu_Settings"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="dockWidget_fileSystemBrowser">

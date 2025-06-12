@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowIcon(QIcon::fromTheme("qkiss"));
     setWindowTitle(QCoreApplication::applicationName());
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
+    setupMenuBar();
     setupToolBars();
     setupDockWindows();
     setupStatusBar();
@@ -267,6 +268,11 @@ void MainWindow::switchPaletteBy(int steps)
     if (curPaletteNo == nextPaletteNo) { return; }
     QAbstractButton *btn = m_btnGroupColorSets->button(nextPaletteNo);
     btn->click();
+}
+
+void MainWindow::setupMenuBar()
+{
+    // ui->menu_encoding->addAction(QKiSS::Encoding)
 }
 
 void MainWindow::setupToolBars()

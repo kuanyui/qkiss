@@ -37,6 +37,7 @@ private:
     void switchToPalette(uint8_t paletteIdx);
     void switchSceneBy(int steps);
     void switchPaletteBy(int steps);
+    void setupMenuBar();
     void setupToolBars();
     void setupDockWindows();
     void setupStatusBar();
