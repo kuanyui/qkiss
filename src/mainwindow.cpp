@@ -109,7 +109,7 @@ void MainWindow::openDirOrFile(const QString &dirOrFilePath)
 
 void MainWindow::tryToLoadKissFilePath(const QString &kissArchiveFilePath, QKiSS::FileLoadMode fileLoadMode)
 {
-    if (!kissArchiveFilePath.endsWith(".LZH", Qt::CaseInsensitive)) { return; }
+    if (!kissArchiveFilePath.endsWith(".LZH", Qt::CaseInsensitive) && !kissArchiveFilePath.endsWith(".CNF", Qt::CaseInsensitive)) { return; }
     m_logViewer->clearAllLogs();
     AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(m_cfg.lzhDecompressorBackend(), kissArchiveFilePath);
     extractor->extractFileAsPromise(kissArchiveFilePath).then([this, extractor, kissArchiveFilePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {

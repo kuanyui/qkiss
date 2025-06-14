@@ -2,15 +2,16 @@
 #include "archiveprocessorexternallha.h"
 #include "archiveprocessorexternalunar.h"
 #include "archiveprocessorlibarchive.h"
+#include "archiveprocessorcnfinfilesystem.h"
 
 
 
 AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(QKiSS::LzhDecompressorBackend backend, QString lzhOrCnfFilePath)
 {
-    return new ArchiveProcessorExternalUnar();
-    if (lzhOrCnfFilePath.endsWith(".CNF")) {
-        return new ArchiveProcessorExternalUnar();
+    if (lzhOrCnfFilePath.endsWith(".CNF", Qt::CaseInsensitive)) {
+        return new ArchiveProcessorCnfInFileSystem();
     }
+    return new ArchiveProcessorExternalUnar();
     switch (backend) {
     case QKiSS::LzhDecompressorBackend::ExternalUnarProcess: return new ArchiveProcessorExternalUnar();
     case QKiSS::LzhDecompressorBackend::ExternalLhaProcess: return new ArchiveProcessorExternalLha();

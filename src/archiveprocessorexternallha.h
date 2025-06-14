@@ -31,7 +31,7 @@ private slots:
     void onQProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void onProcessErrorOccurred(QProcess::ProcessError error);
 private:
-    static std::shared_ptr<ExtractedRawFilesMap> getRelatedFilesInTheSameFolder(const QString &cnfFilePath);
+    static std::shared_ptr<ExtractedRawFilesMap> getRelatedFilesInTheSameFolder(const QString &cnfFilePath);   /// TODO: Move to abstract class
     QProcess *m_process;
     QString m_archiveFilePath;
     FilesSummaryList m_filesSummaryList;

@@ -65,13 +65,6 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
         promise->finish();
         delete promise;
     }
-    if (lzhOrCnfFilePath.endsWith(".CNF"_L1, Qt::CaseInsensitive)) {
-        qInfo().noquote() << tr("Reading a CNF file \"%1\" directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...").arg(lzhOrCnfFilePath);
-        promise->addResult(getRelatedFilesInTheSameFolder(lzhOrCnfFilePath));
-        promise->finish();
-        delete promise;
-        return future;
-    }
     qInfo().noquote() << tr("Trying to extract LZH file \"%1\"...").arg(fileName);
     this->callExternalProgramOrLibraryToExtractLzh(lzhOrCnfFilePath);
     QObject::connect(this, &ArchiveProcessorExternalLha::extractFail, [promise, fileName](QString compressedFilePath, QString errMsg) {

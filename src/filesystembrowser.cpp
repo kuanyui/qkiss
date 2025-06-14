@@ -245,7 +245,7 @@ void FileSystemBrowser::updateModel()
         fileNameItem->setIcon(getFileIcon(fInfo));
         rowItems << fileNameItem;
         rowItems << new QStandardItem(formatFileSize(fInfo.size()));
-        if (isLzh) {
+        if (isLzh || isCnf) {
             QStandardItem *item = new QStandardItem(tr("Patch"));
             QIcon patchIcon = QIcon::fromTheme("addon");
             item->setIcon(patchIcon);
@@ -278,8 +278,12 @@ QIcon FileSystemBrowser::getFileIcon(const QFileInfo &fileInfo) const
     QString absPath = fileInfo.absoluteFilePath();
     if (m_loadedKissFilePaths.contains(absPath)) {
         bool isLzh = absPath.endsWith(".LZH", Qt::CaseInsensitive);
+        bool isCnf = absPath.endsWith(".CNF", Qt::CaseInsensitive);
         if (isLzh) {
             return QIcon::fromTheme("package-unzipped");
+        }
+        if (isCnf) {
+            return QIcon::fromTheme("text-x-cnf");
         }
         if (fileInfo.isDir()) {
             return QIcon::fromTheme("folder-open");
