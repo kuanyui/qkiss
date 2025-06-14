@@ -12,11 +12,11 @@ class ArchiveProcessorExternalLha : public AbstractArchiveProcessor
 public:
     explicit ArchiveProcessorExternalLha(QObject *parent = nullptr);
     virtual ~ArchiveProcessorExternalLha();
+    virtual bool checkAvailability() override;
     /// This function merely extract a LZH file, doesn't do any other checks.
     /// TODO: Should be able to accept a CNF file. Should rename this function.
     virtual QFuture<std::shared_ptr<ExtractedRawFilesMap>> extractFileAsPromise(const QString &lzhOrCnfFilePath) override;
 private:
-    static bool checkLhaCommandAvailability();
     static FilesSummaryList getFileSizeList(const QString &lzhFilePath);
     static const char *getEncodingParam();
     bool callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath);

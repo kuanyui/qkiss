@@ -24,6 +24,11 @@ ArchiveProcessorLibarchive::~ArchiveProcessorLibarchive()
 
 }
 
+bool ArchiveProcessorLibarchive::checkAvailability()
+{
+    return true;
+}
+
 
 QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extractFileAsPromise(const QString &lzhOrCnfFilePath)
 {

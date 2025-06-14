@@ -20,10 +20,13 @@ class AbstractArchiveProcessor : public QObject
     Q_OBJECT
 public:
     AbstractArchiveProcessor(QObject *parent);
-    virtual ~AbstractArchiveProcessor();;
+    virtual ~AbstractArchiveProcessor();
+    virtual bool checkAvailability() = 0;
     /// This function merely extract a LZH file, doesn't do any other checks.
     /// TODO: Should be able to accept a CNF file. Should rename this function.
     virtual QFuture<std::shared_ptr<ExtractedRawFilesMap>> extractFileAsPromise(const QString &lzhOrCnfFilePath) = 0;
+protected:
+    static QString generateTempDirPath();
 private:
     static int instanceCount;
 };

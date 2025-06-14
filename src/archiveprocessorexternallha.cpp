@@ -9,12 +9,14 @@ using namespace Qt::Literals::StringLiterals;
 
 ArchiveProcessorExternalLha::ArchiveProcessorExternalLha(QObject *parent)
     : AbstractArchiveProcessor{parent},
-      m_process{new QProcess(this)},
-      m_extractedFiles{std::make_shared<QMap<QString, QByteArray>>()}
+      m_process{new QProcess(this)}
 {
+    // NOTE: Due to indentation bug of QtCreator so move this shit into here instead of ctor member initializer list...
+    m_extractedFiles = std::make_shared<QMap<QString, QByteArray>>();
     connect(m_process, &QProcess::readyRead, this, &ArchiveProcessorExternalLha::onQProcessReadyRead);
     connect(m_process, &QProcess::finished, this, &ArchiveProcessorExternalLha::onQProcessFinished);
-    m_tmpDir = new QTemporaryDir(QDir(QDir::tempPath()).filePath("qtkiss-extracted-XXXXXX"));
+    // FIXME: QTemporaryDir should be cleared & recreated whenever extract a new LZH file.
+    m_tmpDir = new QTemporaryDir(generateTempDirPath());
     // connect(m_process, &QProcess::errorOccurred, this, &ArchiveProcessor::onProcessErrorOccurred);
 }
 
@@ -22,6 +24,15 @@ ArchiveProcessorExternalLha::~ArchiveProcessorExternalLha()
 {
     delete m_tmpDir;
 }
+
+bool ArchiveProcessorExternalLha::checkAvailability()
+{
+    QProcess p {};
+    p.start("lha");
+    p.waitForFinished();
+    return p.exitCode() == 0;
+}
+
 
 QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::extractFileAsPromise(const QString &lzhOrCnfFilePath)
 {
@@ -31,6 +42,14 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     QString fileName = fileInfo.fileName();
     m_extractedFiles = std::make_shared<QMap<QString, QByteArray>>();
     promise->start();
+    if (!checkAvailability()) {
+        qCritical().noquote() << tr("External program LHA is not installed or not found.");
+        promise->setException(std::make_exception_ptr(
+                                  std::runtime_error("External program LHA is not installed or not found.")
+                                  ));
+        promise->finish();
+        delete promise;
+    }
     if (lzhOrCnfFilePath.endsWith(".CNF"_L1, Qt::CaseInsensitive)) {
         qInfo().noquote() << tr("Reading a CNF file \"%1\" directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...").arg(lzhOrCnfFilePath);
         promise->addResult(getRelatedFilesInTheSameFolder(lzhOrCnfFilePath));
@@ -59,13 +78,6 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     return future;
 }
 
-bool ArchiveProcessorExternalLha::checkLhaCommandAvailability()
-{
-    QProcess p {};
-    p.start("lha");
-    p.waitForFinished();
-    return p.exitCode() == 0;
-}
 
 
 FilesSummaryList ArchiveProcessorExternalLha::getFileSizeList(const QString &lzhFilePath)

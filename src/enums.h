@@ -24,8 +24,9 @@ public:
         LoadAsPatch,
     };
     enum class LzhDecompressorBackend {
-        Libarchive,
         ExternalLhaProcess,
+        ExternalUnarProcess,
+        Libarchive,
     };
     static const QStringList encodingNames() {
         return {

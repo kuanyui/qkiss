@@ -1,16 +1,19 @@
 #include "archiveprocessorfactory.h"
 #include "archiveprocessorexternallha.h"
+#include "archiveprocessorexternalunar.h"
 #include "archiveprocessorlibarchive.h"
 
 
 
 AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(QKiSS::LzhDecompressorBackend backend)
 {
+    return new ArchiveProcessorExternalUnar();
     switch (backend) {
+    case QKiSS::LzhDecompressorBackend::ExternalUnarProcess: return new ArchiveProcessorExternalUnar();
+    case QKiSS::LzhDecompressorBackend::ExternalLhaProcess: return new ArchiveProcessorExternalLha();
 #ifdef HAVE_LIBARCHIVE
     case QKiSS::LzhDecompressorBackend::Libarchive: return new ArchiveProcessorLibarchive();
 #endif
-    case QKiSS::LzhDecompressorBackend::ExternalLhaProcess: return new ArchiveProcessorExternalLha();
-    default: return new ArchiveProcessorLibarchive();
+    default: return new ArchiveProcessorExternalLha();
     }
 }
