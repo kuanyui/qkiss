@@ -5,9 +5,12 @@
 
 
 
-AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(QKiSS::LzhDecompressorBackend backend)
+AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(QKiSS::LzhDecompressorBackend backend, QString lzhOrCnfFilePath)
 {
     return new ArchiveProcessorExternalUnar();
+    if (lzhOrCnfFilePath.endsWith(".CNF")) {
+        return new ArchiveProcessorExternalUnar();
+    }
     switch (backend) {
     case QKiSS::LzhDecompressorBackend::ExternalUnarProcess: return new ArchiveProcessorExternalUnar();
     case QKiSS::LzhDecompressorBackend::ExternalLhaProcess: return new ArchiveProcessorExternalLha();

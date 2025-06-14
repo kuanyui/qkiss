@@ -25,6 +25,21 @@ ArchiveProcessorExternalLha::~ArchiveProcessorExternalLha()
     delete m_tmpDir;
 }
 
+QString ArchiveProcessorExternalLha::name() const
+{
+    return tr("lha (LHa for UNIX)");
+}
+
+QString ArchiveProcessorExternalLha::description() const
+{
+    return tr("<ul>"
+              "  <li>Compatibility of LZH: Perfect (can open any LZH file)</li>"
+              "  <li>Disk: In most cases, the extraction is done in memory, avoid doing writing operation to SSD / HDD if possible.</li>"
+              "  <li>Type: External program; manual installation is needed. </li> (Available on most of Linux distros, also on MacPorts. Windows supporting is experimental)"
+              "  <li>Downloads: <a href='https://github.com/jca02266/lha'>Official Site</a></li>"
+              "</ul>");
+}
+
 bool ArchiveProcessorExternalLha::checkAvailability()
 {
     QProcess p {};

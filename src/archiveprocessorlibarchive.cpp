@@ -24,6 +24,21 @@ ArchiveProcessorLibarchive::~ArchiveProcessorLibarchive()
 
 }
 
+QString ArchiveProcessorLibarchive::name() const
+{
+    return tr("LibArchive (built-in)");
+}
+
+QString ArchiveProcessorLibarchive::description() const
+{
+    return tr("<ul>"
+              "  <li>Compatibility of LZH: Bad (some LZH may fail to be extracted, and only ASCII / UTF-8 filename is supported.)</li>"
+              "  <li>Disk: Always process data in memory, never write any data to HDD / SSD.</li>"
+              "  <li>Type: dynamic library (built-in in this application)"
+              "  <li>Downloads: <a href='https://github.com/libarchive/libarchive'>Source Code</a></li>"
+              "</ul>");
+}
+
 bool ArchiveProcessorLibarchive::checkAvailability()
 {
     return true;
@@ -151,3 +166,5 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
 }
 
 #endif
+
+

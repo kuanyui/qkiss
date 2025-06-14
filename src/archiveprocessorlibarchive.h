@@ -10,6 +10,8 @@ class ArchiveProcessorLibarchive : public AbstractArchiveProcessor
 public:
     explicit ArchiveProcessorLibarchive(QObject *parent = nullptr);
     virtual ~ArchiveProcessorLibarchive();
+    virtual QString name() const override;
+    virtual QString description() const override;
     virtual bool checkAvailability() override;
     virtual QFuture<std::shared_ptr<ExtractedRawFilesMap> > extractFileAsPromise(const QString &lzhOrCnfFilePath) override;
 

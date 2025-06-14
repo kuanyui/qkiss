@@ -21,6 +21,21 @@ ArchiveProcessorExternalUnar::~ArchiveProcessorExternalUnar()
 {
 }
 
+QString ArchiveProcessorExternalUnar::name() const
+{
+    return tr("Unar (Unarchiver)");
+}
+
+QString ArchiveProcessorExternalUnar::description() const
+{
+    return tr("<ul>"
+              "  <li>Compatibility of LZH: Good</li>"
+              "  <li>Disk: All extractions will do writing operations to SSD / HDD.</li>"
+              "  <li>Type: External program; manual installation is needed. </li> (Native macOS supports; available on most of Linux distros; support for Windows)"
+              "  <li>Downloads: <a href=\"https://theunarchiver.com/command-line\">Official Site</a></li>"
+              "</ul>");
+}
+
 bool ArchiveProcessorExternalUnar::checkAvailability()
 {
     QProcess p {};

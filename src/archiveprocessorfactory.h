@@ -6,7 +6,7 @@
 class ArchiveProcessorFactory
 {
 public:
-    static AbstractArchiveProcessor* newArchiveProcessor(QKiSS::LzhDecompressorBackend backend);
+    static AbstractArchiveProcessor* newArchiveProcessor(QKiSS::LzhDecompressorBackend backend, QString lzhOrCnfFilePath);
 };
 
 #endif // ARCHIVEPROCESSORFACTORY_H
