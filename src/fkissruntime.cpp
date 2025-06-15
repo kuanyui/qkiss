@@ -431,7 +431,7 @@ std::shared_ptr<FkissAlarmTimer> FkissRuntime::getOrCreateAlarmTimer(FkissVarian
         tmp->qTimer = std::make_unique<QTimer>();
         tmp->qTimer->setSingleShot(true);
         tmp->qTimer->setInterval(delay);
-        connect(tmp->qTimer.get(), &QTimer::timeout, [=]() {
+        connect(tmp->qTimer.get(), &QTimer::timeout, [=, this]() {
             runActionsInAlarm(alarmID);
         });
         if (delay == 0) {

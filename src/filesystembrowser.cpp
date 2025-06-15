@@ -145,7 +145,7 @@ void FileSystemBrowser::setupUi()
     // Delegate
     IconButtonDelegate *patchDelegate = new IconButtonDelegate(m_view);
     m_view->setItemDelegateForColumn(ColumnIdx::ColIdxPatchBtn, patchDelegate);
-    connect(patchDelegate, &IconButtonDelegate::pressed, [=](const QModelIndex& index){
+    connect(patchDelegate, &IconButtonDelegate::pressed, [=, this](const QModelIndex& index){
         QString filePath = m_model->data(index, ThisRole::FilePathRole).toString();
         if (filePath.isEmpty()) { return; }
         QFileInfo fileInfo {filePath};

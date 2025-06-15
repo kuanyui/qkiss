@@ -34,11 +34,11 @@ MainWindow::MainWindow(QWidget *parent)
     setupDockWindows();
     setupStatusBar();
     setupShortcuts();
-    connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, this, [=](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
+    connect(m_fileSystemBrowser, &FileSystemBrowser::requestLoadFile, this, [=, this](QString filePath, QKiSS::FileLoadMode fileLoadMode) {
         tryToLoadKissFilePath(filePath, fileLoadMode);
     });
 
-    connect(m_kissView, &GKissView::highlightedItemChanged, this, [=](GKissItem *item) {
+    connect(m_kissView, &GKissView::highlightedItemChanged, this, [=, this](GKissItem *item) {
         m_itemInspector->setInspectedItem(item);
         if (item == nullptr) {
             statusBar()->clearMessage();
@@ -59,21 +59,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Zooming
     connect(m_cboxZoomScale, &QComboBox::currentTextChanged, this, &MainWindow::applyViewZoomByText);
-    connect(ui->action_zoomOut, &QAction::triggered, &m_cfg, [=](){
+    connect(ui->action_zoomOut, &QAction::triggered, &m_cfg, [=, this](){
         m_cfg.zoomOut();
         m_cboxZoomScale->setCurrentText(m_cfg.zoom());
     });
-    connect(ui->action_zoomIn, &QAction::triggered, &m_cfg, [=](){
+    connect(ui->action_zoomIn, &QAction::triggered, &m_cfg, [=, this](){
         m_cfg.zoomIn();
         m_cboxZoomScale->setCurrentText(m_cfg.zoom());
     });
-    connect(ui->action_zoomReset, &QAction::triggered, &m_cfg, [=](){
+    connect(ui->action_zoomReset, &QAction::triggered, &m_cfg, [=, this](){
         m_cfg.zoomReset();
         m_cboxZoomScale->setCurrentText(m_cfg.zoom());
     });
     ui->action_zoomIn->setDisabled(!m_cfg.canZoomIn());    // REFACTOR: How to DRY?
     ui->action_zoomOut->setDisabled(!m_cfg.canZoomOut());    // REFACTOR: How to DRY?
-    connect(&m_cfg, &ConfigFile::zoomScaleChanged, this, [=] () {
+    connect(&m_cfg, &ConfigFile::zoomScaleChanged, this, [=, this] () {
         ui->action_zoomIn->setDisabled(!m_cfg.canZoomIn());
         ui->action_zoomOut->setDisabled(!m_cfg.canZoomOut());
     });
@@ -178,7 +178,7 @@ void MainWindow::rerenderSetPaletteButtons()
     cycleToggleSceneSetBtn->setToolTip(tr("Switch scene set (F1/F2)"));
     cycleToggleSceneSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
     m_toolbarSceneSets->addWidget(cycleToggleSceneSetBtn);
-    connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
+    connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, this, [this](bool checked){
         Q_UNUSED(checked);
         switchSceneBy(1);
     });
@@ -189,7 +189,7 @@ void MainWindow::rerenderSetPaletteButtons()
         if (sceneIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(sceneIdx));
         m_toolbarSceneSets->addWidget(btn);
-        connect(btn, &QAbstractButton::clicked, this, [=](){ switchToScene(sceneIdx); });
+        connect(btn, &QAbstractButton::clicked, this, [=, this](){ switchToScene(sceneIdx); });
     }
     connect(m_archiveFile, &ArchiveFile::fkissChangedCnfSetNo, this, &MainWindow::switchToScene);
     // =====================================================
@@ -207,7 +207,7 @@ void MainWindow::rerenderSetPaletteButtons()
     cycleTogglePaletteSetBtn->setToolTip(tr("Switch palette set (F3/F4)"));
     cycleTogglePaletteSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
     m_toolbarColorSets->addWidget(cycleTogglePaletteSetBtn);
-    connect(cycleTogglePaletteSetBtn, &QAbstractButton::clicked, this, [=](bool checked){
+    connect(cycleTogglePaletteSetBtn, &QAbstractButton::clicked, this, [this](bool checked){
         Q_UNUSED(checked);
         switchPaletteBy(1);
     });
@@ -218,7 +218,7 @@ void MainWindow::rerenderSetPaletteButtons()
         if (paletteIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(paletteIdx));
         m_toolbarColorSets->addWidget(btn);
-        connect(btn, &QAbstractButton::clicked, this, [=](){ switchToPalette(paletteIdx); });
+        connect(btn, &QAbstractButton::clicked, this, [=, this](){ switchToPalette(paletteIdx); });
     }
     connect(m_archiveFile, &ArchiveFile::fkissChangedPaletteNo, this, &MainWindow::switchToPalette);
 }
@@ -284,7 +284,7 @@ void MainWindow::setupMenuBar()
         if (m_cfg.encoding() == enumVal) {
             act->setChecked(true);
         }
-        connect(act, &QAction::toggled, this, [=] () { setFileEncoding(enumVal); });
+        connect(act, &QAction::toggled, this, [=, this] () { setFileEncoding(enumVal); });
     }
 
     const auto &allLangs = m_cfg.allLanguages();
@@ -297,7 +297,7 @@ void MainWindow::setupMenuBar()
         if (m_cfg.uiLanguage() == lang.id) {
             act->setChecked(true);
         }
-        connect(act, &QAction::toggled, this, [=] () { setUiLanguage(lang.id); });
+        connect(act, &QAction::toggled, this, [=, this] () { setUiLanguage(lang.id); });
     }
 }
 
@@ -412,7 +412,7 @@ void MainWindow::setupDockWindows()
     // ==================================================
     // (Signals)
     // ==================================================
-    connect(m_innerFilesBrowser, &InnerFilesBrowser::itemActivated, this, [=](QTreeWidgetItem *item) {
+    connect(m_innerFilesBrowser, &InnerFilesBrowser::itemActivated, this, [=, this](QTreeWidgetItem *item) {
         m_innerFilesBrowser->markItemAsLoaded(item);
         if (item->type() == InnerFilesBrowser::CustomItemCnfFileType) {
             QString cnfFileName = item->text(0);
@@ -489,10 +489,10 @@ void MainWindow::setupShortcuts()
     QShortcut *f2 = new QShortcut(QKeySequence(Qt::Key_F2), this);
     QShortcut *f3 = new QShortcut(QKeySequence(Qt::Key_F3), this);
     QShortcut *f4 = new QShortcut(QKeySequence(Qt::Key_F4), this);
-    connect(f1, &QShortcut::activated, this, [=](){ this->switchSceneBy(-1); });
-    connect(f2, &QShortcut::activated, this, [=](){ this->switchSceneBy(1); });
-    connect(f3, &QShortcut::activated, this, [=](){ this->switchPaletteBy(-1); });
-    connect(f4, &QShortcut::activated, this, [=](){ this->switchPaletteBy(1); });
+    connect(f1, &QShortcut::activated, this, [this](){ this->switchSceneBy(-1); });
+    connect(f2, &QShortcut::activated, this, [this](){ this->switchSceneBy(1); });
+    connect(f3, &QShortcut::activated, this, [this](){ this->switchPaletteBy(-1); });
+    connect(f4, &QShortcut::activated, this, [this](){ this->switchPaletteBy(1); });
 }
 
 void MainWindow::saveWindowSettings()
@@ -522,7 +522,7 @@ void MainWindow::renderRecentFiles()
     foreach (const QString &path, m_cfg.recentFiles()) {
         QAction *act = new QAction(menuRecentFiles);
         act->setText(path);
-        connect(act, &QAction::triggered, this, [=]() { openDirOrFile(path); });
+        connect(act, &QAction::triggered, this, [=, this]() { openDirOrFile(path); });
         menuRecentFiles->addAction(act);
     }
     menuRecentFiles->addSeparator();
@@ -539,7 +539,7 @@ void MainWindow::renderRecentFiles()
     foreach (const QString &path, m_cfg.recentDirs()) {
         QAction *act = new QAction(menuRecentDirs);
         act->setText(path);
-        connect(act, &QAction::triggered, this, [=]() { openDirOrFile(path); });
+        connect(act, &QAction::triggered, this, [=, this]() { openDirOrFile(path); });
         menuRecentDirs->addAction(act);
     }
     menuRecentDirs->addSeparator();
