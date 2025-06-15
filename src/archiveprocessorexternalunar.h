@@ -12,8 +12,7 @@ class ArchiveProcessorExternalUnar : public AbstractArchiveProcessor
 public:
     explicit ArchiveProcessorExternalUnar(QObject *parent = nullptr);
     virtual ~ArchiveProcessorExternalUnar();
-    virtual QString name() const override;
-    virtual QString description() const override;
+    virtual Info info() const override;
     virtual bool checkAvailability() override;
     virtual QFuture<std::shared_ptr<ExtractedRawFilesMap> > extractFileAsPromise(const QString &lzhOrCnfFilePath) override;
 

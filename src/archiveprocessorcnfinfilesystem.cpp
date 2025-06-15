@@ -10,14 +10,9 @@ ArchiveProcessorCnfInFileSystem::ArchiveProcessorCnfInFileSystem(QObject *parent
 
 }
 
-QString ArchiveProcessorCnfInFileSystem::name() const
+AbstractArchiveProcessor::Info ArchiveProcessorCnfInFileSystem::info() const
 {
-    return "";
-}
-
-QString ArchiveProcessorCnfInFileSystem::description() const
-{
-    return "";
+    return Info {};
 }
 
 bool ArchiveProcessorCnfInFileSystem::checkAvailability()

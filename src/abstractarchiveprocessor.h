@@ -18,13 +18,21 @@ using FilesSummaryList = QVector<QPair<QString, int>>;
 class AbstractArchiveProcessor : public QObject
 {
     Q_OBJECT
+
 public:
+    struct Info {
+        QString name;
+        QString summary;
+        QString lzhCompatibility;
+        QString installation;
+        QString osSupport;
+        QString diskOperation;
+        QString website;
+    };
     AbstractArchiveProcessor(QObject *parent);
     virtual ~AbstractArchiveProcessor();
     /// Displayed in setting page.
-    virtual QString name() const = 0;
-    /// Displayed in setting page.
-    virtual QString description() const = 0;
+    virtual Info info() const = 0;
     virtual bool checkAvailability() = 0;
     /// This function merely extract a LZH file, doesn't do any other checks.
     /// TODO: Should be able to accept a CNF file. Should rename this function.

@@ -21,19 +21,17 @@ ArchiveProcessorExternalUnar::~ArchiveProcessorExternalUnar()
 {
 }
 
-QString ArchiveProcessorExternalUnar::name() const
+AbstractArchiveProcessor::Info ArchiveProcessorExternalUnar::info() const
 {
-    return tr("Unar (Unarchiver)");
-}
-
-QString ArchiveProcessorExternalUnar::description() const
-{
-    return tr("<ul>"
-              "  <li>Compatibility of LZH: Good</li>"
-              "  <li>Disk: All extractions will do writing operations to SSD / HDD.</li>"
-              "  <li>Type: External program; manual installation is needed. </li> (Native macOS supports; available on most of Linux distros; support for Windows)"
-              "  <li>Downloads: <a href=\"https://theunarchiver.com/command-line\">Official Site</a></li>"
-              "</ul>");
+    return Info {
+        .name = tr("Unar (Unarchiver)"),
+        .summary = tr("An extractor specially focused on archives of old formats containing non UTF-8 encoding file names."),
+        .lzhCompatibility = tr("Pretty Good"),
+        .installation = tr("Nativly supports macOS. Available on most of Linux distros. Supports Windows"),
+        .osSupport = tr("External program; manual installation is needed."),
+        .diskOperation = tr("All extractions will do writing operations to disk; may shorten the lifespan of SSD."),
+        .website = tr("<a href=\"https://theunarchiver.com/command-line\">Official Site</a>, <a href='https://github.com/MacPaw/unar'>Source Code</a>, ")
+    };
 }
 
 bool ArchiveProcessorExternalUnar::checkAvailability()
@@ -74,7 +72,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalUnar::ex
         promise->finish();
         delete promise;
     });
-    conn2 = QObject::connect(this, &ArchiveProcessorExternalUnar::extractSuccess, [=]() {
+    conn2 = QObject::connect(this, &ArchiveProcessorExternalUnar::extractSuccess, [=, this]() {
         std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles = getAllFileRawContentsInTmpDirRecursively();
         qInfo().noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
         promise->addResult(extractedRawFiles);

@@ -9,8 +9,7 @@ class ArchiveProcessorCnfInFileSystem : public AbstractArchiveProcessor
     Q_OBJECT
 public:
     explicit ArchiveProcessorCnfInFileSystem(QObject *parent = nullptr);
-    virtual QString name() const override;
-    virtual QString description() const override;
+    virtual Info info() const override;
     virtual bool checkAvailability() override;
     virtual QFuture<std::shared_ptr<ExtractedRawFilesMap> > extractFileAsPromise(const QString &lzhOrCnfFilePath) override;
 

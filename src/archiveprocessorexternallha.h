@@ -12,8 +12,7 @@ class ArchiveProcessorExternalLha : public AbstractArchiveProcessor
 public:
     explicit ArchiveProcessorExternalLha(QObject *parent = nullptr);
     virtual ~ArchiveProcessorExternalLha();
-    virtual QString name() const override;
-    virtual QString description() const override;
+    virtual Info info() const override;
     virtual bool checkAvailability() override;
     /// This function merely extract a LZH file, doesn't do any other checks.
     /// TODO: Should be able to accept a CNF file. Should rename this function.

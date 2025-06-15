@@ -24,19 +24,17 @@ ArchiveProcessorLibarchive::~ArchiveProcessorLibarchive()
 
 }
 
-QString ArchiveProcessorLibarchive::name() const
+AbstractArchiveProcessor::Info ArchiveProcessorLibarchive::info() const
 {
-    return tr("LibArchive (built-in)");
-}
-
-QString ArchiveProcessorLibarchive::description() const
-{
-    return tr("<ul>"
-              "  <li>Compatibility of LZH: Bad (some LZH may fail to be extracted, and only ASCII / UTF-8 filename is supported.)</li>"
-              "  <li>Disk: Always process data in memory, never write any data to HDD / SSD.</li>"
-              "  <li>Type: dynamic library (built-in in this application)"
-              "  <li>Downloads: <a href='https://github.com/libarchive/libarchive'>Source Code</a></li>"
-              "</ul>");
+    return Info {
+        .name = tr("LibArchive (built-in)"),
+        .summary = tr("Multi-format archive and compression library."),
+        .lzhCompatibility = tr("Poor (some LZH files may be unable to be extracted, and non UTF-8 file names in LZH are totally unsupported.)"),
+        .installation = tr("Built-in in QKiSS. No extra external program is required."),
+        .osSupport = tr("Windows, macOS, Linux"),
+        .diskOperation = tr("All operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan."),
+        .website = tr("<a href='https://github.com/libarchive/libarchive'>Source Code</a></li>")
+    };
 }
 
 bool ArchiveProcessorLibarchive::checkAvailability()

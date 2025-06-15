@@ -25,20 +25,19 @@ ArchiveProcessorExternalLha::~ArchiveProcessorExternalLha()
     delete m_tmpDir;
 }
 
-QString ArchiveProcessorExternalLha::name() const
+AbstractArchiveProcessor::Info ArchiveProcessorExternalLha::info() const
 {
-    return tr("lha (LHa for UNIX)");
+    return Info {
+        .name = tr("lha (LHa for UNIX)"),
+        .summary = tr("The de facto standard implementation of LZH."),
+        .lzhCompatibility = tr("Perfect (theorically can open any LZH file)"),
+        .installation = tr("External program; manual installation is needed."),
+        .osSupport = tr("Available on most of Linux distros, also on MacPorts. Windows supporting is experimental."),
+        .diskOperation = tr("> 95% operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan."),
+        .website = tr("<a href='https://github.com/jca02266/lha'>Source Code</a></li>")
+    };
 }
 
-QString ArchiveProcessorExternalLha::description() const
-{
-    return tr("<ul>"
-              "  <li>Compatibility of LZH: Perfect (can open any LZH file)</li>"
-              "  <li>Disk: In most cases, the extraction is done in memory, avoid doing writing operation to SSD / HDD if possible.</li>"
-              "  <li>Type: External program; manual installation is needed. </li> (Available on most of Linux distros, also on MacPorts. Windows supporting is experimental)"
-              "  <li>Downloads: <a href='https://github.com/jca02266/lha'>Official Site</a></li>"
-              "</ul>");
-}
 
 bool ArchiveProcessorExternalLha::checkAvailability()
 {
