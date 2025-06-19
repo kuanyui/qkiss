@@ -1,6 +1,8 @@
 #ifndef ARCHIVEPROCESSORLIBARCHIVE_H
 #define ARCHIVEPROCESSORLIBARCHIVE_H
 
+#ifdef HAVE_LIBARCHIVE
+
 #include <QObject>
 #include "abstractarchiveprocessor.h"
 
@@ -20,5 +22,6 @@ private:
     static std::shared_ptr<ExtractedRawFilesMap> callLibarchiveToExtractArchiveInMemory(const QByteArray &archiveData);
 
 };
+#endif // HAVE_LIBARCHIVE
 
 #endif // ARCHIVEPROCESSORLIBARCHIVE_H

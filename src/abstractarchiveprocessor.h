@@ -7,6 +7,7 @@
 #include <QMap>
 #include <QElapsedTimer>
 #include <QDebug>
+#include "enums.h"
 using ExtractedRawFilesMap = QMap<QString, QByteArray>;
 
 /// QPair<Filename, Size>. Size is in bytes.
@@ -21,6 +22,7 @@ class AbstractArchiveProcessor : public QObject
 
 public:
     struct Info {
+        QKiSS::LzhDecompressorBackend id;
         QString name;
         QString summary;
         QString lzhCompatibility;

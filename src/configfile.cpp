@@ -243,7 +243,7 @@ void ConfigFile::loadAll()
 #ifdef HAVE_LIBARCHIVE
     m_lzhDecompressorBackend = QKiSS::LzhDecompressorBackend::Libarchive;
 #endif
-#if defined(Q_OS_UNIX) || !defined(HAVE_LIBARCHIVE)
+#if defined(Q_OS_UNIX)
     m_lzhDecompressorBackend = QKiSS::LzhDecompressorBackend::ExternalLhaProcess;
 #endif
 

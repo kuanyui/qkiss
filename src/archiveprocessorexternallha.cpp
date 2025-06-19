@@ -28,6 +28,7 @@ ArchiveProcessorExternalLha::~ArchiveProcessorExternalLha()
 AbstractArchiveProcessor::Info ArchiveProcessorExternalLha::info() const
 {
     return Info {
+        .id = QKiSS::LzhDecompressorBackend::ExternalLhaProcess,
         .name = tr("lha (LHa for UNIX)"),
         .summary = tr("The de facto standard implementation of LZH."),
         .lzhCompatibility = tr("Perfect (theorically can open any LZH file)"),

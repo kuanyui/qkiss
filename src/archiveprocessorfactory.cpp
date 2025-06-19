@@ -5,7 +5,6 @@
 #include "archiveprocessorcnfinfilesystem.h"
 
 
-
 AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(QKiSS::LzhDecompressorBackend backend, QString lzhOrCnfFilePath)
 {
     if (lzhOrCnfFilePath.endsWith(".CNF", Qt::CaseInsensitive)) {
@@ -21,3 +20,15 @@ AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(QKiSS::Lz
     default: return new ArchiveProcessorExternalLha();
     }
 }
+
+std::unique_ptr<std::vector<std::unique_ptr<AbstractArchiveProcessor> > > ArchiveProcessorFactory::getAllAvailableArchiveProcessors()
+{
+    std::unique_ptr<std::vector<std::unique_ptr<AbstractArchiveProcessor> > > vec = std::make_unique<std::vector<std::unique_ptr<AbstractArchiveProcessor> > >();
+    vec->push_back(std::make_unique<ArchiveProcessorExternalLha>());
+    vec->push_back(std::make_unique<ArchiveProcessorExternalUnar>());
+#ifdef HAVE_LIBARCHIVE
+    vec->push_back(std::make_unique<ArchiveProcessorLibarchive>());
+#endif
+    return vec;
+}
+

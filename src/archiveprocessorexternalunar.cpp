@@ -24,6 +24,7 @@ ArchiveProcessorExternalUnar::~ArchiveProcessorExternalUnar()
 AbstractArchiveProcessor::Info ArchiveProcessorExternalUnar::info() const
 {
     return Info {
+        .id = QKiSS::LzhDecompressorBackend::ExternalUnarProcess,
         .name = tr("Unar (Unarchiver)"),
         .summary = tr("An extractor specially focused on archives of old formats containing non UTF-8 encoding file names."),
         .lzhCompatibility = tr("Pretty Good"),

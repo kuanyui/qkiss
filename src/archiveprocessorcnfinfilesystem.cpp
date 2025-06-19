@@ -12,7 +12,16 @@ ArchiveProcessorCnfInFileSystem::ArchiveProcessorCnfInFileSystem(QObject *parent
 
 AbstractArchiveProcessor::Info ArchiveProcessorCnfInFileSystem::info() const
 {
-    return Info {};
+    return Info {
+        .id = QKiSS::LzhDecompressorBackend::PlainFolder,
+        .name = "",
+        .summary = "",
+        .lzhCompatibility = "",
+        .installation = "",
+        .osSupport = "",
+        .diskOperation = "",
+        .website = ""
+    };
 }
 
 bool ArchiveProcessorCnfInFileSystem::checkAvailability()

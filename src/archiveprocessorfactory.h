@@ -7,6 +7,8 @@ class ArchiveProcessorFactory
 {
 public:
     static AbstractArchiveProcessor* newArchiveProcessor(QKiSS::LzhDecompressorBackend backend, QString lzhOrCnfFilePath);
+    static std::unique_ptr<std::vector<std::unique_ptr<AbstractArchiveProcessor>>> getAllAvailableArchiveProcessors();
+
 };
 
 #endif // ARCHIVEPROCESSORFACTORY_H

@@ -24,8 +24,13 @@ public:
         LoadAsPatch,
     };
     enum class LzhDecompressorBackend {
+        /// read CNF file in plain folder directly.
+        PlainFolder,
+        /// LHA
         ExternalLhaProcess,
+        /// Unarchive
         ExternalUnarProcess,
+        /// Libarchive
         Libarchive,
     };
     static const QStringList encodingNames() {

@@ -1,8 +1,9 @@
+#ifdef HAVE_LIBARCHIVE
+
 #include <QtConcurrent>
 #include <QFuture>
 #include <QFutureWatcher>
 
-#ifdef HAVE_LIBARCHIVE
 
 #include "archiveprocessorlibarchive.h"
 
@@ -27,6 +28,7 @@ ArchiveProcessorLibarchive::~ArchiveProcessorLibarchive()
 AbstractArchiveProcessor::Info ArchiveProcessorLibarchive::info() const
 {
     return Info {
+        .id = QKiSS::LzhDecompressorBackend::Libarchive,
         .name = tr("LibArchive (built-in)"),
         .summary = tr("Multi-format archive and compression library."),
         .lzhCompatibility = tr("Poor (some LZH files may be unable to be extracted, and non UTF-8 file names in LZH are totally unsupported.)"),
@@ -163,6 +165,6 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
     return filesDict;
 }
 
-#endif
+#endif // HAVE_LIBARCHIVE
 
 
