@@ -72,8 +72,8 @@ Gnome		tomboy-tag		obj-id
 GimpDefault		gimp-transform-3d-move	obj-pos
 InkscapeTango		distribute-randomize	obj-cels
 GimpDefault		gimp-lock-position	obj-fix-count
-# BlueHumanity		gtk-info		inspector
 InkscapeTango		tool-pointer		inspector
+
 
 BlueGnome	preferences-desktop-keyboard-shortcuts	keyboard
 BlueGnome		input-mouse		mouse
@@ -89,3 +89,11 @@ Gnome		mouse-middle-click	mouse-middle-click
 # Settings
 Gnome		preferences-desktop-font		encoding
 Gnome		preferences-desktop-locale		language
+
+Gnome			application-x-executable
+BlueHumanity		gtk-info
+Humanity		extract-archive
+Humanity		gnome-settings-default-applications
+GimpDefault		gimp-controller-linux-input
+Humanity		drive-harddisk
+Humanity		web-browser

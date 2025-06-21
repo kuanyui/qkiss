@@ -5,7 +5,8 @@
 #include <QObject>
 #include <QWidget>
 #include <QComboBox>
-
+#include "enums.h"
+#include "abstractarchiveprocessor.h"
 
 class PreferenceDialog : public QDialog
 {
@@ -20,6 +21,7 @@ private:
     QWidget *createUiTab();
     QWidget *createBackendTab();
     QComboBox *m_cboxLzhExtractorBackend;
+    std::vector<std::unique_ptr<AbstractArchiveProcessor>> m_allAvailableLzhExtractorBackends;
 };
 
 #endif // PREFERENCEDIALOG_H
