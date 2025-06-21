@@ -58,19 +58,9 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <widget class="QMenu" name="menu_encoding">
-     <property name="title">
-      <string>Encoding</string>
-     </property>
-     <property name="icon">
-      <iconset theme="encoding"/>
-     </property>
-    </widget>
     <addaction name="action_zoomOut"/>
     <addaction name="action_zoomIn"/>
     <addaction name="action_zoomReset"/>
-    <addaction name="separator"/>
-    <addaction name="menu_encoding"/>
    </widget>
    <widget class="QMenu" name="menu_Window">
     <property name="title">
@@ -79,7 +69,7 @@
    </widget>
    <widget class="QMenu" name="menu_Settings">
     <property name="title">
-     <string>Settings</string>
+     <string>&amp;Settings</string>
     </property>
     <widget class="QMenu" name="menu_uiLanguage">
      <property name="title">
@@ -89,7 +79,18 @@
       <iconset theme="language"/>
      </property>
     </widget>
+    <widget class="QMenu" name="menu_encoding">
+     <property name="title">
+      <string>Encoding</string>
+     </property>
+     <property name="icon">
+      <iconset theme="encoding"/>
+     </property>
+    </widget>
     <addaction name="menu_uiLanguage"/>
+    <addaction name="menu_encoding"/>
+    <addaction name="separator"/>
+    <addaction name="action_preferences"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
@@ -228,6 +229,20 @@
   <action name="action_clearAll_2">
    <property name="text">
     <string>Clear All</string>
+   </property>
+  </action>
+  <action name="action_preferences">
+   <property name="icon">
+    <iconset theme="preferences-system"/>
+   </property>
+   <property name="text">
+    <string>&amp;Preferences</string>
+   </property>
+   <property name="toolTip">
+    <string>Preferences</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::PreferencesRole</enum>
    </property>
   </action>
  </widget>

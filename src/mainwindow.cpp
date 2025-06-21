@@ -83,6 +83,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_openDirectory, &QAction::triggered, this, &MainWindow::openDirPicker);
     connect(&m_cfg, &ConfigFile::recentFilesChanged, this, &MainWindow::renderRecentFiles);
 
+    // Preference Dialog
+    m_preferenceDialog = new PreferenceDialog(this);
+    connect(ui->action_preferences, &QAction::triggered, this, [=, this]() {
+        m_preferenceDialog->show();
+    });
+
     setCentralWidget(m_kissView);
     restoreWindowSettings();
 }

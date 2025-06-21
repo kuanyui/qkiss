@@ -17,6 +17,7 @@ public:
 private slots:
     void applySettings();
 
+
 private:
     QWidget *createUiTab();
     QWidget *createBackendTab();

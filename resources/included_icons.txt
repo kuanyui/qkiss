@@ -89,6 +89,7 @@ Gnome		mouse-middle-click	mouse-middle-click
 # Settings
 Gnome		preferences-desktop-font		encoding
 Gnome		preferences-desktop-locale		language
+Gnome		preferences-system
 
 Gnome			application-x-executable
 BlueHumanity		gtk-info

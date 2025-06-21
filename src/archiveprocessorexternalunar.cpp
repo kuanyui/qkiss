@@ -28,10 +28,10 @@ AbstractArchiveProcessor::Info ArchiveProcessorExternalUnar::info() const
         .name = tr("Unar (Unarchiver)"),
         .summary = tr("An extractor specially focused on archives of old formats containing non UTF-8 encoding file names."),
         .lzhCompatibility = tr("Pretty Good"),
-        .installation = tr("Nativly supports macOS. Available on most of Linux distros. Supports Windows"),
-        .osSupport = tr("External program; manual installation is needed."),
+        .installation = tr("External program; manual installation is needed."),
+        .osSupport = tr("Originally developed for macOS, also available on most of Linux distros. Supports Windows"),
         .diskOperation = tr("All extractions will do writing operations to disk; may shorten the lifespan of SSD."),
-        .website = tr("<a href=\"https://theunarchiver.com/command-line\">Official Site</a>, <a href='https://github.com/MacPaw/unar'>Source Code</a>, ")
+        .website = tr("<a href=\"https://theunarchiver.com/command-line\">Official Site</a>, <a href='https://github.com/MacPaw/unar'>Source Code</a>.")
     };
 }
 
