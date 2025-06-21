@@ -55,6 +55,7 @@ struct IconTextField {
     QString iconName;
     QString fieldName;
     QLabel *labelFieldValue;
+    QString AbstractArchiveProcessor::Info::* structFieldPtr;
 };
 }
 
@@ -70,50 +71,40 @@ QWidget *PreferenceDialog::createBackendTab()
         m_cboxLzhExtractorBackend->addItem(beInfo.name, (int)beInfo.id);
         m_allAvailableLzhExtractorBackends.push_back(std::move(be));
     }
-    QLabel *labelName = new QLabel();
-    QLabel *labelSummary = new QLabel();
-    QLabel *labelLzhCompa = new QLabel();
-    QLabel *labelInstall = new QLabel();
-    QLabel *labelOsSupport = new QLabel();
-    QLabel *labelDiskOp = new QLabel();
-    QLabel *labelWebsite = new QLabel();
     QList<IconTextField> fields = {
-        {"application-x-executable",            tr("Name"),              labelName},       // Gnome
-        {"gtk-info",                            tr("Summary"),           labelSummary},    // Humanity
-        {"extract-archive",                     tr("LZH Compatibility"), labelLzhCompa},   // Humanity
-        {"gnome-settings-default-applications", tr("Installation"),      labelInstall},    // Humanity
-        {"gimp-controller-linux-input",         tr("OS Support"),        labelOsSupport},  // GimpDefault
-        {"drive-harddisk",                      tr("Disk Operation"),    labelDiskOp},     // Humanity
-        {"web-browser",                         tr("Website"),           labelWebsite}     // Humanity
+       {"application-x-executable"           , tr("Name"),               new QLabel(), &AbstractArchiveProcessor::Info::name }             , // Gnome
+       {"gtk-info"                           , tr("Summary"),            new QLabel(), &AbstractArchiveProcessor::Info::summary }          , // Humanity
+       {"extract-archive"                    , tr("LZH Compatibility"),  new QLabel(), &AbstractArchiveProcessor::Info::lzhCompatibility } , // Humanity
+       {"gnome-settings-default-applications", tr("Installation"),       new QLabel(), &AbstractArchiveProcessor::Info::installation }     , // Humanity
+       {"gimp-controller-linux-input"        , tr("OS Support"),         new QLabel(), &AbstractArchiveProcessor::Info::osSupport }        , // GimpDefault
+       {"drive-harddisk"                     , tr("Disk Operation"),     new QLabel(), &AbstractArchiveProcessor::Info::diskOperation }    , // Humanity
+       {"web-browser"                        , tr("Website"),            new QLabel(), &AbstractArchiveProcessor::Info::website }            // Humanity
     };
     QGridLayout *grid = new QGridLayout;
     for (uint r = 0; r < fields.size(); r++) {
+        IconTextField &field = fields[r];
         QFont defaultFont = QApplication::font();
         QFontMetrics metrics(defaultFont);
         int h = metrics.height();
 
         QLabel *labelIcon = new QLabel();
         labelIcon->setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Minimum);
-        labelIcon->setPixmap(QIcon::fromTheme(fields[r].iconName).pixmap(h, h));
+        labelIcon->setPixmap(QIcon::fromTheme(field.iconName).pixmap(h, h));
         grid->addWidget(labelIcon, r, 0);
 
-        QLabel *labelFieldName = new QLabel(fields[r].fieldName);
+        QLabel *labelFieldName = new QLabel(field.fieldName);
         labelFieldName->setStyleSheet("font-weight: bold; color: gray;"_L1);
         grid->addWidget(labelFieldName, r, 1);
 
-        fields[r].labelFieldValue->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+        field.labelFieldValue->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
         grid->addWidget(fields[r].labelFieldValue, r, 2);
     }
     auto callback = [=, this](int index) {
         const auto &backend = m_allAvailableLzhExtractorBackends[index];
         const auto &info = backend->info();
-        labelName->setText(info.name);
-        labelSummary->setText(info.summary);
-        labelLzhCompa->setText(info.lzhCompatibility);
-        labelInstall->setText(info.installation);
-        labelOsSupport->setText(info.osSupport);
-        labelDiskOp->setText(info.diskOperation);
-        labelWebsite->setText(info.website);
+        for (auto &field : fields) {
+            field.labelFieldValue->setText(info.*field.structFieldPtr);
+        }
     };
     connect(m_cboxLzhExtractorBackend, &QComboBox::currentIndexChanged, this, callback);
     callback(m_cboxLzhExtractorBackend->currentIndex());
