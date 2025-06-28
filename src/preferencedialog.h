@@ -4,10 +4,10 @@
 #include <QDialog>
 #include <QObject>
 #include <QWidget>
-#include <QComboBox>
 #include <QDialogButtonBox>
 #include "enums.h"
 #include "abstractarchiveprocessor.h"
+#include "zcombobox.h"
 
 
 namespace PreferenceDialogModel {
@@ -44,7 +44,9 @@ public:
     PreferenceDialog(QWidget *parent = nullptr);
     ~PreferenceDialog();
 private slots:
-    void updateUiComponentByCopiedModel();
+    void syncCopiedModelToUiComponents();
+    void syncUiComponentsToCopiedModel();
+    void refreshDirtyState();
 
 private:
     /// Read QSettings file to model
@@ -54,7 +56,7 @@ private:
     QWidget *createUiTab();
     QWidget *createBackendTab();
     QDialogButtonBox* m_dialogButtons;
-    QComboBox *m_cboxLzhExtractorBackend;
+    ZComboBox *m_cboxLzhExtractorBackend;
     std::vector<std::unique_ptr<AbstractArchiveProcessor>> m_allAvailableLzhExtractorBackends;
     PreferenceDialogModel::Root m_appliedModel;
     PreferenceDialogModel::Root m_copiedModel;

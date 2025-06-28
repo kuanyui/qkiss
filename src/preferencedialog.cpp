@@ -37,7 +37,6 @@ PreferenceDialog::PreferenceDialog(QWidget *parent)
     connect(m_dialogButtons, &QDialogButtonBox::rejected, this, [=, this] {
         close();
     });
-    readSettingsToModel();
     auto *tabs = new QTabWidget(this);
     // tabs->addTab(createUiTab(), tr("User Interface"));
     tabs->addTab(createBackendTab(), tr("LZH Extractor Backend"));
@@ -45,6 +44,7 @@ PreferenceDialog::PreferenceDialog(QWidget *parent)
     auto *layout = new QVBoxLayout(this);
     layout->addWidget(tabs);
     layout->addWidget(m_dialogButtons);
+    readSettingsToModel();
 }
 
 PreferenceDialog::~PreferenceDialog()
@@ -60,7 +60,7 @@ void PreferenceDialog::readSettingsToModel()
     m_appliedModel.files.encoding = cfgFile.encoding();
     m_appliedModel.ui.language = cfgFile.uiLanguage();
     m_copiedModel = m_appliedModel;
-    updateUiComponentByCopiedModel();
+    syncCopiedModelToUiComponents();
 }
 
 void PreferenceDialog::writeModelToSettings()
@@ -71,11 +71,24 @@ void PreferenceDialog::writeModelToSettings()
     cfgFile.setEncoding(m_copiedModel.files.encoding);
     cfgFile.setUiLanguage(m_copiedModel.ui.language);
     m_appliedModel = m_copiedModel;
-    updateUiComponentByCopiedModel();
+    syncCopiedModelToUiComponents();
 }
 
-void PreferenceDialog::updateUiComponentByCopiedModel()
+void PreferenceDialog::syncCopiedModelToUiComponents()
 {
+    m_cboxLzhExtractorBackend->setCurrentIndexByUserData(QVariant::fromValue(m_copiedModel.lzhBackend.lzhBackend));
+    refreshDirtyState();
+}
+
+void PreferenceDialog::syncUiComponentsToCopiedModel()
+{
+    m_copiedModel.lzhBackend.lzhBackend = m_cboxLzhExtractorBackend->currentData().value<QKiSS::LzhDecompressorBackend>();
+    refreshDirtyState();
+}
+
+void PreferenceDialog::refreshDirtyState()
+{
+    // Update dirty state & dialog buttons
     m_modelDirty = m_appliedModel != m_copiedModel;
     m_dialogButtons->button(QDialogButtonBox::Apply)->setDisabled(!m_modelDirty);
     m_dialogButtons->button(QDialogButtonBox::Ok)->setDisabled(!m_modelDirty);
@@ -103,7 +116,7 @@ QWidget *PreferenceDialog::createBackendTab()
 {
     auto *rootWidget = new QWidget(this);
     auto *vbox = new QVBoxLayout(rootWidget);
-    m_cboxLzhExtractorBackend = new QComboBox(rootWidget);
+    m_cboxLzhExtractorBackend = new ZComboBox(rootWidget);
     vbox->addWidget(m_cboxLzhExtractorBackend);
     std::unique_ptr<std::vector<std::unique_ptr<AbstractArchiveProcessor>>> allBackends = ArchiveProcessorFactory::getAllAvailableArchiveProcessors();
     for (auto &be : *allBackends) {
@@ -139,19 +152,20 @@ QWidget *PreferenceDialog::createBackendTab()
         field.labelFieldValue->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
         grid->addWidget(fields[r].labelFieldValue, r, 2);
     }
-    auto callback = [=, this](int index) {
+    auto cboxIndexChangedCb = [=, this](int index) {
         const auto &selectedBackend = m_allAvailableLzhExtractorBackends[index];
         // Display info in `QLabel`s
         const auto &selectedBackendInfo = selectedBackend->info();
         for (auto &field : fields) {
             field.labelFieldValue->setText(selectedBackendInfo.*field.structFieldPtr);
         }
-        // write data to copiedModel
-        m_copiedModel.lzhBackend.lzhBackend = selectedBackendInfo.id;
-        updateUiComponentByCopiedModel();
+        syncUiComponentsToCopiedModel();
+        // cbox -> copiedModel
+        // m_copiedModel.lzhBackend.lzhBackend = selectedBackendInfo.id;
+        // syncCopiedModelToUiComponents();
     };
-    connect(m_cboxLzhExtractorBackend, &QComboBox::currentIndexChanged, this, callback);
-    callback(m_cboxLzhExtractorBackend->currentIndex());
+    connect(m_cboxLzhExtractorBackend, &QComboBox::currentIndexChanged, this, cboxIndexChangedCb);
+    cboxIndexChangedCb(m_cboxLzhExtractorBackend->currentIndex());
 
     vbox->addLayout(grid);
     vbox->addStretch();

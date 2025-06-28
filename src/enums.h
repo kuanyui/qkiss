@@ -43,4 +43,9 @@ public:
     };
 };
 
+// For storing enum class in QVariant
+Q_DECLARE_METATYPE(QKiSS::Case);
+Q_DECLARE_METATYPE(QKiSS::Encoding);
+Q_DECLARE_METATYPE(QKiSS::LzhDecompressorBackend);
+
 #endif // ENUMS_H

@@ -106,7 +106,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         resources/application.qrc
         resources/tango-icon-remixer/dist/04_FINAL_PNG_THEME/CustomizedTango/index.qrc   # REFACTOR: path
         src/parsedcnf.h src/parsedcnf.cpp
-        src/enums.h
+        src/enums.h src/enums.cpp
         src/encoding.h src/encoding.cpp
         src/parsedkcf.h src/parsedkcf.cpp
         src/parsedcel.h src/parsedcel.cpp
@@ -139,6 +139,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/archiveprocessorexternalunar.h src/archiveprocessorexternalunar.cpp
         src/archiveprocessorcnfinfilesystem.h src/archiveprocessorcnfinfilesystem.cpp
         src/preferencedialog.h src/preferencedialog.cpp
+        src/zcombobox.h src/zcombobox.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
