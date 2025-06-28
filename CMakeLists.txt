@@ -140,6 +140,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/archiveprocessorcnfinfilesystem.h src/archiveprocessorcnfinfilesystem.cpp
         src/preferencedialog.h src/preferencedialog.cpp
         src/zcombobox.h src/zcombobox.cpp
+        src/zgroupbox.h src/zgroupbox.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
