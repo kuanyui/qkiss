@@ -11,6 +11,7 @@
 #include "iteminspector.h"
 #include "configfile.h"
 #include "src/ui_mainwindow.h"
+#include "preferencedialog.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -84,9 +85,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&m_cfg, &ConfigFile::recentFilesChanged, this, &MainWindow::renderRecentFiles);
 
     // Preference Dialog
-    m_preferenceDialog = new PreferenceDialog(this);
     connect(ui->action_preferences, &QAction::triggered, this, [=, this]() {
-        m_preferenceDialog->show();
+        auto dialog = new PreferenceDialog(this);
+        dialog->show();
     });
 
     setCentralWidget(m_kissView);

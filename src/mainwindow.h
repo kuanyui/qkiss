@@ -14,7 +14,6 @@
 #include "codeeditor.h"
 #include "iteminspector.h"
 #include "configfile.h"
-#include "preferencedialog.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -79,7 +78,6 @@ protected:
     CodeEditor *m_codeEditor;
     ItemInspector *m_itemInspector;
     QPlainTextEdit *m_docViewer;
-    PreferenceDialog *m_preferenceDialog;
     ConfigFile &m_cfg;
 };
 

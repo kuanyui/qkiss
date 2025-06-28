@@ -97,7 +97,7 @@ void ConfigFile::setHomeDirectory(const QString &homeDir)
 const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
 {
     return {
-        {"", "", tr("System Language")},
+        {"", "", tr("Auto (System Language)")},
         {"ja_JP", "🇯🇵", QString("日本語")},
         {"en_US", "🇺🇸", QString("American English")},
         {"zh_TW", "🇹🇼", QString("台灣繁體")},

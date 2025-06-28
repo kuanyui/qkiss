@@ -1,8 +1,8 @@
 #include "preferencedialog.h"
 #include "abstractarchiveprocessor.h"
 #include "archiveprocessorfactory.h"
+#include "configfile.h"
 #include <QTabWidget>
-#include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
@@ -14,31 +14,71 @@ using namespace Qt::StringLiterals;
 PreferenceDialog::PreferenceDialog(QWidget *parent)
     : QDialog(parent)
 {
-    setWindowTitle(tr("Preferences"));
+    setAttribute(Qt::WA_DeleteOnClose);    // Auto delete self when close / ok
     setModal(true);
-    auto *tabs = new QTabWidget(this);
-    // tabs->addTab(createUiTab(), tr("User Interface"));
-    tabs->addTab(createBackendTab(), tr("LZH Extractor Backend"));
+    setWindowTitle(tr("Preferences"));
 
-    auto *buttons = new QDialogButtonBox(
+    m_dialogButtons = new QDialogButtonBox(
                 QDialogButtonBox::Apply |
                 QDialogButtonBox::Ok    |
                 QDialogButtonBox::Cancel,
                 Qt::Horizontal, this);
 
-    connect(buttons->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &PreferenceDialog::applySettings);
-
-    connect(buttons, &QDialogButtonBox::accepted, this, &PreferenceDialog::accept);
-    connect(buttons, &QDialogButtonBox::rejected, this, &PreferenceDialog::reject);
+    // Ok
+    connect(m_dialogButtons, &QDialogButtonBox::accepted, this, [=, this](){
+        writeModelToSettings();
+        close();
+    });
+    // Apply
+    connect(m_dialogButtons->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, [=, this]() {
+        writeModelToSettings();
+    });
+    // Cancel
+    connect(m_dialogButtons, &QDialogButtonBox::rejected, this, [=, this] {
+        close();
+    });
+    readSettingsToModel();
+    auto *tabs = new QTabWidget(this);
+    // tabs->addTab(createUiTab(), tr("User Interface"));
+    tabs->addTab(createBackendTab(), tr("LZH Extractor Backend"));
 
     auto *layout = new QVBoxLayout(this);
     layout->addWidget(tabs);
-    layout->addWidget(buttons);
+    layout->addWidget(m_dialogButtons);
 }
 
-void PreferenceDialog::applySettings()
+PreferenceDialog::~PreferenceDialog()
 {
+    qDebug() << "PreferenceDialog dtor()";
+}
 
+void PreferenceDialog::readSettingsToModel()
+{
+    auto &cfgFile = ConfigFile::instance();
+    m_appliedModel.lzhBackend.lzhBackend = cfgFile.lzhDecompressorBackend();
+    m_appliedModel.files.caseSensitivity = cfgFile.caseSensitivity();
+    m_appliedModel.files.encoding = cfgFile.encoding();
+    m_appliedModel.ui.language = cfgFile.uiLanguage();
+    m_copiedModel = m_appliedModel;
+    updateUiComponentByCopiedModel();
+}
+
+void PreferenceDialog::writeModelToSettings()
+{
+    auto &cfgFile = ConfigFile::instance();
+    cfgFile.setLzhDecompressorBackend(m_copiedModel.lzhBackend.lzhBackend);
+    cfgFile.setCaseSensitivity(m_copiedModel.files.caseSensitivity);
+    cfgFile.setEncoding(m_copiedModel.files.encoding);
+    cfgFile.setUiLanguage(m_copiedModel.ui.language);
+    m_appliedModel = m_copiedModel;
+    updateUiComponentByCopiedModel();
+}
+
+void PreferenceDialog::updateUiComponentByCopiedModel()
+{
+    m_modelDirty = m_appliedModel != m_copiedModel;
+    m_dialogButtons->button(QDialogButtonBox::Apply)->setDisabled(!m_modelDirty);
+    m_dialogButtons->button(QDialogButtonBox::Ok)->setDisabled(!m_modelDirty);
 }
 
 QWidget *PreferenceDialog::createUiTab()
@@ -100,11 +140,15 @@ QWidget *PreferenceDialog::createBackendTab()
         grid->addWidget(fields[r].labelFieldValue, r, 2);
     }
     auto callback = [=, this](int index) {
-        const auto &backend = m_allAvailableLzhExtractorBackends[index];
-        const auto &info = backend->info();
+        const auto &selectedBackend = m_allAvailableLzhExtractorBackends[index];
+        // Display info in `QLabel`s
+        const auto &selectedBackendInfo = selectedBackend->info();
         for (auto &field : fields) {
-            field.labelFieldValue->setText(info.*field.structFieldPtr);
+            field.labelFieldValue->setText(selectedBackendInfo.*field.structFieldPtr);
         }
+        // write data to copiedModel
+        m_copiedModel.lzhBackend.lzhBackend = selectedBackendInfo.id;
+        updateUiComponentByCopiedModel();
     };
     connect(m_cboxLzhExtractorBackend, &QComboBox::currentIndexChanged, this, callback);
     callback(m_cboxLzhExtractorBackend->currentIndex());
