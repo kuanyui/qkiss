@@ -18,6 +18,7 @@ void customizedMessageHandler(QtMsgType type, const QMessageLogContext &context,
     }
     if (originalMessageHandler) {
         (*originalMessageHandler)(type, context, msg);
+        // (*originalMessageHandler)(type, context, QString::fromUtf8(context.file) + QString::number(context.line) + msg);
     }
 }
 

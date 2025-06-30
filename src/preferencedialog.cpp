@@ -2,9 +2,11 @@
 #include "abstractarchiveprocessor.h"
 #include "archiveprocessorfactory.h"
 #include "configfile.h"
+#include "zgroupbox.h"
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QFormLayout>
 #include <QPushButton>
 #include <QLabel>
 #include <QApplication>
@@ -115,15 +117,18 @@ struct IconTextField {
 QWidget *PreferenceDialog::createBackendTab()
 {
     auto *rootWidget = new QWidget(this);
-    auto *vbox = new QVBoxLayout(rootWidget);
+    auto *rootVbox = new QVBoxLayout(rootWidget);
+    auto *layoutForm = new QFormLayout();
     m_cboxLzhExtractorBackend = new ZComboBox(rootWidget);
-    vbox->addWidget(m_cboxLzhExtractorBackend);
+    layoutForm->addRow(new QLabel(tr("Backend")), m_cboxLzhExtractorBackend);
+    rootVbox->addLayout(layoutForm);
     std::unique_ptr<std::vector<std::unique_ptr<AbstractArchiveProcessor>>> allBackends = ArchiveProcessorFactory::getAllAvailableArchiveProcessors();
     for (auto &be : *allBackends) {
         auto beInfo = be->info();
         m_cboxLzhExtractorBackend->addItem(beInfo.name, (int)beInfo.id);
         m_allAvailableLzhExtractorBackends.push_back(std::move(be));
     }
+
     QList<IconTextField> fields = {
        {"application-x-executable"           , tr("Name"),               new QLabel(), &AbstractArchiveProcessor::Info::name }             , // Gnome
        {"gtk-info"                           , tr("Summary"),            new QLabel(), &AbstractArchiveProcessor::Info::summary }          , // Humanity
@@ -133,7 +138,10 @@ QWidget *PreferenceDialog::createBackendTab()
        {"drive-harddisk"                     , tr("Disk Operation"),     new QLabel(), &AbstractArchiveProcessor::Info::diskOperation }    , // Humanity
        {"web-browser"                        , tr("Website"),            new QLabel(), &AbstractArchiveProcessor::Info::website }            // Humanity
     };
+    auto *groupBox = new ZGroupBox(tr("Backend Information"), rootWidget);
+    rootVbox->addWidget(groupBox);
     QGridLayout *grid = new QGridLayout;
+    groupBox->setContentLayout(grid);
     for (uint r = 0; r < fields.size(); r++) {
         IconTextField &field = fields[r];
         QFont defaultFont = QApplication::font();
@@ -143,14 +151,15 @@ QWidget *PreferenceDialog::createBackendTab()
         QLabel *labelIcon = new QLabel();
         labelIcon->setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Minimum);
         labelIcon->setPixmap(QIcon::fromTheme(field.iconName).pixmap(h, h));
-        grid->addWidget(labelIcon, r, 0);
+        grid->addWidget(labelIcon, r, 0, Qt::AlignTop);
 
         QLabel *labelFieldName = new QLabel(field.fieldName);
         labelFieldName->setStyleSheet("font-weight: bold; color: gray;"_L1);
-        grid->addWidget(labelFieldName, r, 1);
+        grid->addWidget(labelFieldName, r, 1, Qt::AlignTop);
 
+        field.labelFieldValue->setWordWrap(true);
         field.labelFieldValue->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
-        grid->addWidget(fields[r].labelFieldValue, r, 2);
+        grid->addWidget(fields[r].labelFieldValue, r, 2, Qt::AlignTop);
     }
     auto cboxIndexChangedCb = [=, this](int index) {
         const auto &selectedBackend = m_allAvailableLzhExtractorBackends[index];
@@ -167,7 +176,6 @@ QWidget *PreferenceDialog::createBackendTab()
     connect(m_cboxLzhExtractorBackend, &QComboBox::currentIndexChanged, this, cboxIndexChangedCb);
     cboxIndexChangedCb(m_cboxLzhExtractorBackend->currentIndex());
 
-    vbox->addLayout(grid);
-    vbox->addStretch();
+    rootVbox->addStretch();
     return rootWidget;
 }
