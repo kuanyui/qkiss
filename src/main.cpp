@@ -45,6 +45,9 @@ int main(int argc, char *argv[])
     }
     mainWindow = new MainWindow();
     mainWindow->show();
+    if (QCoreApplication::arguments().length() >= 2) {
+        mainWindow->openDirOrFile(QCoreApplication::arguments()[1]);
+    }
     // qInstallMessageHandler(originalMessageHandler);
     return app.exec();
 }
