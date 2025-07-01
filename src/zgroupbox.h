@@ -19,6 +19,7 @@ public:
 
 private:
     QLabel *m_iconLabel;
+    QHBoxLayout *m_rootLayout;
     QLayout *m_contentLayout;
     QIcon m_icon;
     int m_iconSize = 48;

@@ -12,11 +12,11 @@ ZGroupBox::ZGroupBox(const QString &title, const QIcon &icon, QWidget *parent)
     m_contentLayout = new QVBoxLayout();
     m_contentLayout->setAlignment(Qt::AlignTop);
 
-    QHBoxLayout *mainLayout = new QHBoxLayout();
-    mainLayout->addWidget(m_iconLabel);
-    mainLayout->addLayout(m_contentLayout);
+    m_rootLayout = new QHBoxLayout();
+    m_rootLayout->addWidget(m_iconLabel);
+    m_rootLayout->addLayout(m_contentLayout);
 
-    setLayout(mainLayout);
+    setLayout(m_rootLayout);
 }
 
 ZGroupBox::ZGroupBox(const QString &title, QWidget *parent) :
@@ -36,15 +36,13 @@ void ZGroupBox::setIcon(const QIcon &icon)
 }
 
 void ZGroupBox::setContentLayout(QLayout *layout) {
-    QLayoutItem *child;
-    while ((child = m_contentLayout->takeAt(0)) != nullptr) {
-        delete child->widget();
-        delete child;
+    QLayoutItem *oldLayout = m_contentLayout->takeAt(1);
+    if (oldLayout != nullptr) {
+        delete oldLayout->layout();    // Delete the QLayout in the QLayoutItem
+        delete oldLayout;              // Delete QLayoutItem
+        m_contentLayout = nullptr;
     }
-    QWidget *container = new QWidget();
-    container->setLayout(layout);
-
-    m_contentLayout->addWidget(container);
+    m_rootLayout->addLayout(layout);
 }
 
 template<typename T>
