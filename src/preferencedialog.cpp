@@ -118,12 +118,23 @@ QWidget *PreferenceDialog::createBackendTab()
 {
     auto *rootWidget = new QWidget(this);
     auto *rootVbox = new QVBoxLayout(rootWidget);
-    auto *layoutForm = new QFormLayout();
+    auto *layoutForm = new QFormLayout();   // Don't pass QWidget to it. If passed, the passed QWidget will use this layout, but each QWidget can only hold one layout in the same time.
+    // Backend ComboBox
     m_cboxLzhExtractorBackend = new ZComboBox(rootWidget);
     m_cboxLzhExtractorBackend->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     layoutForm->addRow(new QLabel(tr("Backend")), m_cboxLzhExtractorBackend);
-    // layoutForm->setFieldGrowthPolicy(QFormLayout::FieldGrowthPolicy::ExpandingFieldsGrow);   // useless...
+    // Backend availability checking
+    QHBoxLayout *layoutLzhStatus = new QHBoxLayout();
+    QLabel *labelLzhStatusIcon = new QLabel();
+    QLabel *labelLzhStatusText= new QLabel();
+    layoutForm->addRow(new QLabel(tr("Status")), layoutLzhStatus);
+    layoutLzhStatus->addWidget(labelLzhStatusIcon);
+    layoutLzhStatus->addWidget(labelLzhStatusText, 1);
+
+    //
     rootVbox->addLayout(layoutForm);
+
+    // Information for selected backend
     std::unique_ptr<std::vector<std::unique_ptr<AbstractArchiveProcessor>>> allBackends = ArchiveProcessorFactory::getAllAvailableArchiveProcessors();
     for (auto &be : *allBackends) {
         auto beInfo = be->info();
@@ -163,12 +174,24 @@ QWidget *PreferenceDialog::createBackendTab()
         field.labelFieldValue->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
         grid->addWidget(fields[r].labelFieldValue, r, 2, Qt::AlignTop);
     }
+
+    QFont defaultFont = QApplication::font();
+    QFontMetrics metrics(defaultFont);
+    int iconSize = metrics.height();
+
     auto cboxIndexChangedCb = [=, this](int index) {
         const auto &selectedBackend = m_allAvailableLzhExtractorBackends[index];
         // Display info in `QLabel`s
         const auto &selectedBackendInfo = selectedBackend->info();
         for (auto &field : fields) {
             field.labelFieldValue->setText(selectedBackendInfo.*field.structFieldPtr);
+        }
+        if (selectedBackend->checkAvailability()) {
+            labelLzhStatusIcon->setPixmap(QIcon::fromTheme("dialog-apply").pixmap(iconSize, iconSize));
+            labelLzhStatusText->setText(tr("Installed"));
+        } else {
+            labelLzhStatusIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(iconSize, iconSize));
+            labelLzhStatusText->setText(tr("Not Found / Not Installed"));
         }
         syncUiComponentsToCopiedModel();
         // cbox -> copiedModel

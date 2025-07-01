@@ -98,3 +98,6 @@ Humanity		gnome-settings-default-applications
 GimpDefault		gimp-controller-linux-input
 Humanity		drive-harddisk
 Humanity		web-browser
+
+Humanity		dialog-warning			dialog-warning
+Humanity		dialog-apply			dialog-apply
