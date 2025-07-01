@@ -44,7 +44,6 @@ int main(int argc, char *argv[])
         }
     }
     mainWindow = new MainWindow();
-    mainWindow->openDirOrFile(QDir(QDir::homePath()).absoluteFilePath("tmp/kissdata"));
     mainWindow->show();
     // qInstallMessageHandler(originalMessageHandler);
     return app.exec();
