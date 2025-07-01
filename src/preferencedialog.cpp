@@ -120,7 +120,9 @@ QWidget *PreferenceDialog::createBackendTab()
     auto *rootVbox = new QVBoxLayout(rootWidget);
     auto *layoutForm = new QFormLayout();
     m_cboxLzhExtractorBackend = new ZComboBox(rootWidget);
+    m_cboxLzhExtractorBackend->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     layoutForm->addRow(new QLabel(tr("Backend")), m_cboxLzhExtractorBackend);
+    // layoutForm->setFieldGrowthPolicy(QFormLayout::FieldGrowthPolicy::ExpandingFieldsGrow);   // useless...
     rootVbox->addLayout(layoutForm);
     std::unique_ptr<std::vector<std::unique_ptr<AbstractArchiveProcessor>>> allBackends = ArchiveProcessorFactory::getAllAvailableArchiveProcessors();
     for (auto &be : *allBackends) {
