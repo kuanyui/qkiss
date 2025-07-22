@@ -76,7 +76,7 @@ ThemeManager::ThemeManager(QObject *parent)
     m_pltLight.blue.setForeground(QColor::fromString("#005faf"_L1));
     m_pltLight.purple.setForeground(QColor::fromString("#b218b2"_L1));
     m_pltLight.gray.setForeground(QColor::fromString("#b2b2b2"_L1));
-    m_pltLight.curLineHlBg = QColor::fromString("#3a3a3a"_L1);
+    m_pltLight.curLineHlBg = QColor::fromString("#e7e7df"_L1);
     m_pltLight.lineNumBg = QColor::fromString("#d7d7af"_L1);
     m_pltLight.lineNumFg = QColor::fromString("#87875f"_L1);
 }
