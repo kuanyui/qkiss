@@ -92,7 +92,7 @@ void GKissItem::renderColorBasedImage()
                     qCritical() << "[WARNING][Item] %1: This should not happened."_L1.arg(m_cnfCel->celFileName());
                     goto end;
                 }
-                line[x] = (*celPixelsData)[i++];
+                line[x] = celPixelsData->at(i++);
             }
         }
     }

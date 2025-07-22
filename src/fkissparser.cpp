@@ -222,7 +222,7 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
     return astCmds;
 }
 
-int FkissParser::findNearestToken(QVector<Token> tokens, Token::Type type, int fromIndex)
+int FkissParser::findNearestToken(const QVector<Token> &tokens, Token::Type type, int fromIndex) const
 {
     for (int i = fromIndex+1; i < tokens.length(); i++) {
         const Token &tk = tokens[i];
@@ -269,7 +269,7 @@ QVector<std::shared_ptr<ASTPairedCommands> > FkissParser::pairAstCommands(FkissP
     return evpairs;
 }
 
-void FkissParser::logSyntaxWarning(const Token &token, QString msg)
+void FkissParser::logSyntaxWarning(const Token &token, QString msg) const
 {
     qWarning().noquote() << QStringLiteral("[FKiSS][SyntaxWarning] %1   [L%2, C%3] %4")
                 .arg(msg)
@@ -278,7 +278,7 @@ void FkissParser::logSyntaxWarning(const Token &token, QString msg)
                 .arg(token.value);
 }
 
-void FkissParser::logSyntaxError(const Token &token, QString msg)
+void FkissParser::logSyntaxError(const Token &token, QString msg) const
 {
     qCritical().noquote() << QStringLiteral("[FKiSS][SyntaxError] %1   [L%2, C%3] %4")
                 .arg(msg)

@@ -46,13 +46,13 @@ private:
     /** tokens -> AST (flat, no semantic, so no nested structure (e.g. `alert() ...`, `ifeq() ...` )  */
     QVector<std::shared_ptr<ASTCommand> > parse0(const QVector<Token> &tokens);
     /** Returns the index of nearest Token. If not found, returns -1. */
-    int findNearestToken(QVector<Token> tokens, Token::Type type, int fromIndex);
+    int findNearestToken(const QVector<Token> &tokens, Token::Type type, int fromIndex) const;
     /** Remove `;@` prefix and `; comment` suffix. */
     QString removePrefixAndCommentOfLine(QString line);
     /** AST -> Commands (Event command + Action command(s)). Traverse across all commands, bind each event + its action(s) (procedure) pair, and store to pairs list. */
     QVector<std::shared_ptr<ASTPairedCommands>> pairAstCommands(FkissProcedure &commands);;
-    void logSyntaxWarning(const Token &token, QString msg);;
-    void logSyntaxError(const Token &token, QString msg);;
+    void logSyntaxWarning(const Token &token, QString msg) const;
+    void logSyntaxError(const Token &token, QString msg) const;
 };
 
 #endif // FKISSPARSER_H
