@@ -166,13 +166,13 @@ public:
     ParsedCnf(QString fileName, QByteArray rawData, QKiSS::Encoding encode);
     ~ParsedCnf();
     QSize playFieldSize() const;
-    QList<ParsedCnfCel *> cels() const;
-    QList<ParsedCnfSet *> sets() const;
+    const QList<ParsedCnfCel *> &cels() const;
+    const QList<ParsedCnfSet *> &sets() const;
     /**
      * KCF file index is the index of a KCF in a CNF declaration (KCF files used by this CNF).
     */
     QString getKcfNameByKcfIndex(uint8_t kcfFileIndex);
-    QStringList kcfFileNames() const;
+    const QStringList &kcfFileNames() const;
     /** KCF files amount used in this CNF */
     size_t kcfFilesAmount() const;
     QString fileName() const;
@@ -180,7 +180,7 @@ public:
     /// Fkiss script engine
     Fkiss *fkiss();
     const QList<int32_t> &sortedObjIdList() const;
-    QStringList readableComments() const;
+    const QStringList &readableComments() const;
     QString fileContentText() const;
 
 private:

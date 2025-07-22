@@ -364,7 +364,7 @@ QString ParsedCnf::fileContentText() const
     return m_fileContentText;
 }
 
-QStringList ParsedCnf::readableComments() const
+const QStringList &ParsedCnf::readableComments() const
 {
     return m_readableComments;
 }
@@ -389,7 +389,7 @@ QString ParsedCnf::fileName() const
     return m_fileName;
 }
 
-QStringList ParsedCnf::kcfFileNames() const
+const QStringList &ParsedCnf::kcfFileNames() const
 {
     return m_kcfFileNames;
 }
@@ -399,12 +399,12 @@ size_t ParsedCnf::kcfFilesAmount() const
     return m_kcfFileNames.size();
 }
 
-QList<ParsedCnfSet *> ParsedCnf::sets() const
+const QList<ParsedCnfSet *> &ParsedCnf::sets() const
 {
     return m_sets;
 }
 
-QList<ParsedCnfCel *> ParsedCnf::cels() const
+const QList<ParsedCnfCel *> &ParsedCnf::cels() const
 {
     return m_cels;
 }
