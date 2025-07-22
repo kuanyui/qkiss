@@ -5,19 +5,18 @@
 #include "archiveprocessorcnfinfilesystem.h"
 
 
-AbstractArchiveProcessor *ArchiveProcessorFactory::newArchiveProcessor(QKiSS::LzhDecompressorBackend backend, QString lzhOrCnfFilePath)
+std::unique_ptr<AbstractArchiveProcessor> ArchiveProcessorFactory::getArchiveProcessor(QKiSS::LzhDecompressorBackend backend, QString lzhOrCnfFilePath)
 {
     if (lzhOrCnfFilePath.endsWith(".CNF", Qt::CaseInsensitive)) {
-        return new ArchiveProcessorCnfInFileSystem();
+        return std::make_unique<ArchiveProcessorCnfInFileSystem>();
     }
-    return new ArchiveProcessorExternalUnar();
     switch (backend) {
-    case QKiSS::LzhDecompressorBackend::ExternalUnarProcess: return new ArchiveProcessorExternalUnar();
-    case QKiSS::LzhDecompressorBackend::ExternalLhaProcess: return new ArchiveProcessorExternalLha();
+    case QKiSS::LzhDecompressorBackend::ExternalUnarProcess: return std::make_unique<ArchiveProcessorExternalUnar>();
+    case QKiSS::LzhDecompressorBackend::ExternalLhaProcess: return std::make_unique<ArchiveProcessorExternalLha>();
 #ifdef HAVE_LIBARCHIVE
-    case QKiSS::LzhDecompressorBackend::Libarchive: return new ArchiveProcessorLibarchive();
+    case QKiSS::LzhDecompressorBackend::Libarchive: return std::make_unique<ArchiveProcessorLibarchive>();
 #endif
-    default: return new ArchiveProcessorExternalLha();
+    default: return std::make_unique<ArchiveProcessorExternalLha>();
     }
 }
 

@@ -118,13 +118,12 @@ void MainWindow::tryToLoadKissFilePath(const QString &kissArchiveFilePath, QKiSS
 {
     if (!kissArchiveFilePath.endsWith(".LZH", Qt::CaseInsensitive) && !kissArchiveFilePath.endsWith(".CNF", Qt::CaseInsensitive)) { return; }
     m_logViewer->clearAllLogs();
-    AbstractArchiveProcessor *extractor = ArchiveProcessorFactory::newArchiveProcessor(m_cfg.lzhDecompressorBackend(), kissArchiveFilePath);
+    std::unique_ptr<AbstractArchiveProcessor> _extractor = ArchiveProcessorFactory::getArchiveProcessor(m_cfg.lzhDecompressorBackend(), kissArchiveFilePath);
+    std::shared_ptr<AbstractArchiveProcessor> extractor { _extractor.release() };
     extractor->extractFileAsPromise(kissArchiveFilePath).then([this, extractor, kissArchiveFilePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
         qDebug() << "Extract ============================" << filesMap->keys();
         tryToParseAndLoadFilesAsKissFiles(kissArchiveFilePath, filesMap, fileLoadMode);      /// <-- entrypoint of loading a CNF
-        delete extractor;
     }).onFailed([extractor](){
-        delete extractor;
     });
 }
 
