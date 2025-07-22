@@ -2,7 +2,7 @@
 #include <QDebug>
 using namespace Qt::Literals::StringLiterals;
 
-ParsedCel::ParsedCel(QString fileName, QByteArray rawData):
+ParsedCel::ParsedCel(QString fileName, const QByteArray &rawData):
     m_fileName(fileName)
 {
     const static QByteArray identifier = QByteArray::fromRawData("\x4B\x69\x53\x53", 4);
@@ -47,7 +47,7 @@ QVector<QRgb> *ParsedCel::getColorBasedPixels() const
     return m_cachedColorBasedPixels;
 }
 
-void ParsedCel::parseModernCel(QByteArray data)
+void ParsedCel::parseModernCel(const QByteArray &data)
 {
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     switch (data[4]) {
@@ -75,7 +75,7 @@ void ParsedCel::parseModernCel(QByteArray data)
     }
 }
 
-void ParsedCel::parseLegacyCel(QByteArray data)
+void ParsedCel::parseLegacyCel(const QByteArray &data)
 {
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     m_celType = Type::PaletteBased;
