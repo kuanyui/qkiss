@@ -1,6 +1,6 @@
 # QKiSS - A tiny renaissance of KISS
 
-A modern implementation of [KISS (KISekae Set system)](https://ja.wikipedia.org/wiki/KISekae_Set_system) in Qt6.
+A modern implementation of [KISS (KISekae Set system)](https://ja.wikipedia.org/wiki/KISekae_Set_system) in Qt 6.
 
 Currently supports Linux only.
 
