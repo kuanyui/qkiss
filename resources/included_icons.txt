@@ -1,103 +1,105 @@
 # This is comment
 # Main
-AppIcon	qkiss	apps/qkiss
-AppIcon	clothes	apps/clothes
+AppIcon           qkiss                          apps/qkiss
+AppIcon           clothes                        apps/clothes
 
-Gnome	application-exit
-Gnome	preferences-desktop-theme	apps/palettes
+Gnome             application-exit
+Gnome             preferences-desktop-theme      apps/palettes
 
-Gnome	apps/system-file-manager
-Gnome	utilities-system-monitor	apps/utility-system-monitor
-Gnome	code-viewer-c-liked	applications-development
-Gnome	package-x-generic	package-unzipped
-Gnome	emblems/emblem-package	package-zipped
-Gnome	text-x-readme	text-x-readme
-Gnome	logviewer	logviewer
+Gnome             apps/system-file-manager
+Gnome             utilities-system-monitor       apps/utility-system-monitor
+Gnome             code-viewer-c-liked            applications-development
+Gnome             package-x-generic              package-unzipped
+Gnome             emblems/emblem-package         package-zipped
+Gnome             text-x-readme                  text-x-readme
+Gnome             logviewer                      logviewer
 
-Gnome	zoom-in
-Gnome	zoom-out
-Gnome	zoom-original
+Gnome             zoom-in
+Gnome             zoom-out
+Gnome             zoom-original
 
 # File Browser
-BlueHumanity	go-up	go-up
-BlueHumanity	go-down	go-down
-BlueHumanity	go-next	go-next
-BlueHumanity	go-previous	go-previous
-BlueHumanity	view-refresh	view-refresh
-BlueHumanity	go-home 	go-home
-BlueHumanity	go-jump 	go-jump
-Gnome		window-close
+BlueHumanity      go-up            go-up
+BlueHumanity      go-down          go-down
+BlueHumanity      go-next          go-next
+BlueHumanity      go-previous      go-previous
+BlueHumanity      view-refresh     view-refresh
+BlueHumanity      go-home          go-home
+BlueHumanity      go-jump          go-jump
+Gnome             window-close
 
 ### XDG Places
-#Gnome	devices/computer
-#Gnome	mimetypes/text-x-preview
-#BlueHumanity	places/user-trash
-#Gnome	places/network-workgroup
-#Gnome	devices/media-optical
-#BlueHumanity	places/folder-remote	folder-remote
+#Gnome             devices/computer
+#Gnome             mimetypes/text-x-preview
+#BlueHumanity      places/user-trash
+#Gnome             places/network-workgroup
+#Gnome             devices/media-optical
+#BlueHumanity      places/folder-remote      folder-remote
 
-#BlueHumanity	places/document-open	folder-open     # blue folder
-#BlueHumanity	places/folder	folder     #blue folder
-BlueGnome	document-open
-BlueGnome	folder-open
-BlueGnome	folder
+#BlueHumanity      places/document-open      folder-open     # blue folder
+#BlueHumanity      places/folder             folder          # blue folder
+BlueGnome          document-open
+BlueGnome          folder-open
+BlueGnome          folder
 
-# Gnome		mimetypes/text-x-ini	text-x-cnf
-Gnome		mimetypes/text-x-c-liked	text-x-cnf
-Gnome		mimetypes/text-x-readme
-Gnome		mimetypes/text-x-generic
+# Gnome          mimetypes/text-x-ini          text-x-cnf
+Gnome            mimetypes/text-x-c-liked      text-x-cnf
+Gnome            mimetypes/text-x-readme
+Gnome            mimetypes/text-x-generic
 
-Gnome		application-x-addon	addon
-# GimpDefault		gimp-plugin		addon
+Gnome            application-x-addon      addon
+# GimpDefault    gimp-plugin            addon
 
-BlueHumanity		actions/preview-file	preview-file
-BlueHumanity		actions/media-playback-start	play
+BlueHumanity            actions/preview-file      preview-file
+BlueHumanity            actions/media-playback-start      play
 
-BlueGnome		changes-allow		unfix
-BlueGnome		image-x-generic		image-x-generic
-BlueHumanity		view-refresh		reset-position
+BlueGnome            changes-allow            unfix
+BlueGnome            image-x-generic            image-x-generic
+BlueHumanity            view-refresh            reset-position
 
-BlueHumanity		document-open-recent	recents
-BlueGnome		edit-clear		edit-clear
+BlueHumanity            document-open-recent      recents
+BlueGnome            edit-clear            edit-clear
 
-BlueGnome		sticky-note		comment
-# BlueGnome		help-faq		comment
-# InkscapeTango		dialog-messages		comment
+BlueGnome            sticky-note            comment
+# BlueGnome            help-faq            comment
+# InkscapeTango            dialog-messages            comment
 
-# InkscapeTango		show-guides		position
-GimpDefault		gimp-resize		cel-size
-InkscapeTango		layer-rename		cel-file-name
-Gnome		image-x-generic		cel-file-preview
-Gnome		tomboy-tag		obj-id
-GimpDefault		gimp-transform-3d-move	obj-pos
-InkscapeTango		distribute-randomize	obj-cels
-GimpDefault		gimp-lock-position	obj-fix-count
-InkscapeTango		tool-pointer		inspector
+# InkscapeTango        show-guides                position
+GimpDefault            gimp-resize                cel-size
+InkscapeTango          layer-rename               cel-file-name
+Gnome                  image-x-generic            cel-file-preview
+Gnome                  tomboy-tag                 obj-id
+GimpDefault            gimp-transform-3d-move     obj-pos
+InkscapeTango          distribute-randomize       obj-cels
+GimpDefault            gimp-lock-position         obj-fix-count
+InkscapeTango          tool-pointer               inspector
 
 
-BlueGnome	preferences-desktop-keyboard-shortcuts	keyboard
-BlueGnome		input-mouse		mouse
+BlueGnome        preferences-desktop-keyboard-shortcuts      keyboard
+BlueGnome        input-mouse                                 mouse
 
-Gnome		keyboard-ctrl		keyboard-ctrl
-Gnome		keyboard-shift		keyboard-shift
-Gnome		keyboard-ctrl-pressed	keyboard-ctrl-pressed
-Gnome		keyboard-shift-pressed	keyboard-shift-pressed
-Gnome		mouse-right-click	mouse-right-click
-Gnome		mouse-left-click	mouse-left-click
-Gnome		mouse-middle-click	mouse-middle-click
+Gnome            keyboard-ctrl               keyboard-ctrl
+Gnome            keyboard-shift              keyboard-shift
+Gnome            keyboard-ctrl-pressed       keyboard-ctrl-pressed
+Gnome            keyboard-shift-pressed      keyboard-shift-pressed
+Gnome            mouse-right-click           mouse-right-click
+Gnome            mouse-left-click            mouse-left-click
+Gnome            mouse-middle-click          mouse-middle-click
 
 # Settings
-Gnome		preferences-desktop-font		encoding
-Gnome		preferences-desktop-locale		language
-Gnome		preferences-system
+Gnome            preferences-desktop-font              encoding
+Gnome            preferences-desktop-locale            language
+Gnome            preferences-system
 
-Gnome			application-x-executable
-BlueHumanity		gtk-info
-Humanity		extract-archive
-Humanity		gnome-settings-default-applications
-GimpDefault		gimp-controller-linux-input
-Humanity		drive-harddisk
-Humanity		web-browser
+Gnome                  application-x-executable
+BlueHumanity           gtk-info
+Humanity               extract-archive
+Humanity               gnome-settings-default-applications
+GimpDefault            gimp-controller-linux-input
+Humanity               drive-harddisk
+Humanity               web-browser
 
-Humanity		dialog-warning			dialog-warning
-Humanity		dialog-apply			dialog-apply
+Humanity               dialog-warning                  dialog-warning
+Humanity               dialog-apply                    dialog-apply
+
+Gnome                  help-about
