@@ -14,6 +14,7 @@
 #include "codeeditor.h"
 #include "iteminspector.h"
 #include "configfile.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -56,6 +57,7 @@ private slots:
     void applyViewZoomByText(QString zoomText);
     void setUiLanguage(QString langId);
     void setFileEncoding(QKiSS::Encoding enc);
+
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dragMoveEvent(QDragMoveEvent *event) override;

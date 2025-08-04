@@ -12,6 +12,7 @@
 #include "configfile.h"
 #include "src/ui_mainwindow.h"
 #include "preferencedialog.h"
+#include "aboutdialog.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -87,6 +88,10 @@ MainWindow::MainWindow(QWidget *parent)
     // Preference Dialog
     connect(ui->action_preferences, &QAction::triggered, this, [=, this]() {
         auto dialog = new PreferenceDialog(this);
+        dialog->show();
+    });
+    connect(ui->action_helpAbout, &QAction::triggered, this, [=, this]() {
+        auto dialog = new AboutDialog(this);
         dialog->show();
     });
 
@@ -647,3 +652,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     m_logViewer = nullptr;   // Avoid potential segfault when closing window
     QMainWindow::closeEvent(event);
 }
+
+
+
