@@ -37,11 +37,11 @@ private:
     void setupUi();
 
     QTabWidget *m_tabWidget;
-    QLabel *m_iconLabel;
-    QLabel *m_appNameLabel;
-    QLabel *m_infoLabel;
-    QTextBrowser *m_licensesBrowser;
-    QTextBrowser *m_translatorsBrowser;
+    QLabel *m_labelIcon;
+    QLabel *m_labelAppName;
+    QLabel *m_labelSummary;
+    QTextBrowser *m_browserLicense;
+    QTextBrowser *m_browserTranslators;
 };
 
 #endif // ABOUTDIALOG_H

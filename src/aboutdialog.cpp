@@ -31,11 +31,11 @@
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent)
     , m_tabWidget(new QTabWidget(this))
-    , m_iconLabel(new QLabel(this))
-    , m_appNameLabel(new QLabel(this))
-    , m_infoLabel(new QLabel(this))
-    , m_licensesBrowser(new QTextBrowser(this))
-    , m_translatorsBrowser(new QTextBrowser(this))
+    , m_labelIcon(new QLabel(this))
+    , m_labelAppName(new QLabel(this))
+    , m_labelSummary(new QLabel(this))
+    , m_browserLicense(new QTextBrowser(this))
+    , m_browserTranslators(new QTextBrowser(this))
 {
     setupUi();
 }
@@ -46,54 +46,65 @@ AboutDialog::~AboutDialog()
 
 void AboutDialog::setupUi()
 {
-    setWindowTitle(tr("About MyApp"));
+    setWindowTitle(tr("About QKiSS"));
     resize(500, 400);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    QVBoxLayout *layoutMain = new QVBoxLayout(this);
+    QVBoxLayout *layoutHeader = new QVBoxLayout();
+    layoutHeader->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
-    // Header section (icon and app name)
-    QHBoxLayout *headerLayout = new QHBoxLayout();
+    QIcon appIcon = QIcon::fromTheme("help-about");
+    m_labelIcon->setPixmap(appIcon.pixmap(48, 48));
+    m_labelIcon->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    m_labelIcon->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+    layoutHeader->addWidget(m_labelIcon);
 
-    QIcon appIcon = QIcon::fromTheme("qkiss");
-    m_iconLabel->setPixmap(appIcon.pixmap(48, 48));
-    headerLayout->addWidget(m_iconLabel);
 
-    // App name and version
-    m_appNameLabel->setText("<h2>QKiSS</h2><p>Version 1.0.0</p>");
-    headerLayout->addWidget(m_appNameLabel);
-    headerLayout->addStretch();
+    m_labelAppName->setText("App Name Is Here");
+    m_labelAppName->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    m_labelAppName->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+    layoutHeader->addWidget(m_labelAppName);
 
-    mainLayout->addLayout(headerLayout);
+    QLabel *labelAppVersion = new QLabel{this};
+    labelAppVersion->setText("1.0.0");
+    labelAppVersion->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    labelAppVersion->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+    layoutHeader->addWidget(labelAppVersion);
 
-    // Tab widget
-    mainLayout->addWidget(m_tabWidget);
+    QLabel *labelSummary = new QLabel{this};
+    labelSummary->setText(tr("QKiSS is a modern implementation of KiSS (Kisekae, 着せ替え) in Qt 6. Kisekae is short for kisekae ningyou, a Japanese term meaning "));
+    labelSummary->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    labelSummary->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+    layoutHeader->addWidget(labelSummary);
+
+    layoutMain->addLayout(layoutHeader);
+    layoutMain->addWidget(m_tabWidget);
 
     // Information tab
     QWidget *infoTab = new QWidget();
     QVBoxLayout *infoLayout = new QVBoxLayout(infoTab);
-    m_infoLabel->setWordWrap(true);
-    m_infoLabel->setText(tr("\n\n") +
-                         tr("Copyright") + "© 2024 - 2025\n");
-    infoLayout->addWidget(m_infoLabel);
+    m_labelSummary->setWordWrap(true);
+    m_labelSummary->setText("Copyright (C) 2024 - 2025");
+    infoLayout->addWidget(m_labelSummary);
     infoLayout->addStretch();
     m_tabWidget->addTab(infoTab, tr("Information"));
 
     // Licenses tab
-    m_licensesBrowser->setOpenExternalLinks(true);
-    m_licensesBrowser->setReadOnly(true);
-    m_licensesBrowser->setHtml("GPLv3");
-    m_tabWidget->addTab(m_licensesBrowser, tr("Licenses"));
+    m_browserLicense->setOpenExternalLinks(true);
+    m_browserLicense->setReadOnly(true);
+    m_browserLicense->setHtml("GPLv3");
+    m_tabWidget->addTab(m_browserLicense, tr("Licenses"));
 
     // Translators tab
-    m_translatorsBrowser->setOpenExternalLinks(true);
-    m_translatorsBrowser->setReadOnly(true);
-    m_translatorsBrowser->setHtml(tr(R"(English: Ono ono)"));
-    m_tabWidget->addTab(m_translatorsBrowser, tr("Translators"));
+    m_browserTranslators->setOpenExternalLinks(true);
+    m_browserTranslators->setReadOnly(true);
+    m_browserTranslators->setHtml("English: Author");
+    m_tabWidget->addTab(m_browserTranslators, tr("Translators"));
 
     // Button box
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close, this);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::accept);
-    mainLayout->addWidget(buttonBox);
+    layoutMain->addWidget(buttonBox);
 }
 
 
