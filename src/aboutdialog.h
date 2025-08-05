@@ -35,13 +35,9 @@ public:
 
 private:
     void setupUi();
+    QString md2Html(const QString& markdown);
 
     QTabWidget *m_tabWidget;
-    QLabel *m_labelIcon;
-    QLabel *m_labelAppName;
-    QLabel *m_labelSummary;
-    QTextBrowser *m_browserLicense;
-    QTextBrowser *m_browserTranslators;
 };
 
 #endif // ABOUTDIALOG_H

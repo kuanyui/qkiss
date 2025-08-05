@@ -27,15 +27,11 @@
 #include <QDialogButtonBox>
 #include <QApplication>
 #include <QCoreApplication>
+#include <QRegularExpression>
 
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent)
     , m_tabWidget(new QTabWidget(this))
-    , m_labelIcon(new QLabel(this))
-    , m_labelAppName(new QLabel(this))
-    , m_labelSummary(new QLabel(this))
-    , m_browserLicense(new QTextBrowser(this))
-    , m_browserTranslators(new QTextBrowser(this))
 {
     setupUi();
 }
@@ -47,23 +43,25 @@ AboutDialog::~AboutDialog()
 void AboutDialog::setupUi()
 {
     setWindowTitle(tr("About QKiSS"));
-    resize(500, 400);
+    resize(500, 500);
 
-    QVBoxLayout *layoutMain = new QVBoxLayout(this);
-    QVBoxLayout *layoutHeader = new QVBoxLayout();
+    QVBoxLayout *layoutMain = new QVBoxLayout{this};
+    QVBoxLayout *layoutHeader = new QVBoxLayout{this};
     layoutHeader->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
-    QIcon appIcon = QIcon::fromTheme("help-about");
-    m_labelIcon->setPixmap(appIcon.pixmap(48, 48));
-    m_labelIcon->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    m_labelIcon->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
-    layoutHeader->addWidget(m_labelIcon);
+    QLabel *labelIcon = new QLabel{};
+    QIcon appIcon = QIcon::fromTheme("qkiss");
+    labelIcon->setPixmap(appIcon.pixmap(48, 48));
+    labelIcon->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    labelIcon->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+    layoutHeader->addWidget(labelIcon);
 
 
-    m_labelAppName->setText("App Name Is Here");
-    m_labelAppName->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    m_labelAppName->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
-    layoutHeader->addWidget(m_labelAppName);
+    QLabel *labelAppName = new QLabel{this};
+    labelAppName->setText("QKiSS");
+    labelAppName->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    labelAppName->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+    layoutHeader->addWidget(labelAppName);
 
     QLabel *labelAppVersion = new QLabel{this};
     labelAppVersion->setText("1.0.0");
@@ -72,39 +70,104 @@ void AboutDialog::setupUi()
     layoutHeader->addWidget(labelAppVersion);
 
     QLabel *labelSummary = new QLabel{this};
-    labelSummary->setText(tr("QKiSS is a modern implementation of KiSS (Kisekae, 着せ替え) in Qt 6. Kisekae is short for kisekae ningyou, a Japanese term meaning "));
+    labelSummary->setText(md2Html(tr("QKiSS is a modern implementation of [KiSS](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6.")));
     labelSummary->setAlignment(Qt::AlignmentFlag::AlignCenter);
     labelSummary->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
     layoutHeader->addWidget(labelSummary);
 
+    QLabel *labelCopyright= new QLabel{this};
+    labelCopyright->setText("Copyright (C) 2024 - 2025");
+    labelCopyright->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    labelCopyright->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+    layoutHeader->addWidget(labelCopyright);
+
+
     layoutMain->addLayout(layoutHeader);
     layoutMain->addWidget(m_tabWidget);
 
-    // Information tab
-    QWidget *infoTab = new QWidget();
-    QVBoxLayout *infoLayout = new QVBoxLayout(infoTab);
-    m_labelSummary->setWordWrap(true);
-    m_labelSummary->setText("Copyright (C) 2024 - 2025");
-    infoLayout->addWidget(m_labelSummary);
-    infoLayout->addStretch();
-    m_tabWidget->addTab(infoTab, tr("Information"));
+    // Information
+    QTextBrowser *browserInfo = new QTextBrowser{this};
+    browserInfo->setOpenExternalLinks(true);
+    browserInfo->setReadOnly(true);
+    browserInfo->setHtml(md2Html(tr(R"(
+QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6.
+
+Kisekae is short for *"kisekae ningyou"* (Japanese: *着せ替え人形*, meaning *"dress-up dolls"*).
+KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.org/wiki/Otaku) and personal computer enthusiast (NEC PC-9800 series) subculture in the 1990s.
+
+You can get more information and the source code of QKiSS on [GitHub](https://github.com/kuanyui/qkiss).
+)")));
+    m_tabWidget->addTab(browserInfo, tr("Information"));
+
+    // Authors tab
+    QTextBrowser *browserAuthors = new QTextBrowser{this};
+    browserAuthors->setOpenExternalLinks(true);
+    browserAuthors->setReadOnly(true);
+    browserAuthors->setHtml(md2Html(R"(
+# Programming
+- [kuanyui](https://github.com/kuanyui)
+
+# Arts & Icons
+- [kuanyui](https://github.com/kuanyui)
+- [GNOME Projects](https://www.gnome.org)
+
+# Translators
+- English: [kuanyui](https://github.com/kuanyui)
+- 日本語: [kuanyui](https://github.com/kuanyui)
+- 台灣繁體: [kuanyui](https://github.com/kuanyui)
+)"));
+    m_tabWidget->addTab(browserAuthors, tr("Authors"));
 
     // Licenses tab
-    m_browserLicense->setOpenExternalLinks(true);
-    m_browserLicense->setReadOnly(true);
-    m_browserLicense->setHtml("GPLv3");
-    m_tabWidget->addTab(m_browserLicense, tr("Licenses"));
-
-    // Translators tab
-    m_browserTranslators->setOpenExternalLinks(true);
-    m_browserTranslators->setReadOnly(true);
-    m_browserTranslators->setHtml("English: Author");
-    m_tabWidget->addTab(m_browserTranslators, tr("Translators"));
+    QTextBrowser *browserLicense = new QTextBrowser{this};
+    browserLicense->setOpenExternalLinks(true);
+    browserLicense->setReadOnly(true);
+    browserLicense->setHtml("GPLv3");
+    m_tabWidget->addTab(browserLicense, tr("Licenses"));
 
     // Button box
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close, this);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::accept);
     layoutMain->addWidget(buttonBox);
+}
+
+QString AboutDialog::md2Html(const QString &markdown) {
+    static const QRegularExpression reH1(R"(^# (.+)$)", QRegularExpression::MultilineOption);
+    static const QRegularExpression reH2(R"(^## (.+)$)", QRegularExpression::MultilineOption);
+    static const QRegularExpression reH3(R"(^### (.+)$)", QRegularExpression::MultilineOption);
+    static const QRegularExpression reBoldItalic(R"(\*\*\*(.+?)\*\*\*)");
+    static const QRegularExpression reBold(R"(\*\*(.+?)\*\*)");
+    static const QRegularExpression reItalic(R"(\*([^*]+?)\*)");
+    static const QRegularExpression reLink(R"(\[([^\]]+)\]\(([^)]+)\))");
+    static const QRegularExpression reParagraph(R"(\n\n+)");
+    static const QRegularExpression reListItem(R"(^\[-*] (.+)$)", QRegularExpression::MultilineOption);
+    static const QRegularExpression reList(R"((?:<li>.*</li>\n?)+)", QRegularExpression::DotMatchesEverythingOption);
+    static const QRegularExpression reEmptyPara(R"(<p>\s*</p>)");
+
+    QString html = markdown;
+
+    html.replace('&', "&amp;");
+    html.replace('<', "&lt;");
+    html.replace('>', "&gt;");
+
+    html.replace(reLink, R"(<a href="\2">\1</a>)");
+
+    html.replace(reH3, R"(<h5>\1</h5>)");
+    html.replace(reH2, R"(<h4>\1</h4>)");
+    html.replace(reH1, R"(<h3>\1</h3>)");
+
+    html.replace(reBoldItalic, R"(<b><i>\1</i></b>)");
+    html.replace(reBold, R"(<b>\1</b>)");
+    html.replace(reItalic, R"(<i>\1</i>)");
+
+    html.replace(reListItem, R"(<li>\1</li>)");
+    html.replace(reList, R"(<ul>\0</ul>)");
+
+    html.replace(reParagraph, "</p><p>");
+    html = "<p>" + html + "</p>";
+    html.replace(reEmptyPara, "");
+
+    return html;
 }
 
 
