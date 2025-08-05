@@ -2,7 +2,9 @@
 
 A modern implementation of [KISS (KISekae Set system)](https://ja.wikipedia.org/wiki/KISekae_Set_system) in Qt 6.
 
-Currently supports Linux only.
+Currently officially supports Linux only.
+
+Kisekae is short for *"kisekae ningyou"* (Japanese: *着せ替え人形*, meaning *"dress-up dolls"*). KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.org/wiki/Otaku) and personal computer enthusiast (NEC PC-9800 series) subculture in the 1990s.
 
 # Why
 - As of 2024, the existed KISS implementations for Linux:
