@@ -132,17 +132,19 @@ You can get more information and the source code of QKiSS on [GitHub](https://gi
 }
 
 QString AboutDialog::md2Html(const QString &markdown) {
-    static const QRegularExpression reH1(R"(^# (.+)$)", QRegularExpression::MultilineOption);
-    static const QRegularExpression reH2(R"(^## (.+)$)", QRegularExpression::MultilineOption);
-    static const QRegularExpression reH3(R"(^### (.+)$)", QRegularExpression::MultilineOption);
+    static const QRegularExpression reH1(R"(^# (.+)$)", QRegularExpression::PatternOption::MultilineOption);
+    static const QRegularExpression reH2(R"(^## (.+)$)", QRegularExpression::PatternOption::MultilineOption);
+    static const QRegularExpression reH3(R"(^### (.+)$)", QRegularExpression::PatternOption::MultilineOption);
+    static const QRegularExpression reCode(R"(`(.+?)`)");
     static const QRegularExpression reBoldItalic(R"(\*\*\*(.+?)\*\*\*)");
     static const QRegularExpression reBold(R"(\*\*(.+?)\*\*)");
     static const QRegularExpression reItalic(R"(\*([^*]+?)\*)");
     static const QRegularExpression reLink(R"(\[([^\]]+)\]\(([^)]+)\))");
     static const QRegularExpression reParagraph(R"(\n\n+)");
-    static const QRegularExpression reListItem(R"(^\[-*] (.+)$)", QRegularExpression::MultilineOption);
-    static const QRegularExpression reList(R"((?:<li>.*</li>\n?)+)", QRegularExpression::DotMatchesEverythingOption);
     static const QRegularExpression reEmptyPara(R"(<p>\s*</p>)");
+
+    static const QRegularExpression reUlLi(R"(^[*-] (.+)$)", QRegularExpression::PatternOption::MultilineOption);
+    static const QRegularExpression reUlLiWorkaround(R"(<\/ul>\n*<ul>)");
 
     QString html = markdown;
 
@@ -150,23 +152,26 @@ QString AboutDialog::md2Html(const QString &markdown) {
     html.replace('<', "&lt;");
     html.replace('>', "&gt;");
 
-    html.replace(reLink, R"(<a href="\2">\1</a>)");
+    html.replace(reUlLi, R"(<ul><li>\1</li></ul>)");
+    html.replace(reUlLiWorkaround, "");
+
+    html.replace(reLink, R"(<a href="\2" title="\2">\1</a>)");   // `title=""` is for tooltip
 
     html.replace(reH3, R"(<h5>\1</h5>)");
     html.replace(reH2, R"(<h4>\1</h4>)");
     html.replace(reH1, R"(<h3>\1</h3>)");
 
+    html.replace(reCode, R"(<code>\1</code>)");
     html.replace(reBoldItalic, R"(<b><i>\1</i></b>)");
     html.replace(reBold, R"(<b>\1</b>)");
     html.replace(reItalic, R"(<i>\1</i>)");
 
-    html.replace(reListItem, R"(<li>\1</li>)");
-    html.replace(reList, R"(<ul>\0</ul>)");
 
     html.replace(reParagraph, "</p><p>");
     html = "<p>" + html + "</p>";
     html.replace(reEmptyPara, "");
-
+    // qDebug() << "\n";
+    // qDebug() << html;
     return html;
 }
 
