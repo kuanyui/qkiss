@@ -28,7 +28,7 @@ clear:
 	rm -rf build/*
 
 git-hooks:     ## install git-hooks and commit-template
-	cp scripts/git_hooks/commit-msg .git/hooks/
-	cp scripts/git_hooks/pre-commit .git/hooks/
+	cp scripts/git_hooks/commit-msg .git/hooks/commit-msg
+	cp scripts/git_hooks/pre-commit .git/hooks/pre-commit
 	git config commit.template scripts/git_hooks/commit-template.txt
 
