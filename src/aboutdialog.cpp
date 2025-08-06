@@ -29,6 +29,8 @@
 #include <QCoreApplication>
 #include <QRegularExpression>
 
+using namespace Qt::Literals::StringLiterals;
+
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent)
     , m_tabWidget(new QTabWidget(this))
@@ -92,10 +94,11 @@ void AboutDialog::setupUi()
     browserInfo->setHtml(md2Html(tr(R"(
 QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6.
 
+
 Kisekae is short for *"kisekae ningyou"* (Japanese: *着せ替え人形*, meaning *"dress-up dolls"*).
 KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.org/wiki/Otaku) and personal computer enthusiast (NEC PC-9800 series) subculture in the 1990s.
 
-You can get more information and the source code of QKiSS on [GitHub](https://github.com/kuanyui/qkiss).
+[Website of QKiSS](https://github.com/kuanyui/qkiss).
 )")));
     m_tabWidget->addTab(browserInfo, tr("Information"));
 
@@ -103,26 +106,44 @@ You can get more information and the source code of QKiSS on [GitHub](https://gi
     QTextBrowser *browserAuthors = new QTextBrowser{this};
     browserAuthors->setOpenExternalLinks(true);
     browserAuthors->setReadOnly(true);
-    browserAuthors->setHtml(md2Html(R"(
-# Programming
+    browserAuthors->setHtml(md2Html(QStringLiteral(R"(
+# %1
 - [kuanyui](https://github.com/kuanyui)
 
-# Arts & Icons
+# %2
 - [kuanyui](https://github.com/kuanyui)
 - [GNOME Projects](https://www.gnome.org)
+- [Ubuntu Humanity](https://launchpad.net/humanity)
+- [GIMP](https://www.gimp.org/)
+- [Inkscape](https://inkscape.org/)
 
-# Translators
+# %3
 - English: [kuanyui](https://github.com/kuanyui)
 - 日本語: [kuanyui](https://github.com/kuanyui)
 - 台灣繁體: [kuanyui](https://github.com/kuanyui)
-)"));
+)")).arg(tr("Programming"),
+         tr("Icons & Arts"),
+         tr("Translators")
+         ));
     m_tabWidget->addTab(browserAuthors, tr("Authors"));
 
     // Licenses tab
     QTextBrowser *browserLicense = new QTextBrowser{this};
     browserLicense->setOpenExternalLinks(true);
     browserLicense->setReadOnly(true);
-    browserLicense->setHtml("GPLv3");
+    browserLicense->setHtml(
+        md2Html(
+            tr(R"(QKiSS is licensed under GPLv3.
+
+QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:)") +
+            QStringLiteral(R"(
+
+- [gnome-icon-theme-fork](https://github.com/kuanyui/gnome-icon-theme-fork): `LGPL v3` or `CC by-sa 3.0`
+- [GNOME Projects](https://www.gnome.org): `LGPL v3` or `CC by-sa 3.0`
+- [Ubuntu Humanity](https://launchpad.net/humanity): `GPL v2`
+- [GIMP](https://www.gimp.org/): `CC by-sa 3.0`
+- [Inkscape](https://inkscape.org/): `GPL v2`
+)")));
     m_tabWidget->addTab(browserLicense, tr("Licenses"));
 
     // Button box
