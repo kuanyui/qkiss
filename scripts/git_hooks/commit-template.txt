@@ -1,0 +1,28 @@
+
+
+
+# Commit message format:
+# <type>: [scope] <description>
+#
+# Accepted types:
+#
+#   feat         A new feature
+#   fix          A bug fix
+#   refactor     Code change that neither fixes a bug nor adds a feature
+#   docs         Documentation only changes
+#   style        GUI style, icon, image changes
+#   build        Changes that affect the build system, CI or external dependencies.
+#   perf         A code change that improves performance
+#   test         Adding or fixing tests
+#   chore        Other changes that don't modify src or test files
+#   revert       Revert a previous commit
+#
+# Examples:
+#
+#   feat: [view.cpp][scene.cpp] Add pinch support
+#   fix: [mainwindow.cpp] Prevent crash on exit
+#   docs: [README.md] Update usage instructions
+#   build: [CMakeLists.txt] Update CMake minimum version
+#   refactor: [imageloader.cpp] Clean up code structure
+#   test: [tests/tst_image.cpp] Add coverage for loading failures
+#   chore: [script/git_hooks] Update `commit-template.txt`

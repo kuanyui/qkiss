@@ -1,0 +1,17 @@
+#!/bin/bash
+
+COMMIT_MSG_FILE="$1"
+FIRST_LINE=$(head -n1 "$COMMIT_MSG_FILE")
+
+# Acceptable commit types
+TYPES_REGEX="feat|fix|refactor|docs|style|build|perf|test|chore|revert"
+
+# Expected pattern: type: [filename] message
+if echo "$FIRST_LINE" | grep -Eq "^(${TYPES_REGEX}): \[[^]]+\] .+"; then
+    exit 0
+else
+    echo "❌ Invalid commit message format."
+    echo "💡 Expected format: <type>: [filename] message"
+    echo "📝 Example: fix: [mainwindow.cpp] Fix crash when closing tab"
+    exit 1
+fi

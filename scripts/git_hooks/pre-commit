@@ -1,0 +1,8 @@
+#!/bin/bash
+
+python3 scripts/add_license_header.py --dry-run
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+    exit 1
+fi
