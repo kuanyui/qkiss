@@ -7,7 +7,7 @@ FIRST_LINE=$(head -n1 "$COMMIT_MSG_FILE")
 TYPES_REGEX="feat|fix|refactor|docs|style|build|perf|test|chore|revert"
 
 # Expected pattern: type: [filename] message
-if echo "$FIRST_LINE" | grep -Eq "^(${TYPES_REGEX}): \[[^]]+\] .+"; then
+if echo "$FIRST_LINE" | grep -Eq "^(${TYPES_REGEX}): (\[[^]]+\]){1,} .+"; then
     exit 0
 else
     echo "❌ Invalid commit message format."

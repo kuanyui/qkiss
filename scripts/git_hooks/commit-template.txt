@@ -2,7 +2,7 @@
 
 
 # Commit message format:
-# <type>: [scope] <description>
+# <type>: [filename, dirname or scope] <description>
 #
 # Accepted types:
 #
@@ -20,6 +20,7 @@
 # Examples:
 #
 #   feat: [view.cpp][scene.cpp] Add pinch support
+#   refactor: [*.cpp] Use C++ 20 lambda + QObject::connect syntax
 #   fix: [mainwindow.cpp] Prevent crash on exit
 #   docs: [README.md] Update usage instructions
 #   build: [CMakeLists.txt] Update CMake minimum version
