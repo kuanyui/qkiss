@@ -73,8 +73,10 @@ if(LibArchive_FOUND)
     list(APPEND EXTRA_LIBS LibArchive::LibArchive)
 endif()
 
+
+
 # ===============================================
-### Build Icons
+# Build Icons
 # ===============================================
 find_package(Python3 REQUIRED Interpreter)
 set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
@@ -87,7 +89,10 @@ set_property(
     DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${RESOURCES_DIR}/included_icons.txt"
 )
 
-set(TS_FILES qkiss_en_US.ts)
+# ===============================================
+# main
+# ===============================================
+
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -96,7 +101,6 @@ set(PROJECT_SOURCES
         src/mainwindow.ui
         src/archivefile.h
         src/archivefile.cpp
-        i18n/${TS_FILES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -149,7 +153,26 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+
+# ===============================================
+# i18n
+# ===============================================
+# https://doc.qt.io/Qt-6/qtlinguist-cmake-qt-add-translations.html#sources-and-include-directories
+qt_standard_project_setup(
+    I18N_SOURCE_LANGUAGE en_US   # This is buggy
+    I18N_TRANSLATED_LANGUAGES ja_JP zh_TW
+    )
+
+qt_add_translations(qkiss      # add translations to `qkiss` target
+    TS_FILE_BASE qkiss
+    TS_OUTPUT_DIRECTORY i18n
+    LUPDATE_OPTIONS
+        -no-obsolete
+    IMMEDIATE_CALL
+)
+# ===============================================
+# (i18n ends here)
+# ===============================================
 else()
     if(ANDROID)
         add_library(qkiss SHARED
