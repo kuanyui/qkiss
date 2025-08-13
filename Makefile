@@ -1,4 +1,4 @@
-.PHONY: help clear git-hooks
+.PHONY: help clear install-git-hooks add-license-header
 
 help:     ## Show this self-documented help message.
 	@# Some operating system / Linux distro may use `mawk` (e.g. Ubuntu), so prefer more portable `perl` over `awk`.
@@ -27,8 +27,17 @@ clear:
 	rm -rf resources/tango-icon-remixer/dist/*
 	rm -rf build/*
 
-git-hooks:     ## install git-hooks and commit-template
+install-git-hooks:     ## install git-hooks and commit-template
 	cp scripts/git_hooks/commit-msg .git/hooks/commit-msg
 	cp scripts/git_hooks/pre-commit .git/hooks/pre-commit
+	chmod +x .git/hooks/commit-msg
+	chmod +x .git/hooks/pre-commit
 	git config commit.template scripts/git_hooks/commit-template.txt
 
+uninstall-git-hooks:     ## install git-hooks and commit-template
+	rm .git/hooks/commit-msg
+	rm .git/hooks/pre-commit
+	git config --unset commit.template
+
+add-license-header:
+	./scripts/add_license_header.py
