@@ -33,13 +33,13 @@
     </property>
     <widget class="QMenu" name="menu_openRecentDirectory">
      <property name="title">
-      <string>Open Recent Directory</string>
+      <string>Open R&amp;ecent Directory</string>
      </property>
      <addaction name="action_clearAll_2"/>
     </widget>
     <widget class="QMenu" name="menu_openRecentFile">
      <property name="title">
-      <string>Open Recent File</string>
+      <string>Open &amp;Recent File</string>
      </property>
      <property name="icon">
       <iconset theme="QIcon::ThemeIcon::AppointmentNew"/>
@@ -73,7 +73,7 @@
     </property>
     <widget class="QMenu" name="menu_uiLanguage">
      <property name="title">
-      <string>Language</string>
+      <string>&amp;Language</string>
      </property>
      <property name="icon">
       <iconset theme="language"/>
@@ -81,7 +81,7 @@
     </widget>
     <widget class="QMenu" name="menu_encoding">
      <property name="title">
-      <string>Encoding</string>
+      <string>&amp;Encoding</string>
      </property>
      <property name="icon">
       <iconset theme="encoding"/>

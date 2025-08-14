@@ -459,16 +459,6 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
         <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="36"/>
-        <source>Open Recent Directory</source>
-        <translation>最近使用したディレクトリを開く</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="42"/>
-        <source>Open Recent File</source>
-        <translation>最近使用したファイルを開く</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="59"/>
         <source>&amp;View</source>
         <translation>表示(&amp;V)</translation>
@@ -484,14 +474,24 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
         <translation>設定(&amp;S)</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.ui" line="36"/>
+        <source>Open R&amp;ecent Directory</source>
+        <translation>最近使用したディレクトリを開く(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="42"/>
+        <source>Open &amp;Recent File</source>
+        <translation>最近使用したファイルを開く(&amp;R)</translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.ui" line="76"/>
-        <source>Language</source>
-        <translation>言語</translation>
+        <source>&amp;Language</source>
+        <translation>言語(&amp;L)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="84"/>
-        <source>Encoding</source>
-        <translation>エンコーディング</translation>
+        <source>&amp;Encoding</source>
+        <translation>エンコーディング(&amp;E)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="97"/>

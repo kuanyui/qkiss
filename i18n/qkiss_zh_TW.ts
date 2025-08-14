@@ -459,16 +459,6 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <translation>檔案(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="36"/>
-        <source>Open Recent Directory</source>
-        <translation>最近開啟的資料夾</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="42"/>
-        <source>Open Recent File</source>
-        <translation>最近開啟的檔案</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.ui" line="59"/>
         <source>&amp;View</source>
         <translation>檢視(&amp;V)</translation>
@@ -484,14 +474,24 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <translation>設定(&amp;S)</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.ui" line="36"/>
+        <source>Open R&amp;ecent Directory</source>
+        <translation>開啟最近使用的資料夾(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="42"/>
+        <source>Open &amp;Recent File</source>
+        <translation>開啟最近使用的檔案(&amp;R)</translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.ui" line="76"/>
-        <source>Language</source>
-        <translation>語言</translation>
+        <source>&amp;Language</source>
+        <translation>語言(&amp;L)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="84"/>
-        <source>Encoding</source>
-        <translation>編碼</translation>
+        <source>&amp;Encoding</source>
+        <translation>編碼(&amp;E)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="97"/>
