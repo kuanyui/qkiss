@@ -6,12 +6,12 @@
     <message>
         <location filename="../src/aboutdialog.cpp" line="47"/>
         <source>About QKiSS</source>
-        <translation type="unfinished"></translation>
+        <translation>QKiSSについて</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="75"/>
         <source>QKiSS is a modern implementation of [KiSS](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6.</source>
-        <translation type="unfinished"></translation>
+        <translation>QKiSSは、Qt 6で開発されたモダンな[KiSS](https://ja.wikipedia.org/wiki/KISekae_Set_system)ビューアです。</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="94"/>
@@ -24,44 +24,54 @@ KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.or
 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
-        <translation type="unfinished"></translation>
+        <translation>
+QKiSSは、Qt 6で開発されたモダンな[KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system)ビューアです。
+
+
+Kisekaeは*「着せ替え人形」*の略称です。
+KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)やパソコン愛好家（NEC PC-9800シリーズ）のサブカルチャーで生まれ、人気となりました。
+
+[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)
+</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="103"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="124"/>
         <source>Programming</source>
-        <translation type="unfinished"></translation>
+        <translation>プログラミング</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="125"/>
         <source>Icons &amp; Arts</source>
-        <translation type="unfinished"></translation>
+        <translation>アイコン・アート</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="126"/>
         <source>Translators</source>
-        <translation type="unfinished"></translation>
+        <translation>翻訳者</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="128"/>
         <source>Authors</source>
-        <translation type="unfinished"></translation>
+        <translation>作者</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="136"/>
         <source>QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
-        <translation type="unfinished"></translation>
+        <translation>QKiSSはGPLv3ライセンスの下で提供されています。
+
+QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を通じて、他のFLOSSプロジェクトからの一部のサードパーティSVGアイコンを使用しており、それらは様々なライセンスの下で公開されています：</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="147"/>
         <source>Licenses</source>
-        <translation type="unfinished"></translation>
+        <translation>ライセンス</translation>
     </message>
 </context>
 <context>
@@ -70,7 +80,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
         <location filename="../src/archivefile.cpp" line="103"/>
         <location filename="../src/archivefile.cpp" line="127"/>
         <source>Found valid files: %1 CNF, %2 CEL, %3 KCF.</source>
-        <translation type="unfinished"></translation>
+        <translation>有効なファイルが見つかりました：CNF %1個、CEL %2個、KCF %3個。</translation>
     </message>
 </context>
 <context>
@@ -78,7 +88,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/archiveprocessorcnfinfilesystem.cpp" line="66"/>
         <source>Reading a CNF file &quot;%1&quot; directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...</source>
-        <translation type="unfinished"></translation>
+        <translation>CNFファイル「%1」を直接読み込んでいます。同じフォルダ内の関連するCNF/KCF/CELファイルを取得しています...</translation>
     </message>
 </context>
 <context>
@@ -86,27 +96,27 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="51"/>
         <source>lha (LHa for UNIX)</source>
-        <translation type="unfinished"></translation>
+        <translation>lha (LHa for UNIX)</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="52"/>
         <source>The de facto standard implementation of LZH.</source>
-        <translation type="unfinished"></translation>
+        <translation>LZH形式の事実上の標準実装。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="53"/>
         <source>Perfect (theorically can open any LZH file)</source>
-        <translation type="unfinished"></translation>
+        <translation>完璧（理論上はどのLZHファイルでも開けます）</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="54"/>
         <source>External program; manual installation is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>外部プログラム；手動インストールが必要です。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="55"/>
         <source>Available on most of Linux distros, also on MacPorts. Windows supporting is experimental.</source>
-        <translation type="unfinished"></translation>
+        <translation>ほとんどのLinuxディストリビューションとMacPortsで利用可能。Windowsサポートは実験的です。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="56"/>
@@ -116,42 +126,42 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="57"/>
         <source>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;ソースコード&lt;/a&gt;&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="80"/>
         <source>External program LHA is not installed or not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>外部プログラムLHAがインストールされていないか見つかりません。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="87"/>
         <source>Trying to extract LZH file &quot;%1&quot;...</source>
-        <translation type="unfinished"></translation>
+        <translation>LZHファイル「%1」を展開しています...</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="90"/>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>LZHファイル「%1」の展開に失敗しました。中止します。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="100"/>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation type="unfinished"></translation>
+        <translation>LZHファイル「%1」の展開に成功しました。%2個のファイルが含まれています</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="216"/>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
-        <translation type="unfinished"></translation>
+        <translation>ネストされたLZHファイル「%1」の展開に失敗しました（一時ファイル「%2」を開けませんでした）。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="221"/>
         <source>Partial write occurred. Expected: %1 bytes, actual: %2 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>部分的な書き込みが発生しました。予期値：%1バイト、実際：%2バイト</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="256"/>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>アーカイブファイルパス「%1」が存在しません。中止します。</translation>
     </message>
 </context>
 <context>
@@ -159,62 +169,62 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="47"/>
         <source>Unar (Unarchiver)</source>
-        <translation type="unfinished"></translation>
+        <translation>Unar (Unarchiver)</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="48"/>
         <source>An extractor specially focused on archives of old formats containing non UTF-8 encoding file names.</source>
-        <translation type="unfinished"></translation>
+        <translation>非UTF-8エンコーディングのファイル名を含む古い形式のアーカイブに特化した展開ツール。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="49"/>
         <source>Pretty Good</source>
-        <translation type="unfinished"></translation>
+        <translation>良好</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="50"/>
         <source>External program; manual installation is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>外部プログラム；手動インストールが必要です。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="51"/>
         <source>Originally developed for macOS, also available on most of Linux distros. Supports Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>元々macOS向けに開発されましたが、ほとんどのLinuxディストリビューションでも利用可能です。Windowsもサポートしています</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="52"/>
         <source>All extractions will do writing operations to disk; may shorten the lifespan of SSD.</source>
-        <translation type="unfinished"></translation>
+        <translation>すべての展開操作でディスクへの書き込みを行うため、SSDの寿命を短くする可能性があります。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="53"/>
         <source>&lt;a href=&quot;https://theunarchiver.com/command-line&quot;&gt;Official Site&lt;/a&gt;, &lt;a href=&apos;https://github.com/MacPaw/unar&apos;&gt;Source Code&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://theunarchiver.com/command-line&quot;&gt;公式サイト&lt;/a&gt;、&lt;a href=&apos;https://github.com/MacPaw/unar&apos;&gt;ソースコード&lt;/a&gt;。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="76"/>
         <source>External program Unar is not installed or not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>外部プログラムUnarがインストールされていないか見つかりません。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="86"/>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>LZHファイル「%1」の展開に失敗しました。中止します。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="97"/>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation type="unfinished"></translation>
+        <translation>LZHファイル「%1」の展開に成功しました。%2個のファイルが含まれています</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="104"/>
         <source>Trying to extract LZH file &quot;%1&quot;...</source>
-        <translation type="unfinished"></translation>
+        <translation>LZHファイル「%1」を展開しています...</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="125"/>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>アーカイブファイルパス「%1」が存在しません。中止します。</translation>
     </message>
 </context>
 <context>
@@ -222,27 +232,27 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="51"/>
         <source>LibArchive (built-in)</source>
-        <translation type="unfinished"></translation>
+        <translation>LibArchive（内蔵）</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="52"/>
         <source>Multi-format archive and compression library.</source>
-        <translation type="unfinished"></translation>
+        <translation>マルチフォーマットアーカイブ・圧縮ライブラリ。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="53"/>
         <source>Poor (some LZH files may be unable to be extracted, and non UTF-8 file names in LZH are totally unsupported.)</source>
-        <translation type="unfinished"></translation>
+        <translation>不十分（一部のLZHファイルは展開できない可能性があり、LZH内の非UTF-8ファイル名は完全にサポートされていません。）</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="54"/>
         <source>Built-in in QKiSS. No extra external program is required.</source>
-        <translation type="unfinished"></translation>
+        <translation>QKiSSに内蔵。追加の外部プログラムは不要です。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="55"/>
         <source>Windows, macOS, Linux</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows、macOS、Linux</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="56"/>
@@ -252,42 +262,42 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="57"/>
         <source>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;ソースコード&lt;/a&gt;&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="77"/>
         <source>Failed to open this file, aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>このファイルを開くことができませんでした。中止します。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="138"/>
         <source>[Error][LibArchive] Error when opening this archive file (%1). Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>[エラー][LibArchive] このアーカイブファイルを開く際にエラーが発生しました（%1）。中止しました。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="146"/>
         <source>[Error][LibArchive] Fatal error (%1), no more operations are possible., abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>[エラー][LibArchive] 致命的エラー（%1）、これ以上の操作は不可能です。中止します。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="149"/>
         <source>[Warning][LibArchive] Current operation cannot complete (%1), skip.</source>
-        <translation type="unfinished"></translation>
+        <translation>[警告][LibArchive] 現在の操作を完了できません（%1）。スキップします。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="152"/>
         <source>[Warning][Libarchive] Partial success (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>[警告][Libarchive] 部分的に成功しました（%1）。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="155"/>
         <source>[Warning][Libarchive] Retry might succeed (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>[警告][Libarchive] 再試行すると成功する可能性があります（%1）</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="173"/>
         <source>[Error][LibArchive] when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>[エラー][LibArchive] LibArchive経由でこのアーカイブファイルを読み込む際にエラーが発生しました（エラーメッセージ：%1）。中止しました。</translation>
     </message>
 </context>
 <context>
@@ -295,7 +305,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/configfile.cpp" line="119"/>
         <source>Auto (System Language)</source>
-        <translation type="unfinished"></translation>
+        <translation>自動（システム言語）</translation>
     </message>
 </context>
 <context>
@@ -303,58 +313,58 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/filesystembrowser.cpp" line="83"/>
         <source>[filesystembrowser] Invalid dir path, aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>[ファイルシステムブラウザ] 無効なディレクトリパスです。中止しました。</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="145"/>
         <source>File Name</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル名</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="145"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="145"/>
         <location filename="../src/filesystembrowser.cpp" line="268"/>
         <source>Patch</source>
-        <translation type="unfinished"></translation>
+        <translation>パッチ</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="182"/>
         <source>Go Back</source>
-        <translation type="unfinished"></translation>
+        <translation>戻る</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="187"/>
         <source>Go Forward</source>
-        <translation type="unfinished"></translation>
+        <translation>進む</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="192"/>
         <source>Go Up</source>
-        <translation type="unfinished"></translation>
+        <translation>上へ</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="197"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>更新</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="202"/>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>ホーム</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="206"/>
         <source>Set current folder as Home</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のフォルダをホームに設定</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="271"/>
         <source>Click to load this file as patch</source>
-        <translation type="unfinished"></translation>
+        <translation>このファイルをパッチとして読み込むにはクリック</translation>
     </message>
 </context>
 <context>
@@ -362,22 +372,22 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/gkissscene.cpp" line="548"/>
         <source>[%1] Unfix (&amp;U)</source>
-        <translation type="unfinished"></translation>
+        <translation>[%1] 固定解除(&amp;U)</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="550"/>
         <source>Reset Object (&amp;R)</source>
-        <translation type="unfinished"></translation>
+        <translation>オブジェクトリセット(&amp;R)</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="552"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="559"/>
         <source>Click to copy filename to clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル名をクリップボードにコピーするにはクリック。</translation>
     </message>
 </context>
 <context>
@@ -385,12 +395,12 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/innerfilesbrowser.cpp" line="35"/>
         <source>CNF files</source>
-        <translation type="unfinished"></translation>
+        <translation>CNFファイル</translation>
     </message>
     <message>
         <location filename="../src/innerfilesbrowser.cpp" line="39"/>
         <source>Document files</source>
-        <translation type="unfinished"></translation>
+        <translation>ドキュメントファイル</translation>
     </message>
 </context>
 <context>
@@ -398,42 +408,42 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/iteminspector.cpp" line="45"/>
         <source>CEL File</source>
-        <translation type="unfinished"></translation>
+        <translation>CELファイル</translation>
     </message>
     <message>
         <location filename="../src/iteminspector.cpp" line="46"/>
         <source>Object ID</source>
-        <translation type="unfinished"></translation>
+        <translation>オブジェクトID</translation>
     </message>
     <message>
         <location filename="../src/iteminspector.cpp" line="47"/>
         <source>CEL Position</source>
-        <translation type="unfinished"></translation>
+        <translation>CEL位置</translation>
     </message>
     <message>
         <location filename="../src/iteminspector.cpp" line="48"/>
         <source>Fix</source>
-        <translation type="unfinished"></translation>
+        <translation>固定</translation>
     </message>
     <message>
         <location filename="../src/iteminspector.cpp" line="49"/>
         <source>CEL Size</source>
-        <translation type="unfinished"></translation>
+        <translation>CELサイズ</translation>
     </message>
     <message>
         <location filename="../src/iteminspector.cpp" line="50"/>
         <source>CEL Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>CELコメント</translation>
     </message>
     <message>
         <location filename="../src/iteminspector.cpp" line="51"/>
         <source>CEL Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>CELプレビュー</translation>
     </message>
     <message>
         <location filename="../src/iteminspector.cpp" line="52"/>
         <source>CEL Siblings</source>
-        <translation type="unfinished"></translation>
+        <translation>CEL姉妹要素</translation>
     </message>
 </context>
 <context>
@@ -441,242 +451,242 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
         <source>MainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>メインウィンドウ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="32"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="36"/>
         <source>Open Recent Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>最近使用したディレクトリを開く</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="42"/>
         <source>Open Recent File</source>
-        <translation type="unfinished"></translation>
+        <translation>最近使用したファイルを開く</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="59"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>表示(&amp;V)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="67"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>ウィンドウ(&amp;W)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="72"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>設定(&amp;S)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="76"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>言語</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="84"/>
         <source>Encoding</source>
-        <translation type="unfinished"></translation>
+        <translation>エンコーディング</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="97"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="116"/>
         <source>File System Browser</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルシステムブラウザ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="125"/>
         <source>Inner File Selector</source>
-        <translation type="unfinished"></translation>
+        <translation>内部ファイルセレクタ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="143"/>
         <source>Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>ログ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="155"/>
         <source>CNF Code Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>CNFコードビューア</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="164"/>
         <source>Document Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>ドキュメントビューア</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="173"/>
         <source>Item Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>アイテムインスペクタ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="185"/>
         <source>&amp;Open File</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルを開く(&amp;O)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="193"/>
         <source>Open &amp;Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリを開く(&amp;D)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="201"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>終了(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="212"/>
         <source>Zoom &amp;Out</source>
-        <translation type="unfinished"></translation>
+        <translation>縮小(&amp;O)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="220"/>
         <source>Zoom &amp;In</source>
-        <translation type="unfinished"></translation>
+        <translation>拡大(&amp;I)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="228"/>
         <source>&amp;Reset Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>スケールリセット(&amp;R)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="233"/>
         <location filename="../src/mainwindow.ui" line="238"/>
-        <location filename="../src/mainwindow.cpp" line="560"/>
-        <location filename="../src/mainwindow.cpp" line="577"/>
+        <location filename="../src/mainwindow.cpp" line="589"/>
+        <location filename="../src/mainwindow.cpp" line="606"/>
         <source>Clear All</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてクリア</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="246"/>
         <source>&amp;Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>環境設定(&amp;P)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="249"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>環境設定</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="260"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>について(&amp;A)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="263"/>
         <source>About QKiSS</source>
-        <translation type="unfinished"></translation>
+        <translation>QKiSSについて</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="72"/>
+        <location filename="../src/mainwindow.cpp" line="74"/>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>固定：%1、CEL名：%2、コメント：%3</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="155"/>
+        <location filename="../src/mainwindow.cpp" line="159"/>
         <source>Start to parse CNF / KCF / CEL files...</source>
-        <translation type="unfinished"></translation>
+        <translation>CNF / KCF / CELファイルの解析を開始...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="161"/>
+        <location filename="../src/mainwindow.cpp" line="165"/>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>「%1」は有効なKiSSパッチファイルではありません。中止しました。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="168"/>
+        <location filename="../src/mainwindow.cpp" line="172"/>
         <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>「%1」は有効なKiSSファイルではありません。中止しました。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="176"/>
+        <location filename="../src/mainwindow.cpp" line="180"/>
         <source>Parsing finished. Now rendering scenes...</source>
-        <translation type="unfinished"></translation>
+        <translation>解析完了。シーンをレンダリング中...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="189"/>
+        <location filename="../src/mainwindow.cpp" line="193"/>
         <source>KiSS files rendered successfully: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>KiSSファイルのレンダリングが完了しました：%1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="203"/>
         <location filename="../src/mainwindow.cpp" line="207"/>
+        <location filename="../src/mainwindow.cpp" line="211"/>
         <source>Scene Sets</source>
-        <translation type="unfinished"></translation>
+        <translation>シーンセット</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="208"/>
+        <location filename="../src/mainwindow.cpp" line="212"/>
         <source>Switch scene set (F1/F2)</source>
-        <translation type="unfinished"></translation>
+        <translation>シーンセット切り替え（F1/F2）</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="232"/>
         <location filename="../src/mainwindow.cpp" line="236"/>
+        <location filename="../src/mainwindow.cpp" line="240"/>
         <source>Palette Sets</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットセット</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="237"/>
+        <location filename="../src/mainwindow.cpp" line="241"/>
         <source>Switch palette set (F3/F4)</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットセット切り替え（F3/F4）</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="338"/>
+        <location filename="../src/mainwindow.cpp" line="342"/>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="346"/>
+        <location filename="../src/mainwindow.cpp" line="350"/>
         <source>Zooming Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>ズームツール</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="359"/>
+        <location filename="../src/mainwindow.cpp" line="363"/>
         <source>Windows</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="465"/>
-        <source>QKiSS ready.</source>
-        <translation type="unfinished"></translation>
+        <translation>ウィンドウ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="469"/>
+        <source>QKiSS ready.</source>
+        <translation>QKiSS準備完了。</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="473"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+ドラッグ：オブジェクトからCELを強制分離</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="474"/>
+        <location filename="../src/mainwindow.cpp" line="478"/>
         <source>Shift+Drag: Disable FKiSS events</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+ドラッグ：FKiSSイベントを無効化</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="479"/>
+        <location filename="../src/mainwindow.cpp" line="483"/>
         <source>Middle Click: Unfix</source>
-        <translation type="unfinished"></translation>
+        <translation>中クリック：固定解除</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="484"/>
+        <location filename="../src/mainwindow.cpp" line="488"/>
         <source>Right Click: More Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>右クリック：その他のアクション</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="589"/>
+        <location filename="../src/mainwindow.cpp" line="618"/>
         <source>Open Compressed KiSS File</source>
-        <translation type="unfinished"></translation>
+        <translation>圧縮KiSSファイルを開く</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="603"/>
+        <location filename="../src/mainwindow.cpp" line="632"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリを開く</translation>
     </message>
 </context>
 <context>
@@ -684,72 +694,72 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/preferencedialog.cpp" line="40"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>環境設定</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="63"/>
         <source>LZH Extractor Backend</source>
-        <translation type="unfinished"></translation>
+        <translation>LZH展開バックエンド</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="144"/>
         <source>Backend</source>
-        <translation type="unfinished"></translation>
+        <translation>バックエンド</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="149"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>ステータス</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="165"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>名前</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="166"/>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>概要</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="167"/>
         <source>LZH Compatibility</source>
-        <translation type="unfinished"></translation>
+        <translation>LZH互換性</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="168"/>
         <source>Installation</source>
-        <translation type="unfinished"></translation>
+        <translation>インストール</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="169"/>
         <source>OS Support</source>
-        <translation type="unfinished"></translation>
+        <translation>OSサポート</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="170"/>
         <source>Disk Operation</source>
-        <translation type="unfinished"></translation>
+        <translation>ディスク操作</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="171"/>
         <source>Website</source>
-        <translation type="unfinished"></translation>
+        <translation>ウェブサイト</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="173"/>
         <source>Backend Information</source>
-        <translation type="unfinished"></translation>
+        <translation>バックエンド情報</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="210"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>インストール済み</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="213"/>
         <source>Not Found / Not Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>見つからない / インストールされていない</translation>
     </message>
 </context>
 <context>
@@ -757,22 +767,22 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
     <message>
         <location filename="../src/enums.h" line="57"/>
         <source>ASCII</source>
-        <translation type="unfinished"></translation>
+        <translation>ASCII</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="58"/>
         <source>UTF-8</source>
-        <translation type="unfinished"></translation>
+        <translation>UTF-8</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="59"/>
         <source>Shift JIS (Default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift JIS（デフォルト）</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="60"/>
         <source>EUC-JP</source>
-        <translation type="unfinished"></translation>
+        <translation>EUC-JP</translation>
     </message>
 </context>
 </TS>
