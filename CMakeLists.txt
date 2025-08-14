@@ -173,6 +173,10 @@ qt_add_translations(qkiss      # add translations to `qkiss` target
         -no-obsolete
     IMMEDIATE_CALL
 )
+# By default, the generated .qm files are embedded in a Qt resource that will be
+# linked into the targets passed with TARGETS. The files in the resource are
+# accessible under the resource prefix "/i18n".
+
 # ===============================================
 # (i18n ends here)
 # ===============================================
