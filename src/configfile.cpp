@@ -19,7 +19,7 @@
 
 #include "configfile.h"
 #include <QSettings>
-
+#include <QLocale>
 
 ConfigFile::ConfigFile(QObject *parent)
     : QObject{parent}
@@ -123,15 +123,51 @@ const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
     };
 }
 
-QString ConfigFile::uiLanguage() const
+QString ConfigFile::detectSystemLanguage() const
 {
-    return m_set.value(CPath::Global_UiLanguage, "").toString();;
+    QLocale systemLocale = QLocale::system();
+    QString sysLangId = systemLocale.name(); // "ja_JP", "en_US"
+    QString sysLangPrefix = sysLangId.split('_').first();   // "ja"
+    if (sysLangPrefix == "ja") { return "ja_JP"; }
+    if (sysLangId == "zh_TW") { return "zh_TW"; }
+    return "en_US";
 }
 
-void ConfigFile::setUiLanguage(const QString &langId)
+
+QString ConfigFile::uiLanguage() const
 {
-    m_set.setValue(CPath::Global_UiLanguage, langId);
+    return m_uiLanguage;
+    // return m_set.value(CPath::Global_UiLanguage, "").toString();
+}
+
+QString ConfigFile::effectedUiLanguage() const
+{
+    if (m_uiLanguage.isEmpty()) {
+        return detectSystemLanguage();
+    }
+    return m_uiLanguage;
+}
+
+
+
+bool ConfigFile::setUiLanguage(const QString &confLangId)
+{
+    if (confLangId == m_uiLanguage) { return true; }
+    bool isValidLangId = false;
+    for (const auto &li : allLanguages()) {
+        if (li.id == confLangId) {
+            isValidLangId = true;
+            break;
+        }
+    }
+    if (!isValidLangId) { return false; }
+
+    // Write into QSettings
+    m_uiLanguage = confLangId;
+    m_set.setValue(CPath::Global_UiLanguage, confLangId);
     m_set.sync();
+    emit uiLanguageChanged();
+    return true;
 }
 
 QKiSS::Encoding ConfigFile::encoding() const
@@ -269,6 +305,7 @@ void ConfigFile::loadAll()
     m_encoding = getEnumClassFromSettings<QKiSS::Encoding>(CPath::Global_Encoding, QKiSS::Encoding::SJIS);
     m_caseSensitivity = getEnumClassFromSettings<QKiSS::Case>(CPath::Global_CaseSensitivity, QKiSS::Case::Insensitive);
     m_lzhDecompressorBackend = getEnumClassFromSettings<QKiSS::LzhDecompressorBackend>(CPath::Global_LzhDecompressorBackend, m_lzhDecompressorBackend);
+    setUiLanguage(m_set.value(CPath::Global_UiLanguage).toString());
 }
 
 void ConfigFile::saveAll()

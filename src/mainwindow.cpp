@@ -26,6 +26,8 @@
 #include <QShortcut>
 #include <QFileDialog>
 #include <QActionGroup>
+#include <QTranslator>
+#include <QLocale>
 #include "archiveprocessorfactory.h"
 #include "iteminspector.h"
 #include "configfile.h"
@@ -103,6 +105,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_openFile, &QAction::triggered, this, &MainWindow::openFilePicker);
     connect(ui->action_openDirectory, &QAction::triggered, this, &MainWindow::openDirPicker);
     connect(&m_cfg, &ConfigFile::recentFilesChanged, this, &MainWindow::renderRecentFiles);
+    connect(&m_cfg, &ConfigFile::uiLanguageChanged, this, &MainWindow::applyUiLanguageFromConfig);
+    applyUiLanguageFromConfig();
 
     // Preference Dialog
     connect(ui->action_preferences, &QAction::triggered, this, [=, this]() {
@@ -314,7 +318,7 @@ void MainWindow::setupMenuBar()
         if (m_cfg.encoding() == enumVal) {
             act->setChecked(true);
         }
-        connect(act, &QAction::toggled, this, [=, this] () { setFileEncoding(enumVal); });
+        connect(act, &QAction::toggled, this, [=, this] () { m_cfg.setEncoding(enumVal); });
     }
 
     const auto &allLangs = m_cfg.allLanguages();
@@ -327,7 +331,7 @@ void MainWindow::setupMenuBar()
         if (m_cfg.uiLanguage() == lang.id) {
             act->setChecked(true);
         }
-        connect(act, &QAction::toggled, this, [=, this] () { setUiLanguage(lang.id); });
+        connect(act, &QAction::toggled, this, [=, this] () { m_cfg.setUiLanguage(lang.id); });
     }
 }
 
@@ -541,6 +545,31 @@ void MainWindow::restoreWindowSettings()
     renderRecentFiles();
 }
 
+bool MainWindow::applyUiLanguageFromConfig()
+{
+    // QTranslate
+    static QTranslator *currTranslator = nullptr;
+    if (currTranslator) {
+        qApp->removeTranslator(currTranslator);
+        delete currTranslator;
+        currTranslator = nullptr;
+    }
+
+    currTranslator = new QTranslator{};
+    QString langId = m_cfg.effectedUiLanguage();
+    if (currTranslator->load(":/i18n/qkiss_" + langId + ".qm")) {
+        qApp->installTranslator(currTranslator);
+        qDebug() << "[DEBUG] MainWindow::applyUiLanguageFromConfig() SUCCESS" << langId;
+        ui->retranslateUi(this);
+        return true;
+    } else {
+        qDebug() << "[DEBUG] MainWindow::applyUiLanguageFromConfig() FAILED" << langId;
+        delete currTranslator;
+        currTranslator = nullptr;
+        return false;
+    }
+}
+
 
 void MainWindow::renderRecentFiles()
 {
@@ -621,15 +650,6 @@ void MainWindow::applyViewZoomByText(QString zoomText)
     m_cfg.setZoom(zoomText);
 }
 
-void MainWindow::setUiLanguage(QString langId)
-{
-    m_cfg.setUiLanguage(langId);
-}
-
-void MainWindow::setFileEncoding(QKiSS::Encoding enc)
-{
-    m_cfg.setEncoding(enc);
-}
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {

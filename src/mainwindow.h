@@ -68,14 +68,13 @@ private:
     void setupShortcuts();
     void saveWindowSettings();
     void restoreWindowSettings();
+    bool applyUiLanguageFromConfig();
 
 private slots:
     void renderRecentFiles();
     void openFilePicker();
     void openDirPicker();
     void applyViewZoomByText(QString zoomText);
-    void setUiLanguage(QString langId);
-    void setFileEncoding(QKiSS::Encoding enc);
 
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;

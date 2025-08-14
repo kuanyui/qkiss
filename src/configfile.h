@@ -65,8 +65,11 @@ public:
     void setHomeDirectory(const QString &homeDir);
     /// QPair("ja_JP", "Japanese")
     static const QList<LangInfo> allLanguages();
+    QString detectSystemLanguage() const;
+
     QString uiLanguage() const;
-    void setUiLanguage(const QString &langId);
+    QString effectedUiLanguage() const;
+    bool setUiLanguage(const QString &langId);
 
     QKiSS::Encoding encoding() const;
     void setEncoding(QKiSS::Encoding newEncoding);
@@ -107,6 +110,7 @@ signals:
     void caseSensitivityChanged();
     void recentFilesChanged();
     void recentDirsChanged();
+    void uiLanguageChanged();
 
     void zoomScaleChanged();
 
@@ -121,6 +125,7 @@ private:
     QKiSS::Case m_caseSensitivity = QKiSS::Case::Insensitive;
     QKiSS::Encoding m_encoding = QKiSS::Encoding::SJIS;
     QKiSS::LzhDecompressorBackend m_lzhDecompressorBackend = QKiSS::LzhDecompressorBackend::Libarchive;
+    QString m_uiLanguage = "";
     // /** 0 ~ 9 */
     // uint8_t m_cnfSetNo;
     // /** usually it's 9. */
