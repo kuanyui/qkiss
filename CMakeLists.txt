@@ -163,6 +163,9 @@ qt_standard_project_setup(
     I18N_TRANSLATED_LANGUAGES ja_JP zh_TW
     )
 
+
+# 1. This function will create the CMake target `update_translations` that scans all source files with `lupdate` and creates and updates the .ts files.
+# 2. This function will create the CMake target `release_translations` that generates the .qm files from the .ts files. This target is built by default.
 qt_add_translations(qkiss      # add translations to `qkiss` target
     TS_FILE_BASE qkiss
     TS_OUTPUT_DIRECTORY i18n
