@@ -121,7 +121,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="56"/>
         <source>&gt; 95% operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation type="unfinished"></translation>
+        <translation>超過 95% 的操作可在記憶體中完成，無需將檔案解壓縮到磁碟，對 SSD 壽命相對友善。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="57"/>
@@ -257,7 +257,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="56"/>
         <source>All operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation type="unfinished"></translation>
+        <translation>所有操作可在記憶體中完成，無需將檔案解壓縮到磁碟，對 SSD 壽命相對友善。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="57"/>

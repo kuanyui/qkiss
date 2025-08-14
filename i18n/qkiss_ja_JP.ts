@@ -31,7 +31,7 @@ QKiSSは、Qt 6で開発されたモダンな[KiSS (Kisekae Set System)](https:/
 Kisekaeは*「着せ替え人形」*の略称です。
 KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)やパソコン愛好家（NEC PC-9800シリーズ）のサブカルチャーで生まれ、人気となりました。
 
-[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)
+[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)。
 </translation>
     </message>
     <message>
@@ -121,7 +121,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="56"/>
         <source>&gt; 95% operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation type="unfinished"></translation>
+        <translation>95%以上の操作をディスクに展開せずRAM内で実行できるため、SSDの寿命に比較的優しいです。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="57"/>
@@ -257,7 +257,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="56"/>
         <source>All operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation type="unfinished"></translation>
+        <translation>すべての操作をディスクに展開せずRAM内で実行できるため、SSDの寿命に比較的優しいです。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="57"/>
