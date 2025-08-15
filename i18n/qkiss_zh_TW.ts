@@ -406,42 +406,42 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
 <context>
     <name>ItemInspector</name>
     <message>
-        <location filename="../src/iteminspector.cpp" line="45"/>
+        <location filename="../src/iteminspector.cpp" line="46"/>
         <source>CEL File</source>
         <translation>CEL 檔案</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="46"/>
+        <location filename="../src/iteminspector.cpp" line="47"/>
         <source>Object ID</source>
         <translation>物件 ID</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="47"/>
+        <location filename="../src/iteminspector.cpp" line="48"/>
         <source>CEL Position</source>
         <translation>CEL 位置</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="48"/>
+        <location filename="../src/iteminspector.cpp" line="49"/>
         <source>Fix</source>
         <translation>固定</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="49"/>
+        <location filename="../src/iteminspector.cpp" line="50"/>
         <source>CEL Size</source>
         <translation>CEL 大小</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="50"/>
+        <location filename="../src/iteminspector.cpp" line="51"/>
         <source>CEL Comment</source>
         <translation>CEL 註解</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="51"/>
+        <location filename="../src/iteminspector.cpp" line="52"/>
         <source>CEL Preview</source>
         <translation>CEL 預覽</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="52"/>
+        <location filename="../src/iteminspector.cpp" line="53"/>
         <source>CEL Siblings</source>
         <translation>CEL 同組元素</translation>
     </message>
@@ -494,97 +494,107 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <translation>編碼(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="97"/>
+        <location filename="../src/mainwindow.ui" line="92"/>
+        <source>&amp;Case Sensitivity</source>
+        <translation>是否區分大小寫(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="103"/>
         <source>&amp;Help</source>
         <translation>幫助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="116"/>
+        <location filename="../src/mainwindow.ui" line="122"/>
         <source>File System Browser</source>
         <translation>檔案系統瀏覽器</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="125"/>
+        <location filename="../src/mainwindow.ui" line="131"/>
         <source>Inner File Selector</source>
         <translation>內部檔案選擇器</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="143"/>
+        <location filename="../src/mainwindow.ui" line="149"/>
         <source>Logs</source>
         <translation>記錄</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="155"/>
+        <location filename="../src/mainwindow.ui" line="161"/>
         <source>CNF Code Viewer</source>
         <translation>CNF 程式碼檢視器</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="164"/>
+        <location filename="../src/mainwindow.ui" line="170"/>
         <source>Document Viewer</source>
         <translation>文件檢視器</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="173"/>
+        <location filename="../src/mainwindow.ui" line="179"/>
         <source>Item Inspector</source>
         <translation>項目檢查器</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="185"/>
+        <location filename="../src/mainwindow.ui" line="191"/>
         <source>&amp;Open File</source>
         <translation>開啟檔案(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="193"/>
+        <location filename="../src/mainwindow.ui" line="199"/>
         <source>Open &amp;Directory</source>
         <translation>開啟資料夾(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="201"/>
+        <location filename="../src/mainwindow.ui" line="207"/>
         <source>&amp;Quit</source>
         <translation>結束(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="212"/>
+        <location filename="../src/mainwindow.ui" line="218"/>
         <source>Zoom &amp;Out</source>
         <translation>縮小(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="220"/>
+        <location filename="../src/mainwindow.ui" line="226"/>
         <source>Zoom &amp;In</source>
         <translation>放大(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="228"/>
+        <location filename="../src/mainwindow.ui" line="234"/>
         <source>&amp;Reset Scale</source>
         <translation>重設縮放(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="233"/>
-        <location filename="../src/mainwindow.ui" line="238"/>
-        <location filename="../src/mainwindow.cpp" line="589"/>
-        <location filename="../src/mainwindow.cpp" line="606"/>
+        <location filename="../src/mainwindow.ui" line="239"/>
+        <location filename="../src/mainwindow.ui" line="244"/>
+        <location filename="../src/mainwindow.cpp" line="603"/>
+        <location filename="../src/mainwindow.cpp" line="620"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="246"/>
+        <location filename="../src/mainwindow.ui" line="252"/>
         <source>&amp;Preferences</source>
         <translation>偏好設定(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="249"/>
+        <location filename="../src/mainwindow.ui" line="255"/>
         <source>Preferences</source>
         <translation>偏好設定</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="260"/>
+        <location filename="../src/mainwindow.ui" line="266"/>
         <source>&amp;About</source>
         <translation>關於(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="263"/>
+        <location filename="../src/mainwindow.ui" line="269"/>
         <source>About QKiSS</source>
         <translation>關於 QKiSS</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="274"/>
+        <source>1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="74"/>
@@ -639,52 +649,52 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <translation>切換調色盤組 (F3/F4)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="342"/>
+        <location filename="../src/mainwindow.cpp" line="356"/>
         <source>Files</source>
         <translation>檔案</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="350"/>
+        <location filename="../src/mainwindow.cpp" line="364"/>
         <source>Zooming Tools</source>
         <translation>縮放工具</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="363"/>
+        <location filename="../src/mainwindow.cpp" line="377"/>
         <source>Windows</source>
         <translation>視窗</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="469"/>
+        <location filename="../src/mainwindow.cpp" line="483"/>
         <source>QKiSS ready.</source>
         <translation>QKiSS 已就緒。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="473"/>
+        <location filename="../src/mainwindow.cpp" line="487"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
         <translation>Ctrl+拖曳：強制從物件分離 CEL</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="478"/>
+        <location filename="../src/mainwindow.cpp" line="492"/>
         <source>Shift+Drag: Disable FKiSS events</source>
         <translation>Shift+拖曳：停用 FKiSS 事件</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="483"/>
+        <location filename="../src/mainwindow.cpp" line="497"/>
         <source>Middle Click: Unfix</source>
         <translation>中鍵點擊：取消固定</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="488"/>
+        <location filename="../src/mainwindow.cpp" line="502"/>
         <source>Right Click: More Actions</source>
         <translation>右鍵點擊：更多動作</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="618"/>
+        <location filename="../src/mainwindow.cpp" line="632"/>
         <source>Open Compressed KiSS File</source>
         <translation>開啟壓縮的 KiSS 檔案</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="632"/>
+        <location filename="../src/mainwindow.cpp" line="646"/>
         <source>Open Directory</source>
         <translation>開啟資料夾</translation>
     </message>
@@ -776,13 +786,23 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <location filename="../src/enums.h" line="59"/>
-        <source>Shift JIS (Default)</source>
-        <translation>Shift JIS（預設）</translation>
+        <source>Shift JIS</source>
+        <translation>Shift JIS</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="60"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
+    </message>
+    <message>
+        <location filename="../src/enums.h" line="65"/>
+        <source>Case Insensitive</source>
+        <translation>不區分大小寫</translation>
+    </message>
+    <message>
+        <location filename="../src/enums.h" line="66"/>
+        <source>Case Sensitive</source>
+        <translation>區分大小寫</translation>
     </message>
 </context>
 </TS>

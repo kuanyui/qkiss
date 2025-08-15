@@ -87,8 +87,14 @@
       <iconset theme="encoding"/>
      </property>
     </widget>
+    <widget class="QMenu" name="menu_caseSensitivity">
+     <property name="title">
+      <string>&amp;Case Sensitivity</string>
+     </property>
+    </widget>
     <addaction name="menu_uiLanguage"/>
     <addaction name="menu_encoding"/>
+    <addaction name="menu_caseSensitivity"/>
     <addaction name="separator"/>
     <addaction name="action_preferences"/>
    </widget>

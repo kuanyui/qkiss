@@ -56,10 +56,16 @@ public:
         return {
             tr("ASCII"),
             tr("UTF-8"),
-            tr("Shift JIS (Default)"),
+            tr("Shift JIS"),
             tr("EUC-JP")
         };
     };
+    static const QList<QPair<Case, QString>> caseSensitivityNames() {
+        return {
+            { QKiSS::Case::Insensitive, tr("Case Insensitive") },
+            { QKiSS::Case::Sensitive, tr("Case Sensitive") },
+        };
+    }
 };
 
 // For storing enum class in QVariant

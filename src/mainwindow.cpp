@@ -333,6 +333,20 @@ void MainWindow::setupMenuBar()
         }
         connect(act, &QAction::toggled, this, [=, this] () { m_cfg.setUiLanguage(lang.id); });
     }
+
+    const auto &allCaseSensitivity= QKiSS::caseSensitivityNames();
+    QActionGroup *caseSensitivityGroup = new QActionGroup {ui->menu_caseSensitivity};
+    for (const auto &x : allCaseSensitivity) {
+        QKiSS::Case key = x.first;
+        const QString &label = x.second;
+        QAction *act = ui->menu_caseSensitivity->addAction(label);
+        caseSensitivityGroup->addAction(act);
+        act->setCheckable(true);
+        if (m_cfg.caseSensitivity() == key) {
+            act->setChecked(true);
+        }
+        connect(act, &QAction::toggled, this, [=, this] () { m_cfg.setCaseSensitivity(key); });
+    }
 }
 
 void MainWindow::setupToolBars()
