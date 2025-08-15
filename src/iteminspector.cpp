@@ -20,6 +20,7 @@
 #include "iteminspector.h"
 #include "gkissitem.h"
 #include "gkissscene.h"
+#include "zlabel.h"
 #include <QHeaderView>
 #include <QScrollBar>
 #include <QVBoxLayout>
@@ -38,18 +39,19 @@ ItemInspector::ItemInspector(QWidget *parent)
 
     scrollArea->setWidgetResizable(true);  // Important!!! QLabel is invisible without this.
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     m_gridLayout->setColumnStretch(2, 1);    // Important!!!!!!!! Do NOT use QLabel::setSizePolicy() to expand, it breaks QScrollArea.
     // scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     // int scrollbarWidth = scrollArea->verticalScrollBar()->sizeHint().width();
 
-    appendKvRow(&m_twCelName, "cel-file-name", tr("CEL File"));
-    appendKvRow(&m_twObjId, "obj-id", tr("Object ID"));
-    appendKvRow(&m_twCelPos, "obj-pos", tr("CEL Position"));
-    appendKvRow(&m_twFix, "obj-fix-count", tr("Fix"));
-    appendKvRow(&m_twCelSize, "cel-size", tr("CEL Size"));
-    appendKvRow(&m_twCelComment, "comment", tr("CEL Comment"));
-    appendKvRow(&m_twCelPreview, "cel-file-preview", tr("CEL Preview"));
-    appendKvRow(&m_twCelSiblings, "obj-cels", tr("CEL Siblings"));
+    appendKvRow(&m_twCelName, "cel-file-name", [](){ return tr("CEL File"); });
+    appendKvRow(&m_twObjId, "obj-id", [](){ return tr("Object ID"); });
+    appendKvRow(&m_twCelPos, "obj-pos", [](){ return tr("CEL Position"); });
+    appendKvRow(&m_twFix, "obj-fix-count", [](){ return tr("Fix"); });
+    appendKvRow(&m_twCelSize, "cel-size", [](){ return tr("CEL Size"); });
+    appendKvRow(&m_twCelComment, "comment", [](){ return tr("CEL Comment"); });
+    appendKvRow(&m_twCelPreview, "cel-file-preview", [](){ return tr("CEL Preview"); });
+    appendKvRow(&m_twCelSiblings, "obj-cels", [](){ return tr("CEL Siblings"); });
     m_gridLayout->setRowStretch(m_gridLayout->rowCount(), 1);
 }
 
@@ -97,7 +99,7 @@ void ItemInspector::setInspectedItem(GKissItem *item)
     m_twCelPreview->setPixmap(pixmap.scaled(targetSize, targetSize, Qt::AspectRatioMode::KeepAspectRatio, Qt::TransformationMode::SmoothTransformation));
 }
 
-void ItemInspector::appendKvRow(QLabel **ppLabel, const QString &icon, const QString &title)
+void ItemInspector::appendKvRow(QLabel **ppLabel, const QString &icon, std::function<QString()> &&titleGetter)
 {
     QFont defaultFont = QApplication::font();
     QFontMetrics metrics(defaultFont);
@@ -109,8 +111,8 @@ void ItemInspector::appendKvRow(QLabel **ppLabel, const QString &icon, const QSt
     iconLabel->setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Minimum);
     m_gridLayout->addWidget(iconLabel, r, 0, Qt::AlignTop);
 
-    auto keyLabel = new QLabel(this);
-    keyLabel->setText(title);
+    auto keyLabel = new ZLabel(this);
+    keyLabel->setText(std::move(titleGetter));
     keyLabel->setStyleSheet("font-weight: bold; color: gray;"_L1);
     keyLabel->setSizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Minimum);
     m_gridLayout->addWidget(keyLabel, r, 1, Qt::AlignTop);

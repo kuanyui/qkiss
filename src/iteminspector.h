@@ -37,7 +37,7 @@ public:
 signals:
 
 private:
-    void appendKvRow(QLabel **item, const QString &icon, const QString &title);
+    void appendKvRow(QLabel **item, const QString &icon, std::function<QString()> &&titleGetter);
     GKissItem *m_curItem;
     QGridLayout *m_gridLayout;
     QLabel *m_twFix;

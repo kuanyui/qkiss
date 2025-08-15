@@ -33,6 +33,7 @@
 #include "codeeditor.h"
 #include "iteminspector.h"
 #include "configfile.h"
+#include "zlabel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -62,7 +63,7 @@ private:
     void setupDockWindows();
     void setupStatusBar();
     QLabel *appendPermanentStatusBarIcon(QString iconName, uint size = 16);
-    QLabel *appendPermanentStatusBarText(QString text);
+    ZLabel *appendPermanentStatusBarText(const std::function<QString ()> &textGetter);
     QFrame *appendPermanentStatusBarSeparator();
     void setupCenterArea();
     void setupShortcuts();

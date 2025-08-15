@@ -484,22 +484,22 @@ void MainWindow::setupStatusBar()
 
     appendPermanentStatusBarIcon("keyboard-ctrl", 22);
     appendPermanentStatusBarIcon("mouse-left-click", 22);
-    appendPermanentStatusBarText(tr("Ctrl+Drag: Force split CEL from Object"));
+    appendPermanentStatusBarText([](){ return tr("Ctrl+Drag: Force split CEL from Object"); } );
     appendPermanentStatusBarSeparator();
 
     appendPermanentStatusBarIcon("keyboard-shift", 22);
     appendPermanentStatusBarIcon("mouse-left-click", 22);
-    appendPermanentStatusBarText(tr("Shift+Drag: Disable FKiSS events"));
+    appendPermanentStatusBarText([](){ return tr("Shift+Drag: Disable FKiSS events"); } );
     appendPermanentStatusBarSeparator();
 
 
     appendPermanentStatusBarIcon("mouse-middle-click", 22);
-    appendPermanentStatusBarText(tr("Middle Click: Unfix"));
+    appendPermanentStatusBarText([](){ return tr("Middle Click: Unfix"); } );
     appendPermanentStatusBarSeparator();
 
 
     appendPermanentStatusBarIcon("mouse-right-click", 22);
-    appendPermanentStatusBarText(tr("Right Click: More Actions"));
+    appendPermanentStatusBarText([](){ return tr("Right Click: More Actions"); } );
     appendPermanentStatusBarSeparator();
 
 }
@@ -512,10 +512,10 @@ QLabel *MainWindow::appendPermanentStatusBarIcon(QString iconName, uint size)
     return iconLabel;
 }
 
-QLabel *MainWindow::appendPermanentStatusBarText(QString text)
+ZLabel *MainWindow::appendPermanentStatusBarText(const std::function<QString()> &textGetter)
 {
-    QLabel *label = new QLabel(this);
-    label->setText(text);
+    ZLabel *label = new ZLabel(this);
+    label->setText(textGetter);
     statusBar()->addPermanentWidget(label);
     return label;
 }
