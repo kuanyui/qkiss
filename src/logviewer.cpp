@@ -21,7 +21,7 @@
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-
+#include "translationmanager.h"
 LogViewer::LogViewer(QWidget *parent)
     : QWidget{parent},
       m_treeWidget{new QTreeWidget{this}}
@@ -35,27 +35,27 @@ void LogViewer::appendLog(QtMsgType type, const QString &msg)
     switch (type) {
         case QtMsgType::QtDebugMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
-        item->setText(0, "Debug");  // 🐛
+        item->setText(0, tr("Debug"));  // 🐛
         item->setForeground(0, QBrush(Qt::gray));
         break;
         case QtMsgType::QtInfoMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxInformation));
-        item->setText(0, "Info");  // ℹ️
+        item->setText(0, tr("Info"));  // ℹ️
         item->setForeground(0, QBrush(QColor("#61AFEF")));
         break;
         case QtMsgType::QtWarningMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxWarning));
-        item->setText(0, "Warning");   // ⚠️
+        item->setText(0, tr("Warning"));   // ⚠️
         item->setForeground(0, QBrush(Qt::yellow));
         break;
         case QtMsgType::QtCriticalMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
-        item->setText(0, "Error");   // ⛔
+        item->setText(0, tr("Error"));   // ⛔
         item->setForeground(0, QBrush(Qt::red));
         break;
         case QtMsgType::QtFatalMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
-        item->setText(0, "Fatal");  // ⛔
+        item->setText(0, tr("Fatal"));  // ⛔
         item->setForeground(0, QBrush(Qt::red));
         break;
     }
@@ -72,7 +72,9 @@ void LogViewer::setupLayout()
 {
     m_treeWidget->setRootIsDecorated(false);
     m_treeWidget->setColumnCount(2);
-    m_treeWidget->setHeaderLabels({"Severity", "Message"});
+    TranslationManager::instance().registerLanguageChangeCallback(this, [this](){
+        m_treeWidget->setHeaderLabels({ tr("Severity"), tr("Message") });
+    });
     m_treeWidget->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);   // Let user can scroll to the middle of a row, if the row contains multiple lines.
     // m_treeWidget->setHeaderLabels({tr""});
     QVBoxLayout *layout = new QVBoxLayout(this);

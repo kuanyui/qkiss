@@ -32,10 +32,10 @@ MainWindow *mainWindow = nullptr;
 void customizedMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     if (mainWindow != nullptr && type != QtMsgType::QtDebugMsg) {
-        QString message = qFormatLogMessage(type, context, msg);
         mainWindow->receiveMsgFromCustomQtDebugMessageHandler(type, msg);
     }
     if (originalMessageHandler) {
+        // QString fmttedMsg = qFormatLogMessage(type, context, msg);
         (*originalMessageHandler)(type, context, msg);
         // (*originalMessageHandler)(type, context, QString::fromUtf8(context.file) + QString::number(context.line) + msg);
     }
@@ -44,6 +44,9 @@ void customizedMessageHandler(QtMsgType type, const QMessageLogContext &context,
 
 int main(int argc, char *argv[])
 {
+    // qSetMessagePattern("[%{type}][%{file}:%{line}] %{message}");
+    // Or envvar
+    // export QT_MESSAGE_PATTERN="[%{type}][%{file}:%{line}] %{message}"
     originalMessageHandler = qInstallMessageHandler(customizedMessageHandler);
     QCoreApplication::setOrganizationDomain("qkiss.io");
     QCoreApplication::setOrganizationName("QKiSS");
@@ -54,6 +57,8 @@ int main(int argc, char *argv[])
     QString qssContent = QLatin1String(qssFile.readAll());
     app.setStyleSheet(qssContent);
     qApp->installEventFilter(&TranslationManager::instance());
+    /*
+    // TODO: redundant `qApp,installTranslator()`.
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
@@ -63,6 +68,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
+    */
     mainWindow = new MainWindow();
     mainWindow->show();
     if (QCoreApplication::arguments().length() >= 2) {

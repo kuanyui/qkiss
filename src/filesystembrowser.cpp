@@ -49,7 +49,7 @@ bool FileSystemBrowser::setPath(QString filePath)
 {
     QFileInfo fInfo {filePath};
     if (!fInfo.exists()) {
-        qWarning() << "[ERROR][filesystembrowser] file path not found, aborted.";
+        qWarning().noquote() << tr(R"(File path "%1" is not found, abort loading this path.)").arg(filePath);
         return false;
     }
     if (fInfo.isFile()) {
@@ -71,7 +71,7 @@ bool FileSystemBrowser::setPath(QString filePath)
         updateModel();
         return true;
     }
-    qCritical() << "[ERROR] unhandled error.";
+    qCritical() << "[ERROR] Unhandled error.";
     return false;
 }
 
@@ -394,6 +394,7 @@ void FileSystemBrowser::goBackward()
 }
 
 void FileSystemBrowser::refresh() {
+    // TODO: Check is dir still existed.
     updateModel();
 }
 

@@ -34,6 +34,7 @@
 #include "src/ui_mainwindow.h"
 #include "preferencedialog.h"
 #include "aboutdialog.h"
+#include "translationmanager.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -347,6 +348,21 @@ void MainWindow::setupMenuBar()
         }
         connect(act, &QAction::toggled, this, [=, this] () { m_cfg.setCaseSensitivity(key); });
     }
+    TranslationManager::instance().registerLanguageChangeCallback(this, [this]() {
+        const auto &allLangs = m_cfg.allLanguages();
+        for (int i = 0; i < allLangs.length(); i++) {
+            QAction *act = ui->menu_uiLanguage->actions().at(i);
+            const auto &lang = allLangs.at(i);
+            const QString langLabel = QStringLiteral("%1 %2").arg(lang.flag).arg(lang.label);
+            act->setText(langLabel);
+        }
+        const auto &allCaseSensitivity= QKiSS::caseSensitivityNames();
+        for (int i = 0; i < allCaseSensitivity.length(); i++) {
+            QAction *act = ui->menu_caseSensitivity->actions().at(i);
+            const auto &cs = allCaseSensitivity.at(i);
+            act->setText(cs.second);
+        }
+    });
 }
 
 void MainWindow::setupToolBars()

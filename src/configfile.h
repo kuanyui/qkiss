@@ -68,6 +68,7 @@ public:
     QString detectSystemLanguage() const;
 
     QString uiLanguage() const;
+    /// When language is set to empty string `""` (auto) in config file, this method will still return the "actually effected" language ID.
     QString effectedUiLanguage() const;
     bool setUiLanguage(const QString &langId);
 
