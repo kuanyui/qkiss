@@ -147,6 +147,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/zgroupbox.h src/zgroupbox.cpp
         src/aboutdialog.h src/aboutdialog.cpp
         src/zlabel.h src/zlabel.cpp
+        src/translationmanager.h src/translationmanager.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

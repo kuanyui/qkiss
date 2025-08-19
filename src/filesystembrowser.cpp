@@ -29,6 +29,7 @@
 #include "filesystembrowser.h"
 #include "fileiconprovider.h"
 #include "iconbuttondelegate.h"
+#include "translationmanager.h"
 
 FileSystemBrowser::FileSystemBrowser(QWidget *parent):
     QWidget{parent},
@@ -142,7 +143,9 @@ void FileSystemBrowser::setupUi()
 
     m_model = new QStandardItemModel(this);
     m_model->setColumnCount(4);
-    m_model->setHorizontalHeaderLabels({ "", tr("File Name"), tr("Size"), tr("Patch") });  // model.clear() will also delete headers... WTF...
+    TranslationManager::instance().registerLanguageChangeCallback(this, [this] () {
+        m_model->setHorizontalHeaderLabels({ "", tr("File Name"), tr("Size"), tr("Patch") });  // model.clear() will also delete headers... WTF...
+    });
 
     m_view = new QTreeView(this);
     m_view->viewport()->installEventFilter(this);

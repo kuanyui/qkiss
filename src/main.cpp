@@ -24,7 +24,7 @@
 #include <QLocale>
 #include <QTranslator>
 #include <QFile>
-
+#include "translationmanager.h"
 
 QtMessageHandler originalMessageHandler = nullptr;
 MainWindow *mainWindow = nullptr;
@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     qssFile.open(QFile::ReadOnly);
     QString qssContent = QLatin1String(qssFile.readAll());
     app.setStyleSheet(qssContent);
+    qApp->installEventFilter(&TranslationManager::instance());
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
