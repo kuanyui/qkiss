@@ -81,7 +81,7 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
     qDebug() << "[QDebug] setDirPath()" << dirPath;
     QFileInfo dInfo {dirPath};
     if (!dInfo.exists() || !dInfo.isDir()) {
-        qWarning() << tr("[filesystembrowser] Invalid dir path, aborted.");
+        qWarning() << tr("Invalid dir path, aborted.");
         return false;
     }
     QString newDirPath = dInfo.absoluteFilePath();  // instead of absolutePath() because itself is already a dir.

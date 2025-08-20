@@ -311,58 +311,63 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
 <context>
     <name>FileSystemBrowser</name>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="83"/>
-        <source>[filesystembrowser] Invalid dir path, aborted.</source>
-        <translation>[檔案系統瀏覽器] 無效的資料夾路徑，操作中止。</translation>
+        <location filename="../src/filesystembrowser.cpp" line="52"/>
+        <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
+        <translation>找不到檔案路徑「%1」，中止載入此路徑。</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="145"/>
+        <location filename="../src/filesystembrowser.cpp" line="84"/>
+        <source>Invalid dir path, aborted.</source>
+        <translation>無效的資料夾路徑，操作中止。</translation>
+    </message>
+    <message>
+        <location filename="../src/filesystembrowser.cpp" line="147"/>
         <source>File Name</source>
         <translation>檔案名稱</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="145"/>
+        <location filename="../src/filesystembrowser.cpp" line="147"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="145"/>
-        <location filename="../src/filesystembrowser.cpp" line="268"/>
+        <location filename="../src/filesystembrowser.cpp" line="147"/>
+        <location filename="../src/filesystembrowser.cpp" line="271"/>
         <source>Patch</source>
         <translation>修補檔</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="182"/>
+        <location filename="../src/filesystembrowser.cpp" line="185"/>
         <source>Go Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="187"/>
+        <location filename="../src/filesystembrowser.cpp" line="190"/>
         <source>Go Forward</source>
         <translation>前進</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="192"/>
+        <location filename="../src/filesystembrowser.cpp" line="195"/>
         <source>Go Up</source>
         <translation>上一層</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="197"/>
+        <location filename="../src/filesystembrowser.cpp" line="200"/>
         <source>Refresh</source>
         <translation>重新整理</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="202"/>
+        <location filename="../src/filesystembrowser.cpp" line="205"/>
         <source>Home</source>
         <translation>首頁</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="206"/>
+        <location filename="../src/filesystembrowser.cpp" line="209"/>
         <source>Set current folder as Home</source>
         <translation>將目前資料夾設為首頁</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="271"/>
+        <location filename="../src/filesystembrowser.cpp" line="274"/>
         <source>Click to load this file as patch</source>
         <translation>點擊以載入此檔案作為修補檔</translation>
     </message>
@@ -406,44 +411,82 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
 <context>
     <name>ItemInspector</name>
     <message>
-        <location filename="../src/iteminspector.cpp" line="46"/>
+        <location filename="../src/iteminspector.cpp" line="47"/>
         <source>CEL File</source>
         <translation>CEL 檔案</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="47"/>
+        <location filename="../src/iteminspector.cpp" line="48"/>
         <source>Object ID</source>
         <translation>物件 ID</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="48"/>
+        <location filename="../src/iteminspector.cpp" line="49"/>
         <source>CEL Position</source>
         <translation>CEL 位置</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="49"/>
+        <location filename="../src/iteminspector.cpp" line="50"/>
         <source>Fix</source>
         <translation>固定</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="50"/>
+        <location filename="../src/iteminspector.cpp" line="51"/>
         <source>CEL Size</source>
         <translation>CEL 大小</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="51"/>
+        <location filename="../src/iteminspector.cpp" line="52"/>
         <source>CEL Comment</source>
         <translation>CEL 註解</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="52"/>
+        <location filename="../src/iteminspector.cpp" line="53"/>
         <source>CEL Preview</source>
         <translation>CEL 預覽</translation>
     </message>
     <message>
-        <location filename="../src/iteminspector.cpp" line="53"/>
+        <location filename="../src/iteminspector.cpp" line="54"/>
         <source>CEL Siblings</source>
         <translation>CEL 同組元素</translation>
+    </message>
+</context>
+<context>
+    <name>LogViewer</name>
+    <message>
+        <location filename="../src/logviewer.cpp" line="38"/>
+        <source>Debug</source>
+        <translation>除錯</translation>
+    </message>
+    <message>
+        <location filename="../src/logviewer.cpp" line="43"/>
+        <source>Info</source>
+        <translation>資訊</translation>
+    </message>
+    <message>
+        <location filename="../src/logviewer.cpp" line="48"/>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <location filename="../src/logviewer.cpp" line="53"/>
+        <source>Error</source>
+        <translation>錯誤</translation>
+    </message>
+    <message>
+        <location filename="../src/logviewer.cpp" line="58"/>
+        <source>Fatal</source>
+        <translation>嚴重錯誤</translation>
+    </message>
+    <message>
+        <location filename="../src/logviewer.cpp" line="76"/>
+        <source>Severity</source>
+        <translation>重要度</translation>
+    </message>
+    <message>
+        <location filename="../src/logviewer.cpp" line="76"/>
+        <source>Message</source>
+        <translation>訊息</translation>
     </message>
 </context>
 <context>
@@ -566,8 +609,8 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     <message>
         <location filename="../src/mainwindow.ui" line="239"/>
         <location filename="../src/mainwindow.ui" line="244"/>
-        <location filename="../src/mainwindow.cpp" line="603"/>
-        <location filename="../src/mainwindow.cpp" line="620"/>
+        <location filename="../src/mainwindow.cpp" line="619"/>
+        <location filename="../src/mainwindow.cpp" line="636"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
@@ -592,109 +635,104 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <translation>關於 QKiSS</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="274"/>
-        <source>1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="74"/>
+        <location filename="../src/mainwindow.cpp" line="75"/>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
         <translation>固定：%1，CEL 名稱：%2，註解：%3</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="159"/>
+        <location filename="../src/mainwindow.cpp" line="160"/>
         <source>Start to parse CNF / KCF / CEL files...</source>
         <translation>開始解析 CNF / KCF / CEL 檔案...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="165"/>
+        <location filename="../src/mainwindow.cpp" line="166"/>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
         <translation>「%1」不是有效的 KiSS 修補檔。操作中止。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="172"/>
+        <location filename="../src/mainwindow.cpp" line="173"/>
         <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
         <translation>「%1」不是有效的 KiSS 檔案。操作中止。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="180"/>
+        <location filename="../src/mainwindow.cpp" line="181"/>
         <source>Parsing finished. Now rendering scenes...</source>
         <translation>解析完成。正在算繪場景...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="193"/>
+        <location filename="../src/mainwindow.cpp" line="194"/>
         <source>KiSS files rendered successfully: %1</source>
         <translation>KiSS 檔案算繪成功：%1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="207"/>
-        <location filename="../src/mainwindow.cpp" line="211"/>
+        <location filename="../src/mainwindow.cpp" line="208"/>
+        <location filename="../src/mainwindow.cpp" line="212"/>
         <source>Scene Sets</source>
         <translation>場景組</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="212"/>
+        <location filename="../src/mainwindow.cpp" line="213"/>
         <source>Switch scene set (F1/F2)</source>
         <translation>切換場景組 (F1/F2)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="236"/>
-        <location filename="../src/mainwindow.cpp" line="240"/>
+        <location filename="../src/mainwindow.cpp" line="237"/>
+        <location filename="../src/mainwindow.cpp" line="241"/>
         <source>Palette Sets</source>
         <translation>調色盤組</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="241"/>
+        <location filename="../src/mainwindow.cpp" line="242"/>
         <source>Switch palette set (F3/F4)</source>
         <translation>切換調色盤組 (F3/F4)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="356"/>
+        <location filename="../src/mainwindow.cpp" line="372"/>
         <source>Files</source>
         <translation>檔案</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="364"/>
+        <location filename="../src/mainwindow.cpp" line="380"/>
         <source>Zooming Tools</source>
         <translation>縮放工具</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="377"/>
+        <location filename="../src/mainwindow.cpp" line="393"/>
         <source>Windows</source>
         <translation>視窗</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="483"/>
+        <location filename="../src/mainwindow.cpp" line="499"/>
         <source>QKiSS ready.</source>
         <translation>QKiSS 已就緒。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="487"/>
+        <location filename="../src/mainwindow.cpp" line="503"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
         <translation>Ctrl+拖曳：強制從物件分離 CEL</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="492"/>
+        <location filename="../src/mainwindow.cpp" line="508"/>
         <source>Shift+Drag: Disable FKiSS events</source>
         <translation>Shift+拖曳：停用 FKiSS 事件</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="497"/>
+        <location filename="../src/mainwindow.cpp" line="513"/>
         <source>Middle Click: Unfix</source>
         <translation>中鍵點擊：取消固定</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="502"/>
+        <location filename="../src/mainwindow.cpp" line="518"/>
         <source>Right Click: More Actions</source>
         <translation>右鍵點擊：更多動作</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="632"/>
+        <location filename="../src/mainwindow.cpp" line="648"/>
         <source>Open Compressed KiSS File</source>
         <translation>開啟壓縮的 KiSS 檔案</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="646"/>
+        <location filename="../src/mainwindow.cpp" line="662"/>
         <source>Open Directory</source>
         <translation>開啟資料夾</translation>
     </message>
