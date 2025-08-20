@@ -20,7 +20,7 @@
 #include "archivefile.h"
 #include "encoding.h"
 #include "configfile.h"
-
+#include "fkissruntime.h"
 #include <QStringList>
 #include <QDebug>
 #include <QDir>
@@ -333,6 +333,11 @@ void ArchiveFile::setPaletteNoFromFkiss(uint8_t newPaletteNo)
     }
 }
 
+void ArchiveFile::setPaletteNoFromMainWindow(uint8_t newPaletteNo)
+{
+    m_curCnf->fkiss()->runtime()->triggerCol(newPaletteNo);
+}
+
 size_t ArchiveFile::paletteAmountOfFirstKcfInCurCnf() const
 {
     if (m_curCnf == nullptr) { return 0; }
@@ -362,6 +367,11 @@ void ArchiveFile::setCnfSetNoFromFkiss(uint8_t newCurCnfSetNo)
         qDebug() << "emit ArchiveFile::curCnfSetNoChanged(%1)"_L1.arg(QString::number(newCurCnfSetNo));
         emit fkissChangedCnfSetNo(newCurCnfSetNo);
     }
+}
+
+void ArchiveFile::setCnfSetNoFromMainWindow(uint8_t newCurCnfSetNo)
+{
+    m_curCnf->fkiss()->runtime()->triggerSet(newCurCnfSetNo);
 }
 
 uint8_t ArchiveFile::curCnfSetsAmount() const

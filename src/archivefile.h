@@ -84,6 +84,7 @@ public:
     uint8_t curCnfSetNo() const;
     void setCnfSetNo(uint8_t newCurCnfSetNo);
     void setCnfSetNoFromFkiss(uint8_t newCurCnfSetNo);
+    void setCnfSetNoFromMainWindow(uint8_t newCurCnfSetNo);
     uint8_t curCnfSetsAmount() const;
     uint8_t curPaletteNo() const;
     void setPaletteNo(uint8_t newPaletteNo);
@@ -91,6 +92,7 @@ public:
     /// (the real one should be stored by Set (GKissScene) because the `N` of `$N` in CNF is the paletteNo of that set).
     /// Set via this method will emit `curPaletteNoChanged` signal, as an event bus.
     void setPaletteNoFromFkiss(uint8_t newPaletteNo);
+    void setPaletteNoFromMainWindow(uint8_t newPaletteNo);
     /// Get the first KCF file, and return the palette amount of this KCF file.
     size_t paletteAmountOfFirstKcfInCurCnf() const;
 
@@ -102,7 +104,9 @@ private slots:
 signals:
     void newLogLine(QString line);
     void curCnfChangedAndLoaded(QString newCnfFileName);
+    /// fkiss script requests to change set, so MainWindow can know it's time to toggle toolbar button.
     void fkissChangedCnfSetNo(uint8_t newCurCnfSetNo);
+    /// fkiss script requests to change palette, so MainWindow can know it's time to toggle toolbar button.
     void fkissChangedPaletteNo(uint8_t newCurPaletteNo);
     // void archivedFilesUncompressAndParseFinished(bool success, QString errmsg);
     // void curCnfSetNoChanged(uint8_t nv);
