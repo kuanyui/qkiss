@@ -53,10 +53,12 @@ public:
     bool isObjectId() const;
     int getInt() const;
     QString getString() const;
+    QString getStringOrCelNameForCompare() const;
     QString getCelName() const;
     int getObjectId() const;
     Type type() const;
     operator QString() const;
+    /// Type safe compare
     bool strictEq(const FkissVariant &other) const;
     /// Make FkissVariant::operator== treat Cel and String as same type, for convenience.
     /// Because currently, for String and Cel, when parsing FKiSS script, I doesn't do extra type checking for each event/action and cast to corresponding type,
@@ -68,6 +70,9 @@ private:
     Type m_type;
     int m_intValue;
     QString m_stringValue;
+    /// Convert & cache according to Qt::CaseSensitivity, for qHash and operator==()
+    QString m_stringValueForCompare;
+    // Qt::CaseSensitivity m_caseSensitivity;
 };
 
 
