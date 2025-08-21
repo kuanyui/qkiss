@@ -77,7 +77,7 @@ public:
 
     QKiSS::LzhDecompressorBackend lzhDecompressorBackend() const;
     void setLzhDecompressorBackend(QKiSS::LzhDecompressorBackend newLzhDecompressorBackend);
-
+    /// When insensitive, you should always cache the upper-cased string.
     QKiSS::Case caseSensitivity() const;
     void setCaseSensitivity(QKiSS::Case newCaseSensitivity);
 

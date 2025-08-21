@@ -26,6 +26,7 @@ class QKiSS {
     Q_DECLARE_TR_FUNCTIONS(QKiSS)   // Use tr() without Q_OBJECT
 
 public:
+    /// When insensitive, you should always cache the upper-cased string.
     enum class Case {
         Sensitive = Qt::CaseSensitive,
         Insensitive = Qt::CaseInsensitive
