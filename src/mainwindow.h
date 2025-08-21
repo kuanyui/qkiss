@@ -54,8 +54,8 @@ private:
     void tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles, QKiSS::FileLoadMode fileLoadMode);
     /// Note: this will activate the first button.
     void rerenderSetPaletteButtons();
-    void switchToScene(uint8_t sceneIdx);
-    void switchToPalette(uint8_t paletteIdx);
+    void switchToScene(uint8_t sceneIdx, bool requestFromFkissScript);
+    void switchToPalette(uint8_t paletteIdx, bool requestFromFkissScript);
     void switchSceneBy(int steps);
     void switchPaletteBy(int steps);
     void setupMenuBar();

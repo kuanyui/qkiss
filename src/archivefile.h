@@ -84,6 +84,7 @@ public:
     uint8_t curCnfSetNo() const;
     void setCnfSetNo(uint8_t newCurCnfSetNo);
     void setCnfSetNoFromFkiss(uint8_t newCurCnfSetNo);
+    /// This will try to trigger `set()` in fkiss runtime
     void setCnfSetNoFromMainWindow(uint8_t newCurCnfSetNo);
     uint8_t curCnfSetsAmount() const;
     uint8_t curPaletteNo() const;
@@ -92,6 +93,7 @@ public:
     /// (the real one should be stored by Set (GKissScene) because the `N` of `$N` in CNF is the paletteNo of that set).
     /// Set via this method will emit `curPaletteNoChanged` signal, as an event bus.
     void setPaletteNoFromFkiss(uint8_t newPaletteNo);
+    /// This will try to trigger `col()` in fkiss runtime
     void setPaletteNoFromMainWindow(uint8_t newPaletteNo);
     /// Get the first KCF file, and return the palette amount of this KCF file.
     size_t paletteAmountOfFirstKcfInCurCnf() const;

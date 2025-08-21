@@ -119,6 +119,9 @@ MainWindow::MainWindow(QWidget *parent)
         dialog->show();
     });
 
+    connect(m_archiveFile, &ArchiveFile::fkissChangedCnfSetNo, this, [=, this](uint8_t newCurSnfSetNo) { switchToScene(newCurSnfSetNo, true); });
+    connect(m_archiveFile, &ArchiveFile::fkissChangedPaletteNo, this, [=, this](uint8_t newCurSnfSetNo) { switchToPalette(newCurSnfSetNo, true); });
+
     setCentralWidget(m_kissView);
     restoreWindowSettings();
 }
@@ -227,9 +230,8 @@ void MainWindow::rerenderSetPaletteButtons()
         if (sceneIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(sceneIdx));
         m_toolbarSceneSets->addWidget(btn);
-        connect(btn, &QAbstractButton::clicked, this, [=, this](){ switchToScene(sceneIdx); });
+        connect(btn, &QAbstractButton::clicked, this, [=, this](){ switchToScene(sceneIdx, false); });
     }
-    connect(m_archiveFile, &ArchiveFile::fkissChangedCnfSetNo, this, &MainWindow::switchToScene);
     // =====================================================
     // Color sets (palettes)
     // =====================================================
@@ -259,12 +261,11 @@ void MainWindow::rerenderSetPaletteButtons()
         if (paletteIdx == 0) { btn->setChecked(true); }
         btn->setText(QString::number(paletteIdx));
         m_toolbarColorSets->addWidget(btn);
-        connect(btn, &QAbstractButton::clicked, this, [=, this](){ switchToPalette(paletteIdx); });
+        connect(btn, &QAbstractButton::clicked, this, [=, this](){ switchToPalette(paletteIdx, false); });
     }
-    connect(m_archiveFile, &ArchiveFile::fkissChangedPaletteNo, this, &MainWindow::switchToPalette);
 }
 
-void MainWindow::switchToScene(uint8_t sceneIdx)
+void MainWindow::switchToScene(uint8_t sceneIdx, bool requestFromFkissScript)
 {
     QAbstractButton *btn = m_btnGroupSceneSets->button(sceneIdx);
     if (btn == nullptr) { return; }
@@ -272,15 +273,21 @@ void MainWindow::switchToScene(uint8_t sceneIdx)
     m_archiveFile->setCnfSetNo(sceneIdx);   // REFACTOR: Disastrous logic. Only used by set/palette toolbar currently... I guess storing in GKissView may be enough?
     m_kissView->showKissSceneByIndex(sceneIdx);
     auto paletteNoInKcf = m_kissView->curKissScene()->paletteNoInKcf();
-    switchToPalette(paletteNoInKcf);
+    if (!requestFromFkissScript) {   // triggered by user (from QWidget)
+        m_archiveFile->setCnfSetNoFromMainWindow(sceneIdx);
+    }
+    switchToPalette(paletteNoInKcf, requestFromFkissScript);
 }
 
-void MainWindow::switchToPalette(uint8_t paletteIdx)
+void MainWindow::switchToPalette(uint8_t paletteIdx, bool requestFromFkissScript)
 {
     QAbstractButton *btn = m_btnGroupColorSets->button(paletteIdx);
     if (btn == nullptr) { return; }
     btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
     m_archiveFile->setPaletteNo(paletteIdx);
+    if (!requestFromFkissScript) {   // triggered by user (from QWidget)
+        m_archiveFile->setPaletteNoFromMainWindow(requestFromFkissScript);
+    }
     m_kissView->curKissScene()->setPaletteNoInKcfAndRender(paletteIdx);
 }
 
