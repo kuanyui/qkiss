@@ -61,13 +61,14 @@ void FkissRuntime::setCurKissScene(GKissScene *newCurKissScene)
 {
     m_curKissScene = newCurKissScene;
     if (m_curKissScene == nullptr) { return; }
+    // Set visibility of CELs / Objects for this new scene, according to the stored mapped / unmapped state.
     QHashIterator<FkissVariant, bool> it(m_mapState);
     while (it.hasNext()) {
         it.next();
         const FkissVariant &key = it.key();
         bool visible = it.value();
-        if (key.type() == FkissVariant::Type::String) {
-            auto _item = m_curKissScene->getItemByCelName(key.getString());
+        if (key.type() == FkissVariant::Type::Cel) {
+            auto _item = m_curKissScene->getItemByCelName(key.getCelName());
             if (!_item.has_value()) { qDebug() << "[DEBUG] FkissRuntime::setCurKissScene(), m_mapState has CEL '%1', but current cannot find this CEL in this scene..."_L1.arg(key.getCelName()); continue; }
             _item.value()->setVisible(visible);
         } else if (key.type() == FkissVariant::Type::Object) {
