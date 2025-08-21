@@ -208,10 +208,13 @@ void MainWindow::rerenderSetPaletteButtons()
     m_toolbarSceneSets->setWindowTitle(tr("Scene Sets"));   // Show in context menu of this ToolBar
     // m_toolbarSceneSets->setWindowIcon(QIcon::fromTheme("clothes"));
     QToolButton *cycleToggleSceneSetBtn = new QToolButton(m_toolbarSceneSets);
-    cycleToggleSceneSetBtn->setIcon(QIcon::fromTheme("clothes"));
-    cycleToggleSceneSetBtn->setText(tr("Scene Sets"));
-    cycleToggleSceneSetBtn->setToolTip(tr("Switch scene set (F1/F2)"));
     cycleToggleSceneSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
+    cycleToggleSceneSetBtn->setIcon(QIcon::fromTheme("clothes"));
+    TranslationManager::instance().registerLanguageChangeCallback(cycleToggleSceneSetBtn, [=, this]() {
+        m_toolbarSceneSets->setWindowTitle(tr("Scene Sets"));   // Show in context menu of this ToolBar
+        cycleToggleSceneSetBtn->setText(tr("Scene Sets"));
+        cycleToggleSceneSetBtn->setToolTip(tr("Switch scene set (F1/F2)"));
+    });
     m_toolbarSceneSets->addWidget(cycleToggleSceneSetBtn);
     connect(cycleToggleSceneSetBtn, &QAbstractButton::clicked, this, [this](bool checked){
         Q_UNUSED(checked);
@@ -237,10 +240,13 @@ void MainWindow::rerenderSetPaletteButtons()
     m_toolbarColorSets->setWindowTitle(tr("Palette Sets"));   // Show in context menu of this ToolBar
     // m_toolbarColorSets->setWindowIcon(QIcon::fromTheme("palettes"));
     QToolButton *cycleTogglePaletteSetBtn = new QToolButton(m_toolbarColorSets);
-    cycleTogglePaletteSetBtn->setIcon(QIcon::fromTheme("palettes"));
-    cycleTogglePaletteSetBtn->setText(tr("Palette Sets"));
-    cycleTogglePaletteSetBtn->setToolTip(tr("Switch palette set (F3/F4)"));
     cycleTogglePaletteSetBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextBesideIcon);
+    cycleTogglePaletteSetBtn->setIcon(QIcon::fromTheme("palettes"));
+    TranslationManager::instance().registerLanguageChangeCallback(cycleTogglePaletteSetBtn, [=, this]() {
+        m_toolbarColorSets->setWindowTitle(tr("Palette Sets"));   // Show in context menu of this ToolBar
+        cycleTogglePaletteSetBtn->setText(tr("Palette Sets"));
+        cycleTogglePaletteSetBtn->setToolTip(tr("Switch palette set (F3/F4)"));
+    });
     m_toolbarColorSets->addWidget(cycleTogglePaletteSetBtn);
     connect(cycleTogglePaletteSetBtn, &QAbstractButton::clicked, this, [this](bool checked){
         Q_UNUSED(checked);
@@ -405,7 +411,11 @@ void MainWindow::setupToolBars()
     ui->menu_Window->addAction(ui->dockWidget_cnfCodeViewer->toggleViewAction());
     ui->menu_Window->addAction(ui->dockWidget_logViewer->toggleViewAction());
     ui->menu_Window->addAction(ui->dockWidget_itemInspector->toggleViewAction());
-
+    TranslationManager::instance().registerLanguageChangeCallback(this, [=, this]() {
+        m_toolbarFiles->setWindowTitle(tr("Files"));   // The text in context menu when you right-click on toolbar.
+        m_toolbarZooms->setWindowTitle(tr("Zooming Tools"));
+        m_toolbarWindows->setWindowTitle(tr("Windows"));
+    });
     // Page Sets
     m_toolbarSceneSets = new QToolBar(this);
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarSceneSets);
