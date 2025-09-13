@@ -35,7 +35,7 @@ const QString &CasePreservedString::normalized() const {
     if (ConfigFile::instance().caseSensitivity() == QKiSS::Case::Sensitive) {
         return m_original;
     }
-    if (!m_cachedNormalized.isNull()) {
+    if (m_cachedNormalized.isNull()) {
         m_cachedNormalized = m_original.toCaseFolded();
     }
     return m_cachedNormalized;
