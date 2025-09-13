@@ -53,6 +53,11 @@ bool CasePreservedString::operator==(const CasePreservedString &other) const
     return normalized() == other.normalized();
 }
 
+bool CasePreservedString::operator<(const CasePreservedString &other) const
+{
+    return normalized() < other.normalized();
+}
+
 QDebug operator<<(QDebug dbg, const CasePreservedString &s)
 {
     dbg.nospace() << s.original();

@@ -21,6 +21,7 @@
 #include "encoding.h"
 #include "configfile.h"
 #include "fkissruntime.h"
+#include "casepreservedstring.h"
 #include <QStringList>
 #include <QDebug>
 #include <QDir>
@@ -52,11 +53,11 @@ void KissFilesParsingResult::deleteAllObjects()
 ArchiveFile::ArchiveFile(QObject *parent):
     QObject(parent),
     m_gs{ConfigFile::instance()},
-    m_parsedCnfFiles(new QMap<QString, ParsedCnf*>),
-    m_parsedKcfFiles(new QHash<QString, ParsedKcf*>),
-    m_parsedCelFiles(new QHash<QString, ParsedCel*>),
-    m_docFiles(new QMap<QString, QString>),
-    m_otherFiles(new QMap<QString, QByteArray>())
+    m_parsedCnfFiles(new QMap<CPString, ParsedCnf*>),
+    m_parsedKcfFiles(new QHash<CPString, ParsedKcf*>),
+    m_parsedCelFiles(new QHash<CPString, ParsedCel*>),
+    m_docFiles(new QMap<CPString, QString>),
+    m_otherFiles(new QMap<CPString, QByteArray>())
 {
 
 }
@@ -73,23 +74,20 @@ KissFilesParsingResult ArchiveFile::parseKissFiles(std::shared_ptr<QMap<QString,
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
     for (const auto &[fileName, fileRawContent] : extractedRawFiles->asKeyValueRange()) {
-        QString fileNameKey = fileName;
+        CPString cpFileName { fileName };
         QString fileNameUpper = fileName.toUpper();
-        if (cfg.caseSensitivity() == QKiSS::Case::Insensitive) {
-            fileNameKey = fileNameKey.toUpper();
-        }
         QKiSS::Encoding encoding = cfg.encoding();
-        if (fileNameUpper.endsWith(".CNF")) {
+        if (fileNameUpper.endsWith(".CNF", Qt::CaseInsensitive)) {
             // TODO: Check parse result, if invalid, delete it.
-            res.parsedCnfFiles.insert(fileNameKey, new ParsedCnf {fileNameKey, fileRawContent, encoding});
+            res.parsedCnfFiles.insert(cpFileName, new ParsedCnf {cpFileName, fileRawContent, encoding});
         } else if (fileNameUpper.endsWith(".KCF")) {
-            res.parsedKcfFiles.insert(fileNameKey, new ParsedKcf {fileNameKey, fileRawContent});
+            res.parsedKcfFiles.insert(cpFileName, new ParsedKcf {cpFileName, fileRawContent});
         } else if (fileNameUpper.endsWith(".CEL")) {
-            res.parsedCelFiles.insert(fileNameKey, new ParsedCel {fileNameKey, fileRawContent});
+            res.parsedCelFiles.insert(cpFileName, new ParsedCel {cpFileName, fileRawContent});
         } else if (fileNameUpper.endsWith(".DOC") || fileNameUpper.endsWith(".TXT") || fileNameUpper == "README") {
-            res.docFiles.insert(fileNameKey, Encoding::toUtf8(fileRawContent, encoding));
+            res.docFiles.insert(cpFileName, Encoding::toUtf8(fileRawContent, encoding));
         } else {
-            res.otherFiles.insert(fileNameKey, fileRawContent);
+            res.otherFiles.insert(cpFileName, fileRawContent);
         }
     }
     qDebug().noquote() << QStringLiteral("[LOG][Benchmark][ArchiveFile] parsing all CNF, KCF, CEL files in \"%1\" spent %2 ms").arg(lzhFilePath).arg(elapsedTimer.elapsed());
@@ -181,49 +179,40 @@ void ArchiveFile::unloadKissFiles()
 
 
 
-QStringList ArchiveFile::getCnfNameList()
+CPStringList ArchiveFile::getCnfNameList()
 {
     return m_parsedCnfFiles->keys();
 }
 
-QStringList ArchiveFile::getOtherFileNameList()
+CPStringList ArchiveFile::getOtherFileNameList()
 {
     return m_otherFiles->keys();
 }
 
-QStringList ArchiveFile::getDocFileNameList()
+CPStringList ArchiveFile::getDocFileNameList()
 {
     return m_docFiles->keys();
 }
 
 
-std::optional<ParsedCnf *> ArchiveFile::getParsedCnf(QString cnfFileName) const
+std::optional<ParsedCnf *> ArchiveFile::getParsedCnf(CPString cnfFileName) const
 {
-    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
-        cnfFileName = cnfFileName.toUpper();
-    }
     if (m_parsedCnfFiles->contains(cnfFileName)) {
         return m_parsedCnfFiles->value(cnfFileName);
     }
     return std::nullopt;
 }
 
-std::optional<ParsedKcf *> ArchiveFile::getParsedKcf(QString kcfFileName) const
+std::optional<ParsedKcf *> ArchiveFile::getParsedKcf(CPString kcfFileName) const
 {
-    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
-        kcfFileName = kcfFileName.toUpper();
-    }
     if (m_parsedKcfFiles->contains(kcfFileName)) {
         return std::optional<ParsedKcf*>(m_parsedKcfFiles->value(kcfFileName));
     }
     return std::nullopt;
 }
 
-std::optional<ParsedCel *> ArchiveFile::getParsedCel(QString celFileName) const
+std::optional<ParsedCel *> ArchiveFile::getParsedCel(CPString celFileName) const
 {
-    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
-        celFileName = celFileName.toUpper();
-    }
     if (m_parsedCelFiles->contains(celFileName)) {
         return std::optional<ParsedCel*>(m_parsedCelFiles->value(celFileName));
     }
@@ -243,29 +232,23 @@ std::optional<ParsedKcf *> ArchiveFile::getParsedKcfByOrderedIndexInCurrentCnf(u
     return m_curCnfOrderedParsedKcfList[kcfIndexInCurrentCnf];
 }
 
-std::optional<QString> ArchiveFile::getDocFile(QString docFileName) const
+std::optional<QString> ArchiveFile::getDocFile(CPString docFileName) const
 {
-    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
-        docFileName = docFileName.toUpper();
-    }
     if (m_docFiles->contains(docFileName)) {
         return std::optional<QString>(m_docFiles->value(docFileName));
     }
     return std::nullopt;
 }
 
-std::optional<QByteArray> ArchiveFile::getOtherFile(QString fileName) const
+std::optional<QByteArray> ArchiveFile::getOtherFile(CPString fileName) const
 {
-    if (m_gs.caseSensitivity() == QKiSS::Case::Insensitive) {
-        fileName = fileName.toUpper();
-    }
     if (m_otherFiles->contains(fileName)) {
         return std::optional<QByteArray>(m_otherFiles->value(fileName));
     }
     return std::nullopt;
 }
 
-QString ArchiveFile::getCnfFileAsString(QString cnfFileName) const
+QString ArchiveFile::getCnfFileAsString(CPString cnfFileName) const
 {
     auto tmp = getParsedCnf(cnfFileName);
     if (tmp.has_value()) {
@@ -274,7 +257,7 @@ QString ArchiveFile::getCnfFileAsString(QString cnfFileName) const
     return QString();
 }
 
-QString ArchiveFile::getDocFileAsString(QString docFileName) const
+QString ArchiveFile::getDocFileAsString(CPString docFileName) const
 {
     auto tmp = getDocFile(docFileName);
     if (tmp.has_value()) {
@@ -283,12 +266,12 @@ QString ArchiveFile::getDocFileAsString(QString docFileName) const
     return QString();
 }
 
-QMap<QString, ParsedCnf *> *ArchiveFile::parsedCnfFiles() const
+QMap<CPString, ParsedCnf *> *ArchiveFile::parsedCnfFiles() const
 {
     return m_parsedCnfFiles;
 }
 
-bool ArchiveFile::setCurCnfByName(QString cnfFileName)
+bool ArchiveFile::setCurCnfByName(CPString cnfFileName)
 {
     auto _cnf = getParsedCnf(cnfFileName);
     if (!_cnf.has_value()) {
@@ -297,12 +280,12 @@ bool ArchiveFile::setCurCnfByName(QString cnfFileName)
     }
     m_curCnf = _cnf.value();
     m_curCnfOrderedParsedKcfList.clear();
-    qDebug() << QStringLiteral("[LOG][ArchiveFile] The CNF '%1' requires %2 KCF files.").arg(cnfFileName).arg(m_curCnf->kcfFileNames().length());
+    qDebug() << QStringLiteral("[LOG][ArchiveFile] The CNF '%1' requires %2 KCF files.").arg(cnfFileName.original()).arg(m_curCnf->kcfFileNames().length());
     for (const QString &kcfFileName : m_curCnf->kcfFileNames()) {
         auto _kcf = getParsedKcf(kcfFileName);
         if (!_kcf.has_value()) {
             qCritical() << QStringLiteral("[ERROR] CNF file '%1' requires KCF file '%2', but this KCF file is not found in this archived file.")
-                           .arg(m_curCnf->fileName())
+                           .arg(m_curCnf->fileName().original())
                            .arg(kcfFileName);
             continue;
         }

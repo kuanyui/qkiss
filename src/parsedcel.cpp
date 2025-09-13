@@ -21,7 +21,7 @@
 #include <QDebug>
 using namespace Qt::Literals::StringLiterals;
 
-ParsedCel::ParsedCel(QString fileName, const QByteArray &rawData):
+ParsedCel::ParsedCel(CPString fileName, const QByteArray &rawData):
     m_fileName(fileName)
 {
     const static QByteArray identifier = QByteArray::fromRawData("\x4B\x69\x53\x53", 4);
@@ -79,7 +79,7 @@ void ParsedCel::parseModernCel(const QByteArray &data)
         qCritical() << "[ERROR] Invalid m_bitsPerPixel (4 or 8 or 32): " << m_bitsPerPixel; return;
     }
     if (m_celType == Type::FullColor && m_bitsPerPixel != 32) {
-        qWarning().noquote() << "[WARNING] \"%1\" claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL."_L1.arg(m_fileName).arg(QString::number(m_bitsPerPixel));
+        qWarning().noquote() << "[WARNING] \"%1\" claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL."_L1.arg(m_fileName.original()).arg(QString::number(m_bitsPerPixel));
         m_celType = Type::PaletteBased;
     }
     m_width = (static_cast<uint16_t>(udata[9]) << 8) | udata[8];
@@ -193,7 +193,7 @@ QVector<QRgb> *ParsedCel::parse32BitsPixelsAsCache(QByteArray *pixelRawData)
     return vec;
 }
 
-QString ParsedCel::fileName() const
+CPString ParsedCel::fileName() const
 {
     return m_fileName;
 }
@@ -208,7 +208,7 @@ QDebug operator<<(QDebug debug, const ParsedCel &cel) {
     return debug.noquote().nospace() << QStringLiteral("ParsedCel { type: %1 (%2 bits per pixel), \tfileName: \"%3\", \tpos: (%4, %5), \tsize(%6 x %7)")
                                         .arg(cel.celType() == ParsedCel::Type::PaletteBased ? QStringLiteral("PaletteBased") : QStringLiteral("FullColor"))
                                         .arg(cel.bitsPerPixel())
-                                        .arg(cel.fileName())
+                                        .arg(cel.fileName().original())
                                         .arg(cel.x())
                                         .arg(cel.y())
                                         .arg(cel.width())

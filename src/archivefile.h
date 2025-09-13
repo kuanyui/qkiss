@@ -28,6 +28,7 @@
 #include "parsedcnf.h"
 #include "parsedkcf.h"
 #include "parsedcel.h"
+#include "casepreservedstring.h"
 #include "archiveprocessorexternallha.h"
 
 class ConfigFile;
@@ -35,11 +36,11 @@ class ConfigFile;
 /// Attention: Remember to call deleteAllObjects() to release memory.
 struct KissFilesParsingResult {
     void deleteAllObjects();
-    QMap<QString,  ParsedCnf*> parsedCnfFiles;
-    QHash<QString, ParsedKcf*> parsedKcfFiles;
-    QHash<QString, ParsedCel*> parsedCelFiles;
-    QMap<QString, QString> docFiles;
-    QMap<QString, QByteArray> otherFiles;
+    QMap<CPString,  ParsedCnf*> parsedCnfFiles;
+    QHash<CPString, ParsedKcf*> parsedKcfFiles;
+    QHash<CPString, ParsedCel*> parsedCelFiles;
+    QMap<CPString, QString> docFiles;
+    QMap<CPString, QByteArray> otherFiles;
 };
 
 class ArchiveFile: public QObject
@@ -59,27 +60,27 @@ public:
     bool loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath);
     bool loadKissFilesAsPatch(KissFilesParsingResult parseRes, QString lzhFilePath);
     void unloadKissFiles();
-    QStringList getCnfNameList();
-    QStringList getOtherFileNameList();
-    QStringList getDocFileNameList();
+    CPStringList getCnfNameList();
+    CPStringList getOtherFileNameList();
+    CPStringList getDocFileNameList();
     /** Auto handling case sensitivity. */
-    std::optional<ParsedCnf *> getParsedCnf(QString cnfFileName) const;
+    std::optional<ParsedCnf *> getParsedCnf(CPString cnfFileName) const;
     /** Auto handling case sensitivity. */
-    std::optional<ParsedKcf *> getParsedKcf(QString kcfFileName) const;
+    std::optional<ParsedKcf *> getParsedKcf(CPString kcfFileName) const;
     /** Auto handling case sensitivity. */
-    std::optional<ParsedCel *> getParsedCel(QString celFileName) const;
+    std::optional<ParsedCel *> getParsedCel(CPString celFileName) const;
     std::optional<ParsedKcf *>getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf);
     /** Auto handling case sensitivity. */
-    std::optional<QString> getDocFile(QString docFileName) const;
+    std::optional<QString> getDocFile(CPString docFileName) const;
     /** Auto handling case sensitivity. */
-    std::optional<QByteArray> getOtherFile(QString fileName) const;
+    std::optional<QByteArray> getOtherFile(CPString fileName) const;
     /// Auto handling case sensitivity. Return empty string if failed
-    QString getCnfFileAsString(QString cnfFileName) const;
+    QString getCnfFileAsString(CPString cnfFileName) const;
     /// Auto handling case sensitivity. Return empty string if failed
-    QString getDocFileAsString(QString docFileName) const;
-    QMap<QString, ParsedCnf *> *parsedCnfFiles() const;
+    QString getDocFileAsString(CPString docFileName) const;
+    QMap<CPString, ParsedCnf *> *parsedCnfFiles() const;
     /// This should be called by GKissView. This won't trigger rendering of GKissView.
-    bool setCurCnfByName(QString cnfFileName);
+    bool setCurCnfByName(CPString cnfFileName);
     ParsedCnf *curCnf() const;
     uint8_t curCnfSetNo() const;
     void setCnfSetNo(uint8_t newCurCnfSetNo);
@@ -105,7 +106,7 @@ private slots:
 
 signals:
     void newLogLine(QString line);
-    void curCnfChangedAndLoaded(QString newCnfFileName);
+    void curCnfChangedAndLoaded(CPString newCnfFileName);
     /// fkiss script requests to change set, so MainWindow can know it's time to toggle toolbar button.
     void fkissChangedCnfSetNo(uint8_t newCurCnfSetNo);
     /// fkiss script requests to change palette, so MainWindow can know it's time to toggle toolbar button.
@@ -114,13 +115,13 @@ signals:
     // void curCnfSetNoChanged(uint8_t nv);
 private:
     ConfigFile &m_gs;
-    QMap<QString, ParsedCnf*> *m_parsedCnfFiles;   /// this class owns these two pointers
-    QHash<QString, ParsedKcf*> *m_parsedKcfFiles;  /// this class owns these two pointers
-    QHash<QString, ParsedCel*> *m_parsedCelFiles;  /// this class owns these two pointers
-    QMap<QString, QString> *m_docFiles;   /// this class owns these two pointers
+    QMap<CPString, ParsedCnf*> *m_parsedCnfFiles;   /// this class owns these two pointers
+    QHash<CPString, ParsedKcf*> *m_parsedKcfFiles;  /// this class owns these two pointers
+    QHash<CPString, ParsedCel*> *m_parsedCelFiles;  /// this class owns these two pointers
+    QMap<CPString, QString> *m_docFiles;   /// this class owns these two pointers
     /// - *.DOC, *.PCM, ... etc.
     /// - this class owns these two pointers
-    QMap<QString, QByteArray> *m_otherFiles;
+    QMap<CPString, QByteArray> *m_otherFiles;
     QString m_archiveFilePath;
     // ==========================================
     /** currently renderred CNF */

@@ -39,17 +39,17 @@ void InnerFilesBrowser::rerenderFileList(ArchiveFile *archiveFile)
     rootDocFolder->setText(0, tr("Document files"));
     rootDocFolder->setIcon(0, style()->standardIcon(QStyle::SP_DirIcon));
     addTopLevelItems({ rootCnfFolder, rootDocFolder });
-    foreach (const QString &cnfFileName, archiveFile->getCnfNameList()) {
+    foreach (const CPString &cnfFileName, archiveFile->getCnfNameList()) {
         QTreeWidgetItem *item = new QTreeWidgetItem(rootCnfFolder, CustomItemType::CustomItemCnfFileType);
-        item->setText(0, cnfFileName);
+        item->setText(0, cnfFileName.original());
         item->setIcon(0, QIcon::fromTheme("text-x-cnf"));
         // item->setIcon(0, style()->standardIcon(QStyle::SP_FileLinkIcon));
     }
     rootCnfFolder->setText(0, rootCnfFolder->text(0) + " (%1)"_L1.arg(QString::number(rootCnfFolder->childCount())));
-    foreach (const QString &docFileName, archiveFile->getDocFileNameList()) {
+    foreach (const CPString &docFileName, archiveFile->getDocFileNameList()) {
         QTreeWidgetItem *item = new QTreeWidgetItem(rootDocFolder, CustomItemType::CustomItemDocFileType);
-        item->setText(0, docFileName);
-        if (isReadme(docFileName)) {
+        item->setText(0, docFileName.original());
+        if (isReadme(docFileName.original())) {
             item->setIcon(0, QIcon::fromTheme("text-x-readme"));
         } else {
             item->setIcon(0, QIcon::fromTheme("text-x-generic"));
@@ -57,7 +57,7 @@ void InnerFilesBrowser::rerenderFileList(ArchiveFile *archiveFile)
         // item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
     }
     rootDocFolder->setText(0, rootDocFolder->text(0) + " (%1)"_L1.arg(QString::number(rootDocFolder->childCount())));
-    QString curCnfFileName = archiveFile->curCnf() ? archiveFile->curCnf()->fileName() : "";
+    QString curCnfFileName = archiveFile->curCnf() ? archiveFile->curCnf()->fileName().original() : "";
     if (!curCnfFileName.isEmpty()) {
         for (int i = 0; i < rootCnfFolder->childCount(); i++) {
             auto item = rootCnfFolder->child(i);

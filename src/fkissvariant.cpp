@@ -43,6 +43,11 @@ FkissVariant FkissVariant::fromString(const QString &value)
     return FkissVariant(Type::String, value);
 }
 
+FkissVariant FkissVariant::fromCelName(const CPString &value)
+{
+    return FkissVariant(Type::Cel, value.original());
+}
+
 FkissVariant FkissVariant::fromCelName(const QString &value)
 {
     return FkissVariant(Type::Cel, value);

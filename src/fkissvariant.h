@@ -41,6 +41,7 @@ private:
 public:
     static const char* typeToString(Type type);
     static FkissVariant fromString(const QString &value);
+    static FkissVariant fromCelName(const CPString &value);
     static FkissVariant fromCelName(const QString &value);
     static FkissVariant fromInt(const QString &value);
     static FkissVariant fromInt(const int &value);

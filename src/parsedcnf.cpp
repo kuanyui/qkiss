@@ -25,7 +25,7 @@
 // Q_LOGGING_CATEGORY(CnfParser, "qkiss.parser.cnf")
 using namespace Qt::Literals::StringLiterals;
 
-ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment):
+ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, CPString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment):
     m_objId(objId),
     m_fix(fix),
     m_celFileName(celFileName),
@@ -48,7 +48,7 @@ int16_t ParsedCnfCel::fix() const
     return m_fix;
 }
 
-QString ParsedCnfCel::celFileName() const
+CPString ParsedCnfCel::celFileName() const
 {
     return m_celFileName;
 }
@@ -151,12 +151,12 @@ const ParsedCnfSetObjPos ParsedCnfSet::getObjPosByObjId(int32_t objId) const
 
 
 
-ParsedCnf::ParsedCnf(QString fileName, QByteArray rawData, QKiSS::Encoding encode):
+ParsedCnf::ParsedCnf(CPString fileName, QByteArray rawData, QKiSS::Encoding encode):
     m_errCount(0),
     m_fileName(fileName),
     m_fkiss(new Fkiss())
 {
-    qDebug().noquote() << "[Log] Parse CNF file \"%1\""_L1.arg(fileName);
+    qDebug().noquote() << "[Log] Parse CNF file \"%1\""_L1.arg(fileName.original());
     m_fileContentText = Encoding::toUtf8(rawData, encode);
     static QRegularExpression reNewline(R"#((\r\n|\r|\n))#");
     parseLines(m_fileContentText.split(reNewline));
@@ -403,7 +403,7 @@ Fkiss *ParsedCnf::fkiss()
     return m_fkiss;
 }
 
-QString ParsedCnf::fileName() const
+CPString ParsedCnf::fileName() const
 {
     return m_fileName;
 }
@@ -441,7 +441,7 @@ QDebug operator<<(QDebug debug, const ParsedCnfCel &cnfCel) {
     return debug.noquote().nospace() << QString("ParsedCnfCel { objId: %1,    fix: %2,    fileName: %3,     kcfIdx: %4,    translucency: %5,     sets: [ %6 ],     comment: %7 }")
                                         .arg(cnfCel.objId())
                                         .arg(cnfCel.fix())
-                                        .arg(cnfCel.celFileName())
+                                        .arg(cnfCel.celFileName().original())
                                         .arg(cnfCel.kcfFileIndex())
                                         .arg(cnfCel.translucency())
                                         .arg(fmtSetIndexes.join(", "))

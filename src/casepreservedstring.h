@@ -24,16 +24,19 @@
 class CasePreservedString {
 public:
     explicit CasePreservedString() = default;
-    explicit CasePreservedString(QString original);
+    CasePreservedString(QString original);
     CasePreservedString &operator=(const QString &newString);
     /// For internal usage. For example, compare among:
     ///   - CEL file name in LZH archive / file system
     ///   - CEL file name referenced in CNF file.
     ///   - CEL file name in FKiSS script.
+    ///
+    /// The value may be different when Case Sensitivity setting is set to "Insensitive"
     const QString& normalized() const;
     /// For displaying on UI only.
     const QString& original() const;
     bool operator==(const CasePreservedString &other) const;
+    bool operator<(const CasePreservedString &other) const;
 private:
     QString m_original;
     mutable QString m_cachedNormalized;
@@ -44,5 +47,6 @@ size_t qHash(const CasePreservedString &s, size_t seed = 0);
 
 
 using CPString = CasePreservedString;
+using CPStringList = QList<CPString>;
 
 #endif // CASEPRESERVEDSTRING_H

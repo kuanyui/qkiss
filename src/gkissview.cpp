@@ -55,7 +55,7 @@ bool GKissView::setArchiveFileAndRenderFirstCnf(ArchiveFile *archiveFile)
     m_connectionsOfArchiveFile.append(connect(m_archiveFile, &ArchiveFile::fkissChangedPaletteNo, [this](uint8_t newCurPaletteNo) {
         m_archiveFile->curCnf()->fkiss()->runtime()->triggerCol(newCurPaletteNo);
     }));
-    QStringList cnfFileNameList = m_archiveFile->getCnfNameList();
+    CPStringList cnfFileNameList = m_archiveFile->getCnfNameList();
     if (cnfFileNameList.isEmpty()) {
         qCritical() << "[ERROR][View] No CNF file found in this archive file.";
         return false;
@@ -81,7 +81,7 @@ void GKissView::deleteAllScenes()
 }
 
 // FIXME: separate setCurCnfAndRenderScenes(), create startFkiss() / stopFkiss()
-bool GKissView::setCurCnfAndRenderScenes(QString cnfFileName)
+bool GKissView::setCurCnfAndRenderScenes(CPString cnfFileName)
 {
     if (m_archiveFile->curCnf()) {
         m_archiveFile->curCnf()->fkiss()->stopRuntime();
@@ -188,7 +188,7 @@ bool GKissView::renderCurCnfAllSets()
             auto _cel = m_archiveFile->getParsedCel(cnfCel->celFileName());
             if (!_cel.has_value()) {
                 qCritical() << QStringLiteral("[ERROR] CNF requires a CEL '%1', but not found in this archived file: ")
-                               .arg(cnfCel->celFileName());
+                               .arg(cnfCel->celFileName().original());
                 continue;
             }
             ParsedCel *cel = _cel.value();
@@ -197,8 +197,8 @@ bool GKissView::renderCurCnfAllSets()
                 auto _kcf = m_archiveFile->getParsedKcfByOrderedIndexInCurrentCnf(cnfCel->kcfFileIndex());
                 if (!_kcf.has_value()) {
                     qCritical() << "[ERROR] In CNF '%1', the CEL '%2' requires KCF index %3, but no KCF file available in this CNF."_L1
-                                   .arg(cnf->fileName())
-                                   .arg(cnfCel->celFileName())
+                                   .arg(cnf->fileName().original())
+                                   .arg(cnfCel->celFileName().original())
                                    .arg(cnfCel->kcfFileIndex());
                     continue;
                 }
@@ -208,7 +208,7 @@ bool GKissView::renderCurCnfAllSets()
                 item = new GKissItem(cnfCel, cel);
             } else {
                 qCritical() << QString("[ERROR][View] Unknown CEL type (not PaletteBased nor ColorBased), skip: %1")
-                               .arg(cnfCel->celFileName());
+                               .arg(cnfCel->celFileName().original());
                 continue;
             }
             item->setPos(cel->x(), cel->y());

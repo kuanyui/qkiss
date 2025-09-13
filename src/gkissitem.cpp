@@ -80,7 +80,7 @@ void GKissItem::renderPaletteBasedImage()
             QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
             for (int x = 0; x < m_cel->width(); ++x) {
                 if (i == celColorizedPixelsData->length()) {
-                    qCritical() << "[WARNING][Item] %1: Pixels length and WxH are not matched. This should not happened."_L1.arg(m_cnfCel->celFileName());
+                    qCritical() << "[WARNING][Item] %1: Pixels length and WxH are not matched. This should not happened."_L1.arg(m_cnfCel->celFileName().original());
                     goto end;
                 }
                 line[x] = celColorizedPixelsData->at(i++);
@@ -108,7 +108,7 @@ void GKissItem::renderColorBasedImage()
             QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
             for (int x = 0; x < m_cel->width(); ++x) {
                 if (i == celPixelsData->length()) {
-                    qCritical() << "[WARNING][Item] %1: This should not happened."_L1.arg(m_cnfCel->celFileName());
+                    qCritical() << "[WARNING][Item] %1: This should not happened."_L1.arg(m_cnfCel->celFileName().original());
                     goto end;
                 }
                 line[x] = celPixelsData->at(i++);
@@ -223,7 +223,7 @@ int32_t GKissItem::objId() const
     return m_cnfCel->objId();
 }
 
-QString GKissItem::celFileName() const
+CPString GKissItem::celFileName() const
 {
     return m_cnfCel->celFileName();
 }
@@ -238,7 +238,7 @@ int32_t GKissItem::fix() const
 QDebug operator<<(QDebug dbg, const GKissItem &item) {
     dbg.nospace().noquote() << QString("GKissItem { objId: %1, \tcelFileName: '%2', \tpos: (%3, %4), \ttranslucency: %5, \tvisible: %6}")
                            .arg(item.objId())
-                           .arg(item.celFileName())
+                           .arg(item.celFileName().original())
                            .arg(item.pos().x())
                            .arg(item.pos().y())
                            .arg(item.kissTranslucency())

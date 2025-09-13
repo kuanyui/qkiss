@@ -22,7 +22,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 
-ParsedKcf::ParsedKcf(QString fileName, QByteArray rawData):
+ParsedKcf::ParsedKcf(CPString fileName, QByteArray rawData):
     m_fileName(fileName)
 {
     const static QByteArray identifier = QByteArray::fromRawData("\x4B\x69\x53\x53", 4);
@@ -90,7 +90,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
     }
     qDebug() << QStringLiteral("[LOG][ParsedKcf] (Modern KCF, %1 bits per color)     %2     %3 palettes    %4 colors per palette")
                 .arg(m_bitsPerColor)
-                .arg(m_fileName)
+                .arg(m_fileName.original())
                 .arg(m_paletteAmounts)
                 .arg(m_colorAmountsInOnePalette);
 }
@@ -98,7 +98,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
 void ParsedKcf::parseLegacyKcf(QByteArray data)
 {
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
-    qDebug() << QString("[LOG][ParsedKcf] Parse Legacy KCF file: %1").arg(m_fileName);
+    qDebug() << QString("[LOG][ParsedKcf] Parse Legacy KCF file: %1").arg(m_fileName.normalized());
     m_bitsPerColor = 12;
     m_colorAmountsInOnePalette = 16;
     m_paletteAmounts = 10;

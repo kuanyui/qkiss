@@ -24,8 +24,7 @@
 #include <QList>
 #include <QVector>
 #include <QColor>
-
-#include "./enums.h"
+#include "casepreservedstring.h"
 
 using ParsedKcfPalette = QVector<QRgb>;
 
@@ -71,7 +70,7 @@ public:
         InvalidKcf,
     };
     /** fileName is the relative file name in archive file. */
-    ParsedKcf(QString fileName, QByteArray rawData);
+    ParsedKcf(CPString fileName, QByteArray rawData);
 
     ParsedKcfPalette *getPaletteInKcf(uint16_t paletteIdxInKcf = 0);  // REFACTOR: Use reference?
     uint8_t bitsPerColor() const;
@@ -82,7 +81,7 @@ public:
 private:
     void parseModernKcf(QByteArray data);
     void parseLegacyKcf(QByteArray data);
-    QString m_fileName;
+    CPString m_fileName;
     /**
      * - 12 or 24 bits
      * - Offset +5, 1 byte

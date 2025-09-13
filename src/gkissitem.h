@@ -47,7 +47,7 @@ public:
     void setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf);
 
     int32_t objId() const;
-    QString celFileName() const;
+    CPString celFileName() const;
     int32_t fix() const;
     /// CEL file itself, which define (x,y) in the Object it belongs to.
     ParsedCel *cel() const;

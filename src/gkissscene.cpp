@@ -553,9 +553,9 @@ void GKissScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     actResetPos->setIcon(QIcon::fromTheme("reset-position"));
     menu.addSection(tr("Information"));
     // Show CEL filename
-    QAction *dummyFileName = menu.addAction(item->cnfCel()->celFileName(), [=](){
+    QAction *dummyFileName = menu.addAction(item->cnfCel()->celFileName().original(), [=](){
         QClipboard *clipboard = QApplication::clipboard();
-        clipboard->setText(item->cnfCel()->celFileName());
+        clipboard->setText(item->cnfCel()->celFileName().original());
     });
     dummyFileName->setIcon(QIcon::fromTheme("image-x-generic"));
     dummyFileName->setStatusTip(tr("Click to copy filename to clipboard."));  // FIXME: doesn't work... Why?

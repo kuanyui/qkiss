@@ -72,14 +72,14 @@ void ItemInspector::setInspectedItem(GKissItem *item)
         return;
     }
     QStringList itemsOfObj;
-    itemsOfObj.append(item->celFileName());
+    itemsOfObj.append(item->celFileName().original());
     foreach (auto sibling, *item->siblings()) {
-        itemsOfObj.append(sibling->celFileName());
+        itemsOfObj.append(sibling->celFileName().original());
     }
     auto cel = item->cel();
     auto celItemCurPos = item->pos().toPoint();
     auto objPos = item->kissScene()->getObjectCurrentPos(item->objId()).value_or(QPoint(-1, -1));
-    m_twCelName->setText(item->celFileName());
+    m_twCelName->setText(item->celFileName().original());
     m_twObjId->setText(QString::number(item->objId()));
     m_twCelPos->setText("Obj (%1, %2) + CEL (%3, %4) = (%5, %6)"_L1
                         .argn(objPos.x()).argn(objPos.y())

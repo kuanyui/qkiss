@@ -27,6 +27,7 @@
 #include <QRect>
 #include <QDebug>
 #include "parsedkcf.h"
+#include "casepreservedstring.h"
 
 /**
  * Represent a parsed .CEL file
@@ -41,7 +42,7 @@ public:
         PaletteBased,
         FullColor
     };
-    ParsedCel(QString fileName, const QByteArray &rawData);
+    ParsedCel(CPString fileName, const QByteArray &rawData);
     std::unique_ptr<QVector<QRgb> > getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, uint16_t paletteIdxInKcf) const;  // REFACTOR: const reference
     QVector<QRgb> *getColorBasedPixels() const;
     QRect getGeometry() const;
@@ -54,7 +55,7 @@ public:
     uint16_t height() const;
     QPoint pos() const;
     QSize size() const;
-    QString fileName() const;
+    CPString fileName() const;
 
 private:
     void parseModernCel(const QByteArray &data);
@@ -64,7 +65,7 @@ private:
     /** 32 bits full-color (rgba) */
     QVector<QRgb> *parse32BitsPixelsAsCache(QByteArray *pixelRawData);   // REFACTOR: Use reference instead?
 
-    QString m_fileName;
+    CPString m_fileName;
     /**
      * +4 offset, 1 byte
      * - Cel file mark (the type of cel):

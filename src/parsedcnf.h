@@ -62,11 +62,11 @@ class ParsedCnfCel
 {
     friend class ParsedCnf;
 public:
-    ParsedCnfCel(int32_t objId, int32_t fix, QString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment);
+    ParsedCnfCel(int32_t objId, int32_t fix, CPString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment);
     int32_t objId() const;
     int16_t fix() const;
 
-    QString celFileName() const;
+    CPString celFileName() const;
     int16_t kcfFileIndex() const;
     QList<uint8_t> setsIndexes() const;
     QString comment() const;
@@ -98,7 +98,7 @@ private:
     */
     int16_t m_fix;
     /*! Describes the filename of the cel including filename extension.  */
-    QString m_celFileName;
+    CPString m_celFileName;
     /**
      * - Indicates which KCF that should be used to draw this cel.
      * - Different instances of the same cel may use different KCFs.
@@ -182,7 +182,7 @@ class ParsedCnf
 {
 public:
     /** fileName is the relative file name in archive file. */
-    ParsedCnf(QString fileName, QByteArray rawData, QKiSS::Encoding encode);
+    ParsedCnf(CPString fileName, QByteArray rawData, QKiSS::Encoding encode);
     ~ParsedCnf();
     QSize playFieldSize() const;
     const QList<ParsedCnfCel *> &cels() const;
@@ -194,7 +194,7 @@ public:
     const QStringList &kcfFileNames() const;
     /** KCF files amount used in this CNF */
     size_t kcfFilesAmount() const;
-    QString fileName() const;
+    CPString fileName() const;
     uint32_t outsideBorderColor() const;
     /// Fkiss script engine
     Fkiss *fkiss();
@@ -217,7 +217,7 @@ private:
     u_int32_t m_lineIdx;
 
     // Basic
-    QString m_fileName;
+    CPString m_fileName;
     /** UTF8 */
     QString m_fileContentText;
     // Parsed

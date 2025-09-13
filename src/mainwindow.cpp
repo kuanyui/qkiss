@@ -68,13 +68,13 @@ MainWindow::MainWindow(QWidget *parent)
             statusBar()->clearMessage();
         } else {
             QStringList itemsOfObj;
-            itemsOfObj.append(item->celFileName());
+            itemsOfObj.append(item->celFileName().original());
             foreach (auto sibling, *item->siblings()) {
-                itemsOfObj.append(sibling->celFileName());
+                itemsOfObj.append(sibling->celFileName().original());
             }
             statusBar()->showMessage(tr("Fix: %1, CEL Name: %2, Comment: %3")
                                      .arg(item->fix())
-                                     .arg(item->celFileName())
+                                     .arg(item->celFileName().original())
                                      .arg(item->cnfCel()->comment())
                                      );
         }
@@ -185,11 +185,11 @@ void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, s
     m_fileSystemBrowser->markPathAsLoaded(compressedFilePath, fileLoadMode);
     m_innerFilesBrowser->rerenderFileList(m_archiveFile);
     m_codeEditor->setPlainText(m_archiveFile->getCnfFileAsString(m_archiveFile->curCnf()->fileName()));
-    QStringList docFileNameList = m_archiveFile->getDocFileNameList();
+    CPStringList docFileNameList = m_archiveFile->getDocFileNameList();
     if (docFileNameList.length() == 0) {
         m_docViewer->setPlainText("");
     } else {
-        QString docFileName = docFileNameList[0];
+        CPString docFileName = docFileNameList[0];
         m_docViewer->setPlainText(m_archiveFile->getDocFileAsString(docFileName));
         ui->dockWidget_docViewer->raise();
     }
