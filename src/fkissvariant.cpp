@@ -23,15 +23,7 @@
 
 FkissVariant::FkissVariant(Type type, int value) : m_type(type), m_intValue(value) {}
 
-FkissVariant::FkissVariant(Type type, const QString &value) : m_type(type), m_stringValue(value) {
-    if (ConfigFile::instance().caseSensitivity() == QKiSS::Case::Sensitive) {
-        // m_caseSensitivity = Qt::CaseSensitivity::CaseSensitive;
-        m_stringValueForCompare = m_stringValue;
-    } else {
-        // m_caseSensitivity = Qt::CaseSensitivity::CaseInsensitive;
-        m_stringValueForCompare = m_stringValue.toUpper();
-    }
-}
+FkissVariant::FkissVariant(Type type, const QString &value) : m_type(type), m_stringValue(value) { }
 
 const char *FkissVariant::typeToString(Type type) {
     switch (type) {
@@ -112,19 +104,19 @@ int FkissVariant::getInt() const
     return m_intValue;
 }
 
-QString FkissVariant::getString() const
+CPString FkissVariant::getString() const
 {
     return m_stringValue;
 }
 
-QString FkissVariant::getStringOrCelNameForCompare() const
+QString FkissVariant::getOriginalString() const
 {
-    return m_stringValueForCompare;
+    return m_stringValue.original();
 }
 
 QString FkissVariant::getCelName() const
 {
-    return m_stringValue;
+    return m_stringValue.normalized();
 }
 
 int FkissVariant::getObjectId() const
@@ -140,8 +132,8 @@ bool FkissVariant::strictEq(const FkissVariant &other) const
     switch (m_type) {
     case Type::Int: return getInt() == other.getInt();
     case Type::Object: return getObjectId() == other.getObjectId();
-    case Type::String: return getString() == other.getString();
-    case Type::Cel: return m_stringValueForCompare == other.m_stringValueForCompare;
+    case Type::String: return getOriginalString() == other.getOriginalString();
+    case Type::Cel: return getCelName() == other.getCelName();
     default: return false;
     }
 }
@@ -153,11 +145,11 @@ bool FkissVariant::operator==(const FkissVariant &other) const
         return m_type == other.type() && getInt() == other.getInt();
     case Type::Object:
         return m_type == other.type() && getObjectId() == other.getObjectId();
+    // NOTE: Some CNF use different cases in CEL file declaraction against FKiSS Script... e.g. `#0 BODY.CEL` and `map("body.cel")`
     case Type::String:
     case Type::Cel:
-        // FIXME: Some CNF use different cases in CEL file declaraction against FKiSS Script... e.g. `#0 BODY.CEL` and `map("body.cel")`
         return (other.type() == Type::String || other.type() == Type::Cel) &&
-                m_stringValueForCompare == other.m_stringValueForCompare;
+                m_stringValue == other.m_stringValue;
     default: return false;
     }
 }
@@ -173,7 +165,7 @@ QDebug operator<<(QDebug debug, const FkissVariant &arg) {
         debug.nospace() << arg.getInt();
         break;
     case FkissVariant::Type::String:
-        debug.nospace() << arg.getString();
+        debug.nospace() << arg.getOriginalString();
         break;
     case FkissVariant::Type::Cel:
         debug.nospace() << arg.getCelName();
@@ -188,8 +180,8 @@ QDebug operator<<(QDebug debug, const FkissVariant &arg) {
 size_t qHash(const FkissVariant &key, size_t seed)
 {
     switch (key.type()) {
-    case FkissVariant::Type::String: return qHash(key.getString(), seed);
-    case FkissVariant::Type::Cel: return qHash(key.getStringOrCelNameForCompare(), seed);
+    case FkissVariant::Type::String: return qHash(key.getOriginalString(), seed);
+    case FkissVariant::Type::Cel: return qHash(key.getOriginalString(), seed);
     case FkissVariant::Type::Int: return qHash(key.getInt(), seed);
     case FkissVariant::Type::Object: return qHash(key.getObjectId(), seed);
     default: return qHash(0, seed);

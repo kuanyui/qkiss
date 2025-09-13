@@ -45,6 +45,14 @@ const QString &CasePreservedString::original() const {
     return m_original;
 }
 
+bool CasePreservedString::operator==(const CasePreservedString &other) const
+{
+    if (ConfigFile::instance().caseSensitivity() == QKiSS::Case::Sensitive) {
+        return m_original == other.m_original;
+    }
+    return normalized() == other.normalized();
+}
+
 QDebug operator<<(QDebug dbg, const CasePreservedString &s)
 {
     dbg.nospace() << s.original();

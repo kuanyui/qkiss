@@ -241,7 +241,7 @@ void FkissRuntime::runTransparent(FkissVariant target, FkissVariant delta)
     switch (target.type()) {
     case FkissVariant::Type::Object: m_curKissScene->executeTransparentOnObj(target.getObjectId(), delta.getInt()); return;
     case FkissVariant::Type::Cel: m_curKissScene->executeTransparentOnCel(target.getCelName(), delta.getInt()); return;
-    case FkissVariant::Type::String: m_curKissScene->executeTransparentOnCel(target.getString(), delta.getInt()); return;
+    case FkissVariant::Type::String: m_curKissScene->executeTransparentOnCel(target.getOriginalString(), delta.getInt()); return;
     default:
         qDebug() << "[fkissruntime][WARNING] currently, the `target` in transparent() must be an cel or object. Skip."_L1;
     }
@@ -395,7 +395,7 @@ void FkissRuntime::runSound(FkissVariant fileName)
     if (m_curKissScene == nullptr) { return; }
     auto archiveFile = m_curKissScene->archiveFile();
     if (!archiveFile.has_value()) { return; }
-    auto audioFileData = archiveFile.value()->getOtherFile(fileName.getString());
+    auto audioFileData = archiveFile.value()->getOtherFile(fileName.getOriginalString());
     if (!audioFileData.has_value()) { return; }
     m_audioPlayer->playWavFromMemory(audioFileData.value());
 }

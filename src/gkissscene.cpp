@@ -145,7 +145,9 @@ void GKissScene::setItemsVisibility(const FkissVariant &target, bool visibility)
     switch (target.type()) {
     case FkissVariant::Type::Object: return setItemsVisibilityByObjId(target.getObjectId(), visibility);
     case FkissVariant::Type::Int: return;
-    case FkissVariant::Type::String: return setItemVisibilityByCelName(target.getString(), visibility);
+    case FkissVariant::Type::String:
+        qDebug() << "[WARNING][Bug] This should not happen.";
+        return setItemVisibilityByCelName(target.getOriginalString(), visibility);  // FIXME: Unreasonable
     case FkissVariant::Type::Cel: return setItemVisibilityByCelName(target.getCelName(), visibility);
         break;
     }
@@ -301,7 +303,7 @@ void GKissScene::executeTransparent(const FkissVariant &target, int delta)
     } else if (target.isCelName()) {
         executeTransparentOnCel(target.getCelName(), delta);
     } else if (target.isString()) {
-        executeTransparentOnCel(target.getString(), delta);
+        executeTransparentOnCel(target.getOriginalString(), delta);  // FIXME: Unreasonable.
     }
 }
 

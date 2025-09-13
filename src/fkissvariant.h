@@ -22,6 +22,7 @@
 #include <QString>
 #include <QDebug>
 #include <QHash>
+#include "casepreservedstring.h"
 
 /** Used by FKiSS script */
 class FkissVariant
@@ -52,8 +53,8 @@ public:
     bool isStringOrCelName() const;
     bool isObjectId() const;
     int getInt() const;
-    QString getString() const;
-    QString getStringOrCelNameForCompare() const;
+    CPString getString() const;
+    QString getOriginalString() const;
     QString getCelName() const;
     int getObjectId() const;
     Type type() const;
@@ -69,10 +70,7 @@ public:
 private:
     Type m_type;
     int m_intValue;
-    QString m_stringValue;
-    /// Convert & cache according to Qt::CaseSensitivity, for qHash and operator==()
-    QString m_stringValueForCompare;
-    // Qt::CaseSensitivity m_caseSensitivity;
+    CPString m_stringValue;
 };
 
 
