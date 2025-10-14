@@ -35,6 +35,7 @@
 #include "preferencedialog.h"
 #include "aboutdialog.h"
 #include "translationmanager.h"
+#include "ztranslator.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -594,25 +595,39 @@ void MainWindow::restoreWindowSettings()
 
 bool MainWindow::applyUiLanguageFromConfig()
 {
-    // QTranslate
-    static QTranslator *currTranslator = nullptr;
-    if (currTranslator) {
-        qApp->removeTranslator(currTranslator);
-        delete currTranslator;
-        currTranslator = nullptr;
+    /// QTranslate
+    static QTranslator *currQTranslator = nullptr;
+    /// ZTranslator as fallback
+    static ZTranslator *currZTranslator = nullptr;
+
+    if (currQTranslator) {
+        qApp->removeTranslator(currQTranslator);
+        delete currQTranslator;
+        currQTranslator = nullptr;
+    }
+    if (currZTranslator) {
+        qApp->removeTranslator(currZTranslator);
+        delete currZTranslator;
+        currZTranslator = nullptr;
     }
 
-    currTranslator = new QTranslator{};
+    currQTranslator = new QTranslator{};
+    currZTranslator = new ZTranslator{};
     QString langId = m_cfg.effectedUiLanguage();
-    if (currTranslator->load(":/i18n/qkiss_" + langId + ".qm")) {
-        qApp->installTranslator(currTranslator);
+    if (currQTranslator->load(":/i18n/qkiss_" + langId + ".qm")) {
+        currZTranslator->setLang(langId);
+        // NOTE: installed translator is applied in reversed order.
+        qApp->installTranslator(currZTranslator);   // 1. fallback
+        qApp->installTranslator(currQTranslator);   // 0. primary
         qDebug() << "[DEBUG] MainWindow::applyUiLanguageFromConfig() SUCCESS" << langId;
         ui->retranslateUi(this);
         return true;
     } else {
         qDebug() << "[DEBUG] MainWindow::applyUiLanguageFromConfig() FAILED" << langId;
-        delete currTranslator;
-        currTranslator = nullptr;
+        delete currQTranslator;
+        currQTranslator = nullptr;
+        delete currZTranslator;
+        currZTranslator = nullptr;
         return false;
     }
 }

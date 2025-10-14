@@ -149,6 +149,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/zlabel.h src/zlabel.cpp
         src/translationmanager.h src/translationmanager.cpp
         src/casepreservedstring.h src/casepreservedstring.cpp
+        src/ztranslator.h src/ztranslator.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
