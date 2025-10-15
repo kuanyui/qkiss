@@ -77,8 +77,8 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
 <context>
     <name>ArchiveFile</name>
     <message>
-        <location filename="../src/archivefile.cpp" line="103"/>
-        <location filename="../src/archivefile.cpp" line="127"/>
+        <location filename="../src/archivefile.cpp" line="101"/>
+        <location filename="../src/archivefile.cpp" line="125"/>
         <source>Found valid files: %1 CNF, %2 CEL, %3 KCF.</source>
         <translation>找到有效檔案：%1 個 CNF、%2 個 CEL、%3 個 KCF。</translation>
     </message>
@@ -375,22 +375,22 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
 <context>
     <name>GKissScene</name>
     <message>
-        <location filename="../src/gkissscene.cpp" line="548"/>
+        <location filename="../src/gkissscene.cpp" line="550"/>
         <source>[%1] Unfix (&amp;U)</source>
         <translation>[%1] 取消固定(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../src/gkissscene.cpp" line="550"/>
+        <location filename="../src/gkissscene.cpp" line="552"/>
         <source>Reset Object (&amp;R)</source>
         <translation>重設物件(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/gkissscene.cpp" line="552"/>
+        <location filename="../src/gkissscene.cpp" line="554"/>
         <source>Information</source>
         <translation>資訊</translation>
     </message>
     <message>
-        <location filename="../src/gkissscene.cpp" line="559"/>
+        <location filename="../src/gkissscene.cpp" line="561"/>
         <source>Click to copy filename to clipboard.</source>
         <translation>點擊以複製檔案名稱到剪貼簿。</translation>
     </message>
@@ -491,11 +491,6 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <location filename="../src/mainwindow.ui" line="14"/>
-        <source>MainWindow</source>
-        <translation>主視窗</translation>
-    </message>
     <message>
         <location filename="../src/mainwindow.ui" line="32"/>
         <source>&amp;File</source>
@@ -609,8 +604,8 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     <message>
         <location filename="../src/mainwindow.ui" line="239"/>
         <location filename="../src/mainwindow.ui" line="244"/>
-        <location filename="../src/mainwindow.cpp" line="619"/>
-        <location filename="../src/mainwindow.cpp" line="636"/>
+        <location filename="../src/mainwindow.cpp" line="651"/>
+        <location filename="../src/mainwindow.cpp" line="668"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
@@ -635,104 +630,109 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <translation>關於 QKiSS</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="75"/>
+        <location filename="../src/mainwindow.cpp" line="76"/>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
         <translation>固定：%1，CEL 名稱：%2，註解：%3</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="160"/>
+        <location filename="../src/mainwindow.cpp" line="164"/>
         <source>Start to parse CNF / KCF / CEL files...</source>
         <translation>開始解析 CNF / KCF / CEL 檔案...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="166"/>
+        <location filename="../src/mainwindow.cpp" line="170"/>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
         <translation>「%1」不是有效的 KiSS 修補檔。操作中止。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="173"/>
+        <location filename="../src/mainwindow.cpp" line="177"/>
         <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
         <translation>「%1」不是有效的 KiSS 檔案。操作中止。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="181"/>
+        <location filename="../src/mainwindow.cpp" line="185"/>
         <source>Parsing finished. Now rendering scenes...</source>
         <translation>解析完成。正在算繪場景...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="194"/>
+        <location filename="../src/mainwindow.cpp" line="198"/>
         <source>KiSS files rendered successfully: %1</source>
         <translation>KiSS 檔案算繪成功：%1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="208"/>
         <location filename="../src/mainwindow.cpp" line="212"/>
+        <location filename="../src/mainwindow.cpp" line="218"/>
+        <location filename="../src/mainwindow.cpp" line="219"/>
         <source>Scene Sets</source>
         <translation>場景組</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="213"/>
+        <location filename="../src/mainwindow.cpp" line="220"/>
         <source>Switch scene set (F1/F2)</source>
         <translation>切換場景組 (F1/F2)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="237"/>
-        <location filename="../src/mainwindow.cpp" line="241"/>
+        <location filename="../src/mainwindow.cpp" line="243"/>
+        <location filename="../src/mainwindow.cpp" line="249"/>
+        <location filename="../src/mainwindow.cpp" line="250"/>
         <source>Palette Sets</source>
         <translation>調色盤組</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="242"/>
+        <location filename="../src/mainwindow.cpp" line="251"/>
         <source>Switch palette set (F3/F4)</source>
         <translation>切換調色盤組 (F3/F4)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="372"/>
+        <location filename="../src/mainwindow.cpp" line="386"/>
+        <location filename="../src/mainwindow.cpp" line="423"/>
         <source>Files</source>
         <translation>檔案</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="380"/>
+        <location filename="../src/mainwindow.cpp" line="394"/>
+        <location filename="../src/mainwindow.cpp" line="424"/>
         <source>Zooming Tools</source>
         <translation>縮放工具</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="393"/>
+        <location filename="../src/mainwindow.cpp" line="407"/>
+        <location filename="../src/mainwindow.cpp" line="425"/>
         <source>Windows</source>
         <translation>視窗</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="499"/>
+        <location filename="../src/mainwindow.cpp" line="517"/>
         <source>QKiSS ready.</source>
         <translation>QKiSS 已就緒。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="503"/>
+        <location filename="../src/mainwindow.cpp" line="521"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
         <translation>Ctrl+拖曳：強制從物件分離 CEL</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="508"/>
+        <location filename="../src/mainwindow.cpp" line="526"/>
         <source>Shift+Drag: Disable FKiSS events</source>
         <translation>Shift+拖曳：停用 FKiSS 事件</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="513"/>
+        <location filename="../src/mainwindow.cpp" line="531"/>
         <source>Middle Click: Unfix</source>
         <translation>中鍵點擊：取消固定</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="518"/>
+        <location filename="../src/mainwindow.cpp" line="536"/>
         <source>Right Click: More Actions</source>
         <translation>右鍵點擊：更多動作</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="648"/>
+        <location filename="../src/mainwindow.cpp" line="680"/>
         <source>Open Compressed KiSS File</source>
         <translation>開啟壓縮的 KiSS 檔案</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="662"/>
+        <location filename="../src/mainwindow.cpp" line="694"/>
         <source>Open Directory</source>
         <translation>開啟資料夾</translation>
     </message>
@@ -813,32 +813,32 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
 <context>
     <name>QKiSS</name>
     <message>
-        <location filename="../src/enums.h" line="57"/>
+        <location filename="../src/enums.h" line="58"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../src/enums.h" line="58"/>
+        <location filename="../src/enums.h" line="59"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../src/enums.h" line="59"/>
+        <location filename="../src/enums.h" line="60"/>
         <source>Shift JIS</source>
         <translation>Shift JIS</translation>
     </message>
     <message>
-        <location filename="../src/enums.h" line="60"/>
+        <location filename="../src/enums.h" line="61"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../src/enums.h" line="65"/>
+        <location filename="../src/enums.h" line="66"/>
         <source>Case Insensitive</source>
         <translation>不區分大小寫</translation>
     </message>
     <message>
-        <location filename="../src/enums.h" line="66"/>
+        <location filename="../src/enums.h" line="67"/>
         <source>Case Sensitive</source>
         <translation>區分大小寫</translation>
     </message>
