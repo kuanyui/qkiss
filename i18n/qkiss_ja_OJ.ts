@@ -42,22 +42,22 @@ KiSSは1990年代、日本の[オタク](https://en.wikipedia.org/wiki/Otaku) �
     <message>
         <location filename="../src/aboutdialog.cpp" line="124"/>
         <source>Programming</source>
-        <translation>プログラミング</translation>
+        <translation>プログラミングでございますわ</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="125"/>
         <source>Icons &amp; Arts</source>
-        <translation>アイコン・アート</translation>
+        <translation>アイコンとアートでございますわ</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="126"/>
         <source>Translators</source>
-        <translation>翻訳者</translation>
+        <translation>翻訳をなさる方</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="128"/>
         <source>Authors</source>
-        <translation>作者</translation>
+        <translation>作者さまでいらっしゃいますの</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="136"/>

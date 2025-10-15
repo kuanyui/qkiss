@@ -37,27 +37,27 @@ KiSSは1990年代、そうした哀れな庶民のサブカルチャーから生
     <message>
         <location filename="../src/aboutdialog.cpp" line="103"/>
         <source>Information</source>
-        <translation>情報</translation>
+        <translation>哀れな情報にすがる下々</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="124"/>
         <source>Programming</source>
-        <translation>プログラミング</translation>
+        <translation>プログラミングしかできない庶民</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="125"/>
         <source>Icons &amp; Arts</source>
-        <translation>アイコン・アート</translation>
+        <translation>アイコンとアートごときに酔いしれる庶民の遊戯ですのよ！オホホホ！</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="126"/>
         <source>Translators</source>
-        <translation>翻訳者</translation>
+        <translation>翻訳ごときに縋る庶民</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="128"/>
         <source>Authors</source>
-        <translation>作者</translation>
+        <translation>作者風情の下々どもでございますわ！哀れでしてよ！</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="136"/>
