@@ -363,6 +363,12 @@ void MainWindow::setupMenuBar()
         connect(act, &QAction::toggled, this, [=, this] () { m_cfg.setCaseSensitivity(key); });
     }
     TranslationManager::instance().registerLanguageChangeCallback(this, [this]() {
+        const QStringList &allEncodingNames = QKiSS::encodingNames();
+        for (int i = 0; i < allEncodingNames.length(); i++) {
+            QAction *act = ui->menu_encoding->actions().at(i);
+            const auto &enc = allEncodingNames.at(i);
+            act->setText(enc);
+        }
         const auto &allLangs = m_cfg.allLanguages();
         for (int i = 0; i < allLangs.length(); i++) {
             QAction *act = ui->menu_uiLanguage->actions().at(i);
