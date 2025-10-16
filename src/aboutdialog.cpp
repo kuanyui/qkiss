@@ -78,7 +78,7 @@ void AboutDialog::setupUi()
     layoutHeader->addWidget(labelSummary);
 
     QLabel *labelCopyright= new QLabel{this};
-    labelCopyright->setText("Copyright (C) 2024 - 2025");
+    labelCopyright->setText("Copyright (C) 2024 - 2025 kuanyui. All rights reserved.");
     labelCopyright->setAlignment(Qt::AlignmentFlag::AlignCenter);
     labelCopyright->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
     layoutHeader->addWidget(labelCopyright);
