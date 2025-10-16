@@ -40,27 +40,27 @@ KiSS は1990年代に日本の [オタク](https://en.wikipedia.org/wiki/Otaku) 
         <translation>情報やで</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="124"/>
+        <location filename="../src/aboutdialog.cpp" line="127"/>
         <source>Programming</source>
         <translation>プログラミングやな</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="125"/>
+        <location filename="../src/aboutdialog.cpp" line="128"/>
         <source>Icons &amp; Arts</source>
         <translation>アイコンとアートやで、見てみぃ</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="126"/>
+        <location filename="../src/aboutdialog.cpp" line="129"/>
         <source>Translators</source>
         <translation>翻訳してくれた人らや</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="128"/>
+        <location filename="../src/aboutdialog.cpp" line="131"/>
         <source>Authors</source>
         <translation>作者やで</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="136"/>
+        <location filename="../src/aboutdialog.cpp" line="139"/>
         <source>QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
@@ -69,7 +69,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
 QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を通じて、ほかのFLOSSプロジェクトからサードパーティのSVGアイコンをちょっと借りとってな、それらはいろんなライセンスで公開されとるんや。</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="147"/>
+        <location filename="../src/aboutdialog.cpp" line="150"/>
         <source>Licenses</source>
         <translation>ライセンスや</translation>
     </message>
@@ -604,8 +604,8 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/mainwindow.ui" line="239"/>
         <location filename="../src/mainwindow.ui" line="244"/>
-        <location filename="../src/mainwindow.cpp" line="651"/>
-        <location filename="../src/mainwindow.cpp" line="668"/>
+        <location filename="../src/mainwindow.cpp" line="657"/>
+        <location filename="../src/mainwindow.cpp" line="674"/>
         <source>Clear All</source>
         <translation>全部消すで</translation>
     </message>
@@ -684,55 +684,55 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
         <translation>パレットセット切り替えるで（F3/F4）</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="386"/>
-        <location filename="../src/mainwindow.cpp" line="423"/>
+        <location filename="../src/mainwindow.cpp" line="392"/>
+        <location filename="../src/mainwindow.cpp" line="429"/>
         <source>Files</source>
         <translation>ファイルや</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="394"/>
-        <location filename="../src/mainwindow.cpp" line="424"/>
+        <location filename="../src/mainwindow.cpp" line="400"/>
+        <location filename="../src/mainwindow.cpp" line="430"/>
         <source>Zooming Tools</source>
         <translation>ズーム道具や</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="407"/>
-        <location filename="../src/mainwindow.cpp" line="425"/>
+        <location filename="../src/mainwindow.cpp" line="413"/>
+        <location filename="../src/mainwindow.cpp" line="431"/>
         <source>Windows</source>
         <translation>ウィンドウや</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="517"/>
+        <location filename="../src/mainwindow.cpp" line="523"/>
         <source>QKiSS ready.</source>
         <translation>QKiSS、準備できとるで</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="521"/>
+        <location filename="../src/mainwindow.cpp" line="527"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
         <translation>Ctrl+ドラッグ：オブジェクトからCELを無理やり分けるで</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="526"/>
+        <location filename="../src/mainwindow.cpp" line="532"/>
         <source>Shift+Drag: Disable FKiSS events</source>
         <translation>Shift+ドラッグ：FKiSSイベント止めるんや</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="531"/>
+        <location filename="../src/mainwindow.cpp" line="537"/>
         <source>Middle Click: Unfix</source>
         <translation>中クリック：固定外すで</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="536"/>
+        <location filename="../src/mainwindow.cpp" line="542"/>
         <source>Right Click: More Actions</source>
         <translation>右クリック：他の操作や</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="680"/>
+        <location filename="../src/mainwindow.cpp" line="686"/>
         <source>Open Compressed KiSS File</source>
         <translation>圧縮KiSSファイル開くで</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="694"/>
+        <location filename="../src/mainwindow.cpp" line="700"/>
         <source>Open Directory</source>
         <translation>ディレクトリ開くんや</translation>
     </message>
@@ -815,22 +815,22 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/enums.h" line="58"/>
         <source>ASCII</source>
-        <translation>ASCII</translation>
+        <translation>ASCII（どうやら外人とか原始人が昔使ってたやつらしいな）</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="59"/>
         <source>UTF-8</source>
-        <translation>UTF-8</translation>
+        <translation>UTF-8（今や世界標準の文字コードやで）</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="60"/>
         <source>Shift JIS</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift JIS（日本語扱うなら正統派でおすすめや）</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="61"/>
         <source>EUC-JP</source>
-        <translation>EUC-JP</translation>
+        <translation>EUC-JP（昔のUNIX系でよう使われとったやつやな）</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="66"/>

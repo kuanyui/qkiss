@@ -40,27 +40,27 @@ KiSS 起源於 1990 年代，在日本[御宅族](https://en.wikipedia.org/wiki/
         <translation>資訊</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="124"/>
+        <location filename="../src/aboutdialog.cpp" line="127"/>
         <source>Programming</source>
         <translation>程式設計</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="125"/>
+        <location filename="../src/aboutdialog.cpp" line="128"/>
         <source>Icons &amp; Arts</source>
         <translation>圖示與美術</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="126"/>
+        <location filename="../src/aboutdialog.cpp" line="129"/>
         <source>Translators</source>
         <translation>翻譯人員</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="128"/>
+        <location filename="../src/aboutdialog.cpp" line="131"/>
         <source>Authors</source>
         <translation>作者</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="136"/>
+        <location filename="../src/aboutdialog.cpp" line="139"/>
         <source>QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
@@ -69,7 +69,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
 QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)` 使用了一些來自其他自由開放原始碼軟體專案的第三方 SVG 圖示，這些圖示採用各種不同的授權條款：</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="147"/>
+        <location filename="../src/aboutdialog.cpp" line="150"/>
         <source>Licenses</source>
         <translation>授權條款</translation>
     </message>
@@ -604,8 +604,8 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     <message>
         <location filename="../src/mainwindow.ui" line="239"/>
         <location filename="../src/mainwindow.ui" line="244"/>
-        <location filename="../src/mainwindow.cpp" line="651"/>
-        <location filename="../src/mainwindow.cpp" line="668"/>
+        <location filename="../src/mainwindow.cpp" line="657"/>
+        <location filename="../src/mainwindow.cpp" line="674"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
@@ -684,55 +684,55 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <translation>切換調色盤組 (F3/F4)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="386"/>
-        <location filename="../src/mainwindow.cpp" line="423"/>
+        <location filename="../src/mainwindow.cpp" line="392"/>
+        <location filename="../src/mainwindow.cpp" line="429"/>
         <source>Files</source>
         <translation>檔案</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="394"/>
-        <location filename="../src/mainwindow.cpp" line="424"/>
+        <location filename="../src/mainwindow.cpp" line="400"/>
+        <location filename="../src/mainwindow.cpp" line="430"/>
         <source>Zooming Tools</source>
         <translation>縮放工具</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="407"/>
-        <location filename="../src/mainwindow.cpp" line="425"/>
+        <location filename="../src/mainwindow.cpp" line="413"/>
+        <location filename="../src/mainwindow.cpp" line="431"/>
         <source>Windows</source>
         <translation>視窗</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="517"/>
+        <location filename="../src/mainwindow.cpp" line="523"/>
         <source>QKiSS ready.</source>
         <translation>QKiSS 已就緒。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="521"/>
+        <location filename="../src/mainwindow.cpp" line="527"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
         <translation>Ctrl+拖曳：強制從物件分離 CEL</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="526"/>
+        <location filename="../src/mainwindow.cpp" line="532"/>
         <source>Shift+Drag: Disable FKiSS events</source>
         <translation>Shift+拖曳：停用 FKiSS 事件</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="531"/>
+        <location filename="../src/mainwindow.cpp" line="537"/>
         <source>Middle Click: Unfix</source>
         <translation>中鍵點擊：取消固定</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="536"/>
+        <location filename="../src/mainwindow.cpp" line="542"/>
         <source>Right Click: More Actions</source>
         <translation>右鍵點擊：更多動作</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="680"/>
+        <location filename="../src/mainwindow.cpp" line="686"/>
         <source>Open Compressed KiSS File</source>
         <translation>開啟壓縮的 KiSS 檔案</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="694"/>
+        <location filename="../src/mainwindow.cpp" line="700"/>
         <source>Open Directory</source>
         <translation>開啟資料夾</translation>
     </message>
