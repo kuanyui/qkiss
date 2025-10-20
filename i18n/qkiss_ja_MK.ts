@@ -32,7 +32,7 @@ KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)と
 
 [QKiSSのWebサイト](https://github.com/kuanyui/qkiss)でも見とけよ。置いてかれんなよ、ざっこ。
 
-ちなみに、『メ〇〇キ』は『メカジキ』ってわけ。他は全部雑魚。
+ちなみに、『メ〇〇キ』は『メカジキ』だから、メカジキ以外は全部雑魚。
 </translation>
     </message>
     <message>
@@ -97,72 +97,72 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="51"/>
         <source>lha (LHa for UNIX)</source>
-        <translation>lha (LHa for UNIX)</translation>
+        <translation>lha (LHa for UNIX)〜。知らないとか言わないでよね、ざっこ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="52"/>
         <source>The de facto standard implementation of LZH.</source>
-        <translation>LZH形式の事実上の標準実装。</translation>
+        <translation>LZH形式の事実上の標準実装だって〜。常識でしょ～？</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="53"/>
         <source>Perfect (theorically can open any LZH file)</source>
-        <translation>完璧（理論上はどのLZHファイルでも開けます）</translation>
+        <translation>完全対応〜。理論上は全部開けるんだよ？理解できる～～？</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="54"/>
         <source>External program; manual installation is needed.</source>
-        <translation>外部プログラム；手動インストールが必要です。</translation>
+        <translation>外部プログラムだし〜。自分でインストールしなきゃダメだよ～～～</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="55"/>
         <source>Available on most of Linux distros, also on MacPorts. Windows supporting is experimental.</source>
-        <translation>ほとんどのLinuxディストリビューションとMacPortsで利用可能。Windowsサポートは実験的です。</translation>
+        <translation>Linuxならほぼ全部で使えるし、MacPortsでもOK〜。でもWindows？実験的だよ、ぷっ、だっさ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="56"/>
         <source>&gt; 95% operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation>95%以上の操作をディスクに展開せずRAM内で実行できるため、SSDの寿命に比較的優しいです。</translation>
+        <translation>操作の95%以上はRAMで済むんだよ〜。SSDに優しいとか言ってドヤってんの？かわいそ〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="57"/>
         <source>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
-        <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;ソースコード&lt;/a&gt;&lt;/li&gt;</translation>
+        <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;ソースコード&lt;/a&gt;&lt;/li&gt;読める？ざっこ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="80"/>
         <source>External program LHA is not installed or not found.</source>
-        <translation>外部プログラムLHAがインストールされていないか見つかりません。</translation>
+        <translation>LHAが入ってないか見つからないって〜？インストールもできないの？ぷっ、よっわ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="87"/>
         <source>Trying to extract LZH file &quot;%1&quot;...</source>
-        <translation>LZHファイル「%1」を展開しています...</translation>
+        <translation>LZHファイル「%1」を展開中…（ちゃんと見てなよ）</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="90"/>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>LZHファイル「%1」の展開に失敗しました。中止します。</translation>
+        <translation>LZHファイル「%1」の展開に失敗〜。中止だよ、中止！ぷっ、かわいそう〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="100"/>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>LZHファイル「%1」の展開に成功しました。%2個のファイルが含まれています</translation>
+        <translation>LZHファイル「%1」の展開に成功しました。%2個のファイルが含まれてます〜〜〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="216"/>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
-        <translation>ネストされたLZHファイル「%1」の展開に失敗しました（一時ファイル「%2」を開けませんでした）。</translation>
+        <translation>ネストされたLZHファイル「%1」の展開に失敗。tmp「%2」すら開けないの？ぷっ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="221"/>
         <source>Partial write occurred. Expected: %1 bytes, actual: %2 bytes</source>
-        <translation>部分的な書き込みが発生しました。予期値：%1バイト、実際：%2バイト</translation>
+        <translation>部分的にしか書き込めなかったよ〜。%1バイトのはずが%2バイトとか、ぷっ、情けな〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="256"/>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在しません。中止します。</translation>
+        <translation>アーカイブファイルパス「%1」が存在しないんだって〜。処理中止〜、ドンマイ☆</translation>
     </message>
 </context>
 <context>
@@ -170,62 +170,62 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="47"/>
         <source>Unar (Unarchiver)</source>
-        <translation>Unar (Unarchiver)</translation>
+        <translation>Unar (Unarchiver)〜。知らないとか言わないでよね</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="48"/>
         <source>An extractor specially focused on archives of old formats containing non UTF-8 encoding file names.</source>
-        <translation>非UTF-8エンコーディングのファイル名を含む古い形式のアーカイブに特化した展開ツール。</translation>
+        <translation>非 UTF-8 のファイル名入りの古いアーカイブ専用の展開ツールだよ〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="49"/>
         <source>Pretty Good</source>
-        <translation>良好</translation>
+        <translation>まあまあ優秀〜。アンタよりはマシかな、ぷっ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="50"/>
         <source>External program; manual installation is needed.</source>
-        <translation>外部プログラム；手動インストールが必要です。</translation>
+        <translation>外部プログラムだから〜。自分でインストールしなきゃダメだよ～～</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="51"/>
         <source>Originally developed for macOS, also available on most of Linux distros. Supports Windows</source>
-        <translation>元々macOS向けに開発されましたが、ほとんどのLinuxディストリビューションでも利用可能です。Windowsもサポートしています</translation>
+        <translation>元はmacOS用だけど〜、Linuxでも使えるしWindowsも一応サポートしてるよ。意外でしょ？</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="52"/>
         <source>All extractions will do writing operations to disk; may shorten the lifespan of SSD.</source>
-        <translation>すべての展開操作でディスクへの書き込みを行うため、SSDの寿命を短くする可能性があります。</translation>
+        <translation>展開は全部ディスクに書き込むんだよ〜。SSDの寿命縮むかもね、ドンマイ☆</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="53"/>
         <source>&lt;a href=&quot;https://theunarchiver.com/command-line&quot;&gt;Official Site&lt;/a&gt;, &lt;a href=&apos;https://github.com/MacPaw/unar&apos;&gt;Source Code&lt;/a&gt;.</source>
-        <translation>&lt;a href=&quot;https://theunarchiver.com/command-line&quot;&gt;公式サイト&lt;/a&gt;、&lt;a href=&apos;https://github.com/MacPaw/unar&apos;&gt;ソースコード&lt;/a&gt;。</translation>
+        <translation>&lt;a href=&quot;https://theunarchiver.com/command-line&quot;&gt;公式サイト&lt;/a&gt;、&lt;a href=&apos;https://github.com/MacPaw/unar&apos;&gt;ソースコード&lt;/a&gt;。読めるよね？</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="76"/>
         <source>External program Unar is not installed or not found.</source>
-        <translation>外部プログラムUnarがインストールされていないか見つかりません。</translation>
+        <translation>外部プログラムUnarが入ってないか見つからないよ〜。インストールもできないの？ざ――こ、ざ――こ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="86"/>
-        <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>LZHファイル「%1」の展開に失敗しました。中止します。</translation>
+        <source>Extracting LZH file "%1" failed. Abort.</source>
+        <translation>LZHファイル「%1」の展開に失敗〜。処理中止だよ、中止！</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="97"/>
-        <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>LZHファイル「%1」の展開に成功しました。%2個のファイルが含まれています</translation>
+        <source>LZH file "%1" is extracted successfully. Got %2 file(s) in it</source>
+        <translation>LZHファイル「%1」の展開に成功しました〜。%2個しか入ってないの？だっさ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="104"/>
-        <source>Trying to extract LZH file &quot;%1&quot;...</source>
-        <translation>LZHファイル「%1」を展開しています...</translation>
+        <source>Trying to extract LZH file "%1"...</source>
+        <translation>LZHファイル「%1」を展開してあげてるんだけど〜。ちゃんと見てなよ〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="125"/>
-        <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在しません。中止します。</translation>
+        <source>Archive file path '%1' doesn't exist, abort.</source>
+        <translation>アーカイブファイルパス「%1」が存在しませ〜ん。処理中止〜、プッ</translation>
     </message>
 </context>
 <context>
@@ -233,72 +233,72 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="51"/>
         <source>LibArchive (built-in)</source>
-        <translation>LibArchive（内蔵）</translation>
+        <translation>LibArchive（内蔵）〜。知らないとか言わないでよね</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="52"/>
         <source>Multi-format archive and compression library.</source>
-        <translation>マルチフォーマットアーカイブ・圧縮ライブラリ。</translation>
+        <translation>マルチフォーマット対応のアーカイブ・圧縮ライブラリだよ〜。常識でしょ？</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="53"/>
         <source>Poor (some LZH files may be unable to be extracted, and non UTF-8 file names in LZH are totally unsupported.)</source>
-        <translation>不十分（一部のLZHファイルは展開できない可能性があり、LZH内の非UTF-8ファイル名は完全にサポートされていません。）</translation>
+        <translation>ざこ（一部のLZHは展開できないし、非UTF-8のファイル名？完全にアウトだよ〜〜）</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="54"/>
         <source>Built-in in QKiSS. No extra external program is required.</source>
-        <translation>QKiSSに内蔵。追加の外部プログラムは不要です。</translation>
+        <translation>QKiSSに内蔵だから〜。追加の外部プログラムなんて要らないんだよ？理解できる？</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="55"/>
         <source>Windows, macOS, Linux</source>
-        <translation>Windows、macOS、Linux</translation>
+        <translation>Windows、macOS、Linux全部対応〜。当たり前でしょ？</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="56"/>
         <source>All operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation>すべての操作をディスクに展開せずRAM内で実行できるため、SSDの寿命に比較的優しいです。</translation>
+        <translation>操作は全部RAMで済むんだよ〜。SSDに優しいとか言ってドヤってんの？かわいそ〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="57"/>
         <source>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
-        <translation>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;ソースコード&lt;/a&gt;&lt;/li&gt;</translation>
+        <translation>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;ソースコード&lt;/a&gt;&lt;/li&gt;。読めるよね？</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="77"/>
         <source>Failed to open this file, aborted.</source>
-        <translation>このファイルを開くことができませんでした。中止します。</translation>
+        <translation>このファイル開けなかったよ〜。処理中止〜、ドンマイ☆</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="138"/>
         <source>[Error][LibArchive] Error when opening this archive file (%1). Aborted.</source>
-        <translation>[エラー][LibArchive] このアーカイブファイルを開く際にエラーが発生しました（%1）。中止しました。</translation>
+        <translation>[エラー][LibArchive] アーカイブ「%1」を開くときにエラー発生〜。中止だよ、中止！ぷっ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="146"/>
         <source>[Error][LibArchive] Fatal error (%1), no more operations are possible., abort.</source>
-        <translation>[エラー][LibArchive] 致命的エラー（%1）、これ以上の操作は不可能です。中止します。</translation>
+        <translation>[エラー][LibArchive] 致命的エラー（%1）〜。もう何もできませ〜ん、ざっこ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="149"/>
         <source>[Warning][LibArchive] Current operation cannot complete (%1), skip.</source>
-        <translation>[警告][LibArchive] 現在の操作を完了できません（%1）。スキップします。</translation>
+        <translation>[警告][LibArchive] この操作は完了できないよ〜（%1）。スキップしとくね</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="152"/>
         <source>[Warning][Libarchive] Partial success (%1).</source>
-        <translation>[警告][Libarchive] 部分的に成功しました（%1）。</translation>
+        <translation>[警告][Libarchive] 部分的にしか成功しなかったよ〜（%1）。よっわ〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="155"/>
         <source>[Warning][Libarchive] Retry might succeed (%1)</source>
-        <translation>[警告][Libarchive] 再試行すると成功する可能性があります（%1）</translation>
+        <translation>[警告][Libarchive] 再試行すればワンチャン成功するかもね〜（%1）</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="173"/>
         <source>[Error][LibArchive] when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
-        <translation>[エラー][LibArchive] LibArchive経由でこのアーカイブファイルを読み込む際にエラーが発生しました（エラーメッセージ：%1）。中止しました。</translation>
+        <translation>[エラー][LibArchive] LibArchiveでこのアーカイブ読むときにエラー発生〜（%1）。処理中止だよ〜〜〜〜よわっ</translation>
     </message>
 </context>
 <context>
