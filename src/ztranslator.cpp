@@ -112,8 +112,26 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
           { "QScrollBar::Scroll up", "上へ御スクロールなさいますわ、身の程知らずにも" },
           { "QScrollBar::Scroll down", "下へ御スクロールなさいますわ──堕落の道連れにして差し上げますわ" },
     }},
+    // メ〇〇キ
+    { "ja_MK", {
+        { "&Copy", "コピーくらい自分でしなよ〜〜〜 (&C)" },
+        { "Select All", "どうせ全部選ぶんでしょ？ざこ (&A)" },
+        { "&Undo", "元に戻すとか、ダッサ〜〜〜 (&U)" },
+        { "&Redo", "やり直し〜〜〜？よっわ (&R)" },
+        { "Cu&t", "切り取りでもしてろよ (&T)" },
+        { "&Paste", "貼り付け？ぷっ、センスな (&P)" },
+        { "Delete", "削除〜〜はいはい消えた〜〜〜" },
+        { "Copy &Link Location", "リンクコピー？そんなのしかできないの？ (&L)" },
+        { "QScrollBar::Scroll here", "ここにスクロールすりゃいいじゃん" },
+        { "QScrollBar::Top", "先頭まで行けよ、ざーーこ" },
+        { "QScrollBar::Bottom", "最後まで落ちとけ〜〜〜" },
+        { "QScrollBar::Page up", "前のページ戻んの？だっさ〜" },
+        { "QScrollBar::Page down", "次のページ行けよ、はやく〜〜〜" },
+        { "QScrollBar::Scroll up", "上にスクロールしなよ、よっわ" },
+        { "QScrollBar::Scroll down", "下にスクロールでもしてな〜〜〜" },
+    }},
     /*
-    // 悪役令嬢
+    // 悪役令嬢 v2
     { "&Copy", "コピーして差し上げますわ、オホホ！ (&C)" },
     { "Select All", "すべて選んでやりましてよ (&A)" },
     { "&Undo", "後悔なさいますの？ (&U)" },
