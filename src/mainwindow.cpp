@@ -134,9 +134,10 @@ MainWindow::~MainWindow()
     ui = nullptr;   // To prevent customized QtDebug message handler from segfault.
 }
 
-void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg)
+void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     if (m_logViewer == nullptr) { return; }
+    qDebug() << "context.category === " << context.category;
     m_logViewer->appendLog(type, msg);
 }
 

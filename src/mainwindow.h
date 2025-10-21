@@ -46,7 +46,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QString &msg);
+    void receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     /// If it's a directory, open it in file browser. If a LZH file, try to extract it and load it.
     void openDirOrFile(const QString &dirOrFilePath);
     void tryToLoadKissFilePath(const QString &kissArchiveFilePath, QKiSS::FileLoadMode fileLoadMode);

@@ -26,14 +26,23 @@
 #include <QFile>
 #include "translationmanager.h"
 
+template <size_t N>
+inline bool strStartsWith(const char* str, const char (&prefix)[N]) noexcept {
+    // str cannot be nullptr
+    return str && std::memcmp(str, prefix, N - 1) == 0;
+}
+
+
 QtMessageHandler originalMessageHandler = nullptr;
 MainWindow *mainWindow = nullptr;
 
 void customizedMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     if (mainWindow != nullptr && type != QtMsgType::QtDebugMsg) {
-        mainWindow->receiveMsgFromCustomQtDebugMessageHandler(type, msg);
+        if (strStartsWith(context.category, "kf.")) { goto end; }    // KDE messages
+        mainWindow->receiveMsgFromCustomQtDebugMessageHandler(type, context, msg);
     }
+    end:
     if (originalMessageHandler) {
         // QString fmttedMsg = qFormatLogMessage(type, context, msg);
         (*originalMessageHandler)(type, context, msg);
