@@ -682,13 +682,14 @@ void MainWindow::renderRecentFiles()
 
 void MainWindow::openFilePicker()
 {
-    QString filter = "LZH Files (*.lzh)";
+    QString filter = tr("LZH Files (*.lzh)");
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open Compressed KiSS File"),
                                                     m_fileSystemBrowser->curDirPath(),
                                                     filter,
-                                                    nullptr,
-                                                    QFileDialog::Option::DontUseNativeDialog);
+                                                    nullptr
+                                                    // QFileDialog::Option::DontUseNativeDialog
+                                                    );
     if (!fileName.isEmpty()) {
         qDebug() << "===============" << fileName;
         openDirOrFile(fileName);
@@ -700,7 +701,8 @@ void MainWindow::openDirPicker()
     QString dirPath = QFileDialog::getExistingDirectory(this,
                                                     tr("Open Directory"),
                                                     m_fileSystemBrowser->curDirPath(),
-                                                    QFileDialog::ShowDirsOnly);
+                                                    QFileDialog::ShowDirsOnly // | QFileDialog::DontUseNativeDialog
+                                                    );
     if (!dirPath.isEmpty()) {
         qDebug() << "===============" << dirPath;
         openDirOrFile(dirPath);
