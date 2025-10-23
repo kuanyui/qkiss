@@ -11,7 +11,7 @@
     <message>
         <location filename="../src/aboutdialog.cpp" line="75"/>
         <source>QKiSS is a modern implementation of [KiSS](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6.</source>
-        <translation>QKiSSは、Qt 6で作られたモダンな[KiSS](https://ja.wikipedia.org/wiki/KISekae_Set_system)ビューアなんだけど〜、理解できる？よっわ</translation>
+        <translation>え〜〜QKiSSはね、ただのQt 6で作られたモダンな[KiSS](https://ja.wikipedia.org/wiki/KISekae_Set_system)ビューアなんだけど〜以上〜</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="94"/>
@@ -25,12 +25,13 @@ KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.or
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
         <translation>
-QKiSS は Qt 6で作られたモダンな [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアなんだけど〜〜〜。理解できる？よっわ。
+QKiSSは、Qt 6で開発されたモダンな [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアだよ〜。知ってるとか、昭和の遺産にしがみついてんの？古臭っw
 
-Kisekaeは「着せ替え人形」の略称だよ。今さら知らなかったとか言わないでね、ぷっ、かわいそ〜。
-KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)とかPC-98好きのサブカルから生まれて流行ったやつ。古っ、そんなネタでドヤるとか恥ずかしくない？かわいそ〜。
 
-[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)でも見とけよ。置いてかれんなよ、ざっこ。
+Kisekaeは*「着せ替え人形」*の略。
+KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)やパソコン（NEC PC-9800シリーズ）オタクたちが必死に遊んでたやつ〜w
+
+[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)見に行く暇あるの？ヒマ人乙〜
 
 ちなみに、『メ〇〇キ』は『メカジキ』だから、メカジキ以外は全部雑魚。
 </translation>
@@ -43,36 +44,38 @@ KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)と
     <message>
         <location filename="../src/aboutdialog.cpp" line="128"/>
         <source>Programming</source>
-        <translation>プログラミング〜よっわ</translation>
+        <translation>プログラミング〜？コード書いてる自分カッコいいとか思ってんの？乙</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="129"/>
         <source>Icons &amp; Arts</source>
-        <translation>アイコン・アート〜〜～</translation>
+        <translation>アイコン・アート〜。絵だけでドヤ顔？ぷっ</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="130"/>
         <source>Translators</source>
-        <translation>翻訳者〜〜</translation>
+        <translation>翻訳者〜〜どうせAI翻訳に突っ込んだだけでしょ？乙</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="132"/>
         <source>Authors</source>
-        <translation>作者さん、はいはいすごいすごい</translation>
+        <translation>偉そうな作者乙w</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="140"/>
         <source>QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
-        <translation>QKiSSはGPLv3ライセンスの下で提供されてるんだよ〜。理解できる？ざっこ。
+        <translation>
+QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使えるのに文句言うとか、どんだけ図々しいの？w
 
-QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を通じて、他のFLOSSプロジェクトからの一部のサードパーティSVGアイコンを使ってるの。で、それらは色んなライセンスで公開されてるんだよ〜。知らなかった？ぷっ、かわいそ〜</translation>
+しかも QKiSS は [tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer) 経由で他の FLOSS プロジェクトのアイコンを借りてるんだよ？いろんなライセンスで公開されてるから、ちゃんと感謝しとけよ〜ざぁーこw
+    </translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="151"/>
         <source>Licenses</source>
-        <translation>ライセンス〜〜？</translation>
+        <translation>ライセンス〜</translation>
     </message>
 </context>
 <context>
@@ -313,7 +316,7 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <name>FileSystemBrowser</name>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="52"/>
-        <source>File path "%1" is not found, abort loading this path.</source>
+        <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
         <translation>ファイルパス「%1」が見つからなかったよ〜。読み込み中止〜、ドンマイ☆</translation>
     </message>
     <message>
@@ -457,22 +460,22 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/logviewer.cpp" line="38"/>
         <source>Debug</source>
-        <translation>むし♥️</translation>
+        <translation>雑魚以下</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="43"/>
         <source>Info</source>
-        <translation>ざこ♥️</translation>
+        <translation>ざこ</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="48"/>
         <source>Warning</source>
-        <translation>ざ〜〜〜こ♥️</translation>
+        <translation>ざっこ</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="53"/>
         <source>Error</source>
-        <translation>超ざ〜〜〜こ♥️</translation>
+        <translation>ざ〜〜〜こ</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="58"/>
@@ -482,12 +485,12 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/logviewer.cpp" line="76"/>
         <source>Severity</source>
-        <translation>重要度</translation>
+        <translation>重要度〜</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="76"/>
         <source>Message</source>
-        <translation>ざっこ♥️</translation>
+        <translation>メッセージ～</translation>
     </message>
 </context>
 <context>
@@ -495,22 +498,22 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/mainwindow.ui" line="32"/>
         <source>&amp;File</source>
-        <translation>ファイル(&amp;F)</translation>
+        <translation>ファイル〜(&amp;F)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="59"/>
         <source>&amp;View</source>
-        <translation>表示(&amp;V)</translation>
+        <translation>表示〜(&amp;V)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="67"/>
         <source>&amp;Window</source>
-        <translation>ウィンドウ(&amp;W)</translation>
+        <translation>ウィンドウ〜(&amp;W)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="72"/>
         <source>&amp;Settings</source>
-        <translation>設定(&amp;S)</translation>
+        <translation>設定〜(&amp;S)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="36"/>
@@ -585,17 +588,17 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/mainwindow.ui" line="207"/>
         <source>&amp;Quit</source>
-        <translation>終了(&amp;Q)</translation>
+        <translation>バイバイ〜。逃げるの？笑(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="218"/>
         <source>Zoom &amp;Out</source>
-        <translation>縮小(&amp;O)</translation>
+        <translation>縮小(&amp;O)〜。老眼で見えないとか加齢臭すぎwww</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="226"/>
         <source>Zoom &amp;In</source>
-        <translation>拡大(&amp;I)</translation>
+        <translation>拡大(&amp;I)〜。ドアップにしないと読めないの？目悪すぎw</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="234"/>
@@ -608,7 +611,7 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
         <location filename="../src/mainwindow.cpp" line="658"/>
         <location filename="../src/mainwindow.cpp" line="675"/>
         <source>Clear All</source>
-        <translation>すべてクリア</translation>
+        <translation>すべてクリア〜。また最初からやり直し？だっさw</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="252"/>
@@ -618,12 +621,12 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/mainwindow.ui" line="255"/>
         <source>Preferences</source>
-        <translation>環境設定〜</translation>
+        <translation>環境設定～〜自分好みにしないと使えないの？ざぁーこw</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="266"/>
         <source>&amp;About</source>
-        <translation>について(&amp;A)</translation>
+        <translation>このアプリについて(&amp;A)〜。作者とかライセンスとか興味あんの？暇人w</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="269"/>
@@ -642,13 +645,13 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="171"/>
-        <source>"%1" is not a valid KiSS patch file. Aborted.</source>
+        <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
         <translation>「%1」は有効なKiSSパッチファイルじゃないよ〜。処理中止〜、ざぁーこ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="178"/>
-        <source>"%1"is not a valid KiSS file. Aborted.</source>
-        <translation>「%1」は有効なKiSSファイルですらないんだって〜。中止だよ、中止！ぷっ</translation>
+        <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
+        <translation>「%1」は有効なKiSSファイルですらないんだって〜。可哀想〜</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="186"/>
@@ -658,7 +661,7 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/mainwindow.cpp" line="199"/>
         <source>KiSS files rendered successfully: %1</source>
-        <translation>KiSSファイルのレンダリング成功〜。%1個しかできなかったの？だっさ</translation>
+        <translation>KiSSファイル「%1」のレンダリング成功〜。はいはいすごいすごい。</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="213"/>
@@ -688,7 +691,7 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
         <location filename="../src/mainwindow.cpp" line="393"/>
         <location filename="../src/mainwindow.cpp" line="430"/>
         <source>Files</source>
-        <translation>ファイル</translation>
+        <translation>ファイル〜</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="401"/>
@@ -710,7 +713,7 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/mainwindow.cpp" line="528"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
-        <translation>Ctrl+ドラッグ：オブジェクトからCELを強制分離〜</translation>
+        <translation>Ctrl+ドラッグ：オブジェクトからCELを強制分離、うっわ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="533"/>
@@ -720,27 +723,27 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/mainwindow.cpp" line="538"/>
         <source>Middle Click: Unfix</source>
-        <translation>中クリック：変なことをする、キモ！</translation>
+        <translation>中クリック：変なことをする、キモキモ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="543"/>
         <source>Right Click: More Actions</source>
-        <translation>右クリック：他の変なアクション</translation>
+        <translation>右クリック：他の変なこと</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="685"/>
-        <source>LZH アーカイヴファイル (*.lzh)</source>
-        <translation></translation>
+        <source>LZH Archive Files (*.lzh)</source>
+        <translation>LZH アーカイブファイル〜 (*.lzh)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="687"/>
         <source>Open Compressed KiSS File</source>
-        <translation>圧縮KiSSファイルを開く</translation>
+        <translation>圧縮KiSSファイルを開く〜〜</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="702"/>
         <source>Open Directory</source>
-        <translation>ディレクトリを開く</translation>
+        <translation>ディレクトリを開く〜〜</translation>
     </message>
 </context>
 <context>
@@ -748,72 +751,72 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/preferencedialog.cpp" line="40"/>
         <source>Preferences</source>
-        <translation>環境設定</translation>
+        <translation>環境設定〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="63"/>
         <source>LZH Extractor Backend</source>
-        <translation>LZH展開バックエンド</translation>
+        <translation>LZH展開バックエンド〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="144"/>
         <source>Backend</source>
-        <translation>バックエンド</translation>
+        <translation>バックエンド〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="149"/>
         <source>Status</source>
-        <translation>ステータス</translation>
+        <translation>ステータス〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="165"/>
         <source>Name</source>
-        <translation>名前</translation>
+        <translation>名前〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="166"/>
         <source>Summary</source>
-        <translation>概要</translation>
+        <translation>概要〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="167"/>
         <source>LZH Compatibility</source>
-        <translation>LZH互換性</translation>
+        <translation>LZH互換性〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="168"/>
         <source>Installation</source>
-        <translation>インストール</translation>
+        <translation>インストール〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="169"/>
         <source>OS Support</source>
-        <translation>OSサポート</translation>
+        <translation>OSサポート〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="170"/>
         <source>Disk Operation</source>
-        <translation>ディスク操作</translation>
+        <translation>ディスク操作〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="171"/>
         <source>Website</source>
-        <translation>ウェブサイト</translation>
+        <translation>ウェブサイト〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="173"/>
         <source>Backend Information</source>
-        <translation>バックエンド情報</translation>
+        <translation>バックエンド情報〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="210"/>
         <source>Installed</source>
-        <translation>インストール済み</translation>
+        <translation>インストール済み〜〜はいはいすごいすごい〜〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="213"/>
         <source>Not Found / Not Installed</source>
-        <translation>見つからない / インストールされていない</translation>
+        <translation>見つからない〜〜インストールされていない〜〜かわいそう〜</translation>
     </message>
 </context>
 <context>
@@ -821,32 +824,32 @@ QKiSSは[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)を�
     <message>
         <location filename="../src/enums.h" line="58"/>
         <source>ASCII</source>
-        <translation>ASCII</translation>
+        <translation>ASCII～〜。英語しか扱えない超ざ〜〜〜こw</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="59"/>
         <source>UTF-8</source>
-        <translation>UTF-8</translation>
+        <translation>UTF-8〜〜でも KiSS は流行してた時代に多分誰も採用されなかったんだろ〜可哀想〜</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="60"/>
         <source>Shift JIS</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift JIS～〜。まだ使ってんの？ぷっ、日本の KiSS ファイルは殆どこれを使っていたがw</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="61"/>
         <source>EUC-JP</source>
-        <translation>EUC-JP</translation>
+        <translation>EUC-JP〜？マニアックすぎて笑うんだけどw</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="66"/>
         <source>Case Insensitive</source>
-        <translation>大文字小文字を区別しない</translation>
+        <translation>大文字小文字を区別しない〜。どっちでも同じにしか見えないの？目悪っw</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="67"/>
         <source>Case Sensitive</source>
-        <translation>大文字小文字を区別する</translation>
+        <translation>大文字小文字を区別する〜。細かいとこ気にしすぎじゃない？神経質〜w</translation>
     </message>
 </context>
 </TS>
