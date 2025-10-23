@@ -26,6 +26,7 @@
 #include <QColor>
 #include <QRect>
 #include <QDebug>
+#include <QCoreApplication>
 #include "parsedkcf.h"
 #include "casepreservedstring.h"
 
@@ -37,6 +38,7 @@
  */
 class ParsedCel
 {
+    Q_DECLARE_TR_FUNCTIONS(ParsedCel)
 public:
     enum class Type {
         PaletteBased,

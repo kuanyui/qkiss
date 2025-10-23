@@ -58,7 +58,7 @@ FkissParser::FkissParser()
 QVector<std::shared_ptr<ASTPairedCommands> > FkissParser::parseScriptLines(const QList<FkissLineInfo> &lineInfoList)
 {
     QVector<Token> tokens = tokenize(lineInfoList);
-    // qDebug() << "[Fkiss] parsed tokens count: " << tokens.length();
+    // qDebug() << "parsed tokens count: " << tokens.length();
     // foreach (Token token, tokens) {
     //     qDebug() << "[Fkiss]" << token;
     // }
@@ -126,7 +126,7 @@ QVector<Token> FkissParser::tokenize(const QList<FkissLineInfo> &lineInfoList) {
                     c++;
                 }
                 if (!foundStr) {
-                    qCritical() << QStringLiteral("[ERROR][Fkiss::Tokenizer] Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: ").arg(lineInfo.line);
+                    qCritical().noquote() << tr("Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: ").arg(lineInfo.line);
                     break;
                 }
             } else if (line[c] == '#') {
@@ -144,7 +144,7 @@ QVector<Token> FkissParser::tokenize(const QList<FkissLineInfo> &lineInfoList) {
                 }
                 tokens.append(Token(Token::Type::Integer, line.mid(begC, c - begC), oriLineNo, begC));
             } else {
-                qCritical() << QStringLiteral("[ERROR][Fkiss::Tokenizer] Ignore this character because it is unexpected [%1:%2]: `%3`").arg(lineInfo.lineNoInCnf).arg(c).arg(lineInfo.line);
+                qCritical().noquote() << tr("Ignore this character because it is unexpected [%1:%2]: `%3`").arg(lineInfo.lineNoInCnf).arg(c).arg(lineInfo.line);
                 c++;
             }
         }
@@ -281,7 +281,7 @@ QVector<std::shared_ptr<ASTPairedCommands> > FkissParser::pairAstCommands(FkissP
         } else if (commandIsAction(cmd->name)) {
             curPair->actions.append(cmd);
         } else {
-            qWarning().noquote() << QStringLiteral("[WARNING][Fkiss] Unknown command \"%1\", skip.").arg(cmd->name);
+            qWarning().noquote() << tr(R"(Unknown command "%1", skip.)").arg(cmd->name);
         }
     }
     evpairs.removeFirst();  // remove sentinel
@@ -290,7 +290,7 @@ QVector<std::shared_ptr<ASTPairedCommands> > FkissParser::pairAstCommands(FkissP
 
 void FkissParser::logSyntaxWarning(const Token &token, QString msg) const
 {
-    qWarning().noquote() << QStringLiteral("[FKiSS][SyntaxWarning] %1   [L%2, C%3] %4")
+    qWarning().noquote() << tr("[SyntaxWarning] %1   [L%2, C%3] %4")
                 .arg(msg)
                 .arg(token.lineNo())
                 .arg(token.columnNo())
@@ -299,7 +299,7 @@ void FkissParser::logSyntaxWarning(const Token &token, QString msg) const
 
 void FkissParser::logSyntaxError(const Token &token, QString msg) const
 {
-    qCritical().noquote() << QStringLiteral("[FKiSS][SyntaxError] %1   [L%2, C%3] %4")
+    qCritical().noquote() << tr("[SyntaxError] %1   [L%2, C%3] %4")
                 .arg(msg)
                 .arg(token.lineNo())
                 .arg(token.columnNo())

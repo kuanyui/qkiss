@@ -71,14 +71,14 @@ void GKissScene::drawCurSetBackground()
 {
     auto _firstKcf = m_archiveFile->getParsedKcfByOrderedIndexInCurrentCnf(0);
     if (!_firstKcf.has_value()) {
-        qWarning() << "[Scene] No KCF found in this CNF, don't draw set background.";
+        qWarning().noquote() << tr("No KCF found in this CNF, don't draw set background.");
         return;
     }
     ParsedKcf *firstKcfInCnf = _firstKcf.value();
     // Border color (outside play field)
     ParsedKcfPalette *firstPaletteInFirstKcfInCnf = firstKcfInCnf->getPaletteInKcf(0);
     if (firstPaletteInFirstKcfInCnf == nullptr) {
-        qCritical() << "[Scene] No palette in this KCF. Abort.";
+        qCritical().noquote() << tr("No palette in this KCF. Abort.");
         return;
     }
     // Some wrong CNF declared a wrong border bolor which index out of "palette_colors_count - 1".
@@ -89,7 +89,7 @@ void GKissScene::drawCurSetBackground()
     // play field background
     uint16_t paletteNoInKcf = m_cnfSet->paletteNoInKcf();
     if (paletteNoInKcf + 1 > firstKcfInCnf->paletteAmounts()) {
-        qWarning().noquote() << "[Scene] In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF."_L1
+        qWarning().noquote() << tr("In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.")
                       .arg(QString::number(m_setIndex))
                       .arg(QString::number((int)paletteNoInKcf))
                       .arg(QString::number((int)firstKcfInCnf->paletteAmounts()));
@@ -97,7 +97,7 @@ void GKissScene::drawCurSetBackground()
     }
     ParsedKcfPalette *paletteOfCnfSet = firstKcfInCnf->getPaletteInKcf(paletteNoInKcf);
     if (paletteOfCnfSet == nullptr) {
-        qCritical() << "[ERROR][Scene] WTF? In CNF's set definition, not found palette in first KCF of this CNF. Abort.";
+        qCritical().noquote() << tr("WTF? In CNF's set definition, not found palette in first KCF of this CNF. Abort.");
         return;
     }
     QRgb playFieldColor = (*paletteOfCnfSet)[0];

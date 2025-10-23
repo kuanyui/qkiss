@@ -24,6 +24,7 @@
 #include <QList>
 #include <QVector>
 #include <QColor>
+#include <QCoreApplication>
 #include "casepreservedstring.h"
 
 using ParsedKcfPalette = QVector<QRgb>;
@@ -57,6 +58,7 @@ All modern KiSS Artforms use the modern KCF format but most KiSS viewers should 
 
 class ParsedKcf
 {
+    Q_DECLARE_TR_FUNCTIONS(ParsedKcf)
 public:
     enum class Format {
         /**

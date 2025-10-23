@@ -19,6 +19,7 @@
 
 #include "parsedkcf.h"
 #include <QDebug>
+#include <QCoreApplication>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -38,15 +39,15 @@ void ParsedKcf::parseModernKcf(QByteArray data)
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     qDebug() << "[LOG] Parse Moden KCF file";
     if (data[4] != 0x10) {
-        qCritical() << "[ERROR] Not a palette file mark!"; return;
+        qCritical() << tr("Not a palette file mark!"); return;
     }
     m_bitsPerColor = udata[5];
     if (m_bitsPerColor != 12 && m_bitsPerColor != 24) {
-        qCritical() << "[ERROR] Invalid bitsPerColor (12 or 24): " << m_bitsPerColor; return;
+        qCritical() << tr("Invalid bitsPerColor (12 or 24): %1").arg(m_bitsPerColor); return;
     }
     m_colorAmountsInOnePalette = (static_cast<uint16_t>(udata[9]) << 8) | udata[8];
     if (m_colorAmountsInOnePalette < 1 || m_colorAmountsInOnePalette > 256) {
-        qCritical() << "[ERROR] Invalid colorAmountsInOnePalette (1 ~ 256): " << m_colorAmountsInOnePalette; return;
+        qCritical() << tr("Invalid colorAmountsInOnePalette (1 ~ 256): %1").arg(m_colorAmountsInOnePalette); return;
     }
     m_paletteAmounts = (static_cast<uint16_t>(udata[11]) << 8) | udata[10];
     if (m_bitsPerColor == 12) {
@@ -56,7 +57,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
             for (uint32_t colorIdx = 0; colorIdx < m_colorAmountsInOnePalette; colorIdx++) {
                 uint32_t i = 32 + (pltIdx * m_colorAmountsInOnePalette * 2) + colorIdx * 2;  // 2 bytes per color
                 if (i >= data.size()) {
-                    qCritical() << "[ERROR] Out of range palatte colors definition, byte offset:" << i; return;
+                    qCritical() << tr("Out of range palatte colors definition, byte offset: %1").arg(i); return;
                 }
                 uint8_t r = udata[i] >> 4;
                 uint8_t b = udata[i] & 0b00001111;
@@ -74,7 +75,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
             for (uint32_t colorIdx = 0; colorIdx < m_colorAmountsInOnePalette; colorIdx++) {
                 uint32_t i = 32 + (pltIdx * m_colorAmountsInOnePalette * 3) + colorIdx * 3;  // 3 bytes per color
                 if (i >= data.size()) {
-                    qCritical() << "[ERROR] Out of range palatte colors definition, byte offset:" << i; return;
+                    qCritical() << tr("Out of range palatte colors definition, byte offset: %1").arg(i); return;
                 }
                 uint8_t r = udata[i];
                 uint8_t g = udata[i+1];
@@ -86,9 +87,9 @@ void ParsedKcf::parseModernKcf(QByteArray data)
             m_palettesList.append(palette);
         }
     } else {
-        qCritical() << QStringLiteral("[ERROR][ParsedKcf] What is this? Unknown KCF bitsPerColor: %1").arg(m_bitsPerColor);
+        qCritical() << tr("What is this? Unknown KCF bitsPerColor: %1").arg(m_bitsPerColor);
     }
-    qDebug() << QStringLiteral("[LOG][ParsedKcf] (Modern KCF, %1 bits per color)     %2     %3 palettes    %4 colors per palette")
+    qDebug() << QStringLiteral("(Modern KCF, %1 bits per color)     %2     %3 palettes    %4 colors per palette")
                 .arg(m_bitsPerColor)
                 .arg(m_fileName.original())
                 .arg(m_paletteAmounts)
@@ -108,7 +109,7 @@ void ParsedKcf::parseLegacyKcf(QByteArray data)
         for (uint32_t colorIdx = 0; colorIdx < m_colorAmountsInOnePalette; colorIdx++) {
             uint32_t i = (pltIdx * m_colorAmountsInOnePalette * 2) + colorIdx * 2;  // 2 bytes per color
             if (i >= data.size()) {
-                qCritical() << "[ERROR] Out of range palatte colors definition, byte offset:" << i; return;
+                qCritical() << tr("Out of range palatte colors definition, byte offset: %1").arg(i); return;
             }
             uint8_t r = udata[i] >> 4;
             uint8_t b = udata[i] & 0b1111;
@@ -138,11 +139,11 @@ uint8_t ParsedKcf::bitsPerColor() const
 ParsedKcfPalette *ParsedKcf::getPaletteInKcf(uint16_t paletteIdxInKcf)
 {
     if (m_palettesList.length() == 0) {
-        qCritical() << "[ERROR] This KCF file contains no valid palette, but you try to get palette from it. Abort.";
+        qCritical() << tr("This KCF file contains no valid palette, but you try to get palette from it. Abort.");
         return nullptr;
     }
     if (paletteIdxInKcf >= m_paletteAmounts) {
-        qCritical().noquote() << "[ERROR] paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback"_L1.arg(QString::number((int)paletteIdxInKcf)).arg(QString::number((int)m_paletteAmounts));
+        qCritical().noquote() << tr("paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback").arg(QString::number((int)paletteIdxInKcf)).arg(QString::number((int)m_paletteAmounts));
         paletteIdxInKcf = 0;
     }
     return &m_palettesList[paletteIdxInKcf];

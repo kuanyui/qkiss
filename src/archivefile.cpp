@@ -222,11 +222,11 @@ std::optional<ParsedCel *> ArchiveFile::getParsedCel(CPString celFileName) const
 std::optional<ParsedKcf *> ArchiveFile::getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf)
 {
     if (m_curCnfOrderedParsedKcfList.length() == 0) {
-        qDebug() << QStringLiteral("[ERROR][ArchiveFile] Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.");
+        qCritical().noquote() << tr("Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.");
         return std::nullopt;
     }
     if (kcfIndexInCurrentCnf >= m_curCnfOrderedParsedKcfList.length()) {
-        qDebug() << QStringLiteral("[WARN][ArchiveFile] Need to get ParsedKcf of current CNF at index %1, but out of index, so fallback to 0.");
+        qDebug() << QStringLiteral("Need to get ParsedKcf of current CNF at index %1, but out of index, so fallback to 0.");
         return m_curCnfOrderedParsedKcfList[0];
     }
     return m_curCnfOrderedParsedKcfList[kcfIndexInCurrentCnf];
@@ -275,16 +275,16 @@ bool ArchiveFile::setCurCnfByName(CPString cnfFileName)
 {
     auto _cnf = getParsedCnf(cnfFileName);
     if (!_cnf.has_value()) {
-        qCritical() << "[ERROR] Set current CNF failed; no CNF named " << cnfFileName << " in this archive file.";
+        qCritical().noquote() << tr(R"(Set current CNF failed; no CNF named "%1" in this archive file.)").arg(cnfFileName.original());
         return false;
     }
     m_curCnf = _cnf.value();
     m_curCnfOrderedParsedKcfList.clear();
-    qDebug() << QStringLiteral("[LOG][ArchiveFile] The CNF '%1' requires %2 KCF files.").arg(cnfFileName.original()).arg(m_curCnf->kcfFileNames().length());
+    qDebug().noquote() << tr(R"(The CNF '%1' requires %2 KCF files.)").arg(cnfFileName.original()).arg(m_curCnf->kcfFileNames().length());
     for (const QString &kcfFileName : m_curCnf->kcfFileNames()) {
         auto _kcf = getParsedKcf(kcfFileName);
         if (!_kcf.has_value()) {
-            qCritical() << QStringLiteral("[ERROR] CNF file '%1' requires KCF file '%2', but this KCF file is not found in this archived file.")
+            qCritical().noquote() << tr("CNF file '%1' requires KCF file '%2', but this KCF file is not found in this archived file.")
                            .arg(m_curCnf->fileName().original())
                            .arg(kcfFileName);
             continue;

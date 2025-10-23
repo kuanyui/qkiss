@@ -21,8 +21,8 @@
 #define FKISSPARSER_H
 
 #include <QObject>
+#include <QCoreApplication>
 #include "fkiss.h"
-
 // ================================================
 // Token
 // ================================================
@@ -54,6 +54,7 @@ QDebug operator<<(QDebug debug, const Token::Type& tokenType);
 
 class FkissParser
 {
+    Q_DECLARE_TR_FUNCTIONS(FkissParser)
 public:
     FkissParser();
     QVector<std::shared_ptr<ASTPairedCommands> > parseScriptLines(const QList<FkissLineInfo> &lineInfoList);

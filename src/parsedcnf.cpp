@@ -22,8 +22,11 @@
 
 #include "parsedcnf.h"
 #include "encoding.h"
+#include <QCoreApplication>
+
 // Q_LOGGING_CATEGORY(CnfParser, "qkiss.parser.cnf")
 using namespace Qt::Literals::StringLiterals;
+
 
 ParsedCnfCel::ParsedCnfCel(int32_t objId, int32_t fix, CPString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment):
     m_objId(objId),
@@ -175,7 +178,7 @@ void ParsedCnf::error(const QString &msg, int lineIdx)
         lineIdx = m_lineIdx;
     }
     QString &line = m_lines[lineIdx];
-    qCritical() << "[ERROR]" << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
+    qCritical() << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
 QString ParsedCnf::removeComment(const QString &line)
@@ -209,19 +212,19 @@ void ParsedCnf::parseLines(const QStringList &lines)
         } else if (line.startsWith("("_L1)) {
             static QRegularExpression rePlayFieldSize(R"#(^\((\d+) *?[,.*] *?(\d+))#");   // Actually, the standard spec is `(x,y`, but some CNF wrongly wrote as `(x.y` even `(x*y`...`
             QRegularExpressionMatch m = rePlayFieldSize.match(line);
-            if (!m.hasMatch()) { error("Wrong playFieldSize format."); continue; }
+            if (!m.hasMatch()) { error(tr("Wrong playFieldSize format.")); continue; }
             m_playFieldSize.setWidth(m.captured(1).toInt());
             m_playFieldSize.setHeight(m.captured(2).toInt());
         } else if (line.startsWith("%"_L1)) {
             static QRegularExpression reKcf(R"#(^%(\S+)\s*?(?:;(.+))?)#");
             QRegularExpressionMatch m = reKcf.match(line);
-            if (!m.hasMatch()) { error("Wrong KCF file name format."); continue; }
+            if (!m.hasMatch()) { error(tr("Wrong KCF file name format.")); continue; }
             qDebug() << "CNF requires KCF " << m.captured(1).trimmed();
             m_kcfFileNames.append(m.captured(1).trimmed());
         } else if (line.startsWith("[")) {
             static QRegularExpression reOutsideColor(R"#(^\[(\d+))#");
             QRegularExpressionMatch m = reOutsideColor.match(line);
-            if (!m.hasMatch()) { error("Wrong outsideColor format."); continue; }
+            if (!m.hasMatch()) { error(tr("Wrong outsideColor format.")); continue; }
             m_outsideColor = line.mid(1).toUInt();
         } else if (line.startsWith("#"_L1)) {
             // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");
@@ -239,7 +242,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             //                                      V          V               V                               V               V         V               V
             static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?[\s　]+([^\s\t　*:]+)(?:[\s　]*[*][\s　]*?(\d+))?(?:[\s　]*([:])?([\d\s　]*))?(?:[;；](.*))?)#");
             QRegularExpressionMatch m = reCel.match(line);
-            if (!m.hasMatch()) { error("Wrong cel format."); continue; }
+            if (!m.hasMatch()) { error(tr("Wrong cel format.")); continue; }
             int32_t objId = m.captured(1).toInt();
             if (!m_sortedObjIdList.contains(objId)) {
                 m_sortedObjIdList.append(objId);
@@ -280,7 +283,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             m_cels.append(cnfCel);
         } else if (line.startsWith("$"_L1)) {
             static QRegularExpression reSetNo(R"#(^[$]\d+\s)#");
-            if (!reSetNo.match(line).hasMatch()) { error("Wrong set line format."); continue; }
+            if (!reSetNo.match(line).hasMatch()) { error(tr("Wrong set line format.")); continue; }
             startToParseSetLines();
             continue;
         }
@@ -325,7 +328,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
         // qDebug() << "===============" << line;
         if (line.startsWith(":@"_L1)) {    // Some lunetic files has typo, colon `:` instead of semicolon `;`...
            fkissScriptLines.append({m_lineIdx + 1, line});
-           error("Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =>  "_L1 + line);
+           error(tr("Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =>  ") + line);
         } else if (line.startsWith(";@"_L1)) {
             fkissScriptLines.append({m_lineIdx + 1, line});
         }
@@ -350,7 +353,7 @@ void ParsedCnf::startToParseSetLines()
         } else if (QRegularExpressionMatch m = rePos.match(seg); m.hasMatch()) {
             set->appendObjPos(m.captured(1).toInt(), m.captured(2).toInt());
         } else {
-            error("Wrong objPos format");
+            error(tr("Wrong objPos format"));
         }
     }
     while (m_lineIdx + 1 < m_lines.length()) {

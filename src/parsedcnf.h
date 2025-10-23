@@ -60,6 +60,7 @@ class ParsedCnf;
  */
 class ParsedCnfCel
 {
+    Q_DECLARE_TR_FUNCTIONS(ParsedCnfCel)
     friend class ParsedCnf;
 public:
     ParsedCnfCel(int32_t objId, int32_t fix, CPString celFileName, int32_t kcfFileIndex, QList<int32_t> setsIndexes, QString comment);
@@ -142,6 +143,7 @@ using ParsedCnfSetObjPos = std::optional<QPoint>;
  */
 class ParsedCnfSet
 {
+    Q_DECLARE_TR_FUNCTIONS(ParsedCnfSet)
 public:
     ParsedCnfSet(int32_t paletteNoInKcf);
     void appendObjPos(int32_t x, int32_t y);
@@ -180,6 +182,7 @@ private:
  */
 class ParsedCnf
 {
+    Q_DECLARE_TR_FUNCTIONS(ParsedCnf)
 public:
     /** fileName is the relative file name in archive file. */
     ParsedCnf(CPString fileName, QByteArray rawData, QKiSS::Encoding encode);

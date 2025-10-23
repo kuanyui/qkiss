@@ -57,7 +57,7 @@ bool GKissView::setArchiveFileAndRenderFirstCnf(ArchiveFile *archiveFile)
     }));
     CPStringList cnfFileNameList = m_archiveFile->getCnfNameList();
     if (cnfFileNameList.isEmpty()) {
-        qCritical() << "[ERROR][View] No CNF file found in this archive file.";
+        qCritical().noquote() << tr("No CNF file found in this archive file.");
         return false;
     }
     setCurCnfAndRenderScenes(cnfFileNameList.first());
@@ -88,10 +88,10 @@ bool GKissView::setCurCnfAndRenderScenes(CPString cnfFileName)
     }
     bool ok = m_archiveFile->setCurCnfByName(cnfFileName);   // REFACTOR: So counterintuitive... Why do this in View???
     if (!ok) {
-        qCritical() << "[ERROR][View] No CNF file named " << cnfFileName << " found in this archive file.";
+        qCritical().noquote() << tr(R"(No CNF file named "%1" found in this archive file.)").arg(cnfFileName.original());
         return false;
     }
-    qDebug() << "[LOG][View] Set current cnfFileName as " << cnfFileName;
+    qDebug() << "Set current cnfFileName as " << cnfFileName;
     ok = renderCurCnfAllSets();
     if (!ok) { return false; }
     if (m_scenes.length() == 0) { return false; }
@@ -112,13 +112,13 @@ uint8_t GKissView::scenesAmount() const
 bool GKissView::showKissSceneByIndex(uint8_t setIndex)
 {
     if (scenesAmount() == 0) {
-        qWarning() << QString("[WARNING][View] only %1 scenes in this view but you ask for sceneIndex %2")
+        qWarning().noquote() << tr("Only %1 scenes in this view but you ask for sceneIndex %2")
                       .arg(scenesAmount())
                       .arg(setIndex);
         return false;
     }
     if (setIndex >= scenesAmount()) {
-        qWarning() << QString("[WARNING][View] only %1 scenes in this view but you ask for sceneIndex %2")
+        qWarning().noquote() << tr("Only %1 scenes in this view but you ask for sceneIndex %2")
                       .arg(scenesAmount())
                       .arg(setIndex);
         m_curSceneIdx = 0;
@@ -187,7 +187,7 @@ bool GKissView::renderCurCnfAllSets()
             }
             auto _cel = m_archiveFile->getParsedCel(cnfCel->celFileName());
             if (!_cel.has_value()) {
-                qCritical() << QStringLiteral("[ERROR] CNF requires a CEL '%1', but not found in this archived file: ")
+                qCritical().noquote() << tr(R"(CNF requires a CEL "%1", but not found in this archived file: )")
                                .arg(cnfCel->celFileName().original());
                 continue;
             }
@@ -196,7 +196,7 @@ bool GKissView::renderCurCnfAllSets()
             if (cel->celType() == ParsedCel::Type::PaletteBased) {
                 auto _kcf = m_archiveFile->getParsedKcfByOrderedIndexInCurrentCnf(cnfCel->kcfFileIndex());
                 if (!_kcf.has_value()) {
-                    qCritical() << "[ERROR] In CNF '%1', the CEL '%2' requires KCF index %3, but no KCF file available in this CNF."_L1
+                    qCritical().noquote() << tr(R"(In CNF "%1", the CEL "%2" requires KCF index %3, but no KCF file available in this CNF.)")
                                    .arg(cnf->fileName().original())
                                    .arg(cnfCel->celFileName().original())
                                    .arg(cnfCel->kcfFileIndex());
@@ -207,8 +207,8 @@ bool GKissView::renderCurCnfAllSets()
             } else if (cel->celType() == ParsedCel::Type::FullColor) {
                 item = new GKissItem(cnfCel, cel);
             } else {
-                qCritical() << QString("[ERROR][View] Unknown CEL type (not PaletteBased nor ColorBased), skip: %1")
-                               .arg(cnfCel->celFileName().original());
+                qCritical().noquote() << QString(R"([View] Unknown CEL type (not PaletteBased nor ColorBased), skip: "%1")")
+                                .arg(cnfCel->celFileName().original());
                 continue;
             }
             item->setPos(cel->x(), cel->y());
@@ -221,9 +221,9 @@ bool GKissView::renderCurCnfAllSets()
         // All CEL are rendered as items. Now bound items into obj (according to objId), and handle events.
         scene->bindItemsToObjects();
     }
-    qDebug().noquote() << QStringLiteral("[LOG][Benchmark][KissView] Creating all graphics items in %1 scene(s) cost %2 ms").arg(cnf->sets().length()).arg(elapsedTimer.elapsed());
+    qDebug().noquote() << tr("[Benchmark] Creating all graphics items in %1 scene(s) cost %2 ms").arg(cnf->sets().length()).arg(elapsedTimer.elapsed());
     if (m_scenes.length() == 0) {
-        qCritical() << QString("[ERROR][View] no scene found. Aborted");
+        qCritical().noquote() << tr("No scene found. Aborted");
         return false;
     }
     return true;

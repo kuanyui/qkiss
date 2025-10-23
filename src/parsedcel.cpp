@@ -72,14 +72,16 @@ void ParsedCel::parseModernCel(const QByteArray &data)
     switch (data[4]) {
     case 0x20: m_celType = Type::PaletteBased; break;
     case 0x21: m_celType = Type::FullColor; break;
-    default: qCritical() << "[ERROR] Not a valid CEL file mark!"; return;
+    default: qCritical() << "Not a valid CEL file mark!"; return;
     }
     m_bitsPerPixel = udata[5];
     if (m_bitsPerPixel != 4 && m_bitsPerPixel != 8 && m_bitsPerPixel != 32) {
-        qCritical() << "[ERROR] Invalid m_bitsPerPixel (4 or 8 or 32): " << m_bitsPerPixel; return;
+        qCritical().noquote() << tr("Invalid m_bitsPerPixel (4 or 8 or 32): %1").arg(m_bitsPerPixel); return;
     }
     if (m_celType == Type::FullColor && m_bitsPerPixel != 32) {
-        qWarning().noquote() << "[WARNING] \"%1\" claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL."_L1.arg(m_fileName.original()).arg(QString::number(m_bitsPerPixel));
+        qWarning().noquote() << tr(R"("%1" claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.)")
+                                .arg(m_fileName.original())
+                                .arg(QString::number(m_bitsPerPixel));
         m_celType = Type::PaletteBased;
     }
     m_width = (static_cast<uint16_t>(udata[9]) << 8) | udata[8];
