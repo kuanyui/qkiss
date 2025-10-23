@@ -145,7 +145,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="90"/>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>LZHファイル「%1」の展開に失敗〜。中止だよ、中止！ぷっ、かわいそう〜</translation>
+        <translation>LZHファイル「%1」の展開に失敗してんじゃんw 〜中止〜ぷっ、かわいそう〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="100"/>
@@ -213,7 +213,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="86"/>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>LZHファイル「%1」の展開に失敗〜。処理中止だよ、中止！</translation>
+        <translation>LZHファイル「%1」の展開？失敗してんじゃんw 中止〜ざぁーこ</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="97"/>
@@ -276,7 +276,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="138"/>
         <source>[Error][LibArchive] Error when opening this archive file (%1). Aborted.</source>
-        <translation>[エラー][LibArchive] アーカイブ「%1」を開くときにエラー発生〜。中止だよ、中止！ぷっ</translation>
+        <translation>[エラー][LibArchive] アーカイブ「%1」を開くときにエラー発生〜中止だよ～可哀想〜</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="146"/>
@@ -460,7 +460,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/logviewer.cpp" line="38"/>
         <source>Debug</source>
-        <translation>雑魚以下</translation>
+        <translation>ざこ以下</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="43"/>
@@ -475,17 +475,17 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/logviewer.cpp" line="53"/>
         <source>Error</source>
-        <translation>ざ〜〜〜こ</translation>
+        <translation>ざぁ〜〜〜こ</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="58"/>
         <source>Fatal</source>
-        <translation>メカジキ🐟</translation>
+        <translation>メカジキ</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="76"/>
         <source>Severity</source>
-        <translation>重要度〜</translation>
+        <translation>カースト～</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="76"/>
@@ -528,7 +528,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.ui" line="76"/>
         <source>&amp;Language</source>
-        <translation>言語(&amp;L)</translation>
+        <translation>言語設定〜母国語しか無理とかよっわw(&amp;L)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="84"/>
@@ -553,7 +553,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.ui" line="131"/>
         <source>Inner File Selector</source>
-        <translation>内部ファイルセレクタ</translation>
+        <translation>内部ファイルセレクタ～</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="149"/>
@@ -578,17 +578,17 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.ui" line="191"/>
         <source>&amp;Open File</source>
-        <translation>ファイルを開く(&amp;O)</translation>
+        <translation>ファイルを開く～(&amp;O)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="199"/>
         <source>Open &amp;Directory</source>
-        <translation>ディレクトリを開く(&amp;D)</translation>
+        <translation>ディレクトリを開く～(&amp;D)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="207"/>
         <source>&amp;Quit</source>
-        <translation>バイバイ〜。逃げるの？笑(&amp;Q)</translation>
+        <translation>バイバイ〜。逃げるの？二度と戻ってこなくていいよ？ざぁーこ(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="218"/>
@@ -631,7 +631,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.ui" line="269"/>
         <source>About QKiSS</source>
-        <translation>QKiSSについて</translation>
+        <translation>QKiSSについて～</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="76"/>
