@@ -139,8 +139,8 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="87"/>
-        <source>Trying to extract LZH file &quot;%1&quot;...</source>
-        <translation>LZHファイル「%1」を展開中…（ちゃんと見てなよ）</translation>
+        <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
+        <translation>LZHファイル「%1」を展開中…、見ても理解できないんでしょ？ぷっ、ざぁーこ。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="90"/>
@@ -222,8 +222,8 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="104"/>
-        <source>Trying to extract LZH file &quot;%1&quot;...</source>
-        <translation>LZHファイル「%1」を展開してあげてるんだけど〜。ちゃんと見てなよ〜</translation>
+        <source>Trying to extract LZH file &quot;%1&quot; via Unar...</source>
+        <translation>UnarでLZH ファイル「%1」を展開中…ほら、見ても理解できないんでしょ？ぷっー</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="125"/>

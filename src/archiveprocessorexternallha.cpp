@@ -84,7 +84,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
         promise->finish();
         delete promise;
     }
-    qInfo().noquote() << tr("Trying to extract LZH file \"%1\"...").arg(fileName);
+    qInfo().noquote() << tr("Trying to extract LZH file \"%1\" via LHA...").arg(fileName);
     this->callExternalProgramOrLibraryToExtractLzh(lzhOrCnfFilePath);
     QObject::connect(this, &ArchiveProcessorExternalLha::extractFail, [promise, fileName](QString compressedFilePath, QString errMsg) {
         qCritical().noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);

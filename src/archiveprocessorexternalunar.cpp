@@ -101,7 +101,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalUnar::ex
         promise->finish();
         delete promise;
     });
-    qInfo().noquote() << tr("Trying to extract LZH file \"%1\"...").arg(fileName);
+    qInfo().noquote() << tr("Trying to extract LZH file \"%1\" via Unar...").arg(fileName);
     startUnarProcessToExtractLzh(lzhOrCnfFilePath);
     return future;
 }

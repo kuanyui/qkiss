@@ -135,7 +135,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="87"/>
-        <source>Trying to extract LZH file &quot;%1&quot;...</source>
+        <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
         <translation>正在嘗試解壓縮 LZH 檔案「%1」...</translation>
     </message>
     <message>
@@ -218,7 +218,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="104"/>
-        <source>Trying to extract LZH file &quot;%1&quot;...</source>
+        <source>Trying to extract LZH file &quot;%1&quot; via Unar...</source>
         <translation>正在嘗試解壓縮 LZH 檔案「%1」...</translation>
     </message>
     <message>
