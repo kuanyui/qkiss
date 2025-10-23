@@ -728,8 +728,8 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="685"/>
-        <source>LZH アーカイヴファイル (*.lzh)</source>
-        <translation></translation>
+        <source>LZH Archive Files (*.lzh)</source>
+        <translation>LZH アーカイヴファイル (*.lzh)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="687"/>
@@ -830,7 +830,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/enums.h" line="60"/>
         <source>Shift JIS</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift JIS</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="61"/>

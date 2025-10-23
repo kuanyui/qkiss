@@ -728,8 +728,8 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="685"/>
-        <source>LZH 壓縮檔 (*.lzh)</source>
-        <translation></translation>
+        <source>LZH Archive Files (*.lzh)</source>
+        <translation>LZH 壓縮檔 (*.lzh)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="687"/>

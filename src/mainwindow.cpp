@@ -682,7 +682,7 @@ void MainWindow::renderRecentFiles()
 
 void MainWindow::openFilePicker()
 {
-    QString filter = tr("LZH Files (*.lzh)");
+    QString filter = tr("LZH Archive Files (*.lzh)");
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open Compressed KiSS File"),
                                                     m_fileSystemBrowser->curDirPath(),
