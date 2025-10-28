@@ -85,22 +85,22 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/archivefile.cpp" line="225"/>
         <source>Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のCNFに対するParsedKcfを取得いたしませんといけませんのに、このCNFにはKCFファイルの宣言がございませんの。中止いたしますわ。</translation>
     </message>
     <message>
         <location filename="../src/archivefile.cpp" line="283"/>
         <source>The CNF &apos;%1&apos; requires %2 KCF files.</source>
-        <translation type="unfinished"></translation>
+        <translation>CNF「%1」にはKCFファイルが%2個必要でございますの。</translation>
     </message>
     <message>
         <location filename="../src/archivefile.cpp" line="287"/>
         <source>CNF file &apos;%1&apos; requires KCF file &apos;%2&apos;, but this KCF file is not found in this archived file.</source>
-        <translation type="unfinished"></translation>
+        <translation>CNF「%1」はKCF「%2」を要すると申しておりますけれど、このアーカイブには当該KCFが見当たりませんの。</translation>
     </message>
     <message>
         <location filename="../src/archivefile.cpp" line="278"/>
         <source>Set current CNF failed; no CNF named &quot;%1&quot; in this archive file.</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のCNFの設定に失敗いたしましたわ。このアーカイブには「%1」というCNFがございませんの。</translation>
     </message>
 </context>
 <context>
@@ -292,32 +292,32 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="138"/>
         <source>Error when opening this archive file (%1). Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>このアーカイブを開く際にエラーが発生いたしましたの（%1）。中止いたしますわ。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="146"/>
         <source>Fatal error (%1), no more operations are possible., abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>致命的なエラー（%1）により、これ以上の操作は叶いませんの。中止いたしますわ。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="149"/>
         <source>Current operation cannot complete (%1), skip.</source>
-        <translation type="unfinished"></translation>
+        <translation>只今の操作は完遂できませんでしたの（%1）。スキップいたしますわ。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="152"/>
         <source>Partial success (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>一部のみ成功いたしましたの（%1）。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="155"/>
         <source>Retry might succeed (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>再試行にて成功いたしますやもしれませんわ（%1）。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="173"/>
         <source>when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>LibArchiveでこのアーカイブを読み込み中にエラーがございましたの（エラー: %1）。中止いたしますわ。</translation>
     </message>
 </context>
 <context>
@@ -397,27 +397,27 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/fkissparser.cpp" line="129"/>
         <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
-        <translation type="unfinished"></translation>
+        <translation>二重引用符を見つけましたけれど、対になるお印が見当たらず文字列が成り立ちませんの。SOURCE: </translation>
     </message>
     <message>
         <location filename="../src/fkissparser.cpp" line="147"/>
         <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
-        <translation type="unfinished"></translation>
+        <translation>想定外の文字でございますゆえ無視いたしますわ [%1:%2]: `%3`</translation>
     </message>
     <message>
         <location filename="../src/fkissparser.cpp" line="284"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
-        <translation type="unfinished"></translation>
+        <translation>不明なコマンド「%1」でございますの。スキップいたしますわ。</translation>
     </message>
     <message>
         <location filename="../src/fkissparser.cpp" line="293"/>
         <source>[SyntaxWarning] %1   [L%2, C%3] %4</source>
-        <translation type="unfinished"></translation>
+        <translation>[構文警告] %1   [L%2, C%3] %4</translation>
     </message>
     <message>
         <location filename="../src/fkissparser.cpp" line="302"/>
         <source>[SyntaxError] %1   [L%2, C%3] %4</source>
-        <translation type="unfinished"></translation>
+        <translation>[構文エラー] %1   [L%2, C%3] %4</translation>
     </message>
 </context>
 <context>
@@ -425,22 +425,22 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/gkissscene.cpp" line="74"/>
         <source>No KCF found in this CNF, don&apos;t draw set background.</source>
-        <translation type="unfinished"></translation>
+        <translation>このCNFにはKCFが見当たりませんので、背景はお描きいたしませんわ。</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="81"/>
         <source>No palette in this KCF. Abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>このKCFにはパレットがございませんの。中止いたしますわ。</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="92"/>
         <source>In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.</source>
-        <translation type="unfinished"></translation>
+        <translation>このCNFでは setNo %1 の既定 paletteNo が %2 と定められておりますけれど、最初のKCFにはパレットが%3個しかございませんの。最初のKCFの paletteNo 0 に差し戻してさしあげますわ。</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="100"/>
         <source>WTF? In CNF&apos;s set definition, not found palette in first KCF of this CNF. Abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>まあ…… CNF の set 定義において、このCNFの最初の KCF にパレットが見当たりませんの。中止いたしますわ。</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="550"/>
@@ -468,38 +468,38 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/gkissview.cpp" line="60"/>
         <source>No CNF file found in this archive file.</source>
-        <translation type="unfinished"></translation>
+        <translation>このアーカイブにはCNFが見当たりませんの。</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="91"/>
         <source>No CNF file named &quot;%1&quot; found in this archive file.</source>
-        <translation type="unfinished"></translation>
+        <translation>このアーカイブに「%1」というCNFはございませんの。</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="115"/>
         <location filename="../src/gkissview.cpp" line="121"/>
         <source>Only %1 scenes in this view but you ask for sceneIndex %2</source>
-        <translation type="unfinished"></translation>
+        <translation>本ビューには%1件のシーンしかございませんのに、sceneIndex %2 が指定されておりますわ。</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="190"/>
         <source>CNF requires a CEL &quot;%1&quot;, but not found in this archived file: </source>
-        <translation type="unfinished"></translation>
+        <translation>CNF は CEL「%1」を要しておりますけれど、このアーカイブには見当たりませんの： </translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="199"/>
         <source>In CNF &quot;%1&quot;, the CEL &quot;%2&quot; requires KCF index %3, but no KCF file available in this CNF.</source>
-        <translation type="unfinished"></translation>
+        <translation>CNF「%1」において、CEL「%2」は KCF インデックス %3 を要しますのに、このCNFにはKCFがございませんの。</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="224"/>
         <source>[Benchmark] Creating all graphics items in %1 scene(s) cost %2 ms</source>
-        <translation type="unfinished"></translation>
+        <translation>[ベンチマーク] %1シーンにおける全グラフィック項目の作成に%2 ms でございますわ</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="226"/>
         <source>No scene found. Aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>シーンが見当たりませんの。中止いたしましたわ。</translation>
     </message>
 </context>
 <context>
@@ -854,12 +854,12 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/parsedcel.cpp" line="79"/>
         <source>Invalid m_bitsPerPixel (4 or 8 or 32): %1</source>
-        <translation type="unfinished"></translation>
+        <translation>m_bitsPerPixel が不正でございますわ（4・8・32 のみ）: %1</translation>
     </message>
     <message>
         <location filename="../src/parsedcel.cpp" line="82"/>
         <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
-        <translation type="unfinished"></translation>
+        <translation>「%1」はパレット方式のCELと称しておりますけれど、各画素が%2ビット（想定は32ビット）と申しており矛盾いたしますの。パレット方式のCELと見なして進めますわ。</translation>
     </message>
 </context>
 <context>
@@ -867,37 +867,37 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/parsedcnf.cpp" line="215"/>
         <source>Wrong playFieldSize format.</source>
-        <translation type="unfinished"></translation>
+        <translation>playFieldSize のお書式が正しくございませんの。</translation>
     </message>
     <message>
         <location filename="../src/parsedcnf.cpp" line="221"/>
         <source>Wrong KCF file name format.</source>
-        <translation type="unfinished"></translation>
+        <translation>KCF ファイル名のお書式が正しくございませんの。</translation>
     </message>
     <message>
         <location filename="../src/parsedcnf.cpp" line="227"/>
         <source>Wrong outsideColor format.</source>
-        <translation type="unfinished"></translation>
+        <translation>outsideColor のお書式が正しくございませんの。</translation>
     </message>
     <message>
         <location filename="../src/parsedcnf.cpp" line="245"/>
         <source>Wrong CEL format.</source>
-        <translation type="unfinished"></translation>
+        <translation>CEL のお書式が正しくございませんの。</translation>
     </message>
     <message>
         <location filename="../src/parsedcnf.cpp" line="286"/>
         <source>Wrong set line format.</source>
-        <translation type="unfinished"></translation>
+        <translation>set 行のお書式が正しくございませんの。</translation>
     </message>
     <message>
         <location filename="../src/parsedcnf.cpp" line="331"/>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
-        <translation type="unfinished"></translation>
+        <translation>fkiss の接頭辞 `:@` は正しくございませんけれど、旧来互換のため受け入れてさしあげますわ =&gt;  </translation>
     </message>
     <message>
         <location filename="../src/parsedcnf.cpp" line="356"/>
         <source>Wrong objPos format</source>
-        <translation type="unfinished"></translation>
+        <translation>objPos のお書式が正しくございませんの。</translation>
     </message>
 </context>
 <context>
@@ -905,39 +905,39 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/parsedkcf.cpp" line="42"/>
         <source>Not a palette file mark!</source>
-        <translation type="unfinished"></translation>
+        <translation>パレットファイルの印ではございませんわ！</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="46"/>
         <source>Invalid bitsPerColor (12 or 24): %1</source>
-        <translation type="unfinished"></translation>
+        <translation>bitsPerColor が不正でございますの（12 または 24）: %1</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="50"/>
         <source>Invalid colorAmountsInOnePalette (1 ~ 256): %1</source>
-        <translation type="unfinished"></translation>
+        <translation>colorAmountsInOnePalette が不正でございますわ（1 ～ 256）: %1</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="60"/>
         <location filename="../src/parsedkcf.cpp" line="78"/>
         <location filename="../src/parsedkcf.cpp" line="112"/>
         <source>Out of range palatte colors definition, byte offset: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>パレット色の定義が範囲外でございますの。バイトオフセット: %1</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="90"/>
         <source>What is this? Unknown KCF bitsPerColor: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>まあ？ 見知らぬ KCF bitsPerColor でございますわ: %1</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="142"/>
         <source>This KCF file contains no valid palette, but you try to get palette from it. Abort.</source>
-        <translation type="unfinished"></translation>
+        <translation>このKCFには有効なパレットがございませんのに、パレットを求めようとなさいますの？ 中止いたしますわ。</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="146"/>
         <source>paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback</source>
-        <translation type="unfinished"></translation>
+        <translation>paletteIdx（%1、0始まりにご留意くださいませ）が実際の paletteAmount（%2）を超えておりますの。代替として 0 を用いますわ。</translation>
     </message>
 </context>
 <context>
@@ -1023,7 +1023,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/enums.h" line="59"/>
         <source>UTF-8</source>
-        <translation>UTF-8（万国共通の御綴り様式ですの）</translation>
+        <translation>UTF-8（万国共通の御綴り様式ですわ）</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="60"/>
