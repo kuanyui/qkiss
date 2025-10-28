@@ -82,6 +82,26 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <source>Found valid files: %1 CNF, %2 CEL, %3 KCF.</source>
         <translation>找到有效檔案：%1 個 CNF、%2 個 CEL、%3 個 KCF。</translation>
     </message>
+    <message>
+        <location filename="../src/archivefile.cpp" line="225"/>
+        <source>Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.</source>
+        <translation>需要取得當前 CNF 的 ParsedKcf，但此 CNF 未宣告任何 KCF 檔。中止。</translation>
+    </message>
+    <message>
+        <location filename="../src/archivefile.cpp" line="283"/>
+        <source>The CNF &apos;%1&apos; requires %2 KCF files.</source>
+        <translation>CNF「%1」需要 %2 個 KCF 檔案。</translation>
+    </message>
+    <message>
+        <location filename="../src/archivefile.cpp" line="287"/>
+        <source>CNF file &apos;%1&apos; requires KCF file &apos;%2&apos;, but this KCF file is not found in this archived file.</source>
+        <translation>CNF 檔案「%1」需要 KCF 檔案「%2」，但此壓縮檔中找不到該 KCF 檔。</translation>
+    </message>
+    <message>
+        <location filename="../src/archivefile.cpp" line="278"/>
+        <source>Set current CNF failed; no CNF named &quot;%1&quot; in this archive file.</source>
+        <translation>設定當前 CNF 失敗；此壓縮檔中沒有名為「%1」的 CNF。</translation>
+    </message>
 </context>
 <context>
     <name>ArchiveProcessorCnfInFileSystem</name>
@@ -271,33 +291,33 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="138"/>
-        <source>[Error][LibArchive] Error when opening this archive file (%1). Aborted.</source>
-        <translation>[錯誤][LibArchive] 開啟此壓縮檔時發生錯誤（%1）。操作中止。</translation>
+        <source>Error when opening this archive file (%1). Aborted.</source>
+        <translation>開啟此壓縮檔時發生錯誤（%1）。已中止。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="146"/>
-        <source>[Error][LibArchive] Fatal error (%1), no more operations are possible., abort.</source>
-        <translation>[錯誤][LibArchive] 嚴重錯誤（%1），無法再進行任何操作。中止操作。</translation>
+        <source>Fatal error (%1), no more operations are possible., abort.</source>
+        <translation>發生嚴重錯誤（%1），無法繼續操作，已中止。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="149"/>
-        <source>[Warning][LibArchive] Current operation cannot complete (%1), skip.</source>
-        <translation>[警告][LibArchive] 目前操作無法完成（%1），跳過。</translation>
+        <source>Current operation cannot complete (%1), skip.</source>
+        <translation>目前的操作無法完成（%1），略過。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="152"/>
-        <source>[Warning][Libarchive] Partial success (%1).</source>
-        <translation>[警告][Libarchive] 部分成功（%1）。</translation>
+        <source>Partial success (%1).</source>
+        <translation>部分成功（%1）。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="155"/>
-        <source>[Warning][Libarchive] Retry might succeed (%1)</source>
-        <translation>[警告][Libarchive] 重試可能會成功（%1）</translation>
+        <source>Retry might succeed (%1)</source>
+        <translation>重試可能會成功（%1）。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="173"/>
-        <source>[Error][LibArchive] when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
-        <translation>[錯誤][LibArchive] 透過 LibArchive 讀取此壓縮檔時發生錯誤（錯誤訊息：%1）。操作中止。</translation>
+        <source>when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
+        <translation>透過 LibArchive 讀取此壓縮檔時發生錯誤（錯誤訊息：%1）。已中止。</translation>
     </message>
 </context>
 <context>
@@ -373,7 +393,55 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
 </context>
 <context>
+    <name>FkissParser</name>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="129"/>
+        <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
+        <translation>發現雙引號，但找不到配對的另一個引號以形成字串。來源： </translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="147"/>
+        <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
+        <translation>由於是非預期字元而略過 [%1:%2]：`%3`</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="284"/>
+        <source>Unknown command &quot;%1&quot;, skip.</source>
+        <translation>不明指令「%1」，略過。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="293"/>
+        <source>[SyntaxWarning] %1   [L%2, C%3] %4</source>
+        <translation>[語法警告] %1   [L%2, C%3] %4</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="302"/>
+        <source>[SyntaxError] %1   [L%2, C%3] %4</source>
+        <translation>[語法錯誤] %1   [L%2, C%3] %4</translation>
+    </message>
+</context>
+<context>
     <name>GKissScene</name>
+    <message>
+        <location filename="../src/gkissscene.cpp" line="74"/>
+        <source>No KCF found in this CNF, don&apos;t draw set background.</source>
+        <translation>此 CNF 未找到 KCF，因此不繪製場景背景。</translation>
+    </message>
+    <message>
+        <location filename="../src/gkissscene.cpp" line="81"/>
+        <source>No palette in this KCF. Abort.</source>
+        <translation>此 KCF 不含任何調色盤。中止。</translation>
+    </message>
+    <message>
+        <location filename="../src/gkissscene.cpp" line="92"/>
+        <source>In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.</source>
+        <translation>在此 CNF 中，setNo %1 將預設的 paletteNo 指定為 %2，但第一個 KCF 僅包含 %3 個調色盤。將回退為第一個 KCF 的 paletteNo 0。</translation>
+    </message>
+    <message>
+        <location filename="../src/gkissscene.cpp" line="100"/>
+        <source>WTF? In CNF&apos;s set definition, not found palette in first KCF of this CNF. Abort.</source>
+        <translation>在 CNF 的 set 定義中，於此 CNF 的第一個 KCF 未找到調色盤。中止。</translation>
+    </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="550"/>
         <source>[%1] Unfix (&amp;U)</source>
@@ -393,6 +461,45 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <location filename="../src/gkissscene.cpp" line="561"/>
         <source>Click to copy filename to clipboard.</source>
         <translation>點擊以複製檔案名稱到剪貼簿。</translation>
+    </message>
+</context>
+<context>
+    <name>GKissView</name>
+    <message>
+        <location filename="../src/gkissview.cpp" line="60"/>
+        <source>No CNF file found in this archive file.</source>
+        <translation>此壓縮檔中未找到 CNF 檔。</translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="91"/>
+        <source>No CNF file named &quot;%1&quot; found in this archive file.</source>
+        <translation>此壓縮檔中未找到名為「%1」的 CNF 檔。</translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="115"/>
+        <location filename="../src/gkissview.cpp" line="121"/>
+        <source>Only %1 scenes in this view but you ask for sceneIndex %2</source>
+        <translation>此畫面僅有 %1 個場景，但要求的 sceneIndex 為 %2。</translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="190"/>
+        <source>CNF requires a CEL &quot;%1&quot;, but not found in this archived file: </source>
+        <translation>CNF 需要 CEL「%1」，但在此壓縮檔中找不到： </translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="199"/>
+        <source>In CNF &quot;%1&quot;, the CEL &quot;%2&quot; requires KCF index %3, but no KCF file available in this CNF.</source>
+        <translation>在 CNF「%1」中，CEL「%2」需要 KCF 索引 %3，但此 CNF 並無任何 KCF 檔。</translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="224"/>
+        <source>[Benchmark] Creating all graphics items in %1 scene(s) cost %2 ms</source>
+        <translation>[效能測試] 在 %1 個場景中建立所有圖形項目耗時 %2 毫秒</translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="226"/>
+        <source>No scene found. Aborted</source>
+        <translation>找不到任何場景。已中止。</translation>
     </message>
 </context>
 <context>
@@ -740,6 +847,97 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <location filename="../src/mainwindow.cpp" line="702"/>
         <source>Open Directory</source>
         <translation>開啟資料夾</translation>
+    </message>
+</context>
+<context>
+    <name>ParsedCel</name>
+    <message>
+        <location filename="../src/parsedcel.cpp" line="79"/>
+        <source>Invalid m_bitsPerPixel (4 or 8 or 32): %1</source>
+        <translation>無效的 m_bitsPerPixel（4、8 或 32）：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcel.cpp" line="82"/>
+        <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
+        <translation>「%1」聲稱是以調色盤為基礎的 CEL 檔，但其表示每個像素為 %2 位元（預期：32 位元），前後矛盾。將視為調色盤式 CEL。</translation>
+    </message>
+</context>
+<context>
+    <name>ParsedCnf</name>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="215"/>
+        <source>Wrong playFieldSize format.</source>
+        <translation>playFieldSize 格式錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="221"/>
+        <source>Wrong KCF file name format.</source>
+        <translation>KCF 檔名格式錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="227"/>
+        <source>Wrong outsideColor format.</source>
+        <translation>outsideColor 格式錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="245"/>
+        <source>Wrong CEL format.</source>
+        <translation>CEL 格式錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="286"/>
+        <source>Wrong set line format.</source>
+        <translation>set 行格式錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="331"/>
+        <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
+        <translation>fkiss 前綴 `:@` 不正確，但為相容舊版而接受 =&gt;  </translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="356"/>
+        <source>Wrong objPos format</source>
+        <translation>objPos 格式錯誤</translation>
+    </message>
+</context>
+<context>
+    <name>ParsedKcf</name>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="42"/>
+        <source>Not a palette file mark!</source>
+        <translation>並非調色盤檔案標記！</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="46"/>
+        <source>Invalid bitsPerColor (12 or 24): %1</source>
+        <translation>無效的 bitsPerColor（12 或 24）：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="50"/>
+        <source>Invalid colorAmountsInOnePalette (1 ~ 256): %1</source>
+        <translation>無效的 colorAmountsInOnePalette（1 ～ 256）：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="60"/>
+        <location filename="../src/parsedkcf.cpp" line="78"/>
+        <location filename="../src/parsedkcf.cpp" line="112"/>
+        <source>Out of range palatte colors definition, byte offset: %1</source>
+        <translation>調色盤顏色定義超出範圍，位元組偏移：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="90"/>
+        <source>What is this? Unknown KCF bitsPerColor: %1</source>
+        <translation>這是什麼？未知的 KCF bitsPerColor：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="142"/>
+        <source>This KCF file contains no valid palette, but you try to get palette from it. Abort.</source>
+        <translation>此 KCF 檔不包含有效的調色盤，但卻嘗試從中取得調色盤。中止。</translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="146"/>
+        <source>paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback</source>
+        <translation>paletteIdx（%1，注意從 0 起算）超出實際的 paletteAmount（%2），將回退使用索引 0。</translation>
     </message>
 </context>
 <context>

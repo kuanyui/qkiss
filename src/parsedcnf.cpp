@@ -242,7 +242,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             //                                      V          V               V                               V               V         V               V
             static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d*))?[\s　]+([^\s\t　*:]+)(?:[\s　]*[*][\s　]*?(\d+))?(?:[\s　]*([:])?([\d\s　]*))?(?:[;；](.*))?)#");
             QRegularExpressionMatch m = reCel.match(line);
-            if (!m.hasMatch()) { error(tr("Wrong cel format.")); continue; }
+            if (!m.hasMatch()) { error(tr("Wrong CEL format.")); continue; }
             int32_t objId = m.captured(1).toInt();
             if (!m_sortedObjIdList.contains(objId)) {
                 m_sortedObjIdList.append(objId);

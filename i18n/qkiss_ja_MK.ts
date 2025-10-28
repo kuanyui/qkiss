@@ -86,6 +86,26 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <source>Found valid files: %1 CNF, %2 CEL, %3 KCF.</source>
         <translation>有効なファイルが見つかりました：CNF %1個、CEL %2個、KCF %3個。</translation>
     </message>
+    <message>
+        <location filename="../src/archivefile.cpp" line="225"/>
+        <source>Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/archivefile.cpp" line="283"/>
+        <source>The CNF &apos;%1&apos; requires %2 KCF files.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/archivefile.cpp" line="287"/>
+        <source>CNF file &apos;%1&apos; requires KCF file &apos;%2&apos;, but this KCF file is not found in this archived file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/archivefile.cpp" line="278"/>
+        <source>Set current CNF failed; no CNF named &quot;%1&quot; in this archive file.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ArchiveProcessorCnfInFileSystem</name>
@@ -155,7 +175,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="216"/>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
-        <translation>ネストされたLZHファイル「%1」の展開に失敗。tmp「%2」すら開けないの？ぷっ</translation>
+        <translation>ネストされたLZHファイル「%1」の展開に失敗。一時ファイル「%2」すら開けないの？ぷっ、能無し♥️</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="221"/>
@@ -165,7 +185,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="256"/>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在しないんだって〜。処理中止〜、ドンマイ☆</translation>
+        <translation>アーカイブファイルパス「%1」が存在しないんだって〜。かっこわる〜い♥️☆</translation>
     </message>
 </context>
 <context>
@@ -275,33 +295,33 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="138"/>
-        <source>[Error][LibArchive] Error when opening this archive file (%1). Aborted.</source>
-        <translation>[エラー][LibArchive] アーカイブ「%1」を開くときにエラー発生〜中止だよ～可哀想〜</translation>
+        <source>Error when opening this archive file (%1). Aborted.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="146"/>
-        <source>[Error][LibArchive] Fatal error (%1), no more operations are possible., abort.</source>
-        <translation>[エラー][LibArchive] 致命的エラー（%1）〜。もう何もできませ〜ん、ざっこ</translation>
+        <source>Fatal error (%1), no more operations are possible., abort.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="149"/>
-        <source>[Warning][LibArchive] Current operation cannot complete (%1), skip.</source>
-        <translation>[警告][LibArchive] この操作は完了できないよ〜（%1）。スキップしとくね</translation>
+        <source>Current operation cannot complete (%1), skip.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="152"/>
-        <source>[Warning][Libarchive] Partial success (%1).</source>
-        <translation>[警告][Libarchive] 部分的にしか成功しなかったよ〜（%1）。よっわ〜</translation>
+        <source>Partial success (%1).</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="155"/>
-        <source>[Warning][Libarchive] Retry might succeed (%1)</source>
-        <translation>[警告][Libarchive] 再試行すればワンチャン成功するかもね〜（%1）</translation>
+        <source>Retry might succeed (%1)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="173"/>
-        <source>[Error][LibArchive] when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
-        <translation>[エラー][LibArchive] LibArchiveでこのアーカイブ読むときにエラー発生〜（%1）。処理中止だよ〜〜〜〜よわっ</translation>
+        <source>when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -377,7 +397,55 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
 </context>
 <context>
+    <name>FkissParser</name>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="129"/>
+        <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="147"/>
+        <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="284"/>
+        <source>Unknown command &quot;%1&quot;, skip.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="293"/>
+        <source>[SyntaxWarning] %1   [L%2, C%3] %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="302"/>
+        <source>[SyntaxError] %1   [L%2, C%3] %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GKissScene</name>
+    <message>
+        <location filename="../src/gkissscene.cpp" line="74"/>
+        <source>No KCF found in this CNF, don&apos;t draw set background.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gkissscene.cpp" line="81"/>
+        <source>No palette in this KCF. Abort.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gkissscene.cpp" line="92"/>
+        <source>In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gkissscene.cpp" line="100"/>
+        <source>WTF? In CNF&apos;s set definition, not found palette in first KCF of this CNF. Abort.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="550"/>
         <source>[%1] Unfix (&amp;U)</source>
@@ -397,6 +465,45 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <location filename="../src/gkissscene.cpp" line="561"/>
         <source>Click to copy filename to clipboard.</source>
         <translation>ファイル名をクリップボードにコピーするにはクリック。</translation>
+    </message>
+</context>
+<context>
+    <name>GKissView</name>
+    <message>
+        <location filename="../src/gkissview.cpp" line="60"/>
+        <source>No CNF file found in this archive file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="91"/>
+        <source>No CNF file named &quot;%1&quot; found in this archive file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="115"/>
+        <location filename="../src/gkissview.cpp" line="121"/>
+        <source>Only %1 scenes in this view but you ask for sceneIndex %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="190"/>
+        <source>CNF requires a CEL &quot;%1&quot;, but not found in this archived file: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="199"/>
+        <source>In CNF &quot;%1&quot;, the CEL &quot;%2&quot; requires KCF index %3, but no KCF file available in this CNF.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="224"/>
+        <source>[Benchmark] Creating all graphics items in %1 scene(s) cost %2 ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gkissview.cpp" line="226"/>
+        <source>No scene found. Aborted</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -744,6 +851,97 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <location filename="../src/mainwindow.cpp" line="702"/>
         <source>Open Directory</source>
         <translation>ディレクトリを開く〜〜</translation>
+    </message>
+</context>
+<context>
+    <name>ParsedCel</name>
+    <message>
+        <location filename="../src/parsedcel.cpp" line="79"/>
+        <source>Invalid m_bitsPerPixel (4 or 8 or 32): %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcel.cpp" line="82"/>
+        <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ParsedCnf</name>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="215"/>
+        <source>Wrong playFieldSize format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="221"/>
+        <source>Wrong KCF file name format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="227"/>
+        <source>Wrong outsideColor format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="245"/>
+        <source>Wrong CEL format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="286"/>
+        <source>Wrong set line format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="331"/>
+        <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedcnf.cpp" line="356"/>
+        <source>Wrong objPos format</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ParsedKcf</name>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="42"/>
+        <source>Not a palette file mark!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="46"/>
+        <source>Invalid bitsPerColor (12 or 24): %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="50"/>
+        <source>Invalid colorAmountsInOnePalette (1 ~ 256): %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="60"/>
+        <location filename="../src/parsedkcf.cpp" line="78"/>
+        <location filename="../src/parsedkcf.cpp" line="112"/>
+        <source>Out of range palatte colors definition, byte offset: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="90"/>
+        <source>What is this? Unknown KCF bitsPerColor: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="142"/>
+        <source>This KCF file contains no valid palette, but you try to get palette from it. Abort.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/parsedkcf.cpp" line="146"/>
+        <source>paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
