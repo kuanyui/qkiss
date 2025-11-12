@@ -31,9 +31,9 @@ QKiSSは、Qt 6で開発されたモダンな [KiSS (Kisekae Set System)](https:
 Kisekaeは*「着せ替え人形」*の略。
 KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)やパソコン（NEC PC-9800シリーズ）オタクたちが必死に遊んでたやつ〜w
 
-[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)見に行く暇あるの？ヒマ人乙〜
+[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)見に行く暇あるの？ヒマ人乙〜キャハハ♥
 
-ちなみに、『メ〇〇キ』は『メカジキ』だから、メカジキ以外は全部雑魚。
+ちなみに、『メ〇〇キ』は『メカジキ』だから、メカジキ以外は全部雑魚。常識だろ？
 </translation>
     </message>
     <message>
@@ -59,7 +59,7 @@ KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)や
     <message>
         <location filename="../src/aboutdialog.cpp" line="132"/>
         <source>Authors</source>
-        <translation>偉そうな作者乙w</translation>
+        <translation>偉そうな作者ら乙w</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="140"/>
@@ -89,7 +89,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/archivefile.cpp" line="225"/>
         <source>Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.</source>
-        <translation>今のCNF用にParsedKcfが必要なんだけど、このCNFはKCFファイルを宣言してないんだよね。あ〜あ、中止〜よわよわ〜♥</translation>
+        <translation>今のCNF用にParsedKcfが必要なんだけど、このCNFはKCFファイルを宣言してないんだよね。あ〜あ、中止しちゃった〜よわ〜♥</translation>
     </message>
     <message>
         <location filename="../src/archivefile.cpp" line="283"/>
@@ -175,7 +175,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="216"/>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
-        <translation>ネストされたLZHファイル「%1」の展開に失敗。一時ファイル「%2」すら開けないの？ぷっ、能無し♥️</translation>
+        <translation>ネストされたLZHファイル「%1」の展開に失敗。一時ファイル「%2」すら開けないの？ぷっ、能無し♥</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="221"/>
@@ -185,7 +185,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="256"/>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在しないんだって〜。かっこわる〜い♥️☆</translation>
+        <translation>アーカイブファイルパス「%1」が存在しないんだって〜。かっこわる〜い♥☆</translation>
     </message>
 </context>
 <context>
@@ -301,7 +301,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="146"/>
         <source>Fatal error (%1), no more operations are possible., abort.</source>
-        <translation>致命的なエラー（%1）だって。これ以上は無理〜～中止ね、よわよわ〜♥</translation>
+        <translation>致命的なエラー（%1）だって。これ以上は無理〜～中止ね、よっわ♥</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="149"/>
@@ -434,7 +434,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/gkissscene.cpp" line="81"/>
         <source>No palette in this KCF. Abort.</source>
-        <translation>このKCFにはパレットが入ってないじゃん。中止ね、よわよわ〜♥</translation>
+        <translation>このKCFにはパレットが入ってないじゃん？中止しちゃった、キャハハ♥</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="92"/>
@@ -449,7 +449,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/gkissscene.cpp" line="550"/>
         <source>[%1] Unfix (&amp;U)</source>
-        <translation>[%1] 固定解除(&amp;U)。ん〜〜〜？な〜〜〜んのつもりなの？うわ、キモッ！地球から消えてくれませんか？</translation>
+        <translation>[%1] 固定解除(&amp;U)。な〜〜〜んのつもりなの？キモいから地球から消えてくれませんか？</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="552"/>
@@ -472,7 +472,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/gkissview.cpp" line="60"/>
         <source>No CNF file found in this archive file.</source>
-        <translation>このアーカイブにはCNFファイルが見つからないよ。ざぁ〜こ♥</translation>
+        <translation>このアーカイブにはCNFファイルが見つからないよ。ざぁーこ♥</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="91"/>
@@ -503,7 +503,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/gkissview.cpp" line="226"/>
         <source>No scene found. Aborted</source>
-        <translation>シーンが無かったから中止したよ。はずかしくないのぉ〜〜？♥</translation>
+        <translation>シーンが無かったから中止したよ〜ざこーい、キャハハ♥</translation>
     </message>
 </context>
 <context>
@@ -635,7 +635,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.ui" line="76"/>
         <source>&amp;Language</source>
-        <translation>言語設定〜母国語しか無理とかよっわw(&amp;L)</translation>
+        <translation>言語設定〜母国語しか無理とかざこーい♥(&amp;L)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="84"/>
@@ -695,7 +695,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.ui" line="207"/>
         <source>&amp;Quit</source>
-        <translation>バイバイ〜。逃げるの？二度と戻ってこなくていいよ？ざぁーこ(&amp;Q)</translation>
+        <translation>逃げるの？罵倒に耐えない顔きたなーい、キャハハ♥(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="218"/>
@@ -753,7 +753,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.cpp" line="171"/>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
-        <translation>「%1」は有効なKiSSパッチファイルじゃないよ〜。処理中止〜、ざぁーこ</translation>
+        <translation>「%1」は有効なKiSSパッチファイルじゃないで処理中止、キャハハ♥</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="178"/>
@@ -820,7 +820,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.cpp" line="528"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
-        <translation>Ctrl+ドラッグ：オブジェクトからCELを強制分離、うっわ</translation>
+        <translation>Ctrl+ドラッグ：オブジェクトからCELを強制分離</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="533"/>
@@ -830,7 +830,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.cpp" line="538"/>
         <source>Middle Click: Unfix</source>
-        <translation>中クリック：変なことをする、キモキモ</translation>
+        <translation>中クリック：変なことをする、キモ〜</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="543"/>
@@ -871,12 +871,12 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/parsedcnf.cpp" line="215"/>
         <source>Wrong playFieldSize format.</source>
-        <translation>playFieldSize の書式がおかしいよ。ぷっ、ざぁ〜こ♥</translation>
+        <translation>playFieldSize の書式ざこ〜〜い♥</translation>
     </message>
     <message>
         <location filename="../src/parsedcnf.cpp" line="221"/>
         <source>Wrong KCF file name format.</source>
-        <translation>KCF ファイル名の書式がおかしいよ。だっさ♥</translation>
+        <translation>KCF ファイル名の書式がきたなーい、キャハハ♥</translation>
     </message>
     <message>
         <location filename="../src/parsedcnf.cpp" line="227"/>
@@ -896,12 +896,12 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/parsedcnf.cpp" line="331"/>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
-        <translation>fkiss の接頭辞 `:@` はおかしいけど、古い互換のために受け入れるよ、だっさ♥ =&gt;  </translation>
+        <translation>fkiss の接頭辞 `:@` はおかしいけど、古い互換のために受け入れるよ、だっさ〜〜〜 =&gt;  </translation>
     </message>
     <message>
         <location filename="../src/parsedcnf.cpp" line="356"/>
         <source>Wrong objPos format</source>
-        <translation>objPos の書式がおかしいよ。だっさ〜♥</translation>
+        <translation>objPos の書式がきたなーい、キャハハ♥</translation>
     </message>
 </context>
 <context>
@@ -931,7 +931,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/parsedkcf.cpp" line="90"/>
         <source>What is this? Unknown KCF bitsPerColor: %1</source>
-        <translation>なにこのざこ？ 見たことない KCF bitsPerColor だね: %1。よわよわ〜♥</translation>
+        <translation>なにこのざこ？ 見たことない KCF bitsPerColor "%1" だね。</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="142"/>
@@ -1032,7 +1032,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/enums.h" line="60"/>
         <source>Shift JIS</source>
-        <translation>Shift JIS～〜。まだ使ってんの？ぷっ、日本の KiSS ファイルは殆どこれを使っていたがw</translation>
+        <translation>Shift JIS～〜。まだ使ってんの？ま、日本の KiSS ファイルは殆どこれを使っていたから仕方ないね。</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="61"/>
