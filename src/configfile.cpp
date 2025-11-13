@@ -117,11 +117,12 @@ const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
 {
     return {
         {"", "", tr("Auto (System Language)")},
-        {"ja_JP", "🇯🇵", QString("日本語")},
+        {"ja_JP", "🇯🇵", QString("日本語（異世界通用語）")},
         {"ja_KS", "🇯🇵", QString("日本語（関西弁）")},
         {"ja_OJ", "🇯🇵", QString("日本語（お嬢様）")},
         {"ja_AR", "🇯🇵", QString("日本語（悪役令嬢）")},
         {"ja_MK", "🇯🇵", QString("日本語（メ〇〇キ）")},
+        {"ja_ME", "🇯🇵", QString("日本語（〈沈黙の魔女〉モニカ・エヴァレット）")},
         {"en_US", "🇺🇸", QString("American English")},
         {"zh_TW", "🇹🇼", QString("台灣繁體")},
     };

@@ -164,7 +164,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 # https://doc.qt.io/Qt-6/qtlinguist-cmake-qt-add-translations.html#sources-and-include-directories
 qt_standard_project_setup(
     I18N_SOURCE_LANGUAGE en_US   # This is buggy
-    I18N_TRANSLATED_LANGUAGES ja_JP ja_KS ja_OJ ja_AR ja_MK zh_TW
+    I18N_TRANSLATED_LANGUAGES ja_JP ja_KS ja_OJ ja_AR ja_MK ja_ME zh_TW
     )
 
 
