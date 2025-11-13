@@ -27,8 +27,8 @@ KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.or
     <translation>
 Q…QKi…KiSSは…Qt…Qt 6…で…け、開発された…も、モダンな…[Ki…KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system)…び、ビューア…でふ…ひぃん…
 
-Ki…Kisekaeは…「き、きせかえ…に、にんぎょう」…の略称…でふ…うぇぇん…
-KiSSは…1990年代に…に、日本の…お、おたく…や…パ、パソコン愛好家…（NE…NEC PC…きゅ、9800…し、シリーズ）…のサブカルチャーで…う、うまれて…人、人気…となりました…ひ、ひぃん…
+Ki…Kisekaeは…「き、きせかえ…に、にんぎょう」…の略称…でふ……
+キキ…キキキキキ…KiSSは…1990年代に…に、日本の…あああああ…あの…お、おおおたく…や…パ、パソコン愛好家…（N…NEC PC…きゅ、9800…し、シリーズ）…のサブカルチャーで…う、うまれて…人、人気…となりました…た、多分…
 
 [QKiSSのWebサイト](https://github.com/kuanyui/qkiss)…です…
     </translation>
@@ -36,7 +36,7 @@ KiSSは…1990年代に…に、日本の…お、おたく…や…パ、パソ
     <message>
         <location filename="../src/aboutdialog.cpp" line="103"/>
         <source>Information</source>
-        <translation>じょ、情報…あ、あっ…</translation>
+        <translation>じ、じじじょ、情報…っ…</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="128"/>
@@ -51,7 +51,7 @@ KiSSは…1990年代に…に、日本の…お、おたく…や…パ、パソ
     <message>
         <location filename="../src/aboutdialog.cpp" line="130"/>
         <source>Translators</source>
-        <translation>ほ、翻訳者…ま、間違えたら…ご、ごめ…</translation>
+        <translation>ほ、翻訳者…ま、間違えたら…ご、ごごごごめ…</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="132"/>
@@ -79,27 +79,27 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
         <location filename="../src/archivefile.cpp" line="101"/>
         <location filename="../src/archivefile.cpp" line="125"/>
         <source>Found valid files: %1 CNF, %2 CEL, %3 KCF.</source>
-        <translation>有効なファイルが見つかりました：CNF %1個、CEL %2個、KCF %3個。</translation>
+        <translation>あ、あっ…ゆ、有効なファイル…み、見つかりました…CNF %1個…CEL %2個…KCF %3個…です</translation>
     </message>
     <message>
         <location filename="../src/archivefile.cpp" line="225"/>
         <source>Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.</source>
-        <translation>現在のCNFに対するParsedKcfを取得する必要がありますが、このCNFにはKCFファイルが宣言されていません。中止します。</translation>
+        <translation>げ、現在のCNFに…Pa、ParsedKcf…ひ、必要ですけど…こ、このCNFには…KCFファイル…せ、宣言されてなくて…ちゅ、中止…しまふ…うぇぇん…</translation>
     </message>
     <message>
         <location filename="../src/archivefile.cpp" line="283"/>
         <source>The CNF &apos;%1&apos; requires %2 KCF files.</source>
-        <translation>このCNFファイル「%1」は%2個のKCFファイルを読み込みます。</translation>
+        <translation>CNF「%1」には…%2個の…KCFファイル…ひ、必要…でふ…</translation>
     </message>
     <message>
         <location filename="../src/archivefile.cpp" line="287"/>
         <source>CNF file &apos;%1&apos; requires KCF file &apos;%2&apos;, but this KCF file is not found in this archived file.</source>
-        <translation>このCNFファイル「%1」は依存関係KCFファイル「%2」を読み込みていますが、このアーカイブ内にそのKCFファイルが見つかりません。</translation>
+        <translation>CNF「%1」は…KCF「%2」を…よ、要求してますけど…こ、このアーカイブには…み、見つからなくて…ご、ごめ…ひぃん…</translation>
     </message>
     <message>
         <location filename="../src/archivefile.cpp" line="278"/>
         <source>Set current CNF failed; no CNF named &quot;%1&quot; in this archive file.</source>
-        <translation>現在のCNFの設定に失敗しました。このアーカイブ内に「%1」という名前のCNFはありません。</translation>
+        <translation>げ、げげ、げげげげ、現在のCNF…せ、設定に…し、失敗しました…「%1」ってCNFは…こ、このアー、アーカイブに…な、ない…です…ひぃぃぃん…</translation>
     </message>
 </context>
 <context>
@@ -107,7 +107,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/archiveprocessorcnfinfilesystem.cpp" line="66"/>
         <source>Reading a CNF file &quot;%1&quot; directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...</source>
-        <translation>CNFファイル「%1」を直接読み込んでいます。同じフォルダ内の関連するCNF/KCF/CELファイルを取得しています...</translation>
+        <translation>し…CNFファイル「%1」を…ちょ、直接…よ、読み込んでまし…ひ、ひぃ……お、同じフォルダ内の…か、関連するCNF/KCF/CELファイルを…と、とってこようと…が、がんばってます…</translation>
     </message>
 </context>
 <context>
@@ -120,67 +120,67 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="52"/>
         <source>The de facto standard implementation of LZH.</source>
-        <translation>LZH形式の事実上の標準実装。</translation>
+        <translation>L…LZH形式の…じ、事実上の…ひ、標準実装…でふ…ひぃん…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="53"/>
         <source>Perfect (theorically can open any LZH file)</source>
-        <translation>完璧（理論上はどのLZHファイルでも開けます）</translation>
+        <translation>か、完璧…（り、理論上は…ど、どのLZHファイルでも…ひ、開けまふ…）</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="54"/>
         <source>External program; manual installation is needed.</source>
-        <translation>外部プログラム；手動インストールが必要です。</translation>
+        <translation>が、外部プログラム…；し、手動インストールが…ひ、必要…でふ…なっななな内蔵されなくて…ごごご、ごごめんなさい…ひぃぃぃぃん…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="55"/>
         <source>Available on most of Linux distros, also on MacPorts. Windows supporting is experimental.</source>
-        <translation>ほとんどのLinuxディストリビューションとMacPortsで利用可能。Windowsサポートは実験的です。</translation>
+        <translation>ほ、ほとんどのLinuxディ…ディディストリビューションと…MacPortsで…り、利用可能…ひぃん…Wi、Windowsサポートは…じ、実験的…でふ…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="56"/>
         <source>&gt; 95% operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation>95%以上の操作をディスクに展開せずRAM内で実行できるため、SSDの寿命に比較的優しいです。</translation>
+        <translation>95%以上の…さ、操作を…ディスクに展開せず…RAM内で…じじじじじじじ…じじじ…じじ実行できるから…SSDの寿命に…ひ、比較的…や、優しい…でふ……</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="57"/>
         <source>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
-        <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;ソースコード&lt;/a&gt;&lt;/li&gt;</translation>
+        <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;ソソソソソースコード&lt;/a&gt;&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="80"/>
         <source>External program LHA is not installed or not found.</source>
-        <translation>外部プログラムLHAがインストールされていないか見つかりません。</translation>
+        <translation>が、外部プログラムLHAが…い、インストールされてないか……ご、ごごごごごごめんなさいごめんなさいごめんなさい、みっみみ見つからなくてごめんなさい</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="87"/>
         <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
-        <translation>LZHファイル「%1」を展開しています...</translation>
+        <translation>LZHファイル「%1」を…LHAで…て、展開しようと…が、がんばってまふ…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="90"/>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>LZHファイル「%1」の展開に失敗しました。中止します。</translation>
+        <translation>ひぃんっ……なっ、ななっ、なんで、LZHファイル「%1」の…て、展開に…し、失敗しちゃった、ですか……ちゅ、中止しまふ…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="100"/>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>LZHファイル「%1」の展開に成功しました。%2個のファイルが含まれています</translation>
+        <translation>LZHファイル「%1」の…て、展開に…せ、成功しました…%2個の…ふ、ファイルが…ふ、含まれてまふ…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="216"/>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
-        <translation>ネストされたLZHファイル「%1」の展開に失敗しました（一時ファイル「%2」を開けませんでした）。</translation>
+        <translation>ネストされたLZHファイル「%1」の…て、展開に…し、失敗しました…（い、一時ファイル「%2」を…ひ、開けなくて…）</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="221"/>
         <source>Partial write occurred. Expected: %1 bytes, actual: %2 bytes</source>
-        <translation>部分的な書き込みが発生しました。予期値：%1バイト、実際：%2バイト</translation>
+        <translation>ぶ、部分的に…か、書き込みが起きちゃった…よ、予期は%1バイトなのに…じ、実際は%2バイト…だよ…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternallha.cpp" line="256"/>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在しません。中止します。</translation>
+        <translation>アーカイブファイルのパ…パパパス「%1」が…そ、存在しないんだよ、ね…？ちゅ、中止するしか…ない…かな………ひぃぃぃ―――ご、ごごごごごごめんなさいごめんなさいごめんなさい、見つからなくてごめんなさい</translation>
     </message>
 </context>
 <context>
@@ -193,57 +193,57 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="48"/>
         <source>An extractor specially focused on archives of old formats containing non UTF-8 encoding file names.</source>
-        <translation>非UTF-8エンコーディングのファイル名を含む古い形式のアーカイブに特化した展開ツール。</translation>
+        <translation>えっと…ひ、非UTF-8エンコーディングの…な、名前を持つ…ふ、古い形式のアーカイブに…と、特化した…展開ツール…なんです…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="49"/>
         <source>Pretty Good</source>
-        <translation>良好</translation>
+        <translation>けっこう…よ、良い感じ…かな…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="50"/>
         <source>External program; manual installation is needed.</source>
-        <translation>外部プログラム；手動インストールが必要です。</translation>
+        <translation>が、外部プログラムで…し、手動インストールが…ひ、必要です…な、内蔵されなくて…ご、ごめんなしゃいいいひーん…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="51"/>
         <source>Originally developed for macOS, also available on most of Linux distros. Supports Windows</source>
-        <translation>元々macOS向けに開発されましたが、ほとんどのLinuxディストリビューションでも利用可能です。Windowsもサポートしています</translation>
+        <translation>も、元々はmacOS向けに…か、開発されたんだけど…ほ、ほとんどのLinuxディストリビューションでも…つ、使えるし…Wi、Windowsも…さ、サポートしてるんだよ…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="52"/>
         <source>All extractions will do writing operations to disk; may shorten the lifespan of SSD.</source>
-        <translation>すべての展開操作でディスクへの書き込みを行うため、SSDの寿命を短くする可能性があります。</translation>
+        <translation>す、すべての展開操作で…ディスクに…か、書き込みしちゃうから…え、SSDの寿命が…み、短くなるかも……</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="53"/>
         <source>&lt;a href=&quot;https://theunarchiver.com/command-line&quot;&gt;Official Site&lt;/a&gt;, &lt;a href=&apos;https://github.com/MacPaw/unar&apos;&gt;Source Code&lt;/a&gt;.</source>
-        <translation>&lt;a href=&quot;https://theunarchiver.com/command-line&quot;&gt;公式サイト&lt;/a&gt;、&lt;a href=&apos;https://github.com/MacPaw/unar&apos;&gt;ソースコード&lt;/a&gt;。</translation>
+        <translation>&lt;a href=&quot;https://theunarchiver.com/command-line&quot;&gt;こっここ公式、さささサイト&lt;/a&gt;、っと&lt;a href=&apos;https://github.com/MacPaw/unar&apos;&gt;ソースコココード&lt;/a&gt;でふ。</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="76"/>
         <source>External program Unar is not installed or not found.</source>
-        <translation>外部プログラムUnarがインストールされていないか見つかりません。</translation>
+        <translation>が、外部プログラムUnarが…い、インストールされておりませんか…み、見つかりませんでした…ご、ごめんなさい…ひぃん…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="86"/>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>LZHファイル「%1」の展開に失敗しました。中止します。</translation>
+        <translation>は、はひっ、な、なな、なんでしょっしょしょしょしょしょ……LZHファイル「%1」の…て、展開に…しっしし失敗いたしました…ちゅ、中止いたします…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="97"/>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>LZHファイル「%1」の展開に成功しました。%2個のファイルが含まれています</translation>
+        <translation>LZHファイル「%1」の…て、展開に…せ、成功いたしました…%2個の…ふ、ファイルが…ふ、含まれております…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="104"/>
         <source>Trying to extract LZH file &quot;%1&quot; via Unar...</source>
-        <translation>LZHファイル「%1」を展開しています...</translation>
+        <translation>LZHファイル「%1」を…Unarで…て、展開しようと…が、がんばっております…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorexternalunar.cpp" line="125"/>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在しません。中止します。</translation>
+        <translation>アーカイブファイルパス「%1」が…そ、存在しておりません…ちゅ、中止するしか…ない…かな………ひぃぃぃ―――ご、ごごごごごごめんなさいごめんなさいごめんなさい、見つからなくてごめんなさいぃぃぃ</translation>
     </message>
 </context>
 <context>
@@ -256,27 +256,27 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="52"/>
         <source>Multi-format archive and compression library.</source>
-        <translation>マルチフォーマットアーカイブ・圧縮ライブラリ。</translation>
+        <translation>マ、マルチフォーマットの…あ、アーカイブと…あ、圧縮ライブラリ…でふ…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="53"/>
         <source>Poor (some LZH files may be unable to be extracted, and non UTF-8 file names in LZH are totally unsupported.)</source>
-        <translation>不十分（一部のLZHファイルは展開できない可能性があり、LZH内の非UTF-8ファイル名は完全にサポートされていません。）</translation>
+        <translation>ふ、不十分です…い、一部のLZHファイルは…て、展開できないかも…ですし…ひ、非UTF-8の名前は…ぜ、全然サポートされてないんです……</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="54"/>
         <source>Built-in in QKiSS. No extra external program is required.</source>
-        <translation>QKiSSに内蔵。追加の外部プログラムは不要です。</translation>
+        <translation>QKiSSに…な、内蔵されてるから…つ、追加の外部プログラムは…ひ、必要ないんです…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="55"/>
         <source>Windows, macOS, Linux</source>
-        <translation>Windows、macOS、Linux</translation>
+        <translation>Wi、Windows…ma、macOS…Li、Linuxに…ぜん…全部対応してるんです…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="56"/>
         <source>All operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation>すべての操作をディスクに展開せずRAM内で実行できるため、SSDの寿命に比較的優しいです。</translation>
+        <translation>す、すべての操作を…ディスクに展開せず…RAMで…じ、実行できるから…SSDの寿命に…や、優しいんでふ…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="57"/>
@@ -286,37 +286,37 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="77"/>
         <source>Failed to open this file, aborted.</source>
-        <translation>このファイルを開くことができませんでした。中止します。</translation>
+        <translation>こ、このファイルを…ひ、開けなくて…し、失敗しました…ご、ごめんなさい…ひぃん…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="138"/>
         <source>Error when opening this archive file (%1). Aborted.</source>
-        <translation>このアーカイブファイルを開く際にエラーが発生しました（%1）。中止します。</translation>
+        <translation>ア、アーカイブファイルを…ひ、開くときに…え、エラーが出ましたの…（%1）…ちゅ、中止…いたしますぅ…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="146"/>
         <source>Fatal error (%1), no more operations are possible., abort.</source>
-        <translation>致命的なエラー（%1）のため、これ以上の処理はできません。中止します。</translation>
+        <translation>なっ、ななっ、なんで、ち、致命的なエラー（%1）で…も、もう処理できませんっ…こっ、怖いっ……もう帰るぅぅ……うっ、うぇぇぇぇぇん/translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="149"/>
         <source>Current operation cannot complete (%1), skip.</source>
-        <translation>現在の操作を完了できません（%1）。スキップします。</translation>
+        <translation>げ、現在の操作は…か、完了できませんでした…（%1）…す、スキップします…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="152"/>
         <source>Partial success (%1).</source>
-        <translation>一部成功（%1）。</translation>
+        <translation>い、一部だけ…せ、成功しました…（%1）…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="155"/>
         <source>Retry might succeed (%1)</source>
-        <translation>再試行により成功する可能性があります（%1）。</translation>
+        <translation>さ、再試行すれば…せ、成功するかも…です…多分…（%1）…</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="173"/>
         <source>when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
-        <translation>LibArchiveでこのアーカイブファイルを読み込み中にエラー（%1）が発生しました。中止します。</translation>
+        <translation>あうぅ…LibArchiveで…ア、アーカイブを読む途中に…え、エラーが出ました…（%1）…ちゅ、中止いたします…ひぃん…</translation>
     </message>
 </context>
 <context>

@@ -33,7 +33,7 @@ KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)や
 
 [QKiSSのWebサイト](https://github.com/kuanyui/qkiss)見に行く暇あるの？ヒマ人乙〜キャハハ♥
 
-ちなみに、『メ〇〇キ』は『メカジキ』だから、メカジキ以外は全部雑魚。常識だろ？
+ちなみに、『メ〇〇キ』は『メカジキ』だから、メカジキ以外は全部雑魚。
 </translation>
     </message>
     <message>
@@ -695,12 +695,12 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.ui" line="207"/>
         <source>&amp;Quit</source>
-        <translation>逃げるの？罵倒に耐えない顔きたなーい、キャハハ♥(&amp;Q)</translation>
+        <translation>逃げんの？罵倒に耐えない顔きたなーい〜〜キャハハ♥(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="218"/>
         <source>Zoom &amp;Out</source>
-        <translation>縮小(&amp;O)〜。老眼で見えないとか加齢臭すぎwww</translation>
+        <translation>縮小(&amp;O)〜。老眼で見えない加齢臭すぎwww</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="226"/>
