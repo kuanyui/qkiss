@@ -64,7 +64,7 @@ public:
     QString homeDirectory() const;
     void setHomeDirectory(const QString &homeDir);
     /// QPair("ja_JP", "Japanese")
-    static const QList<LangInfo> allLanguages();
+    const QList<LangInfo> allLanguages();
     QString detectSystemLanguage() const;
 
     QString uiLanguage() const;

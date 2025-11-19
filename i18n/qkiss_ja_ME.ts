@@ -24,7 +24,7 @@ KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.or
 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
-    <translation>
+        <translation>
 Q…QKi…KiSSは…Qt…Qt 6…で…け、開発された…も、モダンな…[Ki…KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system)…び、ビューア…でふ…ひぃん…
 
 Ki…Kisekaeは…「き、きせかえ…に、にんぎょう」…の略称…でふ……
@@ -39,27 +39,27 @@ Ki…Kisekaeは…「き、きせかえ…に、にんぎょう」…の略称�
         <translation>じ、じじじょ、情報…っ…</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="128"/>
+        <location filename="../src/aboutdialog.cpp" line="129"/>
         <source>Programming</source>
         <translation>ぷ、プログラミング…ひ、ひぃん…</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="129"/>
+        <location filename="../src/aboutdialog.cpp" line="130"/>
         <source>Icons &amp; Arts</source>
         <translation>あ、アイコン・アート…ど、どや…顔…ぷっ…</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="130"/>
+        <location filename="../src/aboutdialog.cpp" line="131"/>
         <source>Translators</source>
         <translation>ほ、翻訳者…ま、間違えたら…ご、ごごごごめ…</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="132"/>
+        <location filename="../src/aboutdialog.cpp" line="133"/>
         <source>Authors</source>
         <translation>さ、作者…じ、自分語り…ひ、ひぃん…</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="140"/>
+        <location filename="../src/aboutdialog.cpp" line="141"/>
         <source>QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
@@ -68,7 +68,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
 QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`…を通じて…ほ、他のF…FLOSSプロジェクトから…い、一部の…サードパーティSVGアイコンを…し、使用しており…そ、それらは…さ、様々なライセンスの下で…こ、公開されて…まふ…うぇぇん…</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="151"/>
+        <location filename="../src/aboutdialog.cpp" line="152"/>
         <source>Licenses</source>
         <translation>ら、ライセンス…</translation>
     </message>
@@ -296,7 +296,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="146"/>
         <source>Fatal error (%1), no more operations are possible., abort.</source>
-        <translation>なっ、ななっ、なんで、ち、致命的なエラー（%1）で…も、もう処理できませんっ…こっ、怖いっ……もう帰るぅぅ……うっ、うぇぇぇぇぇん/translation>
+        <translation>なっ、ななっ、なんで、ち、致命的なエラー（%1）で…も、もう処理できませんっ…こっ、怖いっ……もう帰るぅぅ……うっ、うぇぇぇぇぇん</translation>
     </message>
     <message>
         <location filename="../src/archiveprocessorlibarchive.cpp" line="149"/>
@@ -322,9 +322,9 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
 <context>
     <name>ConfigFile</name>
     <message>
-        <location filename="../src/configfile.cpp" line="119"/>
+        <location filename="../src/configfile.cpp" line="124"/>
         <source>Auto (System Language)</source>
-        <translation>自動（システム言語）</translation>
+        <translation>じ、自動…（し、システム言語…で…すぅ…）</translation>
     </message>
 </context>
 <context>
@@ -332,63 +332,63 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/filesystembrowser.cpp" line="52"/>
         <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
-        <translation>ファイルパス「%1」が見つかりません。このパスの読み込みを中止します。</translation>
+        <translation>ファ、ファイルパス「%1」が…み、見つからなくて…よ、読み込みを…ちゅ、中止しますぅ…ひぃん…</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="84"/>
         <source>Invalid dir path, aborted.</source>
-        <translation>無効なディレクトリパスです。中止しました。</translation>
+        <translation>む、無効なディレクトリパスで…し、失敗しました…ご、ごめんなさい…うぅ…</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="147"/>
         <source>File Name</source>
-        <translation>ファイル名</translation>
+        <translation>ファ、ファイル名…</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="147"/>
         <source>Size</source>
-        <translation>サイズ</translation>
+        <translation>さ、サイズ…</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="147"/>
         <location filename="../src/filesystembrowser.cpp" line="271"/>
         <source>Patch</source>
-        <translation>パッチ</translation>
+        <translation>パッチ…</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="185"/>
         <source>Go Back</source>
-        <translation>戻る</translation>
+        <translation>帰りたい…</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="190"/>
         <source>Go Forward</source>
-        <translation>進む</translation>
+        <translation>進まない…</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="195"/>
         <source>Go Up</source>
-        <translation>上へ</translation>
+        <translation>う、上へ…っ</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="200"/>
         <source>Refresh</source>
-        <translation>更新</translation>
+        <translation>こ、更新…するっ</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="205"/>
         <source>Home</source>
-        <translation>ホーム</translation>
+        <translation>ホーム…っ</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="209"/>
         <source>Set current folder as Home</source>
-        <translation>現在のフォルダをホームに設定</translation>
+        <translation>げげげげげ、現在のフォルダを…ホ、ホームに設定…しまふ…</translation>
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="274"/>
         <source>Click to load this file as patch</source>
-        <translation>このファイルをパッチとして読み込むにはクリック</translation>
+        <translation>こ、このファイルを…パッチとして…よ、読み込むなら…く、クリック…してくださぃぃ…</translation>
     </message>
 </context>
 <context>
@@ -396,17 +396,17 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/fkissparser.cpp" line="129"/>
         <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
-        <translation>二重引用符を検出しましたが、対応するもう一方の引用符が見つからず、文字列を構成できません。ソース： </translation>
+        <translation>あうっ…に、二重引用符は…み、見つかったんですけど…も、もう一方が…な、なくて…文、文字列にできなくて…ご、ごめんなさい…ひぃん…ソース： </translation>
     </message>
     <message>
         <location filename="../src/fkissparser.cpp" line="147"/>
         <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
-        <translation>予期しない文字のため無視します [%1:%2]: `%3`</translation>
+        <translation>え、えぇと、よ、予期しない文字だから…む、無視しちゃい…ます…[%1:%2]: `%3`…</translation>
     </message>
     <message>
         <location filename="../src/fkissparser.cpp" line="284"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
-        <translation>不明なコマンド「%1」です。スキップします。</translation>
+        <translation>不明なコマンド「%1」です。ススススキップしましゅ…。</translation>
     </message>
     <message>
         <location filename="../src/fkissparser.cpp" line="293"/>
@@ -424,42 +424,42 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/gkissscene.cpp" line="74"/>
         <source>No KCF found in this CNF, don&apos;t draw set background.</source>
-        <translation>このCNFにKCFが見つからないため、セットの背景は描画しません。</translation>
+        <translation>あ、あの…こ、このCNFに…KCFが…み、見つからなくて…せ、セットの背景は…か、描けませんっ…</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="81"/>
         <source>No palette in this KCF. Abort.</source>
-        <translation>このKCFにはパレットがありません。中止します。</translation>
+        <translation>ひ、ひぃん…こ、このKCFには…パレットが…な、なくて…ちゅ、中止しますぅ…</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="92"/>
         <source>In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.</source>
-        <translation>このCNFでは、setNo %1 の既定の paletteNo は %2 と指定されていますが、最初のKCFにはパレットが%3個しかありません。最初のKCFの paletteNo 0 にフォールバックします。</translation>
+        <translation>こ、このCNFでは…setNo %1 の既定paletteNoが %2 に…し、指定されてるんですけど…さい、最初のKCFには…パレットが%3個しかなくて…ぱ、paletteNo 0 に…ふぉ、フォールバックします…</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="100"/>
         <source>WTF? In CNF&apos;s set definition, not found palette in first KCF of this CNF. Abort.</source>
-        <translation>え？CNF の set 定義で、このCNFの最初の KCF にパレットが見つかりません。中止します。</translation>
+        <translation>えっ…な、なんでっ…CNFのset定義で…さい、最初のKCFに…パレットが…み、見つからないなんて…む、無理でふっ…ひぃん…</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="550"/>
         <source>[%1] Unfix (&amp;U)</source>
-        <translation>[%1] 固定解除(&amp;U)</translation>
+        <translation>[%1] こ、固定解除(&amp;U)</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="552"/>
         <source>Reset Object (&amp;R)</source>
-        <translation>オブジェクトリセット(&amp;R)</translation>
+        <translation>お、おおおオブジェクトをリ、リセット…(&amp;R)</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="554"/>
         <source>Information</source>
-        <translation>情報</translation>
+        <translation>じ、じ、じ、じじょ、情報</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="561"/>
         <source>Click to copy filename to clipboard.</source>
-        <translation>ファイル名をクリップボードにコピーするにはクリック。</translation>
+        <translation>こ、ここのファイル名を…く、クリップボードに…コ、コピーするなら…く、クリック…してくださぃぃ…</translation>
     </message>
 </context>
 <context>
@@ -467,38 +467,38 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/gkissview.cpp" line="60"/>
         <source>No CNF file found in this archive file.</source>
-        <translation>このアーカイブ内にCNFファイルが見つかりません。</translation>
+        <translation>あぅっ…こ、このアーカイブに…CNFファイルが…み、見つからないんですぅ…</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="91"/>
         <source>No CNF file named &quot;%1&quot; found in this archive file.</source>
-        <translation>このアーカイブ内に「%1」というCNFファイルは見つかりません。</translation>
+        <translation>あぅっ…「%1」っていうCNFファイルが…こ、このアーカイブに…な、ないですっ…</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="115"/>
         <location filename="../src/gkissview.cpp" line="121"/>
         <source>Only %1 scenes in this view but you ask for sceneIndex %2</source>
-        <translation>このビューには%1個のシーンしかありませんが、要求された sceneIndex は %2 です。</translation>
+        <translation>こ、このビューには…%1個しか…シーンがなくて…なのに…sceneIndex %2 を…よ、要求されても…む、無理っ…</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="190"/>
         <source>CNF requires a CEL &quot;%1&quot;, but not found in this archived file: </source>
-        <translation>CNF では CEL「%1」が必要ですが、このアーカイブ内に見つかりません： </translation>
+        <translation>C…CNFでは…CEL「%1」が、ひ、必要なんですけど…こ、このアーカイブに…み、見つからなくて……：</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="199"/>
         <source>In CNF &quot;%1&quot;, the CEL &quot;%2&quot; requires KCF index %3, but no KCF file available in this CNF.</source>
-        <translation>CNF「%1」では、CEL「%2」はKCFインデックス %3 を要求していますが、このCNFにはKCFファイルがありません。</translation>
+        <translation>CNF「%1」では…CEL「%2」が…KCFインデックス %3 を…よ、要求してるんですけど…こ、このCNFには…KCFファイルが…な、ないんですぅ…</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="224"/>
         <source>[Benchmark] Creating all graphics items in %1 scene(s) cost %2 ms</source>
-        <translation>[ベンチマーク] %1個のシーンで全グラフィック項目の作成に%2 msかかりました</translation>
+        <translation>[ベンチマーク] %1個のシーンで…ぜ、全部のグラフィック項目を…作るのに…%2 msかかっちゃいました…</translation>
     </message>
     <message>
         <location filename="../src/gkissview.cpp" line="226"/>
         <source>No scene found. Aborted</source>
-        <translation>シーンが見つかりません。中止しました。</translation>
+        <translation>あぅぅ……し、シーンが…み、見つからなくて…ちゅ、中止しましたぁ…どどどどどどどどどうしよう…うえぇぇぇ……もう帰りたい…</translation>
     </message>
 </context>
 <context>
@@ -506,12 +506,12 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/innerfilesbrowser.cpp" line="35"/>
         <source>CNF files</source>
-        <translation>CNFファイル</translation>
+        <translation>CNF、ふ、ふぁ、ファイル</translation>
     </message>
     <message>
         <location filename="../src/innerfilesbrowser.cpp" line="39"/>
         <source>Document files</source>
-        <translation>ドキュメントファイル</translation>
+        <translation>ドドドドドキュメントファイル</translation>
     </message>
 </context>
 <context>
@@ -562,32 +562,32 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/logviewer.cpp" line="38"/>
         <source>Debug</source>
-        <translation>デバッグ</translation>
+        <translation>は、はぁ…</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="43"/>
         <source>Info</source>
-        <translation>情報</translation>
+        <translation>な…なにか…</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="48"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation>あうっ…</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="53"/>
         <source>Error</source>
-        <translation>エラー</translation>
+        <translation>ひっ……</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="58"/>
         <source>Fatal</source>
-        <translation>致命的エラー</translation>
+        <translation>…殺さないで</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="76"/>
         <source>Severity</source>
-        <translation>重要度</translation>
+        <translation>じじじ重要度</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="76"/>
@@ -600,32 +600,32 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.ui" line="32"/>
         <source>&amp;File</source>
-        <translation>ファイル(&amp;F)</translation>
+        <translation>ふぁ、ファイル…(&amp;F)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="59"/>
         <source>&amp;View</source>
-        <translation>表示(&amp;V)</translation>
+        <translation>ひ、表示…(&amp;V)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="67"/>
         <source>&amp;Window</source>
-        <translation>ウィンドウ(&amp;W)</translation>
+        <translation>ウィンドウ…うぅ(&amp;W)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="72"/>
         <source>&amp;Settings</source>
-        <translation>設定(&amp;S)</translation>
+        <translation>せ、設定(&amp;S)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="36"/>
         <source>Open R&amp;ecent Directory</source>
-        <translation>最近使用したディレクトリを開く(&amp;E)</translation>
+        <translation>さ、さ、最近使用した、で、ディレクトリを開くぅ(&amp;E)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="42"/>
         <source>Open &amp;Recent File</source>
-        <translation>最近使用したファイルを開く(&amp;R)</translation>
+        <translation>さ、最近使ったファイルを…ひ、開くんですぅ(&amp;R)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="76"/>
@@ -640,12 +640,12 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.ui" line="92"/>
         <source>&amp;Case Sensitivity</source>
-        <translation>大文字小文字を区別するか(&amp;C)</translation>
+        <translation>お、大文字小文字を…く、区別するかどうかな…って(&amp;C)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="103"/>
         <source>&amp;Help</source>
-        <translation>ヘルプ(&amp;H)</translation>
+        <translation>たったた助けてー(&amp;H)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="122"/>
@@ -680,32 +680,32 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.ui" line="191"/>
         <source>&amp;Open File</source>
-        <translation>ファイルを開く(&amp;O)</translation>
+        <translation>ふぁ、ファイルを…ひ、開くんですぅ…(&amp;O)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="199"/>
         <source>Open &amp;Directory</source>
-        <translation>ディレクトリを開く(&amp;D)</translation>
+        <translation>で、ディレクトリを…ひ、開くの…こ、怖い…(&amp;D)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="207"/>
         <source>&amp;Quit</source>
-        <translation>終了(&amp;Q)</translation>
+        <translation>もう帰りたい…(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="218"/>
         <source>Zoom &amp;Out</source>
-        <translation>縮小(&amp;O)</translation>
+        <translation>ち、ちっちゃくするんですぅ…(&amp;O)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="226"/>
         <source>Zoom &amp;In</source>
-        <translation>拡大(&amp;I)</translation>
+        <translation>お、おっきくする…(&amp;I)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="234"/>
         <source>&amp;Reset Scale</source>
-        <translation>スケールリセット(&amp;R)</translation>
+        <translation>す、スケールを…り、リセットしちゃう…(&amp;R)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="239"/>
@@ -713,7 +713,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
         <location filename="../src/mainwindow.cpp" line="658"/>
         <location filename="../src/mainwindow.cpp" line="675"/>
         <source>Clear All</source>
-        <translation>すべてクリア</translation>
+        <translation>ぜ、全部…く、クリアしちゃいます…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="252"/>
@@ -723,42 +723,42 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.ui" line="255"/>
         <source>Preferences</source>
-        <translation>環境設定</translation>
+        <translation>か、環境設定…えへ…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="266"/>
         <source>&amp;About</source>
-        <translation>について(&amp;A)</translation>
+        <translation>に、について…よ、読んでくださぃぃ…(&amp;A)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="269"/>
         <source>About QKiSS</source>
-        <translation>QKiSSについて</translation>
+        <translation>QKiSSについて…あ…わ、分かってほしいの…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="76"/>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
-        <translation>固定：%1、CEL名：%2、コメント：%3</translation>
+        <translation>こ、固定：%1…CE、CEL名：%2…コ、コメント：%3…で、出てますぅ…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="165"/>
         <source>Start to parse CNF / KCF / CEL files...</source>
-        <translation>CNF / KCF / CELファイルの解析を開始...</translation>
+        <translation>CNF / KCF / CELファイルの…か、解析を…は、始めちゃいますぅ…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="171"/>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
-        <translation>「%1」は有効なKiSSパッチファイルではありません。中止しました。</translation>
+        <translation>「%1」は…ゆ、有効なKiSSパッチファイルじゃ…な、ないんですぅ…ちゅ、中止しましたぁ…ひっ……殺さないで</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="178"/>
         <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
-        <translation>「%1」は有効なKiSSファイルではありません。中止しました。</translation>
+        <translation>「%1」は…ゆ、有効なKiSSファイルじゃ…な、ないから…も、もう、む、無理です…帰りたい…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="186"/>
         <source>Parsing finished. Now rendering scenes...</source>
-        <translation>解析完了。シーンをレンダリング中...</translation>
+        <translation>か、解析…完了しましたぁ…い、今から…シーンを…れ、レンダリング中ですぅ…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="199"/>

@@ -40,27 +40,27 @@ KiSSは1990年代、日本の[オタク](https://en.wikipedia.org/wiki/Otaku) �
         <translation>情報でございますわ</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="128"/>
+        <location filename="../src/aboutdialog.cpp" line="129"/>
         <source>Programming</source>
         <translation>プログラミングでございますわ</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="129"/>
+        <location filename="../src/aboutdialog.cpp" line="130"/>
         <source>Icons &amp; Arts</source>
         <translation>アイコンとアートでございますわ</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="130"/>
+        <location filename="../src/aboutdialog.cpp" line="131"/>
         <source>Translators</source>
         <translation>翻訳をなさる方</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="132"/>
+        <location filename="../src/aboutdialog.cpp" line="133"/>
         <source>Authors</source>
         <translation>作者さまでいらっしゃいますの</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="140"/>
+        <location filename="../src/aboutdialog.cpp" line="141"/>
         <source>QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
@@ -69,7 +69,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
 QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を通じまして、他のFLOSSプロジェクトから一部のサードパーティSVGアイコンをお借りしておりまして、それらは様々なライセンスの下で公開されておりますわ。</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="151"/>
+        <location filename="../src/aboutdialog.cpp" line="152"/>
         <source>Licenses</source>
         <translation>ライセンスでございますの</translation>
     </message>
@@ -323,7 +323,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
 <context>
     <name>ConfigFile</name>
     <message>
-        <location filename="../src/configfile.cpp" line="119"/>
+        <location filename="../src/configfile.cpp" line="124"/>
         <source>Auto (System Language)</source>
         <translation>自動（システム言語）でございますわ</translation>
     </message>

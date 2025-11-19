@@ -42,27 +42,27 @@ KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)や
         <translation>情報だよ〜</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="128"/>
+        <location filename="../src/aboutdialog.cpp" line="129"/>
         <source>Programming</source>
         <translation>プログラミング〜？コード書いてる自分カッコいいとか思ってんの？乙</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="129"/>
+        <location filename="../src/aboutdialog.cpp" line="130"/>
         <source>Icons &amp; Arts</source>
         <translation>アイコン・アート〜。絵だけでドヤ顔？ぷっ</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="130"/>
+        <location filename="../src/aboutdialog.cpp" line="131"/>
         <source>Translators</source>
         <translation>翻訳者〜〜どうせAI翻訳に突っ込んだだけでしょ？乙</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="132"/>
+        <location filename="../src/aboutdialog.cpp" line="133"/>
         <source>Authors</source>
         <translation>偉そうな作者ら乙w</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="140"/>
+        <location filename="../src/aboutdialog.cpp" line="141"/>
         <source>QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
@@ -73,7 +73,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="151"/>
+        <location filename="../src/aboutdialog.cpp" line="152"/>
         <source>Licenses</source>
         <translation>ライセンス〜</translation>
     </message>
@@ -327,7 +327,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
 <context>
     <name>ConfigFile</name>
     <message>
-        <location filename="../src/configfile.cpp" line="119"/>
+        <location filename="../src/configfile.cpp" line="124"/>
         <source>Auto (System Language)</source>
         <translation>自動（システム言語に従って決めといてあげるんだから感謝しなよ？）</translation>
     </message>
@@ -728,7 +728,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.ui" line="255"/>
         <source>Preferences</source>
-        <translation>環境設定～〜自分好みにしないと使えないの？ざぁーこw</translation>
+        <translation>環境設定～〜自分好みにしないと使えないの？ざぁーこ♥</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="266"/>
@@ -931,7 +931,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/parsedkcf.cpp" line="90"/>
         <source>What is this? Unknown KCF bitsPerColor: %1</source>
-        <translation>なにこのざこ？ 見たことない KCF bitsPerColor "%1" だね。</translation>
+        <translation>なにこのざこ？ 見たことない KCF bitsPerColor &quot;%1&quot; だね。</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="142"/>

@@ -254,8 +254,8 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
         { "QScrollBar::Page up", "1ぺ、ページ…う、上…が、がんば…" },
         { "QScrollBar::Page down", "1ぺ、ページ…し、下…こ、怖…" },
         { "QScrollBar::Scroll up", "あ、あぅ…う、上に…す、スクロール…" },
-        { "QScrollBar::Scroll down", "む、むり…し、下に…す、スクロール…"
-    } }
+        { "QScrollBar::Scroll down", "む、むり…し、下に…す、スクロール…" },
+    }},
     /*
     // 悪役令嬢 v2
     { "&Copy", "コピーして差し上げますわ、オホホ！ (&C)" },

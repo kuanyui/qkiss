@@ -115,14 +115,19 @@ void ConfigFile::setHomeDirectory(const QString &homeDir)
 
 const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
 {
+    QString ja ("日本語");
+    QString zh_TW ("台灣繁體");
+    if (m_uiLanguage.startsWith("ja_") && !m_uiLanguage.endsWith("JP") && !m_uiLanguage.endsWith("KS")) {
+        ja = "異世界通用語";
+    }
     return {
         {"", "", tr("Auto (System Language)")},
-        {"ja_JP", "🇯🇵", QString("日本語（異世界通用語）")},
-        {"ja_KS", "🇯🇵", QString("日本語（関西弁）")},
-        {"ja_OJ", "🇯🇵", QString("日本語（お嬢様）")},
-        {"ja_AR", "🇯🇵", QString("日本語（悪役令嬢）")},
-        {"ja_MK", "🇯🇵", QString("日本語（メ〇〇キ）")},
-        {"ja_ME", "🇯🇵", QString("日本語（〈沈黙の魔女〉モニカ・エヴァレット）")},
+        {"ja_JP", "🇯🇵", ja},
+        {"ja_KS", "🇯🇵", ja + QString("（関西弁）")},
+        {"ja_OJ", "🇯🇵", ja + QString("（お嬢様）")},
+        {"ja_AR", "🇯🇵", ja + QString("（悪役令嬢）")},
+        {"ja_MK", "🇯🇵", ja + QString("（メ〇〇キ）")},
+        {"ja_ME", "🇯🇵", ja + QString("（〈沈黙の魔女〉モニカ・エヴァレット）")},
         {"en_US", "🇺🇸", QString("American English")},
         {"zh_TW", "🇹🇼", QString("台灣繁體")},
     };

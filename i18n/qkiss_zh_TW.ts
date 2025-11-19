@@ -40,27 +40,27 @@ KiSS 起源於 1990 年代，在日本[御宅族](https://en.wikipedia.org/wiki/
         <translation>資訊</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="128"/>
+        <location filename="../src/aboutdialog.cpp" line="129"/>
         <source>Programming</source>
         <translation>程式設計</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="129"/>
+        <location filename="../src/aboutdialog.cpp" line="130"/>
         <source>Icons &amp; Arts</source>
         <translation>圖示與美術</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="130"/>
+        <location filename="../src/aboutdialog.cpp" line="131"/>
         <source>Translators</source>
         <translation>翻譯人員</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="132"/>
+        <location filename="../src/aboutdialog.cpp" line="133"/>
         <source>Authors</source>
         <translation>作者</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="140"/>
+        <location filename="../src/aboutdialog.cpp" line="141"/>
         <source>QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
@@ -69,7 +69,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
 QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)` 使用了一些來自其他自由開放原始碼軟體專案的第三方 SVG 圖示，這些圖示採用各種不同的授權條款：</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="151"/>
+        <location filename="../src/aboutdialog.cpp" line="152"/>
         <source>Licenses</source>
         <translation>授權條款</translation>
     </message>
@@ -323,7 +323,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
 <context>
     <name>ConfigFile</name>
     <message>
-        <location filename="../src/configfile.cpp" line="119"/>
+        <location filename="../src/configfile.cpp" line="124"/>
         <source>Auto (System Language)</source>
         <translation>自動（系統語言）</translation>
     </message>

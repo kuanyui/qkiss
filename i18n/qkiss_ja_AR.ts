@@ -40,27 +40,27 @@ KiSSは1990年代、そうした哀れな庶民のサブカルチャーから生
         <translation>哀れな情報にすがる下々</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="128"/>
+        <location filename="../src/aboutdialog.cpp" line="129"/>
         <source>Programming</source>
         <translation>プログラミングしかできない庶民</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="129"/>
+        <location filename="../src/aboutdialog.cpp" line="130"/>
         <source>Icons &amp; Arts</source>
         <translation>アイコンとアートごときに酔いしれる庶民の遊戯ですのよ！オホホホ！</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="130"/>
+        <location filename="../src/aboutdialog.cpp" line="131"/>
         <source>Translators</source>
         <translation>翻訳ごときに縋る庶民どもでございますわ！</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="132"/>
+        <location filename="../src/aboutdialog.cpp" line="133"/>
         <source>Authors</source>
         <translation>作者風情の下々どもでございますわ！哀れでしてよ！</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="140"/>
+        <location filename="../src/aboutdialog.cpp" line="141"/>
         <source>QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
@@ -69,7 +69,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
 QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を通じて、他のFLOSSプロジェクトからサードパーティのSVGアイコンを拝借しておりましてよ。もちろんそれらは庶民どもには難解な様々なライセンスの下で公開されておりますの！哀れですこと！</translation>
     </message>
     <message>
-        <location filename="../src/aboutdialog.cpp" line="151"/>
+        <location filename="../src/aboutdialog.cpp" line="152"/>
         <source>Licenses</source>
         <translation>ライセンスなどという紙切れですわ！オホホホ！</translation>
     </message>
@@ -323,7 +323,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
 <context>
     <name>ConfigFile</name>
     <message>
-        <location filename="../src/configfile.cpp" line="119"/>
+        <location filename="../src/configfile.cpp" line="124"/>
         <source>Auto (System Language)</source>
         <translation>自動（システム言語に従って決めといてあげるんだから感謝しなよ？オホホホ！）</translation>
     </message>
