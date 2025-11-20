@@ -165,8 +165,13 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
         if (!bodyStarted) {
             if (token.type == Token::Type::Space) { continue; }
             if (token.type == Token::Type::EndOfLine) { continue; }
-            if (token.type == Token::Type::Identifier && token.value == "EventHandler") {
-                bodyStarted = true;
+            if (token.type == Token::Type::Identifier) {
+                if (token.value == "EventHandler") {
+                    bodyStarted = true;
+                } else if (token.value.compare("EventHandler", Qt::CaseSensitivity::CaseInsensitive) == 0) {
+                    bodyStarted = true;
+                    logSyntaxWarning(token, tr(R"(A correct mark to indicate the beginning of FKiSS Script is case-sensitive `EventHandler`, but encountered `%1`. But for compatibility, still accept this.")").arg(token.value));
+                }
             } else {
                 logSyntaxError(token, tr("Command starts before EventHandler, ignore."));
             }
