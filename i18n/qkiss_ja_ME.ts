@@ -562,12 +562,12 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/logviewer.cpp" line="38"/>
         <source>Debug</source>
-        <translation>は、はぁ…</translation>
+        <translation>…</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="43"/>
         <source>Info</source>
-        <translation>な…なにか…</translation>
+        <translation>……</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="48"/>
@@ -582,17 +582,17 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/logviewer.cpp" line="58"/>
         <source>Fatal</source>
-        <translation>…殺さないで</translation>
+        <translation>……殺さないで</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="76"/>
         <source>Severity</source>
-        <translation>じじじ重要度</translation>
+        <translation>じ、じじじ重要度</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="76"/>
         <source>Message</source>
-        <translation>メッセージ</translation>
+        <translation>メッメメメッセージィィ</translation>
     </message>
 </context>
 <context>
@@ -645,7 +645,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.ui" line="103"/>
         <source>&amp;Help</source>
-        <translation>たったた助けてー(&amp;H)</translation>
+        <translation>たっ、たたた助け…(&amp;H)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="122"/>
@@ -718,12 +718,12 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.ui" line="252"/>
         <source>&amp;Preferences</source>
-        <translation>環境設定(&amp;P)</translation>
+        <translation>か、かかか、かかかか、か、環境、っせせせ設定(&amp;P)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="255"/>
         <source>Preferences</source>
-        <translation>か、環境設定…えへ…</translation>
+        <translation>か、環境設定……</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="266"/>
@@ -738,7 +738,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.cpp" line="76"/>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
-        <translation>こ、固定：%1…CE、CEL名：%2…コ、コメント：%3…で、出てますぅ…</translation>
+        <translation>こ、固定数：%1…CE、CEL名：%2…コ、コメント：%3…で、出てますぅ…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="165"/>
@@ -753,12 +753,12 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.cpp" line="178"/>
         <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
-        <translation>「%1」は…ゆ、有効なKiSSファイルじゃ…な、ないから…も、もう、む、無理です…帰りたい…</translation>
+        <translation>「%1」は…ゆ、有効なKiSSファイルじゃな、ないから、も、もう、無理です…かっ、帰りたい…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="186"/>
         <source>Parsing finished. Now rendering scenes...</source>
-        <translation>か、解析…完了しましたぁ…い、今から…シーンを…れ、レンダリング中ですぅ…</translation>
+        <translation>か、解析…完了しましたぁ…い、今から…シーンを…れ、レンダリング中、ですぅ…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="199"/>
@@ -770,24 +770,24 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
         <location filename="../src/mainwindow.cpp" line="219"/>
         <location filename="../src/mainwindow.cpp" line="220"/>
         <source>Scene Sets</source>
-        <translation>シーンセット</translation>
+        <translation>し、シーン、セット</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="221"/>
         <source>Switch scene set (F1/F2)</source>
-        <translation>シーンセット切り替え（F1/F2）</translation>
+        <translation>しっしっしシーンセットをき、切り替えぇ…（F1/F2 …で、でできるんですすすすすぅぅぅ）</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="244"/>
         <location filename="../src/mainwindow.cpp" line="250"/>
         <location filename="../src/mainwindow.cpp" line="251"/>
         <source>Palette Sets</source>
-        <translation>パレットセット</translation>
+        <translation>ぱ、パレットセット</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="252"/>
         <source>Switch palette set (F3/F4)</source>
-        <translation>パレットセット切り替え（F3/F4）</translation>
+        <translation>ぱ、パレットセット切り替え…（F3/F4…で、でできるんですぅ…）</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="393"/>
@@ -799,53 +799,53 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
         <location filename="../src/mainwindow.cpp" line="401"/>
         <location filename="../src/mainwindow.cpp" line="431"/>
         <source>Zooming Tools</source>
-        <translation>ズームツール</translation>
+        <translation>ず、ずずず、ズームツール</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="414"/>
         <location filename="../src/mainwindow.cpp" line="432"/>
         <source>Windows</source>
-        <translation>ウィンドウ</translation>
+        <translation>わ、わわ、枠…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="524"/>
         <source>QKiSS ready.</source>
-        <translation>QKiSS準備完了。</translation>
+        <translation>QKiSS…じゅ、準備…完了しちゃいましたぁ…あうぅ…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="528"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
-        <translation>Ctrl+ドラッグ：オブジェクトからCELを強制分離</translation>
+        <translation>Ctrl+ﾄﾞﾗｯｸﾞ：ｵﾌﾞｼﾞｪｸﾄからCELをき、強制分離…ひぃ…</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="533"/>
         <source>Shift+Drag: Disable FKiSS events</source>
-        <translation>Shift+ドラッグ：FKiSSイベントを無効化</translation>
+        <translation>Shift+ﾄﾞﾗｯｸﾞ：FKiSSじ、事件を無効…っう</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="538"/>
         <source>Middle Click: Unfix</source>
-        <translation>中クリック：固定解除</translation>
+        <translation>中ｸﾘｯｸ：こ、固定を解除…でもな、なんで？</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="543"/>
         <source>Right Click: More Actions</source>
-        <translation>右クリック：その他のアクション</translation>
+        <translation>右ｸﾘｯｸでほ、他の行動</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="685"/>
         <source>LZH Archive Files (*.lzh)</source>
-        <translation>LZH アーカイヴファイル (*.lzh)</translation>
+        <translation>LZH…ア、アーカイヴファイル……だよぅ…(*.lzh)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="687"/>
         <source>Open Compressed KiSS File</source>
-        <translation>圧縮KiSSファイルを開く</translation>
+        <translation>ああああ、あ、ああ、圧縮、Ki、Ki、キスファイルを、ひっ、開く</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="702"/>
         <source>Open Directory</source>
-        <translation>ディレクトリを開く</translation>
+        <translation>デデデッディレクトリを開く</translation>
     </message>
 </context>
 <context>
@@ -864,39 +864,39 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
 <context>
     <name>ParsedCnf</name>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="215"/>
+        <location filename="../src/parsedcnf.cpp" line="231"/>
         <source>Wrong playFieldSize format.</source>
-        <translation>playFieldSize の形式が不正です。</translation>
+        <translation>playFieldSize の形式が、ふふふふ不正でしゅ…</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="221"/>
+        <location filename="../src/parsedcnf.cpp" line="237"/>
         <source>Wrong KCF file name format.</source>
-        <translation>KCF ファイル名の形式が不正です。</translation>
+        <translation>KCF ファイル名の形式、っふ、不正です…</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="227"/>
+        <location filename="../src/parsedcnf.cpp" line="243"/>
         <source>Wrong outsideColor format.</source>
-        <translation>outsideColor の形式が不正です。</translation>
+        <translation>あ、あうっ…outsideColor の形式がっふふふふふふ不正ですすすすすすすぅ……</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="245"/>
+        <location filename="../src/parsedcnf.cpp" line="261"/>
         <source>Wrong CEL format.</source>
-        <translation>CEL の形式が不正です。</translation>
+        <translation>ひぃぃぃん…CE、CELの形式…ぐ、ぐちゃぐちゃで…読めないんですぅ…</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="286"/>
+        <location filename="../src/parsedcnf.cpp" line="302"/>
         <source>Wrong set line format.</source>
-        <translation>set 行の形式が不正です。</translation>
+        <translation>あ、あれぇ…set行の形式…ぜ、全然ちがうよぅ…ど、どうしよぅ…</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="331"/>
+        <location filename="../src/parsedcnf.cpp" line="347"/>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
-        <translation>不正な fkiss の接頭辞 `:@` ですが、レガシー互換のため受け入れます =&gt;  </translation>
+        <translation>ふみゅっ…fkissの接頭辞 `:@` が…ま、間違ってるんだけど…れ、レガシー互換だから…し、仕方なく受け入れちゃうね… =&gt;  </translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="356"/>
+        <location filename="../src/parsedcnf.cpp" line="372"/>
         <source>Wrong objPos format</source>
-        <translation>objPos の形式が不正です</translation>
+        <translation>あうっ……objPosの形式…ぐ、ぐちゃってて…こ、壊れちゃってるんですぅ…</translation>
     </message>
 </context>
 <context>
@@ -904,39 +904,39 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/parsedkcf.cpp" line="42"/>
         <source>Not a palette file mark!</source>
-        <translation>パレットファイルのマークではありません！</translation>
+        <translation>なん、な、ななななんで、パレットファイルのマークはありませんですかぁぁぁ…</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="46"/>
         <source>Invalid bitsPerColor (12 or 24): %1</source>
-        <translation>無効な bitsPerColor（12 または 24）: %1</translation>
+        <translation>び、bitsPerColorが…12か24じゃないんですぅ…%1…こ、壊れてますぅ…かな…</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="50"/>
         <source>Invalid colorAmountsInOnePalette (1 ~ 256): %1</source>
-        <translation>無効な colorAmountsInOnePalette（1 ～ 256）: %1</translation>
+        <translation>ひっっ……co、colorAmountsInOnePaletteが…%1、こ、これは、1〜256の範囲外で……だ、だめ、む、むりですぅ…</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="60"/>
         <location filename="../src/parsedkcf.cpp" line="78"/>
         <location filename="../src/parsedkcf.cpp" line="112"/>
         <source>Out of range palatte colors definition, byte offset: %1</source>
-        <translation>パレット色定義が範囲外です。バイトオフセット: %1</translation>
+        <translation>ば、バイトオフセット「%1」はぱ、パレット色定義が…範囲外なんでちゃってますぅ…</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="90"/>
         <source>What is this? Unknown KCF bitsPerColor: %1</source>
-        <translation>これは何ですか？不明な KCF bitsPerColor: %1</translation>
+        <translation>ななな、なななな、なななっ、なにこれ…KCFのbitsPerColor「%1」が…い、意味不明ですぅ……こ、怖いひっぃぃ…</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="142"/>
         <source>This KCF file contains no valid palette, but you try to get palette from it. Abort.</source>
-        <translation>このKCFファイルには有効なパレットが含まれていませんが、パレットを取得しようとしました。中止します。</translation>
+        <translation>こ、このKCFファイルには…有効なパレットが…な、ないのに…と、取得しようとしましたぁ…ちゅ、中止ですぅ…ごごごごめんなさいごめんなさいごめんなさい、余計なことを言ってごめんなさいぃぃぃ</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="146"/>
         <source>paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback</source>
-        <translation>paletteIdx（%1、0から数える点に注意）が実際の paletteAmount（%2）を超えています。フォールバックとしてインデックス 0 を使用します。</translation>
+        <translation>paletteIdx（%1、…0から数えるんですぅ…）が…じ、実際のpaletteAmount（%2）を…こ、超えちゃってますぅ…だ、だからインデックス0を…し、仕方なく使いますぅ…</translation>
     </message>
 </context>
 <context>
@@ -949,7 +949,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/preferencedialog.cpp" line="63"/>
         <source>LZH Extractor Backend</source>
-        <translation>LZH展開バックエンド</translation>
+        <translation>LZH展開のば、バックエンド</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="144"/>
@@ -964,12 +964,12 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/preferencedialog.cpp" line="165"/>
         <source>Name</source>
-        <translation>名前</translation>
+        <translation>識別名</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="166"/>
         <source>Summary</source>
-        <translation>概要</translation>
+        <translation>要約</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="167"/>
@@ -984,7 +984,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/preferencedialog.cpp" line="169"/>
         <source>OS Support</source>
-        <translation>OSサポート</translation>
+        <translation>OS対応</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="170"/>
@@ -1004,12 +1004,12 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/preferencedialog.cpp" line="210"/>
         <source>Installed</source>
-        <translation>インストール済み</translation>
+        <translation>い、インストール済み…で、で大丈夫みたいですぅ…</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="213"/>
         <source>Not Found / Not Installed</source>
-        <translation>見つからない / インストールされていない</translation>
+        <translation>み、見つからない…あ、あの…インストールされてないみたいで…ごっごごごめんなさいっ！見つけられなくて役に立たなくてほんとにごめんなさいぃ…！</translation>
     </message>
 </context>
 <context>
@@ -1017,32 +1017,32 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/enums.h" line="58"/>
         <source>ASCII</source>
-        <translation>ASCII</translation>
+        <translation>ASCII、こ、これ…お、主に地球の人たちが使ってるんですぅ…</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="59"/>
         <source>UTF-8</source>
-        <translation>UTF-8</translation>
+        <translation>UTF-8…じ、実は KiSS にはあんまり使われてない、と思います……</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="60"/>
         <source>Shift JIS</source>
-        <translation>Shift JIS</translation>
+        <translation>Shift JIS…に、日本の KiSS ではいちばんよく使われてて…わ、これをおすすめなんですぅ…</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="61"/>
         <source>EUC-JP</source>
-        <translation>EUC-JP</translation>
+        <translation>EUC-JP…え、えっ…これも日本語用で…い、今はあんまり見ないんですぅ</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="66"/>
         <source>Case Insensitive</source>
-        <translation>大文字小文字を区別しない</translation>
+        <translation>お、大文字と小文字…く、区別しないんですぅ……わ、私的には…こ、これをおすすめしますぅ……</translation>
     </message>
     <message>
         <location filename="../src/enums.h" line="67"/>
         <source>Case Sensitive</source>
-        <translation>大文字小文字を区別する</translation>
+        <translation>お、大文字と小文字…き、区別するんですぅ…ち、ちょ、ちょっと厳しい設定かもですぅ</translation>
     </message>
 </context>
 </TS>
