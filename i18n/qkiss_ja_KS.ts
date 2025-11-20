@@ -405,6 +405,31 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
         <translation>想定外の文字やさかい無視するで [%1:%2]: `%3`</translation>
     </message>
     <message>
+        <location filename="../src/fkissparser.cpp" line="171"/>
+        <source>Command starts before EventHandler, ignore.</source>
+        <translation>コマンドが EventHandler より前に始まっとるやんけ。しゃーないから無視やで。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="188"/>
+        <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
+        <translation>コマンド名 `%1` のあとに左かっこ付けなあかんねん。ないからパラメータ無し扱いやで。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="197"/>
+        <source>Cannot find the matched right parenthesis. Abort.</source>
+        <translation>右かっこ見つからへんやん。もう中止するしかあらへんわ。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="217"/>
+        <source>Comma is required between two args.</source>
+        <translation>コンマは引数の区切りにせなあかんねんで。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="229"/>
+        <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
+        <translation>今んとこ FKiSS3 の変数も FKiSS4 のラベルも対応してへんねん。ワイらの時間をそないな仕様に割く気はさらさらあらへんで。</translation>
+    </message>
+    <message>
         <location filename="../src/fkissparser.cpp" line="284"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
         <translation>未知のコマンド「%1」や。スキップするで。</translation>
@@ -865,37 +890,37 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
 <context>
     <name>ParsedCnf</name>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="215"/>
+        <location filename="../src/parsedcnf.cpp" line="231"/>
         <source>Wrong playFieldSize format.</source>
         <translation>playFieldSize の書式がおかしいで。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="221"/>
+        <location filename="../src/parsedcnf.cpp" line="237"/>
         <source>Wrong KCF file name format.</source>
         <translation>KCFファイル名の書式がおかしいで。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="227"/>
+        <location filename="../src/parsedcnf.cpp" line="243"/>
         <source>Wrong outsideColor format.</source>
         <translation>outsideColor の書式がおかしいで。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="245"/>
+        <location filename="../src/parsedcnf.cpp" line="261"/>
         <source>Wrong CEL format.</source>
         <translation>CEL の書式がおかしいで。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="286"/>
+        <location filename="../src/parsedcnf.cpp" line="302"/>
         <source>Wrong set line format.</source>
         <translation>set 行の書式がおかしいで。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="331"/>
+        <location filename="../src/parsedcnf.cpp" line="347"/>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
         <translation>fkiss の接頭辞 `:@` はおかしいけど、昔の互換のため受け入れるで =&gt;  </translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="356"/>
+        <location filename="../src/parsedcnf.cpp" line="372"/>
         <source>Wrong objPos format</source>
         <translation>objPos の書式がおかしいで</translation>
     </message>

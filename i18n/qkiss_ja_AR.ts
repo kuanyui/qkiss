@@ -405,6 +405,31 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
         <translation>想定外の文字でございますゆえ無視いたしますわ [%1:%2]: `%3`。まあ、こんな凡ミスを晒すなんて滑稽ですこと！</translation>
     </message>
     <message>
+        <location filename="../src/fkissparser.cpp" line="171"/>
+        <source>Command starts before EventHandler, ignore.</source>
+        <translation>まぁ！EventHandler より先にコマンドを始めるなんて…無視して差し上げますわ！おほほほ！</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="188"/>
+        <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
+        <translation>コマンド名 `%1` の後に左かっこがございませんわね？ならば、パラメータ無しと見なして差し上げますわ！</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="197"/>
+        <source>Cannot find the matched right parenthesis. Abort.</source>
+        <translation>右かっこが見当たりませんこと？まぁ、仕方なく中止いたしますわ！おほほほ！</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="217"/>
+        <source>Comma is required between two args.</source>
+        <translation>コンマは引数の区切りでなくてはなりませんのよ？常識ですわ！</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="229"/>
+        <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
+        <translation>あらあら…FKiSS3 の変数も FKiSS4 のラベルも未対応ですの。わたくしの貴重なお時間を、平民のその面倒くさい仕様に割いて実装するつもりはございませんことよ！おほほほ！</translation>
+    </message>
+    <message>
         <location filename="../src/fkissparser.cpp" line="284"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
         <translation>不明なコマンド「%1」ですことよ。スキップいたしますわ。</translation>
@@ -865,37 +890,37 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
 <context>
     <name>ParsedCnf</name>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="215"/>
+        <location filename="../src/parsedcnf.cpp" line="231"/>
         <source>Wrong playFieldSize format.</source>
         <translation>playFieldSize の形式が正しくございませんわ。まあ、基本もできないなんて無様ですこと。おほほほ！</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="221"/>
+        <location filename="../src/parsedcnf.cpp" line="237"/>
         <source>Wrong KCF file name format.</source>
         <translation>KCF ファイル名の形式が正しくございませんの。あらあら、そんな初歩的なところで躓くなんて哀れですこと。おほほほ！</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="227"/>
+        <location filename="../src/parsedcnf.cpp" line="243"/>
         <source>Wrong outsideColor format.</source>
         <translation>outsideColor の形式が正しくございませんわ。まあ、色すらまともに扱えないなんて情けないですこと。おほほほ！</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="245"/>
+        <location filename="../src/parsedcnf.cpp" line="261"/>
         <source>Wrong CEL format.</source>
         <translation>CEL の形式が正しくございませんの。あらあら、初歩で躓くなんて哀れですことねぇ。おほほほ！</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="286"/>
+        <location filename="../src/parsedcnf.cpp" line="302"/>
         <source>Wrong set line format.</source>
         <translation>set 行の形式が正しくございませんわ。まあ、所詮その程度の腕前ですものね。おほほほ！</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="331"/>
+        <location filename="../src/parsedcnf.cpp" line="347"/>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
         <translation>fkiss の接頭辞 `:@` は正しくございませんけれど、旧来互換のため特別に受け入れて差し上げますわ。まあ、恩に着ることですわねぇ。おほほほ！ =&gt;  </translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="356"/>
+        <location filename="../src/parsedcnf.cpp" line="372"/>
         <source>Wrong objPos format</source>
         <translation>objPos の形式が正しくございませんわ。あらあら、そんな初歩で躓くなんて哀れですこと。おほほほ！</translation>
     </message>

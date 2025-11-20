@@ -409,6 +409,31 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <translation>想定外の文字だから無視しとくよ [%1:%2]: `%3`、カッコわる〜</translation>
     </message>
     <message>
+        <location filename="../src/fkissparser.cpp" line="171"/>
+        <source>Command starts before EventHandler, ignore.</source>
+        <translation>あれ〜コマンドが EventHandler より前に始まってんじゃん。そんなに簡単な常識も知らないの〜？ざこすぎる〜無視しとくしぃ〜</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="188"/>
+        <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
+        <translation>ざこーいコマンド `%1` のあとに左かっこないじゃん。パラメータ無しって決めちゃうもんね〜。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="197"/>
+        <source>Cannot find the matched right parenthesis. Abort.</source>
+        <translation>右かっこ見つからないしぃ〜。もう中止しちゃうからね！</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="217"/>
+        <source>Comma is required between two args.</source>
+        <translation>コンマは引数の区切りにするしかないんだよ？これも知らなくざこすぎ〜</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="229"/>
+        <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
+        <translation>FKiSS3 の変数も FKiSS4 のラベルも未対応だしぃ〜。そんなの面倒臭い仕様を実装する気なんてないもんね〜！キャハハ〜</translation>
+    </message>
+    <message>
         <location filename="../src/fkissparser.cpp" line="284"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
         <translation>未知のコマンド「%1」ね。スキップするよ。なさけな〜い♥</translation>
@@ -869,37 +894,37 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
 <context>
     <name>ParsedCnf</name>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="215"/>
+        <location filename="../src/parsedcnf.cpp" line="231"/>
         <source>Wrong playFieldSize format.</source>
         <translation>playFieldSize の書式ざこ〜〜い♥</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="221"/>
+        <location filename="../src/parsedcnf.cpp" line="237"/>
         <source>Wrong KCF file name format.</source>
         <translation>KCF ファイル名の書式がきたなーい、キャハハ♥</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="227"/>
+        <location filename="../src/parsedcnf.cpp" line="243"/>
         <source>Wrong outsideColor format.</source>
         <translation>outsideColor の書式がおかしいよ。なさけな〜い♥</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="245"/>
+        <location filename="../src/parsedcnf.cpp" line="261"/>
         <source>Wrong CEL format.</source>
         <translation>CEL の書式がおかしいよ。根性なし♥</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="286"/>
+        <location filename="../src/parsedcnf.cpp" line="302"/>
         <source>Wrong set line format.</source>
         <translation>set 行の書式がおかしいよ。はずかしくないのぉ♥</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="331"/>
+        <location filename="../src/parsedcnf.cpp" line="347"/>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
         <translation>fkiss の接頭辞 `:@` はおかしいけど、古い互換のために受け入れるよ、だっさ〜〜〜 =&gt;  </translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="356"/>
+        <location filename="../src/parsedcnf.cpp" line="372"/>
         <source>Wrong objPos format</source>
         <translation>objPos の書式がきたなーい、キャハハ♥</translation>
     </message>
@@ -989,7 +1014,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/preferencedialog.cpp" line="169"/>
         <source>OS Support</source>
-        <translation>OSサポート〜</translation>
+        <translation>OS対応〜</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="170"/>

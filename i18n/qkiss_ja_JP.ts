@@ -405,6 +405,31 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
         <translation>予期しない文字のため無視します [%1:%2]: `%3`</translation>
     </message>
     <message>
+        <location filename="../src/fkissparser.cpp" line="171"/>
+        <source>Command starts before EventHandler, ignore.</source>
+        <translation>コマンドが EventHandler より前に開始されたため、無視します。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="188"/>
+        <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
+        <translation>コマンド名 `%1` の後には左かっこが必要です。存在しないため、パラメータなしとみなします。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="197"/>
+        <source>Cannot find the matched right parenthesis. Abort.</source>
+        <translation>対応する右かっこが見つかりません。処理を中止します。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="217"/>
+        <source>Comma is required between two args.</source>
+        <translation>コンマは 2 つの引数の区切りでなければなりません。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="229"/>
+        <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
+        <translation>現在、FKiSS3 の変数や FKiSS4 のラベル名はサポートされていません。</translation>
+    </message>
+    <message>
         <location filename="../src/fkissparser.cpp" line="284"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
         <translation>不明なコマンド「%1」です。スキップします。</translation>
@@ -865,37 +890,37 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
 <context>
     <name>ParsedCnf</name>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="215"/>
+        <location filename="../src/parsedcnf.cpp" line="231"/>
         <source>Wrong playFieldSize format.</source>
         <translation>playFieldSize の形式が不正です。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="221"/>
+        <location filename="../src/parsedcnf.cpp" line="237"/>
         <source>Wrong KCF file name format.</source>
         <translation>KCF ファイル名の形式が不正です。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="227"/>
+        <location filename="../src/parsedcnf.cpp" line="243"/>
         <source>Wrong outsideColor format.</source>
         <translation>outsideColor の形式が不正です。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="245"/>
+        <location filename="../src/parsedcnf.cpp" line="261"/>
         <source>Wrong CEL format.</source>
         <translation>CEL の形式が不正です。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="286"/>
+        <location filename="../src/parsedcnf.cpp" line="302"/>
         <source>Wrong set line format.</source>
         <translation>set 行の形式が不正です。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="331"/>
+        <location filename="../src/parsedcnf.cpp" line="347"/>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
         <translation>不正な fkiss の接頭辞 `:@` ですが、レガシー互換のため受け入れます =&gt;  </translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="356"/>
+        <location filename="../src/parsedcnf.cpp" line="372"/>
         <source>Wrong objPos format</source>
         <translation>objPos の形式が不正です</translation>
     </message>
@@ -985,7 +1010,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/preferencedialog.cpp" line="169"/>
         <source>OS Support</source>
-        <translation>OSサポート</translation>
+        <translation>OS対応</translation>
     </message>
     <message>
         <location filename="../src/preferencedialog.cpp" line="170"/>

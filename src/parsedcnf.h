@@ -206,8 +206,8 @@ public:
     QString fileContentText() const;
 
 private:
-    void log(const QString &line);
-    void warn(const QString &line);
+    void log(const QString &line, int lineIdx = -1);
+    void warn(const QString &line, int lineIdx = -1);
     void error(const QString &msg, int lineIdx = -1);
 private:
     static QString removeComment(const QString &line);

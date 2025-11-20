@@ -172,25 +172,41 @@ ParsedCnf::~ParsedCnf()
     delete m_fkiss;
 }
 
+
+void ParsedCnf::log(const QString &msg, int lineIdx)
+{
+    if (lineIdx == -1) {
+        lineIdx = m_lineIdx;
+    }
+    QString &line = m_lines[lineIdx];
+    qInfo() << "[LOG]" << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
+}
+
+void ParsedCnf::warn(const QString &msg, int lineIdx)
+{
+    if (lineIdx == -1) {
+        lineIdx = m_lineIdx;
+    }
+    QString &line = m_lines[lineIdx];
+    qWarning() << "[LOG]" << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
+}
+
+
 void ParsedCnf::error(const QString &msg, int lineIdx)
 {
     if (lineIdx == -1) {
         lineIdx = m_lineIdx;
     }
     QString &line = m_lines[lineIdx];
-    qCritical() << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
+    qCritical().noquote() << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
 }
+
 
 QString ParsedCnf::removeComment(const QString &line)
 {
     return line.split(';').first();
 }
 
-void ParsedCnf::log(const QString &msg)
-{
-    QString &line = m_lines[m_lineIdx];
-    qCritical() << "[LOG]" << m_fileName << ":" << m_lineIdx + 1 << ": " << msg << " ===>" << line;
-}
 
 void ParsedCnf::parseLines(const QStringList &lines)
 {
@@ -212,7 +228,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
         } else if (line.startsWith("("_L1)) {
             static QRegularExpression rePlayFieldSize(R"#(^\((\d+) *?[,.*] *?(\d+))#");   // Actually, the standard spec is `(x,y`, but some CNF wrongly wrote as `(x.y` even `(x*y`...`
             QRegularExpressionMatch m = rePlayFieldSize.match(line);
-            if (!m.hasMatch()) { error(tr("Wrong playFieldSize format.")); continue; }
+            if (!m.hasMatch()) { warn(tr("Wrong playFieldSize format.")); continue; }
             m_playFieldSize.setWidth(m.captured(1).toInt());
             m_playFieldSize.setHeight(m.captured(2).toInt());
         } else if (line.startsWith("%"_L1)) {
@@ -224,7 +240,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
         } else if (line.startsWith("[")) {
             static QRegularExpression reOutsideColor(R"#(^\[(\d+))#");
             QRegularExpressionMatch m = reOutsideColor.match(line);
-            if (!m.hasMatch()) { error(tr("Wrong outsideColor format.")); continue; }
+            if (!m.hasMatch()) { warn(tr("Wrong outsideColor format.")); continue; }
             m_outsideColor = line.mid(1).toUInt();
         } else if (line.startsWith("#"_L1)) {
             // static QRegularExpression reCel(R"#(^#(\d+)(?:[.](\d+))?\s+(\S+)(?:\s+[*]\s*?(\d+))?(?:\s+[:]\s*?([\d\s]+))?(?:;(.+))?)#");

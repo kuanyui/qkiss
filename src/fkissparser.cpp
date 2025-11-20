@@ -168,7 +168,7 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
             if (token.type == Token::Type::Identifier && token.value == "EventHandler") {
                 bodyStarted = true;
             } else {
-                logSyntaxError(token, "Command starts before EventHandler, ignore.");
+                logSyntaxError(token, tr("Command starts before EventHandler, ignore."));
             }
             continue;
         }
@@ -185,7 +185,7 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
             }
             const Token &lPar = tokens[i];
             if (lPar.type != Token::Type::LParen) {
-                logSyntaxWarning(token, "Command name `%1` must be followed by a left parenthesis, so assume it has no parameter."_L1.arg(token.value));
+                logSyntaxWarning(token, tr("Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.").arg(token.value));
                 astCmds.append(std::make_shared<ASTCommand>(ASTCommand{cmdName, {}}));
                 ++i;
                 continue;
@@ -194,7 +194,7 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
             const int parenBeg = i;
             const int parenEnd = findNearestToken(tokens, Token::Type::RParen, parenBeg);
             if (parenEnd == -1) {
-                logSyntaxError(lPar, "Cannot find the matched right parenthesis. Abort.");
+                logSyntaxError(lPar, tr("Cannot find the matched right parenthesis. Abort."));
                 return astCmds;
             }
             i = parenEnd;   //
@@ -214,7 +214,7 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
                     if (waitComma) {
                         waitComma = false;
                     } else {
-                        logSyntaxError(*tk, "Comma must be a separator between two args.");
+                        logSyntaxError(*tk, tr("Comma is required between two args."));
                     }
                 } else  if (tk->type == Token::Type::Integer) {
                     cmdArgs.append(FkissVariant::fromInt(tk->value));
@@ -226,7 +226,7 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
                     cmdArgs.append(FkissVariant::fromObjectId(tk->value));
                     waitComma = true;
                 } else if (tk->type == Token::Type::Identifier) {
-                    logSyntaxError(*tk, "Currently FKiSS3 variable, or FKiSS4 named label, is not supported.");
+                    logSyntaxError(*tk, tr("Currently FKiSS3 variable, or FKiSS4 named label, is not supported."));
                     waitComma = true;
                 }
             }

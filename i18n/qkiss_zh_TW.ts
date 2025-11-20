@@ -405,6 +405,31 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
         <translation>由於是非預期字元而略過 [%1:%2]：`%3`</translation>
     </message>
     <message>
+        <location filename="../src/fkissparser.cpp" line="171"/>
+        <source>Command starts before EventHandler, ignore.</source>
+        <translation>指令在 EventHandler 之前就開始，將忽略。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="188"/>
+        <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
+        <translation>指令名稱 `%1` 必須接在左括號之後，否則視為沒有參數。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="197"/>
+        <source>Cannot find the matched right parenthesis. Abort.</source>
+        <translation>找不到對應的右括號，中止。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="217"/>
+        <source>Comma is required between two args.</source>
+        <translation>兩個參數之間必須有逗號。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="229"/>
+        <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
+        <translation>目前不支援 FKiSS3 的變數或 FKiSS4 的命名標籤。</translation>
+    </message>
+    <message>
         <location filename="../src/fkissparser.cpp" line="284"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
         <translation>不明指令「%1」，略過。</translation>
@@ -865,37 +890,37 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
 <context>
     <name>ParsedCnf</name>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="215"/>
+        <location filename="../src/parsedcnf.cpp" line="231"/>
         <source>Wrong playFieldSize format.</source>
         <translation>playFieldSize 格式錯誤。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="221"/>
+        <location filename="../src/parsedcnf.cpp" line="237"/>
         <source>Wrong KCF file name format.</source>
         <translation>KCF 檔名格式錯誤。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="227"/>
+        <location filename="../src/parsedcnf.cpp" line="243"/>
         <source>Wrong outsideColor format.</source>
         <translation>outsideColor 格式錯誤。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="245"/>
+        <location filename="../src/parsedcnf.cpp" line="261"/>
         <source>Wrong CEL format.</source>
         <translation>CEL 格式錯誤。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="286"/>
+        <location filename="../src/parsedcnf.cpp" line="302"/>
         <source>Wrong set line format.</source>
         <translation>set 行格式錯誤。</translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="331"/>
+        <location filename="../src/parsedcnf.cpp" line="347"/>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
         <translation>fkiss 前綴 `:@` 不正確，但為相容舊版而接受 =&gt;  </translation>
     </message>
     <message>
-        <location filename="../src/parsedcnf.cpp" line="356"/>
+        <location filename="../src/parsedcnf.cpp" line="372"/>
         <source>Wrong objPos format</source>
         <translation>objPos 格式錯誤</translation>
     </message>

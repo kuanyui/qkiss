@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("QKiSS");
     QApplication app(argc, argv);
     QFile qssFile(":/styles/main.qss");
-    qssFile.open(QFile::ReadOnly);
+    [[maybe_unused]] bool success = qssFile.open(QFile::ReadOnly);
     QString qssContent = QLatin1String(qssFile.readAll());
     app.setStyleSheet(qssContent);
     qApp->installEventFilter(&TranslationManager::instance());

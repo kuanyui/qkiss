@@ -404,6 +404,31 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
         <translation>え、えぇと、よ、予期しない文字だから…む、無視しちゃい…ます…[%1:%2]: `%3`…</translation>
     </message>
     <message>
+        <location filename="../src/fkissparser.cpp" line="171"/>
+        <source>Command starts before EventHandler, ignore.</source>
+        <translation>こ、コマンドが…EventHandlerより前に始まっちゃって…む、無視しますぅ…</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="188"/>
+        <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
+        <translation>コ、コマンド名 `%1` のあとに…左かっこが必要なのに…な、ないから…パラメータなしって…み、見なしますぅ…</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="197"/>
+        <source>Cannot find the matched right parenthesis. Abort.</source>
+        <translation>あ、あれぇ…右かっこが…み、見つからなくて…中止しちゃいますぅ…</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="217"/>
+        <source>Comma is required between two args.</source>
+        <translation>コ、コンマは…引数の区切りじゃないと…だ、だめなんですぅ…</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="229"/>
+        <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
+        <translation>い、今は…FKiSS3の変数とか…FKiSS4のラベル名は…サ、サポートされてないんですぅ…ご、ごめんなさい…</translation>
+    </message>
+    <message>
         <location filename="../src/fkissparser.cpp" line="284"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
         <translation>不明なコマンド「%1」です。ススススキップしましゅ…。</translation>
