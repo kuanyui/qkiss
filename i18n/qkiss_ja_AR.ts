@@ -395,52 +395,57 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
 <context>
     <name>FkissParser</name>
     <message>
-        <location filename="../src/fkissparser.cpp" line="129"/>
+        <location filename="../src/fkissparser.cpp" line="131"/>
         <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
         <translation>二重引用符を見つけましたけれど、対になるお印が見当たりませんことよ。まあ、文字列すらまともに成り立たないなんて滑稽ですわねぇ。おほほほ！ SOURCE: </translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="147"/>
+        <location filename="../src/fkissparser.cpp" line="149"/>
         <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
         <translation>想定外の文字でございますゆえ無視いたしますわ [%1:%2]: `%3`。まあ、こんな凡ミスを晒すなんて滑稽ですこと！</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="171"/>
-        <source>Command starts before EventHandler, ignore.</source>
-        <translation>まぁ！EventHandler より先にコマンドを始めるなんて…無視して差し上げますわ！おほほほ！</translation>
+        <location filename="../src/fkissparser.cpp" line="182"/>
+        <source>FKiSS specification requires a case-sensitive mark `EventHandler` to indicate the beginning of FKiSS Script, but encountered `%1` in this file. Ahh.... For compatibility, still accept this.</source>
+        <translation>FKiSS の仕様では、スクリプト開始を示すために大小文字を区別した `EventHandler` が必要ですのに…このファイルでは `%1` が見つかりましたわ。あぁ〜なんてお粗末なこと！互換性のために受け入れて差し上げますけれど、わたくしの寛大さに感謝なさいませね！お―――ほほほ！</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="188"/>
+        <location filename="../src/fkissparser.cpp" line="185"/>
+        <source>Command starts before EventHandler, ignore.</source>
+        <translation>まぁ！EventHandler より先にコマンドを始めるなんて…無視して差し上げますわ！お――ほほほ！</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="202"/>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
         <translation>コマンド名 `%1` の後に左かっこがございませんわね？ならば、パラメータ無しと見なして差し上げますわ！</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="197"/>
+        <location filename="../src/fkissparser.cpp" line="211"/>
         <source>Cannot find the matched right parenthesis. Abort.</source>
-        <translation>右かっこが見当たりませんこと？まぁ、仕方なく中止いたしますわ！おほほほ！</translation>
+        <translation>右かっこが見当たりませんこと？まぁ、仕方なく中止いたしますわ！お――ほほほ！</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="217"/>
+        <location filename="../src/fkissparser.cpp" line="231"/>
         <source>Comma is required between two args.</source>
         <translation>コンマは引数の区切りでなくてはなりませんのよ？常識ですわ！</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="229"/>
+        <location filename="../src/fkissparser.cpp" line="243"/>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
-        <translation>あらあら…FKiSS3 の変数も FKiSS4 のラベルも未対応ですの。わたくしの貴重なお時間を、平民のその面倒くさい仕様に割いて実装するつもりはございませんことよ！おほほほ！</translation>
+        <translation>あらあら…FKiSS3 の変数も FKiSS4 のラベルも未対応ですの。わたくしの貴重なお時間を、平民のその面倒くさい仕様に割いて実装するつもりはございませんことよ！お――ほほほ！</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="284"/>
+        <location filename="../src/fkissparser.cpp" line="298"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
         <translation>不明なコマンド「%1」ですことよ。スキップいたしますわ。</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="293"/>
+        <location filename="../src/fkissparser.cpp" line="307"/>
         <source>[SyntaxWarning] %1   [L%2, C%3] %4</source>
         <translation>[構文警告] %1   [L%2, C%3] %4</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="302"/>
+        <location filename="../src/fkissparser.cpp" line="316"/>
         <source>[SyntaxError] %1   [L%2, C%3] %4</source>
         <translation>[構文エラー] %1   [L%2, C%3] %4</translation>
     </message>
@@ -450,22 +455,22 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/gkissscene.cpp" line="74"/>
         <source>No KCF found in this CNF, don&apos;t draw set background.</source>
-        <translation>このCNFにはKCFが見つかりませんので、背景はお描きいたしませんわ。まあ、無様ですことねぇ〜。おほほほ！</translation>
+        <translation>このCNFにはKCFが見つかりませんので、背景はお描きいたしませんわ。まあ、無様ですことねぇ〜。お――ほほほ！</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="81"/>
         <source>No palette in this KCF. Abort.</source>
-        <translation>このKCFにはパレットがございませんの。あらあら、基本も満たせないなんて哀れですこと。中止いたしますわ。おほほほ！</translation>
+        <translation>このKCFにはパレットがございませんの。あらあら、基本も満たせないなんて哀れですこと。中止いたしますわ。お――ほほほ！</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="92"/>
         <source>In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.</source>
-        <translation>このCNFでは setNo %1 の既定の paletteNo を %2 と定めておりますけれど、最初のKCFにはパレットが%3個しかございませんの。仕方なく paletteNo 0 に致しますわ。まあ、情けないですこと。おほほほ！</translation>
+        <translation>このCNFでは setNo %1 の既定の paletteNo を %2 と定めておりますけれど、最初のKCFにはパレットが%3個しかございませんの。仕方なく paletteNo 0 に致しますわ。まあ、情けないですこと。お――ほほほ！</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="100"/>
         <source>WTF? In CNF&apos;s set definition, not found palette in first KCF of this CNF. Abort.</source>
-        <translation>まあ…… CNF の set 定義において、このCNFの最初の KCF にパレットが見当たりませんの。結局中止でございますわ。おほほほ！</translation>
+        <translation>まあ…… CNF の set 定義において、このCNFの最初の KCF にパレットが見当たりませんの。結局中止でございますわ。お――ほほほ！</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="550"/>

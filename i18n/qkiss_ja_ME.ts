@@ -394,52 +394,57 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
 <context>
     <name>FkissParser</name>
     <message>
-        <location filename="../src/fkissparser.cpp" line="129"/>
+        <location filename="../src/fkissparser.cpp" line="131"/>
         <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
         <translation>あうっ…に、二重引用符は…み、見つかったんですけど…も、もう一方が…な、なくて…文、文字列にできなくて…ご、ごめんなさい…ひぃん…ソース： </translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="147"/>
+        <location filename="../src/fkissparser.cpp" line="149"/>
         <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
         <translation>え、えぇと、よ、予期しない文字だから…む、無視しちゃい…ます…[%1:%2]: `%3`…</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="171"/>
+        <location filename="../src/fkissparser.cpp" line="182"/>
+        <source>FKiSS specification requires a case-sensitive mark `EventHandler` to indicate the beginning of FKiSS Script, but encountered `%1` in this file. Ahh.... For compatibility, still accept this.</source>
+        <translation>FKiSS の仕様では…す、スクリプト開始には大小文字を区別した `EventHandler` が必要なのに…こ、このファイルでは `%1` が出てきちゃって………ご、互換性のために…、ひ、ひとまず、受け入れておきます…</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="185"/>
         <source>Command starts before EventHandler, ignore.</source>
         <translation>こ、コマンドが…EventHandlerより前に始まっちゃって…む、無視しますぅ…</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="188"/>
+        <location filename="../src/fkissparser.cpp" line="202"/>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
         <translation>コ、コマンド名 `%1` のあとに…左かっこが必要なのに…な、ないから…パラメータなしって…み、見なしますぅ…</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="197"/>
+        <location filename="../src/fkissparser.cpp" line="211"/>
         <source>Cannot find the matched right parenthesis. Abort.</source>
         <translation>あ、あれぇ…右かっこが…み、見つからなくて…中止しちゃいますぅ…</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="217"/>
+        <location filename="../src/fkissparser.cpp" line="231"/>
         <source>Comma is required between two args.</source>
         <translation>コ、コンマは…引数の区切りじゃないと…だ、だめなんですぅ…</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="229"/>
+        <location filename="../src/fkissparser.cpp" line="243"/>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
         <translation>い、今は…FKiSS3の変数とか…FKiSS4のラベル名は…サ、サポートされてないんですぅ…ご、ごめんなさい…</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="284"/>
+        <location filename="../src/fkissparser.cpp" line="298"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
         <translation>不明なコマンド「%1」です。ススススキップしましゅ…。</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="293"/>
+        <location filename="../src/fkissparser.cpp" line="307"/>
         <source>[SyntaxWarning] %1   [L%2, C%3] %4</source>
         <translation>[構文警告] %1   [L%2, C%3] %4</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="302"/>
+        <location filename="../src/fkissparser.cpp" line="316"/>
         <source>[SyntaxError] %1   [L%2, C%3] %4</source>
         <translation>[構文エラー] %1   [L%2, C%3] %4</translation>
     </message>
@@ -883,7 +888,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/parsedcel.cpp" line="82"/>
         <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
-        <translation>「%1」はパレット方式のCELファイルであるとされていますが、各ピクセルが%2ビット（想定: 32ビット）と記述されており、矛盾しています。パレット方式のCELとみなします。</translation>
+        <translation>「%1」ははは、ぱ、ぱぱっぱパレット式のCELファイルだって…言ってるのに…、ぅ…ぅ…各ピクセルが %2 ビットですって… 32 ビットのはずなのに…、矛盾してる…と思います。パレット方式のCELとして扱ってみます、っど、っどどどどでしょうか？…すすすすすいません勝手にやるのはすいません！</translation>
     </message>
 </context>
 <context>

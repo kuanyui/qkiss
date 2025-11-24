@@ -395,52 +395,57 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
 <context>
     <name>FkissParser</name>
     <message>
-        <location filename="../src/fkissparser.cpp" line="129"/>
+        <location filename="../src/fkissparser.cpp" line="131"/>
         <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
         <translation>二重引用符を見つけましたけれど、対になるお印が見当たらず文字列が成り立ちませんの。SOURCE: </translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="147"/>
+        <location filename="../src/fkissparser.cpp" line="149"/>
         <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
         <translation>想定外の文字でございますゆえ無視いたしますわ [%1:%2]: `%3`</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="171"/>
+        <location filename="../src/fkissparser.cpp" line="182"/>
+        <source>FKiSS specification requires a case-sensitive mark `EventHandler` to indicate the beginning of FKiSS Script, but encountered `%1` in this file. Ahh.... For compatibility, still accept this.</source>
+        <translation>FKiSS の仕様では、スクリプト開始を示すために大文字小文字を区別した `EventHandler` が必要でございますのに…このファイルでは `%1` が見つかりましたわ。まぁ…仕方ないね、互換性のために受け入れて差し上げますわ。</translation>
+    </message>
+    <message>
+        <location filename="../src/fkissparser.cpp" line="185"/>
         <source>Command starts before EventHandler, ignore.</source>
         <translation>あら？EventHandler より先にコマンドを始めるなんて…無視いたしますわ！</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="188"/>
+        <location filename="../src/fkissparser.cpp" line="202"/>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
         <translation>コマンド名 `%1` の後には左かっこが必要ですのに…ございませんから、引数なしと見なして差し上げますわ。</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="197"/>
+        <location filename="../src/fkissparser.cpp" line="211"/>
         <source>Cannot find the matched right parenthesis. Abort.</source>
         <translation>対応する右かっこが見当たりませんの。処理を中止いたしますわ。</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="217"/>
+        <location filename="../src/fkissparser.cpp" line="231"/>
         <source>Comma is required between two args.</source>
         <translation>引数同士の間にはコンマが必要でございますわ。</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="229"/>
+        <location filename="../src/fkissparser.cpp" line="243"/>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
         <translation>現在、FKiSS3 の変数や FKiSS4 のラベルは未対応でございますの。実装の予定もございませんわ。</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="284"/>
+        <location filename="../src/fkissparser.cpp" line="298"/>
         <source>Unknown command &quot;%1&quot;, skip.</source>
         <translation>不明なコマンド「%1」でございますの。スキップいたしますわ。</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="293"/>
+        <location filename="../src/fkissparser.cpp" line="307"/>
         <source>[SyntaxWarning] %1   [L%2, C%3] %4</source>
         <translation>[構文警告] %1   [L%2, C%3] %4</translation>
     </message>
     <message>
-        <location filename="../src/fkissparser.cpp" line="302"/>
+        <location filename="../src/fkissparser.cpp" line="316"/>
         <source>[SyntaxError] %1   [L%2, C%3] %4</source>
         <translation>[構文エラー] %1   [L%2, C%3] %4</translation>
     </message>
