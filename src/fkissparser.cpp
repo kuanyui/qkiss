@@ -18,6 +18,8 @@
 **************************************************************************/
 
 #include "fkissparser.h"
+#include "configfile.h"
+
 using namespace Qt::Literals::StringLiterals;
 
 QDebug operator<<(QDebug debug, const Token &token) {
@@ -157,23 +159,30 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
 {
     FkissProcedure astCmds;
     bool bodyStarted = false;
-    // foreach (const Token &token , tokens) {
-    //     qDebug() << "[DEBUG] Current Token = " << token;
-    // }
+    const QString TOKEN_EVENT_HANDLER = QStringLiteral("EventHandler");
+    // const QKiSS::Case caseSensitivity = ConfigFile::instance().caseSensitivity();
+    bool hasCaseSensitiveEventHandler = false;   /// More tolerance for non-standard FKiSS script which use a case-insensitive `EventHandler`
+    foreach (const Token &token , tokens) {
+        // qDebug() << "[DEBUG] Current Token = " << token;
+        if (token.value == TOKEN_EVENT_HANDLER) {
+            hasCaseSensitiveEventHandler = true;
+            break;
+        }
+    }
     for (int i = 0; i < tokens.length(); i++) {
         const Token &token = tokens[i];
         if (!bodyStarted) {
             if (token.type == Token::Type::Space) { continue; }
             if (token.type == Token::Type::EndOfLine) { continue; }
             if (token.type == Token::Type::Identifier) {
-                if (token.value == "EventHandler") {
+                if (hasCaseSensitiveEventHandler && token.value == TOKEN_EVENT_HANDLER) {
                     bodyStarted = true;
-                } else if (token.value.compare("EventHandler", Qt::CaseSensitivity::CaseInsensitive) == 0) {
+                } else if (!hasCaseSensitiveEventHandler && token.value.compare(TOKEN_EVENT_HANDLER, Qt::CaseSensitivity::CaseInsensitive) == 0) {
                     bodyStarted = true;
-                    logSyntaxWarning(token, tr(R"(A correct mark to indicate the beginning of FKiSS Script is case-sensitive `EventHandler`, but encountered `%1`. But for compatibility, still accept this.")").arg(token.value));
+                    logSyntaxWarning(token, tr(R"(FKiSS specification requires a case-sensitive mark `EventHandler` to indicate the beginning of FKiSS Script, but encountered `%1` in this file. Ahh.... For compatibility, still accept this.)").arg(token.value));
                 }
             } else {
-                logSyntaxError(token, tr("Command starts before EventHandler, ignore."));
+                logSyntaxWarning(token, tr("Command starts before EventHandler, ignore."));
             }
             continue;
         }
