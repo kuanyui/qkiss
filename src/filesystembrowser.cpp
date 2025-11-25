@@ -31,6 +31,8 @@
 #include "iconbuttondelegate.h"
 #include "translationmanager.h"
 
+
+
 FileSystemBrowser::FileSystemBrowser(QWidget *parent):
     QWidget{parent},
     m_fileIconProvider{ new FileIconProvider() },
@@ -121,8 +123,8 @@ void FileSystemBrowser::markPathAsLoaded(QString path, QKiSS::FileLoadMode fileL
     QSet<QString> allChangedPaths = oriPaths + newPaths;
     for (int r = 0; r < m_model->rowCount(); r++) {
         QStandardItem *firstCol = m_model->item(r, 0);
-        QStandardItem *stateIconItem = m_model->item(r, ColumnIdx::ColIdxStateIcon);
-        QStandardItem *fileNameItem = m_model->item(r, ColumnIdx::ColIdxFileName);
+        QStandardItem *stateIconItem = m_model->item(r, ColIdx::ColIdxStateIcon);
+        QStandardItem *fileNameItem = m_model->item(r, ColIdx::ColIdxFileName);
         QString itemFilePath = firstCol->data(ThisRole::FilePathRole).toString();
         if (newlyMarkedPaths.contains(itemFilePath) || newlyUnmarkedPaths.contains(itemFilePath)) {
             fileNameItem->setIcon(getFileIcon(itemFilePath));   // packed / unpacked
@@ -145,6 +147,12 @@ void FileSystemBrowser::setupUi()
     m_model->setColumnCount(4);
     TranslationManager::instance().registerLanguageChangeCallback(this, [this] () {
         m_model->setHorizontalHeaderLabels({ "", tr("File Name"), tr("Size"), tr("Patch") });  // model.clear() will also delete headers... WTF...
+        for (int r = 0; r < m_model->rowCount(); r++) {
+            QStandardItem *item = m_model->item(r, ColIdx::ColIdxPatchBtn);
+            if (item == nullptr) { continue; }
+            item->setText(tr("Patch"));
+            item->setToolTip(tr("Click to load this file as patch"));
+        }
     });
 
     m_view = new QTreeView(this);
@@ -157,16 +165,16 @@ void FileSystemBrowser::setupUi()
     m_view->header()->setDefaultSectionSize(30);
     m_view->header()->setMinimumSectionSize(10);
     m_view->header()->setSectionResizeMode(QHeaderView::Interactive);
-    m_view->header()->resizeSection(ColumnIdx::ColIdxStateIcon, 22);
-    m_view->header()->resizeSection(ColumnIdx::ColIdxFileName, 150);
-    m_view->header()->resizeSection(ColumnIdx::ColIdxSize, 50);
+    m_view->header()->resizeSection(ColIdx::ColIdxStateIcon, 22);
+    m_view->header()->resizeSection(ColIdx::ColIdxFileName, 150);
+    m_view->header()->resizeSection(ColIdx::ColIdxSize, 50);
     // m_view->resizeColumnToContents(2);
-    m_view->header()->setSectionResizeMode(ColumnIdx::ColIdxStateIcon, QHeaderView::ResizeMode::Fixed);
-    m_view->header()->setSectionResizeMode(ColumnIdx::ColIdxPatchBtn, QHeaderView::ResizeMode::ResizeToContents);
+    m_view->header()->setSectionResizeMode(ColIdx::ColIdxStateIcon, QHeaderView::ResizeMode::Fixed);
+    m_view->header()->setSectionResizeMode(ColIdx::ColIdxPatchBtn, QHeaderView::ResizeMode::ResizeToContents);
     m_view->setMouseTracking(true);   // NOTE: Set to true to make QStyledItemDelegate::editorEvent accepts QEvent::MouseMove without QEvent::MouseButtonPress
     // Delegate
     IconButtonDelegate *patchDelegate = new IconButtonDelegate(m_view);
-    m_view->setItemDelegateForColumn(ColumnIdx::ColIdxPatchBtn, patchDelegate);
+    m_view->setItemDelegateForColumn(ColIdx::ColIdxPatchBtn, patchDelegate);
     connect(patchDelegate, &IconButtonDelegate::pressed, [=, this](const QModelIndex& index){
         QString filePath = m_model->data(index, ThisRole::FilePathRole).toString();
         if (filePath.isEmpty()) { return; }
@@ -182,33 +190,36 @@ void FileSystemBrowser::setupUi()
     // int iconSize = style()->pixelMetric(QStyle::PM_ButtonIconSize);
     m_btnGoBackward = new QToolButton(this);
     m_btnGoBackward->setIcon(style()->standardIcon(QStyle::SP_ArrowLeft));
-    m_btnGoBackward->setToolTip(tr("Go Back"));
     m_btnGoBackward->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     m_btnGoForward = new QToolButton(this);
     m_btnGoForward->setIcon(style()->standardIcon(QStyle::SP_ArrowRight));
-    m_btnGoForward->setToolTip(tr("Go Forward"));
     m_btnGoForward->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     m_btnGoUp = new QToolButton(this);
     m_btnGoUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
-    m_btnGoUp->setToolTip(tr("Go Up"));
     m_btnGoUp->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     m_btnRefresh = new QToolButton(this);
     m_btnRefresh->setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
-    m_btnRefresh->setToolTip(tr("Refresh"));
     m_btnRefresh->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     m_btnGoHome = new QToolButton(this);
     m_btnGoHome->setIcon(QIcon::fromTheme("go-home"));
-    m_btnGoHome->setToolTip(tr("Home"));
     m_btnGoHome->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_btnGoHome->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu *btnGoHomeMenu = new QMenu(m_btnGoHome);
-    QAction *actSetCurDirAsHome = btnGoHomeMenu->addAction(tr("Set current folder as Home"));
-    m_btnGoHome->setMenu(btnGoHomeMenu);
+    QAction *actSetCurDirAsHome = btnGoHomeMenu->addAction(tr("Set current folder as Home"));  // FIXME: Ownership and retranslate of QAction
 
+    TranslationManager::instance().registerLanguageChangeCallback(this, [this] () {
+        m_btnGoBackward->setToolTip(tr("Go Back"));
+        m_btnGoForward->setToolTip(tr("Go Forward"));
+        m_btnGoUp->setToolTip(tr("Go Up"));
+        m_btnRefresh->setToolTip(tr("Refresh"));
+        m_btnGoHome->setToolTip(tr("Home"));
+    });
+
+    m_btnGoHome->setMenu(btnGoHomeMenu);
 
     m_labelCurDirName = new QLabel(this);
     m_labelCurDirName->hide();
@@ -381,7 +392,7 @@ void FileSystemBrowser::goBackward()
     updateAllButtonState();
     // focus the previous folder
     for (int r = 0; r < m_model->rowCount(); ++r) {
-        QStandardItem *item = m_model->item(r, 1);   // FIXME: Magic number
+        QStandardItem *item = m_model->item(r, ColIdx::ColIdxFileName);
         if (!item) {
             continue;
         }
@@ -421,7 +432,7 @@ void FileSystemBrowser::setHome(const QString &dirPath)
 
 void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
     if (!index.isValid()) return;
-    QModelIndex indexOfFirstCol = m_model->index(index.row(), 0);  // choose the first column (col = 0)
+    QModelIndex indexOfFirstCol = m_model->index(index.row(), 0);  // choose the first column (col = 0) because extra data is saved here.
     QString filePath = m_model->data(indexOfFirstCol, ThisRole::FilePathRole).toString();
     QFileInfo fileInfo { filePath };
     if (fileInfo.isDir()) {

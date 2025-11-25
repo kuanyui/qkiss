@@ -33,7 +33,8 @@ class TranslationManager : public QObject
 public:
     static TranslationManager& instance();
 
-    /// Universal registration - works for ANY QObject
+    /// - Universal registration - works for ANY QObject
+    /// - Callback will also be called 1 time when register.
     void registerLanguageChangeCallback(QObject* target, std::function<void()> langCb);
     void retranslateAll();
 

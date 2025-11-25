@@ -41,7 +41,7 @@ class FileSystemBrowser : public QWidget
         FilePathRole = Qt::UserRole + 1
     };
 private:
-    enum ColumnIdx {
+    enum ColIdx {
         ColIdxStateIcon,
         ColIdxFileName,
         ColIdxSize,
@@ -66,6 +66,7 @@ private:
     QIcon getLoadStateIcon(const QFileInfo &fileInfo) const;
     QIcon getLoadStateIcon(const QString &filePath) const;
     void updateAllButtonState();
+
 private slots:
     void goUp();
     void goForward();
