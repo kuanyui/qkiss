@@ -595,37 +595,37 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
 <context>
     <name>LogViewer</name>
     <message>
-        <location filename="../src/logviewer.cpp" line="38"/>
+        <location filename="../src/logviewer.cpp" line="39"/>
         <source>Debug</source>
         <translation>ざこ以下</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="43"/>
+        <location filename="../src/logviewer.cpp" line="44"/>
         <source>Info</source>
         <translation>ざこ</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="48"/>
+        <location filename="../src/logviewer.cpp" line="49"/>
         <source>Warning</source>
         <translation>ざっこ</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="53"/>
+        <location filename="../src/logviewer.cpp" line="54"/>
         <source>Error</source>
         <translation>ざぁ〜〜〜こ</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="58"/>
+        <location filename="../src/logviewer.cpp" line="59"/>
         <source>Fatal</source>
         <translation>メカジキ</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="76"/>
+        <location filename="../src/logviewer.cpp" line="77"/>
         <source>Severity</source>
         <translation>カースト～</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="76"/>
+        <location filename="../src/logviewer.cpp" line="77"/>
         <source>Message</source>
         <translation>メッセージ～</translation>
     </message>

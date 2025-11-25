@@ -591,37 +591,37 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
 <context>
     <name>LogViewer</name>
     <message>
-        <location filename="../src/logviewer.cpp" line="38"/>
+        <location filename="../src/logviewer.cpp" line="39"/>
         <source>Debug</source>
         <translation>デバッグや</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="43"/>
+        <location filename="../src/logviewer.cpp" line="44"/>
         <source>Info</source>
         <translation>情報や</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="48"/>
+        <location filename="../src/logviewer.cpp" line="49"/>
         <source>Warning</source>
         <translation>警告や</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="53"/>
+        <location filename="../src/logviewer.cpp" line="54"/>
         <source>Error</source>
         <translation>エラーや</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="58"/>
+        <location filename="../src/logviewer.cpp" line="59"/>
         <source>Fatal</source>
         <translation>致命的エラーや</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="76"/>
+        <location filename="../src/logviewer.cpp" line="77"/>
         <source>Severity</source>
         <translation>重要度や</translation>
     </message>
     <message>
-        <location filename="../src/logviewer.cpp" line="76"/>
+        <location filename="../src/logviewer.cpp" line="77"/>
         <source>Message</source>
         <translation>メッセージや</translation>
     </message>

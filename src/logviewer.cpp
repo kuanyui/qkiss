@@ -21,10 +21,11 @@
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+
 #include "translationmanager.h"
 LogViewer::LogViewer(QWidget *parent)
     : QWidget{parent},
-      m_treeWidget{new QTreeWidget{this}}
+      m_treeWidget{new ZTreeWidget{this}}
 {
     setupLayout();
 }

@@ -20,7 +20,7 @@
 #ifndef LOGVIEWER_H
 #define LOGVIEWER_H
 
-#include <QTreeWidget>
+#include "ztreewidget.h"
 
 class LogViewer : public QWidget
 {
@@ -33,7 +33,7 @@ signals:
 
 private:
     void setupLayout();
-    QTreeWidget *m_treeWidget;
+    ZTreeWidget *m_treeWidget;
 };
 
 #endif // LOGVIEWER_H
