@@ -209,14 +209,16 @@ void FileSystemBrowser::setupUi()
     m_btnGoHome->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_btnGoHome->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu *btnGoHomeMenu = new QMenu(m_btnGoHome);
-    QAction *actSetCurDirAsHome = btnGoHomeMenu->addAction(tr("Set current folder as Home"));  // FIXME: Ownership and retranslate of QAction
+    QAction *actSetCurDirAsHome = new QAction(btnGoHomeMenu);
+    btnGoHomeMenu->addAction(actSetCurDirAsHome);
 
-    TranslationManager::instance().registerLanguageChangeCallback(this, [this] () {
+    TranslationManager::instance().registerLanguageChangeCallback(this, [actSetCurDirAsHome, this] () {
         m_btnGoBackward->setToolTip(tr("Go Back"));
         m_btnGoForward->setToolTip(tr("Go Forward"));
         m_btnGoUp->setToolTip(tr("Go Up"));
         m_btnRefresh->setToolTip(tr("Refresh"));
         m_btnGoHome->setToolTip(tr("Home"));
+        actSetCurDirAsHome->setText(tr("Set current folder as Home"));
     });
 
     m_btnGoHome->setMenu(btnGoHomeMenu);
