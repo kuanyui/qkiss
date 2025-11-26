@@ -100,6 +100,7 @@ public slots:
     void clearRecentFiles();
     void clearRecentDirs();
 
+    /// This is called automatically when initializing.
     void loadAll();
     void saveAll();
 

@@ -23,6 +23,15 @@
 #include <QObject>
 #include <QPointer>
 
+/**
+ * // REFACTOR: Rename to `TranslationBinder`
+ *
+ *  Please install this in `main.cpp` via
+ *
+ *  ```
+ *  qApp->installEventFilter(&TranslationManager::instance());
+ *  ```
+ */
 class TranslationManager : public QObject
 {
     Q_OBJECT

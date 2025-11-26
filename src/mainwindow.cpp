@@ -35,7 +35,6 @@
 #include "preferencedialog.h"
 #include "aboutdialog.h"
 #include "translationmanager.h"
-#include "ztranslator.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -107,8 +106,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_openFile, &QAction::triggered, this, &MainWindow::openFilePicker);
     connect(ui->action_openDirectory, &QAction::triggered, this, &MainWindow::openDirPicker);
     connect(&m_cfg, &ConfigFile::recentFilesChanged, this, &MainWindow::renderRecentFiles);
-    connect(&m_cfg, &ConfigFile::uiLanguageChanged, this, &MainWindow::applyUiLanguageFromConfig);
-    applyUiLanguageFromConfig();
 
     // Preference Dialog
     connect(ui->action_preferences, &QAction::triggered, this, [=, this]() {
@@ -600,45 +597,10 @@ void MainWindow::restoreWindowSettings()
     renderRecentFiles();
 }
 
-bool MainWindow::applyUiLanguageFromConfig()
+void MainWindow::retranslate()
 {
-    /// QTranslate
-    static QTranslator *currQTranslator = nullptr;
-    /// ZTranslator as fallback
-    static ZTranslator *currZTranslator = nullptr;
-
-    if (currQTranslator) {
-        qApp->removeTranslator(currQTranslator);
-        delete currQTranslator;
-        currQTranslator = nullptr;
-    }
-    if (currZTranslator) {
-        qApp->removeTranslator(currZTranslator);
-        delete currZTranslator;
-        currZTranslator = nullptr;
-    }
-
-    currQTranslator = new QTranslator{};
-    currZTranslator = new ZTranslator{};
-    QString langId = m_cfg.effectedUiLanguage();
-    if (currQTranslator->load(":/i18n/qkiss_" + langId + ".qm")) {
-        currZTranslator->setLang(langId);
-        // NOTE: installed translator is applied in reversed order.
-        qApp->installTranslator(currZTranslator);   // 1. fallback
-        qApp->installTranslator(currQTranslator);   // 0. primary
-        qDebug() << "[DEBUG] MainWindow::applyUiLanguageFromConfig() SUCCESS" << langId;
-        ui->retranslateUi(this);
-        return true;
-    } else {
-        qDebug() << "[DEBUG] MainWindow::applyUiLanguageFromConfig() FAILED" << langId;
-        delete currQTranslator;
-        currQTranslator = nullptr;
-        delete currZTranslator;
-        currZTranslator = nullptr;
-        return false;
-    }
+    ui->retranslateUi(this);
 }
-
 
 void MainWindow::renderRecentFiles()
 {

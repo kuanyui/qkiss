@@ -25,6 +25,7 @@
 #include <QTranslator>
 #include <QFile>
 #include "translationmanager.h"
+#include "ztranslator.h"
 
 template <size_t N>
 inline bool strStartsWith(const char* str, const char (&prefix)[N]) noexcept {
@@ -50,6 +51,44 @@ void customizedMessageHandler(QtMsgType type, const QMessageLogContext &context,
     }
 }
 
+bool applyTranslatorsFromConfig()
+{
+    /// QTranslate
+    static QTranslator *currQTranslator = nullptr;
+    /// ZTranslator as fallback
+    static ZTranslator *currZTranslator = nullptr;
+
+    if (currQTranslator) {
+        qApp->removeTranslator(currQTranslator);
+        delete currQTranslator;
+        currQTranslator = nullptr;
+    }
+    if (currZTranslator) {
+        qApp->removeTranslator(currZTranslator);
+        delete currZTranslator;
+        currZTranslator = nullptr;
+    }
+
+    currQTranslator = new QTranslator{};
+    currZTranslator = new ZTranslator{};
+    QString langId = ConfigFile::instance().effectedUiLanguage();
+    if (currQTranslator->load(":/i18n/qkiss_" + langId + ".qm")) {
+        currZTranslator->setLang(langId);
+        // NOTE: installed translator is applied in reversed order.
+        qApp->installTranslator(currZTranslator);   // 1. fallback
+        qApp->installTranslator(currQTranslator);   // 0. primary
+        qDebug() << "[DEBUG] ::applyTranslatorsFromConfig() SUCCESS" << langId;
+        return true;
+    } else {
+        qDebug() << "[DEBUG] ::applyTranslatorsFromConfig() FAILED" << langId;
+        delete currQTranslator;
+        currQTranslator = nullptr;
+        delete currZTranslator;
+        currZTranslator = nullptr;
+        return false;
+    }
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -66,19 +105,12 @@ int main(int argc, char *argv[])
     QString qssContent = QLatin1String(qssFile.readAll());
     app.setStyleSheet(qssContent);
     qApp->installEventFilter(&TranslationManager::instance());
-    /*
-    // TODO: redundant `qApp,installTranslator()`.
-    QTranslator translator;
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        const QString baseName = "qkiss_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
-            app.installTranslator(&translator);
-            break;
-        }
-    }
-    */
+    applyTranslatorsFromConfig();
     mainWindow = new MainWindow();
+    QObject::connect(&ConfigFile::instance(), &ConfigFile::uiLanguageChanged, []() {
+        applyTranslatorsFromConfig();
+        mainWindow->retranslate();
+    });
     mainWindow->show();
     if (QCoreApplication::arguments().length() >= 2) {
         mainWindow->openDirOrFile(QCoreApplication::arguments()[1]);
@@ -86,3 +118,4 @@ int main(int argc, char *argv[])
     // qInstallMessageHandler(originalMessageHandler);
     return app.exec();
 }
+
