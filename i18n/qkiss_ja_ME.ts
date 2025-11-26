@@ -330,63 +330,65 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
 <context>
     <name>FileSystemBrowser</name>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="52"/>
+        <location filename="../src/filesystembrowser.cpp" line="54"/>
         <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
         <translation>ファ、ファイルパス「%1」が…み、見つからなくて…よ、読み込みを…ちゅ、中止しますぅ…ひぃん…</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="84"/>
+        <location filename="../src/filesystembrowser.cpp" line="86"/>
         <source>Invalid dir path, aborted.</source>
         <translation>む、無効なディレクトリパスで…し、失敗しました…ご、ごめんなさい…うぅ…</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="147"/>
+        <location filename="../src/filesystembrowser.cpp" line="149"/>
         <source>File Name</source>
         <translation>ファ、ファイル名…</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="147"/>
+        <location filename="../src/filesystembrowser.cpp" line="149"/>
         <source>Size</source>
         <translation>さ、サイズ…</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="147"/>
-        <location filename="../src/filesystembrowser.cpp" line="271"/>
+        <location filename="../src/filesystembrowser.cpp" line="149"/>
+        <location filename="../src/filesystembrowser.cpp" line="153"/>
+        <location filename="../src/filesystembrowser.cpp" line="284"/>
         <source>Patch</source>
         <translation>パッチ…</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="185"/>
+        <location filename="../src/filesystembrowser.cpp" line="216"/>
         <source>Go Back</source>
         <translation>帰りたい…</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="190"/>
+        <location filename="../src/filesystembrowser.cpp" line="217"/>
         <source>Go Forward</source>
         <translation>進まない…</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="195"/>
+        <location filename="../src/filesystembrowser.cpp" line="218"/>
         <source>Go Up</source>
         <translation>う、上へ…っ</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="200"/>
+        <location filename="../src/filesystembrowser.cpp" line="219"/>
         <source>Refresh</source>
         <translation>こ、更新…するっ</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="205"/>
+        <location filename="../src/filesystembrowser.cpp" line="220"/>
         <source>Home</source>
         <translation>ホーム…っ</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="209"/>
+        <location filename="../src/filesystembrowser.cpp" line="221"/>
         <source>Set current folder as Home</source>
         <translation>げげげげげ、現在のフォルダを…ホ、ホームに設定…しまふ…</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="274"/>
+        <location filename="../src/filesystembrowser.cpp" line="154"/>
+        <location filename="../src/filesystembrowser.cpp" line="287"/>
         <source>Click to load this file as patch</source>
         <translation>こ、このファイルを…パッチとして…よ、読み込むなら…く、クリック…してくださぃぃ…</translation>
     </message>
@@ -740,8 +742,8 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.ui" line="239"/>
         <location filename="../src/mainwindow.ui" line="244"/>
-        <location filename="../src/mainwindow.cpp" line="658"/>
-        <location filename="../src/mainwindow.cpp" line="675"/>
+        <location filename="../src/mainwindow.cpp" line="620"/>
+        <location filename="../src/mainwindow.cpp" line="637"/>
         <source>Clear All</source>
         <translation>ぜ、全部…く、クリアしちゃいます…</translation>
     </message>
@@ -766,114 +768,114 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
         <translation>QKiSSについて…あ…わ、分かってほしいの…</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="76"/>
+        <location filename="../src/mainwindow.cpp" line="75"/>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
         <translation>こ、固定数：%1…CE、CEL名：%2…コ、コメント：%3…で、出てますぅ…</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="165"/>
+        <location filename="../src/mainwindow.cpp" line="162"/>
         <source>Start to parse CNF / KCF / CEL files...</source>
         <translation>CNF / KCF / CELファイルの…か、解析を…は、始めちゃいますぅ…</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="171"/>
+        <location filename="../src/mainwindow.cpp" line="168"/>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
         <translation>「%1」は…ゆ、有効なKiSSパッチファイルじゃ…な、ないんですぅ…ちゅ、中止しましたぁ…ひっ……殺さないで</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="178"/>
+        <location filename="../src/mainwindow.cpp" line="175"/>
         <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
         <translation>「%1」は…ゆ、有効なKiSSファイルじゃな、ないから、も、もう、無理です…かっ、帰りたい…</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="186"/>
+        <location filename="../src/mainwindow.cpp" line="183"/>
         <source>Parsing finished. Now rendering scenes...</source>
         <translation>か、解析…完了しましたぁ…い、今から…シーンを…れ、レンダリング中、ですぅ…</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="199"/>
+        <location filename="../src/mainwindow.cpp" line="196"/>
         <source>KiSS files rendered successfully: %1</source>
         <translation>KiSSファイルのレンダリングが完了しました：%1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="213"/>
-        <location filename="../src/mainwindow.cpp" line="219"/>
-        <location filename="../src/mainwindow.cpp" line="220"/>
+        <location filename="../src/mainwindow.cpp" line="210"/>
+        <location filename="../src/mainwindow.cpp" line="216"/>
+        <location filename="../src/mainwindow.cpp" line="217"/>
         <source>Scene Sets</source>
         <translation>し、シーン、セット</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="221"/>
+        <location filename="../src/mainwindow.cpp" line="218"/>
         <source>Switch scene set (F1/F2)</source>
         <translation>しっしっしシーンセットをき、切り替えぇ…（F1/F2 …で、でできるんですすすすすぅぅぅ）</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="244"/>
-        <location filename="../src/mainwindow.cpp" line="250"/>
-        <location filename="../src/mainwindow.cpp" line="251"/>
+        <location filename="../src/mainwindow.cpp" line="241"/>
+        <location filename="../src/mainwindow.cpp" line="247"/>
+        <location filename="../src/mainwindow.cpp" line="248"/>
         <source>Palette Sets</source>
         <translation>ぱ、パレットセット</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="252"/>
+        <location filename="../src/mainwindow.cpp" line="249"/>
         <source>Switch palette set (F3/F4)</source>
         <translation>ぱ、パレットセット切り替え…（F3/F4…で、でできるんですぅ…）</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="393"/>
-        <location filename="../src/mainwindow.cpp" line="430"/>
+        <location filename="../src/mainwindow.cpp" line="390"/>
+        <location filename="../src/mainwindow.cpp" line="427"/>
         <source>Files</source>
         <translation>ファイル</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="401"/>
-        <location filename="../src/mainwindow.cpp" line="431"/>
+        <location filename="../src/mainwindow.cpp" line="398"/>
+        <location filename="../src/mainwindow.cpp" line="428"/>
         <source>Zooming Tools</source>
         <translation>ず、ずずず、ズームツール</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="414"/>
-        <location filename="../src/mainwindow.cpp" line="432"/>
+        <location filename="../src/mainwindow.cpp" line="411"/>
+        <location filename="../src/mainwindow.cpp" line="429"/>
         <source>Windows</source>
         <translation>わ、わわ、枠…</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="524"/>
+        <location filename="../src/mainwindow.cpp" line="521"/>
         <source>QKiSS ready.</source>
         <translation>QKiSS…じゅ、準備…完了しちゃいましたぁ…あうぅ…</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="528"/>
+        <location filename="../src/mainwindow.cpp" line="525"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
         <translation>Ctrl+ﾄﾞﾗｯｸﾞ：ｵﾌﾞｼﾞｪｸﾄからCELをき、強制分離…ひぃ…</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="533"/>
+        <location filename="../src/mainwindow.cpp" line="530"/>
         <source>Shift+Drag: Disable FKiSS events</source>
         <translation>Shift+ﾄﾞﾗｯｸﾞ：FKiSSじ、事件を無効…っう</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="538"/>
+        <location filename="../src/mainwindow.cpp" line="535"/>
         <source>Middle Click: Unfix</source>
         <translation>中ｸﾘｯｸ：こ、固定を解除…でもな、なんで？</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="543"/>
+        <location filename="../src/mainwindow.cpp" line="540"/>
         <source>Right Click: More Actions</source>
         <translation>右ｸﾘｯｸでほ、他の行動</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="685"/>
+        <location filename="../src/mainwindow.cpp" line="647"/>
         <source>LZH Archive Files (*.lzh)</source>
         <translation>LZH…ア、アーカイヴファイル……だよぅ…(*.lzh)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="687"/>
+        <location filename="../src/mainwindow.cpp" line="649"/>
         <source>Open Compressed KiSS File</source>
         <translation>ああああ、あ、ああ、圧縮、Ki、Ki、キスファイルを、ひっ、開く</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="702"/>
+        <location filename="../src/mainwindow.cpp" line="664"/>
         <source>Open Directory</source>
         <translation>デデデッディレクトリを開く</translation>
     </message>

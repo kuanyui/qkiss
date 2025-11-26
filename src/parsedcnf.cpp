@@ -179,7 +179,7 @@ void ParsedCnf::log(const QString &msg, int lineIdx)
         lineIdx = m_lineIdx;
     }
     QString &line = m_lines[lineIdx];
-    qInfo() << "[LOG]" << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
+    qInfo().noquote() << "[LOG]" << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
 void ParsedCnf::warn(const QString &msg, int lineIdx)
@@ -188,7 +188,7 @@ void ParsedCnf::warn(const QString &msg, int lineIdx)
         lineIdx = m_lineIdx;
     }
     QString &line = m_lines[lineIdx];
-    qWarning() << "[LOG]" << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
+    qWarning().noquote() << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
 
@@ -299,7 +299,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             m_cels.append(cnfCel);
         } else if (line.startsWith("$"_L1)) {
             static QRegularExpression reSetNo(R"#(^[$]\d+\s)#");
-            if (!reSetNo.match(line).hasMatch()) { error(tr("Wrong set line format.")); continue; }
+            if (!reSetNo.match(line).hasMatch()) { warn(tr("Wrong set line format.")); continue; }
             startToParseSetLines();
             continue;
         }

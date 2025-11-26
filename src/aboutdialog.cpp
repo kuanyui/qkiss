@@ -124,7 +124,7 @@ KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.or
 - 日本語（お嬢様）: Copilot + [kuanyui](https://github.com/kuanyui)
 - 日本語（悪役令嬢）: Copilot + [kuanyui](https://github.com/kuanyui)
 - 日本語（メ〇〇キ）: Copilot + [kuanyui](https://github.com/kuanyui)
-- 日本語（〈沈黙の魔女〉モニカ・エヴァレット）: Copilot + [kuanyui](https://github.com/kuanyui)
+- 日本語（〈沈黙の魔女〉モニカ・エヴァレット）: Copilot + モニカ・ノートン
 - 台灣繁體: Claude Code + [kuanyui](https://github.com/kuanyui)
 )")).arg(tr("Programming"),
          tr("Icons & Arts"),

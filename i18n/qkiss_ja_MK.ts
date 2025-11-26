@@ -335,63 +335,65 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
 <context>
     <name>FileSystemBrowser</name>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="52"/>
+        <location filename="../src/filesystembrowser.cpp" line="54"/>
         <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
         <translation>ファイルパス「%1」が見つからなかったよ〜。読み込み中止〜、ドンマイ☆</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="84"/>
+        <location filename="../src/filesystembrowser.cpp" line="86"/>
         <source>Invalid dir path, aborted.</source>
         <translation>無効なディレクトリパスだって〜。ぷっ</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="147"/>
+        <location filename="../src/filesystembrowser.cpp" line="149"/>
         <source>File Name</source>
         <translation>ファイル名〜</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="147"/>
+        <location filename="../src/filesystembrowser.cpp" line="149"/>
         <source>Size</source>
         <translation>サイズ〜</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="147"/>
-        <location filename="../src/filesystembrowser.cpp" line="271"/>
+        <location filename="../src/filesystembrowser.cpp" line="149"/>
+        <location filename="../src/filesystembrowser.cpp" line="153"/>
+        <location filename="../src/filesystembrowser.cpp" line="284"/>
         <source>Patch</source>
         <translation>パッチ～</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="185"/>
+        <location filename="../src/filesystembrowser.cpp" line="216"/>
         <source>Go Back</source>
         <translation>戻る〜</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="190"/>
+        <location filename="../src/filesystembrowser.cpp" line="217"/>
         <source>Go Forward</source>
         <translation>進む〜</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="195"/>
+        <location filename="../src/filesystembrowser.cpp" line="218"/>
         <source>Go Up</source>
         <translation>上へ〜</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="200"/>
+        <location filename="../src/filesystembrowser.cpp" line="219"/>
         <source>Refresh</source>
         <translation>更新〜</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="205"/>
+        <location filename="../src/filesystembrowser.cpp" line="220"/>
         <source>Home</source>
         <translation>ホーム〜</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="209"/>
+        <location filename="../src/filesystembrowser.cpp" line="221"/>
         <source>Set current folder as Home</source>
         <translation>今のフォルダをホームに設定してあげるんだよ〜。感謝しなよ？</translation>
     </message>
     <message>
-        <location filename="../src/filesystembrowser.cpp" line="274"/>
+        <location filename="../src/filesystembrowser.cpp" line="154"/>
+        <location filename="../src/filesystembrowser.cpp" line="287"/>
         <source>Click to load this file as patch</source>
         <translation>このファイルをパッチとして読み込むならクリックしなよ〜。できるでしょ？ざぁーこ</translation>
     </message>
@@ -607,17 +609,17 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/logviewer.cpp" line="49"/>
         <source>Warning</source>
-        <translation>ざっこ</translation>
+        <translation>ざ――こ❤</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="54"/>
         <source>Error</source>
-        <translation>ざぁ〜〜〜こ</translation>
+        <translation>メカジキ</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="59"/>
         <source>Fatal</source>
-        <translation>メカジキ</translation>
+        <translation>アホデカメカジキ</translation>
     </message>
     <message>
         <location filename="../src/logviewer.cpp" line="77"/>
@@ -745,8 +747,8 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/mainwindow.ui" line="239"/>
         <location filename="../src/mainwindow.ui" line="244"/>
-        <location filename="../src/mainwindow.cpp" line="658"/>
-        <location filename="../src/mainwindow.cpp" line="675"/>
+        <location filename="../src/mainwindow.cpp" line="620"/>
+        <location filename="../src/mainwindow.cpp" line="637"/>
         <source>Clear All</source>
         <translation>すべてクリア〜。また最初からやり直し？だっさw</translation>
     </message>
@@ -771,114 +773,114 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <translation>QKiSSについて～</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="76"/>
+        <location filename="../src/mainwindow.cpp" line="75"/>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
         <translation>固定：%1、CEL名：%2、コメント：%3</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="165"/>
+        <location filename="../src/mainwindow.cpp" line="162"/>
         <source>Start to parse CNF / KCF / CEL files...</source>
         <translation>CNF / KCF / CELファイルの解析を開始するよ〜。ちゃんと見てなよ？</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="171"/>
+        <location filename="../src/mainwindow.cpp" line="168"/>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
         <translation>「%1」は有効なKiSSパッチファイルじゃないで処理中止、キャハハ♥</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="178"/>
+        <location filename="../src/mainwindow.cpp" line="175"/>
         <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
         <translation>「%1」は有効なKiSSファイルですらないんだって〜。可哀想〜</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="186"/>
+        <location filename="../src/mainwindow.cpp" line="183"/>
         <source>Parsing finished. Now rendering scenes...</source>
         <translation>解析完了〜。次はシーンをレンダリングしてあげるんだから感謝しなよ？</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="199"/>
+        <location filename="../src/mainwindow.cpp" line="196"/>
         <source>KiSS files rendered successfully: %1</source>
         <translation>KiSSファイル「%1」のレンダリング成功〜。はいはいすごいすごい。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="213"/>
-        <location filename="../src/mainwindow.cpp" line="219"/>
-        <location filename="../src/mainwindow.cpp" line="220"/>
+        <location filename="../src/mainwindow.cpp" line="210"/>
+        <location filename="../src/mainwindow.cpp" line="216"/>
+        <location filename="../src/mainwindow.cpp" line="217"/>
         <source>Scene Sets</source>
         <translation>シーンセット</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="221"/>
+        <location filename="../src/mainwindow.cpp" line="218"/>
         <source>Switch scene set (F1/F2)</source>
         <translation>シーンセット切り替え〜（F1/F2）</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="244"/>
-        <location filename="../src/mainwindow.cpp" line="250"/>
-        <location filename="../src/mainwindow.cpp" line="251"/>
+        <location filename="../src/mainwindow.cpp" line="241"/>
+        <location filename="../src/mainwindow.cpp" line="247"/>
+        <location filename="../src/mainwindow.cpp" line="248"/>
         <source>Palette Sets</source>
         <translation>パレットセット</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="252"/>
+        <location filename="../src/mainwindow.cpp" line="249"/>
         <source>Switch palette set (F3/F4)</source>
         <translation>パレットセット切り替え〜（F3/F4）</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="393"/>
-        <location filename="../src/mainwindow.cpp" line="430"/>
+        <location filename="../src/mainwindow.cpp" line="390"/>
+        <location filename="../src/mainwindow.cpp" line="427"/>
         <source>Files</source>
         <translation>ファイル〜</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="401"/>
-        <location filename="../src/mainwindow.cpp" line="431"/>
+        <location filename="../src/mainwindow.cpp" line="398"/>
+        <location filename="../src/mainwindow.cpp" line="428"/>
         <source>Zooming Tools</source>
         <translation>ズームツール～</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="414"/>
-        <location filename="../src/mainwindow.cpp" line="432"/>
+        <location filename="../src/mainwindow.cpp" line="411"/>
+        <location filename="../src/mainwindow.cpp" line="429"/>
         <source>Windows</source>
         <translation>ウィンドウ～</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="524"/>
+        <location filename="../src/mainwindow.cpp" line="521"/>
         <source>QKiSS ready.</source>
         <translation>QKiSS準備完了だよ〜。おまたせ乙〜。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="528"/>
+        <location filename="../src/mainwindow.cpp" line="525"/>
         <source>Ctrl+Drag: Force split CEL from Object</source>
         <translation>Ctrl+ドラッグ：オブジェクトからCELを強制分離</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="533"/>
+        <location filename="../src/mainwindow.cpp" line="530"/>
         <source>Shift+Drag: Disable FKiSS events</source>
         <translation>Shift+ドラッグ：FKiSSイベントを無効化</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="538"/>
+        <location filename="../src/mainwindow.cpp" line="535"/>
         <source>Middle Click: Unfix</source>
         <translation>中クリック：変なことをする、キモ〜</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="543"/>
+        <location filename="../src/mainwindow.cpp" line="540"/>
         <source>Right Click: More Actions</source>
         <translation>右クリック：他の変なこと</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="685"/>
+        <location filename="../src/mainwindow.cpp" line="647"/>
         <source>LZH Archive Files (*.lzh)</source>
         <translation>LZH アーカイブファイル〜 (*.lzh)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="687"/>
+        <location filename="../src/mainwindow.cpp" line="649"/>
         <source>Open Compressed KiSS File</source>
         <translation>圧縮KiSSファイルを開く〜〜</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="702"/>
+        <location filename="../src/mainwindow.cpp" line="664"/>
         <source>Open Directory</source>
         <translation>ディレクトリを開く〜〜</translation>
     </message>
