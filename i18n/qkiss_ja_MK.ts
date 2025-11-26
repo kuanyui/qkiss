@@ -357,7 +357,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <location filename="../src/filesystembrowser.cpp" line="149"/>
         <location filename="../src/filesystembrowser.cpp" line="153"/>
-        <location filename="../src/filesystembrowser.cpp" line="284"/>
+        <location filename="../src/filesystembrowser.cpp" line="285"/>
         <source>Patch</source>
         <translation>パッチ～</translation>
     </message>
@@ -393,7 +393,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="154"/>
-        <location filename="../src/filesystembrowser.cpp" line="287"/>
+        <location filename="../src/filesystembrowser.cpp" line="288"/>
         <source>Click to load this file as patch</source>
         <translation>このファイルをパッチとして読み込むならクリックしなよ〜。できるでしょ？ざぁーこ</translation>
     </message>

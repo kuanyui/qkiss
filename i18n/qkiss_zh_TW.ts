@@ -353,7 +353,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     <message>
         <location filename="../src/filesystembrowser.cpp" line="149"/>
         <location filename="../src/filesystembrowser.cpp" line="153"/>
-        <location filename="../src/filesystembrowser.cpp" line="284"/>
+        <location filename="../src/filesystembrowser.cpp" line="285"/>
         <source>Patch</source>
         <translation>修補檔</translation>
     </message>
@@ -389,7 +389,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="154"/>
-        <location filename="../src/filesystembrowser.cpp" line="287"/>
+        <location filename="../src/filesystembrowser.cpp" line="288"/>
         <source>Click to load this file as patch</source>
         <translation>點擊以載入此檔案作為修補檔</translation>
     </message>

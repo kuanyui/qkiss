@@ -278,6 +278,7 @@ void FileSystemBrowser::updateModel()
         QString fileName = fInfo.fileName();
         QStandardItem *fileNameItem = new QStandardItem(fileName);
         fileNameItem->setIcon(getFileIcon(fInfo));
+        fileNameItem->setToolTip(fileName);
         rowItems << fileNameItem;
         rowItems << new QStandardItem(formatFileSize(fInfo.size()));
         if (isLzh || isCnf) {

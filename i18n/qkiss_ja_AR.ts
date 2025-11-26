@@ -353,7 +353,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     <message>
         <location filename="../src/filesystembrowser.cpp" line="149"/>
         <location filename="../src/filesystembrowser.cpp" line="153"/>
-        <location filename="../src/filesystembrowser.cpp" line="284"/>
+        <location filename="../src/filesystembrowser.cpp" line="285"/>
         <source>Patch</source>
         <translation>パッチですわ</translation>
     </message>
@@ -389,7 +389,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     </message>
     <message>
         <location filename="../src/filesystembrowser.cpp" line="154"/>
-        <location filename="../src/filesystembrowser.cpp" line="287"/>
+        <location filename="../src/filesystembrowser.cpp" line="288"/>
         <source>Click to load this file as patch</source>
         <translation>このファイルをパッチとして読み込むにはクリックなさいませ。あらまあ、哀れな大衆には荷が重い操作ですこと！オホホホ！</translation>
     </message>
