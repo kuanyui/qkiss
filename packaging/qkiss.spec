@@ -1,0 +1,70 @@
+# spec file for package qkiss
+#
+# Copyright (c) 2025 kuanyui
+#
+# License: GPLv3
+
+Name:            qkiss
+Version:         0.0.1
+Release:         0
+Summary:         A modern implementation of KISS (KISekae Set system) in Qt
+License:         GPL-3.0-or-later
+
+Group:           Amusements/Toys/Graphics
+URL:             https://github.com/kuanyui/qkiss
+Source0:         https://github.com/kuanyui/qkiss/archive/refs/heads/master.tar.gz#/%{name}.tar.gz
+
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  pkgconfig(Qt6Core)
+BuildRequires:  pkgconfig(Qt6Gui)
+BuildRequires:  pkgconfig(Qt6Widgets)
+BuildRequires:  libarchive-devel
+
+# https://en.opensuse.org/openSUSE:Packaging_Conventions_RPM_Macros#%desktop_database_post_/_%desktop_database_postun_(deprecated)
+BuildRequires:  desktop-file-utils
+Requires(pre):  desktop-file-utils
+Requires(post): desktop-file-utils
+
+Recommends:     lha
+Recommends:     unar
+
+
+%description
+QKiSS is a modern implementation of KiSS (Kisekae Set System) viewer in Qt 6.
+
+Kisekae is short for "kisekae ningyou" (Japanese: "着せ替え人形", meaning "dress-up dolls").
+
+KiSS originated from and was popular in Japanese otaku and personal computer enthusiast (NEC PC-9800 series) subculture in the 1990s.
+
+
+%prep
+%autosetup -n %{SOURCE0}
+
+
+%build
+%cmake
+%cmake_build
+
+%install
+%cmake_install
+
+
+%post
+# update‐desktop‐database - Build cache database of MIME types handled by desktop files
+# update‐mime‐database - a program to build the Shared MIME‐Info database cache
+update-desktop-database
+# update-mime-database %{_datadir}/mime
+
+%postun
+update-desktop-database
+# update-mime-database %{_datadir}/mime
+
+%files
+
+%dir %{_datadir}/icons/hicolor
+%{_datadir}/applications/%{name}.desktop
+%{_bindir}/%{name}
+
+%changelog

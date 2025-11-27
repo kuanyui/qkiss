@@ -1,5 +1,11 @@
 .PHONY: help clear install-git-hooks add-license-header
 
+## Name of this project
+NAME    := qkiss
+TARBALL := $(NAME).tar.gz
+RPMBUILD_DIR := $(HOME)/rpmbuild
+SPEC_FILE := packaging/$(NAME).spec
+
 help:     ## Show this self-documented help message.
 	@# Some operating system / Linux distro may use `mawk` (e.g. Ubuntu), so prefer more portable `perl` over `awk`.
 	@export S=`basename $${SHELL}`; if [ $${S} != "zsh" ] && [ $${S} != "fish" ]; then echo "(Tip: You are using \`$${S}\`, but you can consider to use \`zsh\` or \`fish\` because they support tab compoletions for Makefile targets & variables.)"; fi
@@ -29,6 +35,7 @@ help:     ## Show this self-documented help message.
 clean:    ## Clean all built files.
 	rm -rf resources/tango-icon-remixer/dist/*
 	rm -rf build/*
+	rm -f $(TARBALL)
 
 install-git-hooks:     ## Install git-hooks and commit-template.
 	cp scripts/git_hooks/commit-msg .git/hooks/commit-msg
@@ -44,3 +51,13 @@ uninstall-git-hooks:     ## Install git-hooks and commit-template.
 
 add-license-header:    ## Add license header to all .cpp / .h files
 	./scripts/add_license_header.py
+
+$(TARBALL):  ## Create tarball in this repo root dir.
+	tar --exclude-vcs --exclude=$(TARBALL) --exclude=build --exclude=samples -czf $@ .
+
+rpm: $(TARBALL)   ## build rpm with `rpmbuild` into `~/rpmbuild`
+	mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+	cp $(TARBALL) $(RPMBUILD_DIR)/SOURCES/
+	cp ${SPEC_FILE} $(RPMBUILD_DIR)/SPECS/
+	rpmbuild -ba $(RPMBUILD_DIR)/SPECS/$(NAME).spec
+

@@ -82,9 +82,12 @@ find_package(Python3 REQUIRED Interpreter)
 set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
 set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
 set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
+set(BUILT_APP_PNG_XDG_ICON_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer/dist/04_FINAL_PNG_THEME/CustomizedTango")
+
 execute_process(
     COMMAND ${Python3_EXECUTABLE} ${ICON_BUILD_SCRIPT} --included-icon-file "${RESOURCES_DIR}/included_icons.txt" --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon" --output-theme-name "CustomizedTango"
 )
+# When included_icons.txt changed, auto execute cmake again.
 set_property(
     DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${RESOURCES_DIR}/included_icons.txt"
 )
@@ -226,12 +229,33 @@ set_target_properties(qkiss PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+
+# ===============================================
+# Install
+# ===============================================
+
 include(GNUInstallDirs)
+if(UNIX AND NOT APPLE AND NOT WIN32)
+    # Copy built qkiss main app icons into an independent dir for installation.
+    # NOTE: `install()` will only be triggered when `cmake --install` or `make install` or (rpm spec's) `%cmake_install`, so you won't see them when developing.
+    file(GLOB_RECURSE ICONS "${BUILT_APP_PNG_XDG_ICON_DIR}/apps/*/qkiss.png")
+    foreach(iconAbsFilePath ${ICONS})
+        get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
+        string(REPLACE "${BUILT_APP_PNG_XDG_ICON_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
+        # message(STATUS "iconAbsDirPath = ${iconAbsDirPath}")
+        # message(STATUS "iconAbsFilePath = ${iconAbsFilePath}")
+        # message(STATUS "iconRelFilePath = ${iconRelFilePath}")
+        install(FILES ${iconAbsFilePath} DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${iconRelFilePath})
+    endforeach()
+    install(FILES ${CMAKE_SOURCE_DIR}/packaging/qkiss.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+endif()
+
 install(TARGETS qkiss
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
 file(COPY
     samples DESTINATION ${CMAKE_BINARY_DIR})
 
