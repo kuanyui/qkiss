@@ -83,9 +83,13 @@ set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
 set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
 set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
 set(BUILT_APP_PNG_XDG_ICON_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer/dist/04_FINAL_PNG_THEME/CustomizedTango")
+set(BUILT_APP_SVG_XDG_ICON_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer/dist/04_FINAL_SVG_THEME/CustomizedTango")
 
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} ${ICON_BUILD_SCRIPT} --included-icon-file "${RESOURCES_DIR}/included_icons.txt" --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon" --output-theme-name "CustomizedTango"
+    COMMAND ${Python3_EXECUTABLE} ${ICON_BUILD_SCRIPT}
+            --included-icon-file "${RESOURCES_DIR}/included_icons.txt"
+            --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon"
+            --output-theme-name "CustomizedTango"
 )
 # When included_icons.txt changed, auto execute cmake again.
 set_property(
@@ -238,8 +242,10 @@ include(GNUInstallDirs)
 if(UNIX AND NOT APPLE AND NOT WIN32)
     # Copy built qkiss main app icons into an independent dir for installation.
     # NOTE: `install()` will only be triggered when `cmake --install` or `make install` or (rpm spec's) `%cmake_install`, so you won't see them when developing.
-    file(GLOB_RECURSE ICONS "${BUILT_APP_PNG_XDG_ICON_DIR}/apps/*/qkiss.png")
-    foreach(iconAbsFilePath ${ICONS})
+
+    # XDG icon theme :: png files
+    file(GLOB_RECURSE iconPngFiles "${BUILT_APP_PNG_XDG_ICON_DIR}/apps/*/qkiss.png")
+    foreach(iconAbsFilePath ${iconPngFiles})
         get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
         string(REPLACE "${BUILT_APP_PNG_XDG_ICON_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
         # message(STATUS "iconAbsDirPath = ${iconAbsDirPath}")
@@ -247,6 +253,16 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
         # message(STATUS "iconRelFilePath = ${iconRelFilePath}")
         install(FILES ${iconAbsFilePath} DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${iconRelFilePath})
     endforeach()
+
+    # XDG icon theme :: svg files
+    file(GLOB_RECURSE iconSvgFiles "${BUILT_APP_SVG_XDG_ICON_DIR}/apps/*/qkiss.svg")
+    foreach(iconAbsFilePath ${iconSvgFiles})
+        get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
+        string(REPLACE "${BUILT_APP_PNG_XDG_ICON_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
+        install(FILES ${iconAbsFilePath} DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${iconRelFilePath})
+    endforeach()
+
+    # XDG desktop file
     install(FILES ${CMAKE_SOURCE_DIR}/packaging/qkiss.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 endif()
 

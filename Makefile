@@ -32,7 +32,7 @@ help:     ## Show this self-documented help message.
 		gawk 'match($$0, /^([a-zA-Z0-9_-]+):.*?## (.*)$$/, m){printf "\033[32m%-30s\033[0m %s\n", m[1], m[2]} match($$0, /^[ \\t]*### *(.*)/, m){printf "\033[34m%s\033[0m\n", m[1]}' $(MAKEFILE_LIST); \
 	fi
 
-clean:    ## Clean all built files.
+clean:    ## Clean all built files (CMake & built icons).
 	rm -rf resources/tango-icon-remixer/dist/*
 	rm -rf build/*
 	rm -f $(TARBALL)
