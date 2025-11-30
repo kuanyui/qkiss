@@ -238,24 +238,29 @@ set_target_properties(qkiss PROPERTIES
 # Install
 # ===============================================
 
-include(GNUInstallDirs)
+include(GNUInstallDirs)  # This is actually cross-platform
+
 if(UNIX AND NOT APPLE AND NOT WIN32)
+    # Linux / BSD
+
     # Copy built qkiss main app icons into an independent dir for installation.
     # NOTE: `install()` will only be triggered when `cmake --install` or `make install` or (rpm spec's) `%cmake_install`, so you won't see them when developing.
 
     # XDG icon theme :: png files
-    file(GLOB_RECURSE iconPngFiles "${BUILT_APP_PNG_XDG_ICON_DIR}/apps/*/qkiss.png")
+    message(STATUS "DEBUG CMAKE_SOURCE_DIR === ${CMAKE_SOURCE_DIR}")
+    message(STATUS "DEBUG BUILT_APP_PNG_XDG_ICON_DIR === ${BUILT_APP_PNG_XDG_ICON_DIR}")
+    file(GLOB_RECURSE iconPngFiles "${BUILT_APP_PNG_XDG_ICON_DIR}/*/apps/qkiss.png")
     foreach(iconAbsFilePath ${iconPngFiles})
         get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
         string(REPLACE "${BUILT_APP_PNG_XDG_ICON_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
-        # message(STATUS "iconAbsDirPath = ${iconAbsDirPath}")
-        # message(STATUS "iconAbsFilePath = ${iconAbsFilePath}")
-        # message(STATUS "iconRelFilePath = ${iconRelFilePath}")
+        message(STATUS "iconAbsDirPath = ${iconAbsDirPath}")
+        message(STATUS "iconAbsFilePath = ${iconAbsFilePath}")
+        message(STATUS "iconRelFilePath = ${iconRelFilePath}")
         install(FILES ${iconAbsFilePath} DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${iconRelFilePath})
     endforeach()
 
     # XDG icon theme :: svg files
-    file(GLOB_RECURSE iconSvgFiles "${BUILT_APP_SVG_XDG_ICON_DIR}/apps/*/qkiss.svg")
+    file(GLOB_RECURSE iconSvgFiles "${BUILT_APP_SVG_XDG_ICON_DIR}/*/apps/qkiss.svg")
     foreach(iconAbsFilePath ${iconSvgFiles})
         get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
         string(REPLACE "${BUILT_APP_PNG_XDG_ICON_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
@@ -272,8 +277,7 @@ install(TARGETS qkiss
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-file(COPY
-    samples DESTINATION ${CMAKE_BINARY_DIR})
+# file(COPY samples DESTINATION ${CMAKE_BINARY_DIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(qkiss)

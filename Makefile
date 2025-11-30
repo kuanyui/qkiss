@@ -52,12 +52,14 @@ uninstall-git-hooks:     ## Install git-hooks and commit-template.
 add-license-header:    ## Add license header to all .cpp / .h files
 	./scripts/add_license_header.py
 
+.PHONY: $(TARBALL)
 $(TARBALL):  ## Create tarball in this repo root dir.
-	tar --exclude-vcs --exclude=$(TARBALL) --exclude=build --exclude=samples -czf $@ .
+	tar --exclude-vcs --exclude=$(TARBALL) --exclude=build --exclude=samples --exclude=$(TARBALL) --transform='s,^\./,qkiss-master/,' -czf $@ .
 
-rpm: $(TARBALL)   ## build rpm with `rpmbuild` into `~/rpmbuild`
+build-rpm-local-rpmbuild: $(TARBALL)   ## Local build rpm with `rpmbuild` into `~/rpmbuild`
+	rm -rf ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}/*
 	mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-	cp $(TARBALL) $(RPMBUILD_DIR)/SOURCES/
-	cp ${SPEC_FILE} $(RPMBUILD_DIR)/SPECS/
+	cp -f $(TARBALL) $(RPMBUILD_DIR)/SOURCES/
+	cp -f ${SPEC_FILE} $(RPMBUILD_DIR)/SPECS/
 	rpmbuild -ba $(RPMBUILD_DIR)/SPECS/$(NAME).spec
 

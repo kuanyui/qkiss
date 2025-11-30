@@ -40,7 +40,8 @@ KiSS originated from and was popular in Japanese otaku and personal computer ent
 
 
 %prep
-%autosetup -n %{SOURCE0}
+# -n specifies the child folder name after extract, instead of tarball itselves filename .
+%setup -n %{name}-master
 
 
 %build
@@ -63,7 +64,7 @@ update-desktop-database
 
 %files
 
-%dir %{_datadir}/icons/hicolor
+%{_datadir}/icons/hicolor/*/apps/*.png
 %{_datadir}/applications/%{name}.desktop
 %{_bindir}/%{name}
 
