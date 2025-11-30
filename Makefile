@@ -4,7 +4,9 @@
 NAME    := qkiss
 TARBALL := $(NAME).tar.gz
 RPMBUILD_DIR := $(HOME)/rpmbuild
-SPEC_FILE := packaging/$(NAME).spec
+
+## the `.spec` file whose @VAR@ are already expanded by `cmake`
+CONFIGURED_RPM_SPEC_FILE := packaging/$(NAME).spec
 
 help:     ## Show this self-documented help message.
 	@# Some operating system / Linux distro may use `mawk` (e.g. Ubuntu), so prefer more portable `perl` over `awk`.
@@ -52,14 +54,17 @@ uninstall-git-hooks:     ## Install git-hooks and commit-template.
 add-license-header:    ## Add license header to all .cpp / .h files
 	./scripts/add_license_header.py
 
+.PHONY: $(CONFIGURED_RPM_SPEC_FILE)
+
+
 .PHONY: $(TARBALL)
 $(TARBALL):  ## Create tarball in this repo root dir.
-	tar --exclude-vcs --exclude=$(TARBALL) --exclude=build --exclude=samples --exclude=$(TARBALL) --transform='s,^\./,qkiss-master/,' -czf $@ .
+	tar --exclude-vcs --exclude=$(TARBALL) --exclude=build --exclude=samples --exclude=$(TARBALL) --transform='s,^\./,$(NAME)-master/,' -czf $@ .
 
 build-rpm-local-rpmbuild: $(TARBALL)   ## Local build rpm with `rpmbuild` into `~/rpmbuild`
 	rm -rf ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}/*
 	mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	cp -f $(TARBALL) $(RPMBUILD_DIR)/SOURCES/
-	cp -f ${SPEC_FILE} $(RPMBUILD_DIR)/SPECS/
+	cp -f ${CONFIGURED_RPM_SPEC_FILE} $(RPMBUILD_DIR)/SPECS/
 	rpmbuild -ba $(RPMBUILD_DIR)/SPECS/$(NAME).spec
 

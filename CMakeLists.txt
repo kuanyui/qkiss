@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(qkiss VERSION 0.1 LANGUAGES CXX)
+project(qkiss VERSION 0.0.1 LANGUAGES CXX)
+
+# ==============================================
+# Expand CMake macro
+# ==============================================
+configure_file( packaging/qkiss.spec.in ${CMAKE_BINARY_DIR}/qkiss.spec @ONLY)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -85,16 +90,20 @@ set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
 set(BUILT_APP_PNG_XDG_ICON_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer/dist/04_FINAL_PNG_THEME/CustomizedTango")
 set(BUILT_APP_SVG_XDG_ICON_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer/dist/04_FINAL_SVG_THEME/CustomizedTango")
 
-execute_process(
+# When included_icons.txt changed, auto execute cmake again.
+set(ICON_INCLUDE_FILE "${CMAKE_SOURCE_DIR}/${RESOURCES_DIR}/included_icons.txt")
+set(ICON_STAMP_FILE "${CMAKE_BINARY_DIR}/tango-icon-remixer.stamp")
+
+add_custom_command(
+    OUTPUT ${ICON_STAMP_FILE}
     COMMAND ${Python3_EXECUTABLE} ${ICON_BUILD_SCRIPT}
             --included-icon-file "${RESOURCES_DIR}/included_icons.txt"
             --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon"
             --output-theme-name "CustomizedTango"
+    DEPENDS ${ICON_INCLUDE_FILE}
+    COMMENT "Generating icon pack..."
 )
-# When included_icons.txt changed, auto execute cmake again.
-set_property(
-    DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${RESOURCES_DIR}/included_icons.txt"
-)
+add_custom_target(icons DEPENDS ${ICON_STAMP})
 
 # ===============================================
 # main
@@ -276,6 +285,7 @@ install(TARGETS qkiss
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+add_dependencies(qkiss icons)
 
 # file(COPY samples DESTINATION ${CMAKE_BINARY_DIR})
 

@@ -5,7 +5,7 @@
 # License: GPLv3
 
 Name:            qkiss
-Version:         0.0.1
+Version:         @PROJECT_VVERSION@
 Release:         0
 Summary:         A modern implementation of KISS (KISekae Set system) in Qt
 License:         GPL-3.0-or-later
