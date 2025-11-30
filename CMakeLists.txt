@@ -5,7 +5,14 @@ project(qkiss VERSION 0.0.1 LANGUAGES CXX)
 # ==============================================
 # Expand CMake macro
 # ==============================================
-configure_file( packaging/qkiss.spec.in ${CMAKE_BINARY_DIR}/qkiss.spec @ONLY)
+configure_file("packaging/${PROJECT_NAME}.spec.in" "dist/${PROJECT_NAME}.spec" @ONLY)
+
+# ==============================================
+# CPack
+# ==============================================
+set(CPACK_PACKAGE_NAME "${CMAKE_PROJECT_NAME}")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)

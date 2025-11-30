@@ -1,0 +1,69 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 16
+  },
+  "configurePresets": [
+    {
+      "name": "debug",
+      "displayName": "Debug",
+      "description": "Debug build (equal to -DCMAKE_BUILD_TYPE=Debug)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Release",
+      "description": "Release build (equal to -DCMAKE_BUILD_TYPE=Release)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "profile",
+      "displayName": "Profile",
+      "description": "RelWithDebInfo build for profiling (gprof / perf / hotspot)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Profile",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_CXX_FLAGS": "-pg -O2 -g -fno-omit-frame-pointer",
+        "CMAKE_EXE_LINKER_FLAGS": "-pg"
+      }
+    },
+    {
+      "name": "minsize",
+      "displayName": "MinSize",
+      "description": "MinSizeRel build (smallest binary)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/Minsize",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "debug", "configurePreset": "debug" },
+    { "name": "release", "configurePreset": "release" },
+    { "name": "profile", "configurePreset": "profile" },
+    { "name": "minsize", "configurePreset": "minsize" }
+  ],
+  "testPresets": [],
+  "packagePresets": [
+    {
+      "name": "tarball-obs",
+      "configurePreset": "release",
+      "generators": ["TGZ"],
+      "variables": {
+        "CPACK_PACKAGE_DIRECTORY": "${sourceDir}/dist",
+        "CPACK_SOURCE_IGNORE_FILES": "/build/;/.git/;/dist/;/samples/"
+      }
+    }
+  ]
+}

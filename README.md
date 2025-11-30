@@ -14,6 +14,19 @@ Kisekae is short for *"kisekae ningyou"* (Japanese: *着せ替え人形*, meanin
 - Nostalgia and pixel-art from the childhood using Windows 95 / 98 (though I never heard KISS at that time).
 - Real life is so painful. Wellness is in manga and anime.
 
+
+# Development
+> This project use `CMakePresets.json` to define build presets (`Release`, `Debug`...etc), for unify the build behavior between QtCreator and VSCode.
+
+## QtCreator
+Just `File -> Open File or Project` and select the `CMakeLists.txt` to open project, it will ask you which presets to be configured.
+
+## VSCode
+1. Open **the root folder of this project**. (if `CMake Tools` extension is not installed, please install it and restart VSCode, then open the folder again.)
+2. `cmake.selectConfigurePreset` to select preset.
+3. `F7` (`cmake.build`) to build.
+4. `F5` to run the built binary.
+
 # KiSS Specification References
 
 ## fkiss (Japanese)
