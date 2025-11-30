@@ -83,6 +83,7 @@ endif()
 # ===============================================
 # Build Icons
 # ===============================================
+
 find_package(Python3 REQUIRED Interpreter)
 set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
 set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
@@ -91,19 +92,26 @@ set(BUILT_APP_PNG_XDG_ICON_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer
 set(BUILT_APP_SVG_XDG_ICON_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer/dist/04_FINAL_SVG_THEME/CustomizedTango")
 
 # When included_icons.txt changed, auto execute cmake again.
-set(ICON_INCLUDE_FILE "${CMAKE_SOURCE_DIR}/${RESOURCES_DIR}/included_icons.txt")
-set(ICON_STAMP_FILE "${CMAKE_BINARY_DIR}/tango-icon-remixer.stamp")
+set(ICON_INCLUDE_FILE "${RESOURCES_DIR}/included_icons.txt")
+set(ICON_GENERATED_STAMP_FILE "${CMAKE_BINARY_DIR}/built_icons.stamp")
+message(STATUS "STAMP ============================+> ${ICON_GENERATED_STAMP_FILE}")
+# If qrc does not exist, create empty placeholder
+set(ICON_GENERATED_QRC "${CMAKE_BINARY_DIR}/resources/tango-icon-remixer/dist/04_FINAL_PNG_THEME/CustomizedTango/index.qrc")
+if(NOT EXISTS ${ICON_GENERATED_QRC})
+    file(WRITE ${ICON_GENERATED_QRC} "<RCC>\n</RCC>\n")
+endif()
 
 add_custom_command(
-    OUTPUT ${ICON_STAMP_FILE}
+    OUTPUT ${ICON_GENERATED_STAMP_FILE}
     COMMAND ${Python3_EXECUTABLE} ${ICON_BUILD_SCRIPT}
             --included-icon-file "${RESOURCES_DIR}/included_icons.txt"
             --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon"
             --output-theme-name "CustomizedTango"
+    COMMAND ${CMAKE_COMMAND} -E touch ${ICON_GENERATED_STAMP_FILE}
     DEPENDS ${ICON_INCLUDE_FILE}
     COMMENT "Generating icon pack..."
 )
-add_custom_target(icons DEPENDS ${ICON_STAMP})
+add_custom_target(icontheme DEPENDS ${ICON_GENERATED_STAMP_FILE})
 
 # ===============================================
 # main
@@ -285,7 +293,7 @@ install(TARGETS qkiss
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-add_dependencies(qkiss icons)
+add_dependencies(qkiss icontheme)
 
 # file(COPY samples DESTINATION ${CMAKE_BINARY_DIR})
 
