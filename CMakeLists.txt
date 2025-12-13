@@ -117,6 +117,7 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E touch ${ICON_GENERATED_STAMP_FILE}
     DEPENDS ${ICON_INCLUDE_FILE}
     COMMENT "Generating icon pack..."
+    USES_TERMINAL    # immediately output
 )
 add_custom_target(icontheme DEPENDS ${ICON_GENERATED_STAMP_FILE})
 

@@ -959,7 +959,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     <message>
         <location filename="../src/parsedkcf.cpp" line="90"/>
         <source>What is this? Unknown KCF bitsPerColor: %1</source>
-        <translation>這是什麼？未知的 KCF bitsPerColor：%1</translation>
+        <translation>這是什麼鬼？未知的 KCF bitsPerColor：%1</translation>
     </message>
     <message>
         <location filename="../src/parsedkcf.cpp" line="142"/>

@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
 # ==========================================
-# Warning and Acknowedgement: This script heavily relys on M$ Copilot, which wrote > 90% code.
+# Warning and Acknowedgement
+#
+# This script heavily relys on M$ Copilot, which wrote > 90% code.
+# Human reviewed.
 # ==========================================
 
 from __future__ import annotations
@@ -213,12 +216,12 @@ class Runner:
 
 def main(argv: List[str]) -> None:
     ap = argparse.ArgumentParser(description="Universal changelog parser and converter")
-    ap.add_argument("--input-yaml", required=True, type=Path)
-    ap.add_argument("--json-schema", required=True, type=Path)
-    ap.add_argument("--output-rpm", type=Path)
-    ap.add_argument("--output-deb", type=Path)
-    ap.add_argument("--output-markdown", type=Path)
-    ap.add_argument("--output-latest-markdown", type=Path)
+    ap.add_argument("--input-yaml", "-i", required=True, type=Path)
+    ap.add_argument("--json-schema", "-j", required=True, type=Path)
+    ap.add_argument("--output-rpm", "-r", type=Path)
+    ap.add_argument("--output-deb", "-d", type=Path)
+    ap.add_argument("--output-markdown", "-m", type=Path)
+    ap.add_argument("--output-latest-markdown", "-l", type=Path)
 
     args = ap.parse_args(argv)
 

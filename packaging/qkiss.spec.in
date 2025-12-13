@@ -30,6 +30,8 @@ Requires(post): desktop-file-utils
 Recommends:     lha
 Recommends:     unar
 
+BuildRequires:  python-jsonschema
+BuildRequires:  python-PyYAML
 
 %description
 QKiSS is a modern implementation of KiSS (Kisekae Set System) viewer in Qt 6.
