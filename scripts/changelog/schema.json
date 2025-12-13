@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Universal Changelog Schema",
+  "description": "Schema for a unified changelog format that can be converted to RPM and Debian changelogs.",
+  "type": "object",
+  "properties": {
+    "changelogs": {
+      "type": "array",
+      "description": "List of changelog entries, each describing one release.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "srcpkgname": {
+            "type": "string",
+            "description": "Name of this package."
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+){2}$",
+            "description": "Package version string, e.g. `1.2.3`."
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Release date and time in ISO 8601 format, e.g. `2025-12-10T12:00:00+08:00`."
+          },
+          "maintainer": {
+            "type": "string",
+            "description": "Name and email of the maintainer, e.g. `Tanaka <tanaka@buncololi.com>`.",
+            "pattern": "^[^<>]+ <[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}>$"
+          },
+          "rpm": {
+            "type": "object",
+            "description": "RPM-specific metadata for this release.",
+            "properties": {
+              "release": {
+                "type": "string",
+                "description": "RPM release number, usually `1`, optionally with distro suffix like `.fc40`. (Unused currently)"
+              }
+            },
+            "required": []
+          },
+          "deb": {
+            "type": "object",
+            "description": "Debian-specific metadata for this release.",
+            "properties": {
+              "revision": {
+                "type": "string",
+                "description": "In `debian/changelog`, the version must be `UpstreamVersion-DebianRevision`. Default is `1`. (Unused currently, use `1` implicitly)"
+              },
+              "distribution": {
+                "type": "string",
+                "description": "Debian distribution target, e.g. `unstable`, `bookworm`. (Unused currently, always use `unstable`)"
+              },
+              "urgency": {
+                "type": "string",
+                "enum": ["low", "medium", "high"],
+                "description": "Debian urgency level: low, medium, or high."
+              }
+            },
+            "required": [ "urgency"]
+          },
+          "changes": {
+            "type": "array",
+            "description": "List of human-readable change descriptions for this release. \nFormat: `TYPE: MESSAGE`\n`TYPE := added|fixed|removed|style|performance|build|security`",
+            "items": {
+              "type": "string",
+              "pattern": "^(added|fixed|removed|style|performance|build|security):\\s.+",
+              "description": "Single change description line."
+            },
+            "minItems": 1
+          }
+        },
+        "required": ["srcpkgname", "version", "date", "maintainer", "deb", "changes"]
+      }
+    }
+  },
+  "required": ["changelogs"]
+}
