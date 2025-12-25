@@ -120,7 +120,14 @@ const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
     if (m_uiLanguage.startsWith("ja_") && !m_uiLanguage.endsWith("JP") && !m_uiLanguage.endsWith("KS")) {
         ja = "異世界通用語";
     }
-    return {
+    if (m_uiLanguage == "ja_AR") {
+        zh_TW = QStringLiteral("ほとんど浸透されきって、哀れな言語ですわね…");
+    } else if (m_uiLanguage == "ja_MK") {
+        zh_TW = QStringLiteral("ここまで染まってしまっていて、さすがに雑魚扱いはできない言語かな…");
+    } else if (m_uiLanguage == "ja_OJ") {
+        zh_TW = QStringLiteral("…影響を強く受けてしまった言語でございますわね。");
+    }
+    QList<ConfigFile::LangInfo> list = {
         {"", "", tr("Auto (System Language)")},
         {"ja_JP", "🇯🇵", ja},
         {"ja_KS", "🇯🇵", ja + QString("（関西弁）")},
@@ -129,8 +136,9 @@ const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
         {"ja_MK", "🇯🇵", ja + QString("（メ〇〇キ）")},
         {"ja_ME", "🇯🇵", ja + QString("（〈沈黙の魔女〉モニカ・エヴァレット）")},
         {"en_US", "🇺🇸", QString("American English")},
-        {"zh_TW", "🇹🇼", QString("台灣繁體")},
+        {"zh_TW", "🇹🇼", zh_TW},
     };
+    return list;
 }
 
 QString ConfigFile::detectSystemLanguage() const
@@ -152,6 +160,9 @@ QString ConfigFile::uiLanguage() const
 
 QString ConfigFile::effectedUiLanguage() const
 {
+    if (ConfigFile::engOnly()) {
+        return "en_US";
+    }
     if (m_uiLanguage.isEmpty()) {
         return detectSystemLanguage();
     }
@@ -178,6 +189,14 @@ bool ConfigFile::setUiLanguage(const QString &confLangId)
     m_set.sync();
     emit uiLanguageChanged();
     return true;
+}
+
+bool ConfigFile::engOnly()
+{
+    QString l = QLocale::system().name().toLower();
+    std::reverse(l.begin(), l.end());
+    return true;
+    return l.endsWith("hz") && l[0] == 'n' && l[1] == 'c';
 }
 
 QKiSS::Encoding ConfigFile::encoding() const

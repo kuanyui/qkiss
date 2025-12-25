@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QRegularExpression>
+#include "configfile.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -130,7 +131,11 @@ KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.or
          tr("Icons & Arts"),
          tr("Translators")
          ));
-    m_tabWidget->addTab(browserAuthors, tr("Authors"));
+    if (ConfigFile::engOnly()) {
+        delete browserAuthors;
+    } else {
+        m_tabWidget->addTab(browserAuthors, tr("Authors"));
+    }
 
     // Licenses tab
     QTextBrowser *browserLicense = new QTextBrowser{this};

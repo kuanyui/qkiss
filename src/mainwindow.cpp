@@ -333,7 +333,9 @@ void MainWindow::setupMenuBar()
         }
         connect(act, &QAction::toggled, this, [=, this] () { m_cfg.setEncoding(enumVal); });
     }
-
+    if (ConfigFile::engOnly()) {
+        ui->menu_uiLanguage->menuAction()->setVisible(false);
+    }
     const auto &allLangs = m_cfg.allLanguages();
     QActionGroup *langsGroup = new QActionGroup {ui->menu_uiLanguage};
     for (const auto &lang : allLangs) {

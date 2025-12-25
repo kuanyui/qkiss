@@ -71,7 +71,7 @@ public:
     /// When language is set to empty string `""` (auto) in config file, this method will still return the "actually effected" language ID.
     QString effectedUiLanguage() const;
     bool setUiLanguage(const QString &langId);
-
+    static bool engOnly();
     QKiSS::Encoding encoding() const;
     void setEncoding(QKiSS::Encoding newEncoding);
 
