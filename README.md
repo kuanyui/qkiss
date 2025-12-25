@@ -28,15 +28,29 @@ Just `File -> Open File or Project` and select the `CMakeLists.txt` to open proj
 4. `F5` to run the built binary.
 
 ## Manual
-1. List all CMake presets
+1. List all CMake **configure presets**:
 ```sh
+# These two commands are equal.
+# Avcailable value: `configure`, `build`, `test`, `package`, `all` (default is `configure`)
+cmake --list-presets=configure
 cmake --list-presets
 ```
-2. Run preset
+2. **Configure** by the name of **configure preset**:
 ```sh
-cmake --preset PROFILE
+cmake --preset CONFIGURE_PRESET
 ```
 
+3. List all CMake **build presets**:
+```sh
+cmake --list-presets=build
+```
+
+4. **Build** by the name of **build preset**:
+```sh
+cmake --build --preset BUILD_PRESET
+```
+
+5. Manually run the built executable file (in the configured directory) by yourself.
 
 # KiSS Specification References
 

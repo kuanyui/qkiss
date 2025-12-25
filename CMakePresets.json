@@ -148,7 +148,6 @@
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
-
     {
       "name": "windows-msvc-x64",
       "displayName": "Windows x64 + MSVC (Visual Studio)",
@@ -161,50 +160,50 @@
 
   "buildPresets": [
     {
-      "name": "linux-gcc-debug",
-      "displayName": "Build :: Linux + GCC (Debug)",
+      "name": "linux-gcc-x86_64-debug",
+      "displayName": "Build :: Linux x86_64 + GCC (Debug)",
       "description": "Build Debug for Linux GCC",
       "configurePreset": "linux-gcc-x86_64-debug"
     },
     {
-      "name": "linux-gcc-release",
-      "displayName": "Build :: Linux + GCC (Release)",
+      "name": "linux-gcc-x86_64-release",
+      "displayName": "Build :: Linux x86_64 + GCC (Release)",
       "description": "Build Release for Linux GCC",
       "configurePreset": "linux-gcc-x86_64-release"
     },
     {
-      "name": "linux-gcc-profile",
-      "displayName": "Build :: Linux + GCC (Profile)",
+      "name": "linux-gcc-x86_64-profile",
+      "displayName": "Build :: Linux x86_64 + GCC (Profile)",
       "description": "Build Profile for Linux GCC",
       "configurePreset": "linux-gcc-x86_64-profile"
     },
     {
-      "name": "linux-gcc-minsize",
-      "displayName": "Build :: Linux + GCC (Minsize)",
+      "name": "linux-gcc-x86_64-minsize",
+      "displayName": "Build :: Linux x86_64 + GCC (Minsize)",
       "description": "Build Minsize for Linux GCC",
       "configurePreset": "linux-gcc-x86_64-minsize"
     },
     {
-      "name": "linux-clang-debug",
-      "displayName": "Build :: Linux + Clang (Debug)",
+      "name": "linux-clang-x86_64-debug",
+      "displayName": "Build :: Linux x86_64 + Clang (Debug)",
       "description": "Build Debug for Linux Clang",
       "configurePreset": "linux-clang-x86_64-debug"
     },
     {
-      "name": "linux-clang-release",
-      "displayName": "Build :: Linux + Clang (Release)",
+      "name": "linux-clang-x86_64-release",
+      "displayName": "Build :: Linux x86_64 + Clang (Release)",
       "description": "Build Release for Linux Clang",
       "configurePreset": "linux-clang-x86_64-release"
     },
     {
-      "name": "linux-clang-profile",
-      "displayName": "Build :: Linux + Clang (Profile)",
+      "name": "linux-clang-x86_64-profile",
+      "displayName": "Build :: Linux x86_64 + Clang (Profile)",
       "description": "Build Profile for Linux Clang",
       "configurePreset": "linux-clang-x86_64-profile"
     },
     {
-      "name": "linux-clang-minsize",
-      "displayName": "Build :: Linux + Clang (Minsize)",
+      "name": "linux-clang-x86_64-minsize",
+      "displayName": "Build :: Linux x86_64 + Clang (Minsize)",
       "description": "Build Minsize for Linux Clang",
       "configurePreset": "linux-clang-x86_64-minsize"
     },
