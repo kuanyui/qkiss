@@ -647,7 +647,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.ui" line="72"/>
         <source>&amp;Settings</source>
-        <translation>せ、設定(&amp;S)</translation>
+        <translation>せっせせせ設定(&amp;S)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="36"/>
@@ -760,7 +760,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     <message>
         <location filename="../src/mainwindow.ui" line="266"/>
         <source>&amp;About</source>
-        <translation>に、について…よ、読んでくださぃぃ…(&amp;A)</translation>
+        <translation>情報を…よ、読んでくれません…かぁ…(&amp;A)</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="269"/>
