@@ -4,66 +4,237 @@
     "major": 3,
     "minor": 16
   },
+
   "configurePresets": [
     {
-      "name": "debug",
-      "displayName": "Debug",
-      "description": "Debug build (equal to -DCMAKE_BUILD_TYPE=Debug)",
+      "name": "ninja-base",
+      "hidden": true,
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Debug",
+      "description": "[BASE] Base preset for Ninja-based single-config builds"
+    },
+    {
+      "name": "linux-gcc-base",
+      "hidden": true,
+      "inherits": "ninja-base",
+      "description": "[BASE] Linux build using GCC toolchain",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "linux-clang-base",
+      "hidden": true,
+      "inherits": "ninja-base",
+      "description": "[BASE] Linux build using Clang/LLVM toolchain",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "macos-clang-base",
+      "hidden": true,
+      "inherits": "ninja-base",
+      "description": "[BASE] macOS build using Apple Clang toolchain",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "linux-gcc-x86_64-debug",
+      "displayName": "Linux x86_64 + GCC (Debug)",
+      "description": "Linux x86_64 build with GCC (CMAKE_BUILD_TYPE=Debug)",
+      "inherits": "linux-gcc-base",
+      "binaryDir": "${sourceDir}/build/linux/gcc/x86_64/debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
-      "name": "release",
-      "displayName": "Release",
-      "description": "Release build (equal to -DCMAKE_BUILD_TYPE=Release)",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Release",
+      "name": "linux-gcc-x86_64-release",
+      "displayName": "Linux x86_64 + GCC (Release)",
+      "description": "Linux x86_64 build with GCC (CMAKE_BUILD_TYPE=Release)",
+      "inherits": "linux-gcc-base",
+      "binaryDir": "${sourceDir}/build/linux/gcc/x86_64/release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
-      "name": "profile",
-      "displayName": "Profile",
-      "description": "RelWithDebInfo build for profiling (gprof / perf / hotspot)",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Profile",
+      "name": "linux-gcc-x86_64-profile",
+      "displayName": "Linux x86_64 + GCC (Profile)",
+      "description": "Linux x86_64 build with GCC (CMAKE_BUILD_TYPE=RelWithDebInfo)",
+      "inherits": "linux-gcc-base",
+      "binaryDir": "${sourceDir}/build/linux/gcc/x86_64/profile",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_CXX_FLAGS": "-pg -O2 -g -fno-omit-frame-pointer",
-        "CMAKE_EXE_LINKER_FLAGS": "-pg"
+        "ENABLE_PROFILING": "ON"
       }
     },
     {
-      "name": "minsize",
-      "displayName": "MinSize",
-      "description": "MinSizeRel build (smallest binary)",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Minsize",
+      "name": "linux-gcc-x86_64-minsize",
+      "displayName": "Linux x86_64 + GCC (Minsize)",
+      "description": "Linux x86_64 build with GCC (CMAKE_BUILD_TYPE=MinSizeRel)",
+      "inherits": "linux-gcc-base",
+      "binaryDir": "${sourceDir}/build/linux/gcc/x86_64/minsize",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "MinSizeRel"
       }
+    },
+    {
+      "name": "linux-clang-x86_64-debug",
+      "displayName": "Linux x86_64 + Clang (Debug)",
+      "description": "Linux x86_64 build with Clang/LLVM (CMAKE_BUILD_TYPE=Debug)",
+      "inherits": "linux-clang-base",
+      "binaryDir": "${sourceDir}/build/linux/clang/x86_64/debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "linux-clang-x86_64-release",
+      "displayName": "Linux x86_64 + Clang (Release)",
+      "description": "Linux x86_64 build with Clang/LLVM (CMAKE_BUILD_TYPE=Release)",
+      "inherits": "linux-clang-base",
+      "binaryDir": "${sourceDir}/build/linux/clang/x86_64/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "linux-clang-x86_64-profile",
+      "displayName": "Linux x86_64 + Clang (Profile)",
+      "description": "Linux x86_64 build with Clang/LLVM (CMAKE_BUILD_TYPE=RelWithDebInfo)",
+      "inherits": "linux-clang-base",
+      "binaryDir": "${sourceDir}/build/linux/clang/x86_64/profile",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "ENABLE_PROFILING": "ON"
+      }
+    },
+    {
+      "name": "linux-clang-x86_64-minsize",
+      "displayName": "Linux x86_64 + Clang (Minsize)",
+      "description": "Linux x86_64 build with Clang/LLVM (CMAKE_BUILD_TYPE=MinSizeRel)",
+      "inherits": "linux-clang-base",
+      "binaryDir": "${sourceDir}/build/linux/clang/x86_64/minsize",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+
+
+    {
+      "name": "macos-clang-arm64-debug",
+      "displayName": "macOS arm64 + Clang (Debug)",
+      "description": "macOS arm64 build using Apple Clang (CMAKE_BUILD_TYPE=Debug)",
+      "inherits": "macos-clang-base",
+      "binaryDir": "${sourceDir}/build/macos/clang/arm64/debug",
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "arm64",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "macos-clang-arm64-release",
+      "displayName": "macOS arm64 + Clang (Release)",
+      "description": "macOS arm64 build using Apple Clang (CMAKE_BUILD_TYPE=Release)",
+      "inherits": "macos-clang-base",
+      "binaryDir": "${sourceDir}/build/macos/clang/arm64/release",
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "arm64",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+
+    {
+      "name": "windows-msvc-x64",
+      "displayName": "Windows x64 + MSVC (Visual Studio)",
+      "description": "Windows x64 build using MSVC via Visual Studio generator",
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "${sourceDir}/build/windows/msvc/x64",
+      "architecture": "x64"
     }
   ],
+
   "buildPresets": [
-    { "name": "debug", "configurePreset": "debug" },
-    { "name": "release", "configurePreset": "release" },
-    { "name": "profile", "configurePreset": "profile" },
-    { "name": "minsize", "configurePreset": "minsize" }
-  ],
-  "testPresets": [],
-  "packagePresets": [
     {
-      "name": "tarball-obs",
-      "configurePreset": "release",
-      "generators": ["TGZ"],
-      "variables": {
-        "CPACK_PACKAGE_DIRECTORY": "${sourceDir}/dist",
-        "CPACK_SOURCE_IGNORE_FILES": "/build/;/.git/;/dist/;/samples/"
-      }
+      "name": "linux-gcc-debug",
+      "displayName": "Build :: Linux + GCC (Debug)",
+      "description": "Build Debug for Linux GCC",
+      "configurePreset": "linux-gcc-x86_64-debug"
+    },
+    {
+      "name": "linux-gcc-release",
+      "displayName": "Build :: Linux + GCC (Release)",
+      "description": "Build Release for Linux GCC",
+      "configurePreset": "linux-gcc-x86_64-release"
+    },
+    {
+      "name": "linux-gcc-profile",
+      "displayName": "Build :: Linux + GCC (Profile)",
+      "description": "Build Profile for Linux GCC",
+      "configurePreset": "linux-gcc-x86_64-profile"
+    },
+    {
+      "name": "linux-gcc-minsize",
+      "displayName": "Build :: Linux + GCC (Minsize)",
+      "description": "Build Minsize for Linux GCC",
+      "configurePreset": "linux-gcc-x86_64-minsize"
+    },
+    {
+      "name": "linux-clang-debug",
+      "displayName": "Build :: Linux + Clang (Debug)",
+      "description": "Build Debug for Linux Clang",
+      "configurePreset": "linux-clang-x86_64-debug"
+    },
+    {
+      "name": "linux-clang-release",
+      "displayName": "Build :: Linux + Clang (Release)",
+      "description": "Build Release for Linux Clang",
+      "configurePreset": "linux-clang-x86_64-release"
+    },
+    {
+      "name": "linux-clang-profile",
+      "displayName": "Build :: Linux + Clang (Profile)",
+      "description": "Build Profile for Linux Clang",
+      "configurePreset": "linux-clang-x86_64-profile"
+    },
+    {
+      "name": "linux-clang-minsize",
+      "displayName": "Build :: Linux + Clang (Minsize)",
+      "description": "Build Minsize for Linux Clang",
+      "configurePreset": "linux-clang-x86_64-minsize"
+    },
+
+    {
+      "name": "macos-debug",
+      "displayName": "Build :: macOS (Debug)",
+      "description": "Build Debug for macOS arm64",
+      "configurePreset": "macos-clang-arm64-debug"
+    },
+    {
+      "name": "macos-release",
+      "displayName": "Build :: macOS (Release)",
+      "description": "Build Release for macOS arm64",
+      "configurePreset": "macos-clang-arm64-release"
+    },
+
+    {
+      "name": "windows-debug",
+      "displayName": "Build :: Windows (Debug)",
+      "description": "Build Debug using MSVC",
+      "configurePreset": "windows-msvc-x64",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-release",
+      "displayName": "Build :: Windows (Release)",
+      "description": "Build Release using MSVC",
+      "configurePreset": "windows-msvc-x64",
+      "configuration": "Release"
     }
   ]
 }

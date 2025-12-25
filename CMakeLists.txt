@@ -2,6 +2,38 @@ cmake_minimum_required(VERSION 3.10)
 
 project(qkiss VERSION 0.0.1 LANGUAGES CXX)
 
+#======================================================
+# Option :: Profiling
+#======================================================
+
+option(ENABLE_PROFILING "Enable profiling (gprof / perf / hotsopt), should be used with `-DCMAKE_BUILD_TYPE=RelWithDebInfo`" OFF)
+
+if(ENABLE_PROFILING)
+    # Keep frame pointers when possible (useful for profilers)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        add_compile_options(-fno-omit-frame-pointer)
+        add_link_options(-fno-omit-frame-pointer)
+    endif()
+
+    if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        # Linux: gprof / perf style profiling
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            add_compile_options(-pg)
+            add_link_options(-pg)
+        endif()
+    elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+        # macOS: Instruments / Time Profiler (no -pg)
+        message(STATUS
+            "Profiling enabled on macOS: using RelWithDebInfo + Instruments"
+        )
+    elseif(MSVC)
+        # Windows: Visual Studio Profiler / ETW
+        message(STATUS
+            "Profiling enabled on Windows: use Visual Studio Profiler or ETW"
+        )
+    endif()
+endif()
+
 # ==============================================
 # Expand CMake macro
 # ==============================================

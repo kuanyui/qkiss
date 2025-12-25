@@ -23,9 +23,20 @@ Just `File -> Open File or Project` and select the `CMakeLists.txt` to open proj
 
 ## VSCode
 1. Open **the root folder of this project**. (if `CMake Tools` extension is not installed, please install it and restart VSCode, then open the folder again.)
-2. `cmake.selectConfigurePreset` to select preset.
+2. `cmake.selectConfigurePreset` to select configure preset (`configurePresets`).
 3. `F7` (`cmake.build`) to build.
 4. `F5` to run the built binary.
+
+## Manual
+1. List all CMake presets
+```sh
+cmake --list-presets
+```
+2. Run preset
+```sh
+cmake --preset PROFILE
+```
+
 
 # KiSS Specification References
 
