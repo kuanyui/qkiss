@@ -135,7 +135,6 @@ class Parser:
                     if cate.name not in raw_body: continue
                     raw_logs: List[str] = raw_body[cate.name]
                     logs.extend(raw_logs)
-                    print(cate, logs)
                 release = Release(
                     srcpkgname=raw_release["srcpkgname"],
                     version=raw_release["version"],
@@ -275,7 +274,7 @@ def main(argv: List[str]) -> None:
                     help="Path to JSON Schema file used to validate the YAML")
     ap.add_argument("--output-rpm", "-r", type=Path,
                     help="""Output a plain text file containing changelog in RPM .spec format at this path,
-                    you need to insert the contents after `%%changelogs` manually (e.g. via CMake's `configure_file()`)""")
+                    you need to insert the contents of the outputted file  after `changelog` in .spec file manually (e.g. via CMake's `configure_file()`)""")
     ap.add_argument("--output-deb", "-d", type=Path,
                     help="Output a plain text file containing changelog in Debian changelog format at this path")
     ap.add_argument("--output-markdown", "-m", type=Path,
