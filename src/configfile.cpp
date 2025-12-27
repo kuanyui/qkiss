@@ -195,7 +195,6 @@ bool ConfigFile::engOnly()
 {
     QString l = QLocale::system().name().toLower();
     std::reverse(l.begin(), l.end());
-    return true;
     return l.endsWith("hz") && l[0] == 'n' && l[1] == 'c';
 }
 

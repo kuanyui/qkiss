@@ -71,3 +71,5 @@ update-desktop-database
 %{_bindir}/%{name}
 
 %changelog
+
+@CHANGELOG_FOR_RPM_SPEC@

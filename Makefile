@@ -14,7 +14,7 @@ CMAKE_PRESETS_ROOT_DIR := build
 CMAKE_PRESET := release
 
 ## the `.spec` file whose @VAR@ are already expanded by `cmake`
-CONFIGURED_RPM_SPEC_FILE := dist/$(NAME).spec
+CONFIGURED_RPM_SPEC_FILE := generated/$(NAME).spec
 
 help:     ## Show this self-documented help message.
 	@# Some operating system / Linux distro may use `mawk` (e.g. Ubuntu), so prefer more portable `perl` over `awk`.
@@ -45,7 +45,12 @@ help:     ## Show this self-documented help message.
 clean:    ## Clean all built files (CMake & built icons).
 	rm -rf resources/tango-icon-remixer/dist/*
 	rm -rf $(CMAKE_PRESETS_ROOT_DIR)/*
+	rm -rf build/*
+	rm -rf generated/*
 	rm -f $(TARBALL)
+
+clean-cmake-cache: clean   ## Clean all + cmake cache
+	rm -f CMakeLists.txt.user
 
 install-git-hooks:     ## Install git-hooks and commit-template.
 	cp scripts/git_hooks/commit-msg .git/hooks/commit-msg

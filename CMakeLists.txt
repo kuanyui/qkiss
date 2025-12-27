@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.10)
 
 project(qkiss VERSION 0.0.1 LANGUAGES CXX)
 
-#======================================================
+find_package(Python3 REQUIRED Interpreter)
+
+# ==============================================
 # Option :: Profiling
-#======================================================
+# ==============================================
 
 option(ENABLE_PROFILING "Enable profiling (gprof / perf / hotsopt), should be used with `-DCMAKE_BUILD_TYPE=RelWithDebInfo`" OFF)
 
@@ -34,10 +36,44 @@ if(ENABLE_PROFILING)
     endif()
 endif()
 
+
 # ==============================================
-# Expand CMake macro
+# Folder for generated, platform independent files
 # ==============================================
-configure_file("packaging/${PROJECT_NAME}.spec.in" "dist/${PROJECT_NAME}.spec" @ONLY)
+set(PROJECT_GENERATED_DIR "${CMAKE_SOURCE_DIR}/generated" CACHE PATH
+    "Directory for generated, platform independent files (e.g. XDG icon theme, changelogs...etc)")
+
+# ==============================================
+# Generate changelogs from YAML for RPM & DEB
+# ==============================================
+
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
+            --input-yaml ${CMAKE_SOURCE_DIR}/CHANGELOG.yaml
+            --output-rpm ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
+            --output-deb ${PROJECT_GENERATED_DIR}/changelogs_deb.txt
+            --output-markdown ${PROJECT_GENERATED_DIR}/changelogs.md
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    RESULT_VARIABLE _ret)
+
+if(NOT _ret EQUAL 0)
+    message(FATAL_ERROR "Failed to generate RPM changelog")
+endif()
+
+file(READ ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
+    CHANGELOG_FOR_RPM_SPEC)
+
+configure_file(
+    "packaging/${PROJECT_NAME}.spec.in"
+    "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec"
+    @ONLY
+)
+
+
+# ==============================================
+# Expand CMake macro (configure)
+# ==============================================
+configure_file("packaging/${PROJECT_NAME}.spec.in" "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
 
 # ==============================================
 # CPack
@@ -122,22 +158,22 @@ endif()
 # ===============================================
 # Build Icons
 # ===============================================
-
-find_package(Python3 REQUIRED Interpreter)
 set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
 set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
 set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
-set(BUILT_APP_PNG_XDG_ICON_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer/dist/04_FINAL_PNG_THEME/CustomizedTango")
-set(BUILT_APP_SVG_XDG_ICON_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer/dist/04_FINAL_SVG_THEME/CustomizedTango")
+set(ICON_THEME_NAME "CustomizedTango")
+set(ICON_PNG_XDG_THEME_DIR "${PROJECT_GENERATED_DIR}/icon_theme__png/${ICON_THEME_NAME}")
+set(ICON_SVG_XDG_THEME_DIR "${PROJECT_GENERATED_DIR}/icon_theme__svg/${ICON_THEME_NAME}")
 
 # When included_icons.txt changed, auto execute cmake again.
 set(ICON_INCLUDE_FILE "${RESOURCES_DIR}/included_icons.txt")
-set(ICON_GENERATED_STAMP_FILE "${CMAKE_BINARY_DIR}/built_icons.stamp")
+set(ICON_GENERATED_STAMP_FILE "${PROJECT_GENERATED_DIR}/icons_built.stamp")
 message(STATUS "STAMP ============================+> ${ICON_GENERATED_STAMP_FILE}")
+
 # If qrc does not exist, create empty placeholder
-set(ICON_GENERATED_QRC "${CMAKE_BINARY_DIR}/resources/tango-icon-remixer/dist/04_FINAL_PNG_THEME/CustomizedTango/index.qrc")
-if(NOT EXISTS ${ICON_GENERATED_QRC})
-    file(WRITE ${ICON_GENERATED_QRC} "<RCC>\n</RCC>\n")
+set(ICON_PNG_GENERATED_QRC "${ICON_PNG_XDG_THEME_DIR}/index.qrc")
+if(NOT EXISTS ${ICON_PNG_GENERATED_QRC})
+    file(WRITE ${ICON_PNG_GENERATED_QRC} "<RCC>\n</RCC>\n")
 endif()
 
 add_custom_command(
@@ -145,7 +181,9 @@ add_custom_command(
     COMMAND ${Python3_EXECUTABLE} ${ICON_BUILD_SCRIPT}
             --included-icon-file "${RESOURCES_DIR}/included_icons.txt"
             --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon"
-            --output-theme-name "CustomizedTango"
+            --output-theme-name "${ICON_THEME_NAME}"
+            --output-png-theme-to-dir "${ICON_PNG_XDG_THEME_DIR}"
+            --output-svg-theme-to-dir "${ICON_SVG_XDG_THEME_DIR}"
     COMMAND ${CMAKE_COMMAND} -E touch ${ICON_GENERATED_STAMP_FILE}
     DEPENDS ${ICON_INCLUDE_FILE}
     COMMENT "Generating icon pack..."
@@ -172,7 +210,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resources/application.qrc
-        resources/tango-icon-remixer/dist/04_FINAL_PNG_THEME/CustomizedTango/index.qrc   # REFACTOR: path
+        ${ICON_PNG_GENERATED_QRC}
         src/parsedcnf.h src/parsedcnf.cpp
         src/enums.h src/enums.cpp
         src/encoding.h src/encoding.cpp
@@ -305,11 +343,11 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
 
     # XDG icon theme :: png files
     message(STATUS "DEBUG CMAKE_SOURCE_DIR === ${CMAKE_SOURCE_DIR}")
-    message(STATUS "DEBUG BUILT_APP_PNG_XDG_ICON_DIR === ${BUILT_APP_PNG_XDG_ICON_DIR}")
-    file(GLOB_RECURSE iconPngFiles "${BUILT_APP_PNG_XDG_ICON_DIR}/*/apps/qkiss.png")
+    message(STATUS "DEBUG ICON_PNG_XDG_THEME_DIR === ${ICON_PNG_XDG_THEME_DIR}")
+    file(GLOB_RECURSE iconPngFiles "${ICON_PNG_XDG_THEME_DIR}/*/apps/qkiss.png")
     foreach(iconAbsFilePath ${iconPngFiles})
         get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
-        string(REPLACE "${BUILT_APP_PNG_XDG_ICON_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
+        string(REPLACE "${ICON_PNG_XDG_THEME_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
         message(STATUS "iconAbsDirPath = ${iconAbsDirPath}")
         message(STATUS "iconAbsFilePath = ${iconAbsFilePath}")
         message(STATUS "iconRelFilePath = ${iconRelFilePath}")
@@ -317,10 +355,10 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
     endforeach()
 
     # XDG icon theme :: svg files
-    file(GLOB_RECURSE iconSvgFiles "${BUILT_APP_SVG_XDG_ICON_DIR}/*/apps/qkiss.svg")
+    file(GLOB_RECURSE iconSvgFiles "${ICON_SVG_XDG_THEME_DIR}/*/apps/qkiss.svg")
     foreach(iconAbsFilePath ${iconSvgFiles})
         get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
-        string(REPLACE "${BUILT_APP_PNG_XDG_ICON_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
+        string(REPLACE "${ICON_SVG_XDG_THEME_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
         install(FILES ${iconAbsFilePath} DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${iconRelFilePath})
     endforeach()
 
