@@ -1,13 +1,18 @@
 # yaml-language-server: $schema=./scripts/changelog/schema.json
-changelogs:
+releases:
   - srcpkgname: "qkiss"
     maintainer: "kuanyui <azazabc123@gmail.com>"
     version: "0.9.1"
     date: "2025-12-14T12:00:00+08:00"
     deb:
       urgency: "medium"
-    changes:
-      - "fixed: Second release!"
+    body:
+      fixed:
+        - "Potential segmentation fault"
+      added:
+        - "A new feature"
+      build:
+        - "Improve CMakeLists.txt"
 
   - srcpkgname: "qkiss"
     maintainer: "kuanyui <azazabc123@gmail.com>"
@@ -15,6 +20,7 @@ changelogs:
     date: "2025-12-13T12:00:00+08:00"
     deb:
       urgency: "medium"
-    changes:
-      - "added: Initial release!"
-      - "added: Hello World!"
+    body:
+      added:
+        - Initial release!"
+        - Hello World!"

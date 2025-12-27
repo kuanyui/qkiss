@@ -4,7 +4,7 @@
   "description": "Schema for a unified changelog format that can be converted to RPM and Debian changelogs.",
   "type": "object",
   "properties": {
-    "changelogs": {
+    "releases": {
       "type": "array",
       "description": "List of changelog entries, each describing one release.",
       "items": {
@@ -60,20 +60,59 @@
             },
             "required": [ "urgency"]
           },
-          "changes": {
-            "type": "array",
-            "description": "List of human-readable change descriptions for this release. \nFormat: `TYPE: MESSAGE`\n`TYPE := added|fixed|removed|style|performance|build|security`",
-            "items": {
-              "type": "string",
-              "pattern": "^(added|fixed|removed|style|performance|build|security):\\s.+",
-              "description": "Single change description line."
+          "body": {
+            "type": "object",
+            "description": "Structured changelog categories. Each key is optional, but if present must be an array of change descriptions.",
+            "properties": {
+              "added": {
+                "type": "array",
+                "description": "New features or functionality introduced.",
+                "items": { "type": "string" },
+                "minItems": 1
+              },
+              "fixed": {
+                "type": "array",
+                "description": "Bug fixes or corrections applied.",
+                "items": { "type": "string" },
+                "minItems": 1
+              },
+              "removed": {
+                "type": "array",
+                "description": "Features or functionality removed.",
+                "items": { "type": "string" },
+                "minItems": 1
+              },
+              "style": {
+                "type": "array",
+                "description": "Stylistic changes (UI, art, etc.).",
+                "items": { "type": "string" },
+                "minItems": 1
+              },
+              "performance": {
+                "type": "array",
+                "description": "Performance improvements.",
+                "items": { "type": "string" },
+                "minItems": 1
+              },
+              "build": {
+                "type": "array",
+                "description": "Build system or tooling changes.",
+                "items": { "type": "string" },
+                "minItems": 1
+              },
+              "security": {
+                "type": "array",
+                "description": "Security fixes or improvements.",
+                "items": { "type": "string" },
+                "minItems": 1
+              }
             },
-            "minItems": 1
+            "additionalProperties": false
           }
         },
-        "required": ["srcpkgname", "version", "date", "maintainer", "deb", "changes"]
+        "required": ["srcpkgname", "version", "date", "maintainer", "deb", "body"]
       }
     }
   },
-  "required": ["changelogs"]
+  "required": ["releases"]
 }
