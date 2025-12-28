@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=QKiSS
+GenericName=KiSS Kisekae File Viewer
+GenericName[ja]=KiSS 着せ替えファイルビューアー
+GenericName[zh_TW]=KiSS 換裝檔檢視器
+Comment=Modern KiSS file viewer implemented in Qt6
+Comment[ja]=Qt6 で実装した現代の KISS 着せ替えファイルビューアー
+Comment[zh_TW]=以 Qt6 實做的現代 KISS 換裝檔檢視器
+Categories=Game;
+Exec=@PROJECT_NAME@ %f
+Icon=@PROJECT_NAME@
+StartupWMClass=@PROJECT_NAME@
+MimeType=application/x-lha;application/lha;application/x-lzh
+Type=Application
+StartupNotify=true
+NoDisplay=false
+Terminal=false

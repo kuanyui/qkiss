@@ -4,8 +4,8 @@
 NAME    := qkiss
 TARBALL := generated/$(NAME).tar.gz
 
-## The working directory for `rpmbuild` (Default: `~/rpmbuild`)
-RPMBUILD_DIR := $(HOME)/rpmbuild
+## The working directory for `rpmbuild` (Default: `/tmp/rpmbuild/NAME/`)
+RPMBUILD_DIR := /tmp/rpmbuild/$(NAME)
 
 ## The root folder of all folders of configured CMake presets. This value is defined in `CMakePresets.json`
 BUILD_ROOT_DIR := build
@@ -44,8 +44,7 @@ help:     ## Show this self-documented help message.
 
 clean:    ## Clean all built files (CMake & built icons).
 	rm -rf resources/tango-icon-remixer/dist/*
-	rm -rf $(BUILD_ROOT_DIR)/*
-	rm -rf build/*
+	rm -rf "$(BUILD_ROOT_DIR)"/*
 	rm -rf generated/*
 
 clean-cmake-cache: clean   ## Clean all + cmake cache
@@ -74,11 +73,12 @@ $(CONFIGURED_RPM_SPEC_FILE):
 $(TARBALL):  ## Create tarball in this repo root dir.
 	tar --exclude-vcs --exclude=$(TARBALL) --exclude=$(BUILD_ROOT_DIR) --exclude=generated --exclude=samples --exclude=$(TARBALL) --transform='s,^\./,$(NAME)-master/,' -czf $@ .
 
-build-rpm-local-rpmbuild: $(TARBALL)   ## Local build rpm with `rpmbuild` into `~/rpmbuild`
+build-rpm-local-rpmbuild: $(TARBALL)   ## Local build rpm with `rpmbuild`
+	rm -rf "$(RPMBUILD_DIR)"/*
 	make $(CONFIGURED_RPM_SPEC_FILE)
-	rm -rf ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}/*
-	mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+	mkdir -p $(RPMBUILD_DIR)/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	cp -f $(TARBALL) $(RPMBUILD_DIR)/SOURCES/
 	cp -f ${CONFIGURED_RPM_SPEC_FILE} $(RPMBUILD_DIR)/SPECS/
-	rpmbuild -ba $(RPMBUILD_DIR)/SPECS/$(NAME).spec
+
+	rpmbuild -ba --define "_topdir $(RPMBUILD_DIR)" $(RPMBUILD_DIR)/SPECS/$(NAME).spec
 

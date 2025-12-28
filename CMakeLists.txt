@@ -41,9 +41,6 @@ endif()
 set(PROJECT_GENERATED_DIR "${CMAKE_SOURCE_DIR}/generated" CACHE PATH
     "Directory for generated, platform independent files (e.g. XDG icon theme, changelogs...etc)")
 
-configure_file("packaging/${PROJECT_NAME}.spec.in" "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
-
-
 # ==============================================
 # CPack
 # ==============================================
@@ -80,7 +77,7 @@ set(EXTRA_LIBS)
 # Expand CMake macro (configure)
 # ==============================================
 configure_file("${CMAKE_SOURCE_DIR}/src/version.h.in"
-               "${CMAKE_BINARY_DIR}//version.h" @ONLY)
+               "${CMAKE_BINARY_DIR}/version.h" @ONLY)
 list(APPEND EXTRA_INCS "${CMAKE_BINARY_DIR}")
 
 
@@ -155,11 +152,8 @@ endif()
 file(READ ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
     CHANGELOG_FOR_RPM_SPEC)
 
-configure_file(
-    "packaging/${PROJECT_NAME}.spec.in"
-    "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec"
-    @ONLY
-)
+configure_file("packaging/${PROJECT_NAME}.spec.in"    "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
+configure_file("packaging/${PROJECT_NAME}.desktop.in" "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.desktop" @ONLY)
 
 # ===============================================
 # Python :: Build XDG-compatible icon theme pack
@@ -369,7 +363,7 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
     endforeach()
 
     # XDG desktop file
-    install(FILES ${CMAKE_SOURCE_DIR}/packaging/qkiss.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+    install(FILES "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.desktop" DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 endif()
 
 install(TARGETS qkiss
