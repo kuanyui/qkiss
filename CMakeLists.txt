@@ -1,15 +1,23 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Read VERSION file to get version
-file(READ "${CMAKE_SOURCE_DIR}/VERSION" VERSION_FILE_CONTENT)
-string(STRIP "${VERSION_FILE_CONTENT}" VERSION_FILE_CONTENT)
+file(READ "${CMAKE_SOURCE_DIR}/VERSION" PROJ_VERSION)
+string(STRIP "${PROJ_VERSION}" PROJ_VERSION)
+
+set(PROJ_SUMMARY [[A modern implementation of KISS (KISekae Set system) viewer in Qt]])
+set(PROJ_DESCRIPTION [[QKiSS is a modern implementation of KiSS (Kisekae Set System) viewer in Qt 6.
+
+Kisekae is short for "kisekae ningyou" (Japanese: "着せ替え人形", meaning "dress-up dolls").
+
+KiSS originated from Japanese otaku subculture and personal computer enthusiasts community (particularly those using the NEC PC-9800 series) in the 1990s, and gained popularity throughout the 1990s and early 2000s.
+
+This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a lost age before Internet was polluted by AI-generated junk (this project does use some AI though). After all, life is frightening enough as it is; the real world is a hot mess, while nijigen and isekai remain a pure promised land.]])
 
 project(qkiss
-    VERSION ${VERSION_FILE_CONTENT}
-    DESCRIPTION "A modern implementation of KISS (KISekae Set system) viewer in Qt"
+    VERSION ${PROJ_VERSION}
+    DESCRIPTION ${PROJ_SUMMARY}
     HOMEPAGE_URL "https://github.com/kuanyui/qkiss"
     LANGUAGES CXX)
-
 
 # ==============================================
 # Option :: Profiling

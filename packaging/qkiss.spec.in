@@ -7,7 +7,7 @@
 Name:            @PROJECT_NAME@
 Version:         @PROJECT_VERSION@
 Release:         0
-Summary:         @PROJECT_DESCRIPTION@
+Summary:         @PROJ_SUMMARY@
 License:         GPL-3.0-or-later
 
 Group:           Amusements/Toys/Graphics
@@ -35,12 +35,7 @@ BuildRequires:  python3dist(pyyaml)
 BuildRequires:  inkscape
 
 %description
-QKiSS is a modern implementation of KiSS (Kisekae Set System) viewer in Qt 6.
-
-Kisekae is short for "kisekae ningyou" (Japanese: "着せ替え人形", meaning "dress-up dolls").
-
-KiSS originated from and was popular in Japanese otaku and personal computer enthusiast (NEC PC-9800 series) subculture in the 1990s.
-
+@PROJ_DESCRIPTION@
 
 %prep
 # -n specifies the child folder name after extract, instead of tarball itselves filename .
