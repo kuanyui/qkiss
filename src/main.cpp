@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("qkiss.io");
     QCoreApplication::setOrganizationName("QKiSS");
     QCoreApplication::setApplicationName("QKiSS");
+    QGuiApplication::setDesktopFileName("qkiss");  // avoid wrong icon bouncing when startup in KDE
     QApplication app(argc, argv);
     QFile qssFile(":/styles/main.qss");
     [[maybe_unused]] bool success = qssFile.open(QFile::ReadOnly);
