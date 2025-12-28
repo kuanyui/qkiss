@@ -2,13 +2,13 @@
 
 ## Name of this project
 NAME    := qkiss
-TARBALL := $(NAME).tar.gz
+TARBALL := generated/$(NAME).tar.gz
 
 ## The working directory for `rpmbuild` (Default: `~/rpmbuild`)
 RPMBUILD_DIR := $(HOME)/rpmbuild
 
 ## The root folder of all folders of configured CMake presets. This value is defined in `CMakePresets.json`
-CMAKE_PRESETS_ROOT_DIR := build
+BUILD_ROOT_DIR := build
 
 ## Use which CMake preset in `CMakePresets.json`. Default is `release`. (available: `debug`, `release`, `profile`, `minsize`)
 CMAKE_PRESET := release
@@ -44,10 +44,9 @@ help:     ## Show this self-documented help message.
 
 clean:    ## Clean all built files (CMake & built icons).
 	rm -rf resources/tango-icon-remixer/dist/*
-	rm -rf $(CMAKE_PRESETS_ROOT_DIR)/*
+	rm -rf $(BUILD_ROOT_DIR)/*
 	rm -rf build/*
 	rm -rf generated/*
-	rm -f $(TARBALL)
 
 clean-cmake-cache: clean   ## Clean all + cmake cache
 	rm -f CMakeLists.txt.user
@@ -69,11 +68,11 @@ add-license-header:    ## Add license header to all .cpp / .h files
 
 .PHONY: $(CONFIGURED_RPM_SPEC_FILE)
 $(CONFIGURED_RPM_SPEC_FILE):
-	cmake -B $(CMAKE_PRESETS_ROOT_DIR) -S .
+	cmake -B $(BUILD_ROOT_DIR) -S .
 
 .PHONY: $(TARBALL)
 $(TARBALL):  ## Create tarball in this repo root dir.
-	tar --exclude-vcs --exclude=$(TARBALL) --exclude=$(CMAKE_PRESETS_ROOT_DIR) --exclude=samples --exclude=$(TARBALL) --transform='s,^\./,$(NAME)-master/,' -czf $@ .
+	tar --exclude-vcs --exclude=$(TARBALL) --exclude=$(BUILD_ROOT_DIR) --exclude=generated --exclude=samples --exclude=$(TARBALL) --transform='s,^\./,$(NAME)-master/,' -czf $@ .
 
 build-rpm-local-rpmbuild: $(TARBALL)   ## Local build rpm with `rpmbuild` into `~/rpmbuild`
 	make $(CONFIGURED_RPM_SPEC_FILE)

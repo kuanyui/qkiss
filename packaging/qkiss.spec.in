@@ -7,12 +7,12 @@
 Name:            qkiss
 Version:         @PROJECT_VERSION@
 Release:         0
-Summary:         A modern implementation of KISS (KISekae Set system) in Qt
+Summary:         @PROJECT_DESCRIPTION@
 License:         GPL-3.0-or-later
 
 Group:           Amusements/Toys/Graphics
-URL:             https://github.com/kuanyui/qkiss
-Source0:         https://github.com/kuanyui/qkiss/archive/refs/heads/master.tar.gz#/%{name}.tar.gz
+URL:             @PROJECT_HOMEPAGE_URL@
+Source0:         @PROJECT_HOMEPAGE_URL@/archive/refs/heads/master.tar.gz#/%{name}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -30,8 +30,8 @@ Requires(post): desktop-file-utils
 Recommends:     lha
 Recommends:     unar
 
-BuildRequires:  python-jsonschema
-BuildRequires:  python-PyYAML
+BuildRequires:  python3dist(jsonschema)
+BuildRequires:  python3dist(pyyaml)
 
 %description
 QKiSS is a modern implementation of KiSS (Kisekae Set System) viewer in Qt 6.

@@ -29,6 +29,7 @@
 #include <QCoreApplication>
 #include <QRegularExpression>
 #include "configfile.h"
+#include "version.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -67,7 +68,7 @@ void AboutDialog::setupUi()
     layoutHeader->addWidget(labelAppName);
 
     QLabel *labelAppVersion = new QLabel{this};
-    labelAppVersion->setText("1.0.0");
+    labelAppVersion->setText(PROJECT_VERSION);
     labelAppVersion->setAlignment(Qt::AlignmentFlag::AlignCenter);
     labelAppVersion->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
     layoutHeader->addWidget(labelAppVersion);

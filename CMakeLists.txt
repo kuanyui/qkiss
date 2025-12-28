@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(qkiss VERSION 0.0.1 LANGUAGES CXX)
+project(qkiss
+    VERSION 0.9.0
+    DESCRIPTION "A modern implementation of KISS (KISekae Set system) viewer in Qt"
+    HOMEPAGE_URL "https://github.com/kuanyui/qkiss"
+    LANGUAGES CXX)
 
-find_package(Python3 REQUIRED Interpreter)
 
 # ==============================================
 # Option :: Profiling
@@ -25,17 +28,12 @@ if(ENABLE_PROFILING)
         endif()
     elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         # macOS: Instruments / Time Profiler (no -pg)
-        message(STATUS
-            "Profiling enabled on macOS: using RelWithDebInfo + Instruments"
-        )
+        message(STATUS "Profiling enabled on macOS: using RelWithDebInfo + Instruments" )
     elseif(MSVC)
         # Windows: Visual Studio Profiler / ETW
-        message(STATUS
-            "Profiling enabled on Windows: use Visual Studio Profiler or ETW"
-        )
+        message(STATUS "Profiling enabled on Windows: use Visual Studio Profiler or ETW" )
     endif()
 endif()
-
 
 # ==============================================
 # Folder for generated, platform independent files
@@ -43,37 +41,8 @@ endif()
 set(PROJECT_GENERATED_DIR "${CMAKE_SOURCE_DIR}/generated" CACHE PATH
     "Directory for generated, platform independent files (e.g. XDG icon theme, changelogs...etc)")
 
-# ==============================================
-# Generate changelogs from YAML for RPM & DEB
-# ==============================================
-
-execute_process(
-    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
-            --input-yaml ${CMAKE_SOURCE_DIR}/CHANGELOG.yaml
-            --output-rpm ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
-            --output-deb ${PROJECT_GENERATED_DIR}/changelogs_deb.txt
-            --output-markdown ${PROJECT_GENERATED_DIR}/changelogs.md
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    RESULT_VARIABLE _ret)
-
-if(NOT _ret EQUAL 0)
-    message(FATAL_ERROR "Failed to generate RPM changelog")
-endif()
-
-file(READ ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
-    CHANGELOG_FOR_RPM_SPEC)
-
-configure_file(
-    "packaging/${PROJECT_NAME}.spec.in"
-    "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec"
-    @ONLY
-)
-
-
-# ==============================================
-# Expand CMake macro (configure)
-# ==============================================
 configure_file("packaging/${PROJECT_NAME}.spec.in" "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
+
 
 # ==============================================
 # CPack
@@ -106,6 +75,13 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTool
 set(EXTRA_INCS)
 set(EXTRA_DEFS)
 set(EXTRA_LIBS)
+
+# ==============================================
+# Expand CMake macro (configure)
+# ==============================================
+configure_file("${CMAKE_SOURCE_DIR}/src/version.h.in"
+               "${CMAKE_BINARY_DIR}//version.h" @ONLY)
+list(APPEND EXTRA_INCS "${CMAKE_BINARY_DIR}")
 
 
 # ===============================================
@@ -154,9 +130,39 @@ if(LibArchive_FOUND)
 endif()
 
 
+# ==============================================
+# Python :: Find Python interprepter for scripts
+# ==============================================
+find_package(Python3 REQUIRED Interpreter)
+
+# ==============================================
+# Python :: Generate changelogs from YAML for RPM & DEB
+# ==============================================
+
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
+            --input-yaml ${CMAKE_SOURCE_DIR}/CHANGELOG.yaml
+            --output-rpm ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
+            --output-deb ${PROJECT_GENERATED_DIR}/changelogs_deb.txt
+            --output-markdown ${PROJECT_GENERATED_DIR}/changelogs.md
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    RESULT_VARIABLE _ret)
+
+if(NOT _ret EQUAL 0)
+    message(FATAL_ERROR "Failed to generate RPM changelog")
+endif()
+
+file(READ ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
+    CHANGELOG_FOR_RPM_SPEC)
+
+configure_file(
+    "packaging/${PROJECT_NAME}.spec.in"
+    "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec"
+    @ONLY
+)
 
 # ===============================================
-# Build Icons
+# Python :: Build XDG-compatible icon theme pack
 # ===============================================
 set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
 set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
@@ -342,8 +348,8 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
     # NOTE: `install()` will only be triggered when `cmake --install` or `make install` or (rpm spec's) `%cmake_install`, so you won't see them when developing.
 
     # XDG icon theme :: png files
-    message(STATUS "DEBUG CMAKE_SOURCE_DIR === ${CMAKE_SOURCE_DIR}")
-    message(STATUS "DEBUG ICON_PNG_XDG_THEME_DIR === ${ICON_PNG_XDG_THEME_DIR}")
+    message(STATUS "[DEBUG] CMAKE_SOURCE_DIR === ${CMAKE_SOURCE_DIR}")
+    message(STATUS "[DEBUG] ICON_PNG_XDG_THEME_DIR === ${ICON_PNG_XDG_THEME_DIR}")
     file(GLOB_RECURSE iconPngFiles "${ICON_PNG_XDG_THEME_DIR}/*/apps/qkiss.png")
     foreach(iconAbsFilePath ${iconPngFiles})
         get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
