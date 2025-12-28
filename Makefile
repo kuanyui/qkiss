@@ -2,7 +2,11 @@
 
 ## Name of this project
 NAME    := qkiss
-TARBALL := generated/$(NAME).tar.gz
+## Version, gotten from `./VERSION` file.
+VERSION := $(shell cat VERSION)
+
+TARBALL_BASENAME := $(NAME)-$(VERSION)
+TARBALL_PATH := generated/$(TARBALL_BASENAME).tar.gz
 
 ## The working directory for `rpmbuild` (Default: `/tmp/rpmbuild/NAME/`)
 RPMBUILD_DIR := /tmp/rpmbuild/$(NAME)
@@ -16,7 +20,7 @@ CMAKE_PRESET := release
 ## the `.spec` file whose @VAR@ are already expanded by `cmake`
 CONFIGURED_RPM_SPEC_FILE := generated/$(NAME).spec
 
-help:     ## Show this self-documented help message.
+help:    ## Show this self-documented help message.
 	@# Some operating system / Linux distro may use `mawk` (e.g. Ubuntu), so prefer more portable `perl` over `awk`.
 	@export S=`basename $${SHELL}`; if [ $${S} != "zsh" ] && [ $${S} != "fish" ]; then echo "(Tip: You are using \`$${S}\`, but you can consider to use \`zsh\` or \`fish\` because they support tab compoletions for Makefile targets & variables.)"; fi
 
@@ -47,8 +51,18 @@ clean:    ## Clean all built files (CMake & built icons).
 	rm -rf "$(BUILD_ROOT_DIR)"/*
 	rm -rf generated/*
 
-clean-cmake-cache: clean   ## Clean all + cmake cache
+clean-cmake-cache: clean   ## Clean all (built files & CMake cache)
 	rm -f CMakeLists.txt.user
+
+# ██████╗ ███████╗██╗   ██╗    ████████╗ ██████╗  ██████╗ ██╗     ███████╗
+# ██╔══██╗██╔════╝██║   ██║    ╚══██╔══╝██╔═══██╗██╔═══██╗██║     ██╔════╝
+# ██║  ██║█████╗  ██║   ██║       ██║   ██║   ██║██║   ██║██║     ███████╗
+# ██║  ██║██╔══╝  ╚██╗ ██╔╝       ██║   ██║   ██║██║   ██║██║     ╚════██║
+# ██████╔╝███████╗ ╚████╔╝        ██║   ╚██████╔╝╚██████╔╝███████╗███████║
+# ╚═════╝ ╚══════╝  ╚═══╝         ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
+###
+### -- Development Tools ----------------------------------------
+
 
 install-git-hooks:     ## Install git-hooks and commit-template.
 	cp scripts/git_hooks/commit-msg .git/hooks/commit-msg
@@ -65,20 +79,52 @@ uninstall-git-hooks:     ## Install git-hooks and commit-template.
 add-license-header:    ## Add license header to all .cpp / .h files
 	./scripts/add_license_header.py
 
+
+# ████████╗ █████╗ ██████╗ ██████╗  █████╗ ██╗     ██╗
+# ╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║     ██║
+#    ██║   ███████║██████╔╝██████╔╝███████║██║     ██║
+#    ██║   ██╔══██║██╔══██╗██╔══██╗██╔══██║██║     ██║
+#    ██║   ██║  ██║██║  ██║██████╔╝██║  ██║███████╗███████╗
+#    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝
+###
+### -- Tarball & Packaging --------------------------------------
+
+
 .PHONY: $(CONFIGURED_RPM_SPEC_FILE)
-$(CONFIGURED_RPM_SPEC_FILE):
+$(CONFIGURED_RPM_SPEC_FILE):    # (Internal, for tarball) Run cmake to configure RPM `.spec.in`
 	cmake -B $(BUILD_ROOT_DIR) -S .
 
-.PHONY: $(TARBALL)
-$(TARBALL):  ## Create tarball in this repo root dir.
-	tar --exclude-vcs --exclude=$(TARBALL) --exclude=$(BUILD_ROOT_DIR) --exclude=generated --exclude=samples --exclude=$(TARBALL) --transform='s,^\./,$(NAME)-master/,' -czf $@ .
 
-build-rpm-local-rpmbuild: $(TARBALL)   ## Local build rpm with `rpmbuild`
+.PHONY: gitversion.cmake
+gitversion.cmake:    # (For tarball) Because tarball doesn't contain .git history so store commit hash into .cmake file.
+	echo 'set(GIT_COMMIT_HASH "$(shell git rev-parse --short HEAD)")' > $@
+	echo 'set(GIT_COMMIT_TIME_UNIX_SEC "$(shell git show --no-patch --format=%ct HEAD)")' >> $@
+
+.PHONY: $(TARBALL_PATH)
+$(TARBALL_PATH): gitversion.cmake   # (Internal, for tarball)
+	tar --exclude-vcs \
+	    --exclude=$(TARBALL_PATH) \
+		--exclude=$(BUILD_ROOT_DIR) \
+		--exclude=CMakeLists.txt.user \
+		--exclude=generated \
+		--exclude=dist \
+		--exclude=__pycache__ \
+		--exclude=humanity_0.4.6 \
+		--exclude=tango-icon-theme-0.8.90 \
+		--exclude=samples \
+		--exclude=$(TARBALL_PATH) \
+		--transform='s|^[.]/|$(TARBALL_BASENAME)/|' -czf $@ .
+	rm gitversion.cmake
+
+.PHONY: release-tarball
+release-tarball: $(TARBALL_PATH)    ## Archive the codebase along with `gitversion.cmake` as tarball
+
+.PHONY: build-rpm-local-rpmbuild
+build-rpm-local-rpmbuild: release-tarball $(CONFIGURED_RPM_SPEC_FILE)   ## Local build rpm with `rpmbuild`
 	rm -rf "$(RPMBUILD_DIR)"/*
-	make $(CONFIGURED_RPM_SPEC_FILE)
 	mkdir -p $(RPMBUILD_DIR)/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-	cp -f $(TARBALL) $(RPMBUILD_DIR)/SOURCES/
+	cp -f $(TARBALL_PATH) $(RPMBUILD_DIR)/SOURCES/
 	cp -f ${CONFIGURED_RPM_SPEC_FILE} $(RPMBUILD_DIR)/SPECS/
 
-	rpmbuild -ba --define "_topdir $(RPMBUILD_DIR)" $(RPMBUILD_DIR)/SPECS/$(NAME).spec
+	rpmbuild -ba --define "_topdir $(RPMBUILD_DIR)" "$(RPMBUILD_DIR)/SPECS/$(NAME).spec"
 

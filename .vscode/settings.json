@@ -14,7 +14,8 @@
         "*.tcc": "cpp",
         "*.ts": "xml",
         "optional": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "VERSION": "plaintext"
     },
     "python.analysis.languageServerMode": "default",
     "python.analysis.typeCheckingMode": "strict",

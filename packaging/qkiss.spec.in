@@ -1,10 +1,10 @@
-# spec file for package qkiss
+# spec file for package @PROJECT_NAME@
 #
 # Copyright (c) 2025 kuanyui
 #
 # License: GPLv3
 
-Name:            qkiss
+Name:            @PROJECT_NAME@
 Version:         @PROJECT_VERSION@
 Release:         0
 Summary:         @PROJECT_DESCRIPTION@
@@ -12,7 +12,7 @@ License:         GPL-3.0-or-later
 
 Group:           Amusements/Toys/Graphics
 URL:             @PROJECT_HOMEPAGE_URL@
-Source0:         @PROJECT_HOMEPAGE_URL@/archive/refs/heads/master.tar.gz#/%{name}.tar.gz
+Source0:         @PROJECT_HOMEPAGE_URL@/archive/refs/heads/master.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -32,6 +32,7 @@ Recommends:     unar
 
 BuildRequires:  python3dist(jsonschema)
 BuildRequires:  python3dist(pyyaml)
+BuildRequires:  inkscape
 
 %description
 QKiSS is a modern implementation of KiSS (Kisekae Set System) viewer in Qt 6.
@@ -43,7 +44,7 @@ KiSS originated from and was popular in Japanese otaku and personal computer ent
 
 %prep
 # -n specifies the child folder name after extract, instead of tarball itselves filename .
-%setup -n %{name}-master
+%setup -n %{name}-%{version}
 
 
 %build
