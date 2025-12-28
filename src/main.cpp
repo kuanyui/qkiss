@@ -96,10 +96,29 @@ int main(int argc, char *argv[])
     // Or envvar
     // export QT_MESSAGE_PATTERN="[%{type}][%{file}:%{line}] %{message}"
     originalMessageHandler = qInstallMessageHandler(customizedMessageHandler);
-    QCoreApplication::setOrganizationDomain("qkiss.io");
-    QCoreApplication::setOrganizationName("QKiSS");
-    QCoreApplication::setApplicationName("QKiSS");
-    QGuiApplication::setDesktopFileName("qkiss");  // avoid wrong icon bouncing when startup in KDE
+    /*
+     * Qt doc: "This property holds the **Internet domain** of the organization that wrote this application".
+     * For macOS only.
+     * - If set to `qkiss.app`, macOS converts it to `app.qkiss.<APP>.plist`
+     */
+    QCoreApplication::setOrganizationDomain("qkiss.app");
+    /*
+     * For new project, lowercase is safer.
+     * - Windows:
+     *    - HKEY_CURRENT_USER\Software\<ORG>\<APP>
+     *    - C:\Users\<user>\AppData\{Roaming,Local}\<ORG>\<APP>.ini
+     * - macOS:
+     *    - (If domain is set) ~/Library/Preferences/<reversed(DOMAIN)>.<APP>.plist
+     *    - (If no domain set) ~/Library/Preferences/<ORG>.<APP>.plist
+     * - Linux:
+     *    - ~/.config/<ORG>/<APP>.conf
+     */
+    QCoreApplication::setOrganizationName("qkiss");
+    QCoreApplication::setApplicationName("qkiss");
+
+    // avoid wrong icon bouncing when startup in KDE
+    QGuiApplication::setDesktopFileName("qkiss");
+
     QApplication app(argc, argv);
     QFile qssFile(":/styles/main.qss");
     [[maybe_unused]] bool success = qssFile.open(QFile::ReadOnly);
