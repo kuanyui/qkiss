@@ -69,7 +69,7 @@ CodeTextEditSyntaxHighlighter::CodeTextEditSyntaxHighlighter(QTextDocument *pare
 
 void CodeTextEditSyntaxHighlighter::highlightBlock(const QString &text)
 {
-    auto stxPlt = m_themeManager.syntaxFormatPalette();
+    auto stxPlt = m_themeManager.syntaxHighlightFormatPalette();
     // Kcf line
     static QRegularExpression reKcf(R"#(^%(\S+))#");
     QRegularExpressionMatchIterator it = reKcf.globalMatch(text);

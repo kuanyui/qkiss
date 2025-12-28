@@ -23,6 +23,8 @@
 #include <QVBoxLayout>
 
 #include "translationmanager.h"
+#include "thememanager.h"
+
 LogViewer::LogViewer(QWidget *parent)
     : QWidget{parent},
       m_treeWidget{new ZTreeWidget{this}}
@@ -32,32 +34,33 @@ LogViewer::LogViewer(QWidget *parent)
 
 void LogViewer::appendLog(QtMsgType type, const QString &msg)
 {
+    auto &clrs = ThemeManager::instance().generalTextColorPalette();
     QTreeWidgetItem *item = new QTreeWidgetItem();
     switch (type) {
         case QtMsgType::QtDebugMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
         item->setText(0, tr("Debug"));  // 🐛
-        item->setForeground(0, QBrush(Qt::gray));
+        item->setForeground(0, QBrush(clrs.gray));
         break;
         case QtMsgType::QtInfoMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxInformation));
         item->setText(0, tr("Info"));  // ℹ️
-        item->setForeground(0, QBrush(QColor("#61AFEF")));
+        item->setForeground(0, QBrush(clrs.blue));
         break;
         case QtMsgType::QtWarningMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxWarning));
         item->setText(0, tr("Warning"));   // ⚠️
-        item->setForeground(0, QBrush(Qt::yellow));
+        item->setForeground(0, QBrush(clrs.yellow));
         break;
         case QtMsgType::QtCriticalMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
         item->setText(0, tr("Error"));   // ⛔
-        item->setForeground(0, QBrush(Qt::red));
+        item->setForeground(0, QBrush(clrs.red));
         break;
         case QtMsgType::QtFatalMsg:
         item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
         item->setText(0, tr("Fatal"));  // ⛔
-        item->setForeground(0, QBrush(Qt::red));
+        item->setForeground(0, QBrush(clrs.red));
         break;
     }
     item->setText(1, msg);

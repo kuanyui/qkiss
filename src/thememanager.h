@@ -26,7 +26,18 @@
 class ThemeManager : public QObject
 {
     Q_OBJECT
-    struct SyntaxFormat {
+    struct GeneralTextColorPalette {
+        QColor magenta;
+        QColor red;
+        QColor orange;
+        QColor yellow;
+        QColor green;
+        QColor cyan;
+        QColor blue;
+        QColor purple;
+        QColor gray;
+    };
+    struct SyntaxHighlightFormatPalette {
         QTextCharFormat magenta;
         QTextCharFormat red;
         QTextCharFormat orange;
@@ -47,15 +58,18 @@ public:
     };
     static ThemeManager &instance();
     ThemeType themeType() const;
-    const SyntaxFormat &syntaxFormatPalette() const;
+    const GeneralTextColorPalette &generalTextColorPalette() const;
+    const SyntaxHighlightFormatPalette &syntaxHighlightFormatPalette() const;
 
 signals:
 
 private:
     explicit ThemeManager(QObject *parent = nullptr);
     ~ThemeManager();
-    SyntaxFormat m_pltDark;
-    SyntaxFormat m_pltLight;
+    GeneralTextColorPalette m_darkTextPlt;
+    GeneralTextColorPalette m_lightTextPlt;
+    SyntaxHighlightFormatPalette m_darkSyntaxPlt;
+    SyntaxHighlightFormatPalette m_lightSyntaxPlt;
 };
 
 #endif // THEMEMANAGER_H

@@ -30,6 +30,7 @@ ThemeManager &ThemeManager::instance()
     return instance;
 }
 
+
 ThemeManager::ThemeType ThemeManager::themeType() const
 {
     // OPTIMIZE: Cache this value
@@ -45,40 +46,73 @@ ThemeManager::ThemeType ThemeManager::themeType() const
     return text.lightness() < window.lightness() ? ThemeType::Light : ThemeType::Dark;
 }
 
-const ThemeManager::SyntaxFormat &ThemeManager::syntaxFormatPalette() const
+const ThemeManager::GeneralTextColorPalette &ThemeManager::generalTextColorPalette() const
 {
-    return themeType() == ThemeType::Light ? m_pltLight : m_pltDark;
+    return themeType() == ThemeType::Light ? m_lightTextPlt : m_darkTextPlt;
+}
+
+const ThemeManager::SyntaxHighlightFormatPalette &ThemeManager::syntaxHighlightFormatPalette() const
+{
+    return themeType() == ThemeType::Light ? m_lightSyntaxPlt : m_darkSyntaxPlt;
 }
 
 ThemeManager::ThemeManager(QObject *parent)
     : QObject{parent}
 {
-    qDebug() << "ThemeManager ctor()";
-    m_pltDark.magenta.setForeground(QColor::fromString("#ff4ea3"_L1));
-    m_pltDark.red.setForeground(QColor::fromString("#ef2929"_L1));
-    m_pltDark.orange.setForeground(QColor::fromString("#ff8700"_L1));
-    m_pltDark.yellow.setForeground(QColor::fromString("#ffd700"_L1));
-    m_pltDark.green.setForeground(QColor::fromString("#afff00"_L1));
-    m_pltDark.cyan.setForeground(QColor::fromString("#87ffff"_L1));
-    m_pltDark.blue.setForeground(QColor::fromString("#5fafd7"_L1));
-    m_pltDark.purple.setForeground(QColor::fromString("#af5fff"_L1));
-    m_pltDark.gray.setForeground(QColor::fromString("#767676"_L1));
-    m_pltDark.curLineHlBg = QColor::fromString("#3a3a3a"_L1);
-    m_pltDark.lineNumBg = QColor::fromString("#4e4e4e"_L1);
-    m_pltDark.lineNumFg = QColor::fromString("#c6c6c6"_L1);
+    // ====================================================================
+    // Light
+    // ====================================================================
 
-    m_pltLight.magenta.setForeground(QColor::fromString("#ff1f8b"_L1));
-    m_pltLight.red.setForeground(QColor::fromString("#cc0000"_L1));
-    m_pltLight.orange.setForeground(QColor::fromString("#ff5d17"_L1));
-    m_pltLight.yellow.setForeground(QColor::fromString("#c4a000"_L1));
-    m_pltLight.green.setForeground(QColor::fromString("#008700"_L1));
-    m_pltLight.cyan.setForeground(QColor::fromString("#18b2b2"_L1));
-    m_pltLight.blue.setForeground(QColor::fromString("#005faf"_L1));
-    m_pltLight.purple.setForeground(QColor::fromString("#b218b2"_L1));
-    m_pltLight.gray.setForeground(QColor::fromString("#b2b2b2"_L1));
-    m_pltLight.curLineHlBg = QColor::fromString("#e7e7df"_L1);
-    m_pltLight.lineNumBg = QColor::fromString("#d7d7af"_L1);
-    m_pltLight.lineNumFg = QColor::fromString("#87875f"_L1);
+    m_lightTextPlt.magenta = QColor::fromString("#ff1f8b"_L1);
+    m_lightTextPlt.red = QColor::fromString("#cc0000"_L1);
+    m_lightTextPlt.orange = QColor::fromString("#ff5d17"_L1);
+    m_lightTextPlt.yellow = QColor::fromString("#c4a000"_L1);
+    m_lightTextPlt.green = QColor::fromString("#008700"_L1);
+    m_lightTextPlt.cyan = QColor::fromString("#18b2b2"_L1);
+    m_lightTextPlt.blue = QColor::fromString("#005faf"_L1);
+    m_lightTextPlt.purple = QColor::fromString("#b218b2"_L1);
+    m_lightTextPlt.gray = QColor::fromString("#b2b2b2"_L1);
+
+    m_lightSyntaxPlt.magenta.setForeground(m_lightTextPlt.magenta);
+    m_lightSyntaxPlt.red.setForeground(m_lightTextPlt.red);
+    m_lightSyntaxPlt.orange.setForeground(m_lightTextPlt.orange);
+    m_lightSyntaxPlt.yellow.setForeground(m_lightTextPlt.yellow);
+    m_lightSyntaxPlt.green.setForeground(m_lightTextPlt.green);
+    m_lightSyntaxPlt.cyan.setForeground(m_lightTextPlt.cyan);
+    m_lightSyntaxPlt.blue.setForeground(m_lightTextPlt.blue);
+    m_lightSyntaxPlt.purple.setForeground(m_lightTextPlt.purple);
+    m_lightSyntaxPlt.gray.setForeground(m_lightTextPlt.gray);
+    m_lightSyntaxPlt.curLineHlBg = QColor::fromString("#e7e7df"_L1);
+    m_lightSyntaxPlt.lineNumBg = QColor::fromString("#d7d7af"_L1);
+    m_lightSyntaxPlt.lineNumFg = QColor::fromString("#87875f"_L1);
+
+    // ====================================================================
+    // Dark
+    // ====================================================================
+
+    m_darkTextPlt.magenta = QColor::fromString("#ff4ea3"_L1);
+    m_darkTextPlt.red = QColor::fromString("#ef2929"_L1);
+    m_darkTextPlt.orange = QColor::fromString("#ff8700"_L1);
+    m_darkTextPlt.yellow = QColor::fromString("#ffd700"_L1);
+    m_darkTextPlt.green = QColor::fromString("#afff00"_L1);
+    m_darkTextPlt.cyan = QColor::fromString("#87ffff"_L1);
+    m_darkTextPlt.blue = QColor::fromString("#5fafd7"_L1);
+    m_darkTextPlt.purple = QColor::fromString("#af5fff"_L1);
+    m_darkTextPlt.gray = QColor::fromString("#767676"_L1);
+
+    m_darkSyntaxPlt.magenta.setForeground(m_darkTextPlt.magenta);
+    m_darkSyntaxPlt.red.setForeground(m_darkTextPlt.red);
+    m_darkSyntaxPlt.orange.setForeground(m_darkTextPlt.orange);
+    m_darkSyntaxPlt.yellow.setForeground(m_darkTextPlt.yellow);
+    m_darkSyntaxPlt.green.setForeground(m_darkTextPlt.green);
+    m_darkSyntaxPlt.cyan.setForeground(m_darkTextPlt.cyan);
+    m_darkSyntaxPlt.blue.setForeground(m_darkTextPlt.blue);
+    m_darkSyntaxPlt.purple.setForeground(m_darkTextPlt.purple);
+    m_darkSyntaxPlt.gray.setForeground(m_darkTextPlt.gray);
+    m_darkSyntaxPlt.curLineHlBg = QColor::fromString("#3a3a3a"_L1);
+    m_darkSyntaxPlt.lineNumBg = QColor::fromString("#4e4e4e"_L1);
+    m_darkSyntaxPlt.lineNumFg = QColor::fromString("#c6c6c6"_L1);
+
 }
 
 ThemeManager::~ThemeManager()

@@ -199,7 +199,7 @@ void CodeTextEdit::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
     QTextEdit::ExtraSelection selection;
-    auto clrplt = m_themeManager.syntaxFormatPalette();
+    auto clrplt = m_themeManager.syntaxHighlightFormatPalette();
     QColor lineColor = QColor(clrplt.curLineHlBg);
     selection.format.setBackground(lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -212,7 +212,7 @@ void CodeTextEdit::highlightCurrentLine()
 
 void CodeTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
-    auto clrplt = m_themeManager.syntaxFormatPalette();
+    auto clrplt = m_themeManager.syntaxHighlightFormatPalette();
     QPainter painter{qobject_cast<QWidget*>(m_lineNumberArea)};
     painter.fillRect(event->rect(), clrplt.lineNumBg);
     QTextBlock block = firstVisibleBlock();
