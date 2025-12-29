@@ -17,8 +17,14 @@ BUILD_ROOT_DIR := build
 ## Use which CMake preset in `CMakePresets.json`. Default is `release`. (available: `debug`, `release`, `profile`, `minsize`)
 CMAKE_PRESET := release
 
-## the `.spec` file whose @VAR@ are already expanded by `cmake`
+## The `.spec` file whose @VAR@ are already expanded by `cmake`
 CONFIGURED_RPM_SPEC_FILE := generated/$(NAME).spec
+
+## The `debian/` folder, and all files whose @VAR@ are already expanded by `cmake`
+CONFIGURED_DEBIAN_DIR := generated/debian/
+
+## For OpenBuildService, a package directory for `osc`. (ex: `~/osc/project:user/package/`)
+OSC_PACKAGE_PATH :=
 
 help:    ## Show this self-documented help message.
 	@# Some operating system / Linux distro may use `mawk` (e.g. Ubuntu), so prefer more portable `perl` over `awk`.
@@ -89,11 +95,12 @@ add-license-header:    ## Add license header to all .cpp / .h files
 ###
 ### -- Tarball & Packaging --------------------------------------
 
-
-.PHONY: $(CONFIGURED_RPM_SPEC_FILE)
-$(CONFIGURED_RPM_SPEC_FILE):    # (Internal, for tarball) Run cmake to configure RPM `.spec.in`
+.PHONY: _configure
+_configure:    # (internal, for tarball) Run `cmake -B` to configure files
 	cmake -B $(BUILD_ROOT_DIR) -S .
 
+.PHONY: $(CONFIGURED_RPM_SPEC_FILE)
+$(CONFIGURED_RPM_SPEC_FILE): _configure   # (Internal, for tarball) Run cmake to configure RPM `.spec.in`
 
 .PHONY: gitversion.cmake
 gitversion.cmake:    # (For tarball) Because tarball doesn't contain .git history so store commit hash into .cmake file.
@@ -101,7 +108,8 @@ gitversion.cmake:    # (For tarball) Because tarball doesn't contain .git histor
 	echo 'set(GIT_COMMIT_TIME_UNIX_SEC "$(shell git show --no-patch --format=%ct HEAD)")' >> $@
 
 .PHONY: $(TARBALL_PATH)
-$(TARBALL_PATH): gitversion.cmake   # (Internal, for tarball)
+$(TARBALL_PATH): gitversion.cmake _configure  # (Internal, for tarball)
+	cp -r generated/debian ./
 	tar --exclude-vcs \
 	    --exclude=$(TARBALL_PATH) \
 		--exclude=$(BUILD_ROOT_DIR) \
@@ -115,12 +123,13 @@ $(TARBALL_PATH): gitversion.cmake   # (Internal, for tarball)
 		--exclude=$(TARBALL_PATH) \
 		--transform='s|^[.]/|$(TARBALL_BASENAME)/|' -czf $@ .
 	rm gitversion.cmake
+	rm -r debian/
 
 .PHONY: release-tarball
 release-tarball: $(TARBALL_PATH)    ## Archive the codebase along with `gitversion.cmake` as tarball
 
 .PHONY: build-rpm-local-rpmbuild
-build-rpm-local-rpmbuild: release-tarball $(CONFIGURED_RPM_SPEC_FILE)   ## Local build rpm with `rpmbuild`
+build-rpm-local-rpmbuild: $(TARBALL_PATH) $(CONFIGURED_RPM_SPEC_FILE) _configure  ## Local build rpm with `rpmbuild`
 	rm -rf "$(RPMBUILD_DIR)"/*
 	mkdir -p $(RPMBUILD_DIR)/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	cp -f $(TARBALL_PATH) $(RPMBUILD_DIR)/SOURCES/
@@ -128,3 +137,15 @@ build-rpm-local-rpmbuild: release-tarball $(CONFIGURED_RPM_SPEC_FILE)   ## Local
 
 	rpmbuild -ba --define "_topdir $(RPMBUILD_DIR)" "$(RPMBUILD_DIR)/SPECS/$(NAME).spec"
 
+
+_check_osc_var:
+ifeq ($(strip $(OSC_PACKAGE_PATH)),)
+	$(error Makefile variable OSC_PACKAGE_PATH is not defined.)
+endif
+ifeq ($(wildcard $(OSC_PACKAGE_PATH)/.),)
+	$(error Directory '$(OSC_PACKAGE_PATH)' does not exist)
+endif
+
+osc-cp: _check_osc_var $(TARBALL_PATH)    ## Copy necessary files to osc package folder
+	cp -f $(TARBALL_PATH) $(OSC_PACKAGE_PATH)/
+	cp -f ${CONFIGURED_RPM_SPEC_FILE} $(OSC_PACKAGE_PATH)/
