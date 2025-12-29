@@ -187,7 +187,7 @@ execute_process(
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
             --input-yaml ${CMAKE_SOURCE_DIR}/CHANGELOG.yaml
             --output-rpm ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
-            --output-deb ${PROJECT_GENERATED_DIR}/changelogs_deb.txt
+            --output-deb ${PROJECT_GENERATED_DIR}/debian/changelog
             --output-markdown ${PROJECT_GENERATED_DIR}/changelogs.md
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     RESULT_VARIABLE _ret)
@@ -198,9 +198,6 @@ endif()
 
 file(READ ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
     CHANGELOG_FOR_RPM_SPEC)
-
-configure_file("packaging/${PROJECT_NAME}.spec.in"    "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
-configure_file("packaging/${PROJECT_NAME}.desktop.in" "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.desktop" @ONLY)
 
 # ===============================================
 # Python :: Build XDG-compatible icon theme pack
@@ -239,9 +236,39 @@ add_custom_command(
 add_custom_target(icontheme DEPENDS ${ICON_GENERATED_STAMP_FILE})
 
 # ===============================================
-# main
+# Packaging related files
 # ===============================================
 
+configure_file("packaging/${PROJECT_NAME}.desktop.in" "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.desktop" @ONLY)
+configure_file("packaging/${PROJECT_NAME}.spec.in"    "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
+
+file(GLOB debian_input_files
+    RELATIVE "${CMAKE_SOURCE_DIR}/packaging/debian"
+             "${CMAKE_SOURCE_DIR}/packaging/debian/*")
+
+foreach(file_name IN LISTS debian_input_files)
+    message(STATUS "${file_name}")
+    set(src "packaging/debian/${file_name}")
+    if(IS_DIRECTORY "${src}")
+        continue()
+    endif()
+    if(file_name MATCHES "\\.in$")
+        # Remove ".in"
+        string(REGEX REPLACE "\\.in$" "" out_name "${file_name}")
+        set(dst "${PROJECT_GENERATED_DIR}/debian/${out_name}")
+        configure_file("${src}" "${dst}" @ONLY)
+    else()
+        set(dst "${PROJECT_GENERATED_DIR}/debian/${file_name}")
+        file(COPY "${src}" DESTINATION "${PROJECT_GENERATED_DIR}/debian" )
+    endif()
+endforeach()
+file(COPY   "${CMAKE_SOURCE_DIR}/packaging/debian/source/format"
+     DESTINATION "${PROJECT_GENERATED_DIR}/debian/source/")
+
+
+# ===============================================
+# main
+# ===============================================
 
 set(PROJECT_SOURCES
         src/main.cpp

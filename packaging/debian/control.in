@@ -1,0 +1,25 @@
+Source: @PROJECT_NAME@
+Section: games
+Priority: optional
+Maintainer: kuanyui <azazabc123@gmail.com>
+Build-Depends:
+ cmake,
+ g++,
+ pkg-config,
+ qt6-base-dev,
+ libarchive-dev,
+ desktop-file-utils,
+ python3-jsonschema,
+ python3-yaml,
+ inkscape
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+Homepage: @PROJECT_HOMEPAGE_URL@
+
+Package: @PROJECT_NAME@
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: lha, unar
+Description: @PROJ_SUMMARY@
+
+@PROJ_DESCRIPTION@
