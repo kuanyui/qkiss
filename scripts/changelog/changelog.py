@@ -274,6 +274,12 @@ def main(argv: List[str]) -> None:
                     help="Path to the input changelog YAML file (default: ./schema.json)")
     ap.add_argument("--json-schema", "-j", required=False, type=Path, default=Path(__file__).parent / 'schema.json',
                     help="Path to JSON Schema file used to validate the YAML")
+    ap.add_argument("--version-file", "-v", required=False, type=Path,
+                    help="""Path to VERSION file, usually it should be placed at the repo root.
+
+- Can be easily read and used in CMakeLists.txt and Makefile.
+- Will be used to compared with the latest version (at the top of file) in YAML file.
+""")
     ap.add_argument("--output-rpm", "-r", type=Path,
                     help="""Output a plain text file containing changelog in RPM .spec format at this path,
                     you need to insert the contents of the outputted file  after `changelog` in .spec file manually (e.g. via CMake's `configure_file()`)""")

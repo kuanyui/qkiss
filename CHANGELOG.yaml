@@ -2,20 +2,6 @@
 releases:
   - srcpkgname: "qkiss"
     maintainer: "kuanyui <azazabc123@gmail.com>"
-    version: "0.9.1"
-    date: "2025-12-14T12:00:00+08:00"
-    deb:
-      urgency: "medium"
-    body:
-      fixed:
-        - "Potential segmentation fault"
-      added:
-        - "A new feature"
-      build:
-        - "Improve CMakeLists.txt"
-
-  - srcpkgname: "qkiss"
-    maintainer: "kuanyui <azazabc123@gmail.com>"
     version: "0.9.0"
     date: "2025-12-13T12:00:00+08:00"
     deb:

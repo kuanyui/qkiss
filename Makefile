@@ -1,5 +1,3 @@
-.PHONY: help clear install-git-hooks add-license-header
-
 ## Name of this project
 NAME    := qkiss
 ## Version, gotten from `./VERSION` file.
@@ -24,8 +22,11 @@ CONFIGURED_RPM_SPEC_FILE := generated/$(NAME).spec
 CONFIGURED_DEBIAN_DIR := generated/debian/
 
 ## For OpenBuildService, a package directory for `osc`. (ex: `~/osc/project:user/package/`)
-OSC_PACKAGE_DIR :=
+OSC_PACKAGE_DIR ?=
+# (expand ~ as $HOME)
+override OSC_PACKAGE_DIR := $(subst ~,$(HOME),$(OSC_PACKAGE_DIR))
 
+.PHONY: help
 help:    ## Show this self-documented help message.
 	@# Some operating system / Linux distro may use `mawk` (e.g. Ubuntu), so prefer more portable `perl` over `awk`.
 	@export S=`basename $${SHELL}`; if [ $${S} != "zsh" ] && [ $${S} != "fish" ]; then echo "(Tip: You are using \`$${S}\`, but you can consider to use \`zsh\` or \`fish\` because they support tab compoletions for Makefile targets & variables.)"; fi
@@ -52,11 +53,13 @@ help:    ## Show this self-documented help message.
 		gawk 'match($$0, /^([a-zA-Z0-9_-]+):.*?## (.*)$$/, m){printf "\033[32m%-30s\033[0m %s\n", m[1], m[2]} match($$0, /^[ \\t]*### *(.*)/, m){printf "\033[34m%s\033[0m\n", m[1]}' $(MAKEFILE_LIST); \
 	fi
 
+.PHONY: clean
 clean:    ## Clean all built files (CMake & built icons).
 	rm -rf resources/tango-icon-remixer/dist/*
 	rm -rf "$(BUILD_ROOT_DIR)"/*
 	rm -rf generated/*
 
+.PHONY: clean-cmake-cache
 clean-cmake-cache: clean   ## Clean all (built files & CMake cache)
 	rm -f CMakeLists.txt.user
 
@@ -69,7 +72,7 @@ clean-cmake-cache: clean   ## Clean all (built files & CMake cache)
 ###
 ### -- Development Tools ----------------------------------------
 
-
+.PHONY: install-git-hooks
 install-git-hooks:     ## Install git-hooks and commit-template.
 	cp scripts/git_hooks/commit-msg .git/hooks/commit-msg
 	cp scripts/git_hooks/pre-commit .git/hooks/pre-commit
@@ -77,11 +80,13 @@ install-git-hooks:     ## Install git-hooks and commit-template.
 	chmod +x .git/hooks/pre-commit
 	git config commit.template scripts/git_hooks/commit-template.txt
 
+.PHONY: uninstall-git-hooks
 uninstall-git-hooks:     ## Install git-hooks and commit-template.
 	rm .git/hooks/commit-msg
 	rm .git/hooks/pre-commit
 	git config --unset commit.template
 
+.PHONY: add-license-header
 add-license-header:    ## Add license header to all .cpp / .h files
 	./scripts/add_license_header.py
 
@@ -146,6 +151,19 @@ ifeq ($(wildcard $(OSC_PACKAGE_DIR)/.),)
 	$(error Directory '$(OSC_PACKAGE_DIR)' does not exist)
 endif
 
+.PHONY: osc-cp
 osc-cp: _check_osc_var $(TARBALL_PATH)    ## Copy necessary files to osc package folder
-	cp -f $(TARBALL_PATH) $(OSC_PACKAGE_DIR)/
-	cp -f ${CONFIGURED_RPM_SPEC_FILE} $(OSC_PACKAGE_DIR)/
+	cp -f "$(TARBALL_PATH)" "$(OSC_PACKAGE_DIR)/"
+	cp -f "${CONFIGURED_RPM_SPEC_FILE}" "$(OSC_PACKAGE_DIR)/"
+
+.PHONY: osc-create-debian-dsc
+osc-create-debian-dsc: _check_osc_var osc-cp
+	cd "$(OSC_PACKAGE_DIR)/"; \
+    tar xvf "$(TARBALL_BASENAME).tar.gz"; \
+	dpkg-source -b "$(TARBALL_BASENAME)"; \
+	rm -rf "$(TARBALL_BASENAME)"
+
+.PHONY: osc-build-debian
+osc-build-debian: _check_osc_var osc-create-debian-dsc
+	cd "$(OSC_PACKAGE_DIR)/"; \
+	osc build --vm-type=kvm --vm-memory=12000M Debian_12 x86_64

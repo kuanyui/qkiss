@@ -17,7 +17,7 @@ LICENSE_TEMPLATE: str = f"""\
 /**************************************************************************
 * QKiSS - A modern implementation of KiSS (Kisekae) viewer in Qt 6.
 *
-* Copyright (C) 2024 - {YEAR} ono ono (kuanyui) <azazabc123@gmail.com>
+* Copyright (C) {YEAR} ono ono (kuanyui) <azazabc123@gmail.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
