@@ -24,7 +24,7 @@ CONFIGURED_RPM_SPEC_FILE := generated/$(NAME).spec
 CONFIGURED_DEBIAN_DIR := generated/debian/
 
 ## For OpenBuildService, a package directory for `osc`. (ex: `~/osc/project:user/package/`)
-OSC_PACKAGE_PATH :=
+OSC_PACKAGE_DIR :=
 
 help:    ## Show this self-documented help message.
 	@# Some operating system / Linux distro may use `mawk` (e.g. Ubuntu), so prefer more portable `perl` over `awk`.
@@ -139,13 +139,13 @@ build-rpm-local-rpmbuild: $(TARBALL_PATH) $(CONFIGURED_RPM_SPEC_FILE) _configure
 
 
 _check_osc_var:
-ifeq ($(strip $(OSC_PACKAGE_PATH)),)
-	$(error Makefile variable OSC_PACKAGE_PATH is not defined.)
+ifeq ($(strip $(OSC_PACKAGE_DIR)),)
+	$(error Makefile variable OSC_PACKAGE_DIR is not defined.)
 endif
-ifeq ($(wildcard $(OSC_PACKAGE_PATH)/.),)
-	$(error Directory '$(OSC_PACKAGE_PATH)' does not exist)
+ifeq ($(wildcard $(OSC_PACKAGE_DIR)/.),)
+	$(error Directory '$(OSC_PACKAGE_DIR)' does not exist)
 endif
 
 osc-cp: _check_osc_var $(TARBALL_PATH)    ## Copy necessary files to osc package folder
-	cp -f $(TARBALL_PATH) $(OSC_PACKAGE_PATH)/
-	cp -f ${CONFIGURED_RPM_SPEC_FILE} $(OSC_PACKAGE_PATH)/
+	cp -f $(TARBALL_PATH) $(OSC_PACKAGE_DIR)/
+	cp -f ${CONFIGURED_RPM_SPEC_FILE} $(OSC_PACKAGE_DIR)/
