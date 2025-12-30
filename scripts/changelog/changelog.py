@@ -177,8 +177,10 @@ def to_deb(changelog: RootData) -> str:
     """
     lines: List[str] = []
     for release in changelog.releases:
-        # Debian header: "name (version-1) unstable; urgency=medium"
-        header = f"{release.srcpkgname} ({release.version}-1) unstable; urgency={release.deb_urgency}"
+        # Debian header:
+        # When debian/source/format is 3.0 (quilt):  "name (version-1) unstable; urgency=medium"
+        # When debian/source/format is 3.0 (native): "name (version) unstable; urgency=medium"
+        header = f"{release.srcpkgname} ({release.version}) unstable; urgency={release.deb_urgency}"
         lines.append(header)
         lines.append("")
         for cate, logs in release.body:
