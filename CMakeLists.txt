@@ -343,25 +343,67 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 # ===============================================
 # i18n
 # ===============================================
+set(ALL_TR_LANGS ja_JP ja_KS ja_OJ ja_AR ja_MK ja_ME zh_TW)
+
+# if(QT_VERSION VERSION_GREATER_EQUAL "6.7")
 # https://doc.qt.io/Qt-6/qtlinguist-cmake-qt-add-translations.html#sources-and-include-directories
-qt_standard_project_setup(
-    I18N_SOURCE_LANGUAGE en_US   # This is buggy
-    I18N_TRANSLATED_LANGUAGES ja_JP ja_KS ja_OJ ja_AR ja_MK ja_ME zh_TW
-    )
+# Since Qt6.3
+# qt_standard_project_setup(
+#     I18N_SOURCE_LANGUAGE en_US   # This is buggy
+#     I18N_TRANSLATED_LANGUAGES ${ALL_TR_LANGS}
+#     )
 
-
-# 1. This function will create the CMake target `update_translations` that scans all source files with `lupdate` and creates and updates the .ts files.
-# 2. This function will create the CMake target `release_translations` that generates the .qm files from the .ts files. This target is built by default.
-qt_add_translations(qkiss      # add translations to `qkiss` target
-    TS_FILE_BASE qkiss
-    TS_OUTPUT_DIRECTORY i18n
-    LUPDATE_OPTIONS
-        -no-obsolete
-    IMMEDIATE_CALL
-)
+# https://doc.qt.io/qt-6/qtlinguist-cmake-qt-add-translations.html
+# Since Qt 6.2
+#
+# 1. This function will create the CMake target `update_translations` that scans
+#    all source files with `lupdate` and creates and updates the .ts files.
+# 2. This function will create the CMake target `release_translations` that
+#    generates the .qm files from the .ts files. This target is built by
+#    default.
+# qt_add_translations(${PROJECT_NAME}      # add translations to `${PROJECT_NAME}` target
+#     # `lupdate` will scan all `tr()` and output .ts file to:
+#     TS_OUTPUT_DIRECTORY i18n             # (since Qt6.9) i18n/
+#     TS_FILE_BASE ${PROJECT_NAME}         # (since Qt6.7) ${TS_FILE_BASE}_${LANG}.ts
+#     LUPDATE_OPTIONS                      # (since Qt6.2, deprecated)
+#         -no-obsolete
+#     IMMEDIATE_CALL                       # (since Qt6.7)
+# )
 # By default, the generated .qm files are embedded in a Qt resource that will be
 # linked into the targets passed with TARGETS. The files in the resource are
 # accessible under the resource prefix "/i18n".
+
+
+# Qt6.2 ~ Qt6.7
+set(TS_FILES "")
+foreach(LANG   IN LISTS   ALL_TR_LANGS)
+    list(APPEND TS_FILES "i18n/${PROJECT_NAME}_${LANG}.ts")
+endforeach()
+# Scan all source files with `lupdate` to generate *.ts (Create a CMake umbrella target `update_translations`)
+qt_add_lupdate(${PROJECT_NAME} TS_FILES ${TS_FILES}
+    OPTIONS -no-obsolete
+)
+# Compile *.ts -> *.qm (Create a CMake umbrella target `release_translations`)
+qt_add_lrelease(${PROJECT_NAME} TS_FILES ${TS_FILES}
+    QM_FILES_OUTPUT_VARIABLE QM_FILES
+)
+# Add &.qm files to target
+target_sources(${PROJECT_NAME} PRIVATE ${QM_FILES})
+
+# Qt resource doesn't accept absolute path as resource path,
+# so guild-generated files (.qm) requires QT_RESOURCE_ALIAS
+foreach(qm IN LISTS QM_FILES)
+    get_filename_component(qm_name "${qm}" NAME)
+    set_source_files_properties("${qm}"
+        PROPERTIES
+            QT_RESOURCE_ALIAS "${qm_name}"
+    )
+endforeach()
+# *.qm -> *.rcc
+qt_add_resources(${PROJECT_NAME} translations
+    PREFIX "/i18n"
+    FILES ${QM_FILES}
+)
 
 # ===============================================
 # (i18n ends here)

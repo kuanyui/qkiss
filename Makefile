@@ -59,9 +59,10 @@ clean:    ## Clean all built files (CMake & built icons).
 	rm -rf "$(BUILD_ROOT_DIR)"/*
 	rm -rf generated/*
 
-.PHONY: clean-cmake-cache
-clean-cmake-cache: clean   ## Clean all (built files & CMake cache)
+.PHONY: clean-all
+clean-all: clean   ## Clean all (built files & CMake cache)
 	rm -f CMakeLists.txt.user
+	rm -f .qtcreator/CMakeLists.txt.user
 
 # ██████╗ ███████╗██╗   ██╗    ████████╗ ██████╗  ██████╗ ██╗     ███████╗
 # ██╔══██╗██╔════╝██║   ██║    ╚══██╔══╝██╔═══██╗██╔═══██╗██║     ██╔════╝
