@@ -76,3 +76,6 @@ CMakeLists.txt.user*
 build/
 dist/
 generated/
+
+# QtCreator generate its CMakeLists.txt.user to here...
+.qtcreator/
