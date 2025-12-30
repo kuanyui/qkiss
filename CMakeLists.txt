@@ -13,6 +13,11 @@ KiSS originated from Japanese otaku subculture and personal computer enthusiasts
 
 This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a lost age before Internet was polluted by AI-generated junk (this project does use some AI though). After all, life is frightening enough as it is; the real world is a hot mess, while nijigen and isekai remain a pure promised land.]])
 
+# Descriptions`debian/control`
+string(REGEX REPLACE "\n" "\n " PROJ_DESCRIPTION_DEBIAN "${PROJ_DESCRIPTION}")
+string(REGEX REPLACE "\n \n" "\n .\n" PROJ_DESCRIPTION_DEBIAN "${PROJ_DESCRIPTION_DEBIAN}")
+set(PROJ_DESCRIPTION_DEBIAN "${PROJ_SUMMARY}\n ${PROJ_DESCRIPTION_DEBIAN}")
+
 project(qkiss
     VERSION ${PROJ_VERSION}
     DESCRIPTION ${PROJ_SUMMARY}

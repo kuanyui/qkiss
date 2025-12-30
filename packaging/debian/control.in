@@ -20,6 +20,4 @@ Package: @PROJECT_NAME@
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: lha, unar
-Description: @PROJ_SUMMARY@
-
-@PROJ_DESCRIPTION@
+Description: @PROJ_DESCRIPTION_DEBIAN@
