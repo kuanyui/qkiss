@@ -1,3 +1,10 @@
+# ██╗   ██╗ █████╗ ██████╗ ██╗ █████╗ ██████╗ ██╗     ███████╗███████╗
+# ██║   ██║██╔══██╗██╔══██╗██║██╔══██╗██╔══██╗██║     ██╔════╝██╔════╝
+# ██║   ██║███████║██████╔╝██║███████║██████╔╝██║     █████╗  ███████╗
+# ╚██╗ ██╔╝██╔══██║██╔══██╗██║██╔══██║██╔══██╗██║     ██╔══╝  ╚════██║
+#  ╚████╔╝ ██║  ██║██║  ██║██║██║  ██║██████╔╝███████╗███████╗███████║
+#   ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝╚══════╝
+
 ## Name of this project
 NAME    := qkiss
 ## Version, gotten from `./VERSION` file.
@@ -26,32 +33,71 @@ OSC_PACKAGE_DIR ?=
 # (expand ~ as $HOME)
 override OSC_PACKAGE_DIR := $(subst ~,$(HOME),$(OSC_PACKAGE_DIR))
 
+# ██████╗ ███████╗███████╗██╗███╗   ██╗███████╗
+# ██╔══██╗██╔════╝██╔════╝██║████╗  ██║██╔════╝
+# ██║  ██║█████╗  █████╗  ██║██╔██╗ ██║█████╗
+# ██║  ██║██╔══╝  ██╔══╝  ██║██║╚██╗██║██╔══╝
+# ██████╔╝███████╗██║     ██║██║ ╚████║███████╗
+# ╚═════╝ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═══╝╚══════╝
+
+define print_title
+printf "\n"; \
+printf "\033[36m=============================================================\033[0m\n"; \
+printf "\033[36m %s \033[0m\n" $(1); \
+printf "\033[36m=============================================================\033[0m\n" ;
+endef
+
+define __DOC_QUICK_START__
+# Links
+- Github: https://github.com/kuanyui/qkiss
+
+# About this Makefile
+- Use `make` or `make help` to show this help info.
+- To set variables, use `make VAR1=foo VAR2=bar target`
+
+endef
+export __DOC_QUICK_START__
+
+
+define __DOC_OSC_BUILD__
+========================================================
+# Then run:
+osc build --clean --vm-type=kvm --vm-memory 8192 Debian_12 x86_64
+
+# If failed, build witth --shell without --clean:
+stty intr `Ctrl+v Ctrl+] Enter`
+osc build --shell --vm-type=kvm --vm-memory 8192 Debian_12 x86_64
+
+# With `--shell`, `/home/abuild/` should be empty (because it's before extracting tarball...):
+ls /usr/src/packages/SOURCES/
+dpkg-source -x /usr/src/packages/SOURCES/*.dsc
+cd $(TARBALL_BASENAME)
+cd /home/abuild && dpkg-source -x /.build-srcdir/*.dsc && cd $(TARBALL_BASENAME)/ && mkdir -p build && cd build && cmake ..
+endef
+export __DOC_OSC_BUILD__
+
+
 .PHONY: help
 help:    ## Show this self-documented help message.
 	@# Some operating system / Linux distro may use `mawk` (e.g. Ubuntu), so prefer more portable `perl` over `awk`.
 	@export S=`basename $${SHELL}`; if [ $${S} != "zsh" ] && [ $${S} != "fish" ]; then echo "(Tip: You are using \`$${S}\`, but you can consider to use \`zsh\` or \`fish\` because they support tab compoletions for Makefile targets & variables.)"; fi
-
 	@if command -v perl >/dev/null 2>&1; then \
-		printf "\033[36m=============================================================\033[0m\n" ; \
-		printf "\033[36m Variables                                                   \033[0m\n" ; \
-		printf "\033[36m=============================================================\033[0m\n" ; \
-		perl -ne 'if (/^## /) { $$comment = $$_; $$next = <>; if ($$next =~ /^([A-Za-z0-9_]+)\s*[:?+]?=\s*(.*)$$/) { printf "\033[35m%-30s\033[0m %s", $$1, substr($$comment, 3); } }' $(MAKEFILE_LIST); \
-		printf "\n"; \
-		printf "\033[36m=============================================================\033[0m\n" ; \
-		printf "\033[36m Targets                                                     \033[0m\n" ; \
-		printf "\033[36m=============================================================\033[0m\n" ; \
-		perl -ne 'if (/^([a-zA-Z0-9_-]+):.*?## (.*)$$/) { printf "\033[32m%-30s\033[0m %s\n", $$1, $$2; } elsif (/^[ \t]*### *(.*)/) { print "\033[34m$$1\033[0m\n"; }' $(MAKEFILE_LIST); \
+		$(call print_title,"Quick Start") \
+	  	printf "$$__DOC_QUICK_START__" | perl -pe 's/`([^`]+)`/\033[33m`\1`\033[0m/g; s/^(#+ .+)/\033[32m\1\033[0m/g; s/(https?:\/\/[a-zA-Z0-9.\/_#?-]+)/\033[34m\1\033[0m/g'; \
+		$(call print_title,"Variables") \
+		perl -ne 'if (/^## /) { $$desc = substr($$_, 3); $$next = <>; if ($$next =~ /^([A-Za-z0-9_]+)\s*[:?+]?=\s*(.*)$$/) { $$target=$$1; $$desc=~s/(`[^`]*?`)/\033[33m\1\033[0m/g; printf "\033[35m%-30s\033[0m %s", $$target, $$desc; } }' $(MAKEFILE_LIST); \
+		$(call print_title,"Targets") \
+		perl -ne 'if (/^([a-zA-Z0-9_-]+):.*?## (.*)$$/) { $$target = $$1; $$desc = $$2; if ($$desc =~ /DEPRECATED/) { printf "\033[2m%-30s %s\033[0m\n", $$target, $$desc; } else { $$desc=~s/(`[^`]*?`)/\033[33m\1\033[0m/g; printf "\033[32m%-30s\033[0m %s\n", $$target, $$desc; } } elsif (/^[ \t]*### *(.*)/) { print "\033[34m$$1\033[0m\n"; }' $(MAKEFILE_LIST); \
 	else \
-		printf "\033[36m=============================================================\033[0m\n" ; \
-		printf "\033[36m Variables                                                   \033[0m\n" ; \
-		printf "\033[36m=============================================================\033[0m\n" ; \
-		gawk '/^## /{comment=$$0; getline; if ($$1 ~ /^[A-Za-z0-9_]+$$/ && match($$0, /^[^:?+]*[:?+]?=/, m)) printf "\033[35m%-30s\033[0m %s\n", $$1, substr(comment, 4)}' $(MAKEFILE_LIST) ; \
-		printf "\n"; \
-		printf "\033[36m=============================================================\033[0m\n" ; \
-		printf "\033[36m Targets                                                     \033[0m\n" ; \
-		printf "\033[36m=============================================================\033[0m\n" ; \
-		gawk 'match($$0, /^([a-zA-Z0-9_-]+):.*?## (.*)$$/, m){printf "\033[32m%-30s\033[0m %s\n", m[1], m[2]} match($$0, /^[ \\t]*### *(.*)/, m){printf "\033[34m%s\033[0m\n", m[1]}' $(MAKEFILE_LIST); \
+		$(call print_title,"Quick Start") \
+		printf "$$__DOC_QUICK_START__" | gawk '{gsub(/`[^`]+`/, "\033[33m&\033[0m"); gsub(/^#+ .+/, "\033[32m&\033[0m"); gsub(/https?:\/\/[a-zA-Z0-9.\/_#?-]+/, "\033[34m&\033[0m"); print}' #(MAKEFILE_LIST)\
+		$(call print_title,"Variables") \
+		gawk '/^## /{desc=substr($$0, 4); gsub(/`[^`]*`/, "\033[33m&\033[0m", desc); getline; if ($$1 ~ /^[A-Za-z0-9_]+$$/ && match($$0, /^[^:?+]*[:?+]?=/, m)) printf "\033[35m%-30s\033[0m %s\n", $$1, desc}' $(MAKEFILE_LIST) ; \
+		$(call print_title,"Targets") \
+		gawk 'match($$0, /^([a-zA-Z0-9_-]+):.*?## (.*)$$/, m) { target=m[1]; desc=m[2]; if (desc ~ /DEPRECATED/) { printf "\033[2m%-30s %s\033[0m\n", target, desc } else { gsub(/`[^`]*`/, "\033[33m&\033[0m", desc); printf "\033[32m%-30s\033[0m %s\n", target, desc } } match($$0, /^[ \\t]*### *(.*)/, m){printf "\033[34m%s\033[0m\n", m[1]}' $(MAKEFILE_LIST); \
 	fi
+
+
 
 .PHONY: clean
 clean:    ## Clean all built files (CMake & built icons).
@@ -168,3 +214,9 @@ osc-create-debian-dsc: _check_osc_var osc-cp
 osc-build-debian: _check_osc_var osc-create-debian-dsc
 	cd "$(OSC_PACKAGE_DIR)/"; \
 	osc build --vm-type=kvm --vm-memory=12000M Debian_12 x86_64
+
+
+osc-fix-broken-vm-env: _check_osc_var
+	cd "$(OSC_PACKAGE_DIR)/"; rm -f .osc/_buildinfo* .osc/_buildconfig*
+	# sudo rm -rf /var/cache/build/*
+	sudo rm -rf /var/tmp/build-root-ono/Debian_12-x86_64
