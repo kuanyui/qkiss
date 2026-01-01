@@ -284,56 +284,56 @@ set(PROJECT_SOURCES
         src/archivefile.cpp
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(qkiss
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        resources/application.qrc
-        ${ICON_PNG_GENERATED_QRC}
-        src/parsedcnf.h src/parsedcnf.cpp
-        src/enums.h src/enums.cpp
-        src/encoding.h src/encoding.cpp
-        src/parsedkcf.h src/parsedkcf.cpp
-        src/parsedcel.h src/parsedcel.cpp
-        src/gkissview.h src/gkissview.cpp
-        src/gkissitem.h src/gkissitem.cpp
-        src/gkissscene.h src/gkissscene.cpp
-        src/configfile.h src/configfile.cpp
-        src/fkiss.h src/fkiss.cpp
-        src/fkissvariant.h src/fkissvariant.cpp
 
-        src/fkissparser.h src/fkissparser.cpp
-        src/fkissruntime.h src/fkissruntime.cpp
-        src/archiveprocessorexternallha.h src/archiveprocessorexternallha.cpp
-        src/filesystembrowser.h src/filesystembrowser.cpp
-        src/logviewer.h src/logviewer.cpp
-        src/innerfilesbrowser.h src/innerfilesbrowser.cpp
-        src/codetextedit.h src/codetextedit.cpp
-        src/codetexteditlinenumberarea.h src/codetexteditlinenumberarea.cpp
-        src/codetexteditsyntaxhighlighter.h src/codetexteditsyntaxhighlighter.cpp
-        src/thememanager.h src/thememanager.cpp
-        src/fileiconprovider.h src/fileiconprovider.cpp
-        src/iconbuttondelegate.h src/iconbuttondelegate.cpp
-        src/abstractarchiveprocessor.h src/abstractarchiveprocessor.cpp
-        src/archiveprocessorlibarchive.h src/archiveprocessorlibarchive.cpp
-        src/archiveprocessorfactory.h src/archiveprocessorfactory.cpp
-        src/audioplayer.h src/audioplayer.cpp
-        src/iteminspector.h src/iteminspector.cpp
-        src/texteditsearchbar.h src/texteditsearchbar.cpp
-        src/codeeditor.h src/codeeditor.cpp
-        src/archiveprocessorexternalunar.h src/archiveprocessorexternalunar.cpp
-        src/archiveprocessorcnfinfilesystem.h src/archiveprocessorcnfinfilesystem.cpp
-        src/preferencedialog.h src/preferencedialog.cpp
-        src/zcombobox.h src/zcombobox.cpp
-        src/zgroupbox.h src/zgroupbox.cpp
-        src/aboutdialog.h src/aboutdialog.cpp
-        src/zlabel.h src/zlabel.cpp
-        src/translationmanager.h src/translationmanager.cpp
-        src/casepreservedstring.h src/casepreservedstring.cpp
-        src/ztranslator.h src/ztranslator.cpp
-        src/ztreewidget.h src/ztreewidget.cpp
+qt_add_executable(qkiss
+    MANUAL_FINALIZATION
+    ${PROJECT_SOURCES}
+    resources/application.qrc
+    ${ICON_PNG_GENERATED_QRC}
+    src/parsedcnf.h src/parsedcnf.cpp
+    src/enums.h src/enums.cpp
+    src/encoding.h src/encoding.cpp
+    src/parsedkcf.h src/parsedkcf.cpp
+    src/parsedcel.h src/parsedcel.cpp
+    src/gkissview.h src/gkissview.cpp
+    src/gkissitem.h src/gkissitem.cpp
+    src/gkissscene.h src/gkissscene.cpp
+    src/configfile.h src/configfile.cpp
+    src/fkiss.h src/fkiss.cpp
+    src/fkissvariant.h src/fkissvariant.cpp
 
-    )
+    src/fkissparser.h src/fkissparser.cpp
+    src/fkissruntime.h src/fkissruntime.cpp
+    src/archiveprocessorexternallha.h src/archiveprocessorexternallha.cpp
+    src/filesystembrowser.h src/filesystembrowser.cpp
+    src/logviewer.h src/logviewer.cpp
+    src/innerfilesbrowser.h src/innerfilesbrowser.cpp
+    src/codetextedit.h src/codetextedit.cpp
+    src/codetexteditlinenumberarea.h src/codetexteditlinenumberarea.cpp
+    src/codetexteditsyntaxhighlighter.h src/codetexteditsyntaxhighlighter.cpp
+    src/thememanager.h src/thememanager.cpp
+    src/fileiconprovider.h src/fileiconprovider.cpp
+    src/iconbuttondelegate.h src/iconbuttondelegate.cpp
+    src/abstractarchiveprocessor.h src/abstractarchiveprocessor.cpp
+    src/archiveprocessorlibarchive.h src/archiveprocessorlibarchive.cpp
+    src/archiveprocessorfactory.h src/archiveprocessorfactory.cpp
+    src/audioplayer.h src/audioplayer.cpp
+    src/iteminspector.h src/iteminspector.cpp
+    src/texteditsearchbar.h src/texteditsearchbar.cpp
+    src/codeeditor.h src/codeeditor.cpp
+    src/archiveprocessorexternalunar.h src/archiveprocessorexternalunar.cpp
+    src/archiveprocessorcnfinfilesystem.h src/archiveprocessorcnfinfilesystem.cpp
+    src/preferencedialog.h src/preferencedialog.cpp
+    src/zcombobox.h src/zcombobox.cpp
+    src/zgroupbox.h src/zgroupbox.cpp
+    src/aboutdialog.h src/aboutdialog.cpp
+    src/zlabel.h src/zlabel.cpp
+    src/translationmanager.h src/translationmanager.cpp
+    src/casepreservedstring.h src/casepreservedstring.cpp
+    src/ztranslator.h src/ztranslator.cpp
+    src/ztreewidget.h src/ztreewidget.cpp
+
+)
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qkiss APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
@@ -381,7 +381,7 @@ foreach(LANG   IN LISTS   ALL_TR_LANGS)
 endforeach()
 # Scan all source files with `lupdate` to generate *.ts (Create a CMake umbrella target `update_translations`)
 qt_add_lupdate(${PROJECT_NAME} TS_FILES ${TS_FILES}
-    OPTIONS -no-obsolete
+    # OPTIONS -no-obsolete   # remove obsolete strings from all *.ts
 )
 # Compile *.ts -> *.qm (Create a CMake umbrella target `release_translations`)
 qt_add_lrelease(${PROJECT_NAME} TS_FILES ${TS_FILES}
@@ -408,21 +408,6 @@ qt_add_resources(${PROJECT_NAME} translations
 # ===============================================
 # (i18n ends here)
 # ===============================================
-else()
-    if(ANDROID)
-        add_library(qkiss SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(qkiss
-            ${PROJECT_SOURCES}
-        )
-    endif()
-
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-endif()
 
 target_compile_definitions(qkiss PRIVATE ${EXTRA_DEFS})
 target_include_directories(qkiss PRIVATE ${EXTRA_INCS})
