@@ -101,11 +101,13 @@ void AboutDialog::setupUi()
     browserInfo->setOpenExternalLinks(true);
     browserInfo->setReadOnly(true);
     browserInfo->setHtml(md2Html(tr(R"(
-QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6.
+QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6, as a complete rebirth inspired by [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) and [GnomeKiSS](https://devel.tlrmx.org/kiss/) on Linux.
 
-Kisekae is short for *"kisekae ningyou"* (Japanese: *着せ替え人形*, meaning *"dress-up dolls"*).
+"Kisekae" comes from the Japanese word "着せ替え人形" (pronunciation: "kisekae ningyou"), meaning "dress-up dolls".
 
-KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.org/wiki/Otaku) and personal computer enthusiast (NEC PC-9800 series) subculture in the 1990s.
+KiSS originated from Japanese [otaku](https://ja.wikipedia.org/wiki/おたく) subculture and personal computer enthusiasts community (particularly those using the [NEC PC-9800 series](https://ja.wikipedia.org/wiki/PC-9800シリーズ)) in the 1990s, and gained popularity throughout the 1990s and early 2000s.
+
+This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a lost age before Internet was polluted by AI-generated junk (this project does use some AI though). After all, life is frightening enough as it is; the real world is a hot mess, while [nijigen](https://ja.wikipedia.org/wiki/2次元) and [isekai](https://w.wiki/4So4) remain a pure promised land.
 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 )")));
