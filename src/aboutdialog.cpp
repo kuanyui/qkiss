@@ -73,7 +73,8 @@ void AboutDialog::setupUi()
     labelAppVersion->setText(PROJECT_VERSION);
     labelAppVersion->setAlignment(Qt::AlignmentFlag::AlignCenter);
     labelAppVersion->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
-    QDateTime commitDateTime = QDateTime::fromSecsSinceEpoch(GIT_COMMIT_TIME_UNIX_SEC, QTimeZone::UTC);
+
+    QDateTime commitDateTime = QDateTime::fromSecsSinceEpoch(GIT_COMMIT_TIME_UNIX_SEC, QTimeZone::utc());  // `QTimeZone::UTC` is since Qt6.5
     QString commitDateTimeStr = commitDateTime.toString("yyyy-MM-dd (ddd) HH:mm 'UTC'");
     labelAppVersion->setToolTip("Commit Hash: %1\nCommit Time: %2"_L1.arg(GIT_COMMIT_HASH, commitDateTimeStr));
     labelAppVersion->setCursor(Qt::CursorShape::WhatsThisCursor);

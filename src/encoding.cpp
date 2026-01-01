@@ -20,6 +20,48 @@
 #include "encoding.h"
 #include <QDebug>
 
+
+namespace {
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
+QStringList stdVectorStringToQStringList(const std::vector<std::string> &vec)
+{
+    QStringList result;
+    result.reserve(static_cast<int>(vec.size()));
+    for (const std::string &s : vec) {
+        result.append(QString::fromUtf8(s));
+    }
+    return result;
+}
+#endif
+
+/**
+ * QDebug::operator<<(const std::basic_string<Char, Args...> &s) is since Qt6.5
+ * QDebug::operator<<(QDebug debug, const std::vector<T, Alloc> &vec) is since Qt6.9
+ */
+class DebugTypeAdapter {
+public:
+    explicit DebugTypeAdapter(const std::vector<std::string> &v) : vec(v) { }
+    const std::vector<std::string> &vec;
+};
+
+QDebug operator<<(QDebug dbg, const DebugTypeAdapter &dataAdapter)
+{
+    QDebugStateSaver saver(dbg);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
+    dbg << stdVectorStringToQStringList(dataAdapter.vec);
+#else
+    dbg << dataAdapter.vec;
+#endif
+    return dbg;
+}
+
+
+}  // Anonymous namespace end here
+
+
+
 #if defined(HAVE_ICU)
 
 #define qd qDebug() << "[ICU] "
@@ -56,7 +98,7 @@ std::string Encoding::innerToUtf8(const std::string& input, const std::vector<st
         }
     }
     if (!icuOpened) {
-        qd << "Tried to open converter in this list, but failed:" << fromEncodings;
+        qd << "Tried to open converter in this list, but failed:" << DebugTypeAdapter(fromEncodings);
         return "";
     }
     int32_t utf8_len = icu::ucnv_toAlgorithmic(icu::UCNV_UTF8, icuConverter, nullptr, 0, input.c_str(), input.length(), &error_code);
@@ -114,7 +156,7 @@ std::string Encoding::innerToUtf8(const std::string& input, const std::vector<st
         }
     }
     if (!opened) {
-        qd << "iconv_open() failed. Already tried:" << fromEncodings;
+        qd << "iconv_open() failed. Already tried:" << DebugTypeAdapter(fromEncodings);
         return "";
     }
     // input buffer

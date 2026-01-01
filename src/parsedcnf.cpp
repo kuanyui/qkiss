@@ -92,7 +92,7 @@ QString ParsedCnfCel::removeQuotesAndNewlines(QString &comment)
 {
     comment = comment.trimmed();
     if (comment.startsWith("\"") && comment.endsWith("\"")) {
-        comment = comment.slice(1, comment.length() - 2);
+        comment = comment.sliced(1, comment.length() - 2);  // QString::slice() is since Qt 6.8
     }
 
     static QRegularExpression reNewline (R"#(\\n)#");
