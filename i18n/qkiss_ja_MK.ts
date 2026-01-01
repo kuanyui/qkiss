@@ -16,7 +16,7 @@
     <message>
         <location filename="../src/aboutdialog.cpp" line="94"/>
         <source>
-QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6, as a complete rebirth inspired by [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) and [GnomeKiSS](https://devel.tlrmx.org/kiss/) on Linux.
+QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6, compatible with KISS/GS and FKiSS 1 &amp; 2 specifications, as a complete rebirth inspired by [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) and [GnomeKiSS](https://devel.tlrmx.org/kiss/) on Linux.
 
 &quot;Kisekae&quot; comes from the Japanese word &quot;着せ替え人形&quot; (pronunciation: &quot;kisekae ningyou&quot;), meaning &quot;dress-up dolls&quot;.
 
@@ -31,7 +31,7 @@ QKiSSはね〜、Qt 6でわざわざ作られた、モダン（笑）の [KiSS (
 
 「Kisekae」っては何？見りゃわかるっしょ！日本語の「着せ替え人形」に決まってるでしょう〜。うわ…そんなの知もらないとか、ざこすぎないじゃない？
 
-でさ〜、KiSSってのは1990年代の日本の[オタク](https://ja.wikipedia.org/wiki/おたく)とか [NEC PC-9800 シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ)にしがみついてたパソコンオタクとか雑魚どもが必死に遊んでたやつ〜。うわ〜、必死すぎて笑えるんだけどwww  
+でさ〜、KiSSってのは1990年代の日本の[オタク](https://ja.wikipedia.org/wiki/おたく)とか [NEC PC-9800 シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ)にしがみついてたパソコンオタクとか雑魚どもが必死に遊んでたやつ〜。うわ〜、必死すぎて笑えるんだけどwww
 
 このプロジェクト？Windows95/98とかGTK+2時代のノスタルジーから生まれたんだって〜。「失われた文明」とか言っちゃってるけど、インターネットがまだAIゴミに汚染されてなかった頃だってさ！でも結局このプロジェクトもAI使ってんじゃん、矛盾乙〜
 

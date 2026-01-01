@@ -4,10 +4,10 @@ cmake_minimum_required(VERSION 3.10)
 file(READ "${CMAKE_SOURCE_DIR}/VERSION" PROJ_VERSION)
 string(STRIP "${PROJ_VERSION}" PROJ_VERSION)
 
-set(PROJ_SUMMARY [[A modern implementation of KISS (KISekae Set system) viewer in Qt]])
-set(PROJ_DESCRIPTION [[QKiSS is a modern implementation of KiSS (Kisekae Set System) viewer in Qt 6.
+set(PROJ_SUMMARY [[A modern implementation of KiSS (KISekae Set system) viewer in Qt]])
+set(PROJ_DESCRIPTION [[QKiSS is a modern implementation of KiSS (Kisekae Set System) viewer in Qt 6, compatible with KISS/GS and FKiSS 1 &amp; 2 specifications, as a complete rebirth inspired by fkiss and GnomeKiSS on Linux.
 
-Kisekae is short for "kisekae ningyou" (Japanese: "着せ替え人形", meaning "dress-up dolls").
+"Kisekae" comes from the Japanese word "着せ替え人形" (pronunciation: "kisekae ningyou"), meaning "dress-up dolls".
 
 KiSS originated from Japanese otaku subculture and personal computer enthusiasts community (particularly those using the NEC PC-9800 series) in the 1990s, and gained popularity throughout the 1990s and early 2000s.
 
