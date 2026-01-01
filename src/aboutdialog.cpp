@@ -103,8 +103,8 @@ void AboutDialog::setupUi()
     browserInfo->setHtml(md2Html(tr(R"(
 QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6.
 
-
 Kisekae is short for *"kisekae ningyou"* (Japanese: *着せ替え人形*, meaning *"dress-up dolls"*).
+
 KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.org/wiki/Otaku) and personal computer enthusiast (NEC PC-9800 series) subculture in the 1990s.
 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).

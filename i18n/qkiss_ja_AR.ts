@@ -18,8 +18,8 @@
         <source>
 QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6.
 
-
 Kisekae is short for *&quot;kisekae ningyou&quot;* (Japanese: *着せ替え人形*, meaning *&quot;dress-up dolls&quot;*).
+
 KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.org/wiki/Otaku) and personal computer enthusiast (NEC PC-9800 series) subculture in the 1990s.
 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
@@ -27,8 +27,8 @@ KiSS originated from and was popular in Japanese [otaku](https://en.wikipedia.or
         <translation>
 QKiSSは、Qt 6で開発されたモダンな [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアでしてよ！
 
-
 Kisekaeとは「着せ替え人形」の略称にございますの。あら、当時の[キモオタ](https://en.wikipedia.org/wiki/Otaku)やパソコンなどにしか興味を持てない平民どもが NEC PC-9800 の前で必死に遊んでいた姿を想像すると、滑稽でなりませんわね？オホホホ！
+
 KiSSは1990年代、そうした哀れな庶民のサブカルチャーから生まれ、彼らにとって唯一の輝きでございましたのよ。まあ、わたくしには到底理解できませんけれど！
 
 [QKiSSのWebサイト](https://github.com/kuanyui/qkiss) を拝見なさるとよろしいですわ！オホホホ！
