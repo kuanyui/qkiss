@@ -213,7 +213,7 @@ osc-create-debian-dsc: _check_osc_var osc-cp
 .PHONY: osc-build-debian
 osc-build-debian: _check_osc_var osc-create-debian-dsc
 	cd "$(OSC_PACKAGE_DIR)/"; \
-	osc build --vm-type=kvm --vm-memory=12000M Debian_12 x86_64
+	osc build --vm-type=kvm --vm-memory=16000M Debian_12 x86_64
 
 
 osc-fix-broken-vm-env: _check_osc_var
