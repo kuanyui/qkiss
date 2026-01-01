@@ -27,13 +27,17 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
         <translation>
-QKiSSは、Qt 6で開発されたモダンな [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアです。
+QKiSS は Qt 6 で実装され、KISS/GS、FKiSS 1・2 の仕様に対応した現代的な [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアであり、Linux 上の [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) や [GnomeKiSS](https://devel.tlrmx.org/kiss/) に着想を得ています。
 
-Kisekaeは*「着せ替え人形」*の略称です。
+「Kisekae」は見ての通り、日本語の「着せ替え人形」に由来し、その意味を持ちます。
 
-KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)やパソコン愛好家（NEC PC-9800シリーズ）のサブカルチャーで生まれ、人気となりました。
+KiSS は日本の 1990 年代の[オタク](https://ja.wikipedia.org/wiki/おたく) サブカルチャーや個人コンピュータ愛好者コミュニティ（特に [NEC PC-9800 シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ)）から生まれ、1990 年代から 2000 年代中頃にかけて流行しました。
 
-[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)。
+このプロジェクトは一部、Windows 95/98 や GTK+ 2 時代へのノスタルジーからも生まれました —— それはインターネットがまだ AI 生成のゴミに汚染されていなかった失われた文明の時代です（もっとも、このプロジェクト自体も多少の AI を利用していますが…）。
+
+現実世界はすでに十分恐ろしいものですが、少なくとも[二次元](https://ja.wikipedia.org/wiki/2次元)と[異世界](https://w.wiki/4So4)は、私たちに純粋な約束の地を残してくれています。
+
+[QKiSSのWebサイトはこちらです](https://github.com/kuanyui/qkiss)。
 </translation>
     </message>
     <message>

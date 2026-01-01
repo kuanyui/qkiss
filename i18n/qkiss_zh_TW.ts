@@ -27,11 +27,13 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
         <translation>
-QKiSS 是以 Qt 6 開發的現代化 [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) 檢視器。
+QKiSS 是一個以 Qt 6 實作、支援 KISS/GS 與 FKiSS 1・2 規格的現代 [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) 檢視器，靈感來自 Linux 上的 [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) 與 [GnomeKiSS](https://devel.tlrmx.org/kiss/)。
 
-Kisekae 是 *「kisekae ningyou」* (日文：*着せ替え人形*，意思是*「換裝娃娃」*) 的縮寫。
+「Kisekae」源自日文「着せ替え人形」（發音：「kisekae ningyou」），意思是「換裝人偶」。
 
-KiSS 起源於 1990 年代，在日本[御宅族](https://en.wikipedia.org/wiki/Otaku)和個人電腦愛好者（NEC PC-9800 系列）的次文化中相當流行。
+KiSS 起源於日本 1990 年代的[御宅族](https://ja.wikipedia.org/wiki/おたく)次文化，以及個人電腦愛好者社群（特別是 [NEC PC-9800 系列](https://ja.wikipedia.org/wiki/PC-9800シリーズ)），並流行於 1990 年代到 2000 年代中之間。
+
+這個專案一部分也是源自對 Windows 95/98 與 GTK+ 2 時代的懷舊 —— 那是一個在網際網路還沒被 AI 生成的垃圾污染之前的已失落的文明年代（雖然這個專案本身也有用到一些 AI...）。現實世界已經足夠可怕，至少[二次元](https://ja.wikipedia.org/wiki/2次元)與[異世界](https://w.wiki/4So4)保留著賜予我們純淨的應許之地。
 
 [QKiSS 官方網站](https://github.com/kuanyui/qkiss)。
 </translation>

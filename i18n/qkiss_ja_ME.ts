@@ -27,14 +27,18 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
         <translation>
-Q…QKi…KiSSは…Qt…Qt 6…で…け、開発された…も、モダンな…[Ki…KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system)…び、ビューア…でふ…ひぃん…
+Q、QKiSS は……ㇰ、Qt 6 でっ、じ、じじじじじじ実装されて、き、KISS/GS、FKiSS 1・2 の仕様に、い、いちおう、対応した…現代的な、 [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューア……でふっ。Li、Linux 上の……[fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) や……[GnomeKiSS](https://devel.tlrmx.org/kiss/) に……着想を……え、えええええええ……得てまふ……っ。
 
-Ki…Kisekaeは…「き、きせかえ…に、にんぎょう」…の略称…でふ……
+「Kisekae」っては、通用語で「着せ替え人形」、そ、その意味、です。
 
-キキ…キキキキキ…KiSSは…1990年代に…に、日本の…あああああ…あの…お、おおおたく…や…パ、パソコン愛好家…（N…NEC PC…きゅ、9800…し、シリーズ）…のサブカルチャーで…う、うまれて…人、人気…となりました…た、多分…
+キキ…キキキキキKiSS は、ニホンの1990 年代の[オタク](https://ja.wikipedia.org/wiki/おたく) サブカルチャーやパソコン、と、ととくに、 [N…NEC PC…きゅ、9800…し、シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ)、の愛好家さんたちで…う、生まれて、1990 年代から……2000 年代中頃に、かけて……流行、したんでふ……っ。
 
-[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)…です…
-    </translation>
+こ、このプロジェクトは、一部、ウ、Windows 95/98 や……GTK+ 2 時代へのノスタルジーからも…生まれたんでふ……っ。  ──そ、それは……インターネットが…まだ…AI 生成の…ご、ごごごゴミに…汚染されてなかった……失われた伝説の古代文明でふ……。それにしても、このプロジェクト自体も……ちょ、多少の AI を、り、利用していますよね？そ、それは、ちょっと矛盾ではありませんかな〜？と思います…………っひぃん！ご、ごごごごごごごごごごめんなさいごめんなさいごめんなさい！こんな愚かな質問してしまってほんとにごめんなさいぃぃぃ！ひぃぃ………
+
+……げげげ現実世界は……すでに……十分……恐ろしいもの…ですけど……にににに[二次元](https://ja.wikipedia.org/wiki/2次元) も、い、[異世界](https://w.wiki/4So4) も、どちらもこ、こわい…………うぅ…もう家に帰りたい………
+
+[こ、こちらは QKiSS の Webサイト](https://github.com/kuanyui/qkiss)…です…
+</translation>
     </message>
     <message>
         <location filename="../src/aboutdialog.cpp" line="103"/>

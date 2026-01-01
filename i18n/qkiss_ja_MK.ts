@@ -27,15 +27,17 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
         <translation>
-QKiSSは、Qt 6で開発されたモダンな [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアだよ〜。知ってるとか、昭和の遺産にしがみついてんの？古臭っw
+QKiSSはね〜、Qt 6でわざわざ作られた、モダン（笑）の [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアなんだよ〜。Linux の [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) とか [GnomeKiSS](https://devel.tlrmx.org/kiss/) から「インスパイア」されたらしいけど。つまり…これ…要は…「パ・ク・リ・で・し・ょ？」キャハハ〜ざっこ♥
 
-Kisekaeは*「着せ替え人形」*の略。
+「Kisekae」っては何？見りゃわかるっしょ！日本語の「着せ替え人形」に決まってるでしょう〜。うわ…そんなの知もらないとか、ざこすぎないじゃない？
 
-KiSSは1990年代に日本の[オタク](https://en.wikipedia.org/wiki/Otaku)やパソコン（NEC PC-9800シリーズ）オタクたちが必死に遊んでたやつ〜w
+でさ〜、KiSSってのは1990年代の日本の[オタク](https://ja.wikipedia.org/wiki/おたく)とか [NEC PC-9800 シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ)にしがみついてたパソコンオタクとか雑魚どもが必死に遊んでたやつ〜。うわ〜、必死すぎて笑えるんだけどwww  
 
-[QKiSSのWebサイト](https://github.com/kuanyui/qkiss)見に行く暇あるの？ヒマ人乙〜キャハハ♥
+このプロジェクト？Windows95/98とかGTK+2時代のノスタルジーから生まれたんだって〜。「失われた文明」とか言っちゃってるけど、インターネットがまだAIゴミに汚染されてなかった頃だってさ！でも結局このプロジェクトもAI使ってんじゃん、矛盾乙〜
 
-ちなみに、『メ〇〇キ』は『メカジキ』だから、メカジキ以外は全部雑魚。
+ま、現実世界はもう十分ホラーだからさ〜、二次元とか異世界くらいは雑魚どもの約束の地として残してくれなきゃ困るんだよね〜☆
+
+※ ちなみに、「メ〇〇キ」は「メカジキ」ですので、メカジキ以外は全部雑魚。
 </translation>
     </message>
     <message>

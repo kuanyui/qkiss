@@ -27,13 +27,17 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
         <translation>
-QKiSSは、Qt 6で開発されたモダンな [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアでしてよ！
+QKiSSは Qt 6 で実装され、KISS/GS、FKiSS 1・2の仕様に対応した現代的な [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアでしてよ！Linux上の [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html)や[GnomeKiSS](https://devel.tlrmx.org/kiss/) に着想を得ておりますの。平民風情には到底理解できない高尚な代物でございますわね？オ――ホホホホ！
 
-Kisekaeとは「着せ替え人形」の略称にございますの。あら、当時の[キモオタ](https://en.wikipedia.org/wiki/Otaku)やパソコンなどにしか興味を持てない平民どもが NEC PC-9800 の前で必死に遊んでいた姿を想像すると、滑稽でなりませんわね？オホホホ！
+「Kisekae」という名称はご覧の通り、日本語の「着せ替え人形」に由来いたしますのよ。まあ、平民風情には到底わからぬ優雅な響きでございますわね？オ――ホホホホ！
 
-KiSSは1990年代、そうした哀れな庶民のサブカルチャーから生まれ、彼らにとって唯一の輝きでございましたのよ。まあ、わたくしには到底理解できませんけれど！
+KiSSは1990年代の日本の[オタク](https://ja.wikipedia.org/wiki/おたく)サブカルチャーや個人コンピュータ愛好者コミュニティ、特に[NEC PC-9800シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ)から生まれ、そして1990年代から2000年代中頃にかけて流行いたしましたのですわ。当時の[キモオタ](https://en.wikipedia.org/wiki/Otaku)やパソコンなどにしか興味を持てない平民どもがNEC PC-9800の前で必死に遊んでいた姿を想像すると、まあ滑稽でなりませんわね？オ――ホホホホ！
 
-[QKiSSのWebサイト](https://github.com/kuanyui/qkiss) を拝見なさるとよろしいですわ！オホホホ！
+このプロジェクトは一部、Windows 95/98やGTK+ 2時代へのノスタルジーからも生まれましたのよ。それはインターネットがまだAI生成の粗末な産物に汚染されていなかった、まさに失われた文明の時代でございましたわ。もっとも、このプロジェクト自体も多少の AI に頼るなど滑稽でございますわね？オ――ホホホホ！
+
+現実世界はすでに十分恐ろしいものでございますわ。しかしながら、少なくとも[二次元](https://ja.wikipedia.org/wiki/2次元)と[異世界](https://w.wiki/4So4)はわたくしたちに純粋なる約束の地を残してくださっておりますのですわ。平民風情には現実で喘ぐ以外に道はございませんものね？わたくしたちだけが触れられる聖域でございますわよ！オ――ホホホホ！
+
+[QKiSSのWebサイト](https://github.com/kuanyui/qkiss) を拝見なさるとよろしいですわ！オ――ホホホ！
 </translation>
     </message>
     <message>
