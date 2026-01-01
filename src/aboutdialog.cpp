@@ -49,7 +49,7 @@ AboutDialog::~AboutDialog()
 void AboutDialog::setupUi()
 {
     setWindowTitle(tr("About QKiSS"));
-    resize(500, 500);
+    resize(800, 600);
 
     QVBoxLayout *layoutMain = new QVBoxLayout{this};
     QVBoxLayout *layoutHeader = new QVBoxLayout{this};
