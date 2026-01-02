@@ -55,8 +55,11 @@ endif()
 # ==============================================
 # Folder for generated, platform independent files
 # ==============================================
-set(PROJECT_GENERATED_DIR "${CMAKE_SOURCE_DIR}/generated" CACHE PATH
-    "Directory for generated, platform independent files (e.g. XDG icon theme, changelogs...etc)")
+
+# Directory for generated, platform independent files (e.g. XDG icon theme, changelogs...etc)
+# No use of `CACHE PATH` here currently.
+# A cached variable is defined at first-time `cmake`, and will not be changed no matter how many times `cmake` is executed laterly.
+set(PROJECT_GENERATED_DIR "${CMAKE_SOURCE_DIR}/generated")
 
 # ==============================================
 # Git commit hash / time
@@ -441,6 +444,10 @@ set_target_properties(qkiss PROPERTIES
 
 include(GNUInstallDirs)  # This is actually cross-platform
 
+# IMPORTANT: the paths inside `install()` are determined only when `cmake`. So,
+# if icons are not generated when first-time `cmake` (that is to say, when the
+# result of `file(GLOB_RECURSE result "*.png")` is empty), the icons may be
+# potentially unable to be installed via `cmake --install`.
 if(UNIX AND NOT APPLE AND NOT WIN32)
     # Linux / BSD
 
@@ -451,17 +458,19 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
     message(STATUS "[DEBUG] CMAKE_SOURCE_DIR === ${CMAKE_SOURCE_DIR}")
     message(STATUS "[DEBUG] ICON_PNG_XDG_THEME_DIR === ${ICON_PNG_XDG_THEME_DIR}")
     file(GLOB_RECURSE iconPngFiles "${ICON_PNG_XDG_THEME_DIR}/*/apps/qkiss.png")
+    message(STATUS "[DEBUG] Found PNG icons to install = ${iconPngFiles}")
     foreach(iconAbsFilePath ${iconPngFiles})
         get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
         string(REPLACE "${ICON_PNG_XDG_THEME_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
-        message(STATUS "iconAbsDirPath = ${iconAbsDirPath}")
-        message(STATUS "iconAbsFilePath = ${iconAbsFilePath}")
-        message(STATUS "iconRelFilePath = ${iconRelFilePath}")
+        # message(STATUS "[DEBUG] iconAbsDirPath = ${iconAbsDirPath}")
+        # message(STATUS "[DEBUG] iconAbsFilePath = ${iconAbsFilePath}")
+        # message(STATUS "[DEBUG] iconRelFilePath = ${iconRelFilePath}")
         install(FILES ${iconAbsFilePath} DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${iconRelFilePath})
     endforeach()
 
     # XDG icon theme :: svg files
     file(GLOB_RECURSE iconSvgFiles "${ICON_SVG_XDG_THEME_DIR}/*/apps/qkiss.svg")
+    message(STATUS "[DEBUG] Found SVG icons to install = ${iconSvgFiles}")
     foreach(iconAbsFilePath ${iconSvgFiles})
         get_filename_component(iconAbsDirPath ${iconAbsFilePath} DIRECTORY)
         string(REPLACE "${ICON_SVG_XDG_THEME_DIR}/" "" iconRelFilePath ${iconAbsDirPath})
