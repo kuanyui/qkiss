@@ -17,9 +17,18 @@ Source0:         @PROJECT_HOMEPAGE_URL@/archive/refs/heads/master.tar.gz#/%{name
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  make
-BuildRequires:  pkgconfig(Qt6Core)
-BuildRequires:  pkgconfig(Qt6Gui)
-BuildRequires:  pkgconfig(Qt6Widgets)
+
+# Qt6 itself heavily relies on `cmake()`, so it will be more reliable than `pkgconfig()` among various distros (openSUSE, Fedora).
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  cmake(Qt6Multimedia)
+
+# Actually this is a little dirty, but QtLinguist binary and `*.cmake` are provided by different package name among different distros, I hate another condition macro for this:
+# openSUSE:   qt6-tools,     qt6-tools-linguist
+# Fedora:     qt6-qttools,   qt6-linguist
+BuildRequires:  cmake(Qt6LinguistTools)
+
 BuildRequires:  libarchive-devel
 
 # https://en.opensuse.org/openSUSE:Packaging_Conventions_RPM_Macros#%desktop_database_post_/_%desktop_database_postun_(deprecated)
