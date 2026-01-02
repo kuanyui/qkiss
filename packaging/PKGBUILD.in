@@ -1,0 +1,47 @@
+# Maintainer: kuanyui <azazabc123@gmail.com>
+pkgname=@PROJECT_NAME@
+pkgver=@PROJECT_VERSION@
+pkgrel=1
+pkgdesc="@PROJ_SUMMARY@"
+arch=('x86_64')
+url="@PROJECT_HOMEPAGE_URL@"
+license=('GPL3')
+
+# 'blas-openblas' and 'bubblewrap' are to resolve multiple-choices depends problem
+depends=(
+    'qt6-multimedia-ffmpeg'
+    'libarchive'
+    'hicolor-icon-theme'
+    'python-jsonschema'
+    'python-pyyaml'
+    'blas-openblas'
+)
+makedepends=(
+  'cmake'
+  'qt6-tools'
+  'gcc'
+  'make'
+  'inkscape'
+  'desktop-file-utils'
+  'bubblewrap'
+)
+optdepends=('lha: LHA archive support'
+            'unar: Universal archive support')
+source=("${pkgname}-${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+  cd "${pkgname}-${pkgver}"
+}
+
+build() {
+  cmake -B build -S "${pkgname}-${pkgver}" \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release
+
+  cmake --build build --parallel $(nproc)
+}
+
+package() {
+  DESTDIR="${pkgdir}" cmake --install build
+}

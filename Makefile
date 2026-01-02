@@ -30,6 +30,8 @@ RPMBUILD_DIR := /tmp/rpmbuild/$(NAME)
 
 # The `.spec` file whose @VAR@ are already expanded by `cmake`
 CONFIGURED_RPM_SPEC_FILE := generated/$(NAME).spec
+# The `PKGBUILD` file whose @VAR@ are already expanded by `cmake`
+CONFIGURED_PKGBUILD_FILE := generated/PKGBUILD
 
 # The `debian/` folder, and all files whose @VAR@ are already expanded by `cmake`
 CONFIGURED_DEBIAN_DIR := generated/debian/
@@ -167,9 +169,6 @@ add-license-header:    ## Add license header to all .cpp / .h files
 _configure:    # (internal, for tarball) Run `cmake -B` to configure files
 	cmake -B $(BUILD_ROOT_DIR) -S .
 
-.PHONY: $(CONFIGURED_RPM_SPEC_FILE)
-$(CONFIGURED_RPM_SPEC_FILE): _configure   # (Internal, for tarball) Run cmake to configure RPM `.spec.in`
-
 .PHONY: gitversion.cmake
 gitversion.cmake:    # (For tarball) Because tarball doesn't contain .git history so store commit hash into .cmake file.
 	echo 'set(GIT_COMMIT_HASH "$(shell git rev-parse --short HEAD)")' > $@
@@ -197,7 +196,7 @@ $(TARBALL_PATH): gitversion.cmake _configure  # (Internal, for tarball)
 release-tarball: $(TARBALL_PATH)    ## Archive the codebase along with `gitversion.cmake` as tarball
 
 .PHONY: build-rpm-local-rpmbuild
-build-rpm-local-rpmbuild: $(TARBALL_PATH) $(CONFIGURED_RPM_SPEC_FILE) _configure  ## Local build rpm with `rpmbuild` without `osc`
+build-rpm-local-rpmbuild: $(TARBALL_PATH) _configure  ## Local build rpm with `rpmbuild` without `osc`
 	rm -rf "$(RPMBUILD_DIR)"/*
 	mkdir -p $(RPMBUILD_DIR)/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	cp -f $(TARBALL_PATH) $(RPMBUILD_DIR)/SOURCES/
@@ -218,6 +217,7 @@ endif
 osc-cp: _check_osc_var $(TARBALL_PATH)    ## Copy necessary files to osc package folder
 	cp -f "$(TARBALL_PATH)" "$(OSC_PACKAGE_DIR)/"
 	cp -f "${CONFIGURED_RPM_SPEC_FILE}" "$(OSC_PACKAGE_DIR)/"
+	cp -f "${CONFIGURED_PKGBUILD_FILE}" "$(OSC_PACKAGE_DIR)/"
 
 .PHONY: osc-create-debian-dsc
 osc-create-debian-dsc: _check_osc_var osc-cp

@@ -262,6 +262,7 @@ add_custom_target(icontheme DEPENDS ${ICON_GENERATED_STAMP_FILE})
 
 configure_file("packaging/${PROJECT_NAME}.desktop.in" "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.desktop" @ONLY)
 configure_file("packaging/${PROJECT_NAME}.spec.in"    "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
+configure_file("packaging/PKGBUILD.in"                "${PROJECT_GENERATED_DIR}/PKGBUILD" @ONLY)
 
 file(GLOB debian_input_files
     RELATIVE "${CMAKE_SOURCE_DIR}/packaging/debian"
