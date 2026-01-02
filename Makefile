@@ -5,6 +5,8 @@
 #  ╚████╔╝ ██║  ██║██║  ██║██║██║  ██║██████╔╝███████╗███████╗███████║
 #   ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝╚══════╝
 
+##@ -- Constants (Don't modify unless you exactly know what you are doing) --
+
 ## Name of this project
 NAME    := qkiss
 ## Version, gotten from `./VERSION` file.
@@ -13,25 +15,36 @@ VERSION := $(shell cat VERSION)
 TARBALL_BASENAME := $(NAME)-$(VERSION)
 TARBALL_PATH := generated/$(TARBALL_BASENAME).tar.gz
 
-## The working directory for `rpmbuild` (Default: `/tmp/rpmbuild/NAME/`)
-RPMBUILD_DIR := /tmp/rpmbuild/$(NAME)
-
 ## The root folder of all folders of configured CMake presets. This value is defined in `CMakePresets.json`
 BUILD_ROOT_DIR := build
+
+##@ -- General variables ---------------------------------------
+
 
 ## Use which CMake preset in `CMakePresets.json`. Default is `release`. (available: `debug`, `release`, `profile`, `minsize`)
 CMAKE_PRESET := release
 
-## The `.spec` file whose @VAR@ are already expanded by `cmake`
+
+## The working directory for `rpmbuild`, for building RPM without `osc` (Default: `/tmp/rpmbuild/NAME/`)
+RPMBUILD_DIR := /tmp/rpmbuild/$(NAME)
+
+# The `.spec` file whose @VAR@ are already expanded by `cmake`
 CONFIGURED_RPM_SPEC_FILE := generated/$(NAME).spec
 
-## The `debian/` folder, and all files whose @VAR@ are already expanded by `cmake`
+# The `debian/` folder, and all files whose @VAR@ are already expanded by `cmake`
 CONFIGURED_DEBIAN_DIR := generated/debian/
 
-## For OpenBuildService, a package directory for `osc`. (ex: `~/osc/project:user/package/`)
+##@ -- OBS (OpenBuildService) ------------------------------------
+
+## A local package directory for `osc`. (ex: `~/osc/project:user/qkiss/`, created via `osc mkpac qkiss`)
 OSC_PACKAGE_DIR ?=
 # (expand ~ as $HOME)
 override OSC_PACKAGE_DIR := $(subst ~,$(HOME),$(OSC_PACKAGE_DIR))
+
+## OBS `osc build` target's repository name. `osc meta prj` to list. (ex: `openSUSE_Tumbleweed`, `Fedora_43`, `Debian_13`, `xUbuntu_25.04`, `Arch`)
+OBS_REPO :=
+## OBS `osc build` target's repository arch. `osc meta prj` to list.
+OBS_ARCH :=
 
 # ██████╗ ███████╗███████╗██╗███╗   ██╗███████╗
 # ██╔══██╗██╔════╝██╔════╝██║████╗  ██║██╔════╝
@@ -54,6 +67,7 @@ define __DOC_QUICK_START__
 # About this Makefile
 - Use `make` or `make help` to show this help info.
 - To set variables, use `make VAR1=foo VAR2=bar target`
+
 
 endef
 export __DOC_QUICK_START__
@@ -85,7 +99,7 @@ help:    ## Show this self-documented help message.
 		$(call print_title,"Quick Start") \
 	  	printf "$$__DOC_QUICK_START__" | perl -pe 's/`([^`]+)`/\033[33m`\1`\033[0m/g; s/^(#+ .+)/\033[32m\1\033[0m/g; s/(https?:\/\/[a-zA-Z0-9.\/_#?-]+)/\033[34m\1\033[0m/g'; \
 		$(call print_title,"Variables") \
-		perl -ne 'if (/^## /) { $$desc = substr($$_, 3); $$next = <>; if ($$next =~ /^([A-Za-z0-9_]+)\s*[:?+]?=\s*(.*)$$/) { $$target=$$1; $$desc=~s/(`[^`]*?`)/\033[33m\1\033[0m/g; printf "\033[35m%-30s\033[0m %s", $$target, $$desc; } }' $(MAKEFILE_LIST); \
+		perl -ne 'if (/^## /) { $$desc = substr($$_, 3); $$next = <>; if ($$next =~ /^([A-Za-z0-9_]+)\s*[:?+]?=\s*(.*)$$/) { $$target=$$1; $$desc=~s/(`[^`]*?`)/\033[33m\1\033[0m/g; printf "\033[35m%-30s\033[0m %s", $$target, $$desc; } } elsif (/^[ \t]*##@ *(.*)/) { print "\033[34m$$1\033[0m\n"; }' $(MAKEFILE_LIST); \
 		$(call print_title,"Targets") \
 		perl -ne 'if (/^([a-zA-Z0-9_-]+):.*?## (.*)$$/) { $$target = $$1; $$desc = $$2; if ($$desc =~ /DEPRECATED/) { printf "\033[2m%-30s %s\033[0m\n", $$target, $$desc; } else { $$desc=~s/(`[^`]*?`)/\033[33m\1\033[0m/g; printf "\033[32m%-30s\033[0m %s\n", $$target, $$desc; } } elsif (/^[ \t]*### *(.*)/) { print "\033[34m$$1\033[0m\n"; }' $(MAKEFILE_LIST); \
 	else \
@@ -181,7 +195,7 @@ $(TARBALL_PATH): gitversion.cmake _configure  # (Internal, for tarball)
 release-tarball: $(TARBALL_PATH)    ## Archive the codebase along with `gitversion.cmake` as tarball
 
 .PHONY: build-rpm-local-rpmbuild
-build-rpm-local-rpmbuild: $(TARBALL_PATH) $(CONFIGURED_RPM_SPEC_FILE) _configure  ## Local build rpm with `rpmbuild`
+build-rpm-local-rpmbuild: $(TARBALL_PATH) $(CONFIGURED_RPM_SPEC_FILE) _configure  ## Local build rpm with `rpmbuild` without `osc`
 	rm -rf "$(RPMBUILD_DIR)"/*
 	mkdir -p $(RPMBUILD_DIR)/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	cp -f $(TARBALL_PATH) $(RPMBUILD_DIR)/SOURCES/
@@ -213,10 +227,10 @@ osc-create-debian-dsc: _check_osc_var osc-cp
 .PHONY: osc-build-debian
 osc-build-debian: _check_osc_var osc-create-debian-dsc
 	cd "$(OSC_PACKAGE_DIR)/"; \
-	osc build --vm-type=kvm --vm-memory=16000M Debian_12 x86_64
+	osc build --vm-type=kvm --vm-memory=16000M $(OBS_REPO) $(OBS_ARCH)
 
 
 osc-fix-broken-vm-env: _check_osc_var
 	cd "$(OSC_PACKAGE_DIR)/"; rm -f .osc/_buildinfo* .osc/_buildconfig*
-	# sudo rm -rf /var/cache/build/*
-	sudo rm -rf /var/tmp/build-root-ono/Debian_12-x86_64
+	# Delete QEMU/KVM img
+	rm -rf /var/tmp/build-root-$(USER)/$(OBS_REPO)-$(OBS_ARCH)
