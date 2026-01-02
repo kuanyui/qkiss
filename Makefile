@@ -118,6 +118,8 @@ clean:    ## Clean all built files (CMake & built icons).
 	rm -rf resources/tango-icon-remixer/dist/*
 	rm -rf "$(BUILD_ROOT_DIR)"/*
 	rm -rf generated/*
+	# Because I overwrite rpmbuild's _topdir to /tmp (tmpfs)
+	rm -rf "$(RPMBUILD_DIR)"/*
 
 .PHONY: clean-all
 clean-all: clean   ## Clean all (built files & CMake cache)
