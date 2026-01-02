@@ -46,6 +46,34 @@ rm -rf "/var/tmp/osbuild-packagecache/Debian:12"
 rm -rf "/var/tmp/build-root-${USER}/Debian_12-x86_64"
 ```
 
+# RPM .spec
+## Python3 Version
+openSUSE Tumbleweed always provides multiple Python3 versions, and this will cause
+```conf
+BuildRequires:  python3dist(jsonschema)
+BuildRequires:  python3dist(pyyaml)
+```
+
+an error when `osc build openSUSE_Tumbleweed` because it doesn't know which Python should it install:
+
+```
+osc build openSUSE_Tumbleweed x86_64
+INFO: Building the package as a local package.
+...
+buildinfo is broken... it says:
+unresolvable: have choice for python3dist(jsonschema): python311-jsonschema python312-jsonschema python313-jsonschema
+      have choice for python3dist(pyyaml): python311-PyYAML python312-PyYAML python313-PyYAML
+```
+So I try to open `/usr/lib/rpm/macros.d/macros.python_all` and found these macros:
+```conf
+# gh#openSUSE/python-rpm-macros#127 ... define our current primary Python interpreter
+%primary_python python313
+%modern_python %{primary_python}
+```
+
+> 1. Note these are SUSE-only RPM macro.
+> 2. Fedora still can use `python3dist(jsonschema)` without problem
+
 # Prefer depends via OSB (Not recommended)
 
 > Recommended way is using `|` syntax in `debian/controls` directly.

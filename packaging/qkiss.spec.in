@@ -1,6 +1,6 @@
-# spec file for package @PROJECT_NAME@
+# RPM spec file for package @PROJECT_NAME@
 #
-# Copyright (c) 2025 kuanyui
+# Copyright (c) 2025 - 2026 kuanyui
 #
 # License: GPLv3
 
@@ -27,12 +27,21 @@ BuildRequires:  desktop-file-utils
 Requires(pre):  desktop-file-utils
 Requires(post): desktop-file-utils
 
+BuildRequires:  inkscape
+
+BuildRequires:  python-rpm-macros
+# If `_repository` is defined (only on osc/OBS) and evaluates to true (like being set to 1). `0` prefix is a fallback when the expanded macro is an empty string.
+%if 0%{?suse_version} && 0%{?_repository:1}
+BuildRequires:  %{primary_python}-jsonschema
+BuildRequires:  %{primary_python}-PyYAML
+%else
+BuildRequires:  python3dist(jsonschema)
+BuildRequires:  python3dist(pyyaml)
+%endif
+
 Recommends:     lha
 Recommends:     unar
 
-BuildRequires:  python3dist(jsonschema)
-BuildRequires:  python3dist(pyyaml)
-BuildRequires:  inkscape
 
 %description
 @PROJ_DESCRIPTION@
