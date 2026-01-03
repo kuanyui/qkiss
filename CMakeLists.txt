@@ -543,18 +543,18 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
     install(FILES "${PROJ_GENERATED_DIR}/${PROJECT_NAME}.desktop" DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
 elseif(WIN32)
-    set(WIN_EXTERNAL_DEPS_DIR "" CACHE PATH "(Windows only) Path to the directory containing external binary dependencies (lha, unar)")
+    set(WIN_EXTERNAL_BIN_DEPS_DIR "" CACHE PATH "(Windows only) Path to the directory containing external binary dependencies (lha, unar)")
 
-    # Search external dependencies in variable `WIN_EXTERNAL_DEPS_DIR`, falling back to System PATH if not found.
-    find_program(LHA_EXECUTABLE lha HINTS "${WIN_EXTERNAL_DEPS_DIR}")
-    find_program(UNAR_EXECUTABLE unar HINTS "${WIN_EXTERNAL_DEPS_DIR}")
-    find_file(FOUNDATION_DLL "Foundation.1.0.dll" HINTS "${WIN_EXTERNAL_DEPS_DIR}")
+    # Search external dependencies in variable `WIN_EXTERNAL_BIN_DEPS_DIR`, falling back to System PATH if not found.
+    find_program(LHA_EXECUTABLE lha HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
+    find_program(UNAR_EXECUTABLE unar HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
+    find_file(FOUNDATION_DLL "Foundation.1.0.dll" HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
 
     if(LHA_EXECUTABLE AND UNAR_EXECUTABLE AND FOUNDATION_DLL)
         install(FILES "${LHA_EXECUTABLE}" "${UNAR_EXECUTABLE}" "${FOUNDATION_DLL}" DESTINATION .)
         message(STATUS "External dependencies (lha/unar) found and scheduled for installation.")
     else()
-        message(FATAL_ERROR "External dependencies (lha/unar) not found in WIN_EXTERNAL_DEPS_DIR nor PATH! Installer will be incomplete.")
+        message(FATAL_ERROR "External dependencies (lha/unar) not found in WIN_EXTERNAL_BIN_DEPS_DIR nor PATH! Installer will be incomplete.")
     endif()
 
     set(CPACK_PACKAGE_NAME "QKiSS")

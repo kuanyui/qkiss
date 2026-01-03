@@ -52,32 +52,32 @@ jobs:
           }
 
       # Step 6: [Cache] Download and extract external binary dependencies (LHA & unar)
-      - name: Cache External Binary Deps
-        id: cache-external-deps
+      - name: Cache external binary dependencies
+        id: cache-external-binary-dependencies
         uses: actions/cache@v4
         with:
-          path: C:\deps
+          path: C:\bin_deps
           # (if need rebuild libarchive, increase this int.)
-          key: ${{ runner.os }}-external-bin-deps-v1
+          key: ${{ runner.os }}-external-binary-dependencies-v1
 
       # Step 6.1: Download and extract external binary dependencies (LHA & unar)
       - name: Download & extract external binary dependencies
 
-        if: steps.cache-external-deps.outputs.cache-hit != 'true'
+        if: steps.cache-external-binary-dependencies.outputs.cache-hit != 'true'
         run: |
-          mkdir C:\deps
+          mkdir C:\bin_deps
 
           # Handle LHA
-          curl -L -o C:\deps\lha.zip https://github.com/jca02266/lha/releases/download/release-20211125/lha-1.14i-ac20211125-x64.exe.zip
-          powershell Expand-Archive -Path C:\deps\lha.zip -DestinationPath C:\deps
+          curl -L -o C:\bin_deps\lha.zip https://github.com/jca02266/lha/releases/download/release-20211125/lha-1.14i-ac20211125-x64.exe.zip
+          powershell Expand-Archive -Path C:\bin_deps\lha.zip -DestinationPath C:\bin_deps
 
           # Handle unar
-          curl -L -o C:\deps\unar.zip https://cdn.theunarchiver.com/downloads/unarWindows.zip
-          powershell Expand-Archive -Path C:\deps\unar.zip -DestinationPath C:\deps
+          curl -L -o C:\bin_deps\unar.zip https://cdn.theunarchiver.com/downloads/unarWindows.zip
+          powershell Expand-Archive -Path C:\bin_deps\unar.zip -DestinationPath C:\bin_deps
 
-      # Step 6.2: Add deps directory to system PATH
-      - name: Add deps to PATH
-        run: echo "C:\deps" >> $GITHUB_PATH
+      # Step 6.2: Add external binary dependencies directory to system PATH
+      - name: Add external dependencies to PATH
+        run: echo "C:\bin_deps" >> $GITHUB_PATH
 
       # Step 7: Install Qt 6
       - name: Install Qt
@@ -95,7 +95,7 @@ jobs:
       - name: CMake Configure and Build
         run: |
           cmake -B build -G "Visual Studio 17 2022" `
-            -DWIN_EXTERNAL_DEPS_DIR="C:/deps" `
+            -DWIN_EXTERNAL_DEPS_DIR="C:/bin_deps" `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
             -DCMAKE_BUILD_TYPE=Release
           cmake --build build --config Release
