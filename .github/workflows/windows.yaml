@@ -29,17 +29,19 @@ jobs:
           pip install jsonschema pyyaml
 
       # Step 4: [Cache] Binaries built by vcpkg
-      - name: Restore vcpkg Cache
+      - name: Restore vcpkg cache
         uses: actions/cache@v4
+        id: cache-vcpkg
         with:
-          path: $env:VCPKG_INSTALLATION_ROOT/installed
-          # (if need rebuild libarchive, increase this int.)
-          key: ${{ runner.os }}-vcpkg-v1
+          # In "Manifest Mode" (when `vcpkg.json`` exists at repo root), vcpkg
+          # automatically installs all dependencies into `vcpkg_installed/`
+          # folder by default. So use this folder name as cache path.
+          path: vcpkg_installed
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
 
-      # Step 4.1: Install libarchive via vcpkg
-      - name: Install libarchive
-        run: |
-          vcpkg install libarchive:x64-windows
+      # Step 4.1: Install packages via vcpkg
+      - name: vcpkg install
+        run: vcpkg install --triplet x64-windows
 
       # Step 5: Ensure location of ImageMagick
       - name: Locate ImageMagick
