@@ -85,6 +85,8 @@ jobs:
         with:
           version: '6.8.3'
           arch: 'win64_msvc2022_64'
+          target: 'desktop'         # Actually the default value is already `desktop`.
+          modules: 'qtmultimedia'   # Important!
           cache: true      # [Cache] built-in cache
 
       # Step 8: Initialize MSVC Environment
