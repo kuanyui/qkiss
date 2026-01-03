@@ -59,7 +59,7 @@ endif()
 # Directory for generated, platform independent files (e.g. XDG icon theme, changelogs...etc)
 # No use of `CACHE PATH` here currently.
 # A cached variable is defined at first-time `cmake`, and will not be changed no matter how many times `cmake` is executed laterly.
-set(PROJECT_GENERATED_DIR "${CMAKE_SOURCE_DIR}/generated")
+set(PROJ_GENERATED_DIR "${CMAKE_SOURCE_DIR}/generated")
 
 # ==============================================
 # Git commit hash / time
@@ -194,9 +194,9 @@ find_package(Python3 REQUIRED Interpreter)
 execute_process(
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
             --input-yaml ${CMAKE_SOURCE_DIR}/CHANGELOG.yaml
-            --output-rpm ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
-            --output-deb ${PROJECT_GENERATED_DIR}/debian/changelog
-            --output-markdown ${PROJECT_GENERATED_DIR}/changelogs.md
+            --output-rpm ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
+            --output-deb ${PROJ_GENERATED_DIR}/debian/changelog
+            --output-markdown ${PROJ_GENERATED_DIR}/changelogs.md
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     RESULT_VARIABLE _ret)
 
@@ -204,7 +204,7 @@ if(NOT _ret EQUAL 0)
     message(FATAL_ERROR "Failed to generate RPM changelog")
 endif()
 
-file(READ ${PROJECT_GENERATED_DIR}/changelogs_rpm.txt
+file(READ ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
     CHANGELOG_FOR_RPM_SPEC)
 
 # ===============================================
@@ -214,12 +214,12 @@ set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
 set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
 set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
 set(ICON_THEME_NAME "CustomizedTango")
-set(ICON_PNG_XDG_THEME_DIR "${PROJECT_GENERATED_DIR}/icon_theme__png/${ICON_THEME_NAME}")
-set(ICON_SVG_XDG_THEME_DIR "${PROJECT_GENERATED_DIR}/icon_theme__svg/${ICON_THEME_NAME}")
+set(ICON_PNG_XDG_THEME_DIR "${PROJ_GENERATED_DIR}/icon_theme__png/${ICON_THEME_NAME}")
+set(ICON_SVG_XDG_THEME_DIR "${PROJ_GENERATED_DIR}/icon_theme__svg/${ICON_THEME_NAME}")
 
 # When included_icons.txt changed, auto execute cmake again.
 set(ICON_INCLUDE_FILE "${RESOURCES_DIR}/included_icons.txt")
-set(ICON_GENERATED_STAMP_FILE "${PROJECT_GENERATED_DIR}/icons_built.stamp")
+set(ICON_GENERATED_STAMP_FILE "${PROJ_GENERATED_DIR}/icons_built.stamp")
 
 # If qrc does not exist, create empty placeholder
 set(ICON_PNG_GENERATED_QRC "${ICON_PNG_XDG_THEME_DIR}/index.qrc")
@@ -260,9 +260,9 @@ add_custom_target(icontheme DEPENDS ${ICON_GENERATED_STAMP_FILE})
 # Packaging related files
 # ===============================================
 
-configure_file("packaging/${PROJECT_NAME}.desktop.in" "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.desktop" @ONLY)
-configure_file("packaging/${PROJECT_NAME}.spec.in"    "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
-configure_file("packaging/PKGBUILD.in"                "${PROJECT_GENERATED_DIR}/PKGBUILD" @ONLY)
+configure_file("packaging/${PROJECT_NAME}.desktop.in" "${PROJ_GENERATED_DIR}/${PROJECT_NAME}.desktop" @ONLY)
+configure_file("packaging/${PROJECT_NAME}.spec.in"    "${PROJ_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
+configure_file("packaging/PKGBUILD.in"                "${PROJ_GENERATED_DIR}/PKGBUILD" @ONLY)
 
 file(GLOB debian_input_files
     RELATIVE "${CMAKE_SOURCE_DIR}/packaging/debian"
@@ -277,15 +277,15 @@ foreach(file_name IN LISTS debian_input_files)
     if(file_name MATCHES "\\.in$")
         # Remove ".in"
         string(REGEX REPLACE "\\.in$" "" out_name "${file_name}")
-        set(dst "${PROJECT_GENERATED_DIR}/debian/${out_name}")
+        set(dst "${PROJ_GENERATED_DIR}/debian/${out_name}")
         configure_file("${src}" "${dst}" @ONLY)
     else()
-        set(dst "${PROJECT_GENERATED_DIR}/debian/${file_name}")
-        file(COPY "${src}" DESTINATION "${PROJECT_GENERATED_DIR}/debian" )
+        set(dst "${PROJ_GENERATED_DIR}/debian/${file_name}")
+        file(COPY "${src}" DESTINATION "${PROJ_GENERATED_DIR}/debian" )
     endif()
 endforeach()
 file(COPY   "${CMAKE_SOURCE_DIR}/packaging/debian/source/format"
-     DESTINATION "${PROJECT_GENERATED_DIR}/debian/source/")
+     DESTINATION "${PROJ_GENERATED_DIR}/debian/source/")
 
 
 # ===============================================
@@ -492,7 +492,7 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
     endforeach()
 
     # XDG desktop file
-    install(FILES "${PROJECT_GENERATED_DIR}/${PROJECT_NAME}.desktop" DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+    install(FILES "${PROJ_GENERATED_DIR}/${PROJECT_NAME}.desktop" DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 endif()
 
 install(TARGETS qkiss
