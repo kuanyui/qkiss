@@ -32,6 +32,7 @@ on:
 # finished. (because `vcpkg is too fucking time-costing`).
 jobs:
   prepare-vcpkg-cache:
+    name: Prepare `vcpkg` cache.
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_binary_cache
@@ -68,6 +69,7 @@ jobs:
         run: vcpkg install --triplet x64-windows
 
   build-main:
+    name: Build main project
     needs: prepare-vcpkg-cache    # execute after prepare-vcpkg-cache is finished
     runs-on: windows-latest
     env:
@@ -155,10 +157,14 @@ jobs:
       - name: CMake Configure and Build
         # Explicitly specify `$env:pythonLocation` which is prepared by `actions/setup-python`,
         # to prevent CMake from choosing other version of python interpreters,
+        #
+        # Don't specify `-DPython3_EXECUTABLE` directly because it may be overwritten by `find_package(Python3)`
         run: |
           cmake -B build -G "Visual Studio 17 2022" `
+            -DPython3_ROOT_DIR="$env:pythonLocation" `
+            -DPython3_FIND_STRATEGY=LOCATION `
+            -DPython3_FIND_REGISTRY=NEVER `
             -DWIN_EXTERNAL_DEPS_DIR="C:/bin_deps" `
-            -DPython3_EXECUTABLE="$env:pythonLocation\python.exe" `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
             -DCMAKE_BUILD_TYPE=Release
           cmake --build build --config Release
