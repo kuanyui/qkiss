@@ -158,10 +158,11 @@ jobs:
         # Explicitly specify `$env:pythonLocation` which is prepared by `actions/setup-python`,
         # to prevent CMake from choosing other version of python interpreters,
         #
-        # Don't specify `-DPython3_EXECUTABLE` directly because it may be overwritten by `find_package(Python3)`
+        # `-DPython3_EXECUTABLE` may be overwritten by `find_package(Python3)`
         run: |
           cmake -B build -G "Visual Studio 17 2022" `
             -DPython3_ROOT_DIR="$env:pythonLocation" `
+            -DPython3_EXECUTABLE="$env:pythonLocation\python.exe" `
             -DPython3_FIND_STRATEGY=LOCATION `
             -DPython3_FIND_REGISTRY=NEVER `
             -DWIN_EXTERNAL_DEPS_DIR="C:/bin_deps" `
