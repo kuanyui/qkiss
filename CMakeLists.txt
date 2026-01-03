@@ -244,7 +244,9 @@ execute_process(
     RESULT_VARIABLE _ret)
 
 if(NOT _ret EQUAL 0)
-    message(FATAL_ERROR "Failed to generate RPM changelog")
+    message(FATAL_ERROR "Failed to generate changelog")
+else()
+    message(STATUS "Success to generate changelog.")
 endif()
 
 file(READ ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
@@ -263,6 +265,11 @@ set(ICON_SVG_XDG_THEME_DIR "${PROJ_GENERATED_DIR}/icon_theme__svg/${ICON_THEME_N
 # When included_icons.txt changed, auto execute cmake again.
 set(ICON_INCLUDE_FILE "${RESOURCES_DIR}/included_icons.txt")
 set(ICON_GENERATED_STAMP_FILE "${PROJ_GENERATED_DIR}/icons_built.stamp")
+
+# [Windows Only] Formalize path slashes for fucking Windows
+foreach(_v RESOURCES_DIR ICON_REPO_DIR ICON_BUILD_SCRIPT ICON_THEME_NAME ICON_PNG_XDG_THEME_DIR ICON_SVG_XDG_THEME_DIR ICON_INCLUDE_FILE ICON_GENERATED_STAMP_FILE)
+    file(TO_CMAKE_PATH "${${_v}}" ${_v})
+endforeach()
 
 # If qrc does not exist, create empty placeholder
 set(ICON_PNG_GENERATED_QRC "${ICON_PNG_XDG_THEME_DIR}/index.qrc")
