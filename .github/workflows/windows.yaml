@@ -90,18 +90,25 @@ jobs:
       - name: Install packages via `vcpkg` from `vcpkg_binary_cache`
         run: vcpkg install --triplet x64-windows
 
-      # Step 4: Set up Python 3.11
+      # Step 4: Install Inkscape
+      - name: Install Inkscape via Chocolatey
+        run: |
+          choco install inkscape --no-progress
+          echo "C:\Program Files\Inkscape\bin" >> $env:GITHUB_PATH
+
+      # Step 5: Set up Python 3.11
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      # Step 5: Install required Python packages (jsonschema, pyyaml)
+      # Step 6: Install required Python packages (jsonschema, pyyaml)
       - name: Install Python dependencies
         # use `python -m pip` instead of `pip` to ensure the runtime installed
         # by `actions/setup-python@v4` is chosen.
         run: python -m pip install jsonschema pyyaml
-      # Step 6: Ensure location of ImageMagick
+
+      # Step 7: Ensure location of ImageMagick
       - name: Locate ImageMagick
         run: |
           $magickPath = Get-ChildItem "C:\Program Files\ImageMagick*" | Select-Object -First 1
@@ -112,7 +119,7 @@ jobs:
             Write-Error "ImageMagick not found!"
           }
 
-      # Step 7: [Cache] Download and extract external binary dependencies (LHA & unar)
+      # Step 8: [Cache] Download and extract external binary dependencies (LHA & unar)
       - name: Cache external binary dependencies
         id: cache-external-binary-dependencies
         uses: actions/cache@v4
@@ -121,7 +128,7 @@ jobs:
           # (if need rebuild libarchive, increase this int.)
           key: ${{ runner.os }}-external-binary-dependencies-v1
 
-      # Step 7.1: Download and extract external binary dependencies (LHA & unar)
+      # Step 8.1: Download and extract external binary dependencies (LHA & unar)
       - name: Download & extract external binary dependencies
         if: steps.cache-external-binary-dependencies.outputs.cache-hit != 'true'
         run: |
@@ -135,11 +142,11 @@ jobs:
           curl -L -o C:\bin_deps\unar.zip https://cdn.theunarchiver.com/downloads/unarWindows.zip
           powershell Expand-Archive -Path C:\bin_deps\unar.zip -DestinationPath C:\bin_deps
 
-      # Step 7.2: Add external binary dependencies directory to system PATH
+      # Step 8.2: Add external binary dependencies directory to system PATH
       - name: Add external dependencies to PATH
         run: echo "C:\bin_deps" >> $GITHUB_PATH
 
-      # Step 8: Install Qt 6
+      # Step 9: Install Qt 6
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -149,17 +156,25 @@ jobs:
           modules: 'qtmultimedia'   # Important!
           cache: true      # [Cache] built-in cache
 
-      # Step 9: Initialize MSVC Environment
+      # Step 10: Initialize MSVC Environment
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
-      # Step 10: Build with CMake (build to `build/`)
+      # Step 11: Build with CMake (build to `build/`)
       - name: CMake Configure and Build
         # Explicitly specify `$env:pythonLocation` which is prepared by `actions/setup-python`,
         # to prevent CMake from choosing other version of python interpreters,
         #
         # `-DPython3_EXECUTABLE` may be overwritten by `find_package(Python3)`
+        # Python + Windows is a pile of shit. Never understand how do they handle PATH.
         run: |
+          # DIRTY WORKAROUND 1: Use PowerShell to raise the priority of `actions/setup-python` to top.
+          $env:PATH = "$env:pythonLocation;$env:pythonLocation\Scripts;$env:PATH"
+
+          # DIRTY WORKAROUND 2: Hijack envvar to force CMake to eat the python location
+          $env:Python3_ROOT_DIR = "$env:pythonLocation"
+
+          # DIRTY WORKAROUND 3: Lots of explicit -DPython3_ for Python this little shit.
           cmake -B build -G "Visual Studio 17 2022" `
             -DPython3_ROOT_DIR="$env:pythonLocation" `
             -DPython3_EXECUTABLE="$env:pythonLocation\python.exe" `
@@ -170,14 +185,14 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release
           cmake --build build --config Release
 
-      # Step 11: Package with CPack (Bundle Qt DLLs and External Binaries)
+      # Step 12: Package with CPack (Bundle Qt DLLs and External Binaries)
       - name: Package with CPack
         working-directory: build
         run: |
           cpack -G NSIS -C Release
 
 
-      # Step 12: Upload the entire Release folder
+      # Step 13: Upload the entire Release folder
       # Default value of ${CPACK_PACKAGE_FILE_NAME} is
       # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
       - name: Upload Artifact
