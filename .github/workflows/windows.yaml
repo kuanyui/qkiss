@@ -10,10 +10,10 @@ on:
 #
 # - Each job is run in separate VM, each VM:
 #    - Create new empty `${github.workspace}`
-#    - Execute `actions/cache@v4`, our setting is `with: {path: P, key: K}`, it will:
+#    - Execute `actions/cache@v5`, our setting is `with: {path: P, key: K}`, it will:
 #        - Use ${K} to query cache from Github Cache Service.
 #        - If cache found on Github Cache Service, download the zip into `${github.workspace}/${P}`
-# - If job is success, before finished, `actions/cache@v4` will upload the cache labeled with ${K} onto Github Cache Service.
+# - If job is success, before finished, `actions/cache@v5` will upload the cache labeled with ${K} onto Github Cache Service.
 #
 # == About the value of `cache.with.path` ==============================================
 #
@@ -40,7 +40,7 @@ jobs:
     steps:
       # Step 1: Download the source code
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Step 2: Manually create a cache folder for `vcpkg` in `github.workspace`,
       #
@@ -55,7 +55,7 @@ jobs:
 
       # Step 2: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
       - name: Restore `vcpkg_binary_cache`
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           ### In "Manifest Mode" (when `vcpkg.json`` exists at repo root), vcpkg
           ### automatically installs all dependencies into `vcpkg_installed/`
@@ -77,11 +77,11 @@ jobs:
     steps:
       # Step 1: Download the source code
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Step 2: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
       - name: Restore `vcpkg_binary_cache`
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: vcpkg_binary_cache
           key: ${{ runner.os }}-vcpkg-binary-cache-${{ hashFiles('vcpkg.json') }}
@@ -98,7 +98,8 @@ jobs:
 
       # Step 5: Set up Python 3.11
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
+        id: cpython311
         with:
           python-version: '3.11'
 
@@ -122,7 +123,7 @@ jobs:
       # Step 8: [Cache] Download and extract external binary dependencies (LHA & unar)
       - name: Cache external binary dependencies
         id: cache-external-binary-dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: C:\bin_deps
           # (if need rebuild libarchive, increase this int.)
@@ -176,19 +177,21 @@ jobs:
 
           # DIRTY WORKAROUND 3: Lots of explicit -DPython3_ for Python this little shit:
           #
-          #  -DPython3_ROOT_DIR="$env:pythonLocation" `
-          #  -DPython3_EXECUTABLE="$env:pythonLocation\python.exe" `
-          #  -DPython3_FIND_STRATEGY=LOCATION `
-          #  -DPython3_FIND_REGISTRY=NEVER `
+          #    -DPython3_ROOT_DIR="$env:pythonLocation" `
+          #    -DPython3_EXECUTABLE="$env:pythonLocation\python.exe" `
+          #    -DPython3_FIND_STRATEGY=LOCATION `
+          #    -DPython3_FIND_REGISTRY=NEVER `
           #
           # But they are totally useless! Maybe be overwritten by vcpkg, msvc-dev-cmd, or something wtf.
           # So I defined a -DWIN_PYTHON3_EXE for fucking Windows.
-          echo "[Github Context] env.pythonLocation: ${{ env.pythonLocation }}"
-          echo "[PowerShell env] env:pythonLocation: $env:pythonLocation"
+
+          echo "[DEBUG][PowerShell env] env:pythonLocation: $env:pythonLocation"
+          echo "[DEBUG][Github Context] env.pythonLocation: ${{ env.pythonLocation }}"
+          echo "[DEBUG][Github Context] steps.cpython311: ${{ steps.cpython311.outputs.python-path }}"
 
           cmake -B build -G "Visual Studio 17 2022" `
             -DWIN_EXTERNAL_DEPS_DIR="C:/bin_deps" `
-            -DWIN_PYTHON3_EXE="${{ env.pythonLocation }}\python.exe" `
+            -DWIN_PYTHON3_EXE="${{ steps.cpython311.outputs.python-path }}" `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
             -DCMAKE_BUILD_TYPE=Release
           cmake --build build --config Release
