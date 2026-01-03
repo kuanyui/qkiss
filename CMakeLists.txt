@@ -557,8 +557,10 @@ elseif(WIN32)
         message(FATAL_ERROR "External dependencies (lha/unar) not found in WIN_EXTERNAL_BIN_DEPS_DIR nor PATH! Installer will be incomplete.")
     endif()
 
-    set(CPACK_PACKAGE_NAME "QKiSS")
-    set(CPACK_PACKAGE_VENDOR "QKiSS")
+    # Default value of ${CPACK_PACKAGE_FILE_NAME} is
+    # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
+    set(CPACK_PACKAGE_NAME "qkiss")    # This will become as a part in the output file name, so don't use space.
+    set(CPACK_PACKAGE_VENDOR "QKiSS")  # only used in "Vendor" field in Installer.
     set(CPACK_GENERATOR "NSIS")
 
     # Get `windeployqt` to pick DLLs (according to the above `find_package(Qt6 REQUIRED COMPONENTS Core ...)`)
