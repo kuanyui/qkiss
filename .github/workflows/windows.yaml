@@ -78,6 +78,8 @@ jobs:
       # Step 1: Download the source code
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          submodules: 'recursive'
 
       # Step 2: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
       - name: Restore `vcpkg_binary_cache`
