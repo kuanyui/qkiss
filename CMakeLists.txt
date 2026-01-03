@@ -204,7 +204,18 @@ endif()
 # ==============================================
 # Python :: Find Python interprepter for scripts
 # ==============================================
-find_package(Python3 REQUIRED Interpreter)
+
+# Let user able to explicitly specify `Python3_EXECUTABLE`, because the PATH
+# problem under Windows + Python is already a little fucker; when under CI/CD +
+# Windows + msvc-dev-cmd + vcpkg + Python + CMake, it immediately transforms
+# into a huge pile of ultimate shit.
+
+if(Python3_EXECUTABLE)
+    set(Python3_FOUND TRUE)
+    message(STATUS "Using manual-defined Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
+else()
+    find_package(Python3 REQUIRED Interpreter)
+endif()
 
 # ==============================================
 # Python :: Generate changelogs from YAML for RPM & DEB
