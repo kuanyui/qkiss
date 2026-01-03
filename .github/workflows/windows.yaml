@@ -79,7 +79,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
+          # PAT token defined in Repository secrets. SHould have read permission of this repo and all submodules
+          token: ${{ secrets.MY_PAT }}
           submodules: 'recursive'
+
 
       # Step 2: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
       - name: Restore `vcpkg_binary_cache`
