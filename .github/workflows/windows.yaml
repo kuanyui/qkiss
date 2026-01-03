@@ -183,10 +183,12 @@ jobs:
           #
           # But they are totally useless! Maybe be overwritten by vcpkg, msvc-dev-cmd, or something wtf.
           # So I defined a -DWIN_PYTHON3_EXE for fucking Windows.
+          echo "[Github Context] env.pythonLocation: ${{ env.pythonLocation }}"
+          echo "[PowerShell env] env:pythonLocation: $env:pythonLocation"
 
           cmake -B build -G "Visual Studio 17 2022" `
             -DWIN_EXTERNAL_DEPS_DIR="C:/bin_deps" `
-            -DWIN_PYTHON3_EXE="$env:pythonLocation\python.exe" `
+            -DWIN_PYTHON3_EXE="${{ env.pythonLocation }}\python.exe" `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
             -DCMAKE_BUILD_TYPE=Release
           cmake --build build --config Release

@@ -215,18 +215,20 @@ endif()
 
 if (WIN_PYTHON3_EXE)
     file(TO_CMAKE_PATH "${WIN_PYTHON3_EXE}" __PYTHON3__)  # Convert back-slash to slash
-    set(__PYTHON3__ "${WIN_PYTHON3_EXE}" CACHE FILEPATH)  # Use CACHE to remember this value at configure time.
+    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
 elseif(DEFINED ENV{pythonLocation})
     # If found env var `pythonLocation` is defined (by Github Action `actions/setup-python`)
     file(TO_CMAKE_PATH "$ENV{pythonLocation}/python.exe" __PYTHON3__)  # Convert back-slash to slash
-    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH)  # Use CACHE to remember this value at configure time.
+    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
 elseif(Python3_EXECUTABLE)
     file(TO_CMAKE_PATH "${Python3_EXECUTABLE}" __PYTHON3__)  # Convert back-slash to slash
-    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH)  # Use CACHE to remember this value at configure time.
+    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
 else()
     find_package(Python3 REQUIRED Interpreter)
     set(__PYTHON3__ "${Python3_EXECUTABLE}")
 endif()
+
+message(STATUS "CHECKPOINT: __PYTHON3__ is now set to: ${__PYTHON3__}")
 
 # ==============================================
 # Python :: Generate changelogs from YAML for RPM & DEB
