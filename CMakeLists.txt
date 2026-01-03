@@ -209,12 +209,23 @@ endif()
 # problem under Windows + Python is already a little fucker; when under CI/CD +
 # Windows + msvc-dev-cmd + vcpkg + Python + CMake, it immediately transforms
 # into a huge pile of ultimate shit.
+if (WIN32)
+    set(WIN_PYTHON3_EXE "" CACHE FILEPATH "[Windows only] Force specify shitty Python PATH in Windows")
+endif()
 
-if(Python3_EXECUTABLE)
-    set(Python3_FOUND TRUE)
-    message(STATUS "Using manual-defined Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
+if (WIN_PYTHON3_EXE)
+    file(TO_CMAKE_PATH "${WIN_PYTHON3_EXE}" __PYTHON3__)  # Convert back-slash to slash
+    set(__PYTHON3__ "${WIN_PYTHON3_EXE}" CACHE FILEPATH)  # Use CACHE to remember this value at configure time.
+elseif(DEFINED ENV{pythonLocation})
+    # If found env var `pythonLocation` is defined (by Github Action `actions/setup-python`)
+    file(TO_CMAKE_PATH "$ENV{pythonLocation}/python.exe" __PYTHON3__)  # Convert back-slash to slash
+    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH)  # Use CACHE to remember this value at configure time.
+elseif(Python3_EXECUTABLE)
+    file(TO_CMAKE_PATH "${Python3_EXECUTABLE}" __PYTHON3__)  # Convert back-slash to slash
+    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH)  # Use CACHE to remember this value at configure time.
 else()
     find_package(Python3 REQUIRED Interpreter)
+    set(__PYTHON3__ "${Python3_EXECUTABLE}")
 endif()
 
 # ==============================================
@@ -222,7 +233,7 @@ endif()
 # ==============================================
 
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
+    COMMAND ${__PYTHON3__} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
             --input-yaml ${CMAKE_SOURCE_DIR}/CHANGELOG.yaml
             --output-rpm ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
             --output-deb ${PROJ_GENERATED_DIR}/debian/changelog
@@ -258,7 +269,7 @@ if(NOT EXISTS ${ICON_PNG_GENERATED_QRC})
 endif()
 
 # Full script arguments
-set(CMD_PYTHON_BUILD_ICONS ${Python3_EXECUTABLE} "${ICON_BUILD_SCRIPT}"
+set(CMD_PYTHON_BUILD_ICONS ${__PYTHON3__} "${ICON_BUILD_SCRIPT}"
     --included-icon-file "${RESOURCES_DIR}/included_icons.txt"
     --stamp-file "${ICON_GENERATED_STAMP_FILE}"
     --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon"
@@ -554,7 +565,7 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
     install(FILES "${PROJ_GENERATED_DIR}/${PROJECT_NAME}.desktop" DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
 elseif(WIN32)
-    set(WIN_EXTERNAL_BIN_DEPS_DIR "" CACHE PATH "(Windows only) Path to the directory containing external binary dependencies (lha, unar)")
+    set(WIN_EXTERNAL_BIN_DEPS_DIR "" CACHE PATH "[Windows only] Path to the directory containing external binary dependencies (lha, unar)")
 
     # Search external dependencies in variable `WIN_EXTERNAL_BIN_DEPS_DIR`, falling back to System PATH if not found.
     find_program(LHA_EXECUTABLE lha HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
