@@ -120,24 +120,36 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_compile_options(/W4)
 endif()
 
-
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent Multimedia)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent Multimedia)
-
-set(EXTRA_INCS)
-set(EXTRA_DEFS)
-set(EXTRA_LIBS)
-
 # ==============================================
 # Expand CMake macro (configure)
 # ==============================================
 configure_file("${CMAKE_SOURCE_DIR}/src/version.h.in"
-               "${CMAKE_BINARY_DIR}/version.h" @ONLY)
+"${CMAKE_BINARY_DIR}/version.h" @ONLY)
 list(APPEND EXTRA_INCS "${CMAKE_BINARY_DIR}")
 
+# ===============================================
+# Package :: vcpkg compatibility (mainly for Windows)
+# ===============================================
+# If `CMAKE_TOOLCHAIN_FILE` is not defined by user, and system has `vcpkg`
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE AND DEFINED ENV{VCPKG_INSTALLATION_ROOT})
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+endif()
 
 # ===============================================
-# iconv
+# Package :: Qt6
+# ===============================================
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent Multimedia)
+
+# ===============================================
+# Package :: Prepare variables to store extra .h / .cpp / dynamic lib paths
+# ===============================================
+set(EXTRA_INCS)
+set(EXTRA_DEFS)
+set(EXTRA_LIBS)
+
+# ===============================================
+# Package :: iconv
 # ===============================================
 # find_library(ICONV_LIB NAMES iconv libiconv)    // Unreliable because may be built-in in glibc
 # find_path(ICONV_INCLUDE_DIR NAMES iconv.h)
@@ -152,7 +164,7 @@ else()
     include(CheckIncludeFile)
     check_function_exists(iconv_open ICONV_EXISTS)
     check_include_file_cxx(iconv.h ICONV_H_EXISTS)
-    if(ICONV_EXISTS AND ICONV_H_EXISTS)
+    if(ICONV_EXIcSTS AND ICONV_H_EXISTS)
         message(STATUS "Found iconv: ${ICONV_LIB}")
         list(APPEND EXTRA_DEFS HAVE_ICONV)
         list(APPEND EXTRA_INCS ${ICONV_INCLUDE_DIR})
@@ -162,7 +174,7 @@ else()
     endif()
 endif()
 # ===============================================
-# ICU
+# Package :: ICU
 # ===============================================
 find_package(ICU COMPONENTS uc i18n data)
 if(ICU_FOUND)
@@ -172,7 +184,14 @@ if(ICU_FOUND)
 endif()
 
 # ===============================================
-# LibArchive
+# Package :: (iconv & ICU checking)
+# ===============================================
+if(NOT Iconv_FOUND AND NOT ICU_FOUND AND NOT ICONV_EXISTS)
+    message(FATAL_ERROR "Unable to find `ICU` nor `Iconv`, aborted.")
+endif()
+
+# ===============================================
+# Package :: LibArchive
 # ===============================================
 find_package(LibArchive)
 if(LibArchive_FOUND)
