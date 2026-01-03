@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+          cache: 'pip'    # [Cache] packages installed via pip
 
       # Step 3: Install required Python packages (jsonschema, pyyaml)
       - name: Install Python dependencies
@@ -27,7 +28,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install jsonschema pyyaml
 
-      # Step 4: Install libarchive via vcpkg
+      # Step 4: [Cache] Binaries built by vcpkg
+      - name: Restore vcpkg Cache
+        uses: actions/cache@v4
+        with:
+          path: $env:VCPKG_INSTALLATION_ROOT/installed
+          # (if need rebuild libarchive, increase this int.)
+          key: ${{ runner.os }}-vcpkg-v1
+
+      # Step 4.1: Install libarchive via vcpkg
       - name: Install libarchive
         run: |
           vcpkg install libarchive:x64-windows
@@ -43,8 +52,19 @@ jobs:
             Write-Error "ImageMagick not found!"
           }
 
-      # Step 6: Download and Unzip External Binary Dependencies (LHA & unar)
-      - name: Download & Extract External Binary Dependencies
+      # Step 6: [Cache] Download and extract external binary dependencies (LHA & unar)
+      - name: Cache External Binary Deps
+        id: cache-external-deps
+        uses: actions/cache@v4
+        with:
+          path: C:\deps
+          # (if need rebuild libarchive, increase this int.)
+          key: ${{ runner.os }}-external-bin-deps-v1
+
+      # Step 6.1: Download and extract external binary dependencies (LHA & unar)
+      - name: Download & extract external binary dependencies
+
+        if: steps.cache-external-deps.outputs.cache-hit != 'true'
         run: |
           mkdir C:\deps
 
@@ -56,15 +76,17 @@ jobs:
           curl -L -o C:\deps\unar.zip https://cdn.theunarchiver.com/downloads/unarWindows.zip
           powershell Expand-Archive -Path C:\deps\unar.zip -DestinationPath C:\deps
 
-          # Add deps directory to system PATH
-          echo "C:\deps" >> $GITHUB_PATH
+      # Step 6.2: Add deps directory to system PATH
+      - name: Add deps to PATH
+        run: echo "C:\deps" >> $GITHUB_PATH
 
       # Step 7: Install Qt 6
       - name: Install Qt
-        uses: jurplel/install-qt-action@682f723bf2f6e4d0237d26e60f933331b64512a4
+        uses: jurplel/install-qt-action@v4
         with:
           version: '6.8.3'
           arch: 'win64_msvc2022_64'
+          cache: true      # [Cache] built-in cache
 
       # Step 8: Initialize MSVC Environment
       - name: Set up MSVC
