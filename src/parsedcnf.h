@@ -217,7 +217,7 @@ private:
     /** Temporary storage when parsing. */
     QStringList m_lines;
     /** currently parsing line */
-    u_int32_t m_lineIdx;
+    uint32_t m_lineIdx;
 
     // Basic
     CPString m_fileName;
@@ -246,7 +246,7 @@ private:
      *       Example:
      *       [12     ; Set border color to color at index 12 in palette #0.
      */
-    u_int32_t m_outsideColor = 0;  // if not specified, set to 0.
+    uint32_t m_outsideColor = 0;  // if not specified, set to 0.
     QList<ParsedCnfCel *> m_cels;
     QList<ParsedCnfSet *> m_sets;
     /** ObjectID may be not continuous (?), and CNF's set (starts with $) is sorted by the value of ObjectID. */
