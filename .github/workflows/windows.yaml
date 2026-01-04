@@ -32,7 +32,7 @@ on:
 # finished. (because `vcpkg is too fucking time-costing`).
 jobs:
   prepare-vcpkg-cache:
-    name: Prepare `vcpkg` cache.
+    name: Run `vcpkg install` and cache the built binary ZIPs.
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_binary_cache
@@ -68,9 +68,59 @@ jobs:
       - name: Download & build & install packages via vcpkg, and cache to `vcpkg_binary_cache`
         run: vcpkg install --triplet x64-windows
 
+  prepare-icon-cache:
+    name: Convert SVG icons into PNG and cache them.
+    runs-on: windows-latest
+    steps:
+      # Step 1: Download the source code
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          # PAT token defined in Repository secrets. SHould have read permission of this repo and all submodules
+          token: ${{ secrets.MY_PAT }}
+          submodules: 'recursive'
+
+      # Step 2: Install Inkscape
+      - name: Install Inkscape via Chocolatey
+        run: |
+          choco install inkscape --no-progress
+          echo "C:\Program Files\Inkscape\bin" >> $env:GITHUB_PATH
+
+      # Step 3: Set up Python 3.11
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        id: cpython311
+        with:
+          python-version: '3.11'
+
+      # Step 4: Get icon submodule commit hash
+      - name: Get submodule commit hash
+        id: iconSubmodule
+        run: |
+          # Commit hash of submodule
+          echo "commitHash=$(git -C resources/tango-icon-remixer rev-parse HEAD)" >> $GITHUB_OUTPUT
+        shell: bash
+
+      # Step 5: Restore cache
+      - name: Cache generated icons
+        uses: actions/cache@v5
+        with:
+          path: |
+            generated/icon_theme__png
+            generated/icon_theme__svg
+            generated/icon_built.stamp
+          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.iconSubmodule.outputs.commitHash }}
+
+      # Step 6: Convert icons via CMake script mode (cmake -P <script_file>)
+      - name: Convert icons via CMake script mode
+        run: cmake `
+                 -DTASK=GENERATE_ICONS `
+                 -DWIN_PYTHON3_EXE="${{ steps.cpython311.outputs.python-path }}" `
+                 -P CMakeLists.txt
+
   build-main:
     name: Build main project
-    needs: prepare-vcpkg-cache    # execute after prepare-vcpkg-cache is finished
+    needs: [ 'prepare-vcpkg-cache', 'prepare-icon-cache' ]
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_binary_cache
@@ -83,23 +133,27 @@ jobs:
           token: ${{ secrets.MY_PAT }}
           submodules: 'recursive'
 
+      # Step 2: Restore icon cache
+      - name: Restore generated icons cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            generated/icon_theme__png
+            generated/icon_theme__svg
+            generated/icon_built.stamp
+          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.iconSubmodule.outputs.commitHash }}
+          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ needs.prepare-icon-cache.outputs.commitHash }}
 
-      # Step 2: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
+      # Step 3: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
       - name: Restore `vcpkg_binary_cache`
         uses: actions/cache@v5
         with:
           path: vcpkg_binary_cache
           key: ${{ runner.os }}-vcpkg-binary-cache-${{ hashFiles('vcpkg.json') }}
 
-      # Step 3: Install packages via vcpkg (from cache)
+      # Step 4: Install packages via vcpkg (from cache)
       - name: Install packages via `vcpkg` from `vcpkg_binary_cache`
         run: vcpkg install --triplet x64-windows
-
-      # Step 4: Install Inkscape
-      - name: Install Inkscape via Chocolatey
-        run: |
-          choco install inkscape --no-progress
-          echo "C:\Program Files\Inkscape\bin" >> $env:GITHUB_PATH
 
       # Step 5: Set up Python 3.11
       - name: Set up Python
@@ -114,8 +168,8 @@ jobs:
         # by `actions/setup-python@v4` is chosen.
         run: python -m pip install jsonschema pyyaml
 
-      # Step 7: Ensure location of ImageMagick
-      - name: Locate ImageMagick
+      # Step 7: Ensure location of ImageMagick (for converting .PNGs to .ICO)
+      - name: Locate ImageMagick (for converting .PNGs to .ICO)
         run: |
           $magickPath = Get-ChildItem "C:\Program Files\ImageMagick*" | Select-Object -First 1
           if ($magickPath) {
