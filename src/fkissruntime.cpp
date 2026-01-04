@@ -39,19 +39,19 @@ void FkissRuntime::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtTy
 {
     // All events are generated from GKissItem (instead of FKiSS script), so the items counts should not need to be checked here.
     switch (evtType) {
-    case FkissUserMovementEvent::Press:    tryToRunActionsByEvent(FKK::E::PRESS, vars); qDebug() << "[DEBUG] User event " << FKK::E::PRESS << vars;  break;
-    case FkissUserMovementEvent::Catch:    tryToRunActionsByEvent(FKK::E::CATCH, vars); qDebug() << "[DEBUG] User event " << FKK::E::CATCH << vars;  break;
-    case FkissUserMovementEvent::Fixcatch: tryToRunActionsByEvent(FKK::E::FIXCATCH, vars); qDebug() << "[DEBUG] User event " << FKK::E::FIXCATCH << vars;  break;
-    case FkissUserMovementEvent::Unfix:    tryToRunActionsByEvent(FKK::E::UNFIX, vars); qDebug() << "[DEBUG] User event " << FKK::E::UNFIX << vars;  break;
-    case FkissUserMovementEvent::Collide:  tryToRunActionsByEvent(FKK::E::COLLIDE, vars); qDebug() << "[DEBUG] User event " << FKK::E::COLLIDE << vars;  break;
-    case FkissUserMovementEvent::Apart:    tryToRunActionsByEvent(FKK::E::APART, vars); qDebug() << "[DEBUG] User event " << FKK::E::APART << vars;  break;
-    case FkissUserMovementEvent::In:       tryToRunActionsByEvent(FKK::E::IN, vars); qDebug() << "[DEBUG] User event " << FKK::E::IN << vars;  break;
-    case FkissUserMovementEvent::Stillin:  tryToRunActionsByEvent(FKK::E::STILLIN, vars); break;
-    case FkissUserMovementEvent::Out:      tryToRunActionsByEvent(FKK::E::OUT, vars); qDebug() << "[DEBUG] User event " << FKK::E::OUT << vars;  break;
-    case FkissUserMovementEvent::Stillout: tryToRunActionsByEvent(FKK::E::STILLOUT, vars);  break;
-    case FkissUserMovementEvent::Release:  tryToRunActionsByEvent(FKK::E::RELEASE, vars); qDebug() << "[DEBUG] User event " << FKK::E::RELEASE << vars;  break;
-    case FkissUserMovementEvent::Drop:     tryToRunActionsByEvent(FKK::E::DROP, vars); qDebug() << "[DEBUG] User event " << FKK::E::DROP << vars;  break;
-    case FkissUserMovementEvent::Fixdrop:  tryToRunActionsByEvent(FKK::E::FIXDROP, vars); qDebug() << "[DEBUG] User event " << FKK::E::FIXDROP << vars;  break;
+    case FkissUserMovementEvent::Press:    tryToRunActionsByEvent(FKK::E::Press, vars); qDebug() << "[DEBUG] User event " << FKK::E::Press << vars;  break;
+    case FkissUserMovementEvent::Catch:    tryToRunActionsByEvent(FKK::E::Catch, vars); qDebug() << "[DEBUG] User event " << FKK::E::Catch << vars;  break;
+    case FkissUserMovementEvent::Fixcatch: tryToRunActionsByEvent(FKK::E::Fixcatch, vars); qDebug() << "[DEBUG] User event " << FKK::E::Fixcatch << vars;  break;
+    case FkissUserMovementEvent::Unfix:    tryToRunActionsByEvent(FKK::E::Unfix, vars); qDebug() << "[DEBUG] User event " << FKK::E::Unfix << vars;  break;
+    case FkissUserMovementEvent::Collide:  tryToRunActionsByEvent(FKK::E::Collide, vars); qDebug() << "[DEBUG] User event " << FKK::E::Collide << vars;  break;
+    case FkissUserMovementEvent::Apart:    tryToRunActionsByEvent(FKK::E::Apart, vars); qDebug() << "[DEBUG] User event " << FKK::E::Apart << vars;  break;
+    case FkissUserMovementEvent::In:       tryToRunActionsByEvent(FKK::E::In, vars); qDebug() << "[DEBUG] User event " << FKK::E::In << vars;  break;
+    case FkissUserMovementEvent::Stillin:  tryToRunActionsByEvent(FKK::E::Stillin, vars); break;
+    case FkissUserMovementEvent::Out:      tryToRunActionsByEvent(FKK::E::Out, vars); qDebug() << "[DEBUG] User event " << FKK::E::Out << vars;  break;
+    case FkissUserMovementEvent::Stillout: tryToRunActionsByEvent(FKK::E::Stillout, vars);  break;
+    case FkissUserMovementEvent::Release:  tryToRunActionsByEvent(FKK::E::Release, vars); qDebug() << "[DEBUG] User event " << FKK::E::Release << vars;  break;
+    case FkissUserMovementEvent::Drop:     tryToRunActionsByEvent(FKK::E::Drop, vars); qDebug() << "[DEBUG] User event " << FKK::E::Drop << vars;  break;
+    case FkissUserMovementEvent::Fixdrop:  tryToRunActionsByEvent(FKK::E::Fixdrop, vars); qDebug() << "[DEBUG] User event " << FKK::E::Fixdrop << vars;  break;
     }
     return;
 }
@@ -107,27 +107,27 @@ void FkissRuntime::stopTimersAndUnloadFkissScript()
 
 void FkissRuntime::triggerInitializeAndBegin()
 {
-    tryToRunActionsByEvent(FKK::E::INITIALIZE, {});
-    tryToRunActionsByEvent(FKK::E::BEGIN, {});
-    tryToRunActionsByEvent(FKK::E::VERSION, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS1)) });
-    tryToRunActionsByEvent(FKK::E::VERSION, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS1b)) });
-    tryToRunActionsByEvent(FKK::E::VERSION, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS2)) });
-    tryToRunActionsByEvent(FKK::E::VERSION, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS2_1)) });
+    tryToRunActionsByEvent(FKK::E::Initialize, {});
+    tryToRunActionsByEvent(FKK::E::Begin, {});
+    tryToRunActionsByEvent(FKK::E::Version, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS1)) });
+    tryToRunActionsByEvent(FKK::E::Version, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS1b)) });
+    tryToRunActionsByEvent(FKK::E::Version, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS2)) });
+    tryToRunActionsByEvent(FKK::E::Version, { FkissVariant::fromInt(static_cast<int>(FkissVersion::FKiSS2_1)) });
 }
 
 void FkissRuntime::triggerEnd()
 {
-    tryToRunActionsByEvent(FKK::E::END, {});
+    tryToRunActionsByEvent(FKK::E::End, {});
 }
 
 void FkissRuntime::triggerSet(uint8_t setNo)
 {
-    tryToRunActionsByEvent(FKK::E::SET, { FkissVariant::fromInt(setNo) });
+    tryToRunActionsByEvent(FKK::E::Set, { FkissVariant::fromInt(setNo) });
 }
 
 void FkissRuntime::triggerCol(uint8_t paletteNo)
 {
-    tryToRunActionsByEvent(FKK::E::COL, { FkissVariant::fromInt(paletteNo) });
+    tryToRunActionsByEvent(FKK::E::Col, { FkissVariant::fromInt(paletteNo) });
 }
 
 bool FkissRuntime::getMap(FkissVariant target)
@@ -431,7 +431,7 @@ void FkissRuntime::runChangecol(FkissVariant paletteNoInKcf)
 void FkissRuntime::runActionsInAlarm(FkissVariant alarmID)
 {
     // qDebug() << "[fkissruntime] runActionsInAlarm" << alarmID;
-    tryToRunActionsByEvent(FKK::E::ALARM, { alarmID });
+    tryToRunActionsByEvent(FKK::E::Alarm, { alarmID });
 }
 
 std::shared_ptr<FkissAlarmTimer> FkissRuntime::getOrCreateAlarmTimer(FkissVariant alarmID, int delay)
@@ -483,7 +483,7 @@ std::shared_ptr<ASTPairedCommands> FkissRuntime::getEventActionPair(const QStrin
 bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<FkissVariant> &eventArgs)
 {
     bool printDebug = false;
-    if (eventName == FKK::E::STILLOUT) {  // Stillout() generate too many logs
+    if (eventName == FKK::E::Stillout) {  // Stillout() generate too many logs
         printDebug = false;
     }
     if (printDebug) {
@@ -498,97 +498,97 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
         }
         auto actName = act->name;
         auto actArgs = act->args;
-        if (actName == FKK::A::MAP) {
+        if (actName == FKK::A::Map) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid map() args count, skip."_L1; continue; }
             runMap(actArgs[0]);
             continue;
         }
-        if (actName == FKK::A::UNMAP) {
+        if (actName == FKK::A::Unmap) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid unmap() args count, skip."_L1; continue; }
             runUnmap(actArgs[0]);
             continue;
         }
-        if (actName == FKK::A::ALTMAP) {
+        if (actName == FKK::A::Altmap) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid altmap() args count, skip."_L1; continue; }
             runAltmap(actArgs[0]);
             continue;
         }
-        if (actName == FKK::A::MOVE) {
+        if (actName == FKK::A::Move) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid move() args count, skip."_L1; continue; }
             runMove(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::MOVETO) {
+        if (actName == FKK::A::Moveto) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid moveto() args count, skip."_L1; continue; }
             runMoveto(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::MOVEBYX) {
+        if (actName == FKK::A::Movebyx) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid movebyx() args count, skip."_L1; continue; }
             runMovebyx(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::MOVEBYY) {
+        if (actName == FKK::A::Movebyy) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid movebyy() args count, skip."_L1; continue; }
             runMovebyy(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::IFFIXED) {
+        if (actName == FKK::A::Iffixed) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid iffixed() args count, skip."_L1; continue; }
             runIffixed(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::IFNOTFIXED) {
+        if (actName == FKK::A::Ifnotfixed) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifnotfixed() args count, skip."_L1; continue; }
             runIfnotfixed(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::IFMAPPED) {
+        if (actName == FKK::A::Ifmapped) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifmapped() args count, skip."_L1; continue; }
             runIfmapped(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::IFNOTMAPPED) {
+        if (actName == FKK::A::Ifnotmapped) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifnotmapped() args count, skip."_L1; continue; }
             runIfnotmapped(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::IFMOVED) {
+        if (actName == FKK::A::Ifmoved) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifmoved() args count, skip."_L1; continue; }
             runIfmoved(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::IFNOTMOVED) {
+        if (actName == FKK::A::Ifnotmoved) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifnotmoved() args count, skip."_L1; continue; }
             runIfnotmoved(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::TRANSPARENT) {
+        if (actName == FKK::A::Transparent) {
             if (actArgs.length() != 2) { qDebug() << "[Fkiss] invalid transparent(target, N) args count, skip."_L1; continue; }
             runTransparent(actArgs[0], actArgs[1]);
             continue;
         }
-        if (actName == FKK::A::TIMER) {
+        if (actName == FKK::A::Timer) {
             if (actArgs.length() != 2) { qDebug() << "[Fkiss] invalid timer(alarmID, delayMs) args count, skip."_L1; continue; }
             runTimer(actArgs[0], actArgs[1]);
             continue;
         }
-        if (actName == FKK::A::RANDOMTIMER) {
+        if (actName == FKK::A::Randomtimer) {
             if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid randomtimer(alarmID, delay, range) args count, skip."_L1; continue; }
             runRandomtimer(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
-        if (actName == FKK::A::SOUND) {
+        if (actName == FKK::A::Sound) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid sound(fileName) args count, skip."_L1; continue; }
             runSound(actArgs[0]);
             continue;
         }
-        if (actName == FKK::A::CHANGESET) {
+        if (actName == FKK::A::Changeset) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid changeset(pageNo) args count, skip."_L1; continue; }
             runChangeset(actArgs[0]);
             continue;
         }
-        if (actName == FKK::A::CHANGECOL) {
+        if (actName == FKK::A::Changecol) {
             if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid changecol(paletteNo) args count, skip."_L1; continue; }
             runChangecol(actArgs[0]);
             continue;
@@ -601,12 +601,12 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
 std::optional<std::shared_ptr<ASTPairedCommands> > FkissRuntime::findEvpair(const QString &eventName, const QList<FkissVariant> &args)
 {
     static QStringList EVENTS_WITH_ORDER_INSENSITIVE_ARGS {
-        FKK::E::COLLIDE,
-        FKK::E::APART,
-        FKK::E::IN,
-        FKK::E::STILLIN,
-        FKK::E::OUT,
-        FKK::E::STILLOUT
+        FKK::E::Collide,
+        FKK::E::Apart,
+        FKK::E::In,
+        FKK::E::Stillin,
+        FKK::E::Out,
+        FKK::E::Stillout
     };
     bool isOrderInsensitiveArgs = EVENTS_WITH_ORDER_INSENSITIVE_ARGS.contains(eventName);
     // TODO: some events' args are order-insensitive. e.g. collide(), in()
