@@ -221,6 +221,31 @@ project(qkiss
     HOMEPAGE_URL "https://github.com/kuanyui/qkiss"
     LANGUAGES CXX)
 
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# https://gcc.gnu.org/onlinedocs//gcc/Static-Analyzer-Options.html
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_compile_options(-Wall -Wextra -Wunused -Wunused-variable -Wanalyzer-null-dereference -Werror
+        # -fanalyzer
+        # -Wno-analyzer-use-of-uninitialized-value
+    )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    add_compile_options(/W4)
+    # NOMINMAX, WIN32_LEAN_AND_MEAN : disable some conflicted macros defined by Windows.h
+    # _CRT_SECURE_NO_WARNINGS : cross-platform C++ project should use portable function instead of "safe version" defined only by Microsoft
+    add_compile_definitions(
+        NOMINMAX
+        WIN32_LEAN_AND_MEAN
+        _CRT_SECURE_NO_WARNINGS
+    )
+endif()
+
+
 # ==============================================
 # Option :: C++ Profiling
 # ==============================================
@@ -257,23 +282,6 @@ endif()
 set(CPACK_PACKAGE_NAME "${CMAKE_PROJECT_NAME}")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}")
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# https://gcc.gnu.org/onlinedocs//gcc/Static-Analyzer-Options.html
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    add_compile_options(-Wall -Wextra -Wunused -Wunused-variable -Wanalyzer-null-dereference -Werror
-        # -fanalyzer
-        # -Wno-analyzer-use-of-uninitialized-value
-    )
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    add_compile_options(/W4)
-endif()
 
 # ===============================================
 # Prepare variables to store extra .h / .cpp / dynamic lib paths
