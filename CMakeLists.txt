@@ -330,11 +330,11 @@ if (WIN32)
         DEPENDS ${ICON_SOURCES}
         COMMENT "Generating Windows Icon (.ico) from PNG sources"
     )
-    file(WRITE "${GEN_RC}" "IDI_ICON1 ICON DISCARDABLE \"${GEN_ICO}\"\n")   # This is file format of Windows Resource
+    file(WRITE "${GEN_RC_FILE}" "IDI_ICON1 ICON DISCARDABLE \"${GEN_ICO_FILE}\"\n")   # This is file format of Windows Resource
 
     # add_custom_target(gen_win_ico DEPENDS ${GEN_ICO_FILE})
     # add_dependencies(${PROJECT_NAME} gen_win_ico)
-    set(WIN_ICON_RESOURCE "${GEN_RC}" "${GEN_ICO}")
+    set(WIN_ICON_RESOURCE "${GEN_RC_FILE}" "${GEN_ICO_FILE}")
 endif()
 
 # ===============================================
