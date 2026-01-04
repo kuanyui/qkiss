@@ -462,6 +462,8 @@ qt_add_executable(qkiss
     src/ztreewidget.h src/ztreewidget.cpp
 
 )
+add_dependencies(qkiss icontheme)
+
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qkiss APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
@@ -569,6 +571,19 @@ set_target_properties(qkiss PROPERTIES
 
 include(GNUInstallDirs)  # This is actually cross-platform
 
+install(TARGETS qkiss
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+# file(COPY samples DESTINATION ${CMAKE_BINARY_DIR})
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(qkiss)  # Must before include(CPack)
+endif()
+
+
 # IMPORTANT: the paths inside `install()` are determined only when `cmake`. So,
 # if icons are not generated when first-time `cmake` (that is to say, when the
 # result of `file(GLOB_RECURSE result "*.png")` is empty), the icons may be
@@ -622,9 +637,13 @@ elseif(WIN32)
 
     # Default value of ${CPACK_PACKAGE_FILE_NAME} is
     # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
-    set(CPACK_PACKAGE_NAME "qkiss")    # This will become as a part in the output file name, so don't use space.
-    set(CPACK_PACKAGE_VENDOR "QKiSS")  # only used in "Vendor" field in Installer.
-    set(CPACK_GENERATOR "NSIS")
+    set(CPACK_PACKAGE_NAME ${PROJECT_NAME})    # This will become as a part in the output file name, so don't use space.
+    set(CPACK_PACKAGE_VENDOR "QKiSS Project")  # only used in "Vendor" field in Installer.
+    set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})  # to display
+    set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})  # to auto compare version
+    set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+    set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+    set(CPACK_GENERATOR "NSIS;ZIP")
 
     # Get `windeployqt` to pick DLLs (according to the above `find_package(Qt6 REQUIRED COMPONENTS Core ...)`)
     # To reliably get the correct version of `windeployqt` installed on this computer, need to get the folder of `qmake` first,
@@ -684,7 +703,7 @@ elseif(WIN32)
     ]])
 
     # Clean when uninstallation
-set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS [[
+    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS [[
     ;; Delete our ProgID
     DeleteRegKey HKCR "QKiSS.LZH"
 
@@ -699,17 +718,7 @@ set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS [[
 ]])
     # Start Menu
     set(CPACK_NSIS_MENU_LINKS "bin/qkiss.exe" "QKiSS")
+    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)  # Force uninstall old version before installing
+    include(CPack)  # execute CPack to read the defined variables.
 endif()
 
-install(TARGETS qkiss
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
-add_dependencies(qkiss icontheme)
-
-# file(COPY samples DESTINATION ${CMAKE_BINARY_DIR})
-
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(qkiss)
-endif()
