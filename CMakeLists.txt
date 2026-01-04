@@ -18,40 +18,6 @@ string(REGEX REPLACE "\n" "\n " PROJ_DESCRIPTION_DEBIAN "${PROJ_DESCRIPTION}")
 string(REGEX REPLACE "\n \n" "\n .\n" PROJ_DESCRIPTION_DEBIAN "${PROJ_DESCRIPTION_DEBIAN}")
 set(PROJ_DESCRIPTION_DEBIAN "${PROJ_SUMMARY}\n ${PROJ_DESCRIPTION_DEBIAN}")
 
-project(qkiss
-    VERSION ${PROJ_VERSION}
-    DESCRIPTION ${PROJ_SUMMARY}
-    HOMEPAGE_URL "https://github.com/kuanyui/qkiss"
-    LANGUAGES CXX)
-
-# ==============================================
-# Option :: Profiling
-# ==============================================
-
-option(ENABLE_PROFILING "Enable profiling (gprof / perf / hotsopt), should be used with `-DCMAKE_BUILD_TYPE=RelWithDebInfo`" OFF)
-
-if(ENABLE_PROFILING)
-    # Keep frame pointers when possible (useful for profilers)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        add_compile_options(-fno-omit-frame-pointer)
-        add_link_options(-fno-omit-frame-pointer)
-    endif()
-
-    if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        # Linux: gprof / perf style profiling
-        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-            add_compile_options(-pg)
-            add_link_options(-pg)
-        endif()
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-        # macOS: Instruments / Time Profiler (no -pg)
-        message(STATUS "Profiling enabled on macOS: using RelWithDebInfo + Instruments" )
-    elseif(MSVC)
-        # Windows: Visual Studio Profiler / ETW
-        message(STATUS "Profiling enabled on Windows: use Visual Studio Profiler or ETW" )
-    endif()
-endif()
-
 # ==============================================
 # Folder for generated, platform independent files
 # ==============================================
@@ -60,6 +26,154 @@ endif()
 # No use of `CACHE PATH` here currently.
 # A cached variable is defined at first-time `cmake`, and will not be changed no matter how many times `cmake` is executed laterly.
 set(PROJ_GENERATED_DIR "${CMAKE_SOURCE_DIR}/generated")
+
+# ==============================================
+# Python :: Find Python interprepter for scripts
+# ==============================================
+
+# Let user able to explicitly specify `Python3_EXECUTABLE`, because the PATH
+# problem under Windows + Python is already a little fucker; when under CI/CD +
+# Windows + msvc-dev-cmd + vcpkg + Python + CMake, it immediately transforms
+# into a huge pile of ultimate shit.
+if (WIN32)
+    set(WIN_PYTHON3_EXE "" CACHE FILEPATH "[Windows only] Force specify shitty Python PATH in Windows")
+endif()
+
+if (WIN_PYTHON3_EXE)
+    file(TO_CMAKE_PATH "${WIN_PYTHON3_EXE}" __PYTHON3__)  # Convert back-slash to slash
+    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
+elseif(DEFINED ENV{pythonLocation})
+    # If found env var `pythonLocation` is defined (by Github Action `actions/setup-python`)
+    file(TO_CMAKE_PATH "$ENV{pythonLocation}/python.exe" __PYTHON3__)  # Convert back-slash to slash
+    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
+elseif(Python3_EXECUTABLE)
+    file(TO_CMAKE_PATH "${Python3_EXECUTABLE}" __PYTHON3__)  # Convert back-slash to slash
+    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
+else()
+    find_package(Python3 REQUIRED Interpreter)
+    set(__PYTHON3__ "${Python3_EXECUTABLE}")
+endif()
+
+message(STATUS "CHECKPOINT: __PYTHON3__ is now set to: ${__PYTHON3__}")
+
+# ===============================================
+# Python :: Build XDG-compatible icon theme pack
+# ===============================================
+set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
+set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
+set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
+set(ICON_THEME_NAME "CustomizedTango")
+set(ICON_PNG_XDG_THEME_DIR "${PROJ_GENERATED_DIR}/icon_theme__png/${ICON_THEME_NAME}")
+set(ICON_SVG_XDG_THEME_DIR "${PROJ_GENERATED_DIR}/icon_theme__svg/${ICON_THEME_NAME}")
+
+# When included_icons.txt changed, auto execute cmake again.
+set(ICON_INCLUDE_FILE "${RESOURCES_DIR}/included_icons.txt")
+set(ICON_GENERATED_STAMP_FILE "${PROJ_GENERATED_DIR}/icons_built.stamp")
+
+# [Windows Only] Formalize path slashes for fucking Windows
+foreach(_v RESOURCES_DIR ICON_REPO_DIR ICON_BUILD_SCRIPT ICON_THEME_NAME ICON_PNG_XDG_THEME_DIR ICON_SVG_XDG_THEME_DIR ICON_INCLUDE_FILE ICON_GENERATED_STAMP_FILE)
+    file(TO_CMAKE_PATH "${${_v}}" ${_v})
+endforeach()
+
+# If qrc does not exist, create empty placeholder
+set(ICON_PNG_GENERATED_QRC "${ICON_PNG_XDG_THEME_DIR}/index.qrc")
+if(NOT EXISTS ${ICON_PNG_GENERATED_QRC})
+    file(WRITE ${ICON_PNG_GENERATED_QRC} "<RCC>\n</RCC>\n")
+endif()
+
+# Full script arguments
+set(CMD_PYTHON_BUILD_ICONS ${__PYTHON3__} "${ICON_BUILD_SCRIPT}"
+    --included-icon-file "${RESOURCES_DIR}/included_icons.txt"
+    --stamp-file "${ICON_GENERATED_STAMP_FILE}"
+    --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon"
+    --output-theme-name "${ICON_THEME_NAME}"
+    --output-png-theme-to-dir "${ICON_PNG_XDG_THEME_DIR}"
+    --output-svg-theme-to-dir "${ICON_SVG_XDG_THEME_DIR}"
+)
+
+# CMake Script Mode (`cmake -P <script_file>`)
+# Example: cmake -DTASK=GENERATE_ICONS -DWIN_PYTHON3_EXE=python3 -P CMakeLists.txt
+# This is mainly for cache icon result on Github Actions as cache
+if(CMAKE_SCRIPT_MODE_FILE)
+    if(TASK STREQUAL "GENERATE_ICONS")
+        execute_process(COMMAND ${CMD_PYTHON_BUILD_ICONS} RESULT_VARIABLE _icon_rc)
+        if(NOT _icon_rc EQUAL 0)
+            message(FATAL_ERROR "Icon generation failed")
+        endif()
+    endif()
+    return()  # exit immediately
+endif()
+
+# [Configure-time] Ensure icons are all built before `install()`, for packaging (especially some strict build environments like OBS + Fedora).
+execute_process(
+    COMMAND ${CMD_PYTHON_BUILD_ICONS}
+    RESULT_VARIABLE _icon_rc
+)
+if(NOT _icon_rc EQUAL 0)
+    message(FATAL_ERROR "Icon generation failed")
+endif()
+
+# [Build-time] Developer convenience (auto execute `build_icons.py` when building project if `included_icons.txt` modified)
+add_custom_command(
+    OUTPUT ${ICON_GENERATED_STAMP_FILE}
+    COMMAND ${CMD_PYTHON_BUILD_ICONS}
+    DEPENDS ${ICON_INCLUDE_FILE}  # when this modified, auto run this custom command.
+    COMMENT "Generating icon pack..."
+    USES_TERMINAL    # immediately output
+)
+# (custom_target) `icontheme` --needs--> stamp file --generated by--> (custom_command) --needs--> included_icons.txt
+add_custom_target(icontheme DEPENDS ${ICON_GENERATED_STAMP_FILE})
+
+# ==============================================
+# Python :: Generate changelogs from YAML for RPM & DEB
+# ==============================================
+
+execute_process(
+    COMMAND ${__PYTHON3__} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
+            --input-yaml ${CMAKE_SOURCE_DIR}/CHANGELOG.yaml
+            --output-rpm ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
+            --output-deb ${PROJ_GENERATED_DIR}/debian/changelog
+            --output-markdown ${PROJ_GENERATED_DIR}/changelogs.md
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    RESULT_VARIABLE _ret)
+
+if(NOT _ret EQUAL 0)
+    message(FATAL_ERROR "Failed to generate changelog")
+else()
+    message(STATUS "Success to generate changelog.")
+endif()
+
+file(READ ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
+    CHANGELOG_FOR_RPM_SPEC)
+
+# =======================================================
+# Windows .ico file
+# =======================================================
+if (WIN32)
+    find_program(MAGICK_EXECUTABLE NAMES magick convert REQUIRED)
+    set(ICO_SOURCES
+        "${ICON_PNG_XDG_THEME_DIR}/16x16/apps/qkiss.png"
+        "${ICON_PNG_XDG_THEME_DIR}/22x22/apps/qkiss.png"
+        "${ICON_PNG_XDG_THEME_DIR}/24x24/apps/qkiss.png"
+        "${ICON_PNG_XDG_THEME_DIR}/32x32/apps/qkiss.png"
+        "${ICON_PNG_XDG_THEME_DIR}/48x48/apps/qkiss.png"
+        "${ICON_PNG_XDG_THEME_DIR}/48x48@2/apps/qkiss.png"
+    )
+    set(GEN_ICO_FILE "${PROJ_GENERATED_DIR}/qkiss.ico")
+    set(GEN_RC_FILE  "${PROJ_GENERATED_DIR}/qkiss.rc")   # `*.rc` is "Windows Resource", NOT a format defined by Qt.
+    add_custom_command(
+        OUTPUT ${GEN_ICO_FILE}
+        COMMAND ${MAGICK_EXECUTABLE} ${ICO_SOURCES} ${GEN_ICO_FILE}
+        DEPENDS ${ICON_SOURCES}
+        COMMENT "Generating Windows Icon (.ico) from PNG sources"
+    )
+    file(WRITE "${GEN_RC_FILE}" "IDI_ICON1 ICON DISCARDABLE \"${GEN_ICO_FILE}\"\n")   # This is file format of Windows Resource
+
+    # add_custom_target(gen_win_ico DEPENDS ${GEN_ICO_FILE})
+    # add_dependencies(${PROJECT_NAME} gen_win_ico)
+    set(WIN_ICON_RESOURCE "${GEN_RC_FILE}" "${GEN_ICO_FILE}")
+endif()
+
 
 # ==============================================
 # Git commit hash / time
@@ -95,6 +209,47 @@ elseif(EXISTS "${CMAKE_SOURCE_DIR}/gitversion.cmake")
     # This file is generated by Makefile, before creating tarball.
     include("${CMAKE_SOURCE_DIR}/gitversion.cmake")
 endif()
+
+# ==============================================
+# Project
+# ==============================================
+# Call project() here instead of top of file, because project command is not scriptable (when running `cmake -P`)
+
+project(qkiss
+    VERSION ${PROJ_VERSION}
+    DESCRIPTION ${PROJ_SUMMARY}
+    HOMEPAGE_URL "https://github.com/kuanyui/qkiss"
+    LANGUAGES CXX)
+
+# ==============================================
+# Option :: C++ Profiling
+# ==============================================
+
+option(ENABLE_PROFILING "Enable profiling (gprof / perf / hotsopt), should be used with `-DCMAKE_BUILD_TYPE=RelWithDebInfo`" OFF)
+
+# IMPORTANT: these `CMAKE_CXX_*` must be used after project( ...LANGUAGES CXX)
+if(ENABLE_PROFILING)
+    # Keep frame pointers when possible (useful for profilers)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        add_compile_options(-fno-omit-frame-pointer)
+        add_link_options(-fno-omit-frame-pointer)
+    endif()
+
+    if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        # Linux: gprof / perf style profiling
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            add_compile_options(-pg)
+            add_link_options(-pg)
+        endif()
+    elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+        # macOS: Instruments / Time Profiler (no -pg)
+        message(STATUS "Profiling enabled on macOS: using RelWithDebInfo + Instruments" )
+    elseif(MSVC)
+        # Windows: Visual Studio Profiler / ETW
+        message(STATUS "Profiling enabled on Windows: use Visual Studio Profiler or ETW" )
+    endif()
+endif()
+
 
 # ==============================================
 # CPack
@@ -201,140 +356,6 @@ if(LibArchive_FOUND)
     list(APPEND EXTRA_DEFS HAVE_LIBARCHIVE)
     list(APPEND EXTRA_INCS ${LibArchive_INCLUDE_DIRS})
     list(APPEND EXTRA_LIBS LibArchive::LibArchive)
-endif()
-
-
-# ==============================================
-# Python :: Find Python interprepter for scripts
-# ==============================================
-
-# Let user able to explicitly specify `Python3_EXECUTABLE`, because the PATH
-# problem under Windows + Python is already a little fucker; when under CI/CD +
-# Windows + msvc-dev-cmd + vcpkg + Python + CMake, it immediately transforms
-# into a huge pile of ultimate shit.
-if (WIN32)
-    set(WIN_PYTHON3_EXE "" CACHE FILEPATH "[Windows only] Force specify shitty Python PATH in Windows")
-endif()
-
-if (WIN_PYTHON3_EXE)
-    file(TO_CMAKE_PATH "${WIN_PYTHON3_EXE}" __PYTHON3__)  # Convert back-slash to slash
-    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
-elseif(DEFINED ENV{pythonLocation})
-    # If found env var `pythonLocation` is defined (by Github Action `actions/setup-python`)
-    file(TO_CMAKE_PATH "$ENV{pythonLocation}/python.exe" __PYTHON3__)  # Convert back-slash to slash
-    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
-elseif(Python3_EXECUTABLE)
-    file(TO_CMAKE_PATH "${Python3_EXECUTABLE}" __PYTHON3__)  # Convert back-slash to slash
-    set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
-else()
-    find_package(Python3 REQUIRED Interpreter)
-    set(__PYTHON3__ "${Python3_EXECUTABLE}")
-endif()
-
-message(STATUS "CHECKPOINT: __PYTHON3__ is now set to: ${__PYTHON3__}")
-
-# ==============================================
-# Python :: Generate changelogs from YAML for RPM & DEB
-# ==============================================
-
-execute_process(
-    COMMAND ${__PYTHON3__} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
-            --input-yaml ${CMAKE_SOURCE_DIR}/CHANGELOG.yaml
-            --output-rpm ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
-            --output-deb ${PROJ_GENERATED_DIR}/debian/changelog
-            --output-markdown ${PROJ_GENERATED_DIR}/changelogs.md
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    RESULT_VARIABLE _ret)
-
-if(NOT _ret EQUAL 0)
-    message(FATAL_ERROR "Failed to generate changelog")
-else()
-    message(STATUS "Success to generate changelog.")
-endif()
-
-file(READ ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
-    CHANGELOG_FOR_RPM_SPEC)
-
-# ===============================================
-# Python :: Build XDG-compatible icon theme pack
-# ===============================================
-set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
-set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
-set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
-set(ICON_THEME_NAME "CustomizedTango")
-set(ICON_PNG_XDG_THEME_DIR "${PROJ_GENERATED_DIR}/icon_theme__png/${ICON_THEME_NAME}")
-set(ICON_SVG_XDG_THEME_DIR "${PROJ_GENERATED_DIR}/icon_theme__svg/${ICON_THEME_NAME}")
-
-# When included_icons.txt changed, auto execute cmake again.
-set(ICON_INCLUDE_FILE "${RESOURCES_DIR}/included_icons.txt")
-set(ICON_GENERATED_STAMP_FILE "${PROJ_GENERATED_DIR}/icons_built.stamp")
-
-# [Windows Only] Formalize path slashes for fucking Windows
-foreach(_v RESOURCES_DIR ICON_REPO_DIR ICON_BUILD_SCRIPT ICON_THEME_NAME ICON_PNG_XDG_THEME_DIR ICON_SVG_XDG_THEME_DIR ICON_INCLUDE_FILE ICON_GENERATED_STAMP_FILE)
-    file(TO_CMAKE_PATH "${${_v}}" ${_v})
-endforeach()
-
-# If qrc does not exist, create empty placeholder
-set(ICON_PNG_GENERATED_QRC "${ICON_PNG_XDG_THEME_DIR}/index.qrc")
-if(NOT EXISTS ${ICON_PNG_GENERATED_QRC})
-    file(WRITE ${ICON_PNG_GENERATED_QRC} "<RCC>\n</RCC>\n")
-endif()
-
-# Full script arguments
-set(CMD_PYTHON_BUILD_ICONS ${__PYTHON3__} "${ICON_BUILD_SCRIPT}"
-    --included-icon-file "${RESOURCES_DIR}/included_icons.txt"
-    --stamp-file "${ICON_GENERATED_STAMP_FILE}"
-    --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon"
-    --output-theme-name "${ICON_THEME_NAME}"
-    --output-png-theme-to-dir "${ICON_PNG_XDG_THEME_DIR}"
-    --output-svg-theme-to-dir "${ICON_SVG_XDG_THEME_DIR}"
-)
-# [Configure-time] Ensure icons are all built before `install()`, for packaging.
-execute_process(
-    COMMAND ${CMD_PYTHON_BUILD_ICONS}
-    RESULT_VARIABLE _icon_rc
-)
-if(NOT _icon_rc EQUAL 0)
-    message(FATAL_ERROR "Icon generation failed")
-endif()
-
-# [Build-time] Developer convenience (auto execute `build_icons.py` when building project if `included_icons.txt` modified)
-add_custom_command(
-    OUTPUT ${ICON_GENERATED_STAMP_FILE}
-    COMMAND ${CMD_PYTHON_BUILD_ICONS}
-    DEPENDS ${ICON_INCLUDE_FILE}  # when this modified, auto run this custom command.
-    COMMENT "Generating icon pack..."
-    USES_TERMINAL    # immediately output
-)
-# (custom_target) `icontheme` --needs--> stamp file --generated by--> (custom_command) --needs--> included_icons.txt
-add_custom_target(icontheme DEPENDS ${ICON_GENERATED_STAMP_FILE})
-
-# =======================================================
-# Windows .ico file
-# =======================================================
-if (WIN32)
-    find_program(MAGICK_EXECUTABLE NAMES magick convert REQUIRED)
-    set(ICO_SOURCES
-        "${ICON_PNG_XDG_THEME_DIR}/16x16/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/22x22/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/24x24/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/32x32/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/48x48/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/48x48@2/apps/qkiss.png"
-    )
-    set(GEN_ICO_FILE "${PROJ_GENERATED_DIR}/qkiss.ico")
-    set(GEN_RC_FILE  "${PROJ_GENERATED_DIR}/qkiss.rc")   # `*.rc` is "Windows Resource", NOT a format defined by Qt.
-    add_custom_command(
-        OUTPUT ${GEN_ICO_FILE}
-        COMMAND ${MAGICK_EXECUTABLE} ${ICO_SOURCES} ${GEN_ICO_FILE}
-        DEPENDS ${ICON_SOURCES}
-        COMMENT "Generating Windows Icon (.ico) from PNG sources"
-    )
-    file(WRITE "${GEN_RC_FILE}" "IDI_ICON1 ICON DISCARDABLE \"${GEN_ICO_FILE}\"\n")   # This is file format of Windows Resource
-
-    # add_custom_target(gen_win_ico DEPENDS ${GEN_ICO_FILE})
-    # add_dependencies(${PROJECT_NAME} gen_win_ico)
-    set(WIN_ICON_RESOURCE "${GEN_RC_FILE}" "${GEN_ICO_FILE}")
 endif()
 
 # ===============================================
