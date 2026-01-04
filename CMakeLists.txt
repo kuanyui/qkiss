@@ -120,6 +120,16 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_compile_options(/W4)
 endif()
 
+# ===============================================
+# Prepare variables to store extra .h / .cpp / dynamic lib paths
+# ===============================================
+# Actually declaring variable is unnecessary in CMake but explicity is better then implicity.
+# Be careful don't move this after `list(APPREND)` or its accumulated content will be clear.
+
+set(EXTRA_INCS)
+set(EXTRA_DEFS)
+set(EXTRA_LIBS)
+
 # ==============================================
 # Expand CMake macro (configure)
 # ==============================================
@@ -140,13 +150,6 @@ endif()
 # ===============================================
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent Multimedia)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools Concurrent Multimedia)
-
-# ===============================================
-# Package :: Prepare variables to store extra .h / .cpp / dynamic lib paths
-# ===============================================
-set(EXTRA_INCS)
-set(EXTRA_DEFS)
-set(EXTRA_LIBS)
 
 # ===============================================
 # Package :: iconv
