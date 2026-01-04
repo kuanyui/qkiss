@@ -36,7 +36,7 @@ jobs:
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_binary_cache
-      # VCPKG_BINARY_SOURCES: clear; files,${{ github.workspace }}\vcpkg_binary_cache,readwrite
+      # VCPKG_BINARY_SOURCES: clear; files,${{ github.workspace }}/vcpkg_binary_cache,readwrite
     steps:
       # Step 1: Download the source code
       - name: Checkout code
@@ -84,7 +84,7 @@ jobs:
       - name: Install Inkscape via Chocolatey
         run: |
           choco install inkscape --no-progress
-          echo "C:\Program Files\Inkscape\bin" >> $env:GITHUB_PATH
+          echo "C:/Program Files/Inkscape/bin" >> $env:GITHUB_PATH
 
       # Step 3: Set up Python 3.11
       - name: Set up Python
@@ -108,8 +108,9 @@ jobs:
           path: |
             generated/icon_theme__png
             generated/icon_theme__svg
-            generated/icon_built.stamp
-          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.iconSubmodule.outputs.commitHash }}
+            generated/icons_built.stamp
+          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.iconSubmodule.outputs.commitHash }}
+          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
 
       # Step 6: Convert icons via CMake script mode (cmake -P <script_file>)
       - name: Convert icons via CMake script mode
@@ -140,9 +141,10 @@ jobs:
           path: |
             generated/icon_theme__png
             generated/icon_theme__svg
-            generated/icon_built.stamp
+            generated/icons_built.stamp
           # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.iconSubmodule.outputs.commitHash }}
-          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ needs.prepare-icon-cache.outputs.commitHash }}
+          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ needs.prepare-icon-cache.outputs.commitHash }}
+          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
 
       # Step 3: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
       - name: Restore `vcpkg_binary_cache`
@@ -171,7 +173,7 @@ jobs:
       # Step 7: Ensure location of ImageMagick (for converting .PNGs to .ICO)
       - name: Locate ImageMagick (for converting .PNGs to .ICO)
         run: |
-          $magickPath = Get-ChildItem "C:\Program Files\ImageMagick*" | Select-Object -First 1
+          $magickPath = Get-ChildItem "C:/Program Files/ImageMagick*" | Select-Object -First 1
           if ($magickPath) {
             echo "$($magickPath.FullName)" >> $GITHUB_PATH
             Write-Host "Found ImageMagick at $($imPath.FullName)"
@@ -184,7 +186,7 @@ jobs:
         id: cache-external-binary-dependencies
         uses: actions/cache@v5
         with:
-          path: C:\bin_deps
+          path: ${{ runner.temp }}/bin_deps
           # (if need rebuild libarchive, increase this int.)
           key: ${{ runner.os }}-external-binary-dependencies-v1
 
@@ -192,19 +194,19 @@ jobs:
       - name: Download & extract external binary dependencies
         if: steps.cache-external-binary-dependencies.outputs.cache-hit != 'true'
         run: |
-          mkdir C:\bin_deps
+          mkdir "${{ runner.temp }}/bin_deps"
 
           # Handle LHA
-          curl -L -o C:\bin_deps\lha.zip https://github.com/jca02266/lha/releases/download/release-20211125/lha-1.14i-ac20211125-x64.exe.zip
-          powershell Expand-Archive -Path C:\bin_deps\lha.zip -DestinationPath C:\bin_deps
+          curl -L -o "${{ runner.temp }}/bin_deps/lha.zip" https://github.com/jca02266/lha/releases/download/release-20211125/lha-1.14i-ac20211125-x64.exe.zip
+          powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/lha.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
 
           # Handle unar
-          curl -L -o C:\bin_deps\unar.zip https://cdn.theunarchiver.com/downloads/unarWindows.zip
-          powershell Expand-Archive -Path C:\bin_deps\unar.zip -DestinationPath C:\bin_deps
+          curl -L -o "${{ runner.temp }}/bin_deps/unar.zip" https://cdn.theunarchiver.com/downloads/unarWindows.zip
+          powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/unar.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
 
       # Step 8.2: Add external binary dependencies directory to system PATH
       - name: Add external dependencies to PATH
-        run: echo "C:\bin_deps" >> $GITHUB_PATH
+        run: echo "${{ runner.temp }}/bin_deps" >> $GITHUB_PATH
 
       # Step 9: Install Qt 6
       - name: Install Qt
@@ -229,7 +231,7 @@ jobs:
         # Python + Windows is a pile of shit. Never understand how do they handle PATH.
         run: |
           # DIRTY WORKAROUND 1: Use PowerShell to raise the priority of `actions/setup-python` to top.
-          $env:PATH = "$env:pythonLocation;$env:pythonLocation\Scripts;$env:PATH"
+          $env:PATH = "$env:pythonLocation;$env:pythonLocation/Scripts;$env:PATH"
 
           # DIRTY WORKAROUND 2: Hijack envvar to force CMake to eat the python location
           $env:Python3_ROOT_DIR = "$env:pythonLocation"
@@ -237,7 +239,7 @@ jobs:
           # DIRTY WORKAROUND 3: Lots of explicit -DPython3_ for Python this little shit:
           #
           #    -DPython3_ROOT_DIR="$env:pythonLocation" `
-          #    -DPython3_EXECUTABLE="$env:pythonLocation\python.exe" `
+          #    -DPython3_EXECUTABLE="$env:pythonLocation/python.exe" `
           #    -DPython3_FIND_STRATEGY=LOCATION `
           #    -DPython3_FIND_REGISTRY=NEVER `
           #
@@ -249,7 +251,7 @@ jobs:
           echo "[DEBUG][Github Context] steps.cpython311: ${{ steps.cpython311.outputs.python-path }}"
 
           cmake -B build -G "Visual Studio 17 2022" `
-            -DWIN_EXTERNAL_DEPS_DIR="C:/bin_deps" `
+            -DWIN_EXTERNAL_BIN_DEPS_DIR="${{ runner.temp }}/bin_deps" `
             -DWIN_PYTHON3_EXE="${{ steps.cpython311.outputs.python-path }}" `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
             -DCMAKE_BUILD_TYPE=Release
