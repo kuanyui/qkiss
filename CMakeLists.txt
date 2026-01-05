@@ -674,14 +674,18 @@ elseif(WIN32)
     # File association to `*.lzh` (for NSIS only)
     set(CPACK_NSIS_FILE_ASSOCIATIONS "lzh")
 
+    # ===================================================
+    # Fuck Windows, fuck NSIS, fuck CMake.
+    # ===================================================
+
     # NSIS parser may be incompatible with `/` path, use Windows native `\` should be safer... Maybe...
     file(TO_NATIVE_PATH "${PROJ_GENERATED_DIR}/windows/install.nsh" _WIN_NATIVE_PATH_NSIS_INSTALL)
     file(TO_NATIVE_PATH "${PROJ_GENERATED_DIR}/windows/uninstall.nsh" _WIN_NATIVE_PATH_NSIS_UNINSTALL)
-    message(STATUS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}")
+    # Ridiculous "NATIVE". Fuck Windows again. FUUUUCK.
+    string(REPLACE "\\" "\\\\" _WIN_NATIVE_PATH_NSIS_INSTALL "${_WIN_NATIVE_PATH_NSIS_INSTALL}")
+    string(REPLACE "\\" "\\\\" _WIN_NATIVE_PATH_NSIS_UNINSTALL "${_WIN_NATIVE_PATH_NSIS_UNINSTALL}")
 
     # Fuck CMake, WHAT THE FUCK IS THIS STUPID BEHAVIOR???
-    message("FUCK=================================")
-    message("${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}")
     unset(CPACK_NSIS_EXTRA_INSTALL_COMMANDS)
     unset(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS)
 
