@@ -55,6 +55,7 @@ jobs:
 
       # Step 2: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
       - name: Restore `vcpkg_binary_cache`
+        id: vcpkg_cache
         uses: actions/cache@v5
         with:
           ### In "Manifest Mode" (when `vcpkg.json`` exists at repo root), vcpkg
@@ -66,6 +67,7 @@ jobs:
 
       # Step 3: Download & build & install packages via vcpkg
       - name: Download & build & install packages via vcpkg, and cache to `vcpkg_binary_cache`
+        if: steps.vcpkg_cache.outputs.cache-hit != 'true'
         run: vcpkg install --triplet x64-windows
 
   prepare-icon-cache:
@@ -80,40 +82,44 @@ jobs:
           token: ${{ secrets.MY_PAT }}
           submodules: 'recursive'
 
-      # Step 2: Install Inkscape
-      - name: Install Inkscape via Chocolatey
-        run: |
-          choco install inkscape --no-progress
-          echo "C:/Program Files/Inkscape/bin" >> $env:GITHUB_PATH
-
-      # Step 3: Set up Python 3.11
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        id: cpython311
-        with:
-          python-version: '3.11'
-
-      # Step 4: Get icon submodule commit hash
+      # Step 2: Get icon submodule commit hash
       - name: Get submodule commit hash
-        id: iconSubmodule
+        id: icon_submodule
         run: |
           # Commit hash of submodule
           echo "commitHash=$(git -C resources/tango-icon-remixer rev-parse HEAD)" >> $GITHUB_OUTPUT
         shell: bash
 
-      # Step 5: Restore cache
+      # Step 3: Restore cache
       - name: Cache generated icons
+        id: icon_cache
         uses: actions/cache@v5
         with:
           path: |
             generated/icon_theme__png
             generated/icon_theme__svg
             generated/icons_built.stamp
-          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.iconSubmodule.outputs.commitHash }}
+          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.icon_submodule.outputs.commitHash }}
           key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
+
+      # Step 4: Install Inkscape
+      - name: Install Inkscape via Chocolatey
+        if: steps.icon_cache.outputs.cache-hit != 'true'
+        run: |
+          choco install inkscape --no-progress
+          echo "C:/Program Files/Inkscape/bin" >> $env:GITHUB_PATH
+
+      # Step 5: Set up Python 3.11
+      - name: Set up Python
+        if: steps.icon_cache.outputs.cache-hit != 'true'
+        uses: actions/setup-python@v6
+        id: cpython311
+        with:
+          python-version: '3.11'
 
       # Step 6: Convert icons via CMake script mode (cmake -P <script_file>)
       - name: Convert icons via CMake script mode
+        if: steps.icon_cache.outputs.cache-hit != 'true'
         run: cmake `
                  -DTASK=GENERATE_ICONS `
                  -DWIN_PYTHON3_EXE="${{ steps.cpython311.outputs.python-path }}" `
@@ -171,7 +177,7 @@ jobs:
             generated/icon_theme__png
             generated/icon_theme__svg
             generated/icons_built.stamp
-          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.iconSubmodule.outputs.commitHash }}
+          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.icon_submodule.outputs.commitHash }}
           # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ needs.prepare-icon-cache.outputs.commitHash }}
           key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
 
@@ -284,8 +290,14 @@ jobs:
       # Step 13: Package with CPack (Bundle Qt DLLs and External Binaries)
       - name: Package with CPack
         working-directory: build
+        # Generator: NSIS, Configuration: Release
         run: |
           cpack -G NSIS -C Release
+          if ($LASTEXITCODE -ne 0) {
+              Write-Host "CPack failed! Printing NSIS log:"
+              Get-Content ./_CPack_Packages/win64/NSIS/NSISOutput.log
+              exit 1
+          }
 
 
       # Step 14: Upload the entire Release folder
