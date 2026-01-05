@@ -119,9 +119,38 @@ jobs:
                  -DWIN_PYTHON3_EXE="${{ steps.cpython311.outputs.python-path }}" `
                  -P CMakeLists.txt
 
+  prepare-external-bin-deps-cache:
+    name: Download external executable binary (LHA, Unar) and cache
+    runs-on: windows-latest
+    steps:
+      # Step 1: Prepare cache
+      - name: Cache external binary dependencies
+        id: cache-external-binary-dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ runner.temp }}/bin_deps
+          key: ${{ runner.os }}-external-binary-dependencies-v1
+
+      # Step 2: Download and extract external binary dependencies (LHA & unar)
+      - name: Download & extract external binary dependencies
+        if: steps.cache-external-binary-dependencies.outputs.cache-hit != 'true'
+        run: |
+          mkdir "${{ runner.temp }}/bin_deps"
+
+          # Handle LHA
+          curl -L -o "${{ runner.temp }}/bin_deps/lha.zip" https://github.com/jca02266/lha/releases/download/release-20211125/lha-1.14i-ac20211125-x64.exe.zip
+          powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/lha.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
+
+          # Handle unar
+          curl -L -o "${{ runner.temp }}/bin_deps/unar.zip" https://cdn.theunarchiver.com/downloads/unarWindows.zip
+          powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/unar.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
+
   build-main:
     name: Build main project
-    needs: [ 'prepare-vcpkg-cache', 'prepare-icon-cache' ]
+    needs:
+      - 'prepare-vcpkg-cache'
+      - 'prepare-icon-cache'
+      - 'prepare-external-bin-deps-cache'
     runs-on: windows-latest
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_binary_cache
@@ -134,7 +163,7 @@ jobs:
           token: ${{ secrets.MY_PAT }}
           submodules: 'recursive'
 
-      # Step 2: Restore icon cache
+      # Step 2: [Cache] Restore icon cache
       - name: Restore generated icons cache
         uses: actions/cache@v5
         with:
@@ -153,24 +182,46 @@ jobs:
           path: vcpkg_binary_cache
           key: ${{ runner.os }}-vcpkg-binary-cache-${{ hashFiles('vcpkg.json') }}
 
-      # Step 4: Install packages via vcpkg (from cache)
+      # Step 4: [Cache] External binary dependencies (LHA & unar)
+      - name: Restore cache of external binary dependencies
+        id: cache-external-binary-dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ runner.temp }}/bin_deps
+          key: ${{ runner.os }}-external-binary-dependencies-v1
+
+      # Step 4.1: Add external binary dependencies directory to system PATH
+      - name: Add external dependencies to PATH
+        run: echo "${{ runner.temp }}/bin_deps" >> $GITHUB_PATH
+
+      # Step 5: Install packages via vcpkg (from cache)
       - name: Install packages via `vcpkg` from `vcpkg_binary_cache`
         run: vcpkg install --triplet x64-windows
 
-      # Step 5: Set up Python 3.11
+      # Step 6: Install NSIS for pack installer (What CPack using actually is) `makensis.exe`
+      - name: Install NSIS via Chocolatey
+        run: |
+          choco install nsis --no-progress --yes
+          $nsis = "C:/Program Files (x86)/NSIS/Bin"
+          if (!(Test-Path "$nsis/makensis.exe")) {
+            throw "NSIS not installed correctly"
+          }
+          echo $nsis | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      # Step 7: Set up Python 3.11
       - name: Set up Python
         uses: actions/setup-python@v6
         id: cpython311
         with:
           python-version: '3.11'
 
-      # Step 6: Install required Python packages (jsonschema, pyyaml)
+      # Step 8: Install required Python packages (jsonschema, pyyaml)
       - name: Install Python dependencies
         # use `python -m pip` instead of `pip` to ensure the runtime installed
         # by `actions/setup-python@v4` is chosen.
         run: python -m pip install jsonschema pyyaml
 
-      # Step 7: Ensure location of ImageMagick (for converting .PNGs to .ICO)
+      # Step 9: Ensure location of ImageMagick (for converting .PNGs to .ICO)
       - name: Locate ImageMagick (for converting .PNGs to .ICO)
         run: |
           $magickPath = Get-ChildItem "C:/Program Files/ImageMagick*" | Select-Object -First 1
@@ -181,34 +232,7 @@ jobs:
             Write-Error "ImageMagick not found!"
           }
 
-      # Step 8: [Cache] Download and extract external binary dependencies (LHA & unar)
-      - name: Cache external binary dependencies
-        id: cache-external-binary-dependencies
-        uses: actions/cache@v5
-        with:
-          path: ${{ runner.temp }}/bin_deps
-          # (if need rebuild libarchive, increase this int.)
-          key: ${{ runner.os }}-external-binary-dependencies-v1
-
-      # Step 8.1: Download and extract external binary dependencies (LHA & unar)
-      - name: Download & extract external binary dependencies
-        if: steps.cache-external-binary-dependencies.outputs.cache-hit != 'true'
-        run: |
-          mkdir "${{ runner.temp }}/bin_deps"
-
-          # Handle LHA
-          curl -L -o "${{ runner.temp }}/bin_deps/lha.zip" https://github.com/jca02266/lha/releases/download/release-20211125/lha-1.14i-ac20211125-x64.exe.zip
-          powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/lha.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
-
-          # Handle unar
-          curl -L -o "${{ runner.temp }}/bin_deps/unar.zip" https://cdn.theunarchiver.com/downloads/unarWindows.zip
-          powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/unar.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
-
-      # Step 8.2: Add external binary dependencies directory to system PATH
-      - name: Add external dependencies to PATH
-        run: echo "${{ runner.temp }}/bin_deps" >> $GITHUB_PATH
-
-      # Step 9: Install Qt 6
+      # Step 10: Install Qt 6
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -218,11 +242,11 @@ jobs:
           modules: 'qtmultimedia'   # Important!
           cache: true      # [Cache] built-in cache
 
-      # Step 10: Initialize MSVC Environment
+      # Step 11: Initialize MSVC Environment
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
-      # Step 11: Build with CMake (build to `build/`)
+      # Step 12: Build with CMake (build to `build/`)
       - name: CMake Configure and Build
         # Explicitly specify `$env:pythonLocation` which is prepared by `actions/setup-python`,
         # to prevent CMake from choosing other version of python interpreters,
@@ -257,14 +281,14 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release
           cmake --build build --config Release
 
-      # Step 12: Package with CPack (Bundle Qt DLLs and External Binaries)
+      # Step 13: Package with CPack (Bundle Qt DLLs and External Binaries)
       - name: Package with CPack
         working-directory: build
         run: |
           cpack -G NSIS -C Release
 
 
-      # Step 13: Upload the entire Release folder
+      # Step 14: Upload the entire Release folder
       # Default value of ${CPACK_PACKAGE_FILE_NAME} is
       # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
       - name: Upload Artifact
