@@ -673,9 +673,8 @@ elseif(WIN32)
 
     # File association to `*.lzh` (for NSIS only)
     set(CPACK_NSIS_FILE_ASSOCIATIONS "lzh")
-
-    # Setup registry for file association.
-    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS [[
+    # define tmp var, then use "${TMP_VAR}" to force CMake not to interprete a string as list.
+    set(_NSIS_INSTALL_COMMANDS [[
 ; ---- Define ProgID ------------------------------------------------------------
 ; Define a unique identifier, ProgID `QKiSS.LZH` to describe "What to do when opening *.lzh via QKiSS".
 ; A human readable descriptive string showed in "Type" column in Explorer, if QKiSS becomes the default open type.
@@ -702,8 +701,7 @@ WriteRegStr HKCR "Applications/qkiss.exe/shell/open/command" "" '"$INSTDIR/qkiss
 System::Call 'Shell32::SHChangeNotify(i 0x08000000, i 0, i 0, i 0)'
 ]])
 
-    # Clean when uninstallation
-    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS [[
+    set(_NSIS_UNINSTALL_COMMANDS [[
 ; Delete our ProgID
 DeleteRegKey HKCR "QKiSS.LZH"
 
@@ -716,6 +714,11 @@ DeleteRegValue HKCR ".lzh/OpenWithProgids" "QKiSS.LZH"
 ; Calls Windows API `Shell32::SHChangeNotify` again.
 System::Call 'Shell32::SHChangeNotify(i 0x08000000, i 0, i 0, i 0)'
 ]])
+    # Setup registry for file association.
+    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${_NSIS_INSTALL_COMMANDS}")
+    # Clean when uninstallation
+    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${_NSIS_UNINSTALL_COMMANDS}")
+
     set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")
     set(CPACK_NSIS_MENU_LINKS "qkiss.exe" "QKiSS") # Start Menu
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)  # Force uninstall old version before installing
