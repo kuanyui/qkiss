@@ -678,8 +678,8 @@ elseif(WIN32)
     file(TO_NATIVE_PATH "${PROJ_GENERATED_DIR}/windows/install.nsh" _WIN_NATIVE_PATH_NSIS_INSTALL)
     file(TO_NATIVE_PATH "${PROJ_GENERATED_DIR}/windows/uninstall.nsh" _WIN_NATIVE_PATH_NSIS_UNINSTALL)
     # Make `*.nsh` independent files to completely avoid CMake from interpreting string containing semicolons as list.
-    string(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "\n!include \"${_WIN_NATIVE_PATH_NSIS_INSTALL}\"")
-    string(APPEND CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "\n!include \"${_WIN_NATIVE_PATH_NSIS_UNINSTALL}\"")
+    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "!include \"${_WIN_NATIVE_PATH_NSIS_INSTALL}\"")
+    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "!include \"${_WIN_NATIVE_PATH_NSIS_UNINSTALL}\"")
 
     set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")
     set(CPACK_NSIS_MENU_LINKS "qkiss.exe" "QKiSS") # Start Menu
