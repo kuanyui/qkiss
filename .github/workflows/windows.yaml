@@ -302,10 +302,12 @@ jobs:
               Write-Host "./_CPack_Packages/win64/NSIS/NSISOutput.log"
               Write-Host "============================================"
               Get-Content ./_CPack_Packages/win64/NSIS/NSISOutput.log
-              # Write-Host "============================================"
-              # Write-Host "./_CPack_Packages/win64/NSIS/project.nsi"
-              # Write-Host "============================================"
+              Write-Host "============================================"
+              Write-Host "./_CPack_Packages/win64/NSIS/project.nsi"
+              Write-Host "============================================"
+              Get-Content -Path "./_CPack_Packages/win64/NSIS/project.nsi" | ForEach-Object { "$($_.ReadCount): $_" } | Select-Object -Index (740..750)
               # Get-Content ./_CPack_Packages/win64/NSIS/project.nsi
+
               exit 1
           }
 
