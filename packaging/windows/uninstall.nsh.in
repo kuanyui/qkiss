@@ -1,0 +1,13 @@
+; Clean when uninstallation
+
+; Delete our ProgID
+DeleteRegKey HKCR "QKiSS.LZH"
+
+; Delete from Applications
+DeleteRegKey HKCR "Applications/qkiss.exe"
+
+; Remove self from *.lzh Right-click menu (Remove QKiSS.LZH only, instead of delete the whole OpenWithProgids reg key)
+DeleteRegValue HKCR ".lzh/OpenWithProgids" "QKiSS.LZH"
+
+; Calls Windows API `Shell32::SHChangeNotify` again.
+System::Call 'Shell32::SHChangeNotify(i 0x08000000, i 0, i 0, i 0)'
