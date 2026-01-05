@@ -632,7 +632,7 @@ elseif(WIN32)
     find_file(FOUNDATION_DLL "Foundation.1.0.dll" HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
 
     if(LHA_EXECUTABLE AND UNAR_EXECUTABLE AND FOUNDATION_DLL)
-        install(FILES "${LHA_EXECUTABLE}" "${UNAR_EXECUTABLE}" "${FOUNDATION_DLL}" DESTINATION .)
+        install(FILES "${LHA_EXECUTABLE}" "${UNAR_EXECUTABLE}" "${FOUNDATION_DLL}" DESTINATION ${CMAKE_INSTALL_BINDIR})
         message(STATUS "External dependencies (lha/unar) found and scheduled for installation.")
     else()
         message(FATAL_ERROR "External dependencies (lha/unar) not found in WIN_EXTERNAL_BIN_DEPS_DIR nor PATH! Installer will be incomplete.")
@@ -654,9 +654,6 @@ elseif(WIN32)
     get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
     find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qt_bin_dir}")
-
-    # Install the main executable to root
-    install(TARGETS qkiss RUNTIME DESTINATION .)
 
     # Run `windeployqt` only in install() time instead of configure / build time.
     #   --no-translations          Don't include Qt built-in lots of *.qm files.
