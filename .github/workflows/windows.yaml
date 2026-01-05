@@ -208,11 +208,14 @@ jobs:
       - name: Install NSIS via Chocolatey
         run: |
           choco install nsis --no-progress --yes
-          $nsis = "C:/Program Files (x86)/NSIS/Bin"
-          if (!(Test-Path "$nsis/makensis.exe")) {
-            throw "NSIS not installed correctly"
+          $nsis = "C:/Program Files (x86)/NSIS"
+          if (Test-Path "$nsis/makensis.exe") {
+              Write-Host "Found NSIS (makensis.exe) at $nsis/makensis.exe"
+              Add-Content -Path $env:GITHUB_PATH -Value $nsis
+          } else {
+              Write-Error "Unable to find NSIS (makensis.exe)"
+              exit 1
           }
-          echo $nsis | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       # Step 7: Set up Python 3.11
       - name: Set up Python
