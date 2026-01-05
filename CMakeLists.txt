@@ -397,8 +397,9 @@ endforeach()
 file(COPY   "${CMAKE_SOURCE_DIR}/packaging/debian/source/format"
      DESTINATION "${PROJ_GENERATED_DIR}/debian/source/")
 
-configure_file("packaging/windows/install.nsh.in"   "${PROJ_GENERATED_DIR}/windows/install.nsh"   @ONLY)
-configure_file("packaging/windows/uninstall.nsh.in" "${PROJ_GENERATED_DIR}/windows/uninstall.nsh" @ONLY)
+# NSIS files, use CRLF
+configure_file("packaging/windows/install.nsh.in"   "${PROJ_GENERATED_DIR}/windows/install.nsh"   @ONLY NEWLINE_STYLE CRLF)
+configure_file("packaging/windows/uninstall.nsh.in" "${PROJ_GENERATED_DIR}/windows/uninstall.nsh" @ONLY NEWLINE_STYLE CRLF)
 
 # ===============================================
 # main
@@ -676,10 +677,12 @@ elseif(WIN32)
     # File association to `*.lzh` (for NSIS only)
     set(CPACK_NSIS_FILE_ASSOCIATIONS "lzh")
 
+    # NSIS parser may be incompatible with `/` path, use Windows native `\` should be safer... Maybe...
+    file(TO_NATIVE_PATH "${PROJ_GENERATED_DIR}/windows/install.nsh" _WIN_NATIVE_PATH_NSIS_INSTALL)
+    file(TO_NATIVE_PATH "${PROJ_GENERATED_DIR}/windows/uninstall.nsh" _WIN_NATIVE_PATH_NSIS_UNINSTALL)
     # Make `*.nsh` independent files to completely avoid CMake from interpreting string containing semicolons as list.
-
-    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "!include \"${PROJ_GENERATED_DIR}/windows/install.nsh\"")
-    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "!include \"${PROJ_GENERATED_DIR}/windows/uninstall.nsh\"")
+    string(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "\n!include \"${_WIN_NATIVE_PATH_NSIS_INSTALL}\"")
+    string(APPEND CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "\n!include \"${_WIN_NATIVE_PATH_NSIS_UNINSTALL}\"")
 
     set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")
     set(CPACK_NSIS_MENU_LINKS "qkiss.exe" "QKiSS") # Start Menu
