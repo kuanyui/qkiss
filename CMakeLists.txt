@@ -676,48 +676,48 @@ elseif(WIN32)
 
     # Setup registry for file association.
     set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS [[
-    ;; ---- Define ProgID ------------------------------------------------------------
-    ;; Define a unique identifier, ProgID `QKiSS.LZH` to describe "What to do when opening *.lzh via QKiSS".
-    ;; A human readable descriptive string showed in "Type" column in Explorer, if QKiSS becomes the default open type.
-    WriteRegStr HKCR "QKiSS.LZH" "" "LZH Archive File"
-    ;; When opening *.lzh via `shell/open/command` + QKiSS (such as Explorer.exe), how to pass arguments our application.
-    WriteRegStr HKCR "QKiSS.LZH/shell/open/command" "" '"$INSTDIR/qkiss.exe" "%1"'
+;; ---- Define ProgID ------------------------------------------------------------
+;; Define a unique identifier, ProgID `QKiSS.LZH` to describe "What to do when opening *.lzh via QKiSS".
+;; A human readable descriptive string showed in "Type" column in Explorer, if QKiSS becomes the default open type.
+WriteRegStr HKCR "QKiSS.LZH" "" "LZH Archive File"
+;; When opening *.lzh via `shell/open/command` + QKiSS (such as Explorer.exe), how to pass arguments our application.
+WriteRegStr HKCR "QKiSS.LZH/shell/open/command" "" '"$INSTDIR/qkiss.exe" "%1"'
 
-    ;; ---- Register as "default" application for *.lzh files ------------------------
-    ;; [UNUSED] When encountered `.lzh` file, goto a ProgID `QKiSS.LZH` (ProgID is somewhat like... a named label?). BTW, the default value is "".
-    ;; (ATTENTION! this way will forcely seize and occupy the default file association, always open *.lzh by ProgID `QKiSS.LZH`.)
-    ; WriteRegStr HKCR ".lzh" "" "QKiSS.LZH"
+;; ---- Register as "default" application for *.lzh files ------------------------
+;; [UNUSED] When encountered `.lzh` file, goto a ProgID `QKiSS.LZH` (ProgID is somewhat like... a named label?). BTW, the default value is "".
+;; (ATTENTION! this way will forcely seize and occupy the default file association, always open *.lzh by ProgID `QKiSS.LZH`.)
+; WriteRegStr HKCR ".lzh" "" "QKiSS.LZH"
 
-    ;; [UNUSED] Use the first icon (`,0`) inside this EXE file, to apply on this kind of associated file (*.lzh, QKiSS.LZH).
-    ; WriteRegStr HKCR "QKiSS.LZH/DefaultIcon" "" "$INSTDIR/qkiss.exe,0"
+;; [UNUSED] Use the first icon (`,0`) inside this EXE file, to apply on this kind of associated file (*.lzh, QKiSS.LZH).
+; WriteRegStr HKCR "QKiSS.LZH/DefaultIcon" "" "$INSTDIR/qkiss.exe,0"
 
-    ;; ---- Register as an "optional" application for *.lzh files --------------------
-    ;; A mild way to associate *.lzh with QKiSS, as an "available application" (visible in Explorer -> Right click -> Open With)
-    WriteRegStr HKCR ".lzh/OpenWithProgids" "QKiSS.LZH" ""
+;; ---- Register as an "optional" application for *.lzh files --------------------
+;; A mild way to associate *.lzh with QKiSS, as an "available application" (visible in Explorer -> Right click -> Open With)
+WriteRegStr HKCR ".lzh/OpenWithProgids" "QKiSS.LZH" ""
 
-    ;; To make Windows see QKiSS as an "always available fallback application" (visible in Explorer -> Right click -> Open With -> Open with other application...)
-    WriteRegStr HKCR "Applications/qkiss.exe/shell/open/command" "" '"$INSTDIR/qkiss.exe" "%1"'
+;; To make Windows see QKiSS as an "always available fallback application" (visible in Explorer -> Right click -> Open With -> Open with other application...)
+WriteRegStr HKCR "Applications/qkiss.exe/shell/open/command" "" '"$INSTDIR/qkiss.exe" "%1"'
 
-    ;; NSIS calls Windows API `Shell32::SHChangeNotify`, SHCNE_ASSOCCHANGED = 0x08000000 means file association changed.
-    System::Call 'Shell32::SHChangeNotify(i 0x08000000, i 0, i 0, i 0)'
-    ]])
+;; NSIS calls Windows API `Shell32::SHChangeNotify`, SHCNE_ASSOCCHANGED = 0x08000000 means file association changed.
+System::Call 'Shell32::SHChangeNotify(i 0x08000000, i 0, i 0, i 0)'
+]])
 
     # Clean when uninstallation
     set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS [[
-    ;; Delete our ProgID
-    DeleteRegKey HKCR "QKiSS.LZH"
+;; Delete our ProgID
+DeleteRegKey HKCR "QKiSS.LZH"
 
-    ;; Delete from Applications
-    DeleteRegKey HKCR "Applications/qkiss.exe"
+;; Delete from Applications
+DeleteRegKey HKCR "Applications/qkiss.exe"
 
-    ;; Remove self from *.lzh Right-click menu (Remove QKiSS.LZH only, instead of delete the whole OpenWithProgids reg key)
-    DeleteRegValue HKCR ".lzh/OpenWithProgids" "QKiSS.LZH"
+;; Remove self from *.lzh Right-click menu (Remove QKiSS.LZH only, instead of delete the whole OpenWithProgids reg key)
+DeleteRegValue HKCR ".lzh/OpenWithProgids" "QKiSS.LZH"
 
-    ;; Calls Windows API `Shell32::SHChangeNotify` again.
-    System::Call 'Shell32::SHChangeNotify(i 0x08000000, i 0, i 0, i 0)'
+;; Calls Windows API `Shell32::SHChangeNotify` again.
+System::Call 'Shell32::SHChangeNotify(i 0x08000000, i 0, i 0, i 0)'
 ]])
-    # Start Menu
-    set(CPACK_NSIS_MENU_LINKS "bin/qkiss.exe" "QKiSS")
+    set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")
+    set(CPACK_NSIS_MENU_LINKS "qkiss.exe" "QKiSS") # Start Menu
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)  # Force uninstall old version before installing
     include(CPack)  # execute CPack to read the defined variables.
 endif()
