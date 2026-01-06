@@ -578,7 +578,7 @@ include(GNUInstallDirs)  # This is actually cross-platform
 install(TARGETS qkiss
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}    # This is a relpath, if use GNUInstallDirs in Windows, its value is `bin/`
 )
 
 # file(COPY samples DESTINATION ${CMAKE_BINARY_DIR})
@@ -656,20 +656,41 @@ elseif(WIN32)
     get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
     find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qt_bin_dir}")
 
-    # Run `windeployqt` only in install() time instead of configure / build time.
+    # This `install()` actually is not installing files via CMake `install()`.
+    # Insead, `install(CODE ...)` means "run this code only in installing time instead of configure/build time"
+
+    # `windeployqt` options:
     #   --no-translations          Don't include Qt built-in lots of *.qm files.
     #   --compiler-runtime         Copy the C++ runtime DLLs according to the used compiler.
     #   --no-opengl-sw             Don't include OpenGL driver used in software rendering.
     #   --no-system-d3d-compiler   Don't include DirectX compiler
+    #
+    # CMAKE_INSTALL_PREFIX   abs path
+    # CMAKE_INSTALL_BINDIR   rel path, on windows it should be `bin/`
+
+    # EXE_PATH_WHEN_CPACK    This is for `windeployqt`, whice requires the exe
+    # path inside CPack's "simulated installation directory" during CPack
+    # (instead of the real final install directory), so the `$` is needed to be
+    # escaped.
     install(CODE "
+        set(EXE_PATH_WHEN_CPACK \"\${CMAKE_INSTALL_PREFIX}/\${CMAKE_INSTALL_BINDIR}/qkiss.exe\")
+        message(STATUS \"[Deploy] Running windeployqt on: \${EXE_PATH_WHEN_CPACK}\")
+
         execute_process(
             COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
             --no-translations
             --compiler-runtime
             --no-opengl-sw
             --no-system-d3d-compiler
-            \"\${CMAKE_INSTALL_PREFIX}/qkiss.exe\"
+            \"\${EXE_PATH_WHEN_CPACK}\"
+            RESULT_VARIABLE WINDEPLOYQT_RESULT
+            OUTPUT_VARIABLE WINDEPLOYQT_OUTPUT
+            ERROR_VARIABLE WINDEPLOYQT_ERROR
         )
+
+        if(NOT WINDEPLOYQT_RESULT EQUAL 0)
+            message(FATAL_ERROR \"windeployqt failed with error: \${WINDEPLOYQT_RESULT}\nLog: \${WINDEPLOYQT_OUTPUT}\nError: \${WINDEPLOYQT_ERROR}\")
+        endif()
     ")
 
     # File association to `*.lzh` (for NSIS only)
