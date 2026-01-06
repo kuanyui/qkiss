@@ -134,6 +134,7 @@ execute_process(
             --output-rpm ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
             --output-deb ${PROJ_GENERATED_DIR}/debian/changelog
             --output-markdown ${PROJ_GENERATED_DIR}/changelogs.md
+            --output-latest-markdown ${PROJ_GENERATED_DIR}/latest_changelog.md
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     RESULT_VARIABLE _ret)
 
