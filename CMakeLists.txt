@@ -568,6 +568,11 @@ set_target_properties(qkiss PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+if(QT_VERSION_MAJOR EQUAL 6)
+    # Before install(), after target_link_libraries()
+    qt_finalize_executable(qkiss)  # Must before include(CPack)
+endif()
+
 
 # ===============================================
 # Install
@@ -582,10 +587,6 @@ install(TARGETS qkiss
 )
 
 # file(COPY samples DESTINATION ${CMAKE_BINARY_DIR})
-
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(qkiss)  # Must before include(CPack)
-endif()
 
 
 # IMPORTANT: the paths inside `install()` are determined only when `cmake`. So,
