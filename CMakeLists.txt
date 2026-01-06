@@ -665,15 +665,15 @@ elseif(WIN32)
     #   --no-opengl-sw             Don't include OpenGL driver used in software rendering.
     #   --no-system-d3d-compiler   Don't include DirectX compiler
     #
-    # CMAKE_INSTALL_PREFIX   abs path
-    # CMAKE_INSTALL_BINDIR   rel path, on windows it should be `bin/`
+    # CMAKE_INSTALL_PREFIX   abs path, it is different during `cmake` and `cpack`, so escape `$` here.
+    # CMAKE_INSTALL_BINDIR   rel path, on windows it should be `bin/`. BUT this is invisible during `cpack` (WTF is this shitty design???), so don't escape `$` here.
 
     # EXE_PATH_WHEN_CPACK    This is for `windeployqt`, whice requires the exe
     # path inside CPack's "simulated installation directory" during CPack
     # (instead of the real final install directory), so the `$` is needed to be
     # escaped.
     install(CODE "
-        set(EXE_PATH_WHEN_CPACK \"\${CMAKE_INSTALL_PREFIX}/\${CMAKE_INSTALL_BINDIR}/qkiss.exe\")
+        set(EXE_PATH_WHEN_CPACK \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/qkiss.exe\")
         message(STATUS \"[Deploy] Running windeployqt on: \${EXE_PATH_WHEN_CPACK}\")
 
         execute_process(
