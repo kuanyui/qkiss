@@ -311,6 +311,8 @@ jobs:
               exit 1
           }
 
+      - name: List build directory (Windows)
+        run: Get-ChildItem -Path build -Depth 1
 
       # Step 14: Upload the entire Release folder
       # Default value of ${CPACK_PACKAGE_FILE_NAME} is
