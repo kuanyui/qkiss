@@ -299,9 +299,9 @@ jobs:
           if ($LASTEXITCODE -ne 0) {
               Write-Host "CPack failed!"
               Write-Host "============================================"
-              Write-Host "./_CPack_Packages/win64/NSIS/NSISOutput.log"
+              Write-Host "./_CPack_Packages/win64/NSIS/NSISOutput.log (last 50 lines)"
               Write-Host "============================================"
-              Get-Content ./_CPack_Packages/win64/NSIS/NSISOutput.log
+              Get-Content ./_CPack_Packages/win64/NSIS/NSISOutput.log -Tail 50
               Write-Host "============================================"
               Write-Host "./_CPack_Packages/win64/NSIS/project.nsi"
               Write-Host "============================================"
