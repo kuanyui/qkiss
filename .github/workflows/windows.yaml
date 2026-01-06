@@ -293,9 +293,9 @@ jobs:
       # Step 13: Package with CPack (Bundle Qt DLLs and External Binaries)
       - name: Package with CPack
         working-directory: build
-        # Generator: NSIS, Configuration: Release
+        # Configuration: Release. Generators (NSIS, ZIP) are already defined in CMakeLists.txt so do NOT use `-G` to overwrite it
         run: |
-          cpack -G NSIS -C Release
+          cpack -C Release
           if ($LASTEXITCODE -ne 0) {
               Write-Host "CPack failed!"
               Write-Host "============================================"
