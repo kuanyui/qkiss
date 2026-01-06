@@ -309,6 +309,10 @@ if(NOT DEFINED CMAKE_TOOLCHAIN_FILE AND DEFINED ENV{VCPKG_INSTALLATION_ROOT})
     set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 endif()
 
+if(WIN32)
+    set(X_VCPKG_APPLOCAL_DEPS ON)  # auto copy DLL files to same folder of *.exe
+endif()
+
 # ===============================================
 # Package :: Qt6
 # ===============================================
@@ -580,10 +584,17 @@ endif()
 
 include(GNUInstallDirs)  # This is actually cross-platform
 
+if(WIN32)
+    set(MY_INSTALL_BINDIR ".")  # On Windows, *.exe and *.dll are usually placed under app's folder root, instead of bin/
+else()
+    set(MY_INSTALL_BINDIR "${CMAKE_INSTALL_BINDIR}")   # This is a relpath, if use GNUInstallDirs, its value is `bin/` so on linux
+endif()
+
+
 install(TARGETS qkiss
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}    # This is a relpath, if use GNUInstallDirs in Windows, its value is `bin/`
+    RUNTIME DESTINATION ${MY_INSTALL_BINDIR}
 )
 
 # file(COPY samples DESTINATION ${CMAKE_BINARY_DIR})
@@ -634,7 +645,7 @@ elseif(WIN32)
     find_file(FOUNDATION_DLL "Foundation.1.0.dll" HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
 
     if(LHA_EXECUTABLE AND UNAR_EXECUTABLE AND FOUNDATION_DLL)
-        install(FILES "${LHA_EXECUTABLE}" "${UNAR_EXECUTABLE}" "${FOUNDATION_DLL}" DESTINATION ${CMAKE_INSTALL_BINDIR})
+        install(FILES "${LHA_EXECUTABLE}" "${UNAR_EXECUTABLE}" "${FOUNDATION_DLL}" DESTINATION ${MY_INSTALL_BINDIR})
         message(STATUS "External dependencies (lha/unar) found and scheduled for installation.")
     else()
         message(FATAL_ERROR "External dependencies (lha/unar) not found in WIN_EXTERNAL_BIN_DEPS_DIR nor PATH! Installer will be incomplete.")
@@ -667,39 +678,53 @@ elseif(WIN32)
     #   --no-system-d3d-compiler   Don't include DirectX compiler
     #
     # CMAKE_INSTALL_PREFIX   abs path, it is different during `cmake` and `cpack`, so escape `$` here.
-    # CMAKE_INSTALL_BINDIR   rel path, on windows it should be `bin/`. BUT this is invisible during `cpack` (WTF is this shitty design???), so don't escape `$` here.
+    # MY_INSTALL_BINDIR      rel path, on windows it should be `bin/`. BUT this is invisible during `cpack` (WTF is this shitty design???), so don't escape `$` here.
 
     # EXE_PATH_WHEN_CPACK    This is for `windeployqt`, whice requires the exe
     # path inside CPack's "simulated installation directory" during CPack
     # (instead of the real final install directory), so the `$` is needed to be
     # escaped.
-    install(CODE "
-        set(EXE_PATH_WHEN_CPACK \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/qkiss.exe\")
-        message(STATUS \"[Deploy] Running windeployqt on: \${EXE_PATH_WHEN_CPACK}\")
 
-        execute_process(
-            COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
-            --no-translations
-            --compiler-runtime
-            --no-opengl-sw
-            --no-system-d3d-compiler
-            \"\${EXE_PATH_WHEN_CPACK}\"
-            RESULT_VARIABLE WINDEPLOYQT_RESULT
-            OUTPUT_VARIABLE WINDEPLOYQT_OUTPUT
-            ERROR_VARIABLE WINDEPLOYQT_ERROR
-        )
+    # BUT!!! `windeployqt` handles Qt libraries only, other packages installed via vcpkg are ignored...
+    # So use `qt_generate_deploy_app_script()` is better
 
-        if(NOT WINDEPLOYQT_RESULT EQUAL 0)
-            message(FATAL_ERROR \"windeployqt failed with error: \${WINDEPLOYQT_RESULT}\nLog: \${WINDEPLOYQT_OUTPUT}\nError: \${WINDEPLOYQT_ERROR}\")
-        endif()
-    ")
+    # install(CODE "
+    #     set(EXE_PATH_WHEN_CPACK \"\${CMAKE_INSTALL_PREFIX}/${MY_INSTALL_BINDIR}/qkiss.exe\")
+    #     message(STATUS \"[Deploy] Running windeployqt on: \${EXE_PATH_WHEN_CPACK}\")
 
-    # File association to `*.lzh` (for NSIS only)
-    set(CPACK_NSIS_FILE_ASSOCIATIONS "lzh")
+    #     execute_process(
+    #         COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
+    #         --no-translations
+    #         --compiler-runtime
+    #         --no-opengl-sw
+    #         --no-system-d3d-compiler
+    #         \"\${EXE_PATH_WHEN_CPACK}\"
+    #         RESULT_VARIABLE WINDEPLOYQT_RESULT
+    #         OUTPUT_VARIABLE WINDEPLOYQT_OUTPUT
+    #         ERROR_VARIABLE WINDEPLOYQT_ERROR
+    #     )
+
+    #     if(NOT WINDEPLOYQT_RESULT EQUAL 0)
+    #         message(FATAL_ERROR \"windeployqt failed with error: \${WINDEPLOYQT_RESULT}\nLog: \${WINDEPLOYQT_OUTPUT}\nError: \${WINDEPLOYQT_ERROR}\")
+    #     endif()
+    # ")
+
+    # # > Qt6.3, use `qt_generate_deploy_app_script()` instead of `windeployqt`
+    # Generate a script to install() all DLLs.
+    qt_generate_deploy_app_script(
+        TARGET qkiss
+        OUTPUT_SCRIPT deploy_script.cmake
+        NO_TRANSLATIONS
+        # --compiler-runtime will be automatically handled
+    )
+    install(SCRIPT ${deploy_script.cmake})
 
     # ===================================================
     # Fuck Windows, fuck NSIS, fuck CMake.
     # ===================================================
+
+    # File association to `*.lzh` (for NSIS only)
+    set(CPACK_NSIS_FILE_ASSOCIATIONS "lzh")
 
     # NSIS parser may be incompatible with `/` path, use Windows native `\` should be safer... Maybe...
     file(TO_NATIVE_PATH "${PROJ_GENERATED_DIR}/windows/install.nsh" _WIN_NATIVE_PATH_NSIS_INSTALL)
