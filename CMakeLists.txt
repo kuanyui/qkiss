@@ -693,6 +693,8 @@ elseif(WIN32)
     list(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "!include ${_WIN_NATIVE_PATH_NSIS_INSTALL}")
     list(APPEND CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "!include ${_WIN_NATIVE_PATH_NSIS_UNINSTALL}")
 
+    set(CPACK_NSIS_MUI_ICON ${GEN_ICO_FILE})  # installer itself
+    set(CPACK_NSIS_MUI_UNIICON ${GEN_ICO_FILE})  # uninstaller itself
     set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")
     set(CPACK_NSIS_MENU_LINKS "qkiss.exe" "QKiSS") # Start Menu
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)  # Force uninstall old version before installing
