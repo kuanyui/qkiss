@@ -290,7 +290,7 @@ set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}")
 # Actually declaring variable is unnecessary in CMake but explicity is better then implicity.
 # Be careful don't move this after `list(APPREND)` or its accumulated content will be clear.
 
-set(EXTRA_DEFS)   # The defs passed to compiler, so that you can use `#ifdef XXX` in C++ code
+set(EXTRA_DEFS)   # `target_compile_definitions()`, the defs passed to compiler, so that you can use `#ifdef XXX` in C++ code
 set(EXTRA_INCS)   # `target_include_directories()`
 set(EXTRA_LIBS)   # `target_link_libraries()`
 
@@ -725,44 +725,53 @@ elseif(WIN32)
     # ===================================================
     function(install_vcpkg_dll)
         # prefix, opts, single_val_tag, multiple_vals_tag, original_args
-        cmake_parse_arguments(V "" "LIB_NAME;DEF_NAME" "DLL_CANDIDATES" ${ARGN})
+        cmake_parse_arguments(ARG "" "LIB_NAME;DEF_NAME" "DLL_CANDIDATES" ${ARGN})
 
-        if(NOT "${V_DEF_NAME}" IN_LIST EXTRA_DEFS)  # if not defined during `find_package()`
+        set(VCPKG_BIN_DIR "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin")
+        set(FOUND_DLL_PATH "")
+        if(NOT "${ARG_DEF_NAME}" IN_LIST EXTRA_DEFS)   # if this lib is not needed
             return()
         endif()
+        foreach(PATT   IN LISTS   ARG_DLL_CANDIDATES)
+            file(GLOB TMP_FILES "${VCPKG_BIN_DIR}/*${PATT}*.dll")
+            if("${TMP_FILES}")
+                list(GET TMP_FILES 0 FOUND_DLL_PATH)   # pick the first found DLL file
+                break()
+            endif()
+        endforeach()
 
-        # VCPKG_lib_name_TRIPLET means [arch]-[os]-[linkage]
-        find_file(DLL_SRC_PATH
-            NAMES ${V_DLL_CANDIDATES}
-            HINTS "${VCPKG_INSTALLED_DIR}/${VCPKG_lib_name_TRIPLET}/bin"
-            NO_DEFAULT_PATH
-        )
-        if(DLL_SRC_PATH)
-            install(FILES "${DLL_SRC_PATH}" DESTINATION "${CMAKE_INSTALL_PREFIX}/${MY_INSTALL_BINDIR}/")
+        if("${FOUND_DLL_PATH}")
+            install(FILES "${FOUND_DLL_PATH}" DESTINATION ${CMAKE_INSTALL_BINDIR})
+            get_filename_component(DLL_NAME "${FOUND_DLL_PATH}" NAME)
+            message(STATUS "[install_vcpkg_dll()] Found: ${ARG_LIB_NAME}: ${DLL_NAME}")
         else()
-            message(FATAL_ERROR "Not found DLL ${V_LIB_NAME} (tried name: ${V_NAMES})")
+            message(FATAL_ERROR "[install_vcpkg_dll()] Not found: ${ARG_LIB_NAME}. Tried prefixes: ${ARG_DLL_CANDIDATES}")
         endif()
     endfunction()
     install_vcpkg_dll(
         LIB_NAME Iconv
         DEF_NAME HAVE_ICONV
-        "iconv-2.dll" "libiconv.dll" "iconv.dll")
+        DLL_CANDIDATES iconv
+    )
     install_vcpkg_dll(
         LIB_NAME "ICU Core"
         DEF_NAME HAVE_ICU
-        "icuuc80.dll" "icuuc79.dll" "icuuc78.dll" "icuuc78.dll" "icuuc76.dll" "icuuc.dll" )
+        DLL_CANDIDATES icuuc
+    )
     install_vcpkg_dll(
         LIB_NAME "ICU Data"
         DEF_NAME HAVE_ICU
-        "icudt80.dll" "icudt79.dll" "icudt78.dll" "icudt78.dll" "icudt76.dll" "icudt.dll" )
+        DLL_CANDIDATES icudt
+    )
     install_vcpkg_dll(
         LIB_NAME "ICU i18n"
         DEF_NAME HAVE_ICU
-        "icuin80.dll" "icuin79.dll" "icuin78.dll" "icuin78.dll" "icuin76.dll" "icuin.dll")
+        DLL_CANDIDATES icuin
+    )
     install_vcpkg_dll(
         LIB_NAME "LibArchive"
         DEF_NAME HAVE_LIBARCHIVE
-        "archive.dll" "libarchive.dll"
+        DLL_CANDIDATES archive
     )
     # ===================================================
     # Fuck Windows, fuck NSIS, fuck CMake.
