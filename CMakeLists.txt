@@ -290,9 +290,9 @@ set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}")
 # Actually declaring variable is unnecessary in CMake but explicity is better then implicity.
 # Be careful don't move this after `list(APPREND)` or its accumulated content will be clear.
 
-set(EXTRA_INCS)
-set(EXTRA_DEFS)
-set(EXTRA_LIBS)
+set(EXTRA_DEFS)   # The defs passed to compiler, so that you can use `#ifdef XXX` in C++ code
+set(EXTRA_INCS)   # `target_include_directories()`
+set(EXTRA_LIBS)   # `target_link_libraries()`
 
 # ==============================================
 # Expand CMake macro (configure)
@@ -335,7 +335,7 @@ else()
     include(CheckIncludeFile)
     check_function_exists(iconv_open ICONV_EXISTS)
     check_include_file_cxx(iconv.h ICONV_H_EXISTS)
-    if(ICONV_EXIcSTS AND ICONV_H_EXISTS)
+    if(ICONV_EXISTS AND ICONV_H_EXISTS)
         message(STATUS "Found iconv: ${ICONV_LIB}")
         list(APPEND EXTRA_DEFS HAVE_ICONV)
         list(APPEND EXTRA_INCS ${ICONV_INCLUDE_DIR})
@@ -357,7 +357,7 @@ endif()
 # ===============================================
 # Package :: (iconv & ICU checking)
 # ===============================================
-if(NOT Iconv_FOUND AND NOT ICU_FOUND AND NOT ICONV_EXISTS)
+if(NOT Iconv_FOUND AND NOT ICONV_EXISTS AND NOT ICU_FOUND)
     message(FATAL_ERROR "Unable to find `ICU` nor `Iconv`, aborted.")
 endif()
 
@@ -686,39 +686,84 @@ elseif(WIN32)
     # escaped.
 
     # BUT!!! `windeployqt` handles Qt libraries only, other packages installed via vcpkg are ignored...
-    # So use `qt_generate_deploy_app_script()` is better
+    # So remember to `install()` them manually
 
-    # install(CODE "
-    #     set(EXE_PATH_WHEN_CPACK \"\${CMAKE_INSTALL_PREFIX}/${MY_INSTALL_BINDIR}/qkiss.exe\")
-    #     message(STATUS \"[Deploy] Running windeployqt on: \${EXE_PATH_WHEN_CPACK}\")
+    install(CODE "
+        set(EXE_PATH_WHEN_CPACK \"\${CMAKE_INSTALL_PREFIX}/${MY_INSTALL_BINDIR}/qkiss.exe\")
+        message(STATUS \"[Deploy] Running windeployqt on: \${EXE_PATH_WHEN_CPACK}\")
 
-    #     execute_process(
-    #         COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
-    #         --no-translations
-    #         --compiler-runtime
-    #         --no-opengl-sw
-    #         --no-system-d3d-compiler
-    #         \"\${EXE_PATH_WHEN_CPACK}\"
-    #         RESULT_VARIABLE WINDEPLOYQT_RESULT
-    #         OUTPUT_VARIABLE WINDEPLOYQT_OUTPUT
-    #         ERROR_VARIABLE WINDEPLOYQT_ERROR
-    #     )
+        execute_process(
+            COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
+            --no-translations
+            --compiler-runtime
+            --no-opengl-sw
+            --no-system-d3d-compiler
+            \"\${EXE_PATH_WHEN_CPACK}\"
+            RESULT_VARIABLE WINDEPLOYQT_RESULT
+            OUTPUT_VARIABLE WINDEPLOYQT_OUTPUT
+            ERROR_VARIABLE WINDEPLOYQT_ERROR
+        )
 
-    #     if(NOT WINDEPLOYQT_RESULT EQUAL 0)
-    #         message(FATAL_ERROR \"windeployqt failed with error: \${WINDEPLOYQT_RESULT}\nLog: \${WINDEPLOYQT_OUTPUT}\nError: \${WINDEPLOYQT_ERROR}\")
-    #     endif()
-    # ")
+        if(NOT WINDEPLOYQT_RESULT EQUAL 0)
+            message(FATAL_ERROR \"windeployqt failed with error: \${WINDEPLOYQT_RESULT}\nLog: \${WINDEPLOYQT_OUTPUT}\nError: \${WINDEPLOYQT_ERROR}\")
+        endif()
+    ")
 
-    # # > Qt6.3, use `qt_generate_deploy_app_script()` instead of `windeployqt`
-    # Generate a script to install() all DLLs.
-    qt_generate_deploy_app_script(
-        TARGET qkiss
-        OUTPUT_SCRIPT deploy_script.cmake
-        NO_TRANSLATIONS
-        # --compiler-runtime will be automatically handled
+    ## # > Qt6.3, use `qt_generate_deploy_app_script()` instead of `windeployqt`, to
+    ## generate a script to install() all DLLs. But this shit is actually always install binaries into bin/
+    ## Fucking idiot over-engineered Qt tools.
+    # qt_generate_deploy_app_script(
+    #     TARGET qkiss
+    #     OUTPUT_SCRIPT deploy_script.cmake
+    #     NO_TRANSLATIONS
+    #     # --compiler-runtime will be automatically handled
+    # )
+    # install(SCRIPT ${deploy_script.cmake})
+
+    # ===================================================
+    # `install()` third-party DLLs in vcpkg
+    # ===================================================
+    function(install_vcpkg_dll)
+        # prefix, opts, single_val_tag, multiple_vals_tag, original_args
+        cmake_parse_arguments(V "" "LIB_NAME;DEF_NAME" "DLL_CANDIDATES" ${ARGN})
+
+        if(NOT "${V_DEF_NAME}" IN_LIST EXTRA_DEFS)  # if not defined during `find_package()`
+            return()
+        endif()
+
+        # VCPKG_lib_name_TRIPLET means [arch]-[os]-[linkage]
+        find_file(DLL_SRC_PATH
+            NAMES ${V_DLL_CANDIDATES}
+            HINTS "${VCPKG_INSTALLED_DIR}/${VCPKG_lib_name_TRIPLET}/bin"
+            NO_DEFAULT_PATH
+        )
+        if(DLL_SRC_PATH)
+            install(FILES "${DLL_SRC_PATH}" DESTINATION "${CMAKE_INSTALL_PREFIX}/${MY_INSTALL_BINDIR}/")
+        else()
+            message(FATAL_ERROR "Not found DLL ${V_LIB_NAME} (tried name: ${V_NAMES})")
+        endif()
+    endfunction()
+    install_vcpkg_dll(
+        LIB_NAME Iconv
+        DEF_NAME HAVE_ICONV
+        "iconv-2.dll" "libiconv.dll" "iconv.dll")
+    install_vcpkg_dll(
+        LIB_NAME "ICU Core"
+        DEF_NAME HAVE_ICU
+        "icuuc80.dll" "icuuc79.dll" "icuuc78.dll" "icuuc78.dll" "icuuc76.dll" "icuuc.dll" )
+    install_vcpkg_dll(
+        LIB_NAME "ICU Data"
+        DEF_NAME HAVE_ICU
+        "icudt80.dll" "icudt79.dll" "icudt78.dll" "icudt78.dll" "icudt76.dll" "icudt.dll" )
+    install_vcpkg_dll(
+        LIB_NAME "ICU i18n"
+        DEF_NAME HAVE_ICU
+        "icuin80.dll" "icuin79.dll" "icuin78.dll" "icuin78.dll" "icuin76.dll" "icuin.dll")
+    install_vcpkg_dll(
+        LIB_NAME "LibArchive"
+        DEF_NAME HAVE_LIBARCHIVE
+        "archive.dll" "libarchive.dll"
     )
-    install(SCRIPT ${deploy_script.cmake})
-
     # ===================================================
     # Fuck Windows, fuck NSIS, fuck CMake.
     # ===================================================
