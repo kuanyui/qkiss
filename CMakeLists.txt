@@ -741,7 +741,7 @@ elseif(WIN32)
             endif()
         endforeach()
 
-        if("${FOUND_DLL_PATH}")
+        if(FOUND_DLL_PATH)   # Don't use `if("${FOUND_DLL_PATH}")` here...
             install(FILES "${FOUND_DLL_PATH}" DESTINATION ${CMAKE_INSTALL_BINDIR})
             get_filename_component(DLL_NAME "${FOUND_DLL_PATH}" NAME)
             message(STATUS "[install_vcpkg_dll()] Found: ${ARG_LIB_NAME}: ${DLL_NAME}")
