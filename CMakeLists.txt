@@ -734,15 +734,15 @@ elseif(WIN32)
         endif()
         foreach(PATT   IN LISTS   ARG_DLL_CANDIDATES)
             file(GLOB MATCHED_FILES "${VCPKG_BIN_DIR}/*${PATT}*.dll")
-            message(STATUS "[install_vcpkg_dll()] GLOB VCPKG_BIN_DIR='${VCPKG_BIN_DIR}' PATT='${PATT}' -> MATCHED_FILES='${MATCHED_FILES}'")
-            if("${MATCHED_FILES}")
+            message(STATUS "[install_vcpkg_dll()] GLOB \n VCPKG_BIN_DIR='${VCPKG_BIN_DIR}' \n PATT='${PATT}' \n MATCHED_FILES='${MATCHED_FILES}'")
+            if(MATCHED_FILES)  # IMPORTANT: Don't use `if("${MATCHED_FILES}")` here...
                 list(GET MATCHED_FILES 0 FOUND_DLL_PATH)   # pick the first found DLL file
                 break()
             endif()
         endforeach()
 
-        if(FOUND_DLL_PATH)   # Don't use `if("${FOUND_DLL_PATH}")` here...
-            install(FILES "${FOUND_DLL_PATH}" DESTINATION ${CMAKE_INSTALL_BINDIR})
+        if(FOUND_DLL_PATH)   # IMPORTANT: Don't use `if("${FOUND_DLL_PATH}")` here...
+            install(FILES "${FOUND_DLL_PATH}" DESTINATION ${MY_INSTALL_BINDIR})
             get_filename_component(DLL_NAME "${FOUND_DLL_PATH}" NAME)
             message(STATUS "[install_vcpkg_dll()] Found: ${ARG_LIB_NAME}: ${DLL_NAME}")
         else()
