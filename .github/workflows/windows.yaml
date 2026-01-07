@@ -283,11 +283,15 @@ jobs:
           echo "[DEBUG][Github Context] env.pythonLocation: ${{ env.pythonLocation }}"
           echo "[DEBUG][Github Context] steps.cpython311: ${{ steps.cpython311.outputs.python-path }}"
 
-          cmake -B build -G "Visual Studio 17 2022" `
+          # Don't use "Visual Studio 17 2022" as generator, it always generate multiple configs (Release, Debug...) during configuration time.
+          # This cause `qt_generate_deploy_app_script(OUTPUT_SCRIPT)` create a new filename containig MSVC-specific syntax `$<CONFIG>`.
+          # Ninja is single-config, more determinable, follows `-DCMAKE_BUILD_TYPE=Release` and configure only for `Release`.
+
+          cmake -B build -G "Ninja" `
+            -DCMAKE_BUILD_TYPE=Release `
             -DWIN_EXTERNAL_BIN_DEPS_DIR="${{ runner.temp }}/bin_deps" `
             -DWIN_PYTHON3_EXE="${{ steps.cpython311.outputs.python-path }}" `
-            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
-            -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
           cmake --build build --config Release
 
       # Step 13: Package with CPack (Bundle Qt DLLs and External Binaries)
