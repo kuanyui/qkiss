@@ -2,7 +2,11 @@
   "name": "qkiss",
   "dependencies": [
     "libiconv",
-    "libarchive"
+    {
+      "name": "libarchive",
+      "default-features": false,
+      "features": []
+    }
   ],
   "builtin-baseline": "84bab45d415d22042bd0b9081aea57f362da3f35"
 }
