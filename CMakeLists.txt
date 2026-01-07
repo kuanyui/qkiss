@@ -733,9 +733,10 @@ elseif(WIN32)
             return()
         endif()
         foreach(PATT   IN LISTS   ARG_DLL_CANDIDATES)
-            file(GLOB TMP_FILES "${VCPKG_BIN_DIR}/*${PATT}*.dll")
-            if("${TMP_FILES}")
-                list(GET TMP_FILES 0 FOUND_DLL_PATH)   # pick the first found DLL file
+            file(GLOB MATCHED_FILES "${VCPKG_BIN_DIR}/*${PATT}*.dll")
+            message(STATUS "[install_vcpkg_dll()] GLOB VCPKG_BIN_DIR='${VCPKG_BIN_DIR}' PATT='${PATT}' -> MATCHED_FILES='${MATCHED_FILES}'")
+            if("${MATCHED_FILES}")
+                list(GET MATCHED_FILES 0 FOUND_DLL_PATH)   # pick the first found DLL file
                 break()
             endif()
         endforeach()
@@ -745,7 +746,7 @@ elseif(WIN32)
             get_filename_component(DLL_NAME "${FOUND_DLL_PATH}" NAME)
             message(STATUS "[install_vcpkg_dll()] Found: ${ARG_LIB_NAME}: ${DLL_NAME}")
         else()
-            message(FATAL_ERROR "[install_vcpkg_dll()] Not found: ${ARG_LIB_NAME}. Tried prefixes: ${ARG_DLL_CANDIDATES}")
+            message(FATAL_ERROR "[install_vcpkg_dll()] Not found: ${ARG_LIB_NAME}. Tried pattern: ${ARG_DLL_CANDIDATES}")
         endif()
     endfunction()
     install_vcpkg_dll(
@@ -771,7 +772,7 @@ elseif(WIN32)
     install_vcpkg_dll(
         LIB_NAME "LibArchive"
         DEF_NAME HAVE_LIBARCHIVE
-        DLL_CANDIDATES archive
+        DLL_CANDIDATES libarchive archive
     )
     # ===================================================
     # Fuck Windows, fuck NSIS, fuck CMake.
