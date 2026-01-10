@@ -224,6 +224,46 @@ jobs:
               Write-Error "Unable to find NSIS (makensis.exe)"
               exit 1
           }
+      # Step 6.1: Install `Dependencies`, to replace `dumpbin` because it can only get the direct DLL, so useless.
+      - name: Install `Dependencies` via Chocolaty (to replace useless `dumpbin` provided by MSVC)
+        run: |
+          choco install dependencies --no-progress --yes
+          $rawPath = "${env:ProgramFiles}/Dependencies"
+          $depDir = $rawPath.Replace('\', '/')
+          if (Test-Path "$depDir/Dependencies.exe") {
+              Write-Host "Found Dependencies.exe at $depDir"
+              Add-Content -Path $env:GITHUB_PATH -Value $depDir
+          } else {
+              $shimDir = $env:ChocolateyInstall.Replace('\', '/') + "/bin"
+              if (Test-Path "$shimDir/Dependencies.exe") {
+                  Write-Host "Found Dependencies shim at $shimDir"
+                  Add-Content -Path $env:GITHUB_PATH -Value $shimDir
+              } else {
+                  Write-Error "Unable to find Dependencies.exe"
+                  exit 1
+              }
+          }
+
+      # - name: Install `Dependencies` via WinGet (to replace useless `dumpbin` provided by MSVC).... But I found WinGet is a forked Dependencies, not by `lucasg`.
+      #   run: |
+      #     winget install --id lucasg.Dependencies --disable-interactivity --accept-source-agreements --accept-package-agreements
+      #     # WinGet creates shortcuts into this path
+      #     $wingetLinks = "$env:LOCALAPPDATA\Microsoft\WinGet\Links"
+      #     $depExe = "$wingetLinks\Dependencies.exe"
+      #     if (Test-Path $depExe) {
+      #         Write-Host "Found Dependencies.exe at $depExe"
+      #         echo "$wingetLinks" >> $env:GITHUB_PATH
+      #     } else {
+      #         $installPath = Get-ChildItem -Path "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Filter "Dependencies.exe" -Recurse | Select-Object -First 1
+      #         if ($installPath) {
+      #             $binDir = $installPath.DirectoryName
+      #             Write-Host "Found Dependencies.exe in Packages: $binDir"
+      #             echo "$binDir" >> $env:GITHUB_PATH
+      #         } else {
+      #             Write-Error "Failed to locate Dependencies.exe after winget install"
+      #             exit 1
+      #         }
+      #     }
 
       # Step 7: Set up Python 3.11
       - name: Set up Python

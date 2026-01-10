@@ -2,10 +2,11 @@
 # !!!!! BE CAREFUL !!!!!
 # - This file only handles "install-time".
 # - This file should be used via `install(SCRIPT ...)` in CMakeLists.txt
+# - This file relys on `lucasg.Dependencies`, to replace useless `dumpbin`
 # - These variables must be configured in CMakeLists.txt:
 #
 #   - Explicit:
-#     - DUMPBIN_EXECUTABLE_CONFIGURED  (via `find_program(DUMPBIN_EXECUTABLE_CONFIGURED dumpbin)`. `dumpbin.exe` is provided by MSVC, so must be determined during configure time.)
+#     - DEPENDENCIES_EXECUTABLE_CONFIGURED  (via `find_program(DEPENDENCIES_EXECUTABLE_CONFIGURED Dependencies)`. `dumpbin.exe` is provided by MSVC, so must be determined during configure time.)
 #
 #   - Implicit:
 #     - VCPKG_INSTALLED_DIR (via `-DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"` during configure time)
@@ -15,7 +16,7 @@
 # =============================================
 
 # `set()` here for improving syntax highlights of cmake.
-set(DUMPBIN_EXECUTABLE_CONFIGURED "@DUMPBIN_EXECUTABLE_CONFIGURED@")
+set(DEPENDENCIES_EXECUTABLE_CONFIGURED "@DEPENDENCIES_EXECUTABLE_CONFIGURED@")
 
 set(VCPKG_INSTALLED_DIR "@VCPKG_INSTALLED_DIR@")
 set(VCPKG_TARGET_TRIPLET "@VCPKG_TARGET_TRIPLET@")
@@ -23,12 +24,19 @@ set(CMAKE_INSTALL_BINDIR "@CMAKE_INSTALL_BINDIR@")
 set(CMAKE_PROJECT_NAME "@CMAKE_PROJECT_NAME@")
 
 
-# `CMAKE_INSTALL_*` should not be determined during configure time, so the main app's *.exe should be decide here.
 set(MAIN_APP_EXECUTABLE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${CMAKE_PROJECT_NAME}.exe")
-set(VCPKG_BIN_DIR "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin" )
 
+# Determine to use which (Release/Debug) DLLs folder.
+set(_vcpkg_bin_release "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin")
+set(_vcpkg_bin_debug   "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin")
+set(VCPKG_BIN_DIR "${_vcpkg_bin_release}")
+if(DEFINED CMAKE_INSTALL_CONFIG_NAME AND CMAKE_INSTALL_CONFIG_NAME STREQUAL "Debug")
+    set(VCPKG_BIN_DIR "${_vcpkg_bin_debug}")
+endif()
+
+# debug
 message("[deploy_vcpkg_runtime] VCPKG_BIN_DIR = ${VCPKG_BIN_DIR}")
-message("[deploy_vcpkg_runtime] DUMPBIN_EXECUTABLE_CONFIGURED = ${DUMPBIN_EXECUTABLE_CONFIGURED}")
+message("[deploy_vcpkg_runtime] DEPENDENCIES_EXECUTABLE_CONFIGURED = ${DEPENDENCIES_EXECUTABLE_CONFIGURED}")
 message("[deploy_vcpkg_runtime] MAIN_APP_EXECUTABLE = ${MAIN_APP_EXECUTABLE}")
 
 if(NOT EXISTS "${MAIN_APP_EXECUTABLE}")
@@ -38,26 +46,51 @@ endif()
 
 
 execute_process(
-    COMMAND "${DUMPBIN_EXECUTABLE_CONFIGURED}" /dependents "${MAIN_APP_EXECUTABLE}"
-    OUTPUT_VARIABLE _raw_dumpbin_out
+    COMMAND "${DEPENDENCIES_EXECUTABLE_CONFIGURED}" -chain "${MAIN_APP_EXECUTABLE}"
+    OUTPUT_VARIABLE _raw_dependencies_out
 )
 
-string(REPLACE "\r\n" "\n" _raw_dumpbin_out "${_raw_dumpbin_out}")
-string(REPLACE "\n" ";" dumpbin_lines "${_raw_dumpbin_out}")
+string(REPLACE "\r\n" "\n" _raw_dependencies_out "${_raw_dependencies_out}")
+string(REPLACE "\n" ";" dependencies_lines "${_raw_dependencies_out}")
 
-foreach(line   IN LISTS    dumpbin_lines)
-    if (line MATCHES "([A-Za-z0-9_.-]+[.]dll)")
-        set(dll_filename "${CMAKE_MATCH_1}")
-        set(dll_src_file "${VCPKG_BIN_DIR}/${dll_filename}")
-        set(dll_dst_dir  "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
-        set(dll_dst_file "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${dll_filename}")
-        message("[deploy_vcpkg_runtime][DEBUG][MATCHES] ${dll_filename}")
-        if (EXISTS "${dll_src_file}")
-            message("[deploy_vcpkg_runtime][DEBUG][MATCHED][EXISTS] ${dll_src_file}")
-        endif()
-        if (EXISTS "${dll_src_file}" AND NOT EXISTS "${dll_dst_file}")
-            message("[deploy_vcpkg_runtime] Deploy vcpkg DLL: ${dll_filename}")
-            file(COPY "${dll_src_file}" DESTINATION "${dll_dst_dir}")
-        endif()
+
+
+string(REPLACE "\\" "/" vcpkg_bin_dir "${VCPKG_BIN_DIR}")
+set(deploy_dst_dir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+set(_copied_dll_names "")
+
+
+
+foreach(line    IN LISTS    dependencies_lines)
+    if(NOT line MATCHES "([A-Za-z]:[/\\\\][^:]*[.]dll)")
+        continue()
     endif()
+    set(dll_src_file_path "${CMAKE_MATCH_1}")
+    string(REPLACE "\\" "/" dll_src_file_path "${dll_src_file_path}")
+
+    message("[deploy_vcpkg_runtime][DEBUG] src = ${dll_src_file_path}")
+    # If DLL is not inside vcpkg bin/ directory (not installed via vcpkg), skip.
+    if(NOT dll_src_file_path MATCHES "^${vcpkg_bin_dir}")
+        continue()
+    endif()
+
+    get_filename_component(dll_filename "${dll_src_file_path}" NAME)
+    set(dll_dst_file_path "${deploy_dst_dir}/${dll_filename}")
+    message("[deploy_vcpkg_runtime][DEBUG][MATCHED] src = ${dll_src_file_path}")
+    message("[deploy_vcpkg_runtime][DEBUG][MATCHED] dst = ${dll_dst_file_path}")
+
+    # If this DLL is already copied. skip
+    list(FIND _copied_dll_names "${dll_filename}" _seen)
+    if(NOT _seen EQUAL -1)
+        continue()
+    endif()
+    message("[deploy_vcpkg_runtime][DEBUG][MATCHED][need copy] = ${dll_filename}")
+
+    if(NOT EXISTS "${dll_dst_file_path}")
+        message("[deploy_vcpkg_runtime] Deploy vcpkg DLL: ${dll_filename}")
+        file(COPY "${dll_src_file_path}" DESTINATION "${deploy_dst_dir}")
+    endif()
+
+    list(APPEND _copied_dll_names "${dll_filename}")
 endforeach()
+

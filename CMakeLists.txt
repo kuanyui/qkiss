@@ -727,8 +727,8 @@ elseif(WIN32)
 
     # `bumpbin.exe` is provided by MSVC. These `find_program()` must be run during configure time,
     find_program(DUMPBIN_EXECUTABLE_CONFIGURED dumpbin REQUIRED)
-    set(VCPKG_BIN_CONFIGURED "${VCPKG_BIN}")
-
+    find_program(DEPENDENCIES_EXECUTABLE_CONFIGURED Dependencies REQUIRED)
+    # requires -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
     configure_file(
         "${CMAKE_SOURCE_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake.in"
       "${PROJ_GENERATED_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake"
