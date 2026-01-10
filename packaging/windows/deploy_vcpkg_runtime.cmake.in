@@ -55,7 +55,9 @@ string(REPLACE "\n" ";" dependencies_lines "${_raw_dependencies_out}")
 
 
 
-string(REPLACE "\\" "/" vcpkg_bin_dir "${VCPKG_BIN_DIR}")
+string(REPLACE "\\" "/" vcpkg_bin_dir_normalized "${VCPKG_BIN_DIR}")
+message("[deploy_vcpkg_runtime] vcpkg_bin_dir_normalized = ${vcpkg_bin_dir_normalized}")
+
 set(deploy_dst_dir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(_copied_dll_names "")
 
@@ -68,9 +70,13 @@ foreach(line    IN LISTS    dependencies_lines)
     set(dll_src_file_path "${CMAKE_MATCH_1}")
     string(REPLACE "\\" "/" dll_src_file_path "${dll_src_file_path}")
 
+    if(dll_src_file_path MATCHES "^C:/Windows/")
+        continue()
+    endif()
+
     message("[deploy_vcpkg_runtime][DEBUG] src = ${dll_src_file_path}")
     # If DLL is not inside vcpkg bin/ directory (not installed via vcpkg), skip.
-    if(NOT dll_src_file_path MATCHES "^${vcpkg_bin_dir}")
+    if(NOT dll_src_file_path MATCHES "^${vcpkg_bin_dir_normalized}")
         continue()
     endif()
 
