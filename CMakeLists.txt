@@ -734,7 +734,8 @@ elseif(WIN32)
       "${PROJ_GENERATED_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake"
     @ONLY)
     install(SCRIPT "${PROJ_GENERATED_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake")
-
+    # Try to rely on `X_VCPKG_APPLOCAL_DEPS` + `find_package()`
+    install(FILES $<TARGET_RUNTIME_DLLS:${CMAKE_PROJECT_NAME}> DESTINATION "${CMAKE_INSTALL_BINDIR}")
     # ===================================================
     # Fuck Windows, fuck NSIS, fuck CMake.
     # ===================================================

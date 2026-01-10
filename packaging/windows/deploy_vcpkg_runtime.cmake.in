@@ -44,9 +44,9 @@ if(NOT EXISTS "${MAIN_APP_EXECUTABLE}")
     return()
 endif()
 
-
+set(ENV{PATH} "${VCPKG_BIN_DIR};$ENV{PATH}")  # Make Dependencies.exe able to search in it.
 execute_process(
-    COMMAND "${DEPENDENCIES_EXECUTABLE_CONFIGURED}" -chain "${MAIN_APP_EXECUTABLE}"
+    COMMAND "${DEPENDENCIES_EXECUTABLE_CONFIGURED}" -chain -depth 3 "${MAIN_APP_EXECUTABLE}"
     OUTPUT_VARIABLE _raw_dependencies_out
 )
 
@@ -94,7 +94,7 @@ foreach(line    IN LISTS    dependencies_lines)
 
     if(NOT EXISTS "${dll_dst_file_path}")
         message("[deploy_vcpkg_runtime] Deploy vcpkg DLL: ${dll_filename}")
-        file(COPY "${dll_src_file_path}" DESTINATION "${deploy_dst_dir}")
+        # file(COPY "${dll_src_file_path}" DESTINATION "${deploy_dst_dir}")
     endif()
 
     list(APPEND _copied_dll_names "${dll_filename}")
