@@ -24,11 +24,12 @@ set(CMAKE_PROJECT_NAME "@CMAKE_PROJECT_NAME@")
 # `CMAKE_INSTALL_*` should not be determined during configure time, so the main app's *.exe should be decide here.
 set(MAIN_APP_EXECUTABLE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${CMAKE_PROJECT_NAME}.exe")
 
+message("[deploy_vcpkg_runtime] DUMPBIN_EXECUTABLE_CONFIGURED = ${DUMPBIN_EXECUTABLE_CONFIGURED}")
+message("[deploy_vcpkg_runtime] VCPKG_BIN_CONFIGURED = ${VCPKG_BIN_CONFIGURED}")
+message("[deploy_vcpkg_runtime] MAIN_APP_EXECUTABLE = ${MAIN_APP_EXECUTABLE}")
+
 if(NOT EXISTS "${MAIN_APP_EXECUTABLE}")
     message(WARNING "Skip vcpkg DLL deploy: ${MAIN_APP_EXECUTABLE} not installed in this install(COMPONENT \"${CMAKE_INSTALL_COMPONENT_NAME}\")")
-    message("[deploy_vcpkg_runtime] DUMPBIN_EXECUTABLE_CONFIGURED = ${DUMPBIN_EXECUTABLE_CONFIGURED}")
-    message("[deploy_vcpkg_runtime] VCPKG_BIN_CONFIGURED = ${VCPKG_BIN_CONFIGURED}")
-    message("[deploy_vcpkg_runtime] MAIN_APP_EXECUTABLE = ${MAIN_APP_EXECUTABLE}")
     return()
 endif()
 
@@ -39,9 +40,10 @@ execute_process(
 )
 
 string(REPLACE "\r\n" "\n" _raw_dumpbin_out "${_raw_dumpbin_out}")
-string(REPLACE "\n" ";" dumpbin_list "${_raw_dumpbin_out}")
+string(REPLACE "\n" ";" dumpbin_lines "${_raw_dumpbin_out}")
 
-foreach(line   IN LISTS    dumpbin_list)
+foreach(line   IN LISTS    dumpbin_lines)
+    message("[deploy_vcpkg_runtime][DEBUG] ${line}")
     if (line MATCHES "([A-Za-z0-9_.-]+[.]dll)")
         set(dll_filename "${CMAKE_MATCH_1}")
         set(dll_src_file "${VCPKG_BIN_CONFIGURED}/${dll_filename}")
