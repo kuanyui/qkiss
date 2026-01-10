@@ -1,0 +1,51 @@
+# =============================================
+# !!!!! BE CAREFUL !!!!!
+# - This file only handles "install-time".
+# - This file should be used via `install(SCRIPT ...)` in CMakeLists.txt
+# - `WINDEPLOYQT_EXECUTABLE_CONFIGURED` must be configured in CMakeLists.txt
+# =============================================
+#
+# `windeployqt` options:
+#   --no-translations          Don't include Qt built-in lots of *.qm files.
+#   --compiler-runtime         Copy the C++ runtime DLLs according to the used compiler.
+#   --no-opengl-sw             Don't include OpenGL driver used in software rendering.
+#   --no-system-d3d-compiler   Don't include DirectX compiler
+#
+
+# EXE_PATH_WHEN_CPACK    This is for `windeployqt`, whice requires the exe
+# path inside CPack's "simulated installation directory" during CPack
+# (instead of the real final install directory), so the `$` is needed to be
+# escaped.
+
+# BUT!!! `windeployqt` handles Qt libraries only, other packages installed via vcpkg are ignored...
+# So remember to `install()` them manually
+
+# Improve syntax highlights of cmake
+set(WINDEPLOYQT_EXECUTABLE_CONFIGURED "@WINDEPLOYQT_EXECUTABLE_CONFIGURED@")
+
+# `CMAKE_INSTALL_*` should not be determined during configure time, so the main app's *.exe should be decide here.
+set(MAIN_APP_EXECUTABLE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${CMAKE_PROJECT_NAME}.exe")
+
+if(NOT EXISTS "${MAIN_APP_EXECUTABLE}")
+    message(STATUS "Skip windeployqt: ${MAIN_APP_EXECUTABLE} not installed in this install(COMPONENT \"${CMAKE_INSTALL_COMPONENT_NAME}\")")
+    return()
+endif()
+
+execute_process(
+    COMMAND "${WINDEPLOYQT_EXECUTABLE_CONFIGURED}"
+    --no-translations
+    --compiler-runtime
+    --no-opengl-sw
+    --no-system-d3d-compiler
+    "${MAIN_APP_EXECUTABLE}"
+    RESULT_VARIABLE WINDEPLOYQT_RESULT
+    OUTPUT_VARIABLE WINDEPLOYQT_OUTPUT
+    ERROR_VARIABLE WINDEPLOYQT_ERROR
+)
+
+if(NOT WINDEPLOYQT_RESULT EQUAL 0)
+    message(FATAL_ERROR "[windeployqt] failed with error:
+    Result${WINDEPLOYQT_RESULT}
+    Log: ${WINDEPLOYQT_OUTPUT}
+    Error: ${WINDEPLOYQT_ERROR}")
+endif()

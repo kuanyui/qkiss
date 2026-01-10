@@ -583,32 +583,46 @@ endif()
 # ===============================================
 
 include(GNUInstallDirs)  # This is actually cross-platform
+# - CMAKE_INSTALL_*` are provided during `cmake --install` time. So they should not
+# - CMAKE_INSTALL_PREFIX   abs path.
+# - CMAKE_INSTALL_BINDIR   rel path, it should be `bin/`. BUT this is invisible during `cpack`
 
 if(WIN32)
-    set(MY_INSTALL_BINDIR ".")  # On Windows, *.exe and *.dll are usually placed under app's folder root, instead of bin/
-else()
-    set(MY_INSTALL_BINDIR "${CMAKE_INSTALL_BINDIR}")   # This is a relpath, if use GNUInstallDirs, its value is `bin/` so on linux
+    # Force overwrite CMAKE_INSTALL_BINDIR
+    # On Windows, *.exe and *.dll are usually placed under app's folder root, instead of bin/
+    set(CMAKE_INSTALL_BINDIR "." CACHE STRING "Install dir (relpath) for executables" FORCE)
 endif()
 
-
-install(TARGETS qkiss
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${MY_INSTALL_BINDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+# CPack will pack `Runtime`, `Devel`, `Docs` as different `COMPONENT`, `install()` them separately.
 
 # file(COPY samples DESTINATION ${CMAKE_BINARY_DIR})
 
 
-# IMPORTANT: the paths inside `install()` are determined only when `cmake`. So,
-# if icons are not generated when first-time `cmake` (that is to say, when the
-# result of `file(GLOB_RECURSE result "*.png")` is empty), the icons may be
-# potentially unable to be installed via `cmake --install`.
+
+# These `install(CODE ...)` and `install(SCRIPT ...)` actually is not installing files via CMake `install()`. Instead:
+#  - `install(CODE ...)` means "run this code only in installing time instead of configure & build time",
+#    that is to say, copy the string without any reinterpretion into `cmake_install.cmake`.
+#  - `install(SCRIPT <cmake_file_path>)`
+#
+# -------------------------------------------
+
 if(UNIX AND NOT APPLE AND NOT WIN32)
     # Linux / BSD
 
     # Copy built qkiss main app icons into an independent dir for installation.
     # NOTE: `install()` will only be triggered when `cmake --install` or `make install` or (rpm spec's) `%cmake_install`, so you won't see them when developing.
+
+    # IMPORTANT: the paths inside `install()` are determined only when `cmake`
+    # configure time. So, if icons are not generated when first-time `cmake`
+    # (that is to say, when the result of `file(GLOB_RECURSE result "*.png")` is
+    # empty), the icons may be potentially unable to be installed via `cmake
+    # --install`.
+
 
     # XDG icon theme :: png files
     message(STATUS "[DEBUG] CMAKE_SOURCE_DIR === ${CMAKE_SOURCE_DIR}")
@@ -637,19 +651,9 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
     install(FILES "${PROJ_GENERATED_DIR}/${PROJECT_NAME}.desktop" DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
 elseif(WIN32)
-    set(WIN_EXTERNAL_BIN_DEPS_DIR "" CACHE PATH "[Windows only] Path to the directory containing external binary dependencies (lha, unar)")
-
-    # Search external dependencies in variable `WIN_EXTERNAL_BIN_DEPS_DIR`, falling back to System PATH if not found.
-    find_program(LHA_EXECUTABLE lha HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
-    find_program(UNAR_EXECUTABLE unar HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
-    find_file(FOUNDATION_DLL "Foundation.1.0.dll" HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
-
-    if(LHA_EXECUTABLE AND UNAR_EXECUTABLE AND FOUNDATION_DLL)
-        install(FILES "${LHA_EXECUTABLE}" "${UNAR_EXECUTABLE}" "${FOUNDATION_DLL}" DESTINATION ${MY_INSTALL_BINDIR})
-        message(STATUS "External dependencies (lha/unar) found and scheduled for installation.")
-    else()
-        message(FATAL_ERROR "External dependencies (lha/unar) not found in WIN_EXTERNAL_BIN_DEPS_DIR nor PATH! Installer will be incomplete.")
-    endif()
+    # ===================================================
+    # `CPACK_*` variables
+    # ===================================================
 
     # Default value of ${CPACK_PACKAGE_FILE_NAME} is
     # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
@@ -661,57 +665,51 @@ elseif(WIN32)
     set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
     set(CPACK_GENERATOR "NSIS;ZIP")
 
+    # ===================================================
+    # `install()` external .exe (lha, unar)
+    # ===================================================
+
+    set(WIN_EXTERNAL_BIN_DEPS_DIR "" CACHE PATH "[Windows only] Path to the directory containing external binary dependencies (lha, unar)")
+
+    # Search external dependencies in variable `WIN_EXTERNAL_BIN_DEPS_DIR`, falling back to System PATH if not found.
+    find_program(LHA_EXECUTABLE lha HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
+    find_program(UNAR_EXECUTABLE unar HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
+    find_file(FOUNDATION_DLL "Foundation.1.0.dll" HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
+
+    if(LHA_EXECUTABLE AND UNAR_EXECUTABLE AND FOUNDATION_DLL)
+        install(FILES "${LHA_EXECUTABLE}" "${UNAR_EXECUTABLE}" "${FOUNDATION_DLL}" DESTINATION ${CMAKE_INSTALL_BINDIR})
+        message(STATUS "External dependencies (lha/unar) found and scheduled for installation.")
+    else()
+        message(FATAL_ERROR "External dependencies (lha/unar) not found in WIN_EXTERNAL_BIN_DEPS_DIR nor PATH! Installer will be incomplete.")
+    endif()
+
+    # ===================================================
+    # `install()` Qt runtime DLLs via `windeployqt`
+    # ===================================================
+
+
+
     # Get `windeployqt` to pick DLLs (according to the above `find_package(Qt6 REQUIRED COMPONENTS Core ...)`)
     # To reliably get the correct version of `windeployqt` installed on this computer, need to get the folder of `qmake` first,
     # which has been found by `find_package(Qt6 ...)`
     get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
-    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qt_bin_dir}")
+    find_program(WINDEPLOYQT_EXECUTABLE_CONFIGURED windeployqt HINTS "${_qt_bin_dir}" REQUIRED)
 
-    # This `install()` actually is not installing files via CMake `install()`.
-    # Insead, `install(CODE ...)` means "run this code only in installing time instead of configure/build time"
+    configure_file(
+          "${CMAKE_SOURCE_DIR}/packaging/windows/deploy_qt_runtime.cmake.in"
+        "${PROJ_GENERATED_DIR}/packaging/windows/deploy_qt_runtime.cmake"
+        @ONLY)
+    install(SCRIPT "${PROJ_GENERATED_DIR}/packaging/windows/deploy_qt_runtime.cmake")
 
-    # `windeployqt` options:
-    #   --no-translations          Don't include Qt built-in lots of *.qm files.
-    #   --compiler-runtime         Copy the C++ runtime DLLs according to the used compiler.
-    #   --no-opengl-sw             Don't include OpenGL driver used in software rendering.
-    #   --no-system-d3d-compiler   Don't include DirectX compiler
-    #
-    # CMAKE_INSTALL_PREFIX   abs path, it is different during `cmake` and `cpack`, so escape `$` here.
-    # MY_INSTALL_BINDIR      rel path, on windows it should be `bin/`. BUT this is invisible during `cpack` (WTF is this shitty design???), so don't escape `$` here.
 
-    # EXE_PATH_WHEN_CPACK    This is for `windeployqt`, whice requires the exe
-    # path inside CPack's "simulated installation directory" during CPack
-    # (instead of the real final install directory), so the `$` is needed to be
-    # escaped.
+    # - Qt > 6.3 provides `qt_generate_deploy_app_script()` means to replace `windeployqt` to
+    #   generate a script to `install()` all DLLs. NEVERTHELESS!!! this shit is a blackbox which
+    #   actually always install binaries into `bin/`. fucking idiot over-engineered Qt tools.
+    #   So I decide not to use this shit here.
+    # - This `qt_generate_deploy_app_script()` doesn't supports "Visual Studio 17 2022" as generator
+    #   (because it always generates Multi-Config), use Ninja (Single-Config) instead.
 
-    # BUT!!! `windeployqt` handles Qt libraries only, other packages installed via vcpkg are ignored...
-    # So remember to `install()` them manually
-
-    install(CODE "
-        set(EXE_PATH_WHEN_CPACK \"\${CMAKE_INSTALL_PREFIX}/${MY_INSTALL_BINDIR}/qkiss.exe\")
-        message(STATUS \"[Deploy] Running windeployqt on: \${EXE_PATH_WHEN_CPACK}\")
-
-        execute_process(
-            COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
-            --no-translations
-            --compiler-runtime
-            --no-opengl-sw
-            --no-system-d3d-compiler
-            \"\${EXE_PATH_WHEN_CPACK}\"
-            RESULT_VARIABLE WINDEPLOYQT_RESULT
-            OUTPUT_VARIABLE WINDEPLOYQT_OUTPUT
-            ERROR_VARIABLE WINDEPLOYQT_ERROR
-        )
-
-        if(NOT WINDEPLOYQT_RESULT EQUAL 0)
-            message(FATAL_ERROR \"windeployqt failed with error: \${WINDEPLOYQT_RESULT}\nLog: \${WINDEPLOYQT_OUTPUT}\nError: \${WINDEPLOYQT_ERROR}\")
-        endif()
-    ")
-
-    ## # > Qt6.3, use `qt_generate_deploy_app_script()` instead of `windeployqt`, to
-    ## generate a script to install() all DLLs. But this shit is actually always install binaries into bin/
-    ## Fucking idiot over-engineered Qt tools.
     # qt_generate_deploy_app_script(
     #     TARGET qkiss
     #     OUTPUT_SCRIPT deploy_script.cmake
@@ -721,59 +719,19 @@ elseif(WIN32)
     # install(SCRIPT ${deploy_script.cmake})
 
     # ===================================================
-    # `install()` third-party DLLs in vcpkg
+    # `install()` the third-party runtime DLLs in vcpkg
     # ===================================================
-    function(install_vcpkg_dll)
-        # prefix, opts, single_val_tag, multiple_vals_tag, original_args
-        cmake_parse_arguments(ARG "" "LIB_NAME;DEF_NAME" "DLL_CANDIDATES" ${ARGN})
 
-        set(VCPKG_BIN_DIR "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin")
-        set(FOUND_DLL_PATH "")
-        if(NOT "${ARG_DEF_NAME}" IN_LIST EXTRA_DEFS)   # if this lib is not needed
-            return()
-        endif()
-        foreach(PATT   IN LISTS   ARG_DLL_CANDIDATES)
-            file(GLOB MATCHED_FILES "${VCPKG_BIN_DIR}/*${PATT}*.dll")
-            message(STATUS "[install_vcpkg_dll()] GLOB \n VCPKG_BIN_DIR='${VCPKG_BIN_DIR}' \n PATT='${PATT}' \n MATCHED_FILES='${MATCHED_FILES}'")
-            if(MATCHED_FILES)  # IMPORTANT: Don't use `if("${MATCHED_FILES}")` here...
-                list(GET MATCHED_FILES 0 FOUND_DLL_PATH)   # pick the first found DLL file
-                break()
-            endif()
-        endforeach()
+    # `bumpbin.exe` is provided by MSVC. These `find_program()` must be run during configure time,
+    find_program(DUMPBIN_EXECUTABLE_CONFIGURED dumpbin REQUIRED)
+    set(VCPKG_BIN_CONFIGURED "${VCPKG_BIN}")
 
-        if(FOUND_DLL_PATH)   # IMPORTANT: Don't use `if("${FOUND_DLL_PATH}")` here...
-            install(FILES "${FOUND_DLL_PATH}" DESTINATION ${MY_INSTALL_BINDIR})
-            get_filename_component(DLL_NAME "${FOUND_DLL_PATH}" NAME)
-            message(STATUS "[install_vcpkg_dll()] Found: ${ARG_LIB_NAME}: ${DLL_NAME}")
-        else()
-            message(FATAL_ERROR "[install_vcpkg_dll()] Not found: ${ARG_LIB_NAME}. Tried pattern: ${ARG_DLL_CANDIDATES}")
-        endif()
-    endfunction()
-    install_vcpkg_dll(
-        LIB_NAME Iconv
-        DEF_NAME HAVE_ICONV
-        DLL_CANDIDATES iconv
-    )
-    install_vcpkg_dll(
-        LIB_NAME "ICU Core"
-        DEF_NAME HAVE_ICU
-        DLL_CANDIDATES icuuc
-    )
-    install_vcpkg_dll(
-        LIB_NAME "ICU Data"
-        DEF_NAME HAVE_ICU
-        DLL_CANDIDATES icudt
-    )
-    install_vcpkg_dll(
-        LIB_NAME "ICU i18n"
-        DEF_NAME HAVE_ICU
-        DLL_CANDIDATES icuin
-    )
-    install_vcpkg_dll(
-        LIB_NAME "LibArchive"
-        DEF_NAME HAVE_LIBARCHIVE
-        DLL_CANDIDATES libarchive archive
-    )
+    configure_file(
+        "${CMAKE_SOURCE_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake.in"
+      "${PROJ_GENERATED_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake"
+    @ONLY)
+    install(SCRIPT "${PROJ_GENERATED_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake")
+
     # ===================================================
     # Fuck Windows, fuck NSIS, fuck CMake.
     # ===================================================
