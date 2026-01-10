@@ -299,7 +299,7 @@ jobs:
         working-directory: build
         # Configuration: Release. Generators (NSIS, ZIP) are already defined in CMakeLists.txt so do NOT use `-G` to overwrite it
         run: |
-          cpack -C Release
+          cpack -VV -C Release
           if ($LASTEXITCODE -ne 0) {
               Write-Host "CPack failed!"
               Write-Host "============================================"

@@ -26,8 +26,14 @@ set(WINDEPLOYQT_EXECUTABLE_CONFIGURED "@WINDEPLOYQT_EXECUTABLE_CONFIGURED@")
 # `CMAKE_INSTALL_*` should not be determined during configure time, so the main app's *.exe should be decide here.
 set(MAIN_APP_EXECUTABLE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${CMAKE_PROJECT_NAME}.exe")
 
+message(WARNING "[deploy_qt_runtime] CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
+message(WARNING "[deploy_qt_runtime] CMAKE_INSTALL_BINDIR = ${CMAKE_INSTALL_BINDIR}")
+message(WARNING "[deploy_qt_runtime] CMAKE_INSTALL_COMPONENT = ${CMAKE_INSTALL_COMPONENT}")
+message(WARNING "[deploy_qt_runtime] WINDEPLOYQT_EXECUTABLE_CONFIGURED = ${WINDEPLOYQT_EXECUTABLE_CONFIGURED}")
+message(WARNING "[deploy_qt_runtime] MAIN_APP_EXECUTABLE = ${MAIN_APP_EXECUTABLE}")
+
 if(NOT EXISTS "${MAIN_APP_EXECUTABLE}")
-    message(STATUS "Skip windeployqt: ${MAIN_APP_EXECUTABLE} not installed in this install(COMPONENT \"${CMAKE_INSTALL_COMPONENT_NAME}\")")
+    message(WARNING "Skip windeployqt: ${MAIN_APP_EXECUTABLE} not installed in this install(COMPONENT \"${CMAKE_INSTALL_COMPONENT_NAME}\")")
     return()
 endif()
 
@@ -45,7 +51,7 @@ execute_process(
 
 if(NOT WINDEPLOYQT_RESULT EQUAL 0)
     message(FATAL_ERROR "[windeployqt] failed with error:
-    Result${WINDEPLOYQT_RESULT}
+    Result: ${WINDEPLOYQT_RESULT}
     Log: ${WINDEPLOYQT_OUTPUT}
     Error: ${WINDEPLOYQT_ERROR}")
 endif()

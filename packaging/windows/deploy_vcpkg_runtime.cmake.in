@@ -14,9 +14,13 @@ set(VCPKG_BIN_CONFIGURED "@VCPKG_BIN_CONFIGURED@")
 set(MAIN_APP_EXECUTABLE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${CMAKE_PROJECT_NAME}.exe")
 
 if(NOT EXISTS "${MAIN_APP_EXECUTABLE}")
-    message(STATUS "Skip vcpkg DLL deploy: ${MAIN_APP_EXECUTABLE} not installed in this install(COMPONENT \"${CMAKE_INSTALL_COMPONENT_NAME}\")")
+    message(WARNING "Skip vcpkg DLL deploy: ${MAIN_APP_EXECUTABLE} not installed in this install(COMPONENT \"${CMAKE_INSTALL_COMPONENT_NAME}\")")
     return()
 endif()
+
+message(WARNING "[deploy_vcpkg_runtime] DUMPBIN_EXECUTABLE_CONFIGURED = ${DUMPBIN_EXECUTABLE_CONFIGURED}")
+message(WARNING "[deploy_vcpkg_runtime] VCPKG_BIN_CONFIGURED = ${VCPKG_BIN_CONFIGURED}")
+message(WARNING "[deploy_vcpkg_runtime] MAIN_APP_EXECUTABLE = ${MAIN_APP_EXECUTABLE}")
 
 execute_process(
     COMMAND "${DUMPBIN_EXECUTABLE_CONFIGURED}" /dependents "${MAIN_APP_EXECUTABLE}"
@@ -33,7 +37,7 @@ foreach(line   IN LISTS    dumpbin_list)
         set(dll_dst_dir  "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
         set(dll_dst_file "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${dll_filename}")
         if (EXISTS "${dll_src_file}" AND NOT EXISTS "${dll_dst_file}")
-            message(STATUS "Deploy vcpkg DLL: ${dll_filename}")
+            message(WARNING "Deploy vcpkg DLL: ${dll_filename}")
             file(COPY "${dll_src_file}" DESTINATION "${dll_dst_dir}")
         endif()
     endif()
