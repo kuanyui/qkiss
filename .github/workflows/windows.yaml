@@ -35,8 +35,11 @@ jobs:
     name: Run `vcpkg install` and cache the built binary ZIPs.
     runs-on: windows-latest
     env:
-      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_binary_cache
-      # VCPKG_BINARY_SOURCES: clear; files,${{ github.workspace }}/vcpkg_binary_cache,readwrite
+      # VCPKG_BINARY_SOURCES: clear; files,${{ github.workspace }}/vcpkg_cache,readwrite
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_cache/archives
+      # also caches `VCPKG_DOWNLOADS` folder for `cmake` & `powershell` required by `vcpkg` itself.
+      VCPKG_DOWNLOADS: ${{ github.workspace }}/vcpkg_cache/downloads
+      # VCPKG_FORCE_SYSTEM_BINARIES: 1     # Force to use system's `cmake` and `powershell-core` instead of download & installing vcpkg's one
     steps:
       # Step 1: Download the source code
       - name: Checkout code
@@ -49,12 +52,14 @@ jobs:
       # zip files will be cached in `VCPKG_DEFAULT_BINARY_CACHE`, then extract
       # to `REPO_ROOT/vcpkg_installed/`
 
-      - name: Manually create an extra folder `vcpkg_binary_cache` as `VCPKG_DEFAULT_BINARY_CACHE`
+      - name: Manually create an extra folder `vcpkg_cache` as `VCPKG_DEFAULT_BINARY_CACHE`
         shell: bash
-        run: mkdir -p "${VCPKG_DEFAULT_BINARY_CACHE}"
+        run: |
+          mkdir -p "${VCPKG_DEFAULT_BINARY_CACHE}"
+          mkdir -p "${VCPKG_DOWNLOADS}"
 
-      # Step 2: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
-      - name: Restore `vcpkg_binary_cache`
+      # Step 2: [Cache] Try to restore `vcpkg_cache` folder with specified key
+      - name: Restore `vcpkg_cache`
         id: vcpkg_cache
         uses: actions/cache@v5
         with:
@@ -62,11 +67,11 @@ jobs:
           ### automatically installs all dependencies into `vcpkg_installed/`
           ### folder by default. So use this folder name as cache path.
           ## path: vcpkg_installed
-          path: vcpkg_binary_cache
-          key: ${{ runner.os }}-vcpkg-binary-cache-${{ hashFiles('vcpkg.json') }}
+          path: vcpkg_cache
+          key: ${{ runner.os }}-vcpkg-mega-cache-${{ hashFiles('vcpkg.json') }}
 
       # Step 3: Download & build & install packages via vcpkg
-      - name: Download & build & install packages via vcpkg, and cache to `vcpkg_binary_cache`
+      - name: Download & build & install packages via vcpkg, and cache to `vcpkg_cache`
         if: steps.vcpkg_cache.outputs.cache-hit != 'true'
         run: vcpkg install --triplet x64-windows
 
@@ -159,7 +164,10 @@ jobs:
       - 'prepare-external-bin-deps-cache'
     runs-on: windows-latest
     env:
-      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_binary_cache
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_cache/archives
+      VCPKG_DOWNLOADS: ${{ github.workspace }}/vcpkg_cache/downloads
+      # VCPKG_FORCE_SYSTEM_BINARIES: 1     # Force to use system's `cmake` and `powershell-core` instead of download & installing vcpkg's one
+
     steps:
       # Step 1: Download the source code
       - name: Checkout code
@@ -181,12 +189,12 @@ jobs:
           # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ needs.prepare-icon-cache.outputs.commitHash }}
           key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
 
-      # Step 3: [Cache] Try to restore `vcpkg_binary_cache` folder with specified key
-      - name: Restore `vcpkg_binary_cache`
+      # Step 3: [Cache] Try to restore `vcpkg_cache` folder with specified key
+      - name: Restore `vcpkg_cache`
         uses: actions/cache@v5
         with:
-          path: vcpkg_binary_cache
-          key: ${{ runner.os }}-vcpkg-binary-cache-${{ hashFiles('vcpkg.json') }}
+          path: vcpkg_cache
+          key: ${{ runner.os }}-vcpkg-mega-cache-${{ hashFiles('vcpkg.json') }}
 
       # Step 4: [Cache] External binary dependencies (LHA & unar)
       - name: Restore cache of external binary dependencies
@@ -201,7 +209,7 @@ jobs:
         run: echo "${{ runner.temp }}/bin_deps" >> $GITHUB_PATH
 
       # Step 5: Install packages via vcpkg (from cache)
-      - name: Install packages via `vcpkg` from `vcpkg_binary_cache`
+      - name: Install packages via `vcpkg` from `vcpkg_cache`
         run: vcpkg install --triplet x64-windows
 
       # Step 6: Install NSIS for pack installer (What CPack using actually is) `makensis.exe`
