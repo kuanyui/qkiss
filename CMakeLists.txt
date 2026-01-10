@@ -583,9 +583,12 @@ endif()
 # ===============================================
 
 include(GNUInstallDirs)  # This is actually cross-platform
-# - CMAKE_INSTALL_*` are provided during `cmake --install` time. So they should not
-# - CMAKE_INSTALL_PREFIX   abs path.
-# - CMAKE_INSTALL_BINDIR   rel path, it should be `bin/`. BUT this is invisible during `cpack`
+# **NOT** all `CMAKE_INSTALL_*` are provided during `cmake --install` time.
+#
+# - CMAKE_INSTALL_PREFIX      abs path. Visible during install time.
+# - CMAKE_INSTALL_BINDIR      rel path, it should be `bin/`. **BUT this is invisible during install time**
+# - CMAKE_INSTALL_LIBDIR      rel path, it should be `lib/`. **BUT this is invisible during install time**
+# - CMAKE_INSTALL_INCLUDEDIR  rel path, it should be `include/`. **BUT this is invisible during install time**
 
 if(WIN32)
     # Force overwrite CMAKE_INSTALL_BINDIR

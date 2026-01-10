@@ -3,24 +3,35 @@
 # - This file only handles "install-time".
 # - This file should be used via `install(SCRIPT ...)` in CMakeLists.txt
 # - These variables must be configured in CMakeLists.txt:
-#   - DUMPBIN_EXECUTABLE_CONFIGURED
-#   - VCPKG_BIN_CONFIGURED    (`bumpbin.exe` is provided by MSVC, so must be determined during configure time,)
-# =============================================
 #
+#   - Explicit:
+#     - DUMPBIN_EXECUTABLE_CONFIGURED  (via `find_program(DUMPBIN_EXECUTABLE_CONFIGURED dumpbin)`. `dumpbin.exe` is provided by MSVC, so must be determined during configure time.)
+#     - VCPKG_BIN_CONFIGURED  (via `set(VCPKG_BIN_CONFIGURED "${VCPKG_BIN}")`)
+#
+#   - Implicit:
+#     - CMAKE_INSTALL_BINDIR (via `include(GNUInstallDirs)`, rel path.)
+#     - CMAKE_PROJECT_NAME (via `project(<name>`)
+# =============================================
+
+# `set()` here for improving syntax highlights of cmake.
 set(DUMPBIN_EXECUTABLE_CONFIGURED "@DUMPBIN_EXECUTABLE_CONFIGURED@")
 set(VCPKG_BIN_CONFIGURED "@VCPKG_BIN_CONFIGURED@")
+
+set(CMAKE_INSTALL_BINDIR "@CMAKE_INSTALL_BINDIR@")
+set(CMAKE_PROJECT_NAME "@CMAKE_PROJECT_NAME@")
+
 
 # `CMAKE_INSTALL_*` should not be determined during configure time, so the main app's *.exe should be decide here.
 set(MAIN_APP_EXECUTABLE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${CMAKE_PROJECT_NAME}.exe")
 
 if(NOT EXISTS "${MAIN_APP_EXECUTABLE}")
     message(WARNING "Skip vcpkg DLL deploy: ${MAIN_APP_EXECUTABLE} not installed in this install(COMPONENT \"${CMAKE_INSTALL_COMPONENT_NAME}\")")
+    message("[deploy_vcpkg_runtime] DUMPBIN_EXECUTABLE_CONFIGURED = ${DUMPBIN_EXECUTABLE_CONFIGURED}")
+    message("[deploy_vcpkg_runtime] VCPKG_BIN_CONFIGURED = ${VCPKG_BIN_CONFIGURED}")
+    message("[deploy_vcpkg_runtime] MAIN_APP_EXECUTABLE = ${MAIN_APP_EXECUTABLE}")
     return()
 endif()
 
-message(WARNING "[deploy_vcpkg_runtime] DUMPBIN_EXECUTABLE_CONFIGURED = ${DUMPBIN_EXECUTABLE_CONFIGURED}")
-message(WARNING "[deploy_vcpkg_runtime] VCPKG_BIN_CONFIGURED = ${VCPKG_BIN_CONFIGURED}")
-message(WARNING "[deploy_vcpkg_runtime] MAIN_APP_EXECUTABLE = ${MAIN_APP_EXECUTABLE}")
 
 execute_process(
     COMMAND "${DUMPBIN_EXECUTABLE_CONFIGURED}" /dependents "${MAIN_APP_EXECUTABLE}"
@@ -37,7 +48,7 @@ foreach(line   IN LISTS    dumpbin_list)
         set(dll_dst_dir  "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
         set(dll_dst_file "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${dll_filename}")
         if (EXISTS "${dll_src_file}" AND NOT EXISTS "${dll_dst_file}")
-            message(WARNING "Deploy vcpkg DLL: ${dll_filename}")
+            message("[deploy_vcpkg_runtime] Deploy vcpkg DLL: ${dll_filename}")
             file(COPY "${dll_src_file}" DESTINATION "${dll_dst_dir}")
         endif()
     endif()
