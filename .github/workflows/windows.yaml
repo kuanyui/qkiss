@@ -332,10 +332,16 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: QKiSS-Windows-Builds
+          name: QKiSS-Windows-Portable
+          path: |
+            build/qkiss-*-win64.zip
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: QKiSS-Windows-Installer
           path: |
             build/qkiss-*-win64.exe
-            build/qkiss-*-win64.zip
 
       # - name: Create public release page
       #   uses: softprops/action-gh-release@v2
