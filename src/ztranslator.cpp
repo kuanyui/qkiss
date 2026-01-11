@@ -20,6 +20,7 @@
 #include "ztranslator.h"
 #include <QHash>
 #include <QDebug>
+#include <QRegularExpression>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -108,7 +109,7 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
         { "&Paste", "貼り付け (&P)" },
         { "Delete", "削除" },
         { "Copy &Link Location", "リンクの場所をコピー (&L)" },
-	{ "&Close", "閉じる (&C)" },
+        { "&Close", "閉じる (&C)" },
         { "QFileDialog::All Files (*)", "すべてのファイル (*)" },
         { "QFileDialog::Look in:", "場所:" },
         { "QFileDialog::Back", "戻る" },
@@ -181,7 +182,7 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
         { "&Paste", "貼りつけるで (&P)" },
         { "Delete", "消すで" },
         { "Copy &Link Location", "リンクの場所コピるんや (&L)" },
-	{ "&Close", "閉めるで (&C)" },
+        { "&Close", "閉めるで (&C)" },
         { "QFileDialog::All Files (*)", "全部のファイルやで (*)" },
         { "QFileDialog::Look in:", "見てる場所や:" },
         { "QFileDialog::Back", "戻んで" },
@@ -251,7 +252,7 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
         { "&Paste", "貼り付けますわよ (&P)" },
         { "Delete", "削除なさいますわ" },
         { "Copy &Link Location", "リンクの所在をコピーいたしますの (&L)" },
-	{ "&Close", "閉じますわ (&C)" },
+        { "&Close", "閉じますわ (&C)" },
         { "QFileDialog::All Files (*)", "すべてのファイルでございますわ (*)" },
         { "QFileDialog::Look in:", "場所をご覧なさいませ:" },
         { "QFileDialog::Back", "戻りますわ" },
@@ -308,7 +309,7 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
         { "&Paste", "貼り付けて差し上げますのよ、感謝なさいませ！ (&P)" },
         { "Delete", "消え去りなさいませ！奈落の底まで堕ちるがよろしい！オホホホ！" },
         { "Copy &Link Location", "リンクの所在をお写しあそばせ──もっとも貴様に理解できるかしら？ (&L)" },
-	{ "&Close", "さっさと閉じませ、平民！ (&C)" },
+        { "&Close", "さっさと閉じませ、平民！ (&C)" },
         { "QFileDialog::All Files (*)", "すべてのファイルですわ、下々でも見えるでしょうね (*)" },
         { "QFileDialog::Look in:", "場所をご覧なさいませ、庶民でも分かりますわ" },
         { "QFileDialog::Back", "戻りますわよ、おほほ！" },
@@ -381,7 +382,7 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
         { "&Paste", "貼り付け？ぷっ、センスな (&P)" },
         { "Delete", "削除〜〜はいはい消えた〜〜〜" },
         { "Copy &Link Location", "リンクコピー？そんなのしかできないの？ (&L)" },
-	{ "&Close", "閉じんの？ざこ♥ (&C)" },
+        { "&Close", "閉じんの？ざこ♥ (&C)" },
         { "QFileDialog::All Files (*)", "全部のファイルだよ〜ざこには多すぎ？ (*)" },
         { "QFileDialog::Look in:", "見てる場所:" },
         { "QFileDialog::Back", "戻るんだぁ？ビビってんの？ざぁ〜こ♥" },
@@ -454,7 +455,7 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
         { "&Paste", "は、貼り付け…ど、どこ…に… (&P)" },
         { "Delete", "さ、削除…い、いやぁ…" },
         { "Copy &Link Location", "リンク場所をこ…こ…コピ…ころさないで… (&L)" },
-	{ "&Close", "ととととと閉じますかぁぁ… (&C)" },
+        { "&Close", "ととととと閉じますかぁぁ… (&C)" },
         { "QFileDialog::All Files (*)", "すすすすべてのふぁ、ふぁふぁファイル (*)" },
         { "QFileDialog::Look in:", "表示場所：…あ、あの…こ、ここ…ですか…" },
         { "QFileDialog::Back", "か…帰りたい、ひぃん…" },
@@ -535,10 +536,16 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
 };
 
 
+ZTranslator::ZTranslator(QObject *parent)
+    : QTranslator(parent)
+{
+    initExtraTranslations();
+}
+
 ZTranslator::ZTranslator(const QString &lang, QObject *parent)
     : QTranslator(parent), m_curLang(lang)
 {
-
+    initExtraTranslations();
 }
 
 bool ZTranslator::setLang(const QString &lang)
@@ -564,6 +571,37 @@ QString ZTranslator::translate(const char *context, const char *sourceText, cons
     if (Z_TRANSLATIONS[m_curLang].contains(ctxKey)) {
         return Z_TRANSLATIONS[m_curLang][ctxKey];
     }
+
+    if (m_extraTranslations[m_curLang].contains(globalKey)) {
+        return m_extraTranslations[m_curLang][globalKey];
+    }
+    if (m_extraTranslations[m_curLang].contains(ctxKey)) {
+        return m_extraTranslations[m_curLang][ctxKey];
+    }
     // qDebug().noquote() << R"#([ZTranslator] Not translated ( %1 )  %2::%3")#"_L1.arg(m_curLang, context, sourceText);
     return QString();   // fallback to Qt itself
+}
+
+void ZTranslator::initExtraTranslations()
+{
+    if (m_extraTranslationsInitialized) { return; }
+    QRegularExpression pattShortcut(R"( ?\(&[A-Za-z]\) ?)");
+    for (auto it = Z_TRANSLATIONS.begin(); it != Z_TRANSLATIONS.end(); ++it) {
+        QString langId = it.key();
+        const QHash<QString, QString> &oriDict = it.value();
+        QList<QString> keys = oriDict.keys();
+        m_extraTranslations[langId] = {};
+        qDebug() << "LANG <<" << langId;
+        for (const QString &key : keys) {
+            if (!key.contains('&')) { continue; }
+            QString newKey = key;
+            newKey.remove('&');
+            if (oriDict.contains(newKey)) { continue; }
+            QString newValue = oriDict.value(key);
+            newValue.remove(pattShortcut);
+            qDebug() << "TRANSLATE" << langId << newKey << newValue;
+            m_extraTranslations[langId][newKey] = newValue;
+        }
+    }
+    m_extraTranslationsInitialized = true;
 }

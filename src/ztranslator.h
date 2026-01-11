@@ -21,19 +21,22 @@
 #define ZTRANSLATOR_H
 
 #include <QTranslator>
+#include <QHash>
 
 /** Fallback of built-in widgets (ex: context menu) & languages against Qt official language pack.*/
 class ZTranslator : public QTranslator
 {
 public:
-    using QTranslator::QTranslator;
+    explicit ZTranslator(QObject *parent = nullptr);
     explicit ZTranslator(const QString &lang, QObject *parent = nullptr);
     bool setLang(const QString &lang);
     QString translate(const char *context, const char *sourceText, const char *disambiguation = nullptr, int n = -1) const override;
 
 private:
+    void initExtraTranslations();
     QString m_curLang = "en-US";
-
+    bool m_extraTranslationsInitialized = false;
+    QHash<QString, QHash<QString, QString>> m_extraTranslations;
 };
 
 #endif // ZTRANSLATOR_H
