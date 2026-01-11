@@ -316,13 +316,6 @@ if(ENABLE_PROFILING)
 endif()
 
 
-# ==============================================
-# CPack
-# ==============================================
-set(CPACK_PACKAGE_NAME "${CMAKE_PROJECT_NAME}")
-set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}")
-
 # ===============================================
 # Prepare variables to store extra .h / .cpp / dynamic lib paths
 # ===============================================
@@ -701,14 +694,19 @@ elseif(WIN32)
 
     # Default value of ${CPACK_PACKAGE_FILE_NAME} is
     # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
-    set(CPACK_PACKAGE_NAME "${PROJ_LABEL}")    # This will become as a part in the output file name, so don't use space.
+    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
     set(CPACK_PACKAGE_VENDOR "QKiSS Project")  # only used in "Vendor" field in Installer.
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})  # to display
     set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})  # to auto compare version
     set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
     set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
-    set(CPACK_GENERATOR "NSIS;ZIP")
 
+    set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")  # source code tarball file name
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")  # Installer file name
+    set(CPACK_NSIS_DISPLAY_NAME "${PROJ_LABEL} ${PROJECT_VERSION} Installer")   # Window title of installer
+
+    set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+    set(CPACK_GENERATOR "NSIS;ZIP")
     # ===================================================
     # `install()` external .exe (lha, unar)
     # ===================================================
