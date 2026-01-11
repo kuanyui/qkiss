@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     // setWindowIcon(QIcon::fromTheme("paprefs"));
     setWindowIcon(QIcon::fromTheme("qkiss"));
     // setWindowTitle(QCoreApplication::applicationName());
-    setWindowTitle(QString("%1 %2").arg(PROJ_LABEL, PROJECT_VERSION));
+    setWindowTitle(QString("%1 %2").arg(PROJ_DISPLAY_NAME, PROJECT_VERSION));
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupMenuBar();
     setupToolBars();

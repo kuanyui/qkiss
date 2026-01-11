@@ -18,7 +18,7 @@
 cmake_minimum_required(VERSION 3.25)  # For Debian 12 (cmake 3.25)
 
 set(PROJ_NAME qkiss) # So this can be used before `project()`
-set(PROJ_LABEL QKiSS)
+set(PROJ_DISPLAY_NAME QKiSS)
 # Read VERSION file to get version
 file(READ "${CMAKE_SOURCE_DIR}/VERSION" PROJ_VERSION)
 string(STRIP "${PROJ_VERSION}" PROJ_VERSION)
@@ -694,16 +694,19 @@ elseif(WIN32)
 
     # Default value of ${CPACK_PACKAGE_FILE_NAME} is
     # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
-    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+    set(CPACK_PACKAGE_NAME "${PROJ_DISPLAY_NAME}")
     set(CPACK_PACKAGE_VENDOR "QKiSS Project")  # only used in "Vendor" field in Installer.
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})  # to display
     set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})  # to auto compare version
     set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
     set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+    set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/kuanyui/qkiss")
+    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJ_SUMMARY}")
+    set(CPACK_PACKAGE_DESCRIPTION "${PROJ_DESCRIPTION}")
 
     set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")  # source code tarball file name
-    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")  # Installer file name
-    set(CPACK_NSIS_DISPLAY_NAME "${PROJ_LABEL} ${PROJECT_VERSION} Installer")   # Window title of installer
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${CPACK_SYSTEM_NAME}")  # Installer / Portable ZIP file name
+    set(CPACK_NSIS_DISPLAY_NAME "${PROJ_DISPLAY_NAME} ${PROJECT_VERSION} Installer")   # Window title of installer
 
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
     set(CPACK_GENERATOR "NSIS;ZIP")
