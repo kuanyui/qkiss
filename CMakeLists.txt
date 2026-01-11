@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.25)  # For Debian 12 (cmake 3.25)
 
 # Read VERSION file to get version
 file(READ "${CMAKE_SOURCE_DIR}/VERSION" PROJ_VERSION)
