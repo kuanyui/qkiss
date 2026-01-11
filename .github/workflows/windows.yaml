@@ -293,7 +293,8 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.8.3'
+          # Use this to see all Qt versions https://ddalcino.github.io/aqt-list-server/
+          version: '6.9.3'    # >= 6.9.0 supports emoji on Windows, so don't use 6.8.3 even if it's LTS  https://www.qt.io/blog/emoji-in-qt-6.9
           arch: 'win64_msvc2022_64'
           target: 'desktop'         # Actually the default value is already `desktop`.
           modules: 'qtmultimedia'   # Important!
