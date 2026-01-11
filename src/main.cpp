@@ -1,7 +1,7 @@
 /**************************************************************************
 * QKiSS - A modern implementation of KiSS (Kisekae) viewer in Qt 6.
 *
-* Copyright (C) 2024 - 2025 ono ono (kuanyui) <azazabc123@gmail.com>
+* Copyright (C) 2024 - 2026 ono ono (kuanyui) <azazabc123@gmail.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <QLocale>
 #include <QTranslator>
 #include <QFile>
+#include <QStyleFactory>
 #include "translationmanager.h"
 #include "ztranslator.h"
 
@@ -120,6 +121,10 @@ int main(int argc, char *argv[])
     QGuiApplication::setDesktopFileName("qkiss");
 
     QApplication app(argc, argv);
+#ifdef Q_OS_WIN
+    // Windows style + color is too ugly on Windows... So use Fusion on Windows
+    app.setStyle(QStyleFactory::create("Fusion"));
+#endif
     QFile qssFile(":/styles/main.qss");
     [[maybe_unused]] bool success = qssFile.open(QFile::ReadOnly);
     QString qssContent = QLatin1String(qssFile.readAll());
