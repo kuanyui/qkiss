@@ -35,6 +35,7 @@
 #include "preferencedialog.h"
 #include "aboutdialog.h"
 #include "translationmanager.h"
+#include "version.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -51,7 +52,8 @@ MainWindow::MainWindow(QWidget *parent)
     QIcon::setThemeName("CustomizedTango");    // folder name under any of QIcon::themeSearchPaths (:/src/humanity_0.4.6)
     // setWindowIcon(QIcon::fromTheme("paprefs"));
     setWindowIcon(QIcon::fromTheme("qkiss"));
-    setWindowTitle(QCoreApplication::applicationName());
+    // setWindowTitle(QCoreApplication::applicationName());
+    setWindowTitle(QString("%1 %2").arg(PROJ_LABEL, PROJECT_VERSION));
     // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupMenuBar();
     setupToolBars();

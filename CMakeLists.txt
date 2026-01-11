@@ -1,6 +1,24 @@
+# QKiSS - A modern implementation of KiSS (Kisekae) viewer in Qt 6.
+#
+# Copyright (C) 2024 - 2026 ono ono (kuanyui) <azazabc123@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 cmake_minimum_required(VERSION 3.25)  # For Debian 12 (cmake 3.25)
 
 set(PROJ_NAME qkiss) # So this can be used before `project()`
+set(PROJ_LABEL QKiSS)
 # Read VERSION file to get version
 file(READ "${CMAKE_SOURCE_DIR}/VERSION" PROJ_VERSION)
 string(STRIP "${PROJ_VERSION}" PROJ_VERSION)
@@ -683,7 +701,7 @@ elseif(WIN32)
 
     # Default value of ${CPACK_PACKAGE_FILE_NAME} is
     # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
-    set(CPACK_PACKAGE_NAME ${PROJECT_NAME})    # This will become as a part in the output file name, so don't use space.
+    set(CPACK_PACKAGE_NAME "${PROJ_LABEL}")    # This will become as a part in the output file name, so don't use space.
     set(CPACK_PACKAGE_VENDOR "QKiSS Project")  # only used in "Vendor" field in Installer.
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})  # to display
     set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})  # to auto compare version
