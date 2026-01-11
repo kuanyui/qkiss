@@ -481,7 +481,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     <message>
         <location filename="../src/gkissscene.cpp" line="550"/>
         <source>[%1] Unfix (&amp;U)</source>
-        <translation>[%1] 取消固定(&amp;U)</translation>
+        <translation>[%1] 解除固定(&amp;U)</translation>
     </message>
     <message>
         <location filename="../src/gkissscene.cpp" line="552"/>
@@ -862,7 +862,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     <message>
         <location filename="../src/mainwindow.cpp" line="535"/>
         <source>Middle Click: Unfix</source>
-        <translation>中鍵點擊：取消固定</translation>
+        <translation>中鍵點擊：解除固定</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="540"/>
