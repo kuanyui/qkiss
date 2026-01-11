@@ -49,7 +49,7 @@ AboutDialog::~AboutDialog()
 void AboutDialog::setupUi()
 {
     setWindowTitle(tr("About QKiSS"));
-    resize(800, 600);
+    resize(800, 700);
 
     QVBoxLayout *layoutMain = new QVBoxLayout{this};
     QVBoxLayout *layoutHeader = new QVBoxLayout{this};
@@ -57,7 +57,7 @@ void AboutDialog::setupUi()
 
     QLabel *labelIcon = new QLabel{};
     QIcon appIcon = QIcon::fromTheme("qkiss");
-    labelIcon->setPixmap(appIcon.pixmap(48, 48));
+    labelIcon->setPixmap(appIcon.pixmap(128, 128));
     labelIcon->setAlignment(Qt::AlignmentFlag::AlignCenter);
     labelIcon->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
     layoutHeader->addWidget(labelIcon);
