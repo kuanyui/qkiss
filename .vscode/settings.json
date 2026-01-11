@@ -11,6 +11,7 @@
         "*.desktop": "ini",
         "*.spec.in": "RPMSpec",
         "*.nsh.in": "nsis",
+        "included_icons.txt": "shellscript",   // The most suitable syntax highlight...
     },
     "python.analysis.languageServerMode": "default",
     "python.analysis.typeCheckingMode": "strict",

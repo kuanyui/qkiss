@@ -1,6 +1,8 @@
 # This is comment
 # Main
 AppIcon           qkiss                          apps/qkiss
+AppIcon           qkiss-installer                apps/qkiss-installer
+AppIcon           qkiss-uninstaller              apps/qkiss-uninstaller
 AppIcon           clothes                        apps/clothes
 
 Gnome             application-exit

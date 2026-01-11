@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.25)  # For Debian 12 (cmake 3.25)
 
+set(PROJ_NAME qkiss) # So this can be used before `project()`
 # Read VERSION file to get version
 file(READ "${CMAKE_SOURCE_DIR}/VERSION" PROJ_VERSION)
 string(STRIP "${PROJ_VERSION}" PROJ_VERSION)
@@ -82,7 +83,11 @@ if(NOT EXISTS ${ICON_PNG_GENERATED_QRC})
 endif()
 
 # Full script arguments
+# --clean-before-build
 set(CMD_PYTHON_BUILD_ICONS ${__PYTHON3__} "${ICON_BUILD_SCRIPT}"
+    --input-svg-sizes "16,22,24,32,48,256,scalable"
+    --output-png-sizes "16,22,24,32,48,256"
+    --output-png-sizes-from-scalable "48"
     --included-icon-file "${RESOURCES_DIR}/included_icons.txt"
     --stamp-file "${ICON_GENERATED_STAMP_FILE}"
     --extra-icon-theme "AppIcon:${RESOURCES_DIR}/appicon"
@@ -151,28 +156,44 @@ file(READ ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
 # Windows .ico file
 # =======================================================
 if (WIN32)
+    # NOTE: `project()` is not executed yet, don't use PROJECT_NAME here.
     find_program(MAGICK_EXECUTABLE NAMES magick convert REQUIRED)
-    set(ICO_SOURCES
-        "${ICON_PNG_XDG_THEME_DIR}/16x16/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/22x22/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/24x24/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/32x32/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/48x48/apps/qkiss.png"
-        "${ICON_PNG_XDG_THEME_DIR}/48x48@2/apps/qkiss.png"
-    )
-    set(GEN_ICO_FILE "${PROJ_GENERATED_DIR}/windows/qkiss.ico")
-    set(GEN_RC_FILE  "${PROJ_GENERATED_DIR}/windows/qkiss.rc")   # `*.rc` is "Windows Resource", NOT a format defined by Qt.
-    add_custom_command(
-        OUTPUT ${GEN_ICO_FILE}
-        COMMAND ${MAGICK_EXECUTABLE} ${ICO_SOURCES} ${GEN_ICO_FILE}
-        DEPENDS ${ICON_SOURCES}
-        COMMENT "Generating Windows Icon (.ico) from PNG sources"
-    )
-    file(WRITE "${GEN_RC_FILE}" "IDI_ICON1 ICON DISCARDABLE \"${GEN_ICO_FILE}\"\n")   # This is file format of Windows Resource
+    set(win_ico_names "${PROJ_NAME}" "${PROJ_NAME}-installer" "${PROJ_NAME}-uninstaller")
+    set(generated_win_icos)
 
-    # add_custom_target(gen_win_ico DEPENDS ${GEN_ICO_FILE})
-    # add_dependencies(${PROJECT_NAME} gen_win_ico)
-    set(WIN_ICON_RESOURCE "${GEN_RC_FILE}" "${GEN_ICO_FILE}")
+    foreach(ico_name    IN LISTS    win_ico_names)
+        set(SRC_PNGS
+            "${ICON_PNG_XDG_THEME_DIR}/16x16/apps/${ico_name}.png"
+            "${ICON_PNG_XDG_THEME_DIR}/22x22/apps/${ico_name}.png"
+            "${ICON_PNG_XDG_THEME_DIR}/24x24/apps/${ico_name}.png"
+            "${ICON_PNG_XDG_THEME_DIR}/32x32/apps/${ico_name}.png"
+            "${ICON_PNG_XDG_THEME_DIR}/48x48/apps/${ico_name}.png"
+            "${ICON_PNG_XDG_THEME_DIR}/48x48@2/apps/${ico_name}.png"
+            "${ICON_PNG_XDG_THEME_DIR}/256x256/apps/${ico_name}.png"
+            "${ICON_PNG_XDG_THEME_DIR}/256x256@2/apps/${ico_name}.png"
+        )
+        set(DST_WIN_ICO "${PROJ_GENERATED_DIR}/windows/${ico_name}.ico")
+        # NOTE: Be carefule, this is `add_custom_comamnd()`, not `execute_process()`,
+        # so it needs to be bound to a target via `add_custom_target()` or `add_dependencies()`
+        add_custom_command(
+            OUTPUT ${DST_WIN_ICO}
+            COMMAND ${MAGICK_EXECUTABLE} ${SRC_PNGS} ${DST_WIN_ICO}
+            DEPENDS ${SRC_PNGS}
+            COMMENT "Generating Windows Icon (.ico) from PNG sources"
+        )
+        list(APPEND generated_win_icos "${DST_WIN_ICO}")
+    endforeach()
+    # Generate .rc file for main app (not include installer / uninstaller icon)
+    set(GEN_WIN_RC_FILE                 "${PROJ_GENERATED_DIR}/windows/${PROJ_NAME}.rc")   # `*.rc` is "Windows Resource", NOT a format defined by Qt.
+    set(GEN_WIN_ICO_FILE_MAIN           "${PROJ_GENERATED_DIR}/windows/${PROJ_NAME}.ico")
+    set(GEN_WIN_ICO_FILE_INSTALLER      "${PROJ_GENERATED_DIR}/windows/${PROJ_NAME}-installer.ico")
+    set(GEN_WIN_ICO_FILE_UNINSTALLER    "${PROJ_GENERATED_DIR}/windows/${PROJ_NAME}-uninstaller.ico")
+    file(WRITE "${GEN_WIN_RC_FILE}" "IDI_ICON1 ICON DISCARDABLE \"${GEN_WIN_ICO_FILE_MAIN}\"\n")   # This is file format of Windows Resource
+    set(WIN_ICO_RESOURCE "${GEN_WIN_RC_FILE}" "${GEN_WIN_ICO_FILE_MAIN}")  # add to `qt_add_executable()`
+
+    # `ALL` is CMake's "default build target"
+    add_custom_target(generate_windows_icons ALL DEPENDS ${generated_win_icos})
+
 endif()
 
 
@@ -216,7 +237,7 @@ endif()
 # ==============================================
 # Call project() here instead of top of file, because project command is not scriptable (when running `cmake -P`)
 
-project(qkiss
+project("${PROJ_NAME}"
     VERSION ${PROJ_VERSION}
     DESCRIPTION ${PROJ_SUMMARY}
     HOMEPAGE_URL "https://github.com/kuanyui/qkiss"
@@ -420,10 +441,10 @@ set(PROJECT_SOURCES
 )
 
 
-qt_add_executable(qkiss
+qt_add_executable("${PROJ_NAME}"
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
-    ${WIN_ICON_RESOURCE}
+    ${WIN_ICO_RESOURCE}
     resources/application.qrc
     ${ICON_PNG_GENERATED_QRC}
     src/parsedcnf.h src/parsedcnf.cpp
@@ -470,8 +491,10 @@ qt_add_executable(qkiss
     src/ztreewidget.h src/ztreewidget.cpp
 
 )
-add_dependencies(qkiss icontheme)
-
+add_dependencies("${PROJ_NAME}" icontheme)
+if (WIN32)
+    add_dependencies("${PROJ_NAME}" generate_windows_icons)
+endif()
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qkiss APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
@@ -757,8 +780,8 @@ elseif(WIN32)
     list(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "!include ${_WIN_NATIVE_PATH_NSIS_INSTALL}")
     list(APPEND CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "!include ${_WIN_NATIVE_PATH_NSIS_UNINSTALL}")
 
-    set(CPACK_NSIS_MUI_ICON ${GEN_ICO_FILE})  # installer itself
-    set(CPACK_NSIS_MUI_UNIICON ${GEN_ICO_FILE})  # uninstaller itself
+    set(CPACK_NSIS_MUI_ICON ${GEN_WIN_ICO_FILE_INSTALLER})  # installer itself
+    set(CPACK_NSIS_MUI_UNIICON ${GEN_WIN_ICO_FILE_UNINSTALLER})  # uninstaller itself
     set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")
     set(CPACK_NSIS_MENU_LINKS "qkiss.exe" "QKiSS") # Start Menu
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)  # Force uninstall old version before installing
