@@ -730,7 +730,7 @@ elseif(WIN32)
     find_program(DEPENDENCIES_EXECUTABLE_CONFIGURED Dependencies REQUIRED)
     # requires -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
     configure_file(
-        "${CMAKE_SOURCE_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake.in"
+        "${CMAKE_SOURCE_DIR}/packaging/windows/deploy_vcpkg_runtime__dumpbin.cmake.in"
       "${PROJ_GENERATED_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake"
     @ONLY)
     install(SCRIPT "${PROJ_GENERATED_DIR}/packaging/windows/deploy_vcpkg_runtime.cmake")
