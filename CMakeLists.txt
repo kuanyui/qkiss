@@ -694,7 +694,7 @@ elseif(WIN32)
 
     # Default value of ${CPACK_PACKAGE_FILE_NAME} is
     # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
-    set(CPACK_PACKAGE_NAME "${PROJ_DISPLAY_NAME}")
+    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")  # use id instead of human-oriented display-name
     set(CPACK_PACKAGE_VENDOR "QKiSS Project")  # only used in "Vendor" field in Installer.
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})  # to display
     set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})  # to auto compare version
@@ -705,7 +705,7 @@ elseif(WIN32)
     set(CPACK_PACKAGE_DESCRIPTION "${PROJ_DESCRIPTION}")
 
     set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")  # source code tarball file name
-    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${CPACK_SYSTEM_NAME}")  # Installer / Portable ZIP file name
+    # set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${CPACK_SYSTEM_NAME}")  # Installer / Portable ZIP file name (FUCK: ${CPACK_SYSTEM_NAME} is empty, donno why. )
     set(CPACK_NSIS_DISPLAY_NAME "${PROJ_DISPLAY_NAME} ${PROJECT_VERSION} Installer")   # Window title of installer
 
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
