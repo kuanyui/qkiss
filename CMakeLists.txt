@@ -170,10 +170,11 @@ endif()
 file(READ ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
     CHANGELOG_FOR_RPM_SPEC)
 
-# =======================================================
-# Windows .ico file
-# =======================================================
 if (WIN32)
+    file(MAKE_DIRECTORY "${PROJ_GENERATED_DIR}/windows")
+    # =======================================================
+    # Windows .ico file
+    # =======================================================
     # NOTE: `project()` is not executed yet, don't use PROJECT_NAME here.
     find_program(MAGICK_EXECUTABLE NAMES magick convert REQUIRED)
     set(win_ico_names "${PROJ_NAME}" "${PROJ_NAME}-installer" "${PROJ_NAME}-uninstaller")
@@ -211,6 +212,25 @@ if (WIN32)
 
     # `ALL` is CMake's "default build target"
     add_custom_target(generate_windows_icons ALL DEPENDS ${generated_win_icos})
+
+    # ==============================================
+    # NSIS Installer & Uninstall's header & sidebar images
+    # ==============================================
+    set(imgNames MUI_HEADERIMAGE_BITMAP MUI_WELCOMEFINISHPAGE_BITMAP MUI_UNWELCOMEFINISHPAGE_BITMAP)
+    set(generated_nsis_bmps)
+    foreach(imgName    IN LISTS    imgNames)
+        set(inputSvgPath  "${CMAKE_SOURCE_DIR}/packaging/windows/${imgName}.svg")
+        set(outputBmpPath "${PROJ_GENERATED_DIR}/windows/${imgName}.bmp")
+        # `-alpha remove` for 24-bit RGB
+        add_custom_command(
+            OUTPUT ${outputBmpPath}
+            DEPENDS ${inputSvgPath}
+            COMMAND ${MAGICK_EXECUTABLE} ${inputSvgPath} "-background" "white" "-alpha" "remove" ${outputBmpPath}
+            COMMENT "Generating NSIS installer / uninstall images from SVG sources"
+        )
+        list(APPEND generated_nsis_bmps "${outputBmpPath}")
+    endforeach()
+    add_custom_target(generate_nsis_bmps ALL DEPENDS ${generated_nsis_bmps})
 
 endif()
 
@@ -504,7 +524,7 @@ qt_add_executable("${PROJ_NAME}"
 )
 add_dependencies("${PROJ_NAME}" icontheme)
 if (WIN32)
-    add_dependencies("${PROJ_NAME}" generate_windows_icons)
+    add_dependencies("${PROJ_NAME}" generate_windows_icons  generate_nsis_bmps)
 endif()
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qkiss APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -797,12 +817,17 @@ elseif(WIN32)
     list(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "!include ${_WIN_NATIVE_PATH_NSIS_INSTALL}")
     list(APPEND CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "!include ${_WIN_NATIVE_PATH_NSIS_UNINSTALL}")
 
-    set(CPACK_NSIS_MUI_ICON ${GEN_WIN_ICO_FILE_INSTALLER})  # installer itself
-    set(CPACK_NSIS_MUI_UNIICON ${GEN_WIN_ICO_FILE_UNINSTALLER})  # uninstaller itself
-    set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")
+    set(CPACK_NSIS_MUI_HEADERIMAGE                "${PROJ_GENERATED_DIR}/windows/MUI_HEADERIMAGE_BITMAP.bmp")          # header in installer / uninstaller
+    set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP   "${PROJ_GENERATED_DIR}/windows/MUI_WELCOMEFINISHPAGE_BITMAP.bmp")    # sidebar image in installer
+    set(CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${PROJ_GENERATED_DIR}/windows/MUI_UNWELCOMEFINISHPAGE_BITMAP.bmp")  # sidebar image in uninstaller
+    set(CPACK_NSIS_MUI_ICON    ${GEN_WIN_ICO_FILE_INSTALLER})    # icon of installer itself
+    set(CPACK_NSIS_MUI_UNIICON ${GEN_WIN_ICO_FILE_UNINSTALLER})  # icon of uninstaller itself
+    set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")  # What the fuck? "A path to the executable that contains the installer icon."???
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PROJ_DISPLAY_NAME}")   # Force remove version from install folder name
     set(CPACK_NSIS_DISPLAY_NAME "${PROJ_DISPLAY_NAME}") # Window title of installer. Do not contain version in this variable, it will also be used in installed application name
+    set(CPACK_NSIS_MANIFEST_DPI_AWARE ON)
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)  # Force uninstall old version before installing
+    set(CPACK_NSIS_URL_INFO_ABOUT "${PROJECT_HOMEPAGE_URL}")
     include(CPack)  # execute CPack to read the defined variables.
 endif()
 
