@@ -24,3 +24,14 @@ WriteRegStr HKCR "Applications\qkiss.exe\shell\open\command" "" '"$INSTDIR\qkiss
 
 ; NSIS calls Windows API `Shell32::SHChangeNotify`, SHCNE_ASSOCCHANGED = 0x08000000 means file association changed.
 System::Call 'Shell32::SHChangeNotify(i 0x08000000, i 0, i 0, i 0)'
+
+
+# Auto install MSVC runtime
+SetOutPath "$INSTDIR"
+${If} ${FileExists} "$INSTDIR\vc_redist.x64.exe"
+  DetailPrint "Installing Microsoft Visual C++ Runtime (x64)..."
+  ExecWait '"$INSTDIR\vc_redist.x64.exe" /install /quiet /norestart' $0
+  DetailPrint "Finished installing Microsoft Visual C++ Runtime (x64): $0"
+${EndIf}
+# For saving disk space...?
+# Delete "$INSTDIR\vc_redist.x64.exe"
