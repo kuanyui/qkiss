@@ -706,7 +706,6 @@ elseif(WIN32)
 
     set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")  # source code tarball file name
     # set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${CPACK_SYSTEM_NAME}")  # Installer / Portable ZIP file name (FUCK: ${CPACK_SYSTEM_NAME} is empty, donno why. )
-    set(CPACK_NSIS_DISPLAY_NAME "${PROJ_DISPLAY_NAME} ${PROJECT_VERSION} Installer")   # Window title of installer
 
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
     set(CPACK_GENERATOR "NSIS;ZIP")
@@ -781,7 +780,6 @@ elseif(WIN32)
     # ===================================================
     # Fuck Windows, fuck NSIS, fuck CMake.
     # ===================================================
-
     # File association to `*.lzh` (for NSIS only)
     set(CPACK_NSIS_FILE_ASSOCIATIONS "lzh")
 
@@ -802,7 +800,8 @@ elseif(WIN32)
     set(CPACK_NSIS_MUI_ICON ${GEN_WIN_ICO_FILE_INSTALLER})  # installer itself
     set(CPACK_NSIS_MUI_UNIICON ${GEN_WIN_ICO_FILE_UNINSTALLER})  # uninstaller itself
     set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")
-    set(CPACK_NSIS_MENU_LINKS "qkiss.exe" "QKiSS") # Start Menu
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PROJ_DISPLAY_NAME}")   # Force remove version from install folder name
+    set(CPACK_NSIS_DISPLAY_NAME "${PROJ_DISPLAY_NAME}") # Window title of installer. Do not contain version in this variable, it will also be used in installed application name
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)  # Force uninstall old version before installing
     include(CPack)  # execute CPack to read the defined variables.
 endif()
