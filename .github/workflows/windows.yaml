@@ -343,6 +343,9 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
           cmake --build build --config Release
 
+      - name: List build directory (Windows)
+        run: Get-ChildItem -Path build -Depth 2
+
       # Step 13: Package with CPack (Bundle Qt DLLs and External Binaries)
       - name: Package with CPack
         working-directory: build
