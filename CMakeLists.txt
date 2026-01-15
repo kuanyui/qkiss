@@ -820,7 +820,7 @@ elseif(WIN32)
 
     # Fuck... inconsistent path handling between MUI_ICON path and these shits
     # file(TO_NATIVE_PATH  _WIN_NATIVE_PATH_GENERATED_DIR "${PROJ_GENERATED_DIR}/windows")
-    string(REPLACE "/" [[\]] _WIN_NATIVE_PATH_GENERATED_DIR "${PROJ_GENERATED_DIR}/windows/")
+    string(REPLACE "/" [[\\]] _WIN_NATIVE_PATH_GENERATED_DIR "${PROJ_GENERATED_DIR}/windows/")
     set(CPACK_NSIS_MUI_HEADERIMAGE                "${_WIN_NATIVE_PATH_GENERATED_DIR}MUI_HEADERIMAGE_BITMAP.bmp")          # header in installer / uninstaller
     set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP   "${_WIN_NATIVE_PATH_GENERATED_DIR}MUI_WELCOMEFINISHPAGE_BITMAP.bmp")    # sidebar image in installer
     set(CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${_WIN_NATIVE_PATH_GENERATED_DIR}MUI_UNWELCOMEFINISHPAGE_BITMAP.bmp")  # sidebar image in uninstaller
