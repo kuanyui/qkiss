@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="164"
-   height="314"
-   viewBox="0 0 43.391666 83.079166"
+   width="328"
+   height="628"
+   viewBox="0 0 86.783332 166.15833"
    version="1.1"
    id="svg1"
    inkscape:version="1.4.2 (unknown)"
@@ -14,7 +14,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"><title
+     id="title1">QKiSS NSIS Uninstaller Sidebar</title><sodipodi:namedview
      id="namedview1"
      pagecolor="#ffffff"
      bordercolor="#000000"
@@ -106,8 +110,8 @@
        style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter105"
-       x="-0.37789302"
-       y="-0.099788855"
+       x="-0.37789303"
+       y="-0.099788852"
        width="1.8064555"
        height="1.2744194"><feFlood
          result="flood"
@@ -137,8 +141,8 @@
        style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter105-4"
-       x="-0.37789302"
-       y="-0.099788855"
+       x="-0.37789303"
+       y="-0.099788852"
        width="1.8064555"
        height="1.2744194"><feFlood
          result="flood"
@@ -165,12 +169,12 @@
          in="SourceGraphic"
          in2="comp1"
          id="feComposite105-3" /></filter><filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter131"
-       x="-0.15524965"
+       x="-0.15524966"
        y="-0.075210415"
-       width="1.439874"
+       width="1.4398741"
        height="1.1504208"><feFlood
          result="flood"
          in="SourceGraphic"
@@ -196,11 +200,11 @@
          in="SourceGraphic"
          in2="comp1"
          id="feComposite131" /></filter><filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter155"
-       x="-0.074363799"
-       y="-0.098968224"
+       x="-0.074363798"
+       y="-0.098968223"
        width="1.1487429"
        height="1.2211053"><feFlood
          result="flood"
@@ -260,7 +264,7 @@
        x2="24.25"
        y2="21.106092"
        gradientTransform="translate(-1,0.25)" /><filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter56"
        x="-0.07395082"
@@ -291,10 +295,10 @@
          in="SourceGraphic"
          in2="comp1"
          id="feComposite56" /></filter><filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter79"
-       x="-0.12761339"
+       x="-0.1276134"
        y="-0.11096067"
        width="1.2674776"
        height="1.2578046"><feFlood
@@ -325,7 +329,7 @@
        style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter79-7"
-       x="-0.12761339"
+       x="-0.1276134"
        y="-0.11096067"
        width="1.2674776"
        height="1.2578046"><feFlood
@@ -353,7 +357,7 @@
          in="SourceGraphic"
          in2="comp1"
          id="feComposite79-2" /></filter><filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter22"
        x="-0.083999999"
@@ -460,7 +464,7 @@
        x2="20.121975"
        y2="23.733141"
        gradientUnits="userSpaceOnUse" /><filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Blur"
        id="filter33"
        x="-0.59023124"
@@ -1962,11 +1966,18 @@
        y2="17.692694" /></defs><g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1"><g
+     id="layer1"><rect
+       style="opacity:1;fill:#b8c779;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linejoin:round;paint-order:stroke fill markers"
+       id="rect174"
+       width="43.391666"
+       height="83.079163"
+       x="0"
+       y="0"
+       transform="matrix(2.0000001,0,0,1.5154576,-1.9152702e-6,40.255383)" /><g
        inkscape:label="Layer 1"
        id="g103"
-       transform="matrix(1.4087948,0,0,1.4087948,-28.970022,13.225689)"
-       style="opacity:0.37278403"><rect
+       transform="matrix(2.1759636,0,0,2.1759636,-27.540793,57.249431)"
+       style="opacity:0.12"><rect
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient103);stroke:none;stroke-width:0.999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:normal"
          id="rect4"
          width="46.999996"
@@ -2530,18 +2541,10 @@
            id="path102"
            style="fill:url(#linearGradient174);stroke:none;stroke-width:0.999996;-inkscape-stroke:none;paint-order:fill markers stroke"
            d="m 22.017134,16.790113 v 1.388061 c 0,0.07116 0.0023,0.141022 0.0095,0.210173 0.657823,-1.38868 1.999797,-2.266957 3.46897,-2.270325 0.08978,5.66e-4 0.179502,0.0044 0.269024,0.01155 -0.265522,-0.761419 -0.94151,-1.133483 -1.896802,-1.133486 -0.673451,-0.01225 -1.850662,0.705578 -1.850662,1.794027 z"
-           sodipodi:nodetypes="ssccccss" /></g></g><rect
-       style="fill:#b8c779;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linejoin:round;paint-order:stroke fill markers;opacity:0.61170419"
-       id="rect174"
-       width="43.391666"
-       height="83.079163"
-       x="0"
-       y="0"
-       rx="0.63755178"
-       ry="0.86688715" /><g
+           sodipodi:nodetypes="ssccccss" /></g></g><g
        inkscape:label="Layer 1"
        id="layer1-5"
-       transform="matrix(0.26458333,0,0,0.26458333,26.484279,4.8180046)"><rect
+       transform="matrix(0.52916669,0,0,0.52916669,53.697321,8.1784803)"><rect
          style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient30);stroke:none;stroke-width:0.999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:normal"
          id="rect131"
          width="46.999996"
@@ -3105,4 +3108,8 @@
            id="rect23"
            style="fill:url(#linearGradient27);stroke:none;stroke-width:0.999996;-inkscape-stroke:none;paint-order:fill markers stroke"
            d="m 22.017134,16.790113 v 1.388061 c 0,0.07116 0.0023,0.141022 0.0095,0.210173 0.657823,-1.38868 1.999797,-2.266957 3.46897,-2.270325 0.08978,5.66e-4 0.179502,0.0044 0.269024,0.01155 -0.265522,-0.761419 -0.94151,-1.133483 -1.896802,-1.133486 -0.673451,-0.01225 -1.850662,0.705578 -1.850662,1.794027 z"
-           sodipodi:nodetypes="ssccccss" /></g></g></g></svg>
+           sodipodi:nodetypes="ssccccss" /></g></g></g><metadata
+     id="metadata1"><rdf:RDF><cc:Work
+         rdf:about=""><dc:description>NSIS spec requirements:
+1x: 164x314,
+2x: 328x628</dc:description><dc:title>QKiSS NSIS Uninstaller Sidebar</dc:title><dc:creator><cc:Agent><dc:title>kuanyui</dc:title></cc:Agent></dc:creator></cc:Work></rdf:RDF></metadata></svg>

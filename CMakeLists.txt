@@ -221,12 +221,13 @@ if (WIN32)
     foreach(imgName    IN LISTS    imgNames)
         set(inputSvgPath  "${CMAKE_SOURCE_DIR}/packaging/windows/${imgName}.svg")
         set(outputBmpPath "${PROJ_GENERATED_DIR}/windows/${imgName}.bmp")
+        message("NSIS image ==> ${outputBmpPath}")
         # `-alpha remove` for 24-bit RGB
         add_custom_command(
             OUTPUT ${outputBmpPath}
             DEPENDS ${inputSvgPath}
             COMMAND ${MAGICK_EXECUTABLE} ${inputSvgPath} "-background" "white" "-alpha" "remove" ${outputBmpPath}
-            COMMENT "Generating NSIS installer / uninstall images from SVG sources"
+            COMMENT "Generating NSIS installer / uninstall images from SVG sources to ${outputBmpPath}"
         )
         list(APPEND generated_nsis_bmps "${outputBmpPath}")
     endforeach()
