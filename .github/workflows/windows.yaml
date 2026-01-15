@@ -344,7 +344,7 @@ jobs:
           cmake --build build --config Release
 
       - name: List build directory (Windows)
-        run: Get-ChildItem -Path build -Depth 2
+        run: Get-ChildItem -Path . -Depth 2
 
       # Step 13: Package with CPack (Bundle Qt DLLs and External Binaries)
       - name: Package with CPack
