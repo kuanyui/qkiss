@@ -222,11 +222,21 @@ if (WIN32)
         set(inputSvgPath  "${CMAKE_SOURCE_DIR}/packaging/windows/${imgName}.svg")
         set(outputBmpPath "${PROJ_GENERATED_DIR}/windows/${imgName}.bmp")
         message("NSIS image ==> ${outputBmpPath}")
-        # `-alpha remove` for 24-bit RGB
+        # - `-alpha remove` for 24-bit RGB
+	# - `bmp3` is required by NSIS
+	# - `-depth 8` means 8 x 3 = 24 bits
+	# - `-colorspace sRGB` is for consistent behaviors between different OS.
+	# - Use `magick identify -verbose XXX.bmp` to ensure.
         add_custom_command(
             OUTPUT ${outputBmpPath}
             DEPENDS ${inputSvgPath}
-            COMMAND ${MAGICK_EXECUTABLE} ${inputSvgPath} "-background" "white" "-alpha" "remove" ${outputBmpPath}
+            COMMAND ${MAGICK_EXECUTABLE} ${inputSvgPath}
+	    "-background" "white"
+	    "-alpha" "off"
+	    "-define" "bmp:format=bmp3"
+	    "-colorspace" "sRGB"
+	    "-depth" "8"
+	    ${outputBmpPath}
             COMMENT "Generating NSIS installer / uninstall images from SVG sources to ${outputBmpPath}"
         )
         list(APPEND generated_nsis_bmps "${outputBmpPath}")
