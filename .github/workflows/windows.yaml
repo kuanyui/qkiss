@@ -51,10 +51,15 @@ jobs:
         id: getMsvcVer
         shell: pwsh
         run: |
-          # get version of cl.exe
-          $msvcPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find VC\Tools\MSVC\*\bin\Hostx64\x64\cl.exe | Select-Object -First 1
-          $msvcVer = (Get-Item $msvcPath).VersionInfo.ProductVersion
-          echo "msvcVer=$msvcVer" >> $GITHUB_OUTPUT
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          $msvcVer = Get-Content "$vsPath\VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.txt" -Raw -ErrorAction SilentlyContinue
+          $msvcVer = $msvcVer.Trim()
+          Write-Host "Check Point -> Detected MSVC: [$msvcVer]"
+          if (-not $msvcVer) {
+            $msvcVer = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationVersion
+            Write-Host "Warning: Falling back to VS Version: [$msvcVer]"
+          }
+          echo "msvcVer=$msvcVer" >> $env:GITHUB_OUTPUT
 
       # Step 2: Manually create a cache folder for `vcpkg` in `github.workspace`,
       #
@@ -366,13 +371,14 @@ jobs:
           if ($LASTEXITCODE -ne 0) {
               Write-Host "CPack failed!"
               Write-Host "============================================"
-              Write-Host "./_CPack_Packages/win64/NSIS/NSISOutput.log (last 50 lines)"
+              Write-Host "./_CPack_Packages/win64/NSIS/NSISOutput.log (last 100 lines)"
               Write-Host "============================================"
-              Get-Content ./_CPack_Packages/win64/NSIS/NSISOutput.log -Tail 50
+              Get-Content ./_CPack_Packages/win64/NSIS/NSISOutput.log -Tail 100
               Write-Host "============================================"
               Write-Host "./_CPack_Packages/win64/NSIS/project.nsi"
               Write-Host "============================================"
-              Get-Content -Path "./_CPack_Packages/win64/NSIS/project.nsi" | ForEach-Object { "$($_.ReadCount): $_" } | Select-Object -Index (740..750)
+              Get-Content -Path "./_CPack_Packages/win64/NSIS/project.nsi"
+              # Get-Content -Path "./_CPack_Packages/win64/NSIS/project.nsi" | ForEach-Object { "$($_.ReadCount): $_" } | Select-Object -Index (740..750)
               # Get-Content ./_CPack_Packages/win64/NSIS/project.nsi
 
               exit 1
