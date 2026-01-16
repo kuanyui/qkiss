@@ -12,11 +12,17 @@ WriteRegStr HKCR "QKiSS.LZH\shell\open\command" "" '"$INSTDIR\qkiss.exe" "%1"'
 ; (ATTENTION! this way will forcely seize and occupy the default file association, always open *.lzh by ProgID `QKiSS.LZH`.)
 ; WriteRegStr HKCR ".lzh" "" "QKiSS.LZH"
 
-; [UNUSED] Use the first icon (`,0`) inside this EXE file, to apply on this kind of associated file (*.lzh, QKiSS.LZH).
-; WriteRegStr HKCR "QKiSS.LZH\DefaultIcon" "" "$INSTDIR\qkiss.exe,0"
+; Use the nth icon (`,0` at the EOL) inside this EXE file, to apply on this kind of associated file (*.lzh, QKiSS.LZH).
+; If you use `OpenWithProgids`, the first icon `,0` is taken by default.
+WriteRegStr HKCR "QKiSS.LZH\DefaultIcon" "" "$INSTDIR\qkiss.exe,0"
+
+
+; [UNUSED] This way is "milder" than `OpenWithProgids`, because it will not affect the icon of associated file.
+; WriteRegStr HKCR "Applications\qkiss.exe\SupportedTypes" ".lzh" ""
 
 ; ---- Register as an "optional" application for *.lzh files --------------------
 ; A mild way to associate *.lzh with QKiSS, as an "available application" (visible in Explorer -> Right click -> Open With)
+; NOTE: If no other existed application (ex: WinRAR, 7Zip) adds icon for *.LZH file, this will take the main icon of QKiSS for *.LZH
 WriteRegStr HKCR ".lzh\OpenWithProgids" "QKiSS.LZH" ""
 
 ; To make Windows see QKiSS as an "always available fallback application" (visible in Explorer -> Right click -> Open With -> Open with other application...)

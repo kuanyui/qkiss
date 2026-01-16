@@ -1,3 +1,4 @@
+# -*- mode: conf -*-
 # This is comment
 # Main
 AppIcon           qkiss                          apps/qkiss
