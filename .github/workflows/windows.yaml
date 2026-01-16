@@ -34,6 +34,8 @@ jobs:
   prepare-vcpkg-cache:
     name: Run `vcpkg install` and cache the built binary ZIPs.
     runs-on: windows-latest
+    outputs:
+      msvcVer: ${{ steps.getMsvcVer.outputs.msvcVer }}
     env:
       # VCPKG_BINARY_SOURCES: clear; files,${{ github.workspace }}/vcpkg_cache,readwrite
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_cache/archives
@@ -44,6 +46,15 @@ jobs:
       # Step 1: Download the source code
       - name: Checkout code
         uses: actions/checkout@v5
+
+      - name: Get MSVC Version (for creating key of cache of vcpkg)
+        id: getMsvcVer
+        shell: pwsh
+        run: |
+          # get version of cl.exe
+          $msvcPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find VC\Tools\MSVC\*\bin\Hostx64\x64\cl.exe | Select-Object -First 1
+          $msvcVer = (Get-Item $msvcPath).VersionInfo.ProductVersion
+          echo "msvcVer=$msvcVer" >> $GITHUB_OUTPUT
 
       # Step 2: Manually create a cache folder for `vcpkg` in `github.workspace`,
       #
@@ -68,7 +79,7 @@ jobs:
           ### folder by default. So use this folder name as cache path.
           ## path: vcpkg_installed
           path: vcpkg_cache
-          key: ${{ runner.os }}-vcpkg-mega-cache-${{ hashFiles('vcpkg.json') }}
+          key: ${{ runner.os }}-msvc-${{ steps.getMsvcVer.outputs.msvcVer }}-vcpkg-mega-cache-${{ hashFiles('vcpkg.json') }}
 
       # Step 3: Download & build & install packages via vcpkg
       - name: Download & build & install packages via vcpkg, and cache to `vcpkg_cache`
@@ -194,7 +205,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: vcpkg_cache
-          key: ${{ runner.os }}-vcpkg-mega-cache-${{ hashFiles('vcpkg.json') }}
+          key: ${{ runner.os }}-msvc-${{ needs.prepare-vcpkg-cache.outputs.msvcVer }}-vcpkg-mega-cache-${{ hashFiles('vcpkg.json') }}
 
       # Step 4: [Cache] External binary dependencies (LHA & unar)
       - name: Restore cache of external binary dependencies
