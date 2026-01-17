@@ -487,7 +487,7 @@ qt_add_executable("${PROJ_NAME}"
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
     ${WIN_ICO_RESOURCE}
-    resources/application.qrc
+    resources/styles/index.qrc
     ${ICON_PNG_GENERATED_QRC}
     src/parsedcnf.h src/parsedcnf.cpp
     src/enums.h src/enums.cpp
