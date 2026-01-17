@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/flags">
+        <file alias="jp.svg">svg/jp.svg</file>
+        <file alias="tw.svg">svg/tw.svg</file>
+        <file alias="us.svg">svg/us.svg</file>
+    </qresource>
+</RCC>

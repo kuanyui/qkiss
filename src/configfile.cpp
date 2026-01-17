@@ -128,15 +128,15 @@ const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
         zh_TW = QStringLiteral("…影響を強く受けてしまった言語でございますわね。");
     }
     QList<ConfigFile::LangInfo> list = {
-        {"", "", tr("Auto (System Language)")},
-        {"ja_JP", "🇯🇵", ja},
-        {"ja_KS", "🇯🇵", ja + QString("（関西弁）")},
-        {"ja_OJ", "🇯🇵", ja + QString("（お嬢様）")},
-        {"ja_AR", "🇯🇵", ja + QString("（悪役令嬢）")},
-        {"ja_MK", "🇯🇵", ja + QString("（メ〇〇キ）")},
-        {"ja_ME", "🇯🇵", ja + QString("（〈沈黙の魔女〉モニカ・エヴァレット）")},
-        {"en_US", "🇺🇸", QString("American English")},
-        {"zh_TW", "🇹🇼", zh_TW},
+        {"", "", "", tr("Auto (System Language)")},
+        {"ja_JP", "🇯🇵", ":/flags/jp.svg", ja},
+        {"ja_KS", "🇯🇵", ":/flags/jp.svg", ja + QString("（関西弁）")},
+        {"ja_OJ", "🇯🇵", ":/flags/jp.svg", ja + QString("（お嬢様）")},
+        {"ja_AR", "🇯🇵", ":/flags/jp.svg", ja + QString("（悪役令嬢）")},
+        {"ja_MK", "🇯🇵", ":/flags/jp.svg", ja + QString("（メ〇〇キ）")},
+        {"ja_ME", "🇯🇵", ":/flags/jp.svg", ja + QString("（〈沈黙の魔女〉モニカ・エヴァレット）")},
+        {"en_US", "🇺🇸", ":/flags/us.svg", QString("American English")},
+        {"zh_TW", "🇹🇼", ":/flags/tw.svg", zh_TW},
     };
     return list;
 }

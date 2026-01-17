@@ -44,7 +44,9 @@ class ConfigFile : public QObject
     inline static QStringList ZOOM_LIST = { "4", "3.5", "3", "2.5", "2", "1.5", "1", "0.5" };
     struct LangInfo {
         const char* id;
-        const char* flag;
+        const char* flagEmoji;
+        /// SVG file path in qrc. Use SVG file instead of emoji because Windows 11 built-in font removed flags from emoji list.
+        const char* flagSvgFile;
         const QString label;
     };
 

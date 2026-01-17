@@ -341,8 +341,10 @@ void MainWindow::setupMenuBar()
     const auto &allLangs = m_cfg.allLanguages();
     QActionGroup *langsGroup = new QActionGroup {ui->menu_uiLanguage};
     for (const auto &lang : allLangs) {
-        const QString langLabel = QStringLiteral("%1 %2").arg(lang.flag).arg(lang.label);
-        QAction * act = ui->menu_uiLanguage->addAction(langLabel);
+        // const QString langText = QStringLiteral("%1 %2").arg(lang.flagEmoji).arg(lang.label);
+        const QString langText = lang.label;
+        QIcon langIcon { lang.flagSvgFile };
+        QAction * act = ui->menu_uiLanguage->addAction(langIcon, langText);
         langsGroup->addAction(act);
         act->setCheckable(true);
         if (m_cfg.uiLanguage() == lang.id) {
@@ -375,8 +377,9 @@ void MainWindow::setupMenuBar()
         for (int i = 0; i < allLangs.length(); i++) {
             QAction *act = ui->menu_uiLanguage->actions().at(i);
             const auto &lang = allLangs.at(i);
-            const QString langLabel = QStringLiteral("%1 %2").arg(lang.flag).arg(lang.label);
-            act->setText(langLabel);
+            // const QString langLabel = QStringLiteral("%1 %2").arg(lang.flagEmoji).arg(lang.label);
+            const QString langText = lang.label;
+            act->setText(langText);
         }
         const auto &allCaseSensitivity= QKiSS::caseSensitivityNames();
         for (int i = 0; i < allCaseSensitivity.length(); i++) {

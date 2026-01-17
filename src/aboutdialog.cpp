@@ -127,6 +127,7 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 - [Ubuntu Humanity](https://launchpad.net/humanity)
 - [GIMP](https://www.gimp.org/)
 - [Inkscape](https://inkscape.org/)
+- [flag-icons](https://github.com/lipis/flag-icons)
 
 # %3
 - English: [kuanyui](https://github.com/kuanyui)
@@ -163,6 +164,7 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-ic
 - [Ubuntu Humanity](https://launchpad.net/humanity): `GPL v2`
 - [GIMP](https://www.gimp.org/): `CC by-sa 3.0`
 - [Inkscape](https://inkscape.org/): `GPL v2`
+- [flag-icons](https://github.com/lipis/flag-icons): `MIT`
 )")));
     m_tabWidget->addTab(browserLicense, tr("Licenses"));
 
