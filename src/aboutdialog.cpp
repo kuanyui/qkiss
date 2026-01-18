@@ -117,7 +117,7 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
     QTextBrowser *browserAuthors = new QTextBrowser{this};
     browserAuthors->setOpenExternalLinks(true);
     browserAuthors->setReadOnly(true);
-    browserAuthors->setHtml(md2Html(QStringLiteral(R"(
+    QString authorsMd = QStringLiteral(R"(
 # %1
 - [kuanyui](https://github.com/kuanyui)
 
@@ -129,6 +129,7 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 - [Inkscape](https://inkscape.org/)
 - [flag-icons](https://github.com/lipis/flag-icons)
 
+@@@@@
 # %3
 - English: [kuanyui](https://github.com/kuanyui)
 - 日本語: Claude Code + [kuanyui](https://github.com/kuanyui)
@@ -138,15 +139,20 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 - 日本語（メ〇〇キ）: Copilot + [kuanyui](https://github.com/kuanyui)
 - 日本語（〈沈黙の魔女〉モニカ・エヴァレット）: Copilot + モニカ・ノートン
 - 台灣繁體: Claude Code + [kuanyui](https://github.com/kuanyui)
-)")).arg(tr("Programming"),
-         tr("Icons & Arts"),
-         tr("Translators")
-         ));
+)")
+                          .arg(tr("Programming"),
+                               tr("Icons & Arts"),
+                               tr("Translators"));
     if (ConfigFile::engOnly()) {
-        delete browserAuthors;
+        int idx = authorsMd.indexOf("\n@@@@@\n");
+        if (idx != -1) {
+            authorsMd.truncate(idx);
+        }
     } else {
-        m_tabWidget->addTab(browserAuthors, tr("Authors"));
+        authorsMd.remove("\n@@@@@\n");
     }
+    browserAuthors->setHtml(md2Html(authorsMd));
+    m_tabWidget->addTab(browserAuthors, tr("Authors"));
 
     // Licenses tab
     QTextBrowser *browserLicense = new QTextBrowser{this};
