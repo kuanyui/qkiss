@@ -108,6 +108,31 @@ I've also ever considered several other names:
 - `Qute KISS`: Also pronounced `Cute Kiss`, but argh... Qute is the trademark of a Japanese **computer game company**... Too risky.
 
 
+# Acknowledgements
+- For an unified appearance across various platforms, this project adpots icon themes / SVG icons forked from GNOME Project, Ubuntu, Inkscape, GIMP. For detailed information, please see the [README](resources/tango-icon-remixer/README.md) of [`resources/tango-icon-remixer`](resources/tango-icon-remixer/).
+- For display flags on various platforms (especially for fucking Windows 11), this project adopts [lipis/flag-icons](https://github.com/lipis/flag-icons).
+- For extracting LZH file, this project relys on multiple backends from various projects:
+  - [libarchive](https://github.com/libarchive/libarchive) originated from FreeBSD Project by Tim Kientzle.
+  - [LHa for UNIX](https://github.com/jca02266/lha) as an optional external program.
+  - [Unarchiver](https://theunarchiver.com/command-line) as an optional external program.
+
+## Disclosuring Usage of LLMs
+
+- This project relies on LLM as developing assistant, but always try to keep everything in control as possible as I can.
+- This project doesn't relies any agent (e.g. Claude Code, Codex).
+- Never did any fucking vibe code. All codes are manually reviewed line by line. I can understand and explain every lines in this codebase.
+- All detailed contribution ratios are listed below:
+
+| Fields          | LLMs (sorted by contributions)     | LLM contributed                             | Usage                                                                                                                                                   |
+|-----------------|------------------------------------|---------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Qt / C++        | Microsoft Copilot, ChatGPT, Claude | 5% codes in the whole C++ codebase          | Disscuss design patterns, find suitable Qt APIs, write some examples for difficult Qt APIs (e.g. delegate in MVC)                                       |
+| Python          | Microsoft Copilot, ChatGPT         | 40% codes in the whole Python codebase      | Provide a rough scaffolds (e.g. `argparse`), write some snippets, learn the latest "Pythonic" way, learn best-practice of Python3 type annotations.     |
+| Translations    | Microsoft Copilot                  | 75% translations                            | Translate string in `*.ts` from English or Japanese to others (then manually fix line by line).                                                         |
+| FKiSS Spec      | Claude                             | (Organize FKiSS documentation as docstring) | Collect and organize all FKiSS commands from HTML-formated FKiSS references as formalized list and docstring in `fkiss.cpp`                             |
+| CMake           | ChatGPT, Gemini                    | 60% codes; survey, learning                 | Survey and discuss best practice of `CPack`, `CMakePresets.json` for a cross-platform Qt app. Learn Windows packaging & NSIS & deploy DLL.              |
+| Github Actions  | Gemini, ChatGPT                    | 60% codes; survey, learning                 | For Windows packaging (I have no Windows development environment). Donno why Gemini do this better, while ChatGPT keeps output bullshits in this field. |
+| osc / RPM / DEB | Gemini, ChatGPT                    | 40% codes; survey, learning                 | Learning lots of detailed rules of DEB & RPM packaging & troubleshooting; and how to build locally via `osc`.                                           |
+
 # Magіc Spells
 
 Some Magіc Spells Specially Reserved for The Great Pile of Shitty Hole Country You May Know Who™
