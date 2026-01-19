@@ -1,4 +1,8 @@
-# QKiSS - A tiny renaissance of KISS
+<div align="center">
+  <h1>QKiSS</h1>
+  <img src="resources/appicon/apps/48/qkiss.svg" alt="QKiSS's Logo" />
+  <h4>A modest renaissance of KiSS</h4>
+</div>
 
 QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6, compatible with KISS/GS and FKiSS 1 & 2 specifications, as a complete rebirth inspired by [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) and [GnomeKiSS](https://devel.tlrmx.org/kiss/) on Linux.
 
@@ -16,21 +20,60 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 - Nostalgia and pixel-art from the childhood using Windows 95 / 98 (though I never heard KISS at that time).
 - Real life is so painful. Wellness is in manga and anime.
 
+# Download Binaries
+> [!NOTE]
+> Currently, all binaries are tested only on x86_64 architecture.
+
+## Linux
+- QKiSS for Linux is built & signed via SUSE's Open Build Service, which provides repositories for the package managers of each distribution: **Debian, Fedora, openSUSE, Ubuntu**. [The installation steps are available here](https://software.opensuse.org//download.html?project=home%3Akuanyui%3Astable&package=qkiss).
+- Archlinux is too fucking of a hassle and I'm too lazy to test `osc` for it. After all, Arch users are a bunch of weirdos who enjoy compiling everything from tarball by themselves, ... A `PKGBUILD` is provided for now, though I'm not sure if it actually works.
+
+## Windows
+QKiSS for Windows is built via GitHub Actions CI/CD, the portable ZIP and NSIS installer are available on [GitHub release page](https://github.com/kuanyui/qkiss/releases)
 
 # Development
-> This project use `CMakePresets.json` to define build presets (`Release`, `Debug`...etc), for unify the build behavior between QtCreator and VSCode.
+## Requirements
 
-## QtCreator
+- OS
+  - Linux
+  - Windows (requires `vcpkg`)
+
+- Toolchains
+  - C++ 20 compiler (tested on GCC, MSVC)
+  - Qt >= 6.4.2 (recommended: >= 6.8.3)
+  - Python >= 3.11
+  - CMake >= 3.25
+  - Ninja
+  - GNU Make
+  - Inkscape
+  - Magick
+
+- C / C++ Libraries (Required)
+  - `QtMultimedia`
+  - `LibArchive`
+  - `Iconv` or `ICU` (Requires at least one of them)
+
+- Python 3 Packages (Required)
+  - `jsonschema`
+  - `pyyaml`
+
+- External Programs (Optional)
+  - `lha`
+  - `unar`
+
+## Configure & Build
+> This project use `CMakePresets.json` to define build presets (`Release`, `Debug`...etc), for unify the build behavior between QtCreator and VSCode.
+### QtCreator
 Just `File -> Open File or Project` and select the `CMakeLists.txt` to open project, it will ask you which presets to be configured.
 
-## VSCode
+### VSCode
 1. Open **the root folder of this project**. (if `CMake Tools` extension is not installed, please install it and restart VSCode, then open the folder again.)
 2. `cmake.selectConfigurePreset` to select configure preset (`configurePresets`).
 3. `F7` (`cmake.build`) to configure (if needed) & build.
 4. `cmake.selectLaunchTarget` to select the target to launch.
 5. `F5` to run the built binary. (See `.vscode/launch.json` for details)
 
-## Manual
+### Manual
 1. List all CMake **configure presets**:
 ```sh
 # These two commands are equal.
