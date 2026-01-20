@@ -252,6 +252,7 @@ void FileSystemBrowser::setupUi()
     connect(actSetCurDirAsHome, &QAction::triggered, this, &FileSystemBrowser::setCurDirAsHome);
     connect(m_btnRefresh, &QPushButton::clicked, this, &FileSystemBrowser::refresh);
     connect(m_view, &QTreeView::doubleClicked, this, &FileSystemBrowser::onItemDbClicked);
+    connect(m_view, &QTreeView::activated, this, &FileSystemBrowser::onItemActivated);
     updateAllButtonState();
 }
 
@@ -433,7 +434,8 @@ void FileSystemBrowser::setHome(const QString &dirPath)
     m_cfg.setHomeDirectory(dirPath);
 }
 
-void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
+void FileSystemBrowser::onItemActivated(const QModelIndex &index)
+{
     if (!index.isValid()) return;
     QModelIndex indexOfFirstCol = m_model->index(index.row(), 0);  // choose the first column (col = 0) because extra data is saved here.
     QString filePath = m_model->data(indexOfFirstCol, ThisRole::FilePathRole).toString();
@@ -446,6 +448,10 @@ void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
     } else {
         emit requestLoadFile(filePath, QKiSS::FileLoadMode::LoadAsIndependent);
     }
+}
+
+void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
+    onItemActivated(index);
 }
 
 bool FileSystemBrowser::eventFilter(QObject *watched, QEvent *event)

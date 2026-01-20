@@ -75,6 +75,7 @@ private slots:
     void goHome();
     void setCurDirAsHome();
     void setHome(const QString &dirPath);
+    void onItemActivated(const QModelIndex &index);
     void onItemDbClicked(const QModelIndex &index);
 signals:
     void requestLoadFile(QString filePath, QKiSS::FileLoadMode fileLoadMode);
