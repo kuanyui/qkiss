@@ -383,6 +383,10 @@ jobs:
 
               exit 1
           }
+          Write-Host "============================================"
+          Write-Host "./_CPack_Packages/win64/NSIS/project.nsi"
+          Write-Host "============================================"
+          Get-Content -Path "./_CPack_Packages/win64/NSIS/project.nsi"
 
       - name: List build directory (Windows)
         run: Get-ChildItem -Path build -Depth 1

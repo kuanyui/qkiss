@@ -838,6 +838,18 @@ elseif(WIN32)
 
     set(CPACK_NSIS_MUI_ICON    ${GEN_WIN_ICO_FILE_INSTALLER})    # icon of installer itself
     set(CPACK_NSIS_MUI_UNIICON ${GEN_WIN_ICO_FILE_UNINSTALLER})  # icon of uninstaller itself
+
+    # Donno why https://gitlab.kitware.com/cmake/cmake/-/blob/master/Modules/Internal/CPack/NSIS.template.in
+    #   doesn't contains `MUI_UNPAGE_WELCOME` therefore there's no page to let `CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP` shown in
+    # Force insert these macros via internal magic @CPACK_NSIS_DEFINES@.
+    set(CPACK_NSIS_DEFINES [[
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+]])
+
+
     set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")  # What the fuck? "A path to the executable that contains the installer icon."???
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PROJ_DISPLAY_NAME}")   # Force remove version from install folder name
     set(CPACK_NSIS_DISPLAY_NAME "${PROJ_DISPLAY_NAME}") # Window title of installer. Do not contain version in this variable, it will also be used in installed application name
