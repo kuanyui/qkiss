@@ -90,7 +90,7 @@ public:
     static QString stringifyZoomFactorToPercent(qreal factor);
     const QList<qreal> &zoomFactorList() const;
     qreal zoom() const;
-    void setZoom(const qreal &newFactor);
+    void setZoom(qreal newFactor);
     QString zoomAsPercent() const;
     bool canZoomIn() const;
     bool canZoomOut() const;

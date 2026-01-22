@@ -83,11 +83,18 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(m_kissView, &GKissView::requestSwitchingSet, this, &MainWindow::switchSceneBy);
     // Zooming
-    connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=, this]{
-        qreal factor = ConfigFile::parseZoomHumanToFactor(m_cboxZoomScale->lineEdit()->text());
-        m_kissView->scaleAbs(factor);
+    // connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=, this]{
+    //     qreal factor = ConfigFile::parseZoomHumanToFactor(m_cboxZoomScale->lineEdit()->text());
+    //     m_kissView->scaleAbs(factor);
+    // });
+    // connect(m_cboxZoomScale->lineEdit(), &QLineEdit::editingFinished, [=, this](){
+    //     qreal factor = ConfigFile::parseZoomHumanToFactor(m_cboxZoomScale->lineEdit()->text());
+    //     m_cfg.setZoom(factor);
+    // });
+    connect(&m_cfg, &ConfigFile::zoomChanged, [=, this](){
+        m_kissView->scaleAbs(m_cfg.zoom());
     });
-    connect(m_cboxZoomScale->lineEdit(), &QLineEdit::editingFinished, [=, this](){
+    connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=, this](){    // ComboBox triggered by user directly
         qreal factor = ConfigFile::parseZoomHumanToFactor(m_cboxZoomScale->lineEdit()->text());
         m_cfg.setZoom(factor);
     });

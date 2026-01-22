@@ -296,10 +296,11 @@ qreal ConfigFile::zoom() const
     return val;
 }
 
-void ConfigFile::setZoom(const qreal &newFactor)
+void ConfigFile::setZoom(qreal newFactor)
 {
-    if (zoom() == newFactor)
-        return;
+    if (zoom() == newFactor) { return; }
+    if (newFactor > ZOOM_RATIO_MAX) { newFactor = ZOOM_RATIO_MAX; }
+    else if (newFactor < ZOOM_RATIO_MIN) { newFactor = ZOOM_RATIO_MIN; }  // TODO: do validation at UI layer.
     m_set.setValue(CPath::View_Zoom, newFactor);
     m_set.sync();
     emit zoomChanged();
@@ -334,6 +335,7 @@ bool ConfigFile::zoomIn()
     if (!canZoomIn()) { return false; }
     qreal nv = zoom();
     nv *= ZOOM_RATIO_STEP;
+    if (nv >= ZOOM_RATIO_MAX) { nv = ZOOM_RATIO_MAX; }
     setZoom(nv);
     return true;
 }
@@ -343,6 +345,7 @@ bool ConfigFile::zoomOut()
     if (!canZoomOut()) { return false; }
     qreal nv = zoom();
     nv /= ZOOM_RATIO_STEP;
+    if (nv <= ZOOM_RATIO_MIN) { nv = ZOOM_RATIO_MIN; }
     setZoom(nv);
     return true;
 }
