@@ -50,6 +50,8 @@ signals:
     void highlightedItemChanged(GKissItem *item);
     /// 1 means go right-ward; -1 means left.
     void requestSwitchingSet(int steps);
+    void requestZoomIn();
+    void requestZoomOut();
 
 protected:
 
@@ -57,6 +59,8 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dropEvent(QDropEvent *event) override;
+    virtual void wheelEvent(QWheelEvent *event) override;
+
 private:
     ArchiveFile *m_archiveFile = nullptr;
     /// Each set is stored in its scene.
@@ -65,6 +69,7 @@ private:
     uint8_t m_curSceneIdx = 0;
     GKissItem *m_curHoveredCelItem;
     QList<QMetaObject::Connection> m_connectionsOfArchiveFile;
+
 
 };
 

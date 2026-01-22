@@ -41,7 +41,7 @@ class ConfigFile : public QObject
         static constexpr auto File_HomeDirectory            = "File/HomeDirectory";
     };
     static const int RECENTS_MAX_COUNT = 16;
-    inline static QStringList ZOOM_LIST = { "4", "3.5", "3", "2.5", "2", "1.5", "1", "0.5" };
+    inline static QList<qreal> ZOOM_FACTOR_LIST = { 4, 3, 2, 1, 0.5 };
     struct LangInfo {
         const char* id;
         const char* flagEmoji;
@@ -86,18 +86,19 @@ public:
     QStringList recentFiles() const;
     QStringList recentDirs() const;
     void appendRecentFile(QString filePath);
-
-    const QStringList &zoomList() const;
-    QString zoom() const;
-    void setZoom(const QString &newZoom);
-
+    static qreal parseZoomHumanToFactor(const QString &humanReadableZoom);
+    static QString stringifyZoomFactorToPercent(qreal factor);
+    const QList<qreal> &zoomFactorList() const;
+    qreal zoom() const;
+    void setZoom(const qreal &newFactor);
+    QString zoomAsPercent() const;
     bool canZoomIn() const;
     bool canZoomOut() const;
 
 public slots:
-    QString zoomReset();
-    QString zoomIn();
-    QString zoomOut();
+    qreal zoomReset();
+    bool zoomIn();
+    bool zoomOut();
 
     void clearRecentFiles();
     void clearRecentDirs();
@@ -116,7 +117,7 @@ signals:
     void recentDirsChanged();
     void uiLanguageChanged();
 
-    void zoomScaleChanged();
+    void zoomChanged();
 
 private:
     /** Avoid initialized from outside. */

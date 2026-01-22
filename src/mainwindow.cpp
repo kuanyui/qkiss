@@ -82,26 +82,42 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
     connect(m_kissView, &GKissView::requestSwitchingSet, this, &MainWindow::switchSceneBy);
-
     // Zooming
-    connect(m_cboxZoomScale, &QComboBox::currentTextChanged, this, &MainWindow::applyViewZoomByText);
+    connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=, this]{
+        qreal factor = ConfigFile::parseZoomHumanToFactor(m_cboxZoomScale->lineEdit()->text());
+        m_kissView->scaleAbs(factor);
+    });
+    connect(m_cboxZoomScale->lineEdit(), &QLineEdit::editingFinished, [=, this](){
+        qreal factor = ConfigFile::parseZoomHumanToFactor(m_cboxZoomScale->lineEdit()->text());
+        m_cfg.setZoom(factor);
+    });
     connect(ui->action_zoomOut, &QAction::triggered, &m_cfg, [=, this](){
         m_cfg.zoomOut();
-        m_cboxZoomScale->setCurrentText(m_cfg.zoom());
+        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
     connect(ui->action_zoomIn, &QAction::triggered, &m_cfg, [=, this](){
         m_cfg.zoomIn();
-        m_cboxZoomScale->setCurrentText(m_cfg.zoom());
+        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
     connect(ui->action_zoomReset, &QAction::triggered, &m_cfg, [=, this](){
         m_cfg.zoomReset();
-        m_cboxZoomScale->setCurrentText(m_cfg.zoom());
+        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
     ui->action_zoomIn->setDisabled(!m_cfg.canZoomIn());    // REFACTOR: How to DRY?
     ui->action_zoomOut->setDisabled(!m_cfg.canZoomOut());    // REFACTOR: How to DRY?
-    connect(&m_cfg, &ConfigFile::zoomScaleChanged, this, [=, this] () {
+    connect(&m_cfg, &ConfigFile::zoomChanged, this, [=, this] () {
         ui->action_zoomIn->setDisabled(!m_cfg.canZoomIn());
         ui->action_zoomOut->setDisabled(!m_cfg.canZoomOut());
+    });
+
+    // Zooming via Ctrl + mouse wheel on view
+    connect(m_kissView, &GKissView::requestZoomIn, &m_cfg, [=, this](){
+        m_cfg.zoomIn();
+        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
+    });
+    connect(m_kissView, &GKissView::requestZoomOut, &m_cfg, [=, this](){
+        m_cfg.zoomOut();
+        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
 
     // Other
@@ -406,10 +422,12 @@ void MainWindow::setupToolBars()
     m_toolbarZooms->setObjectName("MainWindow_ToolBar_Zooms");
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarZooms);
     m_cboxZoomScale = new QComboBox(m_toolbarZooms);
-    for (const QString &s : m_cfg.zoomList()) {
-        m_cboxZoomScale->addItem(s, QVariant(s));
+    m_cboxZoomScale->setEditable(true);
+    m_cboxZoomScale->setCurrentText("100%");
+    for (qreal factor : m_cfg.zoomFactorList()) {
+        QString percentStr = ConfigFile::stringifyZoomFactorToPercent(factor);
+        m_cboxZoomScale->addItem(percentStr, QVariant(percentStr));
     }
-    m_cboxZoomScale->setCurrentIndex(m_cboxZoomScale->count() - 2);
     m_toolbarZooms->addAction(ui->action_zoomOut);
     m_toolbarZooms->addAction(ui->action_zoomIn);
     m_toolbarZooms->addWidget(m_cboxZoomScale);
@@ -593,14 +611,15 @@ void MainWindow::saveWindowSettings()
     QSettings set;
     m_cfg.setMainWindowGeometry(saveGeometry());
     m_cfg.setMainWindowState(saveState());
-    m_cfg.setZoom(m_cboxZoomScale->currentText());
+    qreal factor = ConfigFile::parseZoomHumanToFactor(m_cboxZoomScale->currentText());
+    m_cfg.setZoom(factor);
 }
 
 void MainWindow::restoreWindowSettings()
 {
     restoreGeometry(m_cfg.mainWindowGeometry());
     restoreState(m_cfg.mainWindowState());
-    m_cboxZoomScale->setCurrentText(m_cfg.zoom());
+    m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     renderRecentFiles();
 }
 
@@ -676,18 +695,6 @@ void MainWindow::openDirPicker()
         qDebug() << "===============" << dirPath;
         openDirOrFile(dirPath);
     }
-}
-
-void MainWindow::applyViewZoomByText(QString zoomText)
-{
-    bool ok;
-    qreal targetScale = zoomText.toFloat(&ok);
-    if (!ok) {
-        targetScale = 1;
-        zoomText = "1";
-    }
-    m_kissView->scaleAbs(targetScale);
-    m_cfg.setZoom(zoomText);
 }
 
 

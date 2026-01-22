@@ -79,7 +79,6 @@ private slots:
     void renderRecentFiles();
     void openFilePicker();
     void openDirPicker();
-    void applyViewZoomByText(QString zoomText);
 
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;

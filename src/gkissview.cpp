@@ -278,3 +278,17 @@ void GKissView::dropEvent(QDropEvent *event)
     // dragging LZH file into QMainWindow can load this LZH file, but QGraphicsView stops it so ignore this event here.
     event->ignore();
 }
+
+void GKissView::wheelEvent(QWheelEvent *event)
+{
+    if (event->modifiers() & Qt::ControlModifier) {
+        if (event->angleDelta().y() > 0) {
+            emit requestZoomIn();
+        } else {
+            emit requestZoomOut();
+        }
+        event->accept();
+        return;
+    }
+    QGraphicsView::wheelEvent(event);
+}

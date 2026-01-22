@@ -21,13 +21,20 @@
 #include <QSettings>
 #include <QLocale>
 
+// const: Gurantee it's runtime constant, mayby inlined.
+// constexpr: Gurantee it's known during compilation time.
+namespace {
+constexpr qreal ZOOM_RATIO_ORIGIN = 1.0;
+constexpr qreal ZOOM_RATIO_STEP = 1.1;
+constexpr qreal ZOOM_RATIO_MIN  = 0.1;
+constexpr qreal ZOOM_RATIO_MAX  = 8.0;
+}
+
 ConfigFile::ConfigFile(QObject *parent)
     : QObject{parent}
 {
     loadAll();
 }
-
-
 
 
 QStringList ConfigFile::recentFiles() const
@@ -254,70 +261,90 @@ EnumClassT ConfigFile::getEnumClassFromSettings(const QString& cfgKey, EnumClass
     return static_cast<EnumClassT>(val);
 }
 
-const QStringList &ConfigFile::zoomList() const
+qreal ConfigFile::parseZoomHumanToFactor(const QString &humanReadableZoom)
 {
-    return ZOOM_LIST;
+    QString trimmed = humanReadableZoom.trimmed();
+    bool ok = false;
+    qreal rawNum = 100;
+    if (trimmed.endsWith('%')) {
+        rawNum = trimmed.left(trimmed.size() - 1).toDouble(&ok);
+    } else {
+        rawNum = trimmed.toDouble(&ok);
+    }
+    if (!ok) { return ZOOM_RATIO_ORIGIN; }
+    return rawNum / 100.0;
 }
 
-QString ConfigFile::zoom() const
+QString ConfigFile::stringifyZoomFactorToPercent(qreal factor)
+{
+    return QString::number(factor * 100.0, 'f', 0) + "%";
+}
+
+const QList<qreal> &ConfigFile::zoomFactorList() const
+{
+    return ZOOM_FACTOR_LIST;
+}
+
+qreal ConfigFile::zoom() const
 {
     // NOTE: Scale will be stored into ComboBox and QGraphicsView, so don't need to cache with a m_zoomScale here.
-    QString val = m_set.value(CPath::View_Zoom).toString();
-    if (val.isEmpty()) {
-        val = "1";
+    bool ok = false;
+    qreal val = m_set.value(CPath::View_Zoom).toReal(&ok);
+    if (!ok) {
+        val = ZOOM_RATIO_ORIGIN;
     };
     return val;
 }
 
-void ConfigFile::setZoom(const QString &newZoom)
+void ConfigFile::setZoom(const qreal &newFactor)
 {
-    if (zoom() == newZoom)
+    if (zoom() == newFactor)
         return;
-    m_set.setValue(CPath::View_Zoom, newZoom);
+    m_set.setValue(CPath::View_Zoom, newFactor);
     m_set.sync();
-    emit zoomScaleChanged();
+    emit zoomChanged();
+}
+
+QString ConfigFile::zoomAsPercent() const
+{
+    return stringifyZoomFactorToPercent(zoom());
 }
 
 bool ConfigFile::canZoomIn() const
 {
-    QString val = zoom();
-    int idx = ZOOM_LIST.indexOf(val);
-    if (idx == 0) { return false; }
+    if (zoom() >= ZOOM_RATIO_MAX) { return false; }
     return true;
 }
 
 bool ConfigFile::canZoomOut() const
 {
-    QString val = zoom();
-    int idx = ZOOM_LIST.indexOf(val);
-    if (idx == ZOOM_LIST.length() - 1) { return false; }
+    qreal val = zoom();
+    if (val <= ZOOM_RATIO_MIN) { return false; }
     return true;
 }
 
-QString ConfigFile::zoomReset()
+qreal ConfigFile::zoomReset()
 {
-    setZoom("1");
-    return "1";
+    setZoom(1);
+    return 1;
 }
 
-QString ConfigFile::zoomIn()
+bool ConfigFile::zoomIn()
 {
-    QString ov = zoom();
-    int i = ZOOM_LIST.indexOf(ov) - 1;
-    i = qMax(i, 0);
-    QString nv = ZOOM_LIST[i];
+    if (!canZoomIn()) { return false; }
+    qreal nv = zoom();
+    nv *= ZOOM_RATIO_STEP;
     setZoom(nv);
-    return nv;
+    return true;
 }
 
-QString ConfigFile::zoomOut()
+bool ConfigFile::zoomOut()
 {
-    QString ov = zoom();
-    int i = ZOOM_LIST.indexOf(ov) + 1;
-    i = qMin(i, ZOOM_LIST.count() - 1);
-    QString nv = ZOOM_LIST[i];
+    if (!canZoomOut()) { return false; }
+    qreal nv = zoom();
+    nv /= ZOOM_RATIO_STEP;
     setZoom(nv);
-    return nv;
+    return true;
 }
 
 void ConfigFile::loadAll()
