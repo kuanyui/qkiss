@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     m_archiveFile = new ArchiveFile{this};
     m_kissView = new GKissView(this);
+    m_kissView->scaleAbs(m_cfg.zoom());
     QIcon::setThemeSearchPaths({ ":/xdg_icon_themes" });
     // QIcon::setFallbackSearchPaths({ ":/icons/light" });
     QIcon::setThemeName("CustomizedTango");    // folder name under any of QIcon::themeSearchPaths (:/src/humanity_0.4.6)
