@@ -84,6 +84,7 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
     QFileInfo dInfo {dirPath};
     if (!dInfo.exists() || !dInfo.isDir()) {
         qWarning() << tr("Invalid dir path, aborted.");
+        m_lineEditUrl->setText(m_curDirPath);
         return false;
     }
     QString newDirPath = dInfo.absoluteFilePath();  // instead of absolutePath() because itself is already a dir.
@@ -239,6 +240,9 @@ void FileSystemBrowser::setupUi()
 
     QHBoxLayout *urlBarLayout = new QHBoxLayout();
     urlBarLayout->addWidget(m_lineEditUrl);
+    connect(m_lineEditUrl, &QLineEdit::editingFinished, [=, this] () {  //  when the Return or Enter key is used,
+        setDirPath(m_lineEditUrl->text());
+    });
     // btnLayout->addWidget(m_labelCurDirName);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
