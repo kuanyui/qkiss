@@ -14,6 +14,7 @@
 #     - CMAKE_INSTALL_BINDIR (via `include(GNUInstallDirs)`, rel path.)
 #     - CMAKE_PROJECT_NAME (via `project(<name>`)
 # =============================================
+cmake_policy(SET CMP0011 NEW)  # if P includes this script, this script includes C, then the policies of C won't effect this script
 
 # `set()` here for improving syntax highlights of cmake.
 set(DEPENDENCIES_EXECUTABLE_CONFIGURED "@DEPENDENCIES_EXECUTABLE_CONFIGURED@")
