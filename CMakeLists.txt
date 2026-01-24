@@ -585,7 +585,9 @@ foreach(LANG   IN LISTS   ALL_TR_LANGS)
 endforeach()
 # Scan all source files with `lupdate` to generate *.ts (Create a CMake umbrella target `update_translations`)
 qt_add_lupdate(${PROJECT_NAME} TS_FILES ${TS_FILES}
-    # OPTIONS -no-obsolete   # remove obsolete strings from all *.ts
+  OPTIONS
+  -locations none  # Don't generate <location> to avoid endless pollution in version control...... Don't over-engineered here.
+  # -no-obsolete   # Remove obsolete strings from all *.ts
 )
 # Compile *.ts -> *.qm (Create a CMake umbrella target `release_translations`)
 qt_add_lrelease(${PROJECT_NAME} TS_FILES ${TS_FILES}
