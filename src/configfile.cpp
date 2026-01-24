@@ -28,6 +28,8 @@ constexpr qreal ZOOM_RATIO_ORIGIN = 1.0;
 constexpr qreal ZOOM_RATIO_STEP = 1.1;
 constexpr qreal ZOOM_RATIO_MIN  = 0.1;
 constexpr qreal ZOOM_RATIO_MAX  = 8.0;
+/// Large to Small
+inline static QList<qreal> ZOOM_RATIO_LIST = { 4, 3, 2, 1, 0.5 };
 }
 
 ConfigFile::ConfigFile(QObject *parent)
@@ -282,7 +284,7 @@ QString ConfigFile::stringifyZoomFactorToPercent(qreal factor)
 
 const QList<qreal> &ConfigFile::zoomFactorList() const
 {
-    return ZOOM_FACTOR_LIST;
+    return ZOOM_RATIO_LIST;
 }
 
 qreal ConfigFile::zoom() const
@@ -348,6 +350,46 @@ bool ConfigFile::zoomOut()
     if (nv <= ZOOM_RATIO_MIN) { nv = ZOOM_RATIO_MIN; }
     setZoom(nv);
     return true;
+}
+
+bool ConfigFile::zoomInByPredefinedSteps()
+{
+    if (!canZoomIn()) { return false; }
+    const qreal ov = zoom();
+    qreal nv = zoom();
+    // 4, 3, 2, 1, 0.5  <-
+    for (qsizetype i = ZOOM_RATIO_LIST.length() - 1; i >= 0; i--) {
+        qreal x = ZOOM_RATIO_LIST[i];
+        if (ov == x) { continue; }
+        else if (ov > x) { continue; }
+        else if (x > ov) { nv = x; break; }
+    }
+    if (nv != ov) {
+        qDebug() << "[config] scale = " << nv;
+        setZoom(nv);
+        return true;
+    }
+    return true;
+}
+
+bool ConfigFile::zoomOutByPredefinedSteps()
+{
+    if (!canZoomOut()) { return false; }
+    const qreal ov = zoom();
+    qreal nv = zoom();
+    // ->  4, 3, 2, 1, 0.5
+    for (qsizetype i = 0; i < ZOOM_RATIO_LIST.length(); i++) {
+        qreal x = ZOOM_RATIO_LIST[i];
+        if (ov == x) { continue; }
+        else if (ov > x) { nv = x; break; }
+        else if (x > ov) { continue; }
+    }
+    if (nv != ov) {
+        qDebug() << "[config] scale = " << nv;
+        setZoom(nv);
+        return true;
+    }
+    return false;
 }
 
 void ConfigFile::loadAll()

@@ -80,11 +80,17 @@ private slots:
     void openFilePicker();
     void openDirPicker();
 
+    // QObject interface
+public:
+    virtual bool eventFilter(QObject *watched, QEvent *event) override;
+
+    // QWidget interface
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dragMoveEvent(QDragMoveEvent *event) override;
     virtual void dropEvent(QDropEvent *event) override;
     virtual void closeEvent(QCloseEvent *event) override;
+
     Ui::MainWindow *ui = nullptr;
     QToolBar *m_toolbarFiles;
     QToolBar *m_toolbarZooms;
@@ -103,6 +109,8 @@ protected:
     ItemInspector *m_itemInspector;
     QPlainTextEdit *m_docViewer;
     ConfigFile &m_cfg;
+
+
 };
 
 

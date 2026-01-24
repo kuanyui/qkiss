@@ -94,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent)
     // });
     connect(&m_cfg, &ConfigFile::zoomChanged, [=, this](){
         m_kissView->scaleAbs(m_cfg.zoom());
+        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
     connect(m_cboxZoomScale, &QComboBox::currentTextChanged, [=, this](){    // ComboBox triggered by user directly
         qreal factor = ConfigFile::parseZoomHumanToFactor(m_cboxZoomScale->lineEdit()->text());
@@ -101,15 +102,12 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(ui->action_zoomOut, &QAction::triggered, &m_cfg, [=, this](){
         m_cfg.zoomOut();
-        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
     connect(ui->action_zoomIn, &QAction::triggered, &m_cfg, [=, this](){
         m_cfg.zoomIn();
-        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
     connect(ui->action_zoomReset, &QAction::triggered, &m_cfg, [=, this](){
         m_cfg.zoomReset();
-        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
     ui->action_zoomIn->setDisabled(!m_cfg.canZoomIn());    // REFACTOR: How to DRY?
     ui->action_zoomOut->setDisabled(!m_cfg.canZoomOut());    // REFACTOR: How to DRY?
@@ -121,11 +119,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Zooming via Ctrl + mouse wheel on view
     connect(m_kissView, &GKissView::requestZoomIn, &m_cfg, [=, this](){
         m_cfg.zoomIn();
-        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
     connect(m_kissView, &GKissView::requestZoomOut, &m_cfg, [=, this](){
         m_cfg.zoomOut();
-        m_cboxZoomScale->setCurrentText(m_cfg.zoomAsPercent());
     });
 
     // Other
@@ -430,6 +426,7 @@ void MainWindow::setupToolBars()
     m_toolbarZooms->setObjectName("MainWindow_ToolBar_Zooms");
     this->addToolBar(Qt::ToolBarArea::TopToolBarArea, m_toolbarZooms);
     m_cboxZoomScale = new QComboBox(m_toolbarZooms);
+    m_cboxZoomScale->installEventFilter(this);  // When cbox received an event, pass it to `this` first (to let `this->eventFilter()` handle it).
     m_cboxZoomScale->setEditable(true);
     m_cboxZoomScale->setCurrentText("100%");
     for (qreal factor : m_cfg.zoomFactorList()) {
@@ -703,6 +700,24 @@ void MainWindow::openDirPicker()
         qDebug() << "===============" << dirPath;
         openDirOrFile(dirPath);
     }
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_cboxZoomScale && event->type() == QEvent::Wheel) {
+        // if dropdown menu of this combobox is expanded, do default behavior.
+        if (m_cboxZoomScale->view()->isVisible()) {
+            return QMainWindow::eventFilter(watched, event);
+        }
+        QWheelEvent *ev = static_cast<QWheelEvent *>(event);
+        if (ev->angleDelta().y() > 0) {  // scroll up
+            m_cfg.zoomInByPredefinedSteps();
+        } else {  // scroll down
+            m_cfg.zoomOutByPredefinedSteps();
+        }
+        return true;  // Capture this event.
+    }
+    return QMainWindow::eventFilter(watched, event);
 }
 
 
