@@ -845,9 +845,8 @@ elseif(WIN32)
     #   doesn't contains `MUI_UNPAGE_WELCOME` therefore there's no page to let `CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP` shown in
     # Force insert these macros via internal magic @CPACK_NSIS_DEFINES@.
     string(APPEND CPACK_NSIS_DEFINES [[
+!undef MUI_ICON
 !insertmacro MUI_UNPAGE_WELCOME
-!insertmacro MUI_UNPAGE_CONFIRM
-!insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_UNPAGE_FINISH
 ]])
 
