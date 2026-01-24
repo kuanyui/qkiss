@@ -843,13 +843,27 @@ elseif(WIN32)
 
     # Donno why https://gitlab.kitware.com/cmake/cmake/-/blob/master/Modules/Internal/CPack/NSIS.template.in
     #   doesn't contains `MUI_UNPAGE_WELCOME` therefore there's no page to let `CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP` shown in
-    # Force insert these macros via internal magic @CPACK_NSIS_DEFINES@.
-    string(APPEND CPACK_NSIS_DEFINES [[
-!undef MUI_ICON
-!insertmacro MUI_UNPAGE_WELCOME
-!insertmacro MUI_UNPAGE_FINISH
-]])
+    # Don't force insert these macros via internal magic @CPACK_NSIS_DEFINES@, which causes error `!define: "MUI_ICON" already defined!`
+    #
+    find_file(NSIS_TEMPLATE_IN "NSIS.template.in"
+        PATHS "${CMAKE_ROOT}/Modules/Internal/CPack" "${CMAKE_ROOT}/Modules/CPack"
+        NO_DEFAULT_PATH)
 
+    if(NSIS_TEMPLATE_IN)
+        file(READ "${NSIS_TEMPLATE_IN}" _CONTENT)
+        string(REPLACE "!insertmacro MUI_UNPAGE_CONFIRM"
+                    "!insertmacro MUI_UNPAGE_WELCOME\n  !insertmacro MUI_UNPAGE_CONFIRM"
+                    _CONTENT "${_CONTENT}")
+        string(REPLACE "!insertmacro MUI_UNPAGE_INSTFILES"
+                    "!insertmacro MUI_UNPAGE_INSTFILES\n  !insertmacro MUI_UNPAGE_FINISH"
+                    _CONTENT "${_CONTENT}")
+
+        # Write to tmp dir
+        file(WRITE "${CMAKE_BINARY_DIR}/NSIS.template.in" "${_CONTENT}")
+
+        # Force CPack use this first.
+        list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_BINARY_DIR}")
+    endif()
 
     set(CPACK_NSIS_INSTALLED_ICON_NAME "qkiss.exe")  # What the fuck? "A path to the executable that contains the installer icon."???
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PROJ_DISPLAY_NAME}")   # Force remove version from install folder name
