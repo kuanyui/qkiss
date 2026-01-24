@@ -844,7 +844,7 @@ elseif(WIN32)
     # Donno why https://gitlab.kitware.com/cmake/cmake/-/blob/master/Modules/Internal/CPack/NSIS.template.in
     #   doesn't contains `MUI_UNPAGE_WELCOME` therefore there's no page to let `CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP` shown in
     # Force insert these macros via internal magic @CPACK_NSIS_DEFINES@.
-    set(CPACK_NSIS_DEFINES [[
+    string(APPEND CPACK_NSIS_DEFINES [[
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
