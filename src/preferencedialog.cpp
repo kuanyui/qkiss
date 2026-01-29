@@ -162,13 +162,13 @@ QWidget *PreferenceDialog::createBackendTab()
     }
 
     QList<IconTextField> fields = {
-       {"application-x-executable"           , tr("Name"),               new QLabel(), &AbstractArchiveProcessor::Info::name }             , // Gnome
-       {"gtk-info"                           , tr("Summary"),            new QLabel(), &AbstractArchiveProcessor::Info::summary }          , // Humanity
-       {"extract-archive"                    , tr("LZH Compatibility"),  new QLabel(), &AbstractArchiveProcessor::Info::lzhCompatibility } , // Humanity
-       {"gnome-settings-default-applications", tr("Installation"),       new QLabel(), &AbstractArchiveProcessor::Info::installation }     , // Humanity
-       {"gimp-controller-linux-input"        , tr("OS Support"),         new QLabel(), &AbstractArchiveProcessor::Info::osSupport }        , // GimpDefault
-       {"drive-harddisk"                     , tr("Disk Operation"),     new QLabel(), &AbstractArchiveProcessor::Info::diskOperation }    , // Humanity
-       {"web-browser"                        , tr("Website"),            new QLabel(), &AbstractArchiveProcessor::Info::website }            // Humanity
+       {"backend-name"                       , tr("Name"),               new QLabel(), &AbstractArchiveProcessor::Info::name }             , // Gnome
+       {"backend-summary"                    , tr("Summary"),            new QLabel(), &AbstractArchiveProcessor::Info::summary }          , // Humanity
+       {"backend-lzh-compatibility"          , tr("LZH Compatibility"),  new QLabel(), &AbstractArchiveProcessor::Info::lzhCompatibility } , // Humanity
+       {"backend-installation"               , tr("Installation"),       new QLabel(), &AbstractArchiveProcessor::Info::installation }     , // Humanity
+       {"backend-os-support"                 , tr("OS Support"),         new QLabel(), &AbstractArchiveProcessor::Info::osSupport }        , // GimpDefault
+       {"backend-disk"                       , tr("Disk Operation"),     new QLabel(), &AbstractArchiveProcessor::Info::diskOperation }    , // Humanity
+       {"backend-website"                    , tr("Website"),            new QLabel(), &AbstractArchiveProcessor::Info::website }            // Humanity
     };
     auto *groupBox = new ZGroupBox(tr("Backend Information"), rootWidget);
     rootVbox->addWidget(groupBox);

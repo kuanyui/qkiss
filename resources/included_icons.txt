@@ -1,13 +1,24 @@
 # -*- mode: conf -*-
 # This is comment
+# ===================================================================
 # Main
+# ===================================================================
 AppIcon           qkiss                          apps/qkiss
 AppIcon           qkiss-installer                apps/qkiss-installer
 AppIcon           qkiss-uninstaller              apps/qkiss-uninstaller
+
 AppIcon           clothes                        apps/clothes
+Gnome             preferences-desktop-theme      apps/palettes
 
 Gnome             application-exit
-Gnome             preferences-desktop-theme      apps/palettes
+Gnome             help-about
+
+BlueHumanity         document-open-recent      recents        # TODO: Draw `document-open-recent` from `clocks` in GNOME3
+BlueGnome            edit-clear                edit-clear
+
+# ===================================================================
+# Docks
+# ===================================================================
 
 Gnome             apps/system-file-manager
 Gnome             utilities-system-monitor       apps/utility-system-monitor
@@ -17,21 +28,37 @@ Gnome             emblems/emblem-package         package-zipped
 Gnome             text-x-readme                  text-x-readme
 Gnome             logviewer                      logviewer
 
+# ===================================================================
+# Zooming
+# ===================================================================
+
 Gnome             zoom-in
 Gnome             zoom-out
 Gnome             zoom-original
 
-# File Browser
-BlueHumanity      go-up            go-up
-BlueHumanity      go-down          go-down
-BlueHumanity      go-next          go-next
-BlueHumanity      go-previous      go-previous
-BlueHumanity      view-refresh     view-refresh
-BlueHumanity      go-home          go-home
-BlueHumanity      go-jump          go-jump
-Gnome             window-close
+# ===================================================================
+# File System Browse
+# ===================================================================
+Tango      actions/go-up            go-up            # BlueHumanity
+Tango      actions/go-down          go-down          # BlueHumanity
+Tango      actions/go-next          go-next          # BlueHumanity
+Tango      actions/go-previous      go-previous      # BlueHumanity
+Tango      actions/view-refresh     view-refresh     # BlueHumanity
+Tango      actions/go-home          go-home          # BlueHumanity
+Tango      actions/go-jump          go-jump          # BlueHumanity
 
-### XDG Places
+Gnome            application-x-addon      addon
+# GimpDefault    gimp-plugin            addon
+
+# ===================================================================
+# Search
+# ===================================================================
+
+BlueGnome      actions/window-close
+
+# ===================================================================
+# XDG Standard Places & Folder Icons
+# ===================================================================
 #Gnome             devices/computer
 #Gnome             mimetypes/text-x-preview
 #BlueHumanity      places/user-trash
@@ -41,27 +68,39 @@ Gnome             window-close
 
 #BlueHumanity      places/document-open      folder-open     # blue folder
 #BlueHumanity      places/folder             folder          # blue folder
-BlueGnome          document-open
+# BlueGnome          document-open
 BlueGnome          folder-open
 BlueGnome          folder
 
+# ===================================================================
+# Files in Archive
+# ===================================================================
+
 # Gnome          mimetypes/text-x-ini          text-x-cnf
-Gnome            mimetypes/text-x-c-liked      text-x-cnf
-Gnome            mimetypes/text-x-readme
-Gnome            mimetypes/text-x-generic
+BlueGnome        mimetypes/text-x-c-liked      text-x-cnf
+BlueGnome        mimetypes/text-x-readme
+BlueGnome        mimetypes/text-x-generic
 
-Gnome            application-x-addon      addon
-# GimpDefault    gimp-plugin            addon
 
-BlueHumanity            actions/preview-file      preview-file
-BlueHumanity            actions/media-playback-start      play
+# BlueHumanity            actions/preview-file      preview-file
+Tango                actions/edit-find                 preview-file
+Tango                actions/media-playback-start      play    # FIXME: Draw `media-playback-start-green` in GNOME3 amd Tango
 
-BlueGnome            changes-allow            unfix
+# ===================================================================
+# Context Menu on CEL / Object
+# ===================================================================
+
+BlueGnome            changes-allow              unfix
 BlueGnome            image-x-generic            image-x-generic
-BlueHumanity            view-refresh            reset-position
+BlueGnome            view-refresh               reset-position   # FIXME:
+# BlueHumanity         view-refresh               reset-position
 
-BlueHumanity            document-open-recent      recents
-BlueGnome            edit-clear            edit-clear
+
+
+# ===================================================================
+# CEL Inspector
+# ===================================================================
+
 
 BlueGnome            sticky-note            comment
 # BlueGnome            help-faq            comment
@@ -69,17 +108,21 @@ BlueGnome            sticky-note            comment
 
 # InkscapeTango        show-guides                position
 GimpDefault            gimp-resize                cel-size
-InkscapeTango          layer-rename               cel-file-name
+InkscapeTango          layer-rename               cel-file-name       # TODO: DIY
 Gnome                  image-x-generic            cel-file-preview
 Gnome                  tomboy-tag                 obj-id
 GimpDefault            gimp-transform-3d-move     obj-pos
-InkscapeTango          distribute-randomize       obj-cels
+InkscapeTango          distribute-randomize       obj-cels            # TODO: DIY
 GimpDefault            gimp-lock-position         obj-fix-count
-InkscapeTango          tool-pointer               inspector
+InkscapeTango          tool-pointer               inspector           # TODO: DIY
 
 
-BlueGnome        preferences-desktop-keyboard-shortcuts      keyboard
-BlueGnome        input-mouse                                 mouse
+# ===================================================================
+# Status Bar
+# ===================================================================
+
+# BlueGnome        preferences-desktop-keyboard-shortcuts      keyboard
+# BlueGnome        input-mouse                                 mouse
 
 Gnome            keyboard-ctrl               keyboard-ctrl
 Gnome            keyboard-shift              keyboard-shift
@@ -89,20 +132,33 @@ Gnome            mouse-right-click           mouse-right-click
 Gnome            mouse-left-click            mouse-left-click
 Gnome            mouse-middle-click          mouse-middle-click
 
+# ===================================================================
 # Settings
+# ===================================================================
+
 Gnome            preferences-desktop-font              encoding
 Gnome            preferences-desktop-locale            language
 Gnome            preferences-system
 
-Gnome                  application-x-executable
-BlueHumanity           gtk-info
-Humanity               extract-archive
-Humanity               gnome-settings-default-applications
-GimpDefault            gimp-controller-linux-input
-Humanity               drive-harddisk
-Humanity               web-browser
+# ===================================================================
+# Preference Dialog
+# ===================================================================
 
-Humanity               dialog-warning                  dialog-warning
-Humanity               dialog-apply                    dialog-apply
+# BlueHumanity               gtk-info                             backend-summary
+# BlueHumanity               gnome-settings-default-applications  backend-installation
+# BlueHumanity               extract-archive                      backend-lzh-compatibility
+# BlueHumanity               drive-harddisk                       backend-disk
+# BlueHumanity               web-browser                          backend-website
 
-Gnome                  help-about
+Gnome                  application-x-executable             backend-name
+Gnome                  text-x-readme                        backend-summary
+Gnome                  package-x-generic                    backend-lzh-compatibility  # OPTIMIZE: Same icon should able to have multiple aliases in *.qrc?
+Tango                  system-installer                     backend-installation
+GimpDefault            gimp-controller-linux-input          backend-os-support
+Tango                  drive-harddisk                       backend-disk    # TODO: Use `drive-harddisk` in GNOME3
+Gnome                  web-browser                          backend-website
+
+Gnome               dialog-warning                  dialog-warning
+Gnome               emblem-default                  dialog-apply
+# BlueHumanity               dialog-apply                    dialog-apply     # FIXME: Draw `dialog-apply` in GNOME3
+
