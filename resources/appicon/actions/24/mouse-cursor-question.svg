@@ -66,7 +66,7 @@
          style="stop-color:#d3d7cf;stop-opacity:1;"
          offset="0"
          id="stop11" /><stop
-         style="stop-color:#d3d7cf;stop-opacity:0;"
+         style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
          id="stop12" /></linearGradient><linearGradient
        id="linearGradient9"
@@ -88,8 +88,8 @@
        inkscape:collect="always"
        xlink:href="#linearGradient11"
        id="linearGradient12"
-       x1="3"
-       y1="10.357858"
+       x1="4"
+       y1="12"
        x2="10"
        y2="20.566713"
        gradientUnits="userSpaceOnUse" /><linearGradient
