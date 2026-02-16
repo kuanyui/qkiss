@@ -13,8 +13,9 @@ Gnome             preferences-desktop-theme      apps/palettes
 Gnome             application-exit
 Gnome             help-about
 
-BlueHumanity         document-open-recent      recents        # TODO: Draw `document-open-recent` from `clocks` in GNOME3
-BlueGnome            edit-clear                edit-clear
+BlueHumanity         document-open-recent      recents        # FIXME: Draw `document-open-recent` from `clocks` in GNOME3
+# Gnome            document-open-recent      recents
+Gnome            edit-clear                edit-clear
 
 # ===================================================================
 # Docks
@@ -32,9 +33,13 @@ Gnome             logviewer                      logviewer
 # Zooming
 # ===================================================================
 
-Gnome             zoom-in
-Gnome             zoom-out
-Gnome             zoom-original
+# Gnome             zoom-in
+# Gnome             zoom-out
+# Gnome             zoom-original
+
+Tango             actions/zoom-in
+Tango             actions/zoom-out
+Tango             actions/zoom-original
 
 # ===================================================================
 # File System Browse
@@ -108,13 +113,15 @@ BlueGnome            sticky-note            comment
 
 # InkscapeTango        show-guides                position
 GimpDefault            gimp-resize                cel-size
-InkscapeTango          layer-rename               cel-file-name       # TODO: DIY
+# InkscapeTango        layer-rename               cel-file-name
+AppIcon                rename                     cel-file-name
 Gnome                  image-x-generic            cel-file-preview
 Gnome                  tomboy-tag                 obj-id
 GimpDefault            gimp-transform-3d-move     obj-pos
-InkscapeTango          distribute-randomize       obj-cels            # TODO: DIY
+InkscapeTango          distribute-randomize       obj-cels            # FIXME: License incompatible
 GimpDefault            gimp-lock-position         obj-fix-count
-InkscapeTango          tool-pointer               inspector           # TODO: DIY
+# InkscapeTango        tool-pointer               inspector
+AppIcon                mouse-cursor-question      inspector
 
 
 # ===================================================================
@@ -162,3 +169,10 @@ Gnome               dialog-warning                  dialog-warning
 Gnome               emblem-default                  dialog-apply
 # BlueHumanity               dialog-apply                    dialog-apply     # FIXME: Draw `dialog-apply` in GNOME3
 
+# =====================================================================
+# Log Viewer
+# =====================================================================
+
+# Tango      inline-information     inline-information
+# Tango      inline-warning         inline-warning
+# Tango      inline-error           inline-error

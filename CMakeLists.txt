@@ -121,7 +121,7 @@ if(CMAKE_SCRIPT_MODE_FILE)
     if(TASK STREQUAL "GENERATE_ICONS")
         execute_process(COMMAND ${CMD_PYTHON_BUILD_ICONS} RESULT_VARIABLE _icon_rc)
         if(NOT _icon_rc EQUAL 0)
-            message(FATAL_ERROR "Icon generation failed")
+            message(FATAL_ERROR "Icon generation failed ${_icon_rc}")
         endif()
     endif()
     return()  # exit immediately
@@ -133,7 +133,7 @@ execute_process(
     RESULT_VARIABLE _icon_rc
 )
 if(NOT _icon_rc EQUAL 0)
-    message(FATAL_ERROR "Icon generation failed")
+    message(FATAL_ERROR "Icon generation failed ${_icon_rc}")
 endif()
 
 # [Build-time] Developer convenience (auto execute `build_icons.py` when building project if `included_icons.txt` modified)

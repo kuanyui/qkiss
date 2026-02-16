@@ -164,12 +164,9 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:)") +
             QStringLiteral(R"(
-
-- [gnome-icon-theme-fork](https://github.com/kuanyui/gnome-icon-theme-fork): `LGPL v3` or `CC by-sa 3.0`
-- [GNOME Projects](https://www.gnome.org): `LGPL v3` or `CC by-sa 3.0`
-- [Ubuntu Humanity](https://launchpad.net/humanity): `GPL v2`
+- [Tango Icon Theme](https://github.com/kuanyui/tango-icon-theme): `GPL v2` or `GPL v3`
+- [Nome Icon Theme](https://github.com/kuanyui/nome-icon-theme): `LGPL v3` or `CC by-sa 3.0`
 - [GIMP](https://www.gimp.org/): `CC by-sa 3.0`
-- [Inkscape](https://inkscape.org/): `GPL v2`
 - [flag-icons](https://github.com/lipis/flag-icons): `MIT`
 )")));
     m_tabWidget->addTab(browserLicense, tr("Licenses"));
