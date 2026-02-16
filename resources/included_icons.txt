@@ -8,34 +8,34 @@ AppIcon           qkiss-installer                apps/qkiss-installer
 AppIcon           qkiss-uninstaller              apps/qkiss-uninstaller
 
 AppIcon           clothes                        apps/clothes
-Gnome             preferences-desktop-theme      apps/palettes
+Nome              preferences-desktop-theme      apps/palettes
 
-Gnome             application-exit
-Gnome             help-about
+Nome              application-exit
+Nome              help-about
 
-BlueHumanity         document-open-recent      recents        # FIXME: Draw `document-open-recent` from `clocks` in GNOME3
-# Gnome            document-open-recent      recents
-Gnome            edit-clear                edit-clear
+# BlueHumanity      document-open-recent      recents
+Tango             document-open-recent      recents
+Nome              edit-clear                edit-clear
 
 # ===================================================================
 # Docks
 # ===================================================================
 
-Gnome             apps/system-file-manager
-Gnome             utilities-system-monitor       apps/utility-system-monitor
-Gnome             code-viewer-c-liked            applications-development
-Gnome             package-x-generic              package-unzipped
-Gnome             emblems/emblem-package         package-zipped
-Gnome             text-x-readme                  text-x-readme
-Gnome             logviewer                      logviewer
+Nome             apps/system-file-manager
+Nome             utilities-system-monitor       apps/utility-system-monitor
+Nome             code-viewer-c-liked            applications-development
+Nome             package-x-generic              package-unzipped
+Nome             emblems/emblem-package         package-zipped
+Nome             text-x-readme                  text-x-readme
+Nome             logviewer                      logviewer
 
 # ===================================================================
 # Zooming
 # ===================================================================
 
-# Gnome             zoom-in
-# Gnome             zoom-out
-# Gnome             zoom-original
+# Nome             zoom-in
+# Nome             zoom-out
+# Nome             zoom-original
 
 Tango             actions/zoom-in
 Tango             actions/zoom-out
@@ -52,52 +52,52 @@ Tango      actions/view-refresh     view-refresh     # BlueHumanity
 Tango      actions/go-home          go-home          # BlueHumanity
 Tango      actions/go-jump          go-jump          # BlueHumanity
 
-Gnome            application-x-addon      addon
+Nome             application-x-addon      addon
 # GimpDefault    gimp-plugin            addon
 
 # ===================================================================
 # Search
 # ===================================================================
 
-BlueGnome      actions/window-close
+BlueNome      actions/window-close
 
 # ===================================================================
 # XDG Standard Places & Folder Icons
 # ===================================================================
-#Gnome             devices/computer
-#Gnome             mimetypes/text-x-preview
+#Nome              devices/computer
+#Nome              mimetypes/text-x-preview
 #BlueHumanity      places/user-trash
-#Gnome             places/network-workgroup
-#Gnome             devices/media-optical
+#Nome              places/network-workgroup
+#Nome              devices/media-optical
 #BlueHumanity      places/folder-remote      folder-remote
 
 #BlueHumanity      places/document-open      folder-open     # blue folder
 #BlueHumanity      places/folder             folder          # blue folder
-# BlueGnome          document-open
-BlueGnome          folder-open
-BlueGnome          folder
+# BlueNome         document-open
+BlueNome          folder-open
+BlueNome          folder
 
 # ===================================================================
 # Files in Archive
 # ===================================================================
 
-# Gnome          mimetypes/text-x-ini          text-x-cnf
-BlueGnome        mimetypes/text-x-c-liked      text-x-cnf
-BlueGnome        mimetypes/text-x-readme
-BlueGnome        mimetypes/text-x-generic
+# Nome          mimetypes/text-x-ini          text-x-cnf
+BlueNome        mimetypes/text-x-c-liked      text-x-cnf
+BlueNome        mimetypes/text-x-readme
+BlueNome        mimetypes/text-x-generic
 
 
 # BlueHumanity            actions/preview-file      preview-file
-Tango                actions/edit-find                 preview-file
-Tango                actions/media-playback-start      play    # FIXME: Draw `media-playback-start-green` in GNOME3 amd Tango
+Tango                actions/edit-find                       preview-file
+Tango                actions/media-playback-start-green      play
 
 # ===================================================================
 # Context Menu on CEL / Object
 # ===================================================================
 
-BlueGnome            changes-allow              unfix
-BlueGnome            image-x-generic            image-x-generic
-BlueGnome            view-refresh               reset-position   # FIXME:
+BlueNome            changes-allow              unfix
+BlueNome            image-x-generic            image-x-generic
+BlueNome            view-refresh               reset-position
 # BlueHumanity         view-refresh               reset-position
 
 
@@ -107,16 +107,16 @@ BlueGnome            view-refresh               reset-position   # FIXME:
 # ===================================================================
 
 
-BlueGnome            sticky-note            comment
-# BlueGnome            help-faq            comment
+BlueNome              sticky-note            comment
+# BlueNome            help-faq            comment
 # InkscapeTango            dialog-messages            comment
 
 # InkscapeTango        show-guides                position
 GimpDefault            gimp-resize                cel-size
 # InkscapeTango        layer-rename               cel-file-name
 AppIcon                rename                     cel-file-name
-Gnome                  image-x-generic            cel-file-preview
-Gnome                  tomboy-tag                 obj-id
+Nome                   image-x-generic            cel-file-preview
+Nome                   tomboy-tag                 obj-id
 GimpDefault            gimp-transform-3d-move     obj-pos
 InkscapeTango          distribute-randomize       obj-cels            # FIXME: License incompatible
 GimpDefault            gimp-lock-position         obj-fix-count
@@ -128,24 +128,24 @@ AppIcon                mouse-cursor-question      inspector
 # Status Bar
 # ===================================================================
 
-# BlueGnome        preferences-desktop-keyboard-shortcuts      keyboard
-# BlueGnome        input-mouse                                 mouse
+# BlueNome        preferences-desktop-keyboard-shortcuts      keyboard
+# BlueNome        input-mouse                                 mouse
 
-Gnome            keyboard-ctrl               keyboard-ctrl
-Gnome            keyboard-shift              keyboard-shift
-Gnome            keyboard-ctrl-pressed       keyboard-ctrl-pressed
-Gnome            keyboard-shift-pressed      keyboard-shift-pressed
-Gnome            mouse-right-click           mouse-right-click
-Gnome            mouse-left-click            mouse-left-click
-Gnome            mouse-middle-click          mouse-middle-click
+Nome            keyboard-ctrl               keyboard-ctrl
+Nome            keyboard-shift              keyboard-shift
+Nome            keyboard-ctrl-pressed       keyboard-ctrl-pressed
+Nome            keyboard-shift-pressed      keyboard-shift-pressed
+Nome            mouse-right-click           mouse-right-click
+Nome            mouse-left-click            mouse-left-click
+Nome            mouse-middle-click          mouse-middle-click
 
 # ===================================================================
 # Settings
 # ===================================================================
 
-Gnome            preferences-desktop-font              encoding
-Gnome            preferences-desktop-locale            language
-Gnome            preferences-system
+Nome            preferences-desktop-font              encoding
+Nome            preferences-desktop-locale            language
+Nome            preferences-system
 
 # ===================================================================
 # Preference Dialog
@@ -157,16 +157,16 @@ Gnome            preferences-system
 # BlueHumanity               drive-harddisk                       backend-disk
 # BlueHumanity               web-browser                          backend-website
 
-Gnome                  application-x-executable             backend-name
-Gnome                  text-x-readme                        backend-summary
-Gnome                  package-x-generic                    backend-lzh-compatibility  # OPTIMIZE: Same icon should able to have multiple aliases in *.qrc?
+Nome                   application-x-executable             backend-name
+Nome                   text-x-readme                        backend-summary
+Nome                   package-x-generic                    backend-lzh-compatibility  # OPTIMIZE: Same icon should able to have multiple aliases in *.qrc?
 Tango                  system-installer                     backend-installation
 GimpDefault            gimp-controller-linux-input          backend-os-support
 Tango                  drive-harddisk                       backend-disk    # TODO: Use `drive-harddisk` in GNOME3
-Gnome                  web-browser                          backend-website
+Nome                   web-browser                          backend-website
 
-Gnome               dialog-warning                  dialog-warning
-Gnome               emblem-default                  dialog-apply
+Nome               dialog-warning                  dialog-warning
+Nome               emblem-default                  dialog-apply
 # BlueHumanity               dialog-apply                    dialog-apply     # FIXME: Draw `dialog-apply` in GNOME3
 
 # =====================================================================
