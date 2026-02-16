@@ -206,10 +206,10 @@ QWidget *PreferenceDialog::createBackendTab()
             field.labelFieldValue->setText(selectedBackendInfo.*field.structFieldPtr);
         }
         if (selectedBackend->checkAvailability()) {
-            labelLzhStatusIcon->setPixmap(QIcon::fromTheme("dialog-apply").pixmap(iconSize, iconSize));
+            labelLzhStatusIcon->setPixmap(QIcon::fromTheme("dialog-ok").pixmap(iconSize, iconSize));
             labelLzhStatusText->setText(tr("Installed"));
         } else {
-            labelLzhStatusIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(iconSize, iconSize));
+            labelLzhStatusIcon->setPixmap(QIcon::fromTheme("dialog-cancel").pixmap(iconSize, iconSize));
             labelLzhStatusText->setText(tr("Not Found / Not Installed"));
         }
         syncUiComponentsToCopiedModel();
