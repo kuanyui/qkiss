@@ -1,2 +1,10 @@
 dist/
 *.svg
+
+
+**/tango-icon-theme/**/Makefile.am
+*.png
+*.xcf
+*.xcf.bz2
+*.xcf.gz
+.cvsignore
