@@ -21,7 +21,12 @@
                     "description": "逆アセンブリ フレーバーを Intel に設定",
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
-                }
+                },
+                {
+                    "description": "Disable debuginfod (don't download debug symbols, because I don't need to trace the internal implementations of Qt / C++ libraries)",
+                    "text": "set debuginfod enabled off",
+                    "ignoreFailures": true
+                },
             ]
         }
     ]
