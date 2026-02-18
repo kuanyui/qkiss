@@ -117,6 +117,7 @@ set(CMD_PYTHON_BUILD_ICONS ${__PYTHON3__} "${ICON_BUILD_SCRIPT}"
 # CMake Script Mode (`cmake -P <script_file>`)
 # Example: cmake -DTASK=GENERATE_ICONS -DWIN_PYTHON3_EXE=python3 -P CMakeLists.txt
 # This is mainly for cache icon result on Github Actions as cache
+# ATTENTION: `project()` command is not scriptable, so `project()` must be called **after** this `CMAKE_SCRIPT_MODE_FILE`
 if(CMAKE_SCRIPT_MODE_FILE)
     if(TASK STREQUAL "GENERATE_ICONS")
         execute_process(COMMAND ${CMD_PYTHON_BUILD_ICONS} RESULT_VARIABLE _icon_rc)
@@ -284,7 +285,7 @@ endif()
 # ==============================================
 # Project
 # ==============================================
-# Call project() here instead of top of file, because project command is not scriptable (when running `cmake -P`)
+# Call project() here instead of top of file, because `project()` command is not scriptable (when running `cmake -P`)
 
 project("${PROJ_NAME}"
     VERSION ${PROJ_VERSION}
