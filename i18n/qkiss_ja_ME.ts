@@ -467,7 +467,7 @@ QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`
     </message>
     <message>
         <source>Fix</source>
-        <translation>固定</translation>
+        <translation>固定数</translation>
     </message>
     <message>
         <source>CEL Size</source>

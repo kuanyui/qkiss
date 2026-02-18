@@ -469,7 +469,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Fix</source>
-        <translation>固定〜</translation>
+        <translation>固定数〜</translation>
     </message>
     <message>
         <source>CEL Size</source>
@@ -631,7 +631,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
-        <translation>固定：%1、CEL名：%2、コメント：%3</translation>
+        <translation>固定数：%1、CEL名：%2、コメント：%3</translation>
     </message>
     <message>
         <source>Start to parse CNF / KCF / CEL files...</source>

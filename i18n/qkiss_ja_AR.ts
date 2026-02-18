@@ -467,7 +467,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     </message>
     <message>
         <source>Fix</source>
-        <translation>拘束</translation>
+        <translation>固定数</translation>
     </message>
     <message>
         <source>CEL Size</source>
@@ -629,7 +629,7 @@ QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を
     </message>
     <message>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
-        <translation>固定：%1、CEL名：%2、所感：%3。凡俗には理解不能でしょうね</translation>
+        <translation>固定数：%1、CEL名：%2、所感：%3。凡俗には理解不能でしょうね</translation>
     </message>
     <message>
         <source>Start to parse CNF / KCF / CEL files...</source>

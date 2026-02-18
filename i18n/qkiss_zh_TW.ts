@@ -122,7 +122,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <source>&gt; 95% operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation>超過 95% 的操作可在記憶體中完成，無需將檔案解壓縮到磁碟，對 SSD 壽命相對友善。</translation>
+        <translation>超過 95% 的操作可在記憶體中完成，無需將檔案解壓縮到硬碟，對 SSD 壽命相對友善。</translation>
     </message>
     <message>
         <source>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
@@ -181,7 +181,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <source>All extractions will do writing operations to disk; may shorten the lifespan of SSD.</source>
-        <translation>所有解壓縮操作都會對磁碟進行寫入；可能會縮短 SSD 的壽命。</translation>
+        <translation>所有解壓縮操作都會對硬碟進行寫入；可能會縮短 SSD 的壽命。</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://theunarchiver.com/command-line&quot;&gt;Official Site&lt;/a&gt;, &lt;a href=&apos;https://github.com/MacPaw/unar&apos;&gt;Source Code&lt;/a&gt;.</source>
@@ -232,7 +232,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <source>All operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation>所有操作可在記憶體中完成，無需將檔案解壓縮到磁碟，對 SSD 壽命相對友善。</translation>
+        <translation>所有操作可在記憶體中完成，無需將檔案解壓縮到硬碟，對 SSD 壽命相對友善。</translation>
     </message>
     <message>
         <source>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
@@ -465,7 +465,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <source>Fix</source>
-        <translation>固定</translation>
+        <translation>固定次數</translation>
     </message>
     <message>
         <source>CEL Size</source>
@@ -627,7 +627,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
-        <translation>固定：%1，CEL 名稱：%2，註解：%3</translation>
+        <translation>固定次數：%1，CEL 名稱：%2，註解：%3</translation>
     </message>
     <message>
         <source>Start to parse CNF / KCF / CEL files...</source>
@@ -823,7 +823,7 @@ QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer
     </message>
     <message>
         <source>Disk Operation</source>
-        <translation>磁碟操作</translation>
+        <translation>硬碟操作</translation>
     </message>
     <message>
         <source>Website</source>
