@@ -29,6 +29,9 @@ class DockWidgetProxyStyle : public QProxyStyle
 public:
     using QProxyStyle::QProxyStyle;
     virtual void drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const override;
+private:
+    static int getMostFitIconSize(const QStyleOption &option);
+
 };
 
 #endif // DOCKWIDGETPROXYSTYLE_H

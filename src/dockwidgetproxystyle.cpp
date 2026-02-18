@@ -31,8 +31,21 @@ void DockWidgetProxyStyle::drawControl(QStyle::ControlElement element, const QSt
             icon = dockWidget->windowIcon();  // use windowIcon as icon
         }
         if (!icon.isNull()) {
-            // Draw icon
-            int iconSize = 16;
+            // Draw original background & border seperately, to avoid breaking the original background & border.
+            // Because a modified``QStyleOption.rect` breaks the original behavior of `QProxyStyle::drawControl()`.
+            // So manually draw:
+            //   - background + border
+            //   - icon
+            //   - text
+            // separately here.
+
+            // 1. Backgroun + Border
+            QStyleOptionDockWidget bgOpt = *opt;
+            bgOpt.title = "";
+            QProxyStyle::drawControl(element, &bgOpt, painter, widget);
+
+            // 2. Icon
+            int iconSize = getMostFitIconSize(*opt);
             int margin = 4;
             // (NOTE: CE_DockWidgetTitle's rect already includes the whold title area.)
             QRect iconRect(opt->rect.left() + margin,
@@ -41,14 +54,33 @@ void DockWidgetProxyStyle::drawControl(QStyle::ControlElement element, const QSt
 
             icon.paint(painter, iconRect);
 
-            QStyleOptionDockWidget modifiedOpt = *opt;
-            modifiedOpt.rect.setLeft(modifiedOpt.rect.left() + iconSize + margin);
-
-            QProxyStyle::drawControl(element, &modifiedOpt, painter, widget);
+            // 3. Text
+            QRect textRect = opt->rect;
+            textRect.setLeft(iconRect.right() + margin);
+            drawItemText(painter,
+                         textRect,
+                         Qt::AlignLeft | Qt::AlignVCenter,
+                         opt->palette,
+                         opt->state & QStyle::State_Enabled,
+                         opt->title,
+                         QPalette::WindowText);
             return;
         }
     }
-    // Draw remain parts (do original behaviors)
+    // (do original behaviors)
     fallback:
     QProxyStyle::drawControl(element, option, painter, widget);
 }
+
+int DockWidgetProxyStyle::getMostFitIconSize(const QStyleOption &option)
+{
+    static const QList<int> AVAILABLE_SIZE_LIST = {48, 32, 24, 22, 16};
+    int textHeight = option.fontMetrics.height();
+    for (const int candidate : AVAILABLE_SIZE_LIST) {
+        if (candidate < textHeight) {
+            return candidate;
+        }
+    }
+    return AVAILABLE_SIZE_LIST.last();
+}
+
