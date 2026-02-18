@@ -591,7 +591,7 @@ void ZTranslator::initExtraTranslations()
         const QHash<QString, QString> &oriDict = it.value();
         QList<QString> keys = oriDict.keys();
         m_extraTranslations[langId] = {};
-        qDebug() << "LANG <<" << langId;
+        // qDebug() << "LANG <<" << langId;
         for (const QString &key : keys) {
             if (!key.contains('&')) { continue; }
             QString newKey = key;
@@ -599,7 +599,7 @@ void ZTranslator::initExtraTranslations()
             if (oriDict.contains(newKey)) { continue; }
             QString newValue = oriDict.value(key);
             newValue.remove(pattShortcut);
-            qDebug() << "TRANSLATE" << langId << newKey << newValue;
+            // qDebug() << "TRANSLATE" << langId << newKey << newValue;
             m_extraTranslations[langId][newKey] = newValue;
         }
     }

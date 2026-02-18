@@ -29,6 +29,7 @@
 #include <QTranslator>
 #include <QLocale>
 #include "archiveprocessorfactory.h"
+#include "dockwidgetproxystyle.h"
 #include "iteminspector.h"
 #include "configfile.h"
 #include "src/ui_mainwindow.h"
@@ -473,6 +474,7 @@ void MainWindow::setupToolBars()
 
 void MainWindow::setupDockWindows()
 {
+    qApp->setStyle(new DockWidgetProxyStyle{});
     setCorner(Qt::Corner::BottomLeftCorner, Qt::DockWidgetArea::LeftDockWidgetArea);  // Make bottom dock cannot stretch to bottom-left corner.
     // tabifyDockWidget(ui->dockWidget_logViewer, ui->dockWidget_textFileViewer);
     // ui->dockWidget_logViewer->raise();  // activate "logs viewer" tab.
