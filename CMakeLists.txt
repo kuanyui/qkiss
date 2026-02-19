@@ -139,7 +139,7 @@ endif()
 
 # [Build-time] Developer convenience (auto execute `build_icons.py` when building project if `included_icons.txt` modified)
 add_custom_command(
-    OUTPUT ${ICON_GENERATED_STAMP_FILE}
+    OUTPUT "${ICON_GENERATED_STAMP_FILE}" "${ICON_PNG_GENERATED_QRC}"
     COMMAND ${CMD_PYTHON_BUILD_ICONS}
     DEPENDS ${ICON_INCLUDE_FILE}  # when this modified, auto run this custom command.
     COMMENT "Generating icon pack..."
