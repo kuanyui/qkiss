@@ -27,7 +27,7 @@ Nome             code-viewer-c-liked            applications-development
 Nome             package-x-generic              package-unzipped
 Nome             emblems/emblem-package         package-zipped
 Nome             text-x-readme                  text-x-readme
-Nome             logviewer                      logviewer
+Tango            logviewer                      logviewer
 
 # ===================================================================
 # Zooming
@@ -64,6 +64,7 @@ BlueNome      actions/window-close
 # ===================================================================
 # XDG Standard Places & Folder Icons
 # ===================================================================
+
 #Nome              devices/computer
 #Nome              mimetypes/text-x-preview
 #BlueHumanity      places/user-trash
@@ -101,29 +102,28 @@ BlueNome            image-x-generic            image-x-generic
 BlueNome            view-refresh               reset-position
 # BlueHumanity         view-refresh               reset-position
 
-
-
 # ===================================================================
 # CEL Inspector
 # ===================================================================
-
-
 BlueNome              sticky-note            comment
-# BlueNome            help-faq            comment
+# BlueNome            help-faq              comment
 # InkscapeTango            dialog-messages            comment
 
 # InkscapeTango        show-guides                position
-GimpDefault            gimp-resize                cel-size
+# GimpDefault          gimp-resize                cel-size
 # InkscapeTango        layer-rename               cel-file-name
+# GimpDefault          gimp-transform-3d-move     obj-pos
+# InkscapeTango        tool-pointer               inspector
+# GimpDefault          gimp-lock-position         obj-fix-count
+# InkscapeTango        distribute-randomize       obj-cels
+AppIcon                geometry-size              cel-size
 AppIcon                rename                     cel-file-name
 Nome                   image-x-generic            cel-file-preview
 Nome                   tomboy-tag                 obj-id
-GimpDefault            gimp-transform-3d-move     obj-pos
-InkscapeTango          distribute-randomize       obj-cels            # FIXME: License incompatible
-GimpDefault            gimp-lock-position         obj-fix-count
-# InkscapeTango        tool-pointer               inspector
+AppIcon                cursor-move                obj-pos
+AppIcon                distributed-objects        obj-cels
+AppIcon                cursor-move-lock           obj-fix-count
 AppIcon                mouse-cursor-question      inspector
-
 
 # ===================================================================
 # Status Bar
@@ -177,6 +177,6 @@ Tango                dialog-close                    dialog-close
 # Log Viewer
 # =====================================================================
 
-# Tango      inline-information     inline-information
-# Tango      inline-warning         inline-warning
-# Tango      inline-error           inline-error
+Tango      emblem-information     emblem-information
+Tango      emblem-warning         emblem-warning
+Tango      emblem-error           emblem-error

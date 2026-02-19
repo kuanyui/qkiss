@@ -43,22 +43,26 @@ void LogViewer::appendLog(QtMsgType type, const QString &msg)
         item->setForeground(0, QBrush(clrs.gray));
         break;
         case QtMsgType::QtInfoMsg:
-        item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxInformation));
+        // item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxInformation));
+        item->setIcon(0, QIcon::fromTheme("emblem-information"));
         item->setText(0, tr("Info"));  // ℹ️
         item->setForeground(0, QBrush(clrs.blue));
         break;
         case QtMsgType::QtWarningMsg:
-        item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxWarning));
+        // item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxWarning));
+        item->setIcon(0, QIcon::fromTheme("emblem-warning"));
         item->setText(0, tr("Warning"));   // ⚠️
-        item->setForeground(0, QBrush(clrs.yellow));
+        item->setForeground(0, QBrush(clrs.orange));
         break;
         case QtMsgType::QtCriticalMsg:
-        item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
+        // item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
+        item->setIcon(0, QIcon::fromTheme("emblem-error"));
         item->setText(0, tr("Error"));   // ⛔
         item->setForeground(0, QBrush(clrs.red));
         break;
         case QtMsgType::QtFatalMsg:
-        item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
+        // item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
+        item->setIcon(0, QIcon::fromTheme("emblem-error"));
         item->setText(0, tr("Fatal"));  // ⛔
         item->setForeground(0, QBrush(clrs.red));
         break;
