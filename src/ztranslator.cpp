@@ -86,7 +86,7 @@ const QHash<QString, QHash<QString, QString>> Z_TRANSLATIONS = {
         { "KBookmarkMenu::New Bookmark Folder…", "新書籤資料夾…" },
         { "KBookmarkMenu::Create a new bookmark folder in this menu", "在此選單中建立新的書籤資料夾" },
         { "QIODevice::No such file or directory", "沒有此檔案或目錄" },
-        { "QAbstractFileIconProvider::Drive", "磁碟機" },
+        { "QAbstractFileIconProvider::Drive", "硬碟" },
         { "QAbstractFileIconProvider::Folder", "資料夾" },
         { "QAbstractFileIconProvider::Shortcut", "捷徑" },
         { "QScrollBar::Scroll here", "捲動到這裡" },
