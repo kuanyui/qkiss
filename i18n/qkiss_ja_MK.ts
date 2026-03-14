@@ -60,11 +60,11 @@ QKiSSはね〜、Qt 6でわざわざ作られた、モダン（笑）の [KiSS (
     <message>
         <source>QKiSS is licensed under GPLv3.
 
-QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
+QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-remixer](https://github.com/kuanyui/tango-remixer)`, and they are released under various licenses:</source>
         <translation>
 QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使えるのに文句言うとか、どんだけ図々しいの？w
 
-しかも QKiSS は [tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer) 経由で他の FLOSS プロジェクトのアイコンを借りてるんだよ？いろんなライセンスで公開されてるから、ちゃんと感謝しとけよ〜ざぁーこw
+しかも QKiSS は [tango-remixer](https://github.com/kuanyui/tango-remixer) 経由で他の FLOSS プロジェクトのアイコンを借りてるんだよ？いろんなライセンスで公開されてるから、ちゃんと感謝しとけよ〜ざぁーこw
     </translation>
     </message>
     <message>

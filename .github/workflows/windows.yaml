@@ -108,7 +108,7 @@ jobs:
         id: icon_submodule
         run: |
           # Commit hash of submodule
-          echo "commitHash=$(git -C resources/tango-icon-remixer rev-parse HEAD)" >> $GITHUB_OUTPUT
+          echo "commitHash=$(git -C resources/tango-remixer rev-parse HEAD)" >> $GITHUB_OUTPUT
         shell: bash
 
       # Step 3: Restore cache

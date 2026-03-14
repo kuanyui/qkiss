@@ -60,10 +60,10 @@ Q、QKiSS は……ㇰ、Qt 6 でっ、じ、じじじじじじ実装されて�
     <message>
         <source>QKiSS is licensed under GPLv3.
 
-QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
+QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-remixer](https://github.com/kuanyui/tango-remixer)`, and they are released under various licenses:</source>
         <translation>Q…QKiSSは…GPLv3ライセンスの下で…て、提供されて…まふ…ひ、ひぃん…
 
-QKiSSは…`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`…を通じて…ほ、他のF…FLOSSプロジェクトから…い、一部の…サードパーティSVGアイコンを…し、使用しており…そ、それらは…さ、様々なライセンスの下で…こ、公開されて…まふ…うぇぇん…</translation>
+QKiSSは…`[tango-remixer](https://github.com/kuanyui/tango-remixer)`…を通じて…ほ、他のF…FLOSSプロジェクトから…い、一部の…サードパーティSVGアイコンを…し、使用しており…そ、それらは…さ、様々なライセンスの下で…こ、公開されて…まふ…うぇぇん…</translation>
     </message>
     <message>
         <source>Licenses</source>

@@ -60,10 +60,10 @@ KiSS は日本の 1990 年代の[オタク](https://ja.wikipedia.org/wiki/おた
     <message>
         <source>QKiSS is licensed under GPLv3.
 
-QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
+QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-remixer](https://github.com/kuanyui/tango-remixer)`, and they are released under various licenses:</source>
         <translation>QKiSSはGPLv3ライセンスの下で提供されています。
 
-QKiSSは`[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`を通じて、他のFLOSSプロジェクトからの一部のサードパーティSVGアイコンを使用しており、それらは様々なライセンスの下で公開されています：</translation>
+QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて、他のFLOSSプロジェクトからの一部のサードパーティSVGアイコンを使用しており、それらは様々なライセンスの下で公開されています：</translation>
     </message>
     <message>
         <source>Licenses</source>

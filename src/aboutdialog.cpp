@@ -162,7 +162,7 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
         md2Html(
             tr(R"(QKiSS is licensed under GPLv3.
 
-QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:)") +
+QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-remixer](https://github.com/kuanyui/tango-remixer)`, and they are released under various licenses:)") +
             QStringLiteral(R"(
 - [Tango Icon Theme](https://github.com/kuanyui/tango-icon-theme): `GPL v2` or `GPL v3`
 - [Nome Icon Theme](https://github.com/kuanyui/nome-icon-theme): `LGPL v3` or `CC by-sa 3.0`

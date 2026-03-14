@@ -58,10 +58,10 @@ KiSS 起源於日本 1990 年代的[御宅族](https://ja.wikipedia.org/wiki/お
     <message>
         <source>QKiSS is licensed under GPLv3.
 
-QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)`, and they are released under various licenses:</source>
+QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-remixer](https://github.com/kuanyui/tango-remixer)`, and they are released under various licenses:</source>
         <translation>QKiSS 採用 GPLv3 授權條款。
 
-QKiSS 透過 `[tango-icon-remixer](https://github.com/kuanyui/tango-icon-remixer)` 使用了一些來自其他自由開放原始碼軟體專案的第三方 SVG 圖示，這些圖示採用各種不同的授權條款：</translation>
+QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用了一些來自其他自由開放原始碼軟體專案的第三方 SVG 圖示，這些圖示採用各種不同的授權條款：</translation>
     </message>
     <message>
         <source>Licenses</source>

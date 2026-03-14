@@ -117,7 +117,7 @@ help:    ## Show this self-documented help message.
 
 .PHONY: clean
 clean:    ## Clean all built files (CMake & built icons).
-	rm -rf resources/tango-icon-remixer/dist/*
+	rm -rf resources/tango-remixer/dist/*
 	rm -rf "$(BUILD_ROOT_DIR)"/*
 	rm -rf generated/*
 	# Because I overwrite rpmbuild's _topdir to /tmp (tmpfs)

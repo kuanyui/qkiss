@@ -79,7 +79,7 @@ message(STATUS "CHECKPOINT: __PYTHON3__ is now set to: ${__PYTHON3__}")
 # Python :: Build XDG-compatible icon theme pack
 # ===============================================
 set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/resources")
-set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-icon-remixer")
+set(ICON_REPO_DIR "${CMAKE_SOURCE_DIR}/resources/tango-remixer")
 set(ICON_BUILD_SCRIPT "${ICON_REPO_DIR}/build_icons.py")
 set(ICON_THEME_NAME "CustomizedTango")
 set(ICON_PNG_XDG_THEME_DIR "${PROJ_GENERATED_DIR}/icon_theme__png/${ICON_THEME_NAME}")

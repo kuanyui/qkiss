@@ -152,7 +152,7 @@ I've also ever considered several other names:
 
 
 # Acknowledgements
-- For an unified appearance across various platforms, this project adpots icon themes / SVG icons forked from GNOME Project, Ubuntu, Inkscape, GIMP. For detailed information, please see the [README](resources/tango-icon-remixer/README.md) of [`resources/tango-icon-remixer`](resources/tango-icon-remixer/).
+- For an unified appearance across various platforms, this project adpots icon themes / SVG icons forked from GNOME Project, Ubuntu, Inkscape, GIMP. For detailed information, please see the [README](resources/tango-remixer/README.md) of [`resources/tango-remixer`](resources/tango-remixer/).
 - For display flags on various platforms (especially for fucking Windows 11), this project adopts [lipis/flag-icons](https://github.com/lipis/flag-icons).
 - For extracting LZH file, this project relys on multiple backends from various projects:
   - [libarchive](https://github.com/libarchive/libarchive) originated from FreeBSD Project by Tim Kientzle.
