@@ -1,7 +1,7 @@
 /**************************************************************************
 * QKiSS - A modern implementation of KiSS (Kisekae) viewer in Qt 6.
 *
-* Copyright (C) 2025 ono ono (kuanyui) <azazabc123@gmail.com>
+* Copyright (C) 2025 - 2026 ono ono (kuanyui) <azazabc123@gmail.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ void AboutDialog::setupUi()
 
     QLabel *labelIcon = new QLabel{};
     QIcon appIcon = QIcon::fromTheme("qkiss");
-    labelIcon->setPixmap(appIcon.pixmap(128, 128));
+    labelIcon->setPixmap(appIcon.pixmap(48, 48));
     labelIcon->setAlignment(Qt::AlignmentFlag::AlignCenter);
     labelIcon->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
     layoutHeader->addWidget(labelIcon);
@@ -87,7 +87,7 @@ void AboutDialog::setupUi()
     layoutHeader->addWidget(labelSummary);
 
     QLabel *labelCopyright= new QLabel{this};
-    labelCopyright->setText("Copyright (C) 2024 - 2025 kuanyui. All rights reserved.");
+    labelCopyright->setText("Copyright (C) 2024 - 2026 kuanyui. All rights reserved.");
     labelCopyright->setAlignment(Qt::AlignmentFlag::AlignCenter);
     labelCopyright->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
     layoutHeader->addWidget(labelCopyright);
@@ -220,5 +220,3 @@ QString AboutDialog::md2Html(const QString &markdown) {
     // qDebug() << html;
     return html;
 }
-
-
