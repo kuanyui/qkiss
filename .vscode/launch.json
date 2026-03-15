@@ -8,7 +8,14 @@
             "program": "${command:cmake.launchTargetPath}",
             "args": [],
             "cwd": "${fileDirname}",
-            "environment": [],
+            "environment": [
+                {
+                    // Don't let `debuginfod` to download debug symbol. Debug info will be force downloaded when this env var has value.
+                    // (in openSUSE, this value is assigned to `https://debuginfod.opensuse.org/`)
+                    "name": "DEBUGINFOD_URLS",
+                    "value": ""
+                }
+            ],
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
