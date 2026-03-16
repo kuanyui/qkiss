@@ -23,7 +23,8 @@ Nome              edit-clear                edit-clear
 
 Nome             apps/system-file-manager
 Nome             utilities-system-monitor       apps/utility-system-monitor
-Nome             code-viewer-c-liked            applications-development
+#Nome             code-viewer-c-liked            applications-development
+AppIcon          cnf-code-editor                applications-development
 Nome             package-x-generic              package-unzipped
 Nome             emblems/emblem-package         package-zipped
 Nome             text-x-readme                  text-x-readme
@@ -74,9 +75,12 @@ BlueNome      actions/window-close
 
 #BlueHumanity      places/document-open      folder-open     # blue folder
 #BlueHumanity      places/folder             folder          # blue folder
-# BlueNome         document-open
+
+BlueNome          document-open
 BlueNome          folder-open
 BlueNome          folder
+# Tango          folder-open
+# Tango          folder
 
 
 # ===================================================================

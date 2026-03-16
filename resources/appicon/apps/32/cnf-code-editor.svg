@@ -66,16 +66,6 @@
          id="feGaussianBlur5695-0" />
     </filter>
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3909-8"
-       id="linearGradient5721"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.1790706,0,0,1.1067374,-360.39244,-66.792472)"
-       x1="320"
-       y1="76.79776"
-       x2="320"
-       y2="64.409302" />
-    <linearGradient
        id="linearGradient3909-8">
       <stop
          id="stop3911-7"
@@ -169,7 +159,7 @@
        sodipodi:nodetypes="sssccss"
        transform="matrix(1.8480146,0,0,1.7509287,-763.97347,-312.2846)" />
     <path
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#linearGradient5721);fill-opacity:1;stroke:#888a85;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:normal;enable-background:new"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#3465a4;fill-opacity:1;stroke:#204a87;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:normal;enable-background:new"
        d="m 4.254769,3.4853611 h 23.502792 c 1.502372,0 2.711858,1.1960266 2.711858,2.6816982 V 28.514656 H 1.5428836 V 6.1670593 c 0,-1.4856716 1.2094999,-2.6816982 2.7118854,-2.6816982 z"
        id="rect4627-2"
        inkscape:connector-curvature="0"
