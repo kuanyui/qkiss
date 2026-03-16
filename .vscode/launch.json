@@ -18,6 +18,10 @@
             ],
             "externalConsole": false,
             "MIMode": "gdb",
+            "symbolLoadInfo": {
+                "loadAll": false,
+                "exceptionList": "${command:cmake.launchTargetPath};*qkiss*"
+            },
             "setupCommands": [
                 {
                     "description": "gdb の再フォーマットを有効にする",
@@ -32,6 +36,16 @@
                 {
                     "description": "Disable debuginfod (don't download debug symbols, because I don't need to trace the internal implementations of Qt / C++ libraries)",
                     "text": "set debuginfod enabled off",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Skip Qt and GLIBC functions when using `Step Into` in GDB",
+                    "text": "skip -gfi /usr/include/qt6/*",
+                    "ignoreFailures": true
+                  },
+                  {
+                  "description": "Skip Qt and GLIBC functions when using `Step Into` in GDB",
+                    "text": "skip -gfi /usr/include/c++/*",
                     "ignoreFailures": true
                 },
             ]
