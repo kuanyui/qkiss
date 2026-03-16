@@ -19,6 +19,7 @@
 
 #include "gkissitem.h"
 #include "gkissscene.h"
+#include "logging.h"
 #include <QSet>
 using namespace Qt::Literals::StringLiterals;
 
@@ -57,7 +58,7 @@ void GKissItem::init()
 
 void GKissItem::rerenderImage()
 {
-    // qDebug() << QStringLiteral("[Item] generate image for CEL '%1' size(%2, %3)  pos(%4, %5)")
+    // qkDebug << QStringLiteral("[Item] generate image for CEL '%1' size(%2, %3)  pos(%4, %5)")
     //             .arg(m_cnfCel->celFileName())
     //             .arg(m_cel->width())
     //             .arg(m_cel->height())
@@ -80,7 +81,7 @@ void GKissItem::renderPaletteBasedImage()
             QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
             for (int x = 0; x < m_cel->width(); ++x) {
                 if (i == celColorizedPixelsData->length()) {
-                    qCritical() << "[WARNING][Item] %1: Pixels length and WxH are not matched. This should not happened."_L1.arg(m_cnfCel->celFileName().original());
+                    qkCritical << "[WARNING][Item] %1: Pixels length and WxH are not matched. This should not happened."_L1.arg(m_cnfCel->celFileName().original());
                     goto end;
                 }
                 line[x] = celColorizedPixelsData->at(i++);
@@ -97,7 +98,7 @@ void GKissItem::renderPaletteBasedImage()
 void GKissItem::renderColorBasedImage()
 {
     // if (m_cel->bitsPerPixel() != 32) {
-    //     qWarning().noquote() << "[WARNING][Item] \"%1\" claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. "_L1.arg(m_cel->fileName()).arg(QString::number(m_cel->bitsPerPixel()));
+    //     qkWarning.noquote() << "[WARNING][Item] \"%1\" claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. "_L1.arg(m_cel->fileName()).arg(QString::number(m_cel->bitsPerPixel()));
     //     return renderPaletteBasedImage();
     // }
     QVector<QRgb> *celPixelsData = m_cel->getColorBasedPixels();
@@ -108,7 +109,7 @@ void GKissItem::renderColorBasedImage()
             QRgb *line = reinterpret_cast<QRgb *>(m_image->scanLine(y));
             for (int x = 0; x < m_cel->width(); ++x) {
                 if (i == celPixelsData->length()) {
-                    qCritical() << "[WARNING][Item] %1: This should not happened."_L1.arg(m_cnfCel->celFileName().original());
+                    qkCritical << "[WARNING][Item] %1: This should not happened."_L1.arg(m_cnfCel->celFileName().original());
                     goto end;
                 }
                 line[x] = celPixelsData->at(i++);

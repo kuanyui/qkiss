@@ -18,6 +18,7 @@
 **************************************************************************/
 
 #include "encoding.h"
+#include "logging.h"
 #include <QDebug>
 
 
@@ -64,7 +65,7 @@ QDebug operator<<(QDebug dbg, const DebugTypeAdapter &dataAdapter)
 
 #if defined(HAVE_ICU)
 
-#define qd qDebug() << "[ICU] "
+#define qd qkDebug << "[ICU] "
 
 namespace icu {
 #include <unicode/ucnv.h>
@@ -125,7 +126,7 @@ std::string Encoding::innerToUtf8(const std::string& input, const std::vector<st
 
 #elif defined(HAVE_ICONV)
 
-#define qd qDebug() << "[iconv]"
+#define qd qkDebug << "[iconv]"
 
 extern "C" {
 #include <iconv.h>

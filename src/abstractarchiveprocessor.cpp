@@ -18,19 +18,20 @@
 **************************************************************************/
 
 #include "abstractarchiveprocessor.h"
+#include "logging.h"
 #include <QDir>
 
 AbstractArchiveProcessor::AbstractArchiveProcessor(QObject *parent)
     : QObject{parent}
 {
     instanceCount++;
-    qDebug() << "ctor of AbstractArchiveProcessor" << instanceCount;
+    qkDebug << "ctor of AbstractArchiveProcessor" << instanceCount;
 }
 
 
 AbstractArchiveProcessor::~AbstractArchiveProcessor() {
     instanceCount--;
-    qDebug() << "dtor of AbstractArchiveProcessor" << instanceCount;
+    qkDebug << "dtor of AbstractArchiveProcessor" << instanceCount;
 }
 
 QString AbstractArchiveProcessor::generateTempDirPath()

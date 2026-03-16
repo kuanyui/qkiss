@@ -20,6 +20,7 @@
 #include "fkiss.h"
 #include "fkissparser.h"
 #include "fkissruntime.h"
+#include "logging.h"
 #include <QRegularExpression>
 #include <QHashIterator>
 using namespace Qt::Literals::StringLiterals;
@@ -29,12 +30,12 @@ Fkiss::Fkiss(QObject *parent)
       m_parser{new FkissParser()},
       m_runtime(new FkissRuntime())
 {
-    qDebug() << "[fkiss] ctor";
+    qkDebug << "[fkiss] ctor";
 }
 
 Fkiss::~Fkiss()
 {
-    qDebug() << "[fkiss] dtor";
+    qkDebug << "[fkiss] dtor";
     delete m_parser;
     delete m_runtime;
 }

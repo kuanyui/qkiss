@@ -79,7 +79,7 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     }
     int padHori = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
     int padVert = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
-    // qDebug() << padHori << padVert;
+    // qkDebug << padHori << padVert;
     int itemHeight = opt.rect.height();
     int itemIconSize = itemHeight - padVert * 3;   // FIXME: Magic number... Donno why 2 gives out a too-large icon after upgrade Qt...
     QRect iconRect;
@@ -123,7 +123,7 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         textRect.setHeight(textHeight);
         painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignHCenter, text);
     }
-    // qDebug() << opt.rect << iconRect << textRect;
+    // qkDebug << opt.rect << iconRect << textRect;
 }
 
 bool IconButtonDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) {
@@ -143,7 +143,7 @@ bool IconButtonDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
         return true;
     } else if (event->type() == QEvent::MouseMove) {
         auto *mouseEvent = static_cast<QMouseEvent *>(event);
-        // qDebug() << "QEvent.pos" << mouseEvent->pos();
+        // qkDebug << "QEvent.pos" << mouseEvent->pos();
         if (opt.rect.contains(mouseEvent->pos())) {
             m_hoveredOnIndex = index;
         } else {

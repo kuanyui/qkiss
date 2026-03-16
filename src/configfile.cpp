@@ -18,6 +18,7 @@
 **************************************************************************/
 
 #include "configfile.h"
+#include "logging.h"
 #include <QSettings>
 #include <QLocale>
 
@@ -365,7 +366,7 @@ bool ConfigFile::zoomInByPredefinedSteps()
         else if (x > ov) { nv = x; break; }
     }
     if (nv != ov) {
-        qDebug() << "[config] scale = " << nv;
+        qkDebug << "[config] scale = " << nv;
         setZoom(nv);
         return true;
     }
@@ -385,7 +386,7 @@ bool ConfigFile::zoomOutByPredefinedSteps()
         else if (x > ov) { continue; }
     }
     if (nv != ov) {
-        qDebug() << "[config] scale = " << nv;
+        qkDebug << "[config] scale = " << nv;
         setZoom(nv);
         return true;
     }

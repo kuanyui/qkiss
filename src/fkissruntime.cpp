@@ -21,37 +21,38 @@
 #include "gkissscene.h"
 #include <QRandomGenerator>
 #include "audioplayer.h"
+#include "logging.h"
 
 using namespace Qt::Literals::StringLiterals;
 
 FkissRuntime::FkissRuntime() :
     m_audioPlayer{new AudioPlayer{this}}
 {
-    qDebug() << "[fkissruntime] ctor()";
+    qkDebug << "[fkissruntime] ctor()";
 }
 
 FkissRuntime::~FkissRuntime()
 {
-    qDebug() << "[fkissruntime] dtor()";
+    qkDebug << "[fkissruntime] dtor()";
     stopTimersAndUnloadFkissScript();
 }
 void FkissRuntime::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars)
 {
     // All events are generated from GKissItem (instead of FKiSS script), so the items counts should not need to be checked here.
     switch (evtType) {
-    case FkissUserMovementEvent::Press:    tryToRunActionsByEvent(FKK::E::Press, vars); qDebug() << "[DEBUG] User event " << FKK::E::Press << vars;  break;
-    case FkissUserMovementEvent::Catch:    tryToRunActionsByEvent(FKK::E::Catch, vars); qDebug() << "[DEBUG] User event " << FKK::E::Catch << vars;  break;
-    case FkissUserMovementEvent::Fixcatch: tryToRunActionsByEvent(FKK::E::Fixcatch, vars); qDebug() << "[DEBUG] User event " << FKK::E::Fixcatch << vars;  break;
-    case FkissUserMovementEvent::Unfix:    tryToRunActionsByEvent(FKK::E::Unfix, vars); qDebug() << "[DEBUG] User event " << FKK::E::Unfix << vars;  break;
-    case FkissUserMovementEvent::Collide:  tryToRunActionsByEvent(FKK::E::Collide, vars); qDebug() << "[DEBUG] User event " << FKK::E::Collide << vars;  break;
-    case FkissUserMovementEvent::Apart:    tryToRunActionsByEvent(FKK::E::Apart, vars); qDebug() << "[DEBUG] User event " << FKK::E::Apart << vars;  break;
-    case FkissUserMovementEvent::In:       tryToRunActionsByEvent(FKK::E::In, vars); qDebug() << "[DEBUG] User event " << FKK::E::In << vars;  break;
+    case FkissUserMovementEvent::Press:    tryToRunActionsByEvent(FKK::E::Press, vars); qkDebug << "[DEBUG] User event " << FKK::E::Press << vars;  break;
+    case FkissUserMovementEvent::Catch:    tryToRunActionsByEvent(FKK::E::Catch, vars); qkDebug << "[DEBUG] User event " << FKK::E::Catch << vars;  break;
+    case FkissUserMovementEvent::Fixcatch: tryToRunActionsByEvent(FKK::E::Fixcatch, vars); qkDebug << "[DEBUG] User event " << FKK::E::Fixcatch << vars;  break;
+    case FkissUserMovementEvent::Unfix:    tryToRunActionsByEvent(FKK::E::Unfix, vars); qkDebug << "[DEBUG] User event " << FKK::E::Unfix << vars;  break;
+    case FkissUserMovementEvent::Collide:  tryToRunActionsByEvent(FKK::E::Collide, vars); qkDebug << "[DEBUG] User event " << FKK::E::Collide << vars;  break;
+    case FkissUserMovementEvent::Apart:    tryToRunActionsByEvent(FKK::E::Apart, vars); qkDebug << "[DEBUG] User event " << FKK::E::Apart << vars;  break;
+    case FkissUserMovementEvent::In:       tryToRunActionsByEvent(FKK::E::In, vars); qkDebug << "[DEBUG] User event " << FKK::E::In << vars;  break;
     case FkissUserMovementEvent::Stillin:  tryToRunActionsByEvent(FKK::E::Stillin, vars); break;
-    case FkissUserMovementEvent::Out:      tryToRunActionsByEvent(FKK::E::Out, vars); qDebug() << "[DEBUG] User event " << FKK::E::Out << vars;  break;
+    case FkissUserMovementEvent::Out:      tryToRunActionsByEvent(FKK::E::Out, vars); qkDebug << "[DEBUG] User event " << FKK::E::Out << vars;  break;
     case FkissUserMovementEvent::Stillout: tryToRunActionsByEvent(FKK::E::Stillout, vars);  break;
-    case FkissUserMovementEvent::Release:  tryToRunActionsByEvent(FKK::E::Release, vars); qDebug() << "[DEBUG] User event " << FKK::E::Release << vars;  break;
-    case FkissUserMovementEvent::Drop:     tryToRunActionsByEvent(FKK::E::Drop, vars); qDebug() << "[DEBUG] User event " << FKK::E::Drop << vars;  break;
-    case FkissUserMovementEvent::Fixdrop:  tryToRunActionsByEvent(FKK::E::Fixdrop, vars); qDebug() << "[DEBUG] User event " << FKK::E::Fixdrop << vars;  break;
+    case FkissUserMovementEvent::Release:  tryToRunActionsByEvent(FKK::E::Release, vars); qkDebug << "[DEBUG] User event " << FKK::E::Release << vars;  break;
+    case FkissUserMovementEvent::Drop:     tryToRunActionsByEvent(FKK::E::Drop, vars); qkDebug << "[DEBUG] User event " << FKK::E::Drop << vars;  break;
+    case FkissUserMovementEvent::Fixdrop:  tryToRunActionsByEvent(FKK::E::Fixdrop, vars); qkDebug << "[DEBUG] User event " << FKK::E::Fixdrop << vars;  break;
     }
     return;
 }
@@ -69,11 +70,11 @@ void FkissRuntime::setCurKissScene(GKissScene *newCurKissScene)
         bool visible = it.value();
         if (key.type() == FkissVariant::Type::Cel) {
             auto _item = m_curKissScene->getItemByCelName(key.getCelName());
-            if (!_item.has_value()) { qDebug() << "[DEBUG] FkissRuntime::setCurKissScene(), m_mapState has CEL '%1', but current cannot find this CEL in this scene..."_L1.arg(key.getCelName()); continue; }
+            if (!_item.has_value()) { qkDebug << "[DEBUG] FkissRuntime::setCurKissScene(), m_mapState has CEL '%1', but current cannot find this CEL in this scene..."_L1.arg(key.getCelName()); continue; }
             _item.value()->setVisible(visible);
         } else if (key.type() == FkissVariant::Type::Object) {
             std::optional<QVector<GKissItem *> *> _items = m_curKissScene->getItemsByObjId(key.getObjectId());
-            if (!_items.has_value()) { qDebug() << "[DEBUG] FkissRuntime::setCurKissScene(), m_mapState has ObjectId '%1', but current cannot find this ObjectId in this scene..."_L1.arg(QString::number(key.getObjectId())); continue; }
+            if (!_items.has_value()) { qkDebug << "[DEBUG] FkissRuntime::setCurKissScene(), m_mapState has ObjectId '%1', but current cannot find this ObjectId in this scene..."_L1.arg(QString::number(key.getObjectId())); continue; }
             auto *items = _items.value();
             foreach (auto *item, *items) {
                 item->setVisible(visible);
@@ -86,16 +87,16 @@ void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedComman
 {
     stopTimersAndUnloadFkissScript();
     m_evpairs = parsedFkissScript;
-    // qDebug() << "loadParsedFkissScript begins here =========================>";
+    // qkDebug << "loadParsedFkissScript begins here =========================>";
     // foreach (auto pair, parsedFkissScript) {
-    //     qDebug() << pair->event->name << pair->event->args;
+    //     qkDebug << pair->event->name << pair->event->args;
     // }
-    // qDebug() << "loadParsedFkissScript ends here <=========================";
+    // qkDebug << "loadParsedFkissScript ends here <=========================";
 }
 
 void FkissRuntime::stopTimersAndUnloadFkissScript()
 {
-    qDebug() << "[fkissruntime] unloadFkissScript()";
+    qkDebug << "[fkissruntime] unloadFkissScript()";
     foreach (auto x, m_alarmTimerPool.values()) {
         x->qTimer->stop();
         // disconnect(x->qTimer.get(), nullptr, nullptr, nullptr);
@@ -165,15 +166,15 @@ void FkissRuntime::runMove(FkissVariant target, FkissVariant dx, FkissVariant dy
 {
     if (m_curKissScene == nullptr) { return; }
     if (target.type() != FkissVariant::Type::Object) {
-        qDebug() << "[fkissruntime][WARNING] currently, the target in move() must be an object ID. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the target in move() must be an object ID. Skip."_L1;
         return;
     }
     if (dx.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `dx` in move() must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] the `dx` in move() must be an integer. Skip."_L1;
         return;
     }
     if (dy.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `dy` in move() must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] the `dy` in move() must be an integer. Skip."_L1;
         return;
     }
     m_curKissScene->moveObject(target.getObjectId(), dx.getInt(), dy.getInt());
@@ -183,15 +184,15 @@ void FkissRuntime::runMoveto(FkissVariant target, FkissVariant x, FkissVariant y
 {
     if (m_curKissScene == nullptr) { return; }
     if (target.type() != FkissVariant::Type::Object) {
-        qDebug() << "[fkissruntime][WARNING] currently, the `target` in moveto() must be an object ID. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the `target` in moveto() must be an object ID. Skip."_L1;
         return;
     }
     if (x.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `x` in moveto() must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] the `x` in moveto() must be an integer. Skip."_L1;
         return;
     }
     if (y.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `y` in moveto() must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] the `y` in moveto() must be an integer. Skip."_L1;
         return;
     }
     m_curKissScene->moveObjectTo(target.getObjectId(), x.getInt(), y.getInt());
@@ -200,15 +201,15 @@ void FkissRuntime::runMoveto(FkissVariant target, FkissVariant x, FkissVariant y
 void FkissRuntime::runMovebyx(FkissVariant target, FkissVariant relative, FkissVariant dx)
 {
     if (target.type() != FkissVariant::Type::Object) {
-        qDebug() << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
         return;
     }
     if (relative.type() != FkissVariant::Type::Object) {
-        qDebug() << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
         return;
     }
     if (dx.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `x` in movebyx() must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] the `x` in movebyx() must be an integer. Skip."_L1;
         return;
     }
     m_curKissScene->moveObjectByX(target.getObjectId(), relative.getObjectId(), dx.getInt());
@@ -217,15 +218,15 @@ void FkissRuntime::runMovebyx(FkissVariant target, FkissVariant relative, FkissV
 void FkissRuntime::runMovebyy(FkissVariant target, FkissVariant relative, FkissVariant dy)
 {
     if (target.type() != FkissVariant::Type::Object) {
-        qDebug() << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
         return;
     }
     if (relative.type() != FkissVariant::Type::Object) {
-        qDebug() << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the `target` in movebyx() must be an object ID. Skip."_L1;
         return;
     }
     if (dy.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] the `y` in movebyy() must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] the `y` in movebyy() must be an integer. Skip."_L1;
         return;
     }
     m_curKissScene->moveObjectByY(target.getObjectId(), relative.getObjectId(), dy.getInt());
@@ -235,7 +236,7 @@ void FkissRuntime::runTransparent(FkissVariant target, FkissVariant delta)
 {
     if (m_curKissScene == nullptr) { return; }
     if (!delta.isInt()) {
-        qDebug() << "[fkissruntime][ERROR] the `translucency` in transparent() must be an object ID. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] the `translucency` in transparent() must be an object ID. Skip."_L1;
         return;
     }
     switch (target.type()) {
@@ -243,30 +244,30 @@ void FkissRuntime::runTransparent(FkissVariant target, FkissVariant delta)
     case FkissVariant::Type::Cel: m_curKissScene->executeTransparentOnCel(target.getCelName(), delta.getInt()); return;
     case FkissVariant::Type::String: m_curKissScene->executeTransparentOnCel(target.getOriginalString(), delta.getInt()); return;
     default:
-        qDebug() << "[fkissruntime][WARNING] currently, the `target` in transparent() must be an cel or object. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the `target` in transparent() must be an cel or object. Skip."_L1;
     }
 }
 
-// qDebug() << "[fkissruntime][WARNING] currently, the `" #paramName "` in command `" #fkissCmd "()` must be a(n) " << FkissVariant::typeToString(expectedType) << ". Skip.";
+// qkDebug << "[fkissruntime][WARNING] currently, the `" #paramName "` in command `" #fkissCmd "()` must be a(n) " << FkissVariant::typeToString(expectedType) << ". Skip.";
 
 #define RT_TYPE_CHECK(fkissCmd, paramName, expectedType) \
     if ((paramName).type() != expectedType) { \
-        qDebug() << "[fkissruntime][WARNING] currently, the `" #paramName "` in command `" #fkissCmd "()` must be a " << FkissVariant::typeToString(expectedType) << ". Skip." << paramName; \
+        qkDebug << "[fkissruntime][WARNING] currently, the `" #paramName "` in command `" #fkissCmd "()` must be a " << FkissVariant::typeToString(expectedType) << ". Skip." << paramName; \
         return; \
     }
 
 void FkissRuntime::runIffixed(FkissVariant target, FkissVariant alarmID, FkissVariant delay)
 {
     // if (target.type() != FkissVariant::Type::Cel) {
-    //     qDebug() << "[fkissruntime][WARNING] currently, the `target` in iffixed() must be an object ID. Skip."_L1;
+    //     qkDebug << "[fkissruntime][WARNING] currently, the `target` in iffixed() must be an object ID. Skip."_L1;
     //     return;
     // }
     // if (alarmId.type() != FkissVariant::Type::Object) {
-    //     qDebug() << "[fkissruntime][WARNING] currently, the `alarmId` in iffixed() must be an object ID. Skip."_L1;
+    //     qkDebug << "[fkissruntime][WARNING] currently, the `alarmId` in iffixed() must be an object ID. Skip."_L1;
     //     return;
     // }
     // if (delay.type() != FkissVariant::Type::Int) {
-    //     qDebug() << "[fkissruntime][ERROR] the `delay` in iffixed() must be an integer. Skip."_L1;
+    //     qkDebug << "[fkissruntime][ERROR] the `delay` in iffixed() must be an integer. Skip."_L1;
     //     return;
     // }
     if (m_curKissScene == nullptr) { return; }
@@ -361,11 +362,11 @@ void FkissRuntime::runIfnotmoved(FkissVariant target, FkissVariant alarmID, Fkis
 void FkissRuntime::runTimer(FkissVariant alarmID, FkissVariant delay)
 {
     if (alarmID.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][WARNING] currently, the alarmID in timer() must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the alarmID in timer() must be an integer. Skip."_L1;
         return;
     }
     if (delay.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] delay in timer() must be an interger. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] delay in timer() must be an interger. Skip."_L1;
         return;
     }
     getOrCreateAlarmTimer(alarmID, delay.getInt());
@@ -373,15 +374,15 @@ void FkissRuntime::runTimer(FkissVariant alarmID, FkissVariant delay)
 void FkissRuntime::runRandomtimer(FkissVariant alarmID, FkissVariant delay, FkissVariant range)
 {
     if (alarmID.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][WARNING] currently, the alarmID in randomtimer() must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the alarmID in randomtimer() must be an integer. Skip."_L1;
         return;
     }
     if (delay.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] delay in randomtimer() must be an interger. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] delay in randomtimer() must be an interger. Skip."_L1;
         return;
     }
     if (range.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][ERROR] range in randomtimer() must be an interger. Skip."_L1;
+        qkDebug << "[fkissruntime][ERROR] range in randomtimer() must be an interger. Skip."_L1;
         return;
     }
     int from = delay.getInt();
@@ -404,7 +405,7 @@ void FkissRuntime::runChangeset(FkissVariant pageNo)
 {
     if (m_curKissScene == nullptr) { return; }
     if (pageNo.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][WARNING] currently, the pageNo in changeset(pageNo) must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the pageNo in changeset(pageNo) must be an integer. Skip."_L1;
         return;
     }
     int setNo = pageNo.getInt();
@@ -418,7 +419,7 @@ void FkissRuntime::runChangecol(FkissVariant paletteNoInKcf)
 {
     if (m_curKissScene == nullptr) { return; }
     if (paletteNoInKcf.type() != FkissVariant::Type::Int) {
-        qDebug() << "[fkissruntime][WARNING] currently, the paletteNoInKcf in changecol(paletteNoInKcf) must be an integer. Skip."_L1;
+        qkDebug << "[fkissruntime][WARNING] currently, the paletteNoInKcf in changecol(paletteNoInKcf) must be an integer. Skip."_L1;
         return;
     }
     int paletteNoInKcfInt = paletteNoInKcf.getInt();
@@ -430,7 +431,7 @@ void FkissRuntime::runChangecol(FkissVariant paletteNoInKcf)
 
 void FkissRuntime::runActionsInAlarm(FkissVariant alarmID)
 {
-    // qDebug() << "[fkissruntime] runActionsInAlarm" << alarmID;
+    // qkDebug << "[fkissruntime] runActionsInAlarm" << alarmID;
     tryToRunActionsByEvent(FKK::E::Alarm, { alarmID });
 }
 
@@ -487,113 +488,113 @@ bool FkissRuntime::tryToRunActionsByEvent(const QString &eventName, const QList<
         printDebug = false;
     }
     if (printDebug) {
-        qDebug() << "[DEBUG][Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
+        qkDebug << "[DEBUG][Fkiss] tryToRunActionsByEvent" << eventName << eventArgs;
     }
     auto _evpair = findEvpair(eventName, eventArgs);
     if (!_evpair.has_value()) { return false; }
     auto evpair = _evpair.value();
     foreach (auto act, evpair->actions) {
         if (printDebug) {
-            qDebug() << "[DEBUG][Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
+            qkDebug << "[DEBUG][Fkiss]   tryToRunActionsByEvent(): execute action" << act->name << act->args;
         }
         auto actName = act->name;
         auto actArgs = act->args;
         if (actName == FKK::A::Map) {
-            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid map() args count, skip."_L1; continue; }
+            if (actArgs.length() != 1) { qkDebug << "[Fkiss] invalid map() args count, skip."_L1; continue; }
             runMap(actArgs[0]);
             continue;
         }
         if (actName == FKK::A::Unmap) {
-            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid unmap() args count, skip."_L1; continue; }
+            if (actArgs.length() != 1) { qkDebug << "[Fkiss] invalid unmap() args count, skip."_L1; continue; }
             runUnmap(actArgs[0]);
             continue;
         }
         if (actName == FKK::A::Altmap) {
-            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid altmap() args count, skip."_L1; continue; }
+            if (actArgs.length() != 1) { qkDebug << "[Fkiss] invalid altmap() args count, skip."_L1; continue; }
             runAltmap(actArgs[0]);
             continue;
         }
         if (actName == FKK::A::Move) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid move() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid move() args count, skip."_L1; continue; }
             runMove(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Moveto) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid moveto() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid moveto() args count, skip."_L1; continue; }
             runMoveto(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Movebyx) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid movebyx() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid movebyx() args count, skip."_L1; continue; }
             runMovebyx(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Movebyy) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid movebyy() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid movebyy() args count, skip."_L1; continue; }
             runMovebyy(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Iffixed) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid iffixed() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid iffixed() args count, skip."_L1; continue; }
             runIffixed(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Ifnotfixed) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifnotfixed() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid ifnotfixed() args count, skip."_L1; continue; }
             runIfnotfixed(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Ifmapped) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifmapped() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid ifmapped() args count, skip."_L1; continue; }
             runIfmapped(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Ifnotmapped) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifnotmapped() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid ifnotmapped() args count, skip."_L1; continue; }
             runIfnotmapped(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Ifmoved) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifmoved() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid ifmoved() args count, skip."_L1; continue; }
             runIfmoved(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Ifnotmoved) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid ifnotmoved() args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid ifnotmoved() args count, skip."_L1; continue; }
             runIfnotmoved(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Transparent) {
-            if (actArgs.length() != 2) { qDebug() << "[Fkiss] invalid transparent(target, N) args count, skip."_L1; continue; }
+            if (actArgs.length() != 2) { qkDebug << "[Fkiss] invalid transparent(target, N) args count, skip."_L1; continue; }
             runTransparent(actArgs[0], actArgs[1]);
             continue;
         }
         if (actName == FKK::A::Timer) {
-            if (actArgs.length() != 2) { qDebug() << "[Fkiss] invalid timer(alarmID, delayMs) args count, skip."_L1; continue; }
+            if (actArgs.length() != 2) { qkDebug << "[Fkiss] invalid timer(alarmID, delayMs) args count, skip."_L1; continue; }
             runTimer(actArgs[0], actArgs[1]);
             continue;
         }
         if (actName == FKK::A::Randomtimer) {
-            if (actArgs.length() != 3) { qDebug() << "[Fkiss] invalid randomtimer(alarmID, delay, range) args count, skip."_L1; continue; }
+            if (actArgs.length() != 3) { qkDebug << "[Fkiss] invalid randomtimer(alarmID, delay, range) args count, skip."_L1; continue; }
             runRandomtimer(actArgs[0], actArgs[1], actArgs[2]);
             continue;
         }
         if (actName == FKK::A::Sound) {
-            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid sound(fileName) args count, skip."_L1; continue; }
+            if (actArgs.length() != 1) { qkDebug << "[Fkiss] invalid sound(fileName) args count, skip."_L1; continue; }
             runSound(actArgs[0]);
             continue;
         }
         if (actName == FKK::A::Changeset) {
-            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid changeset(pageNo) args count, skip."_L1; continue; }
+            if (actArgs.length() != 1) { qkDebug << "[Fkiss] invalid changeset(pageNo) args count, skip."_L1; continue; }
             runChangeset(actArgs[0]);
             continue;
         }
         if (actName == FKK::A::Changecol) {
-            if (actArgs.length() != 1) { qDebug() << "[Fkiss] invalid changecol(paletteNo) args count, skip."_L1; continue; }
+            if (actArgs.length() != 1) { qkDebug << "[Fkiss] invalid changecol(paletteNo) args count, skip."_L1; continue; }
             runChangecol(actArgs[0]);
             continue;
         }
-        qDebug() << "[Fkiss][WARN] unsupported action `%1`, skip."_L1.arg(actName);
+        qkDebug << "[Fkiss][WARN] unsupported action `%1`, skip."_L1.arg(actName);
     }
     return true;
 }

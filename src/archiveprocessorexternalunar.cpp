@@ -19,6 +19,7 @@
 
 #include "archiveprocessorexternalunar.h"
 #include "configfile.h"
+#include "logging.h"
 
 #include <QDirIterator>
 #include <QTemporaryDir>
@@ -73,7 +74,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalUnar::ex
     promise->start();
 
     if (!checkAvailability()) {
-        qCritical().noquote() << tr("External program Unar is not installed or not found.");
+        qkCritical.noquote() << tr("External program Unar is not installed or not found.");
         promise->setException(std::make_exception_ptr(
                                   std::runtime_error("External program Unar is not installed or not found.")
                                   ));
@@ -83,7 +84,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalUnar::ex
 
     QMetaObject::Connection conn1, conn2;
     conn1 = QObject::connect(this, &ArchiveProcessorExternalUnar::extractFail, [=](QString errMsg) {
-        qCritical().noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);
+        qkCritical.noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);
         promise->setException(std::make_exception_ptr(
                                   std::runtime_error("Process failed with exit code: %1"_L1.arg(errMsg).toStdString())
                                   ));
@@ -94,14 +95,14 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalUnar::ex
     });
     conn2 = QObject::connect(this, &ArchiveProcessorExternalUnar::extractSuccess, [=, this]() {
         std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles = getAllFileRawContentsInTmpDirRecursively();
-        qInfo().noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
+        qkInfo.noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
         promise->addResult(extractedRawFiles);
         QObject::disconnect(conn1);
         QObject::disconnect(conn2);
         promise->finish();
         delete promise;
     });
-    qInfo().noquote() << tr("Trying to extract LZH file \"%1\" via Unar...").arg(fileName);
+    qkInfo.noquote() << tr("Trying to extract LZH file \"%1\" via Unar...").arg(fileName);
     startUnarProcessToExtractLzh(lzhOrCnfFilePath);
     return future;
 }
@@ -122,7 +123,7 @@ const char *ArchiveProcessorExternalUnar::getEncodingParam()
 bool ArchiveProcessorExternalUnar::startUnarProcessToExtractLzh(const QString &lzhFilePath)
 {
     if (!QFileInfo::exists(lzhFilePath)) {
-        qCritical() << tr("Archive file path '%1' doesn't exist, abort.").arg(lzhFilePath);
+        qkCritical << tr("Archive file path '%1' doesn't exist, abort.").arg(lzhFilePath);
         return false;
     }
     m_elapsedTimer.start();
@@ -141,7 +142,7 @@ bool ArchiveProcessorExternalUnar::startUnarProcessToExtractLzh(const QString &l
 void ArchiveProcessorExternalUnar::onQProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitCode);
-    qInfo() << "onQProcessFinished" << exitStatus << exitCode;
+    qkInfo << "onQProcessFinished" << exitStatus << exitCode;
     m_elapsedTimer.start();
     if (exitStatus == QProcess::CrashExit) {
         emit extractFail(m_archiveFilePath, "Extract failed.");
@@ -178,7 +179,7 @@ void ArchiveProcessorExternalUnar::onQProcessErrorOccurred(QProcess::ProcessErro
 
 void ArchiveProcessorExternalUnar::onQProcessStdout(){
     QByteArray ba = m_process -> readAllStandardOutput();
-    qDebug() << "[DEBUG][Unar]" << QString::fromUtf8(ba);
+    qkDebug << "[DEBUG][Unar]" << QString::fromUtf8(ba);
 }
 
 QStringList ArchiveProcessorExternalUnar::getAllFileNamesInTmpDirRecursively() {
@@ -205,7 +206,7 @@ std::shared_ptr<QMap<QString, QByteArray> > ArchiveProcessorExternalUnar::getAll
             extractedRawFiles->insert(fileName, content);
             file.close();
         } else {
-            qWarning() << "Failed to open file:" << file.errorString();
+            qkWarning << "Failed to open file:" << file.errorString();
         }
     }
     return extractedRawFiles;

@@ -32,6 +32,7 @@
 #include <QRegularExpression>
 #include "configfile.h"
 #include "version.h"
+#include "logging.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -216,7 +217,7 @@ QString AboutDialog::md2Html(const QString &markdown) {
     html.replace(reParagraph, "</p><p>");
     html = "<p>" + html + "</p>";
     html.replace(reEmptyPara, "");
-    // qDebug() << "\n";
-    // qDebug() << html;
+    // nsDebug() << "\n";
+    // nsDebug() << html;
     return html;
 }

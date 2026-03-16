@@ -22,6 +22,7 @@
 
 #include "parsedcnf.h"
 #include "encoding.h"
+#include "logging.h"
 #include <QCoreApplication>
 
 // Q_LOGGING_CATEGORY(CnfParser, "qkiss.parser.cnf")
@@ -159,7 +160,7 @@ ParsedCnf::ParsedCnf(CPString fileName, QByteArray rawData, QKiSS::Encoding enco
     m_fileName(fileName),
     m_fkiss(new Fkiss())
 {
-    qDebug().noquote() << "[Log] Parse CNF file \"%1\""_L1.arg(fileName.original());
+    qkDebug.noquote() << "[Log] Parse CNF file \"%1\""_L1.arg(fileName.original());
     m_fileContentText = Encoding::toUtf8(rawData, encode);
     static QRegularExpression reNewline(R"#((\r\n|\r|\n))#");
     parseLines(m_fileContentText.split(reNewline));
@@ -179,7 +180,7 @@ void ParsedCnf::log(const QString &msg, int lineIdx)
         lineIdx = m_lineIdx;
     }
     QString &line = m_lines[lineIdx];
-    qInfo().noquote() << "[LOG]" << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
+    qkInfo.noquote() << "[LOG]" << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
 void ParsedCnf::warn(const QString &msg, int lineIdx)
@@ -188,7 +189,7 @@ void ParsedCnf::warn(const QString &msg, int lineIdx)
         lineIdx = m_lineIdx;
     }
     QString &line = m_lines[lineIdx];
-    qWarning().noquote() << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
+    qkWarning.noquote() << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
 
@@ -198,7 +199,7 @@ void ParsedCnf::error(const QString &msg, int lineIdx)
         lineIdx = m_lineIdx;
     }
     QString &line = m_lines[lineIdx];
-    qCritical().noquote() << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
+    qkCritical.noquote() << m_fileName << ":" << lineIdx + 1 << ": " << msg << " ===>" << line;
 }
 
 
@@ -216,11 +217,11 @@ void ParsedCnf::parseLines(const QStringList &lines)
     /** With ;@ prefix */
     QList<FkissLineInfo> fkissScriptLines;
     // for (auto l : lines) {
-    //     qDebug() << "=========" << l;
+    //     qkDebug << "=========" << l;
     // }
     for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
         QString &line = m_lines[m_lineIdx];
-        // qDebug() << "===============" << line;
+        // qkDebug << "===============" << line;
         if (line.startsWith(":@"_L1) || line.startsWith(";@"_L1)) {    // Some lunetic files has typo, colon `:` instead of semicolon `;`...
            continue;
         } else if (line.startsWith(";"_L1) && !line.startsWith(";@"_L1)) {
@@ -235,7 +236,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             static QRegularExpression reKcf(R"#(^%(\S+)\s*?(?:;(.+))?)#");
             QRegularExpressionMatch m = reKcf.match(line);
             if (!m.hasMatch()) { error(tr("Wrong KCF file name format.")); continue; }
-            qDebug() << "CNF requires KCF " << m.captured(1).trimmed();
+            qkDebug << "CNF requires KCF " << m.captured(1).trimmed();
             m_kcfFileNames.append(m.captured(1).trimmed());
         } else if (line.startsWith("[")) {
             static QRegularExpression reOutsideColor(R"#(^\[(\d+))#");
@@ -287,7 +288,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             }
 
             QString rawComment = m.captured(7).trimmed();
-            // qDebug() << QString("[LOG][ParsedCnf] { objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: [%5], comment: %6 }")
+            // qkDebug << QString("[LOG][ParsedCnf] { objId: %1, fix: %2, fileName: %3, kcfIdx: %4, sets: [%5], comment: %6 }")
             //     .arg(objId)
             //     .arg(fix)
             //     .arg(celFileName)
@@ -295,7 +296,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
             //     .arg(setIndexesStrList.join(","))
             //     .arg(rawComment);
             ParsedCnfCel *cnfCel = new ParsedCnfCel {objId, fix, celFileName, kcfFileIndex, setIndexes, rawComment};
-            qDebug() << "[DEBUG][ParsedCnf]" << *cnfCel;
+            qkDebug << "[DEBUG][ParsedCnf]" << *cnfCel;
             m_cels.append(cnfCel);
         } else if (line.startsWith("$"_L1)) {
             static QRegularExpression reSetNo(R"#(^[$]\d+\s)#");
@@ -316,32 +317,32 @@ void ParsedCnf::parseLines(const QStringList &lines)
     std::sort(m_sortedObjIdList.begin(), m_sortedObjIdList.end(), std::less<int32_t>());
 
     // auto objPosList = m_sets.at(0)->getObjPosList();
-    // qDebug() << "[DEBUG] object pos in set 0 =================================================================";
+    // qkDebug << "[DEBUG] object pos in set 0 =================================================================";
     // for (int i = 0; i < objPosList.length(); i++) {
-    //     qDebug() << "[DEBUG] #" << i << objPosList[i].value();
+    //     qkDebug << "[DEBUG] #" << i << objPosList[i].value();
     // }
-    // qDebug() << "[DEBUG] (ENDS) =================================================================";
-    // qDebug() << "sortedbjIdList = " << m_sortedObjIdList;
+    // qkDebug << "[DEBUG] (ENDS) =================================================================";
+    // qkDebug << "sortedbjIdList = " << m_sortedObjIdList;
     for (int i = 0; i< m_sets.length(); i++) {
         ParsedCnfSet *set = m_sets[i];
-        // qDebug() << "===================================================================";
-        qDebug() << QStringLiteral("[LOG][ParsedCnf] Set %1: Palette no: %2, Objects amounts: %3")
+        // qkDebug << "===================================================================";
+        qkDebug << QStringLiteral("[LOG][ParsedCnf] Set %1: Palette no: %2, Objects amounts: %3")
                     .arg(i)
                     .arg(set->paletteNoInKcf())
                     .arg(set->getObjPosList().length());
-        // qDebug() << "===================================================================";
+        // qkDebug << "===================================================================";
         // for (auto pos : set.getObjPosList()) {
         //     if (pos.has_value()) {
-        //         qDebug() << "    " << pos.value();
+        //         qkDebug << "    " << pos.value();
         //     } else {
-        //         qDebug() << "    *";
+        //         qkDebug << "    *";
         //     }
         // }
     }
-    qDebug() << "Readable comments in this CNF:\n" << m_readableComments;
+    qkDebug << "Readable comments in this CNF:\n" << m_readableComments;
     for (m_lineIdx = 0; m_lineIdx < m_lines.length(); m_lineIdx++) {
         QString &line = m_lines[m_lineIdx];
-        // qDebug() << "===============" << line;
+        // qkDebug << "===============" << line;
         if (line.startsWith(":@"_L1)) {    // Some lunetic files has typo, colon `:` instead of semicolon `;`...
            fkissScriptLines.append({m_lineIdx + 1, line});
            error(tr("Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =>  ") + line);
@@ -356,7 +357,7 @@ void ParsedCnf::parseLines(const QStringList &lines)
 void ParsedCnf::startToParseSetLines()
 {
     QString line = removeComment(m_lines[m_lineIdx].trimmed());
-    qDebug() << "SET START ======" << line;
+    qkDebug << "SET START ======" << line;
     static QRegularExpression reSegSeparator(R"#([\s　]+)#");   // more tolerant
     QStringList segs = line.split(reSegSeparator);
     int32_t paletteNoInPaletteFile = segs[0].mid(1).toInt();
@@ -374,7 +375,7 @@ void ParsedCnf::startToParseSetLines()
     }
     while (m_lineIdx + 1 < m_lines.length()) {
         line = removeComment(m_lines[m_lineIdx + 1]);
-        qDebug() << "(SET) ======" << line;
+        qkDebug << "(SET) ======" << line;
         if (line.trimmed().isEmpty()) {
             m_lineIdx++;
             continue;
@@ -393,7 +394,7 @@ void ParsedCnf::startToParseSetLines()
         }
         m_lineIdx++;
     }
-    qDebug() << "(SET ENDS)";
+    qkDebug << "(SET ENDS)";
     m_sets.append(set);  // QList::append() will copy this obj... So append here.
 }
 

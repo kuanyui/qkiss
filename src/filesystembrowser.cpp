@@ -30,6 +30,7 @@
 #include "fileiconprovider.h"
 #include "iconbuttondelegate.h"
 #include "translationmanager.h"
+#include "logging.h"
 
 
 
@@ -51,7 +52,7 @@ bool FileSystemBrowser::setPath(QString filePath)
 {
     QFileInfo fInfo {filePath};
     if (!fInfo.exists()) {
-        qWarning().noquote() << tr(R"(File path "%1" is not found, abort loading this path.)").arg(filePath);
+        qkWarning.noquote() << tr(R"(File path "%1" is not found, abort loading this path.)").arg(filePath);
         return false;
     }
     if (fInfo.isFile()) {
@@ -73,17 +74,17 @@ bool FileSystemBrowser::setPath(QString filePath)
         updateModel();
         return true;
     }
-    qCritical() << "[ERROR] Unhandled error.";
+    qkCritical << "[ERROR] Unhandled error.";
     return false;
 }
 
 
 bool FileSystemBrowser::setDirPath(QString dirPath)
 {
-    qDebug() << "[QDebug] setDirPath()" << dirPath;
+    qkDebug << "[QDebug] setDirPath()" << dirPath;
     QFileInfo dInfo {dirPath};
     if (!dInfo.exists() || !dInfo.isDir()) {
-        qWarning() << tr("Invalid dir path, aborted.");
+        qkWarning << tr("Invalid dir path, aborted.");
         m_lineEditUrl->setText(m_curDirPath);
         return false;
     }
@@ -180,7 +181,7 @@ void FileSystemBrowser::setupUi()
         QString filePath = m_model->data(index, ThisRole::FilePathRole).toString();
         if (filePath.isEmpty()) { return; }
         QFileInfo fileInfo {filePath};
-        qDebug() << "debug" << filePath;
+        qkDebug << "debug" << filePath;
         if (fileInfo.isDir()) {
             // TODO: load folder as patch
         } else {
@@ -419,8 +420,8 @@ void FileSystemBrowser::refresh() {
 
 void FileSystemBrowser::goHome()
 {
-    qDebug() << "m_curDirPath" << m_curDirPath;
-    qDebug() << "cfg home" << m_cfg.homeDirectory();
+    qkDebug << "m_curDirPath" << m_curDirPath;
+    qkDebug << "cfg home" << m_cfg.homeDirectory();
     if (m_curDirPath == m_cfg.homeDirectory()) { return; }
     m_navBackwardStack.push(m_curDirPath);
     m_navForwardStack.clear();
@@ -464,11 +465,11 @@ bool FileSystemBrowser::eventFilter(QObject *watched, QEvent *event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         switch (mouseEvent->button()) {
             case Qt::MouseButton::BackButton:
-                qDebug() << ">> Backward";
+                qkDebug << ">> Backward";
                 goBackward();
                 return true; // don't propagate
             case Qt::MouseButton::ForwardButton:
-                qDebug() << ">> Forward";
+                qkDebug << ">> Forward";
                 goForward();
                 return true; // don't propagate
             default:

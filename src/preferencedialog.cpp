@@ -22,6 +22,7 @@
 #include "archiveprocessorfactory.h"
 #include "configfile.h"
 #include "zgroupbox.h"
+#include "logging.h"
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QGridLayout>
@@ -70,7 +71,7 @@ PreferenceDialog::PreferenceDialog(QWidget *parent)
 
 PreferenceDialog::~PreferenceDialog()
 {
-    qDebug() << "PreferenceDialog dtor()";
+    qkDebug << "PreferenceDialog dtor()";
 }
 
 void PreferenceDialog::readSettingsToModel()

@@ -22,6 +22,7 @@
 #include "configfile.h"
 #include "fkissruntime.h"
 #include "casepreservedstring.h"
+#include "logging.h"
 #include <QStringList>
 #include <QDebug>
 #include <QDir>
@@ -90,7 +91,7 @@ KissFilesParsingResult ArchiveFile::parseKissFiles(std::shared_ptr<QMap<QString,
             res.otherFiles.insert(cpFileName, fileRawContent);
         }
     }
-    qDebug().noquote() << QStringLiteral("[LOG][Benchmark][ArchiveFile] parsing all CNF, KCF, CEL files in \"%1\" spent %2 ms").arg(lzhFilePath).arg(elapsedTimer.elapsed());
+    qkDebug.noquote() << QStringLiteral("[LOG][Benchmark][ArchiveFile] parsing all CNF, KCF, CEL files in \"%1\" spent %2 ms").arg(lzhFilePath).arg(elapsedTimer.elapsed());
     return res;
 }
 
@@ -98,7 +99,7 @@ KissFilesParsingResult ArchiveFile::parseKissFiles(std::shared_ptr<QMap<QString,
 
 bool ArchiveFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFilePath)
 {
-    qInfo().noquote() << tr("Found valid files: %1 CNF, %2 CEL, %3 KCF.")
+    qkInfo.noquote() << tr("Found valid files: %1 CNF, %2 CEL, %3 KCF.")
                           .argnum(parseRes.parsedCnfFiles.count())
                           .argnum(parseRes.parsedCelFiles.count())
                           .argnum(parseRes.parsedKcfFiles.count());
@@ -122,32 +123,32 @@ bool ArchiveFile::loadKissFiles(KissFilesParsingResult &parseRes, QString lzhFil
 
 bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult patchFiles, QString lzhFilePath)
 {
-    qInfo().noquote() << tr("Found valid files: %1 CNF, %2 CEL, %3 KCF.")
+    qkInfo.noquote() << tr("Found valid files: %1 CNF, %2 CEL, %3 KCF.")
                           .argnum(patchFiles.parsedCnfFiles.count())
                           .argnum(patchFiles.parsedCelFiles.count())
                           .argnum(patchFiles.parsedKcfFiles.count());
     if (patchFiles.parsedCnfFiles.isEmpty() && patchFiles.parsedCelFiles.isEmpty() && patchFiles.parsedKcfFiles.isEmpty()) {
-        qWarning() << "[WARNING][ArchiveFile] Try to load this file as patch, but it contains no any CNF/CEL/KCF file, abort.";
+        qkWarning << "[WARNING][ArchiveFile] Try to load this file as patch, but it contains no any CNF/CEL/KCF file, abort.";
         return false;
     }
     m_archiveFilePath = lzhFilePath;
     for (auto itPatch = patchFiles.parsedCnfFiles.begin(); itPatch != patchFiles.parsedCnfFiles.end(); itPatch++) {
         if (m_parsedCnfFiles->contains(itPatch.key())) {
-            qDebug() << "[loadKissFilesAsPatch] detele ParsedCnf and replace with the patched version." << itPatch.key();
+            qkDebug << "[loadKissFilesAsPatch] detele ParsedCnf and replace with the patched version." << itPatch.key();
             delete m_parsedCnfFiles->value(itPatch.key());
         }
         m_parsedCnfFiles->insert(itPatch.key(), itPatch.value());
     }
     for (auto itPatch = patchFiles.parsedKcfFiles.begin(); itPatch != patchFiles.parsedKcfFiles.end(); itPatch++) {
         if (m_parsedKcfFiles->contains(itPatch.key())) {
-            qDebug() << "[loadKissFilesAsPatch] detele ParsedKcf and replace with the patched version." << itPatch.key();
+            qkDebug << "[loadKissFilesAsPatch] detele ParsedKcf and replace with the patched version." << itPatch.key();
             delete m_parsedKcfFiles->value(itPatch.key());
         }
         m_parsedKcfFiles->insert(itPatch.key(), itPatch.value());
     }
     for (auto itPatch = patchFiles.parsedCelFiles.begin(); itPatch != patchFiles.parsedCelFiles.end(); itPatch++) {
         if (m_parsedCelFiles->contains(itPatch.key())) {
-            qDebug() << "[loadKissFilesAsPatch] detele ParsedCel and replace with the patched version." << itPatch.key();
+            qkDebug << "[loadKissFilesAsPatch] detele ParsedCel and replace with the patched version." << itPatch.key();
             delete m_parsedCelFiles->value(itPatch.key());
         }
         m_parsedCelFiles->insert(itPatch.key(), itPatch.value());
@@ -222,11 +223,11 @@ std::optional<ParsedCel *> ArchiveFile::getParsedCel(CPString celFileName) const
 std::optional<ParsedKcf *> ArchiveFile::getParsedKcfByOrderedIndexInCurrentCnf(uint32_t kcfIndexInCurrentCnf)
 {
     if (m_curCnfOrderedParsedKcfList.length() == 0) {
-        qCritical().noquote() << tr("Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.");
+        qkCritical.noquote() << tr("Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.");
         return std::nullopt;
     }
     if (kcfIndexInCurrentCnf >= m_curCnfOrderedParsedKcfList.length()) {
-        qDebug() << QStringLiteral("Need to get ParsedKcf of current CNF at index %1, but out of index, so fallback to 0.");
+        qkDebug << QStringLiteral("Need to get ParsedKcf of current CNF at index %1, but out of index, so fallback to 0.");
         return m_curCnfOrderedParsedKcfList[0];
     }
     return m_curCnfOrderedParsedKcfList[kcfIndexInCurrentCnf];
@@ -275,16 +276,16 @@ bool ArchiveFile::setCurCnfByName(CPString cnfFileName)
 {
     auto _cnf = getParsedCnf(cnfFileName);
     if (!_cnf.has_value()) {
-        qCritical().noquote() << tr(R"(Set current CNF failed; no CNF named "%1" in this archive file.)").arg(cnfFileName.original());
+        qkCritical.noquote() << tr(R"(Set current CNF failed; no CNF named "%1" in this archive file.)").arg(cnfFileName.original());
         return false;
     }
     m_curCnf = _cnf.value();
     m_curCnfOrderedParsedKcfList.clear();
-    qDebug().noquote() << tr(R"(The CNF '%1' requires %2 KCF files.)").arg(cnfFileName.original()).arg(m_curCnf->kcfFileNames().length());
+    qkDebug.noquote() << tr(R"(The CNF '%1' requires %2 KCF files.)").arg(cnfFileName.original()).arg(m_curCnf->kcfFileNames().length());
     for (const QString &kcfFileName : m_curCnf->kcfFileNames()) {
         auto _kcf = getParsedKcf(kcfFileName);
         if (!_kcf.has_value()) {
-            qCritical().noquote() << tr("CNF file '%1' requires KCF file '%2', but this KCF file is not found in this archived file.")
+            qkCritical.noquote() << tr("CNF file '%1' requires KCF file '%2', but this KCF file is not found in this archived file.")
                            .arg(m_curCnf->fileName().original())
                            .arg(kcfFileName);
             continue;
@@ -311,7 +312,7 @@ void ArchiveFile::setPaletteNoFromFkiss(uint8_t newPaletteNo)
 {
     if (m_curPaletteNo != newPaletteNo) {
         m_curPaletteNo = newPaletteNo;
-        qDebug() << "emit ArchiveFile::curPaletteNoChanged(%1)"_L1.arg(QString::number(newPaletteNo));
+        qkDebug << "emit ArchiveFile::curPaletteNoChanged(%1)"_L1.arg(QString::number(newPaletteNo));
         emit fkissChangedPaletteNo(newPaletteNo);
     }
 }
@@ -347,7 +348,7 @@ void ArchiveFile::setCnfSetNoFromFkiss(uint8_t newCurCnfSetNo)
 {
     if (m_curCnfSetNo != newCurCnfSetNo) {
         m_curCnfSetNo = newCurCnfSetNo;
-        qDebug() << "emit ArchiveFile::curCnfSetNoChanged(%1)"_L1.arg(QString::number(newCurCnfSetNo));
+        qkDebug << "emit ArchiveFile::curCnfSetNoChanged(%1)"_L1.arg(QString::number(newCurCnfSetNo));
         emit fkissChangedCnfSetNo(newCurCnfSetNo);
     }
 }

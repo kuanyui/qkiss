@@ -37,6 +37,7 @@
 #include "aboutdialog.h"
 #include "translationmanager.h"
 #include "version.h"
+#include "logging.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -56,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowIcon(QIcon::fromTheme("qkiss"));
     // setWindowTitle(QCoreApplication::applicationName());
     setWindowTitle(QString("%1 %2").arg(PROJ_DISPLAY_NAME, PROJECT_VERSION));
-    // qDebug() << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
+    // qkDebug << "Available sizes" << QIcon::fromTheme("paprefs").availableSizes();
     setupMenuBar();
     setupToolBars();
     setupDockWindows();
@@ -157,7 +158,7 @@ MainWindow::~MainWindow()
 void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     if (m_logViewer == nullptr) { return; }
-    qDebug() << "context.category === " << context.category;
+    qkDebug << "context.category === " << context.category;
     m_logViewer->appendLog(type, msg);
 }
 
@@ -175,27 +176,27 @@ void MainWindow::tryToLoadKissFilePath(const QString &kissArchiveFilePath, QKiSS
     std::unique_ptr<AbstractArchiveProcessor> _extractor = ArchiveProcessorFactory::getArchiveProcessor(m_cfg.lzhDecompressorBackend(), kissArchiveFilePath);
     std::shared_ptr<AbstractArchiveProcessor> extractor { _extractor.release() };
     extractor->extractFileAsPromise(kissArchiveFilePath).then([this, extractor, kissArchiveFilePath, fileLoadMode](std::shared_ptr<QMap<QString, QByteArray>> filesMap) {
-        qDebug() << "Extract ============================" << filesMap->keys();
+        qkDebug << "Extract ============================" << filesMap->keys();
         tryToParseAndLoadFilesAsKissFiles(kissArchiveFilePath, filesMap, fileLoadMode);      /// <-- entrypoint of loading a CNF
     }).onFailed([extractor](){
     });
 }
 
 void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, std::shared_ptr<QMap<QString, QByteArray> > extractedRawFiles,  QKiSS::FileLoadMode fileLoadMode) {
-    qInfo().noquote() << tr("Start to parse CNF / KCF / CEL files...");
+    qkInfo.noquote() << tr("Start to parse CNF / KCF / CEL files...");
     KissFilesParsingResult parsedKissFiles = ArchiveFile::parseKissFiles(extractedRawFiles, compressedFilePath);
     if (fileLoadMode == QKiSS::FileLoadMode::LoadAsPatch) {
         bool kissFilesLoadedOk = m_archiveFile->loadKissFilesAsPatch(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
             parsedKissFiles.deleteAllObjects();  // FIXME: This is too dangerous... If return value contains allocated pointer, should use smart pointer to avoid user from forgotting to delete... But std::unique_ptr cannot be placed in QHash because of CoW...
-            qCritical().noquote() << tr("\"%1\" is not a valid KiSS patch file. Aborted.").arg(compressedFilePath);
+            qkCritical.noquote() << tr("\"%1\" is not a valid KiSS patch file. Aborted.").arg(compressedFilePath);
             return;
         }
     } else {
         bool kissFilesLoadedOk = m_archiveFile->loadKissFiles(parsedKissFiles, compressedFilePath);
         if (!kissFilesLoadedOk) {
             parsedKissFiles.deleteAllObjects();  // FIXME: This is too dangerous... If return value contains allocated pointer, should use smart pointer to avoid user from forgotting to delete... But std::unique_ptr cannot be placed in QHash because of CoW...
-            qCritical().noquote() << tr("\"%1\"is not a valid KiSS file. Aborted.").arg(compressedFilePath);
+            qkCritical.noquote() << tr("\"%1\"is not a valid KiSS file. Aborted.").arg(compressedFilePath);
             return;
         }
     }
@@ -203,7 +204,7 @@ void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, s
     bool ok = m_kissView->setArchiveFileAndRenderFirstCnf(m_archiveFile);
     if (!ok) { return; }
     m_cfg.appendRecentFile(compressedFilePath);
-    qInfo().noquote() << tr("Parsing finished. Now rendering scenes...");
+    qkInfo.noquote() << tr("Parsing finished. Now rendering scenes...");
     m_fileSystemBrowser->markPathAsLoaded(compressedFilePath, fileLoadMode);
     m_innerFilesBrowser->rerenderFileList(m_archiveFile);
     m_codeEditor->setPlainText(m_archiveFile->getCnfFileAsString(m_archiveFile->curCnf()->fileName()));
@@ -216,7 +217,7 @@ void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, s
         ui->dockWidget_docViewer->raise();
     }
     rerenderSetPaletteButtons();
-    qInfo().noquote() << tr("KiSS files rendered successfully: %1").arg(QFileInfo(compressedFilePath).fileName());
+    qkInfo.noquote() << tr("KiSS files rendered successfully: %1").arg(QFileInfo(compressedFilePath).fileName());
     // m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("KiSS files rendered successfully: %1").arg(QFileInfo(compressedFilePath).fileName()));
 }
 
@@ -323,7 +324,7 @@ void MainWindow::switchSceneBy(int steps)
         nextSceneNo += max;
     }
     if (curSceneNo == nextSceneNo) { return; }
-    qDebug() << "[DEBUG] switchSceneBy()" << nextSceneNo;
+    qkDebug << "[DEBUG] switchSceneBy()" << nextSceneNo;
     QAbstractButton *btn = m_btnGroupSceneSets->button(nextSceneNo);
     btn->click();
 }
@@ -639,7 +640,7 @@ void MainWindow::renderRecentFiles()
 {
     // Files
     auto menuRecentFiles = ui->menu_openRecentFile;
-    // qDebug() << "[Render] Recent File = " << m_recentFiles;
+    // qkDebug << "[Render] Recent File = " << m_recentFiles;
     menuRecentFiles->setIcon(QIcon::fromTheme("recents"));
     menuRecentFiles->clear();
     foreach (const QString &path, m_cfg.recentFiles()) {
@@ -655,7 +656,7 @@ void MainWindow::renderRecentFiles()
     connect(actClearFile, &QAction::triggered, &m_cfg, &ConfigFile::clearRecentFiles);
     menuRecentFiles->addAction(actClearFile);
     // Dirs
-    // qDebug() << "[Render] Recent Dirs = " << m_recentDirs;
+    // qkDebug << "[Render] Recent Dirs = " << m_recentDirs;
     auto menuRecentDirs = ui->menu_openRecentDirectory;
     // menuRecentDirs->setIcon(QIcon::fromTheme("recents"));
     menuRecentDirs->clear();
@@ -686,7 +687,7 @@ void MainWindow::openFilePicker()
                                                     // QFileDialog::Option::DontUseNativeDialog
                                                     );
     if (!fileName.isEmpty()) {
-        qDebug() << "===============" << fileName;
+        qkDebug << "===============" << fileName;
         openDirOrFile(fileName);
     }
 }
@@ -699,7 +700,7 @@ void MainWindow::openDirPicker()
                                                     QFileDialog::ShowDirsOnly // | QFileDialog::DontUseNativeDialog
                                                     );
     if (!dirPath.isEmpty()) {
-        qDebug() << "===============" << dirPath;
+        qkDebug << "===============" << dirPath;
         openDirOrFile(dirPath);
     }
 }
@@ -747,7 +748,7 @@ void MainWindow::dropEvent(QDropEvent *event)
         foreach (const QUrl &url , urlList) {
             if (url.isLocalFile()) {
                 QString filePath = url.toLocalFile();
-                qDebug() << "Dropped file:" << filePath;
+                qkDebug << "Dropped file:" << filePath;
                 tryToLoadKissFilePath(filePath, QKiSS::FileLoadMode::LoadAsIndependent);
                 // m_archiveProcessor->extractLzh(filePath);
             }

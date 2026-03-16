@@ -19,6 +19,7 @@
 
 #include "gkissscene.h"
 #include "fkissruntime.h"
+#include "logging.h"
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QAction>
@@ -34,8 +35,8 @@ using FV = FkissVariant;
 GKissScene::GKissScene(ArchiveFile* archiveFile, ParsedCnf* cnf, int setIdx, QObject *parent):
     QGraphicsScene(parent)
 {
-    qDebug() << "[scene] ctor!" << m_setIndex;
-    qDebug() << "[DEBUG] Scene::setEssentialContext" << archiveFile << cnf << m_cnfSet;
+    qkDebug << "[scene] ctor!" << m_setIndex;
+    qkDebug << "[DEBUG] Scene::setEssentialContext" << archiveFile << cnf << m_cnfSet;
     m_archiveFile = archiveFile;
     m_cnf = cnf;
     m_setIndex = setIdx;
@@ -54,7 +55,7 @@ GKissScene::GKissScene(ArchiveFile* archiveFile, ParsedCnf* cnf, int setIdx, QOb
 
 GKissScene::~GKissScene()
 {
-    qDebug() << "[scene] dtor!" << m_setIndex;
+    qkDebug << "[scene] dtor!" << m_setIndex;
     for (QVector<GKissItem*> *vec : m_objIdToItemsMap.values()) {
         delete vec;
     }
@@ -71,14 +72,14 @@ void GKissScene::drawCurSetBackground()
 {
     auto _firstKcf = m_archiveFile->getParsedKcfByOrderedIndexInCurrentCnf(0);
     if (!_firstKcf.has_value()) {
-        qWarning().noquote() << tr("No KCF found in this CNF, don't draw set background.");
+        qkWarning.noquote() << tr("No KCF found in this CNF, don't draw set background.");
         return;
     }
     ParsedKcf *firstKcfInCnf = _firstKcf.value();
     // Border color (outside play field)
     ParsedKcfPalette *firstPaletteInFirstKcfInCnf = firstKcfInCnf->getPaletteInKcf(0);
     if (firstPaletteInFirstKcfInCnf == nullptr) {
-        qCritical().noquote() << tr("No palette in this KCF. Abort.");
+        qkCritical.noquote() << tr("No palette in this KCF. Abort.");
         return;
     }
     // Some wrong CNF declared a wrong border bolor which index out of "palette_colors_count - 1".
@@ -89,7 +90,7 @@ void GKissScene::drawCurSetBackground()
     // play field background
     uint16_t paletteNoInKcf = m_cnfSet->paletteNoInKcf();
     if (paletteNoInKcf + 1 > firstKcfInCnf->paletteAmounts()) {
-        qWarning().noquote() << tr("In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.")
+        qkWarning.noquote() << tr("In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.")
                       .arg(QString::number(m_setIndex))
                       .arg(QString::number((int)paletteNoInKcf))
                       .arg(QString::number((int)firstKcfInCnf->paletteAmounts()));
@@ -97,7 +98,7 @@ void GKissScene::drawCurSetBackground()
     }
     ParsedKcfPalette *paletteOfCnfSet = firstKcfInCnf->getPaletteInKcf(paletteNoInKcf);
     if (paletteOfCnfSet == nullptr) {
-        qCritical().noquote() << tr("WTF? In CNF's set definition, not found palette in first KCF of this CNF. Abort.");
+        qkCritical.noquote() << tr("WTF? In CNF's set definition, not found palette in first KCF of this CNF. Abort.");
         return;
     }
     QRgb playFieldColor = (*paletteOfCnfSet)[0];
@@ -146,7 +147,7 @@ void GKissScene::setItemsVisibility(const FkissVariant &target, bool visibility)
     case FkissVariant::Type::Object: return setItemsVisibilityByObjId(target.getObjectId(), visibility);
     case FkissVariant::Type::Int: return;
     case FkissVariant::Type::String:
-        qDebug() << "[WARNING][Bug] This should not happen.";
+        qkDebug << "[WARNING][Bug] This should not happen.";
         return setItemVisibilityByCelName(target.getOriginalString(), visibility);  // FIXME: Unreasonable
     case FkissVariant::Type::Cel: return setItemVisibilityByCelName(target.getCelName(), visibility);
         break;
@@ -176,17 +177,17 @@ void GKissScene::bindItemsToObjects()
     // /** (In the CEL list (#)) ordered by the value of ObjectID . Length is always larger than object potitions list ($) */
     // const QList<int32_t> &sortedObjIdList = m_cnf->sortedObjIdList();
     const QList<ParsedCnfSetObjPos> &objPosList = m_cnfSet->getObjPosList();
-    // qDebug() << "BIND FOR SCENE ====================================";
-    // qDebug() << QStringLiteral("[DEBUG][Scene] sortedObjIdList (Length = %1)").arg(sortedObjIdList.length()) << sortedObjIdList;  // FIXME: Misunderstood. Unneeded anymore. Should remove it.
-    // qDebug() << QStringLiteral("[DEBUG][Scene] ObjPosList (Length = %1)").arg(objPosList.length());
+    // qkDebug << "BIND FOR SCENE ====================================";
+    // qkDebug << QStringLiteral("[DEBUG][Scene] sortedObjIdList (Length = %1)").arg(sortedObjIdList.length()) << sortedObjIdList;  // FIXME: Misunderstood. Unneeded anymore. Should remove it.
+    // qkDebug << QStringLiteral("[DEBUG][Scene] ObjPosList (Length = %1)").arg(objPosList.length());
     // Iterate by objId (small to large)
     for (int objId = 0; objId < objPosList.length(); objId ++) {
         auto _objPos = objPosList[objId];
         QPoint objPos = _objPos.has_value() ? _objPos.value() : QPoint(0, 0);
-        // qDebug() << "[DEBUG][Scene] sceneIndex: %1,\t\t\tobjId: %2, \t\tobjPos: (%3, %4)"_L1.argnum(m_setIndex).arg(objId).argnum(objPos.x()).argnum(objPos.y());
+        // qkDebug << "[DEBUG][Scene] sceneIndex: %1,\t\t\tobjId: %2, \t\tobjPos: (%3, %4)"_L1.argnum(m_setIndex).arg(objId).argnum(objPos.x()).argnum(objPos.y());
         auto _items = this->getItemsByObjId(objId);
         if (!_items.has_value()) {
-            // qDebug() << "[DEBUG][Scene] No items";
+            // qkDebug << "[DEBUG][Scene] No items";
             continue;
         }
         auto items = _items.value();
@@ -195,7 +196,7 @@ void GKissScene::bindItemsToObjects()
             item->setPos(objPos.x() + item->cel()->x(),
                          objPos.y() + item->cel()->y());
             item->setInitialPos(item->pos());
-            // qDebug().noquote().nospace() << "[DEBUG][Scene] bindItemsToObjects() ===> sceneIndex: %1,\t\t\tcelFileName: %2\t\t objId: %3, \t\t itemPos: (%4, %5)"_L1.argnum(m_setIndex).arg(item->celFileName()).argnum(objId).argnum(item->x()).argnum(item->y());
+            // qkDebug.noquote().nospace() << "[DEBUG][Scene] bindItemsToObjects() ===> sceneIndex: %1,\t\t\tcelFileName: %2\t\t objId: %3, \t\t itemPos: (%4, %5)"_L1.argnum(m_setIndex).arg(item->celFileName()).argnum(objId).argnum(item->x()).argnum(item->y());
         }
     }
 }
@@ -204,12 +205,12 @@ std::optional<QPoint> GKissScene::getObjectCurrentPos(size_t objId) const
 {
     auto _objItems = getItemsByObjId(objId);
     if (!_objItems.has_value()) {
-        qWarning() << QStringLiteral("[Scene] WTF, anchorObjId %1 has no item??? Skip.").arg(objId);
+        qkWarning << QStringLiteral("[Scene] WTF, anchorObjId %1 has no item??? Skip.").arg(objId);
         return std::nullopt;
     }
     auto objItems = _objItems.value();
     if (objItems->empty()) {
-        qWarning() << QStringLiteral("[Scene] WTF??? Impossible, the obj #%1 has no items???").arg(objId);
+        qkWarning << QStringLiteral("[Scene] WTF??? Impossible, the obj #%1 has no items???").arg(objId);
         return std::nullopt;
     }
     auto item = objItems->at(0);
@@ -225,7 +226,7 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
     // QPoint objPos = _objPos.has_value() ? _objPos.value() : QPoint(0, 0);
     auto _items = getItemsByObjId(objId);
     if (!_items.has_value()) {
-        qWarning() << QStringLiteral("[Scene] WTF, objectId %1 has no item??? Skip.").arg(objId);
+        qkWarning << QStringLiteral("[Scene] WTF, objectId %1 has no item??? Skip.").arg(objId);
         return false;
     }
     auto items = _items.value();
@@ -240,7 +241,7 @@ bool GKissScene::moveObject(size_t objId, int dx, int dy)
 {
     auto _items = getItemsByObjId(objId);
     if (!_items.has_value()) {
-        qWarning() << QStringLiteral("[Scene] WTF, objectId %1 has no item??? Skip.").arg(objId);
+        qkWarning << QStringLiteral("[Scene] WTF, objectId %1 has no item??? Skip.").arg(objId);
         return false;
     }
     auto items = _items.value();
@@ -256,14 +257,14 @@ bool GKissScene::moveObjectByX(size_t targetObjId, size_t anchorObjId, int dx)
 {
     auto _targetObjPos = getObjectCurrentPos(targetObjId);
     if (!_targetObjPos.has_value()) {
-        qWarning() << QStringLiteral("[Scene] WTF???");
+        qkWarning << QStringLiteral("[Scene] WTF???");
         return false;
     }
     auto targetObjPos = _targetObjPos.value();
 
     auto _anchorObjPos = getObjectCurrentPos(anchorObjId);
     if (!_anchorObjPos.has_value()) {
-        qWarning() << QStringLiteral("[Scene] WTF???");
+        qkWarning << QStringLiteral("[Scene] WTF???");
         return false;
     }
     auto anchorObjPos = _anchorObjPos.value();
@@ -278,14 +279,14 @@ bool GKissScene::moveObjectByY(size_t targetObjId, size_t anchorObjId, int dy)
 {
     auto _targetObjPos = getObjectCurrentPos(targetObjId);
     if (!_targetObjPos.has_value()) {
-        qWarning() << QStringLiteral("[Scene] WTF???");
+        qkWarning << QStringLiteral("[Scene] WTF???");
         return false;
     }
     auto targetObjPos = _targetObjPos.value();
 
     auto _anchorObjPos = getObjectCurrentPos(anchorObjId);
     if (!_anchorObjPos.has_value()) {
-        qWarning() << QStringLiteral("[Scene] WTF???");
+        qkWarning << QStringLiteral("[Scene] WTF???");
         return false;
     }
     auto anchorObjPos = _anchorObjPos.value();
@@ -382,7 +383,7 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (!_item) { return; }
     GKissItem *item = qgraphicsitem_cast<GKissItem *>(_item);
     if (!item) { return; }
-    qDebug() << "mousePressEvent()" << item->cnfCel();
+    qkDebug << "mousePressEvent()" << item->cnfCel();
     if (event->button() == Qt::RightButton) {
         return;
     }
@@ -390,7 +391,7 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     m_draggingWithShift = event->modifiers() & Qt::ShiftModifier;
     m_draggingItem = item;
     storeCurrentOverlappedItems(item);
-    qDebug() << "[DEBUG] mousePressEvent " << item << event->scenePos();
+    qkDebug << "[DEBUG] mousePressEvent " << item << event->scenePos();
     m_dragStartMouseScenePos = event->scenePos();
     m_fixDecreasedWhileDraggingItem = false;
     receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Press, { FV::fromCelName(m_draggingItem->celFileName()) });

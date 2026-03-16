@@ -18,6 +18,7 @@
 **************************************************************************/
 
 #include "archiveprocessorcnfinfilesystem.h"
+#include "logging.h"
 
 #include <QDirIterator>
 #include <QTemporaryDir>
@@ -63,7 +64,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorCnfInFileSystem:
         delete promise;
         return future;
     }
-    qInfo().noquote() << tr("Reading a CNF file \"%1\" directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...").arg(lzhOrCnfFilePath);
+    qkInfo.noquote() << tr("Reading a CNF file \"%1\" directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...").arg(lzhOrCnfFilePath);
     promise->addResult(getRelatedFilesInTheSameFolder(lzhOrCnfFilePath));
     promise->finish();
     delete promise;
@@ -79,7 +80,7 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorCnfInFileSystem::getRelate
     QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
     for (const QFileInfo &info : std::as_const(fileInfoList)) {
         QFile file(info.absoluteFilePath());
-        qDebug() << "[CnfInFileSystem] " << info.absoluteFilePath();
+        qkDebug << "[CnfInFileSystem] " << info.absoluteFilePath();
         if (file.open(QIODevice::ReadOnly)) {
             fileContents->insert(info.fileName(), file.readAll());
             file.close();

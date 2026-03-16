@@ -491,6 +491,7 @@ qt_add_executable("${PROJ_NAME}"
     resources/styles/index.qrc
     resources/flags/index.qrc
     ${ICON_PNG_GENERATED_QRC}
+    src/logging.h src/logging.cpp
     src/parsedcnf.h src/parsedcnf.cpp
     src/enums.h src/enums.cpp
     src/encoding.h src/encoding.cpp

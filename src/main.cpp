@@ -27,6 +27,7 @@
 #include <QStyleFactory>
 #include "translationmanager.h"
 #include "ztranslator.h"
+#include "logging.h"
 
 template <size_t N>
 inline bool strStartsWith(const char* str, const char (&prefix)[N]) noexcept {
@@ -41,7 +42,7 @@ MainWindow *mainWindow = nullptr;
 void customizedMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     if (mainWindow != nullptr && type != QtMsgType::QtDebugMsg) {
-        if (strStartsWith(context.category, "kf.")) { goto end; }    // KDE messages
+        if (!strStartsWith(context.category, "qkiss")) { goto end; }   /// @see `logging.h`
         mainWindow->receiveMsgFromCustomQtDebugMessageHandler(type, context, msg);
     }
     end:
@@ -78,10 +79,10 @@ bool applyTranslatorsFromConfig()
         // NOTE: installed translator is applied in reversed order.
         qApp->installTranslator(currZTranslator);   // 1. fallback
         qApp->installTranslator(currQTranslator);   // 0. primary
-        qDebug() << "[DEBUG] ::applyTranslatorsFromConfig() SUCCESS" << langId;
+        qkDebug << "[DEBUG] ::applyTranslatorsFromConfig() SUCCESS" << langId;
         return true;
     } else {
-        qDebug() << "[DEBUG] ::applyTranslatorsFromConfig() FAILED" << langId;
+        qkDebug << "[DEBUG] ::applyTranslatorsFromConfig() FAILED" << langId;
         delete currQTranslator;
         currQTranslator = nullptr;
         delete currZTranslator;
@@ -143,4 +144,3 @@ int main(int argc, char *argv[])
     // qInstallMessageHandler(originalMessageHandler);
     return app.exec();
 }
-

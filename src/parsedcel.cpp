@@ -18,6 +18,7 @@
 **************************************************************************/
 
 #include "parsedcel.h"
+#include "logging.h"
 #include <QDebug>
 using namespace Qt::Literals::StringLiterals;
 
@@ -30,7 +31,7 @@ ParsedCel::ParsedCel(CPString fileName, const QByteArray &rawData):
     } else {
         parseLegacyCel(rawData);
     }
-    qDebug() << "[DEBUG][ParsedCel] ctor: " << *this;
+    qkDebug << "[DEBUG][ParsedCel] ctor: " << *this;
 }
 
 std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, uint16_t paletteIdxInKcf) const
@@ -54,7 +55,7 @@ std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(Pars
             }
             colorizedPixels->append(paletteInKcf->at(colorNo));
             // if (true) {
-            //     qDebug() << "[VERBOSE] colorNo of pixel = " << colorNo << ", real color of pixel = " << paletteInKcf->at(colorNo);
+            //     qkDebug << "[VERBOSE] colorNo of pixel = " << colorNo << ", real color of pixel = " << paletteInKcf->at(colorNo);
             // }
         }
     }
@@ -72,14 +73,14 @@ void ParsedCel::parseModernCel(const QByteArray &data)
     switch (data[4]) {
     case 0x20: m_celType = Type::PaletteBased; break;
     case 0x21: m_celType = Type::FullColor; break;
-    default: qCritical() << "Not a valid CEL file mark!"; return;
+    default: qkCritical << "Not a valid CEL file mark!"; return;
     }
     m_bitsPerPixel = udata[5];
     if (m_bitsPerPixel != 4 && m_bitsPerPixel != 8 && m_bitsPerPixel != 32) {
-        qCritical().noquote() << tr("Invalid m_bitsPerPixel (4 or 8 or 32): %1").arg(m_bitsPerPixel); return;
+        qkCritical.noquote() << tr("Invalid m_bitsPerPixel (4 or 8 or 32): %1").arg(m_bitsPerPixel); return;
     }
     if (m_celType == Type::FullColor && m_bitsPerPixel != 32) {
-        qWarning().noquote() << tr(R"("%1" claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.)")
+        qkWarning.noquote() << tr(R"("%1" claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.)")
                                 .arg(m_fileName.original())
                                 .arg(QString::number(m_bitsPerPixel));
         m_celType = Type::PaletteBased;

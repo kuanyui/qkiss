@@ -578,7 +578,7 @@ QString ZTranslator::translate(const char *context, const char *sourceText, cons
     if (m_extraTranslations[m_curLang].contains(ctxKey)) {
         return m_extraTranslations[m_curLang][ctxKey];
     }
-    // qDebug().noquote() << R"#([ZTranslator] Not translated ( %1 )  %2::%3")#"_L1.arg(m_curLang, context, sourceText);
+    // qkDebug.noquote() << R"#([ZTranslator] Not translated ( %1 )  %2::%3")#"_L1.arg(m_curLang, context, sourceText);
     return QString();   // fallback to Qt itself
 }
 
@@ -591,7 +591,7 @@ void ZTranslator::initExtraTranslations()
         const QHash<QString, QString> &oriDict = it.value();
         QList<QString> keys = oriDict.keys();
         m_extraTranslations[langId] = {};
-        // qDebug() << "LANG <<" << langId;
+        // qkDebug << "LANG <<" << langId;
         for (const QString &key : keys) {
             if (!key.contains('&')) { continue; }
             QString newKey = key;
@@ -599,7 +599,7 @@ void ZTranslator::initExtraTranslations()
             if (oriDict.contains(newKey)) { continue; }
             QString newValue = oriDict.value(key);
             newValue.remove(pattShortcut);
-            // qDebug() << "TRANSLATE" << langId << newKey << newValue;
+            // qkDebug << "TRANSLATE" << langId << newKey << newValue;
             m_extraTranslations[langId][newKey] = newValue;
         }
     }

@@ -24,6 +24,7 @@
 #include <QFutureWatcher>
 
 
+#include "logging.h"
 #include "archiveprocessorlibarchive.h"
 
 namespace la {   // libarchive
@@ -74,7 +75,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extr
     promise->start();
     QFile file(lzhOrCnfFilePath);
     if (!file.open(QIODevice::OpenModeFlag::ReadOnly)) {
-        qCritical().noquote() << tr("Failed to open this file, aborted.");
+        qkCritical.noquote() << tr("Failed to open this file, aborted.");
         promise->setException(std::make_exception_ptr( std::runtime_error("Failed to open file \"%1\", aborted."_L1.arg(lzhOrCnfFilePath).toStdString()) ));
         promise->finish();    // NOTE: `QPromise::finished()` is still need to be called after `QPromise::setException()`. Documentation doesn't clearly say this.
         delete promise;
@@ -135,7 +136,7 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
     // List contents of Archive stored in Memory   // https://github.com/libarchive/libarchive/wiki/Examples#list-contents-of-archive-stored-in-memory
     if (la::archive_read_open_memory(arch, const_cast<char*>(archiveData.constData()), static_cast<size_t>(archiveData.size())) != ARCHIVE_OK) {
         const char *errMsg = la::archive_error_string(arch);
-        qCritical().noquote() << tr("Error when opening this archive file (%1). Aborted.").arg(errMsg);
+        qkCritical.noquote() << tr("Error when opening this archive file (%1). Aborted.").arg(errMsg);
         archive_read_free(arch);
         return filesDict;
     }
@@ -143,21 +144,21 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
     while (true) {
         auto r = la::archive_read_next_header(arch, &entry);
         if (r == ARCHIVE_FATAL) {
-            qCritical().noquote() << tr("Fatal error (%1), no more operations are possible., abort.").arg(la::archive_error_string(arch));
+            qkCritical.noquote() << tr("Fatal error (%1), no more operations are possible., abort.").arg(la::archive_error_string(arch));
             break;
         } else if (r == ARCHIVE_FAILED) {
-            qCritical().noquote() << tr("Current operation cannot complete (%1), skip.").arg(la::archive_error_string(arch));
+            qkCritical.noquote() << tr("Current operation cannot complete (%1), skip.").arg(la::archive_error_string(arch));
             break;
         } else if (r == ARCHIVE_WARN) {
-            qWarning().noquote() << tr("Partial success (%1).").arg(la::archive_error_string(arch));
+            qkWarning.noquote() << tr("Partial success (%1).").arg(la::archive_error_string(arch));
             break;
         } else if (r == ARCHIVE_RETRY) {
-            qWarning().noquote() << tr("Retry might succeed (%1)").arg(la::archive_error_string(arch));
+            qkWarning.noquote() << tr("Retry might succeed (%1)").arg(la::archive_error_string(arch));
             continue;
         }
 
         QString filePath = QString::fromUtf8(la::archive_entry_pathname_utf8(entry));   // FIXME: Donno how to retrieve the raw char* containing non-ASCII code......
-        qDebug().noquote() << "archive_read_next_header() == %1"_L1.arg(filePath);
+        qkDebug.noquote() << "archive_read_next_header() == %1"_L1.arg(filePath);
         QByteArray fileData;
         while (true) {
             const void *buf = nullptr;
@@ -165,12 +166,12 @@ std::shared_ptr<ExtractedRawFilesMap> ArchiveProcessorLibarchive::callLibarchive
             la::la_int64_t offset = 0;
             int readStatus = la::archive_read_data_block(arch, &buf, &size, &offset);
             if (readStatus == ARCHIVE_EOF) {   // EOF of a file in this archive
-                // qInfo().noquote() << tr("EOF of archive.");
+                // qkInfo.noquote() << tr("EOF of archive.");
                 break;
             }
             if (readStatus < ARCHIVE_OK) {   // Operation was successful
                 const char *errMsg = la::archive_error_string(arch);
-                qCritical().noquote() << tr("when reading this archive file via LibArchive (Error message: %1). Aborted.").arg(errMsg);
+                qkCritical.noquote() << tr("when reading this archive file via LibArchive (Error message: %1). Aborted.").arg(errMsg);
                 break;
             }
             fileData.append(static_cast<const char*>(buf), static_cast<int>(size));

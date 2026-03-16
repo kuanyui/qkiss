@@ -19,6 +19,7 @@
 
 #include "archiveprocessorexternallha.h"
 #include "configfile.h"
+#include "logging.h"
 
 #include <QDirIterator>
 #include <QTemporaryDir>
@@ -77,17 +78,17 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     m_extractedFiles = std::make_shared<QMap<QString, QByteArray>>();
     promise->start();
     if (!checkAvailability()) {
-        qCritical().noquote() << tr("External program LHA is not installed or not found.");
+        qkCritical.noquote() << tr("External program LHA is not installed or not found.");
         promise->setException(std::make_exception_ptr(
                                   std::runtime_error("External program LHA is not installed or not found.")
                                   ));
         promise->finish();
         delete promise;
     }
-    qInfo().noquote() << tr("Trying to extract LZH file \"%1\" via LHA...").arg(fileName);
+    qkInfo.noquote() << tr("Trying to extract LZH file \"%1\" via LHA...").arg(fileName);
     this->callExternalProgramOrLibraryToExtractLzh(lzhOrCnfFilePath);
     QObject::connect(this, &ArchiveProcessorExternalLha::extractFail, [promise, fileName](QString compressedFilePath, QString errMsg) {
-        qCritical().noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);
+        qkCritical.noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);
         Q_UNUSED(compressedFilePath);
         promise->setException(std::make_exception_ptr(
                                   std::runtime_error("Process failed with exit code: %1"_L1.arg(errMsg).toStdString())
@@ -97,7 +98,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     });
     QObject::connect(this, &ArchiveProcessorExternalLha::extractSuccess, [promise, fileName](QString compressedFilePath, std::shared_ptr<ExtractedRawFilesMap> extractedRawFiles) {
         Q_UNUSED(compressedFilePath);
-        qInfo().noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
+        qkInfo.noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
         promise->addResult(extractedRawFiles);
         promise->finish();
         delete promise;
@@ -115,7 +116,7 @@ FilesSummaryList ArchiveProcessorExternalLha::getFileSizeList(const QString &lzh
     connect(&process, &QProcess::readyRead, [&lines, &process](){
         while (process.canReadLine()) {
             lines.append(QString(process.readLine()));
-            qDebug() << lines.last();
+            qkDebug << lines.last();
         }
     });
     connect(&process, &QProcess::finished, [&ok](int exitCode, QProcess::ExitStatus exitStatus){
@@ -169,7 +170,7 @@ PERMISSION  UID  GID      SIZE  RATIO     STAMP           NAME
         QString relPath = line.mid(nameColIdxFrom).trimmed();
         QFileInfo fileInfo(relPath);
         QString fileName = fileInfo.fileName();
-        qDebug() << "List file name: " << fileName << byte;
+        qkDebug << "List file name: " << fileName << byte;
         fileSizeSummary.append(FileSummary(fileName, byte));
     }
     return fileSizeSummary;
@@ -184,7 +185,7 @@ PERMISSION  UID  GID      SIZE  RATIO     STAMP           NAME
 void ArchiveProcessorExternalLha::onQProcessReadyRead()
 {
     QByteArray tmp = m_process->readAll();
-    // qDebug() << "QProcess readyRead";
+    // qkDebug << "QProcess readyRead";
     m_buffer.append(tmp);
 }
 
@@ -192,7 +193,7 @@ void ArchiveProcessorExternalLha::onQProcessFinished(int exitCode, QProcess::Exi
 {
     Q_UNUSED(exitCode);
     m_buffer.append(m_process->readAll());
-    qDebug() << "QProcess finished, buffer size = " << m_buffer.size();
+    qkDebug << "QProcess finished, buffer size = " << m_buffer.size();
     if (exitStatus == QProcess::CrashExit) {
         emit extractFail(m_archiveFilePath, "Extract failed.");
         return;
@@ -202,10 +203,10 @@ void ArchiveProcessorExternalLha::onQProcessFinished(int exitCode, QProcess::Exi
         QString fileName = fileSummary.first;
         uint byteSize = static_cast<qsizetype>(static_cast<uint>(fileSummary.second));
         QByteArray data = m_buffer.sliced(pos, byteSize);
-        // qDebug() << "=====================================";
-        // qDebug() << fileName << byteSize;
-        // qDebug() << "=====================================";
-        // qDebug() << data;
+        // qkDebug << "=====================================";
+        // qkDebug << fileName << byteSize;
+        // qkDebug << "=====================================";
+        // qkDebug << data;
         pos += byteSize;
         if (!fileName.endsWith(".LZH"_L1, Qt::CaseInsensitive)) {
             m_extractedFiles->insert(fileName, data);
@@ -226,7 +227,7 @@ void ArchiveProcessorExternalLha::onQProcessFinished(int exitCode, QProcess::Exi
             tmpFile.close();
         }
     }
-    qDebug() << "[LOG][Benchmark][ArchiveProcessor] Decompression spent " << m_elapsedTimer.elapsed() << " ms";
+    qkDebug << "[LOG][Benchmark][ArchiveProcessor] Decompression spent " << m_elapsedTimer.elapsed() << " ms";
     m_buffer.clear();
     if (m_tmpNestedLzhFilePathList.length()) {
         QString nextLzhFilePath = m_tmpNestedLzhFilePathList.takeLast();
@@ -253,7 +254,7 @@ void ArchiveProcessorExternalLha::onProcessErrorOccurred(QProcess::ProcessError 
 bool ArchiveProcessorExternalLha::callExternalProgramOrLibraryToExtractLzh(const QString &lzhFilePath)
 {
     if (!QFileInfo::exists(lzhFilePath)) {
-        qCritical() << tr("Archive file path '%1' doesn't exist, abort.").arg(lzhFilePath);
+        qkCritical << tr("Archive file path '%1' doesn't exist, abort.").arg(lzhFilePath);
         return false;
     }
     m_elapsedTimer.start();
