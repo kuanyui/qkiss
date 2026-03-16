@@ -47,6 +47,10 @@ void Fkiss::parseAndCacheFkissScript(QList<FkissLineInfo> fkissScriptLines)
 
 void Fkiss::startRuntime(GKissScene *kissScene)
 {
+    if (m_parsedScriptCache.length() == 0) {
+        return;
+    }
+    qkInfo.noquote() << tr("FKiSS Script is found in this CNF file, initialize FKiSS runtime.");
     m_runtime->loadParsedFkissScript(m_parsedScriptCache);
     m_runtime->setCurKissScene(kissScene);
     m_runtime->triggerInitializeAndBegin();
@@ -54,6 +58,9 @@ void Fkiss::startRuntime(GKissScene *kissScene)
 
 void Fkiss::stopRuntime()
 {
+    if (m_parsedScriptCache.length() == 0) {
+        return;
+    }
     m_runtime->triggerEnd();
     m_runtime->stopTimersAndUnloadFkissScript();
     m_runtime->setCurKissScene(nullptr);
