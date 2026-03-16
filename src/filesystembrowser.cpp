@@ -256,8 +256,7 @@ void FileSystemBrowser::setupUi()
     connect(m_btnGoHome, &QPushButton::clicked, this, &FileSystemBrowser::goHome);
     connect(actSetCurDirAsHome, &QAction::triggered, this, &FileSystemBrowser::setCurDirAsHome);
     connect(m_btnRefresh, &QPushButton::clicked, this, &FileSystemBrowser::refresh);
-    connect(m_view, &QTreeView::doubleClicked, this, &FileSystemBrowser::onItemDbClicked);
-    connect(m_view, &QTreeView::activated, this, &FileSystemBrowser::onItemActivated);
+    connect(m_view, &QTreeView::activated, this, &FileSystemBrowser::onItemActivated);  // DbClick or EnterKey will trigger this
     updateAllButtonState();
 }
 
@@ -455,9 +454,6 @@ void FileSystemBrowser::onItemActivated(const QModelIndex &index)
     }
 }
 
-void FileSystemBrowser::onItemDbClicked(const QModelIndex &index) {
-    onItemActivated(index);
-}
 
 bool FileSystemBrowser::eventFilter(QObject *watched, QEvent *event)
 {
