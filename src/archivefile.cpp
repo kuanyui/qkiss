@@ -131,11 +131,21 @@ bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult patchFiles, QStrin
         qkWarning << "[WARNING][ArchiveFile] Try to load this file as patch, but it contains no any CNF/CEL/KCF file, abort.";
         return false;
     }
+
+    quint32 cnfReplaced = 0;
+    quint32 kcfReplaced = 0;
+    quint32 celReplaced = 0;
+    quint32 cnfAdded = 0;
+    quint32 kcfAdded = 0;
+    quint32 celAdded = 0;
     m_archiveFilePath = lzhFilePath;
     for (auto itPatch = patchFiles.parsedCnfFiles.begin(); itPatch != patchFiles.parsedCnfFiles.end(); itPatch++) {
         if (m_parsedCnfFiles->contains(itPatch.key())) {
             qkDebug << "[loadKissFilesAsPatch] detele ParsedCnf and replace with the patched version." << itPatch.key();
             delete m_parsedCnfFiles->value(itPatch.key());
+            cnfReplaced++;
+        } else {
+            cnfAdded++;
         }
         m_parsedCnfFiles->insert(itPatch.key(), itPatch.value());
     }
@@ -143,6 +153,9 @@ bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult patchFiles, QStrin
         if (m_parsedKcfFiles->contains(itPatch.key())) {
             qkDebug << "[loadKissFilesAsPatch] detele ParsedKcf and replace with the patched version." << itPatch.key();
             delete m_parsedKcfFiles->value(itPatch.key());
+            kcfReplaced++;
+        } else {
+            kcfAdded++;
         }
         m_parsedKcfFiles->insert(itPatch.key(), itPatch.value());
     }
@@ -150,10 +163,15 @@ bool ArchiveFile::loadKissFilesAsPatch(KissFilesParsingResult patchFiles, QStrin
         if (m_parsedCelFiles->contains(itPatch.key())) {
             qkDebug << "[loadKissFilesAsPatch] detele ParsedCel and replace with the patched version." << itPatch.key();
             delete m_parsedCelFiles->value(itPatch.key());
+            celReplaced++;
+        } else {
+            celAdded++;
         }
         m_parsedCelFiles->insert(itPatch.key(), itPatch.value());
     }
-
+    qkInfo.noquote() << tr("Patch: newly added extra %1 CNF; and replaced %2 CNF.").argnum(cnfAdded).argnum(cnfReplaced);
+    qkInfo.noquote() << tr("Patch: newly added extra %1 KCF, and replaced %2 KCF.").argnum(kcfAdded).argnum(kcfReplaced);
+    qkInfo.noquote() << tr("Patch: newly added extra %1 CEL, and replaced %2 CEL.").argnum(celAdded).argnum(celReplaced);
     m_docFiles->insert(patchFiles.docFiles);
     m_otherFiles->insert(patchFiles.otherFiles);
     m_curCnf = m_parsedCnfFiles->first();
