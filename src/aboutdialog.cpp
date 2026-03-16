@@ -124,10 +124,8 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 
 # %2
 - [kuanyui](https://github.com/kuanyui)
+- [Freedesktop.org Tango Desktop Projects](https://www.freedesktop.org/) ([Wikipedia](https://en.wikipedia.org/wiki/Tango_Desktop_Project), [Github](https://github.com/kuanyui/tango-icon-theme))
 - [GNOME Projects](https://www.gnome.org)
-- [Ubuntu Humanity](https://launchpad.net/humanity)
-- [GIMP](https://www.gimp.org/)
-- [Inkscape](https://inkscape.org/)
 - [flag-icons](https://github.com/lipis/flag-icons)
 
 @@@@@
@@ -138,7 +136,7 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 - 日本語（お嬢様）: Copilot + [kuanyui](https://github.com/kuanyui)
 - 日本語（悪役令嬢）: Copilot + [kuanyui](https://github.com/kuanyui)
 - 日本語（メ〇〇キ）: Copilot + [kuanyui](https://github.com/kuanyui)
-- 日本語（〈沈黙の魔女〉モニカ・エヴァレット）: Copilot + モニカ・ノートン
+- 日本語（〈沈黙の魔女〉モニカ・エヴァレット）: モニカ・ノートン
 - 台灣繁體: Claude Code + [kuanyui](https://github.com/kuanyui)
 )")
                           .arg(tr("Programming"),
@@ -167,7 +165,6 @@ QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-re
             QStringLiteral(R"(
 - [Tango Icon Theme](https://github.com/kuanyui/tango-icon-theme): `GPL v2` or `GPL v3`
 - [Nome Icon Theme](https://github.com/kuanyui/nome-icon-theme): `LGPL v3` or `CC by-sa 3.0`
-- [GIMP](https://www.gimp.org/): `CC by-sa 3.0`
 - [flag-icons](https://github.com/lipis/flag-icons): `MIT`
 )")));
     m_tabWidget->addTab(browserLicense, tr("Licenses"));
