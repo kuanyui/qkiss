@@ -98,7 +98,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     });
     QObject::connect(this, &ArchiveProcessorExternalLha::extractSuccess, [promise, fileName](QString compressedFilePath, std::shared_ptr<ExtractedRawFilesMap> extractedRawFiles) {
         Q_UNUSED(compressedFilePath);
-        qkInfo.noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
+        qkSuccess.noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
         promise->addResult(extractedRawFiles);
         promise->finish();
         delete promise;

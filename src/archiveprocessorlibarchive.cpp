@@ -85,7 +85,9 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorLibarchive::extr
     file.close();
     // ATTENTION: `QFuture::then()` will be executed in the thread where the `QPromise::finished()` was called,
     // so specify the execution context (`this`) for this lambda here.
-    extractArchiveInMemory(fileRawContent).then(this, [promise] (QFuture<std::shared_ptr<ExtractedRawFilesMap>> res) {
+    extractArchiveInMemory(fileRawContent).then(this, [promise, lzhOrCnfFilePath] (QFuture<std::shared_ptr<ExtractedRawFilesMap>> res) {
+        std::shared_ptr<QMap<QString, QByteArray>> rawfileMap = res.result();
+        qkSuccess.noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(lzhOrCnfFilePath).arg(rawfileMap->size());
         promise->addResult(res.result());
         promise->finish();
         delete promise;

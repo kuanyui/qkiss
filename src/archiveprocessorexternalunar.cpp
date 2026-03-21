@@ -95,7 +95,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalUnar::ex
     });
     conn2 = QObject::connect(this, &ArchiveProcessorExternalUnar::extractSuccess, [=, this]() {
         std::shared_ptr<QMap<QString, QByteArray>> extractedRawFiles = getAllFileRawContentsInTmpDirRecursively();
-        qkInfo.noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
+        qkSuccess.noquote() << tr("LZH file \"%1\" is extracted successfully. Got %2 file(s) in it").arg(fileName).arg(extractedRawFiles->size());
         promise->addResult(extractedRawFiles);
         QObject::disconnect(conn1);
         QObject::disconnect(conn2);
