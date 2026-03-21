@@ -159,7 +159,7 @@ void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const
 {
     if (m_logViewer == nullptr) { return; }
     qkDebug << "context.category === " << context.category;
-    m_logViewer->appendLog(type, msg);
+    m_logViewer->appendLog(type, context, msg);
 }
 
 void MainWindow::openDirOrFile(const QString &dirOrFilePath)
@@ -217,8 +217,7 @@ void MainWindow::tryToParseAndLoadFilesAsKissFiles(QString compressedFilePath, s
         ui->dockWidget_docViewer->raise();
     }
     rerenderSetPaletteButtons();
-    qkInfo.noquote() << tr("KiSS files rendered successfully: %1").arg(QFileInfo(compressedFilePath).fileName());
-    // m_logViewer->appendLog(QtMsgType::QtInfoMsg, QStringLiteral("KiSS files rendered successfully: %1").arg(QFileInfo(compressedFilePath).fileName()));
+    qkSuccess.noquote() << tr("KiSS files rendered successfully: %1").arg(QFileInfo(compressedFilePath).fileName());
 }
 
 

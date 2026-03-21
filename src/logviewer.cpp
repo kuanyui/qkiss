@@ -24,6 +24,7 @@
 
 #include "translationmanager.h"
 #include "thememanager.h"
+#include "logging.h"
 
 LogViewer::LogViewer(QWidget *parent)
     : QWidget{parent},
@@ -32,35 +33,42 @@ LogViewer::LogViewer(QWidget *parent)
     setupLayout();
 }
 
-void LogViewer::appendLog(QtMsgType type, const QString &msg)
+void LogViewer::appendLog(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     auto &clrs = ThemeManager::instance().generalTextColorPalette();
+    ExtendedLogType etype = formalizeLogType(type, context.category);
     QTreeWidgetItem *item = new QTreeWidgetItem();
-    switch (type) {
-        case QtMsgType::QtDebugMsg:
+    switch (etype) {
+        case ExtendedLogType::Debug:
         item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
         item->setText(0, tr("Debug"));  // 🐛
         item->setForeground(0, QBrush(clrs.gray));
         break;
-        case QtMsgType::QtInfoMsg:
+        case ExtendedLogType::Success:
+        // item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxInformation));
+        item->setIcon(0, QIcon::fromTheme("emblem-success"));
+        item->setText(0, tr("Success"));  // ✅️
+        item->setForeground(0, QBrush(clrs.green));
+        break;
+        case ExtendedLogType::Info:
         // item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxInformation));
         item->setIcon(0, QIcon::fromTheme("emblem-information"));
         item->setText(0, tr("Info"));  // ℹ️
         item->setForeground(0, QBrush(clrs.blue));
         break;
-        case QtMsgType::QtWarningMsg:
+        case ExtendedLogType::Warning:
         // item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxWarning));
         item->setIcon(0, QIcon::fromTheme("emblem-warning"));
         item->setText(0, tr("Warning"));   // ⚠️
         item->setForeground(0, QBrush(clrs.orange));
         break;
-        case QtMsgType::QtCriticalMsg:
+        case ExtendedLogType::Critical:
         // item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
         item->setIcon(0, QIcon::fromTheme("emblem-error"));
         item->setText(0, tr("Error"));   // ⛔
         item->setForeground(0, QBrush(clrs.red));
         break;
-        case QtMsgType::QtFatalMsg:
+        case ExtendedLogType::Fatal:
         // item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxCritical));
         item->setIcon(0, QIcon::fromTheme("emblem-error"));
         item->setText(0, tr("Fatal"));  // ⛔

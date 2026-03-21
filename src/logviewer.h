@@ -27,7 +27,7 @@ class LogViewer : public QWidget
     Q_OBJECT
 public:
     explicit LogViewer(QWidget *parent = nullptr);
-    void appendLog(QtMsgType type, const QString &msg);
+    void appendLog(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     void clearAllLogs();
 signals:
 

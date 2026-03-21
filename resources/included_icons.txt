@@ -181,6 +181,7 @@ Tango                dialog-close                    dialog-close
 # Log Viewer
 # =====================================================================
 
+Tango      emblem-success         emblem-success
 Tango      emblem-information     emblem-information
 Tango      emblem-warning         emblem-warning
 Tango      emblem-error           emblem-error
