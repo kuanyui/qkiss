@@ -231,7 +231,7 @@ osc-build-debian: _check_osc_var osc-create-debian-dsc
 	cd "$(OSC_PACKAGE_DIR)/"; \
 	osc build --vm-type=kvm --vm-memory=16000M $(OBS_REPO) $(OBS_ARCH)
 
-
+.PHONY: osc-fix-broken-vm-env
 osc-fix-broken-vm-env: _check_osc_var
 	cd "$(OSC_PACKAGE_DIR)/"; rm -f .osc/_buildinfo* .osc/_buildconfig*
 	# Delete QEMU/KVM img

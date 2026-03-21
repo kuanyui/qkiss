@@ -62,11 +62,13 @@ QKiSS for Windows is built via GitHub Actions CI/CD, the portable ZIP and NSIS i
   - `unar`
 
 ## Configure & Build
-> This project use `CMakePresets.json` to define build presets (`Release`, `Debug`...etc), for unify the build behavior between QtCreator and VSCode.
+> This project use `CMakePresets.json` to define build presets (`Release`, `Debug`...etc), for unify the build behavior among various IDE / editors such as QtCreator and VSCode.
+
 ### QtCreator
 Just `File -> Open File or Project` and select the `CMakeLists.txt` to open project, it will ask you which presets to be configured.
 
 ### VSCode
+> Please install extension `ms-vscode.cmake-tools` first.
 1. Open **the root folder of this project**. (if `CMake Tools` extension is not installed, please install it and restart VSCode, then open the folder again.)
 2. `cmake.selectConfigurePreset` to select configure preset (`configurePresets`).
 3. `F7` (`cmake.build`) to configure (if needed) & build.
@@ -76,8 +78,8 @@ Just `File -> Open File or Project` and select the `CMakeLists.txt` to open proj
 ### Manual
 1. List all CMake **configure presets**:
 ```sh
-# These two commands are equal.
-# Avcailable value: `configure`, `build`, `test`, `package`, `all` (default is `configure`)
+# 1. These two commands are equal.
+# 2. Avcailable value: `configure`, `build`, `test`, `package`, `all` (default is `configure`)
 cmake --list-presets=configure
 cmake --list-presets
 ```
@@ -91,12 +93,44 @@ cmake --preset CONFIGURE_PRESET
 cmake --list-presets=build
 ```
 
-4. **Build** by the name of **build preset**:
+4. **Build** by the name of **build preset** (with Ninja, by default, this will run `all`, but will **NOT** run `update_translations`):
 ```sh
 cmake --build --preset BUILD_PRESET
 ```
 
 5. Manually run the built executable file (in the configured directory) by yourself.
+
+## Update translation files (Run `lupdate` to extract translations in source code into `*.ts`)
+
+### Qt Creator
+#### Method 1: Via Locate Bar
+1. Summon Locate Bar at the bottom-left corner. (`Ctrl + K`)
+2. Input `cm ` prefix, then choose `update_translations`.
+
+#### Method2: Via Project
+> Not recommended, this will run `lupdate` every time you build and may be annoying.
+1. Open `Projects` tab (`Ctrl + 5`) at the left-side.
+2. `Build Steps` -> `Details` -> `Targets`, check `update_translations`
+
+### VSCode
+#### Method 1: Via Command
+1. Call `cmake.buildWithTarget`.
+#### Method 2: Via UI of CMake Extension
+1. Goto `CMake` at left sidebar -> find `Project Outline`.
+2. Find item `update_translations (Utility)`, click `Build` icon on it.
+
+### Manual
+> You must configure first via `cmake --preset CONFIGURE_PRESET`
+1. Show all targets (you should able to see `update_translations` in the target list)
+```sh
+cmake --build CONFIGURED_BUILD_DIR --target help
+# Or if your don't want to input dir path:
+cmake --build --preset BUILD_PRESET --target help
+```
+2. Run umbrella target `update_translations`:
+```sh
+cmake --build --preset BUILD_PRESET --target update_translations
+```
 
 # KiSS Specification References
 

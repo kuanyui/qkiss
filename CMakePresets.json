@@ -44,7 +44,7 @@
     },
     {
       "name": "linux-gcc-x86_64-debug",
-      "displayName": "Linux x86_64 + GCC (Debug)",
+      "displayName": "Configure :: Linux x86_64 + GCC (Debug)",
       "description": "Linux x86_64 build with GCC (CMAKE_BUILD_TYPE=Debug)",
       "inherits": "linux-gcc-base",
       "binaryDir": "${sourceDir}/build/linux/gcc/x86_64/debug",
@@ -54,7 +54,7 @@
     },
     {
       "name": "linux-gcc-x86_64-release",
-      "displayName": "Linux x86_64 + GCC (Release)",
+      "displayName": "Configure :: Linux x86_64 + GCC (Release)",
       "description": "Linux x86_64 build with GCC (CMAKE_BUILD_TYPE=Release)",
       "inherits": "linux-gcc-base",
       "binaryDir": "${sourceDir}/build/linux/gcc/x86_64/release",
@@ -64,7 +64,7 @@
     },
     {
       "name": "linux-gcc-x86_64-profile",
-      "displayName": "Linux x86_64 + GCC (Profile)",
+      "displayName": "Configure :: Linux x86_64 + GCC (Profile)",
       "description": "Linux x86_64 build with GCC (CMAKE_BUILD_TYPE=RelWithDebInfo)",
       "inherits": "linux-gcc-base",
       "binaryDir": "${sourceDir}/build/linux/gcc/x86_64/profile",
@@ -75,7 +75,7 @@
     },
     {
       "name": "linux-gcc-x86_64-minsize",
-      "displayName": "Linux x86_64 + GCC (Minsize)",
+      "displayName": "Configure :: Linux x86_64 + GCC (Minsize)",
       "description": "Linux x86_64 build with GCC (CMAKE_BUILD_TYPE=MinSizeRel)",
       "inherits": "linux-gcc-base",
       "binaryDir": "${sourceDir}/build/linux/gcc/x86_64/minsize",
@@ -85,7 +85,7 @@
     },
     {
       "name": "linux-clang-x86_64-debug",
-      "displayName": "Linux x86_64 + Clang (Debug)",
+      "displayName": "Configure :: Linux x86_64 + Clang (Debug)",
       "description": "Linux x86_64 build with Clang/LLVM (CMAKE_BUILD_TYPE=Debug)",
       "inherits": "linux-clang-base",
       "binaryDir": "${sourceDir}/build/linux/clang/x86_64/debug",
@@ -95,7 +95,7 @@
     },
     {
       "name": "linux-clang-x86_64-release",
-      "displayName": "Linux x86_64 + Clang (Release)",
+      "displayName": "Configure :: Linux x86_64 + Clang (Release)",
       "description": "Linux x86_64 build with Clang/LLVM (CMAKE_BUILD_TYPE=Release)",
       "inherits": "linux-clang-base",
       "binaryDir": "${sourceDir}/build/linux/clang/x86_64/release",
@@ -105,7 +105,7 @@
     },
     {
       "name": "linux-clang-x86_64-profile",
-      "displayName": "Linux x86_64 + Clang (Profile)",
+      "displayName": "Configure :: Linux x86_64 + Clang (Profile)",
       "description": "Linux x86_64 build with Clang/LLVM (CMAKE_BUILD_TYPE=RelWithDebInfo)",
       "inherits": "linux-clang-base",
       "binaryDir": "${sourceDir}/build/linux/clang/x86_64/profile",
@@ -116,7 +116,7 @@
     },
     {
       "name": "linux-clang-x86_64-minsize",
-      "displayName": "Linux x86_64 + Clang (Minsize)",
+      "displayName": "Configure :: Linux x86_64 + Clang (Minsize)",
       "description": "Linux x86_64 build with Clang/LLVM (CMAKE_BUILD_TYPE=MinSizeRel)",
       "inherits": "linux-clang-base",
       "binaryDir": "${sourceDir}/build/linux/clang/x86_64/minsize",
@@ -128,7 +128,7 @@
 
     {
       "name": "macos-clang-arm64-debug",
-      "displayName": "macOS arm64 + Clang (Debug)",
+      "displayName": "Configure :: macOS arm64 + Clang (Debug)",
       "description": "macOS arm64 build using Apple Clang (CMAKE_BUILD_TYPE=Debug)",
       "inherits": "macos-clang-base",
       "binaryDir": "${sourceDir}/build/macos/clang/arm64/debug",
@@ -139,7 +139,7 @@
     },
     {
       "name": "macos-clang-arm64-release",
-      "displayName": "macOS arm64 + Clang (Release)",
+      "displayName": "Configure :: macOS arm64 + Clang (Release)",
       "description": "macOS arm64 build using Apple Clang (CMAKE_BUILD_TYPE=Release)",
       "inherits": "macos-clang-base",
       "binaryDir": "${sourceDir}/build/macos/clang/arm64/release",
@@ -150,7 +150,7 @@
     },
     {
       "name": "windows-msvc-x64",
-      "displayName": "Windows x64 + MSVC (Visual Studio)",
+      "displayName": "Configure :: Windows x64 + MSVC (Visual Studio)",
       "description": "Windows x64 build using MSVC via Visual Studio generator",
       "generator": "Visual Studio 17 2022",
       "binaryDir": "${sourceDir}/build/windows/msvc/x64",
