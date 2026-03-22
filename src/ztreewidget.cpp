@@ -53,6 +53,7 @@ void ZTreeWidget::showContextMenu(const QPoint &pos) {
     QMenu menu{this};
     static const char* strCopy { "&Copy" };  // Workaround to avoid being caught by `lupdate`, because `lupdate` cannot analyze dynamic string.
     QAction *copyAction = menu.addAction(QCoreApplication::tr(strCopy));
+    copyAction->setIcon(QIcon::fromTheme("edit-copy"));
     QAction *selected = menu.exec(viewport()->mapToGlobal(pos));
     if (selected == copyAction) {
         QClipboard *cb = QGuiApplication::clipboard();

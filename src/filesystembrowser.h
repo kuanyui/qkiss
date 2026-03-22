@@ -1,7 +1,7 @@
 /**************************************************************************
 * QKiSS - A modern implementation of KiSS (Kisekae) viewer in Qt 6.
 *
-* Copyright (C) 2024 - 2025 ono ono (kuanyui) <azazabc123@gmail.com>
+* Copyright (C) 2024 - 2026 ono ono (kuanyui) <azazabc123@gmail.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ public:
     void markPathAsLoaded(QString path, QKiSS::FileLoadMode fileLoadMode);
 private:
     void setupUi();
+    void setupContextMenu();
     void updateModel();
     static QString formatFileSize(qint64 bytes);
     QIcon getFileIcon(const QFileInfo &fileInfo) const;
@@ -78,6 +79,7 @@ private slots:
     void setCurDirAsHome();
     void setHome(const QString &dirPath);
     void onItemActivated(const QModelIndex &index);
+    void showContextMenu(const QPoint &pos);
 signals:
     void requestLoadFile(QString filePath, QKiSS::FileLoadMode fileLoadMode);
 private:

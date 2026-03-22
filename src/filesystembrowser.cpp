@@ -1,7 +1,7 @@
 /**************************************************************************
 * QKiSS - A modern implementation of KiSS (Kisekae) viewer in Qt 6.
 *
-* Copyright (C) 2024 - 2025 ono ono (kuanyui) <azazabc123@gmail.com>
+* Copyright (C) 2024 - 2026 ono ono (kuanyui) <azazabc123@gmail.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <QLineEdit>
 #include <QItemSelectionModel>
 #include <QMenu>
+#include <QDesktopServices>
 #include "filesystembrowser.h"
 #include "fileiconprovider.h"
 #include "iconbuttondelegate.h"
@@ -40,6 +41,7 @@ FileSystemBrowser::FileSystemBrowser(QWidget *parent):
     m_cfg{ConfigFile::instance()}
 {
     setupUi();
+    setupContextMenu();
     setDirPath(m_cfg.homeDirectory());
 }
 
@@ -262,6 +264,12 @@ void FileSystemBrowser::setupUi()
     updateAllButtonState();
 }
 
+void FileSystemBrowser::setupContextMenu()
+{
+    m_view->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_view, &QTreeView::customContextMenuRequested, this, &FileSystemBrowser::showContextMenu);
+}
+
 void FileSystemBrowser::updateModel()
 {
     // m_model->clear();   // DO NOT USE THIS. This will clear header title, header size...etc
@@ -457,6 +465,26 @@ void FileSystemBrowser::onItemActivated(const QModelIndex &index)
         updateAllButtonState();
     } else {
         emit requestLoadFile(filePath, QKiSS::FileLoadMode::LoadAsIndependent);
+    }
+}
+
+void FileSystemBrowser::showContextMenu(const QPoint &pos)
+{
+    QModelIndex index = m_view->indexAt(pos);
+    if (!index.isValid()) { return; }
+    QModelIndex index0 = index.sibling(index.row(), 0);
+    QString itemAbsPath = m_model->data(index0, ThisRole::FilePathRole).toString();
+    QMenu menu(this);
+    QAction *openItemAct = menu.addAction(tr("Open this item"));
+    QAction *openDirAct = menu.addAction(tr("Open containing folder"));
+    openItemAct->setIcon(QIcon::fromTheme("text-x-generic"));
+    openDirAct->setIcon(QIcon::fromTheme("folder-open"));
+    QPoint globalPos = m_view->viewport()->mapToGlobal(pos);
+    QAction *selectedAct = menu.exec(globalPos);
+    if (selectedAct == openItemAct) {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(itemAbsPath));
+    } else if (selectedAct == openDirAct) {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(m_curDirPath));
     }
 }
 

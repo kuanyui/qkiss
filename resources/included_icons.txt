@@ -17,6 +17,19 @@ Nome              help-about
 Tango             document-open-recent      recents
 Nome              edit-clear                edit-clear
 
+
+# ===================================================================
+# General Context Menu
+# ===================================================================
+
+Nome             edit-copy
+Nome             edit-paste
+Nome             edit-cut
+Nome             edit-select-all
+Tango            edit-undo
+Tango            edit-redo
+Tango            edit-delete
+
 # ===================================================================
 # Docks
 # ===================================================================
