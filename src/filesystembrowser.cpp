@@ -57,6 +57,7 @@ bool FileSystemBrowser::setPath(QString filePath)
     }
     if (fInfo.isFile()) {
         QDir dir = fInfo.dir();
+        m_prevOpenedDirPath = m_curDirPath;
         m_curDirPath = dir.absolutePath();
         m_lineEditUrl->setText(dir.absolutePath());
         m_labelCurDirName->setText(dir.dirName());
@@ -68,6 +69,7 @@ bool FileSystemBrowser::setPath(QString filePath)
         if (!filePath.endsWith("/")) {
             fInfo = QFileInfo(filePath + "/");
         }
+        m_prevOpenedDirPath = m_curDirPath;
         m_curDirPath = fInfo.absolutePath();
         m_lineEditUrl->setText(fInfo.absolutePath());
         m_labelCurDirName->setText(fInfo.fileName());
@@ -92,6 +94,7 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
     if (m_curDirPath == newDirPath) {
         return false;
     }
+    m_prevOpenedDirPath = m_curDirPath;
     m_curDirPath = newDirPath;
     m_lineEditUrl->setText(dInfo.absoluteFilePath());
     m_labelCurDirName->setText(dInfo.fileName());
@@ -327,6 +330,9 @@ QIcon FileSystemBrowser::getFileIcon(const QFileInfo &fileInfo) const
             return QIcon::fromTheme("text-x-cnf");
         }
         if (fileInfo.isDir()) {
+        }
+    } else if (fileInfo.isDir()) {
+        if (m_prevOpenedDirPath == absPath) {
             return QIcon::fromTheme("folder-open");
         }
     }
@@ -398,7 +404,7 @@ void FileSystemBrowser::goBackward()
     m_navForwardStack.push(oriDirPath);
     setDirPath(newDirPath);
     updateAllButtonState();
-    // focus the previous folder
+    // FIXME: focus the previously opened folder
     for (int r = 0; r < m_model->rowCount(); ++r) {
         QStandardItem *item = m_model->item(r, ColIdx::ColIdxFileName);
         if (!item) {
@@ -424,8 +430,8 @@ void FileSystemBrowser::goHome()
     if (m_curDirPath == m_cfg.homeDirectory()) { return; }
     m_navBackwardStack.push(m_curDirPath);
     m_navForwardStack.clear();
-    updateAllButtonState();
     setDirPath(m_cfg.homeDirectory());
+    updateAllButtonState();
 }
 
 void FileSystemBrowser::setCurDirAsHome()
@@ -447,8 +453,8 @@ void FileSystemBrowser::onItemActivated(const QModelIndex &index)
     if (fileInfo.isDir()) {
         m_navBackwardStack.push(m_curDirPath);
         m_navForwardStack.clear();
-        updateAllButtonState();
         setDirPath(filePath);
+        updateAllButtonState();
     } else {
         emit requestLoadFile(filePath, QKiSS::FileLoadMode::LoadAsIndependent);
     }

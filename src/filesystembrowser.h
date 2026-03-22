@@ -87,14 +87,31 @@ private:
     QToolButton *m_btnRefresh;
     QToolButton *m_btnGoHome;
     QLineEdit *m_lineEditUrl;
+    /// Current working directory (CWD)
     QString m_curDirPath;
+    /// Previous CWD
+    QString m_prevOpenedDirPath;
     /// Unused currently.
     QLabel *m_labelCurDirName;
     FileIconProvider *m_fileIconProvider;
     /// First element is main archive path, the rests are patches' paths.
     /// Can be a LZH file path, or folder (not supported yet.)
     QList<QString> m_loadedKissFilePaths;
+
+    /**
+     * ```
+     *                             m_curPathDir
+     *    　|______|　                                       |______|
+     *   BackwardStack             CurrentDir              ForwardStack
+     * ```
+     *
+     * - When click any new folder   --> Clear `ForwardStack`, push `m_curPathDir` into `BackwardStack`; then `m_curPathDir := newDir`
+     * - When click GoUp             --> Clear `ForwardStack`, push `m_curPathDir` into `BackwardStack`; then `m_curPathDir := newDir`
+     * - When click GoBackward       --> take one from `BackwardStack` and push it to `ForwardStack`; then `m_curPathDir := takenDir`
+     * - When click GoForward        --> take one from `ForwardStack` and push it to `BackwardStack`; then `m_curPathDir := takenDir`.
+     */
     QStack<QString> m_navBackwardStack;
+    /** When user press Back, item will be push on this. */
     QStack<QString> m_navForwardStack;
     ConfigFile &m_cfg;
 
