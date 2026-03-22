@@ -365,6 +365,20 @@ void FileSystemBrowser::updateAllButtonState()
 {
     m_btnGoBackward->setEnabled(m_navBackwardStack.length() != 0);
     m_btnGoForward->setEnabled(m_navForwardStack.length() != 0);
+    // focus (highlight) the previously opened folder
+    for (int r = 0; r < m_model->rowCount(); ++r) {
+        QStandardItem *item = m_model->item(r, 0);   // FIXME: Are you sure to store path in this column???
+        if (!item) {
+            continue;
+        }
+        const QString &rowFileName = item->text();
+        const QString &rowFilePath = item->data(ThisRole::FilePathRole).toString();
+        qkInfo << m_prevOpenedDirPath << rowFilePath;
+        if (m_prevOpenedDirPath == rowFilePath) {
+            auto idx = item->index();
+            m_view->setCurrentIndex(idx);
+        }
+    }
 }
 
 
@@ -404,18 +418,6 @@ void FileSystemBrowser::goBackward()
     m_navForwardStack.push(oriDirPath);
     setDirPath(newDirPath);
     updateAllButtonState();
-    // FIXME: focus the previously opened folder
-    for (int r = 0; r < m_model->rowCount(); ++r) {
-        QStandardItem *item = m_model->item(r, ColIdx::ColIdxFileName);
-        if (!item) {
-            continue;
-        }
-        const QString &rowFileName = item->text();
-        if (rowFileName == oriDirName) {
-            auto idx = item->index();
-            m_view->setCurrentIndex(idx);
-        }
-    }
 }
 
 void FileSystemBrowser::refresh() {
