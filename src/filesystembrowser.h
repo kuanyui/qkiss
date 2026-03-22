@@ -51,9 +51,16 @@ private:
 public:
     FileSystemBrowser(QWidget *parent = nullptr);
     ~FileSystemBrowser();
+    /**
+     * Ensure a dir path always ends with a slash `/` (Or `\` on Windows), while fild path should never ends with a slash.
+     * If the path is not existed, returns an empty string.
+     */
+    static QString formalizePath(const QString& dirOrFilePath);
     /// File name, not dir name
     bool setPath(QString filePath);
+    /// Set CWD
     bool setDirPath(QString dirPath);
+    /// Get CWD
     QString curDirPath() const;
     /// Add icon to mark this file is loaded, for UX.
     void markPathAsLoaded(QString path, QKiSS::FileLoadMode fileLoadMode);

@@ -48,6 +48,47 @@ FileSystemBrowser::~FileSystemBrowser()
     delete m_fileIconProvider;
 }
 
+QString FileSystemBrowser::formalizePath(const QString &dirOrFilePath)
+{
+    /**
+     * Always add slash suffix to prevent ambigious meaning of string.
+     *
+     * NOTE: The following test results are tested under Linux.
+     * @code{.cpp}
+     * QFileInfo a ("/usr/share");
+     * QFileInfo b ("/usr/share/");
+     *
+     * qDebug() << "a" << a.isDir() << a.absolutePath();      // a  true  "/usr"
+     * qDebug() << "b" << b.isDir() << b.absolutePath();      // b  true  "/usr/share"
+     *
+     * qDebug() << "a" << a.isDir() << a.absoluteFilePath();  // a  true  "/usr/share"
+     * qDebug() << "b" << b.isDir() << b.absoluteFilePath();  // b  true  "/usr/share/"
+     * @endcode
+     *
+     * Therefore, NEVER relys on `QFileInfo` to store original path. To preserve path, use QString instead.
+     */
+    QFileInfo rawInfo {dirOrFilePath};
+    QString absPath {};
+    if (!rawInfo.exists()) { return ""; }
+    if (rawInfo.isDir()) {
+        // FileInfo::absolutePath() is wrong when `dirPath` in `FileInfo(dirPath)` is not ends with `/`.
+        if (!dirOrFilePath.endsWith("/")) {
+            QFileInfo fixedInfo { dirOrFilePath + "/" };
+            absPath = fixedInfo.absoluteFilePath();
+        } else {
+            absPath = rawInfo.absoluteFilePath();
+        }
+    } else {
+        if (dirOrFilePath.endsWith("/")) {
+            QFileInfo fixedInfo { dirOrFilePath.sliced(0, dirOrFilePath.size() - 1) };
+            absPath = fixedInfo.absoluteFilePath();
+        } else {
+            absPath = rawInfo.absoluteFilePath();
+        }
+    }
+    return QDir::toNativeSeparators(absPath);  // For windows
+}
+
 bool FileSystemBrowser::setPath(QString filePath)
 {
     QFileInfo fInfo {filePath};
@@ -65,13 +106,9 @@ bool FileSystemBrowser::setPath(QString filePath)
         return true;
     }
     if (fInfo.isDir()) {
-        // FileInfo::absolutePath() is wrong when `dirPath` in `FileInfo(dirPath)` is not ends with `/`.
-        if (!filePath.endsWith("/")) {
-            fInfo = QFileInfo(filePath + "/");
-        }
         m_prevOpenedDirPath = m_curDirPath;
-        m_curDirPath = fInfo.absolutePath();
-        m_lineEditUrl->setText(fInfo.absolutePath());
+        m_curDirPath = fInfo.absoluteFilePath();   // Be careful
+        m_lineEditUrl->setText(fInfo.absoluteFilePath());
         m_labelCurDirName->setText(fInfo.fileName());
         updateModel();
         return true;
@@ -90,7 +127,7 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
         m_lineEditUrl->setText(m_curDirPath);
         return false;
     }
-    QString newDirPath = dInfo.absoluteFilePath();  // instead of absolutePath() because itself is already a dir.
+    QString newDirPath = formalizePath(dInfo.absoluteFilePath());  // instead of absolutePath() because itself is already a dir.
     if (m_curDirPath == newDirPath) {
         return false;
     }

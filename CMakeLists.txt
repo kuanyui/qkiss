@@ -536,6 +536,7 @@ qt_add_executable("${PROJ_NAME}"
     src/ztreewidget.h src/ztreewidget.cpp
     src/dockwidgetproxystyle.h src/dockwidgetproxystyle.cpp
     src/mycstr.h
+    src/unipath.h src/unipath.cpp
 
 )
 add_dependencies("${PROJ_NAME}" icontheme)
