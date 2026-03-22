@@ -24,7 +24,12 @@
 
 /** Avoid ambiguiety of directory / file path.
  *
- * That is to say, always add slash suffix to prevent ambigious meaning of string.
+ * That is to say, always append slash suffix to folder's path, to prevent ambigious meaning of string.
+ *
+ * - Two formalized path can also be compared accurately.
+ *
+ * ATTENTION: This class is designed for an existed file / folder. A non-existed path will treated as empty path.
+ * TODO: Handle non-existed file path, `QString UniPath::absolutePath(UniPath::Creation)`
  *
  * NOTE: The following test results are tested under Linux.
  *
@@ -41,7 +46,6 @@
  *
  * Therefore, NEVER relys on `QFileInfo` to store original path. To preserve path, use QString instead.
  *
- * ATTENTION: This class is designed for an existed file / folder. A non-existed path will treated as empty path.
  */
 class UniPath
 {
@@ -49,14 +53,25 @@ public:
     UniPath(const QString &path);
     QString absolutePath() const;
     QString absolutePathNative() const;
+    const QFileInfo &fileInfo() const;
     bool exists() const;
     bool isDir() const;
     bool isFile() const;
+    /// - If self is a file, returns its directory.
+    /// - If self is a already a directory, still returns its parent directory.
+    UniPath parent() const;
+    /// Return the name of the very last directory in the path.
+    /// - If self is a file, return the name of its parent dir.
+    /// - If self is a dir, return the name of this dir itself.
+    QString lastDirName() const;
     /**
      * Ensure a dir path always ends with a slash `/` (`/` even if on Windows), while fild path should never ends with a slash.
      * If the path is not existed, returns an empty string.
+     *
+     * @deprecated Shitty API. Don't use.
      */
     static QString formalizePath(const QString& dirOrFilePath);
+    static QString formalizePath(const QString& path, bool isDir);
 
 private:
     bool init(const QString &path);

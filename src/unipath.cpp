@@ -35,6 +35,11 @@ QString UniPath::absolutePathNative() const
     return QDir::toNativeSeparators(m_absPath);
 }
 
+const QFileInfo &UniPath::fileInfo() const
+{
+    return m_fInfo;
+}
+
 bool UniPath::exists() const
 {
     return m_fInfo.exists();
@@ -50,52 +55,74 @@ bool UniPath::isFile() const
     return m_fInfo.isFile();
 }
 
-bool UniPath::init(const QString &path)
+UniPath UniPath::parent() const
 {
-    // ex: `C:\\Data/` -> `C:/Data`
-    QString fixedPath = QDir::cleanPath(QDir::fromNativeSeparators(path));   // QDir::cleanPath() always remove trailing `/` (except for root dir)
-    m_fInfo.setFile(fixedPath);
-    if (!m_fInfo.exists()) { return false; }
-    if (m_fInfo.isDir()) {
-        // FileInfo::absolutePath() is wrong when `dirPath` in `FileInfo(dirPath)` is not ends with `/`.
-        if (!fixedPath.endsWith("/")) {
-            m_fInfo.setFile(fixedPath + "/");
-            m_absPath = m_fInfo.absoluteFilePath();
-        } else {
-            m_absPath = m_fInfo.absoluteFilePath();
-        }
+    return UniPath(m_fInfo.dir().absolutePath());
+}
+
+QString UniPath::lastDirName() const
+{
+    if (isFile()) {
+        return m_fInfo.dir().dirName();
     } else {
-        if (!fixedPath.endsWith("/")) {
-            m_fInfo.setFile(fixedPath.sliced(0, fixedPath.size() - 1));
-            m_absPath = m_fInfo.absoluteFilePath();
-        } else {
-            m_absPath = m_fInfo.absoluteFilePath();
-        }
+        return m_fInfo.baseName();
     }
-    return true;
 }
 
 QString UniPath::formalizePath(const QString &dirOrFilePath)
 {
-    QFileInfo rawInfo {QDir::cleanPath(QDir::fromNativeSeparators(dirOrFilePath))};
-    QString absPath {};
-    if (!rawInfo.exists()) { return ""; }
-    if (rawInfo.isDir()) {
-        // FileInfo::absolutePath() is wrong when `dirPath` in `FileInfo(dirPath)` is not ends with `/`.
-        if (!dirOrFilePath.endsWith("/")) {
-            QFileInfo fixedInfo { dirOrFilePath + "/" };
-            absPath = fixedInfo.absoluteFilePath();
+    QString cleanPath = QDir::cleanPath(QDir::fromNativeSeparators(dirOrFilePath));   // Never has `/` suffix.
+    QFileInfo fInfo { cleanPath };
+    /// Input is abspath
+    bool isAbs = fInfo.isAbsolute();
+    /// Input is already has slash suffix
+    bool isDir = dirOrFilePath.endsWith("/") || dirOrFilePath.endsWith("\\");
+    /// QFileInfo a ("/usr/share");  qDebug() << "a" << a.isDir() << a.absoluteFilePath();  // ===> a  true  "/usr/share"
+    /// QFileInfo b ("/usr/share/"); qDebug() << "b" << b.isDir() << b.absoluteFilePath();  // ===> b  true  "/usr/share/"
+    if (!fInfo.exists()) { return dirOrFilePath; }
+    if (isDir || fInfo.isDir()) {
+        if (cleanPath.length() == 1) {  // root path `/`
+            return isAbs ? fInfo.absoluteFilePath() : fInfo.filePath();
         } else {
-            absPath = rawInfo.absoluteFilePath();
+            return (isAbs ? fInfo.absoluteFilePath() : fInfo.filePath())+ "/";
         }
     } else {
-        if (!dirOrFilePath.endsWith("/")) {
-            QFileInfo fixedInfo { dirOrFilePath.sliced(0, dirOrFilePath.size() - 1) };
-            absPath = fixedInfo.absoluteFilePath();
-        } else {
-            absPath = rawInfo.absoluteFilePath();
-        }
+        return isAbs ? fInfo.absoluteFilePath() : fInfo.filePath();
     }
-    // return QDir::toNativeSeparators(absPath);  // For windows
-    return absPath;  // For windows
 }
+
+QString UniPath::formalizePath(const QString &path, bool isDir)
+{
+    QString cleanPath = QDir::cleanPath(QDir::fromNativeSeparators(path));   // Never has `/` suffix.
+    if (isDir) {
+        if (cleanPath.length() == 1) { return path; }  // root path `/`
+        return path + "/";
+    }
+    return path;
+}
+
+
+bool UniPath::init(const QString &path)
+{
+    // - ex: `C:\\Data/` -> `C:/Data`
+    // - QDir::cleanPath() always remove trailing `/` (except for root dir)
+    // - QDir::fromNativeSeparators() only works on Windows.
+    QString cleanPath = QDir::cleanPath(QDir::fromNativeSeparators(path));   // Never has `/` suffix.
+    m_fInfo.setFile(cleanPath);
+
+    /// QFileInfo a ("/usr/share");  qDebug() << "a" << a.isDir() << a.absoluteFilePath();  // ===> a  true  "/usr/share"
+    /// QFileInfo b ("/usr/share/"); qDebug() << "b" << b.isDir() << b.absoluteFilePath();  // ===> b  true  "/usr/share/"
+    if (!m_fInfo.exists()) { return false; }
+    if (m_fInfo.isDir()) {
+        if (cleanPath.length() == 1) {  // root path `/`
+            m_absPath = m_fInfo.absoluteFilePath();
+        } else {
+            m_absPath = m_fInfo.absoluteFilePath() + "/";
+            m_fInfo.setFile(cleanPath + "/");
+        }
+    } else {
+        m_absPath = m_fInfo.absoluteFilePath();
+    }
+    return true;
+}
+

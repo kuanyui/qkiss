@@ -31,7 +31,7 @@
 #include "iconbuttondelegate.h"
 #include "translationmanager.h"
 #include "logging.h"
-
+#include "unipath.h"
 
 
 FileSystemBrowser::FileSystemBrowser(QWidget *parent):
@@ -48,68 +48,29 @@ FileSystemBrowser::~FileSystemBrowser()
     delete m_fileIconProvider;
 }
 
-QString FileSystemBrowser::formalizePath(const QString &dirOrFilePath)
-{
-    /**
-     * Always add slash suffix to prevent ambigious meaning of string.
-     *
-     * NOTE: The following test results are tested under Linux.
-     * @code{.cpp}
-     * QFileInfo a ("/usr/share");
-     * QFileInfo b ("/usr/share/");
-     *
-     * qDebug() << "a" << a.isDir() << a.absolutePath();      // a  true  "/usr"
-     * qDebug() << "b" << b.isDir() << b.absolutePath();      // b  true  "/usr/share"
-     *
-     * qDebug() << "a" << a.isDir() << a.absoluteFilePath();  // a  true  "/usr/share"
-     * qDebug() << "b" << b.isDir() << b.absoluteFilePath();  // b  true  "/usr/share/"
-     * @endcode
-     *
-     * Therefore, NEVER relys on `QFileInfo` to store original path. To preserve path, use QString instead.
-     */
-    QFileInfo rawInfo {dirOrFilePath};
-    QString absPath {};
-    if (!rawInfo.exists()) { return ""; }
-    if (rawInfo.isDir()) {
-        // FileInfo::absolutePath() is wrong when `dirPath` in `FileInfo(dirPath)` is not ends with `/`.
-        if (!dirOrFilePath.endsWith("/")) {
-            QFileInfo fixedInfo { dirOrFilePath + "/" };
-            absPath = fixedInfo.absoluteFilePath();
-        } else {
-            absPath = rawInfo.absoluteFilePath();
-        }
-    } else {
-        if (dirOrFilePath.endsWith("/")) {
-            QFileInfo fixedInfo { dirOrFilePath.sliced(0, dirOrFilePath.size() - 1) };
-            absPath = fixedInfo.absoluteFilePath();
-        } else {
-            absPath = rawInfo.absoluteFilePath();
-        }
-    }
-    return QDir::toNativeSeparators(absPath);  // For windows
-}
+
 
 bool FileSystemBrowser::setPath(QString filePath)
 {
-    QFileInfo fInfo {filePath};
-    if (!fInfo.exists()) {
+    UniPath uPath {filePath};
+    if (!uPath.exists()) {
         qkWarning.noquote() << tr(R"(File path "%1" is not found, abort loading this path.)").arg(filePath);
         return false;
     }
-    if (fInfo.isFile()) {
-        QDir dir = fInfo.dir();
+    if (uPath.isFile()) {
+        UniPath uDir = uPath.parent();
         m_prevOpenedDirPath = m_curDirPath;
-        m_curDirPath = dir.absolutePath();
-        m_lineEditUrl->setText(dir.absolutePath());
-        m_labelCurDirName->setText(dir.dirName());
+        m_curDirPath = uDir.absolutePath();
+        m_lineEditUrl->setText(uDir.absolutePath());
+        m_labelCurDirName->setText(uDir.fileInfo().dir().dirName());
         updateModel();
         return true;
     }
-    if (fInfo.isDir()) {
+    if (uPath.isDir()) {
         m_prevOpenedDirPath = m_curDirPath;
-        m_curDirPath = fInfo.absoluteFilePath();   // Be careful
-        m_lineEditUrl->setText(fInfo.absoluteFilePath());
-        m_labelCurDirName->setText(fInfo.fileName());
+        m_curDirPath = uPath.absolutePath();   // Be careful
+        m_lineEditUrl->setText(uPath.absolutePath());
+        m_labelCurDirName->setText(uPath.fileInfo().fileName());
         updateModel();
         return true;
     }
@@ -121,20 +82,20 @@ bool FileSystemBrowser::setPath(QString filePath)
 bool FileSystemBrowser::setDirPath(QString dirPath)
 {
     qkDebug << "[QDebug] setDirPath()" << dirPath;
-    QFileInfo dInfo {dirPath};
-    if (!dInfo.exists() || !dInfo.isDir()) {
+    UniPath uDir {dirPath};
+    if (!uDir.exists() || !uDir.isDir()) {
         qkWarning << tr("Invalid dir path, aborted.");
         m_lineEditUrl->setText(m_curDirPath);
         return false;
     }
-    QString newDirPath = formalizePath(dInfo.absoluteFilePath());  // instead of absolutePath() because itself is already a dir.
+    QString newDirPath = uDir.absolutePath();  // instead of absolutePath() because itself is already a dir.
     if (m_curDirPath == newDirPath) {
         return false;
     }
     m_prevOpenedDirPath = m_curDirPath;
     m_curDirPath = newDirPath;
-    m_lineEditUrl->setText(dInfo.absoluteFilePath());
-    m_labelCurDirName->setText(dInfo.fileName());
+    m_lineEditUrl->setText(uDir.absolutePath());
+    m_labelCurDirName->setText(uDir.fileInfo().fileName());
     updateModel();
     return true;
 }
@@ -308,13 +269,13 @@ void FileSystemBrowser::updateModel()
     QFileInfoList fInfoList = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::IgnoreCase);
     foreach (const QFileInfo &fInfo, fInfoList) {
         const QString ext = fInfo.fileName().toUpper();
-        QString fileAbsPath = fInfo.absoluteFilePath();
         bool isDir = fInfo.isDir();
         bool isLzh = ext.endsWith(".LZH");
         bool isCnf = ext.endsWith(".CNF");
         if (!isDir && (!isLzh && !isCnf)) {
             continue;
         }
+        QString fileAbsPath = UniPath::formalizePath(fInfo.absoluteFilePath(), isDir);
         QList<QStandardItem *> rowItems;
         QStandardItem *stateItem = new QStandardItem();
         stateItem->setData(fileAbsPath, ThisRole::FilePathRole);
@@ -331,7 +292,7 @@ void FileSystemBrowser::updateModel()
             QIcon patchIcon = QIcon::fromTheme("addon");
             item->setIcon(patchIcon);
             item->setToolTip(tr("Click to load this file as patch"));
-            item->setData(fInfo.filePath(), ThisRole::FilePathRole);    // REFACTOR: Redundant data, consider how to reuse it.
+            item->setData(fileAbsPath, ThisRole::FilePathRole);    // REFACTOR: Redundant data, consider how to reuse it.
             rowItems << item;
         }
         m_model->appendRow(rowItems);
@@ -356,7 +317,7 @@ QString FileSystemBrowser::formatFileSize(qint64 bytes) {
 
 QIcon FileSystemBrowser::getFileIcon(const QFileInfo &fileInfo) const
 {
-    QString absPath = fileInfo.absoluteFilePath();
+    QString absPath = UniPath::formalizePath(fileInfo.absoluteFilePath(), fileInfo.isDir());
     if (m_loadedKissFilePaths.contains(absPath)) {
         bool isLzh = absPath.endsWith(".LZH", Qt::CaseInsensitive);
         bool isCnf = absPath.endsWith(".CNF", Qt::CaseInsensitive);
@@ -410,7 +371,7 @@ void FileSystemBrowser::updateAllButtonState()
         }
         const QString &rowFileName = item->text();
         const QString &rowFilePath = item->data(ThisRole::FilePathRole).toString();
-        qkInfo << m_prevOpenedDirPath << rowFilePath;
+        qkInfo << "DEBUG " << m_prevOpenedDirPath << rowFilePath;
         if (m_prevOpenedDirPath == rowFilePath) {
             auto idx = item->index();
             m_view->setCurrentIndex(idx);

@@ -158,7 +158,6 @@ MainWindow::~MainWindow()
 void MainWindow::receiveMsgFromCustomQtDebugMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     if (m_logViewer == nullptr) { return; }
-    qkDebug << "context.category === " << context.category;
     m_logViewer->appendLog(type, context, msg);
 }
 
