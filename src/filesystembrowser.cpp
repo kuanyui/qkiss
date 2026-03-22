@@ -88,13 +88,14 @@ bool FileSystemBrowser::setDirPath(QString dirPath)
         m_lineEditUrl->setText(m_curDirPath);
         return false;
     }
+    m_lineEditUrl->setText(uDir.absolutePath());
+
     QString newDirPath = uDir.absolutePath();  // instead of absolutePath() because itself is already a dir.
     if (m_curDirPath == newDirPath) {
         return false;
     }
     m_prevOpenedDirPath = m_curDirPath;
     m_curDirPath = newDirPath;
-    m_lineEditUrl->setText(uDir.absolutePath());
     m_labelCurDirName->setText(uDir.fileInfo().fileName());
     updateModel();
     return true;
@@ -371,7 +372,6 @@ void FileSystemBrowser::updateAllButtonState()
         }
         const QString &rowFileName = item->text();
         const QString &rowFilePath = item->data(ThisRole::FilePathRole).toString();
-        qkInfo << "DEBUG " << m_prevOpenedDirPath << rowFilePath;
         if (m_prevOpenedDirPath == rowFilePath) {
             auto idx = item->index();
             m_view->setCurrentIndex(idx);
