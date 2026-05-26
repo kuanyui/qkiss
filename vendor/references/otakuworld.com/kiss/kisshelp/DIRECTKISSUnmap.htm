@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>Unmap</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; unmap</div>
+    <h1>Action: <i>Unmap(target)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSMap.htm">map</a>,
+		<a href="DIRECTKISSAltmap.htm">altmap</a>,
+		<a href="DIRECTKISSLetmapped.htm">letmapped</a>,
+		<a href="DIRECTKISSIfmapped.htm">ifmapped</a>,
+		<a href="DIRECTKISSIfnotmapped.htm">ifnotmapped</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>unmap(<i>target</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>
+		The <b>unmap</b> action causes <i>target</i> to become unmapped on all
+		sets in which it is present.</div>
+
+    <div>Mapped cels may be clickable and visible (although
+		<a href="DIRECTKISSGhost.htm">ghost</a> and
+		<a href="DIRECTKISSTransparent.htm">transparent</a> can also affect this).
+		Unmapped cels are unclickable and invisible.</div>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS3, <i>target</i> may be an object number or cel.</div>
+
+		<div>In FKiSS4, <i>target</i> may be an object number, cel, group, or a
+		variable representing an object number.</div>
+		</div>
+
+		<h4>Example:</h4>
+    <div class="example">;@ unmap(&quot;doll.cel&quot;) <i>; Make &quot;doll.cel&quot; invisible.</i></div>
+    <div class="example">;@ unmap(#5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Make all cels invisible in object #5.</i></div>
+    <div class="example">;@ unmap(!MyGroup)&nbsp;&nbsp; <i>; Make all cels invisible in group !MyGroup.</i></div>
+    <div class="example">;@ unmap(VarObj)&nbsp;&nbsp;&nbsp;&nbsp; <i>; Make all cels invisible that are in the object identified by the variable VarObj.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; unmap</div>
+  </body>
+</html>

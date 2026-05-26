@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <title>Letframe</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letframe</div>
+    <h1>Action: <i>Letframe(variable, group)</i></h1>
+
+
+		<div class="relatedactions">
+    Related Actions: <a href="DIRECTKISSSetframe.htm">setframe</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>letframe(<i>variable, group</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS4</div>
+
+		<div>The <b>letframe</b> action sets the value of <i>variable</i> to the
+		current <a href="DIRECTKISSFKiSS_Data_Types.htm#groupframe">group frame
+		number</a> of <i>group</i>. </div>
+
+		<div>If <i>group</i> has not been set to a frame, <i>variable</i> is set
+		to -1.</div>
+
+		<div><i>variable</i> must a variable name.</div>
+		<div><i>group</i> must a valid <a href="DIRECTKISSFKiSS_Data_Types.htm#group">group</a>.</div>
+    <h4>Example:</h4>
+    <div class="example">;@ letframe(VarFrame, !MyGroup) <i>; Sets the variable VarFrame to the current frame of !MyGroup</i></div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letframe</div>
+  </body>
+</html>

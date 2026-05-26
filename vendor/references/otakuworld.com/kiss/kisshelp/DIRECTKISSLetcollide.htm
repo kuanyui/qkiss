@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <title>Letcollide</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letcollide</div>
+    <h1>Action: <i>Letcollide(variable, target1, target2)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSSetkcf.htm">setkcf</a>,
+		<a href="DIRECTKISSLetkcf.htm">letkcf</a>,
+		<a href="DIRECTKISSSetfix.htm">setfix</a>,
+		<a href="DIRECTKISSLetfix.htm">letfix</a>,
+		<a href="DIRECTKISSGhost.htm">ghost</a>,
+		<a href="DIRECTKISSTransparent.htm">transparent</a>,
+		<a href="DIRECTKISSLettransparent.htm">lettransparent</a>,
+		<a href="DIRECTKISSLetinitx.htm">letinitx</a>,
+		<a href="DIRECTKISSLetinity.htm">letinity</a>,
+		<a href="DIRECTKISSLetmapped.htm">letmapped</a>,
+		<a href="DIRECTKISSLetobjectx.htm">letobjectx</a>,
+		<a href="DIRECTKISSLetobjecty.htm">letobjecty</a>,
+		<a href="DIRECTKISSLetwidth.htm">letwidth</a>,
+		<a href="DIRECTKISSLetheight.htm">letheight</a>,
+		<a href="DIRECTKISSLetinside.htm#2b4d4b1f">letinside</a>
+		</div>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSCollide.htm">collide</a>,
+		<a href="DIRECTKISSApart.htm">apart</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>letcollide(<i>variable, target1, target2</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS3</div>
+		<div>The <b>letcollide</b> action makes a comparison based on the
+		individual, non-transparent pixels of the two targets.</div>
+
+    <div>If any pixel for <i>target1</i> overlaps a pixel for <i>target2</i>, <i>variable</i> is set to 1.
+    Otherwise, <i>variable</i> is set to 0.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">Since pixel-by-pixel comparison is more task-intensive,
+		only use this action to test collision-detection when pixel-collision
+		detection is necessary.<br>
+		Use <a href="DIRECTKISSLetinside.htm">letinside</a> first to see if the
+		rectangles of the objects overlap then use <b>letcollide</b> to test the
+		collision at a pixel level.</div>
+		</td></tr></table>
+
+		<h3><i>variable</i></h3>
+		<div class="indent"><i>variable</i> must be a variable name.</div>
+
+		<h3><i>target1</i></h3>
+		<div class="indent">
+		<div>In FKiSS3, <i>target1</i> must be a cel.</div>
+    <div>In FKiSS4, <i>target1</i> may be an object number, cel, group, or
+		variable repesenting an object number.</div>
+		</div>
+
+		<h3><i>target2</i></h3>
+		<div class="indent">
+		<div>In FKiSS3, <i>target2</i> must be a cel.</div>
+    <div>In FKiSS4, <i>target2</i> may be an object number, cel, group, or
+		variable repesenting an object number.</div>
+		</div>
+
+		<h4>Example:</h4>
+    <div class="example">;@ letcollide(C, &quot;this.cel&quot;, &quot;that.cel&quot;) <i>; Set C to 1 if any pixel in "this.cel" overlaps any pixel in "that.cel".</i></div>
+    <div class="example">;@ letcollide(C, #5, &quot;that.cel&quot;)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Set C to 1 if any pixel in "that.cel" overlaps any pixel in any cel in object #5.</i></div>
+    <div class="example">;@ letcollide(C, VarObj, !MyGroup)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Set C to 1 if any pixel in any cel in the object identified by VarObj overlaps any pixel in any cel in group !MyGroup.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letcollide</div>
+  </body>
+</html>

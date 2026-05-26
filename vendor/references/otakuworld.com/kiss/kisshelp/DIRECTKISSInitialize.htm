@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Initialize</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; initialize</div>
+    <h1>Event: <i>Initialize()</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSBegin.htm">begin</a>,
+		<a href="DIRECTKISSEnd.htm">end</a>,
+		<a href="DIRECTKISSOverflow.htm">overflow</a>,
+		<a href="DIRECTKISSNever.htm">never</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>initialize()</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>The <b>initialize</b> event is called exactly once before the artform
+		is displayed on the screen for the first time. It occurs before all other
+		events.</div>
+
+    <div>Use this event to do any processing which should take place before
+		the artform becomes visible to the user such as unmapping hidden
+		cels.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">There can only be one <b>initialize</b> event.</div>
+		</td></tr></table>
+
+    <h4>Example:</h4>
+    <div class="example">
+		;@ initialize()<br>
+    ;@ &nbsp;&nbsp;unmap(&quot;hair2.cel&quot;) <i>; At first, &quot;hair2.cel&quot; show be hidden.</i><br>
+    ;@ &nbsp;&nbsp;let(X, 1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; At first, X starts off at 1.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; initialize</div>
+  </body>
+</html>

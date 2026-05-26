@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>Ghost</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; ghost</div>
+    <h1>Action: <i>Ghost(target, N)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSTransparent.htm">transparent</a>,
+		<a href="DIRECTKISSLettransparent.htm">lettransparent</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>ghost(<i>target, N</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS3</div>
+
+		<div>The <b>ghost</b> action changes the ghost-state of <i>target</i>.</div>
+
+		<div>A cel may be ghosted or not ghosted. By default, all cels are not ghosted. A
+    ghosted cel is one which cannot receive mouse-clicks. Any attempt to click on a
+    ghosted cel with the mouse will pass through to cels beneath it regardless of
+    whether the cel is visible or not.</div>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS3, <i>target</i> may be a cel or object number.</div>
+		<div>In FKiSS4, <i>target</i> may be a cel, object number, group, or a variable representing an object
+    number.</div>
+		</div>
+
+		<h3><i>N</i></h3>
+		<div class="indent">
+		<div><i>N</i> may be a number or a variable.</div>
+		<div>If <i>N</i> is 0, <i>target</i> is not ghosted.</div>
+		<div>If <i>N</i> is non-zero, <i>target</i> is ghosted.</div>
+		</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ ghost(#5, 1)&nbsp;&nbsp;&nbsp;&nbsp; <i>; object 5 becomes ghosted.</i> </div>
+    <div class="example">;@ ghost(VarObj, 0) <i>; Object or group identified by VarObj stops being ghosted.</i></div>
+
+		</div>
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; ghost</div>
+  </body>
+</html>

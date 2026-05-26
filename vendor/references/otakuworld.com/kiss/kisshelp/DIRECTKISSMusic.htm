@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Music</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; music</div>
+    <h1>Action: <i>Music(filename)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions: <a href="DIRECTKISSSound.htm">sound</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>music(<i>filename</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS2</div>
+		<div>
+		The <b>music</b> action begins playback of the MIDI <i>filename</i>.</div>
+
+    <div>If <i>filename</i> is an empty string, any currently playing MIDI is
+		halted.</div>
+
+		<table class="tablenote"><tr><td>
+		<div class="note">Some viewers will produce an error message if you attempt to play
+		a MIDI while another one is already playing so it is a good idea to call
+		<b>music</b> with an empty string before calling <b>music</b> with a MIDI
+		filename.</div>
+		</td></tr></table>
+
+		<h3><i>filename</i></h3>
+		<div class="indent"><i>filename</i> must be an empty string or a filename
+		surrounded by quotation marks.</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ music(&quot;&quot;)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; First, turn off any music that might be playing.</i><br>
+    ;@ music(&quot;happy.MID&quot;) <i>; Now we can start playing &quot;happy.mid&quot;.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; music</div>
+  </body>
+</html>

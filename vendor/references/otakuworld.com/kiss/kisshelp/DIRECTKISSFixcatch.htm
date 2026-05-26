@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Fixcatch</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; fixcatch</div>
+    <h1>Event: <i>Fixcatch(target)</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSPress.htm">press</a>,
+		<a href="DIRECTKISSRelease.htm">release</a>,
+		<a href="DIRECTKISSCatch.htm">catch</a>,
+		<a href="DIRECTKISSDrop.htm">drop</a>,
+		<a href="DIRECTKISSFixdrop.htm">fixdrop</a>,
+		<a href="DIRECTKISSUnfix.htm">unfix</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSSetfix.htm">setfix</a>,
+		<a href="DIRECTKISSLetfix.htm">letfix</a>,
+		<a href="DIRECTKISSLetcatch.htm">letcatch</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>fixcatch(<i>target</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>The <b>fixcatch</b> event is triggered when the user first begins to
+		move a <i>target</i> which has a non-zero fix value.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">Only one <b>fixcatch</b> event should exist for any <i>target</i>.</div>
+		</td></tr></table>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS3, <i>target</i> may be an object number or cel.</div>
+    <div>In FKiSS4, <i>target</i> may be an object number, cel, or group.</div>
+		</div>
+
+    <h4>Example:</h4>
+    <div class="example">
+    ;@ fixcatch(&quot;shirt.cel&quot;) <i>; When &quot;shirt.cel&quot; is first started to be dragged and has a non-zero fixed value...</i><br>
+    ;@ &nbsp;&nbsp;sound(&quot;yank.wav&quot;)&nbsp;&nbsp; <i>; Play a sound.</i></div>
+
+    <div class="example">
+    ;@ fixcatch(#5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; When object #5 is first started to be dragged and has a non-zero fixed value...</i><br>
+    ;@ &nbsp;&nbsp;sound(&quot;ding.wav&quot;)&nbsp;&nbsp; <i>; Play a sound.</i></div>
+
+    <div class="example">
+    ;@ fixcatch(!MyGroup)&nbsp;&nbsp;&nbsp; <i>; When group !MyGroup is first started to be dragged and has a non-zero value...</i><br>
+    ;@ &nbsp;&nbsp;gosub(50)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Execute procedure 50.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; fixcatch</div>
+  </body>
+</html>

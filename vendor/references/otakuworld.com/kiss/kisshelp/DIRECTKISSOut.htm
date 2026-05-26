@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <title>Out</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; out</div>
+    <h1>Event: <i>Out(target1, target2)</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSIn.htm">in</a>,
+		<a href="DIRECTKISSStillin.htm">stillin</a>,
+		<a href="DIRECTKISSStillout.htm">stillout</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions: <a href="DIRECTKISSLetinside.htm#2b4d4b1f">letinside</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>out(<i>target1, target2</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS2</div>
+		<div>The <b>out</b> event makes a comparison based on the individual
+		bounding rectangles of the two targets. If no bounding rectangle for
+		<i>target1</i> overlaps a bounding rectangle for <i>target2</i> and
+		rectangles of these targets previously overlapped, this event will occur.
+		When the targets are objects or groups, comparison is made using the
+		individual bounding rectangles of the applicable cels, not the single
+		bounding rectangle for the entire object.  In other words, when no one cel
+		in the <i>target1</i> object or group no longer overlaps any cel in the
+		<i>target2</i> object or group, the <b>out</b> event is triggered.</div>
+
+		<div>Use this event to react to collision-detection when pixel-collision detection
+    is not necessary.</div>
+
+    <div>This event may be triggered by the user picking up an object and dropping it
+    somewhere else or by FKiSS movement.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">Only one <b>out</b> event should exist for any
+		<i>target1</i>-<i>target2</i> pair.</div>
+		</td></tr></table>
+
+		<h3><i>target1</i></h3>
+		<div class="indent">
+		<div>In FKiSS2 to FKiSS3, <i>target1</i> must be an object number.</div>
+    <div>In FKiSS4, <i>target1</i> may be an object number, cel, or group.</div>
+		</div>
+
+		<h3><i>target2</i></h3>
+		<div class="indent">
+		<div>In FKiSS2 to FKiSS3, <i>target2</i> must be an object number.</div>
+    <div>In FKiSS4, <i>target2</i> may be an object number, cel, or group.</div>
+		</div>
+
+		<h4>Example:</h4>
+		<div class="example">
+    ;@ out(#1, #2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; When no cel in object #1 no longer overlaps any cel in object #2...</i><br>
+    ;@ &nbsp;unmap(&quot;hathair.cel&quot;) <i>; Hide the hat</i><br>
+    ;@ &nbsp;map(&quot;hair1.cel&quot;)&nbsp;&nbsp;&nbsp;&nbsp; <i>; and show the hair.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; out</div>
+  </body>
+</html>

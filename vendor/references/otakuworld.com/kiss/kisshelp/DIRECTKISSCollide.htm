@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>Collide</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; collide</div>
+    <h1>Event: <i>Collide(target1, target2)</i></h1>
+
+		<div class="relatedevents">
+    Related Events: <a href="DIRECTKISSApart.htm">apart</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions: <a href="DIRECTKISSLetcollide.htm">letcollide</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>collide(<i>target1, target2</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS2</div>
+		<div>The <b>collide</b> event makes a comparison based on the individual
+		pixels of the two targets. If any pixel for <i>target1</i> overlaps a a
+		pixel for <i>target2</i> and no pixels previously overlapped, this event
+		will occur.</div>
+
+    <div>This event may be triggered by the user picking up an object and dropping it
+    somewhere else or by FKiSS movement.</div>
+
+		<table class="tablenote"><tr><td>
+		<div class="note">Since pixel-by-pixel comparison is more task-intensive,
+		only use this event to react to collision-detection when pixel-collision
+		detection is necessary.</div>
+		</td></tr></table>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">Only one <b>collide</b> event should exist for any
+		<i>target1</i>-<i>target2</i> pair.</div>
+		</td></tr></table>
+
+		<h3><i>target1</i></h3>
+		<div class="indent">
+		<div>In FKiSS2 to FKiSS3, <i>target1</i> must be a cel.</div>
+    <div>In FKiSS4, <i>target1</i> may be an object number, cel, or group.</div>
+		</div>
+
+		<h3><i>target2</i></h3>
+		<div class="indent">
+		<div>In FKiSS2 to FKiSS3, <i>target2</i> must be a cel.</div>
+    <div>In FKiSS4, <i>target2</i> may be an object number, cel, or group.</div>
+		</div>
+
+    <h4>Example:</h4>
+		<div class="example">
+    ;@ collide(&quot;this.cel&quot;, &quot;that.cel&quot;) <i>; When any pixel in &quot;this.cel&quot; overlaps any pixel in &quot;that.cel&quot;...</i><br>
+    ;@ &nbsp;&nbsp;sound(&quot;bell.wav&quot;)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Play a sound.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; collide</div>
+  </body>
+</html>

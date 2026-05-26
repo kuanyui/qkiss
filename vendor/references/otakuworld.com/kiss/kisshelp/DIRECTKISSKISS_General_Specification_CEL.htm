@@ -1,0 +1,268 @@
+<html>
+  <head>
+    <title>KISS General Specification: CEL</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+		</script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSKISS_General_Specification.htm">KiSS General Specification</a> &gt; CEL</div>
+    <h1>KISS General Specification: CEL</h1>
+
+    <h2>5. Details of Cel files</h2>
+		<div class="indent">
+			<div>A cel file is a binary file. The modern CEL file format contains a 32-byte header.
+			See <a href="DIRECTKISSKISS_General_Specification_CEL.htm#table51">Table 5-1</a>.</div>
+
+			<div>A cel is an image that is composed of pixels, arranged in rows.  Each
+			pixel represents a color in one of two basic forms: Palette-based and Color-based.</div>
+
+			<h3>Pixel Formats</h3>
+			<div class="indent">
+				<div>There are two pixel formats that can be used in cels.  Each
+				format specifies where the colors for each pixel come from:</div>
+
+				<h4><a name="palettebased">Palette-based</a></h4>
+				<div class="indent">In a palette-based image, a pixel is an index into a palette of
+				colors.  This index can be 4 or 8 bits in size, depending on the size of
+				the palette.  A 4-bit pixel can index 16 colors while an 8-bit pixel can
+				index 256 colors.</div>
+
+				<h4><a name="colorbased">Color-based</a></h4>
+				<div class="indent">
+					<div>In a color-based image, each pixel contains all the color data so a
+					palette is not needed. </div>
+					<div>32-bit colors also include what is known as an "alpha" channel.  The
+					"alpha" channel controls the translucency of the pixels and ranges from 0
+					to 255.  A translucency of 0 means that the pixel is completely
+					transparent to the background while a translucency of 255 means the
+					background is completely hidden.</div>
+					</div>
+				</div>
+
+				<h3><a name="transparent">Translucency and Transparency</a></h3>
+				<div class="indent">
+					<div>There are two terms associated with pixel art that are applicable to KiSS cels:
+					<h4>Translucency</h4>
+					<div class="indent">A pixel that is translucent allows the background to
+					"bleed" through, like looking through a stained-glass window.  The
+					background is visible, but it is colored by the translucent pixel in front
+					of it.</div>
+					<h4>Transparency</h4>
+					<div class="indent">
+						<div>A pixel that is transparent allows the background to
+						show through, like a clear windowpane.  "Transparent as glass".</div>
+						<div>In palette-based cels, pixels that are 0 are treated as transparent
+						pixels.  That means that any cel allows the background to show through
+						where the cel's pixels are 0, making the cel look like a cut-out.</div>
+
+						<div>With color-based pixels (32-bit), a pixel with an "alpha" channel of
+						0 is	considered transparent.</div>
+					</div>
+				</div>
+			</div>
+
+			<h3>Mouse Clicks and Transparency</h3>
+			<div class="indent">
+				<div>Transparency also affects where in a cel a mouse click can be "seen".
+				Clicking in a transparent section of a cel causes the click to go through that
+				cel and to whatever is underneath the cel.  For 32-bit pixels, the "alpha" channel
+				must be set to 0 to allow a mouse click to go through to what lies beneath.</div>
+			</div>
+		</div>
+
+		<h2>Cel File Format</h2>
+		<div class="indent">
+			<div class="tabletitle"><a name="table51">Table 5-1</a>: Modern CEL Header block</div>
+
+    	<table class="gridded">
+				<tr>
+					<th>Offset<br>
+    		    <span class="smallnote">(in bytes)</span></th>
+					<th>Size<br>
+    		    <span class="smallnote">(in bytes)</span></th>
+					<th>Contents</th>
+    		</tr>
+				<tr>
+    			<td>+0</td><td>4</td><td> Identifier 'KiSS' ( 4Bh 69h 53h 53h )</td>
+				</tr>
+    		<tr>
+					<td>+4</td><td>1</td><td> Cel file mark (the type of cel):
+							<ul>
+								<li>20h = Palette-based cel, colors come from a palette.<br>
+								<li>21h = Color-based cel, each pixel in the cel is a 32-bit color with alpha (transparency) control.<br>
+							</ul>
+					</td>
+				</tr>
+    		<tr>
+    			<td>+5</td><td>1</td><td> bits per pixel:
+						<ul>
+							<li><div>4: palette-based image (16 colors per pixel in a palette)</div>
+							<li><div>8: palette-based image (256 colors per pixel in a palette)</div>
+							<li><div>32: color-based image (16,777,216 colors per pixel, no palette)</div>
+						</ul>
+					</td>
+				</tr>
+    		<tr>
+    			<td>+6</td><td>2</td><td> Reserved.  Must be set to 0.</td>
+				</tr>
+    		<tr>
+    			<td>+8</td><td>2</td><td> Width ( 1 ... XMAX )<br>
+    		    <span class="smallnote">(+8 = low byte, +9 = high byte)</span></td>
+				</tr>
+	  		<tr>
+    			<td>+10</td><td>2</td><td> Height ( 1 ... YMAX )<br>
+    		    <span class="smallnote">(+10 = low byte, +11 = high byte)</span></td>
+				</tr>
+    		<tr>
+    			<td>+12</td><td>2</td><td> X-offset ( 0 ... XMAX )<br>
+    		    <span class="smallnote">(+12 = low byte, +13 = high byte)</span></td>
+				</tr>
+    		<tr>
+				  <td>+14</td><td>2</td><td> Y-offset ( 0 ... YMAX )<br>
+    		    <span class="smallnote">(+14 = low byte, +15 = high byte)</span></td>
+				</tr>
+    		<tr>
+    			<td>+16</td><td>16</td><td> Reserved.  Must all be 0.</td>
+				</tr>
+    		<tr>
+    			<td>+32</td><td>...</td><td>Pixel data, ordered by rows.  See Remarks for details.</td>
+				</tr>
+			</table>
+
+			<h2>Remarks</h2>
+			<div class="indent">
+				<h3>Cel Positions</h3>
+				<div class="indent">
+    			<div>Cels declared in the same object are aligned at the top left corner.
+					X,Y-offsets are the offsets from this alignment point.</div>
+				</div>
+
+				<h3><a name="pixeldata">Pixel Data</a></h3>
+				<div class="indent">
+					<div>The format of the pixels in a cel depends on whether the cel is
+					palette-based or color-based.</div>
+
+					<div>The width of a cel image (as specified in the header) indicates how
+					many pixels wide the image is. The height of a cel image (as specified in
+					the header) indicates how many rows high the image is.</div>
+
+					<h4>Pixel data order (4 bits/pixel)</h4>
+					<div class="indent">
+						<div>With 4 bits per pixel, each byte in a cel row contains 2 pixels.
+						In the situation where the number of pixels is odd, the remaining 4 bits are set to 0.</div>
+
+						<div class="tabletitle"><a name="table52">Table 5-2:</a> 4-bit pixel layout</div>
+
+    				<table class="gridded">
+							<tr>
+    					  <th>Byte 0</th>
+								<th>Byte 1</th>
+								<th>Byte 2</th>
+								<th>Byte N</th>
+    					</tr>
+							<tr>
+								<td><span class="monospace"><span class="underline">7654 3210</span><br>
+    					    pix0 pix1</span></td>
+    					  <td><span class="monospace"><span class="underline">7654 3210</span><br>
+    					    pix2 pix3</span></td>
+    					  <td><span class="monospace"><span class="underline">7654 3210</span><br>
+    					    pix4 pix5</span></td>
+    					  <td><span class="monospace"><span class="underline">7654 3210</span><br>
+    					    pixN 0000</span></td>
+    					</tr>
+    				</table>
+					</div>
+
+    			<h4>Pixel data order (8 bits/pixel)</h4>
+					<div class="indent">
+						<div>With 8 bits per pixel, each byte in a cel row contains 1 pixel.</div>
+
+						<div class="tabletitle"><a name="table53">Table 5-3:</a> 8-bit pixel layout</div>
+
+    				<table class="gridded">
+							<tr>
+    					  <th>Byte 0</th>
+								<th>Byte 1</th>
+								<th>Byte 2</th>
+								<th>Byte N</th>
+    					</tr>
+							<tr>
+								<td><span class="monospace"><span class="underline">76543210</span><br>
+    					    pixel 0</span></td>
+    					  <td><span class="monospace"><span class="underline">76543210</span><br>
+    					    pixel 1</span></td>
+    					  <td><span class="monospace"><span class="underline">76543210</span><br>
+    					    pixel 2</span></td>
+    					  <td><span class="monospace"><span class="underline">76543210</span><br>
+    					    pixel 3</span></td>
+    					</tr>
+    				</table>
+						</div>
+
+    				<h4>Pixel data order (32 bits/pixel)</h4>
+						<div class="indent">
+							<div>With 32 bits per pixel, each pixel in a cel row uses 4 bytes.</div>
+
+							<div class="tabletitle"><a name="table54">Table 5-4:</a> 32-bit pixel layout</div>
+
+							<table class="gridded">
+								<tr>
+    						  <th>Byte 0</th>
+									<th>Byte 1</th>
+									<th>Byte 2</th>
+									<th>Byte 3</th>
+    						</tr>
+								<tr>
+									<td><span class="monospace"><span class="underline">76543210</span><br>
+    						    blue</span></td>
+    						  <td><span class="monospace"><span class="underline">76543210</span><br>
+    						    green</span></td>
+    						  <td><span class="monospace"><span class="underline">76543210</span><br>
+    						    red</span></td>
+    						  <td><span class="monospace"><span class="underline">76543210</span><br>
+    						    alpha</span></td>
+    						</tr>
+    					</table>
+							<div>The "alpha" channel controls the translucency of the pixel,
+							which determines how much of the background "bleeds" through the
+							pixel.  An "alpha" of 0 means completely transparent while an
+							"alpha" of 255 means completely opaque.</div>
+						</div>
+    				<table class="tablenote"><tr><td>
+							<div class="note">32-bit cels are clickable at any point where alpha is greater than 0.<br>
+							"Ghosted" cels are the exception.</div>
+						</td></tr></table>
+					</div>
+				</div>
+			</div>
+		<hr>
+		<h2>Old File Format</h2>
+		<div class="indent">
+			<div>If the top 4-byte identifier is not 'KiSS', the file format is as follows:</div>
+
+			<div class="tabletitle"><a name="table55">Table 5-5</a>: Old format CEL Header block</div>
+			<table class="gridded">
+				<tr>
+					<th>Offset<br>
+    	      <span class="smallnote">(in bytes)</span></th>
+					<th>Size<br>
+    	      <span class="smallnote">(in bytes)</span></th>
+					<th>Contents</th>
+    	  </tr>
+				<tr>
+    			<td>+0</td><td>2</td><td> Width ( 1 ... XMAX )<br>
+    	      <span class="smallnote">(+0 = low byte, +1 = high byte)</span></td>
+				</tr>
+	  	  <tr>
+    			<td>+2</td><td>2</td><td> Height ( 1 ... YMAX )<br>
+    	      <span class="smallnote">(+2 = low byte, +3 = high byte)</span></td>
+				</tr>
+    		<tr>
+    			<td>+4</td><td>...</td><td>Pixel data, ordered by rows.  Always 4-bit pixel data.</td>
+				</tr>
+			</table>
+		</div>
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSKISS_General_Specification.htm">KiSS General Specification</a> &gt; CEL</div>
+  </body>
+</html>

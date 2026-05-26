@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <title>Transparent</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; transparent</div>
+    <h1>Action: <i>Transparent(target, N)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSGhost.htm">ghost</a>,
+		<a href="DIRECTKISSLettransparent.htm">lettransparent</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>,
+		<a href="DIRECTKISSKISS_General_Specification_CEL.htm#transparent">Transparency and translucency</a>
+		</div>
+
+		<hr>
+    <h2>transparent(<i>target, N</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS1b</div>
+
+		<div>The <b>transparent</b> action adds <b>N</b> to the
+		<a href="DIRECTKISSKISS_General_Specification_CEL.htm#transparent">translucency</a>
+		value of <i>target</i>.</div>
+
+		<div>Use negative values of <b>N</b> to make <i>target</i> less translucent.</div>
+
+		<div>The <a href="DIRECTKISSKISS_General_Specification_CEL.htm#transparent">translucency</a>
+		of a cel is in the range 0 to 255. 0 is fully opaque (the default). 255 is
+		fully invisible.</div>
+
+		<table class="tablenote"><tr><td>
+		<div class="note">A cel with a transparency of 255 may still be clicked on although it cannot be
+    seen.</div>
+		</td></tr></table>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS1b to FKiSS3, <i>target</i> may be a cel or object number.</div>
+		<div>In FKiSS4, <i>target</i> may be a cel, object number, group, or a variable representing an object
+    number.</div>
+		</div>
+
+		<h3><i>N</i></h3>
+		<div class="indent">
+		<div>In FKiSS1b to FKiSS2.1, <i>N</i> must be a number.</div>
+		<div>In FKiSS3, <i>N</i> may be a number or variable.</div>
+		</div>
+    <h4>Example:</h4>
+    <div class="example">;@ transparent(VarObj, 16)&nbsp; <i>; Increase translucency of the object or group identified by VarObj by 16.</i></div>
+    <div class="example">;@ transparent(VarObj, -32) <i>; Decrease translucency of the object or group identified by VarObj by 32.</i></div>
+    <div class="example">;@ transparent(#5, -255)&nbsp;&nbsp;&nbsp; <i>; Makes sure #5 is completely opaque.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; transparent</div>
+  </body>
+</html>

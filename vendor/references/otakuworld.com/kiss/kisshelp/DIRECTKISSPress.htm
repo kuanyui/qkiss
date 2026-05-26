@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <title>Press</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; press</div>
+    <h1>Event: <i>Press(target)</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSRelease.htm">release</a>,
+		<a href="DIRECTKISSCatch.htm">catch</a>,
+		<a href="DIRECTKISSFixcatch.htm">fixcatch</a>,
+		<a href="DIRECTKISSDrop.htm">drop</a>,
+		<a href="DIRECTKISSFixdrop.htm">fixdrop</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions: <a href="DIRECTKISSLetcatch.htm">letcatch</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>press(<i>target</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>The <b>press</b> event is triggered when the user clicks on the
+		<i>target</i>.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">Only one <b>press</b> event should exist for any <i>target</i>.</div>
+		</td></tr></table>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS3, <i>target</i> may be an object number or cel.</div>
+    <div>In FKiSS4, <i>target</i> may be an object number, cel, or group.</div>
+		</div>
+
+		<h4>Example:</h4>
+		<div class="example">
+    ;@ press(&quot;hair1.cel&quot;)&nbsp;&nbsp; <i>; When the mouse is clicked on &quot;hair1.cel&quot;...</i><br>
+    ;@ &nbsp;&nbsp;map(&quot;hair2.cel&quot;)&nbsp;&nbsp; <i>; Show &quot;hair2.cel&quot;</i><br>
+		;@ &nbsp;&nbsp;unmap(&quot;hair1.cel&quot;) <i>; and hide &quot;hair1.cel&quot;.</i></div>
+
+		<div class="example">
+    ;@ press(#5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; When the mouse is clicked on any cel in object #5...</i><br>
+    ;@ &nbsp;&nbsp;sound(&quot;ding.wav&quot;)&nbsp; <i>; Play a sound.</i></div>
+
+		<div class="example">
+    ;@ press(!MyGroup)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; When the mouse is clicked on any cel in group !MyGroup...</i><br>
+    ;@ &nbsp;&nbsp;gosub(50)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Execute procedure 50.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; press</div>
+  </body>
+</html>

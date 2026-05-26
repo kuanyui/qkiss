@@ -1,0 +1,159 @@
+<html>
+  <head>
+    <title>FKiSS Event Order</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; FKiSS Event Order</div>
+    <h1>FKiSS Event Order</h1>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_General_Syntax.htm">General Syntax</a>,
+		<a href="DIRECTKISSFKiSS_Data_Types.htm">Data Types</a>,
+		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>,
+		<a href="DIRECTKISSFKiSS_Shortcuts.htm">Shortcuts</a>,
+		<a href="DIRECTKISSFKiSS_Cel_Groups.htm">Cel Groups</a>,
+		<a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<h2>Description</h2>
+		<div class="indent">
+    <div>Some events can trigger other events, creating a stack of events. These events
+    will always trigger in a very specific order.</div>
+
+
+    <hr>
+    <h3>FKiSS movement</h3>
+			<div class="indent">
+      <div>When an FKiSS action causes an object to move, the following sequence occurs:</div>
+			<ol>
+        <li> <i>The object's current position (before movement) is checked to see if it has
+        collided with other objects</i>
+				<ol>
+					<li> <a href="DIRECTKISSCollide.htm">collide()</a> event is triggered<br>
+				</ol>
+				<br>
+				<li> <i>The object moves to its new position</i>
+        <ol>
+					<li> <a href="DIRECTKISSApart.htm">apart()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSIn.htm">in()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSStillin.htm">stillin()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSOut.htm">out()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSStillout.htm">stillout()</a> event is triggered
+        	<br>
+				</ol>
+				<br>
+				<li> <i>The object's new position (after movement) is checked to see if it has
+        collided with other objects</i>
+				<ol>
+					<li> <a href="DIRECTKISSCollide.htm">collide()</a> event is triggered<br>
+				</ol>
+				<br>
+				<li> <i>FKiSS actions continue executing after the FKiSS action which started this
+        sequence</i>
+        <br>
+			</ol>
+			</div>
+
+    <hr>
+    <h3>User movement</h3>
+			<div class="indent">
+
+      <div><i>The user clicks the mouse button on an object:</i>
+			<ol>
+    	    <li> <a href="DIRECTKISSPress.htm">press()</a> event is triggered
+        <br>
+			</ol>
+			</div>
+
+			<div><i>The user moves the mouse:</i>
+			<ol>
+				<li> <a href="DIRECTKISSCatch.htm">catch()</a> event is triggered
+        <br>
+				<li> <a href="DIRECTKISSFixcatch.htm">fixcatch()</a> event is triggered, if fix value of object is greater than 1
+        <br>
+				<li> <a href="DIRECTKISSUnfix.htm">unfix()</a> event is triggered, if fix value of object is equal to 1
+        <br>
+				<li><i>If the fix value of the object is greater than 0 but less than the
+			<a href="DIRECTKISSuntitled00000210.htm">max fix value,</a> the fix value is reduced by 1.</i>
+			</ol>
+			</div>
+			<div><i>The user releases the mouse button:</i>
+			<div class="indent">
+				<ul>
+					<li><i>The object's original position (before dragging) is checked to see if it has
+        	collided with other objects or</i>
+        	<br>
+					<li><i>The object's new position (after dragging) is checked to see if it has
+        	collided with other objects</i><br>
+				</ul>
+				<div>And the following events are triggered:
+					<ol>
+					<li> <a href="DIRECTKISSCollide.htm">collide()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSApart.htm">apart()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSIn.htm">in()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSStillin.htm">stillin()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSOut.htm">out()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSStillout.htm">stillout()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSRelease.htm">release()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSDrop.htm">drop()</a> event is triggered, if fix value of object is equal to 0
+        	<br>
+					<li> <a href="DIRECTKISSFixdrop.htm">fixdrop()</a> event is triggered, if fix value of object is greater than 0
+        	<br>
+	    	</ol>
+			</div>
+			</div>
+			</div>
+
+    <hr>
+		<h3>Set change</h3>
+		<div class="indent">
+      </div>When a set (page) change is requested by clicking a menu button or the
+			<a href="DIRECTKISSChangeset.htm">changeset()</a> FKiSS action, the following sequence occurs:</div>
+
+			<ol>
+        <li> <i>All objects' current positions (on the current set) are checked to see if they
+        collided with other objects</i>
+				<ol>
+					<li> <a href="DIRECTKISSCollide.htm">collide()</a> event is triggered<br>
+				</ol>
+				<br>
+				<li> <i>The new set becomes the current set</i>
+        <br>
+				<ol>
+					<li> <a href="DIRECTKISSSet.htm">set()</a> event is triggered
+        	<br>
+					<li> <a href="DIRECTKISSCol.htm">col()</a> event is triggered if the palette has changed
+  	      <br>
+				</ol>
+				<br>
+				<li> <i>All objects' current positions (on the new set) are checked to see if they
+        collided with other objects</i>
+				<ol>
+					<li> <a href="DIRECTKISSCollide.htm">collide()</a> event is triggered<br>
+				</ol>
+				<br>
+			</ol>
+		</div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; FKiSS Event Order</div>
+  </body>
+</html>

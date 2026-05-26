@@ -1,0 +1,296 @@
+<html>
+  <head>
+    <title>FKiSS Data Types</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Data Types</div>
+    <h1>FKiSS Data Types</h1>
+
+    <div class="seealso">See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_General_Syntax.htm">General Syntax</a>,
+		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>,
+		<a href="DIRECTKISSFKiSS_Shortcuts.htm">Shortcuts</a>,
+		<a href="DIRECTKISSFKiSS_tags.htm">%Tags</a>,
+		<a href="DIRECTKISSFKiSS_Cel_Groups.htm">Cel Groups</a>,
+		<a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>,
+		<a href="DIRECTKISSFKiSS_HINTs.htm">HINTs</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<h2>Overview</h2>
+		<div class="indent">
+    <div>There are many different FKiSS data types which can be used as parameters in an
+    FKiSS command:</div>
+
+		<hr>
+		<h3><a name="number">Numbers</a></h3>
+		<div class="indent">
+			<div>All numbers in FKiSS are integers, that is, values without a decimal point. For example,
+			5, 0, or -37 but not 3.14159.</div>
+			<div>Numbers have the following requirements:</div>
+			<ul>
+				<li>Must be in the range -2147483648 to 2147483647.<br>
+				<li>Must not include a decimal point.<br>
+				<li>Cannot be preceded by #; otherwise, the integer is treated as an object number.<br>
+			</ul>
+    	<h4>Example:</h4>
+    	<div class="example">
+			;@ alarm(1)<br>
+    	;@ &nbsp;&nbsp;movebyx(#2, #1, 14)<br>
+    	;@ &nbsp;&nbsp;movebyy(#2, #1, 37)</div>
+    	<h4>Wrong:</h4>
+    	<div class="example">
+			;@ alarm(#1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Alarms must be an integer, not an object</i><br>
+    	;@ &nbsp;&nbsp;movebyx(#2, #1, #14)&nbsp;  <i>; 3rd parameter must be an integer, not an object</i><br>
+    	;@ &nbsp;&nbsp;movebyy(#2, #1, 37.5)  <i>; 3rd parameter cannot contain a decimal point</i></div>
+		</div>
+
+		<hr>
+		<h3><a name="string">Strings</a></h3>
+		<div class="indent">
+    	<div>A string is a block of text surrounded by quotation marks. It can include any
+    	type of character except a quotation mark.</div>
+
+    	<h4>Example:</h4>
+    	<div class="example">
+			;@ alarm(1)<br>
+    	;@ &nbsp;&nbsp;notify(&quot;Hello, World!&quot;)<br>
+    	;@ &nbsp;&nbsp;shell(&quot;http://OtakuWorld.com/kiss/&quot;)</div>
+    	<br>
+    	<h4>Wrong:</h4>
+    	<div class="example">;@ notify(Hello, World!)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; A string must be surrounded by quotes</i></div>
+    	<div class="example">;@ notify(&quot;John says, &quot;Hello!&quot;&quot;) <i>; Quotes cannot appear inside quotes</i></div>
+		</div>
+
+		<hr>
+		<h3><a name="cel">Cels</a></h3>
+		<div class="indent">
+    	<div>A cel is an image filename specified as a <a href="DIRECTKISSFKiSS_Data_Types.htm#string">string</a>.  That is, a cel
+			is identified by its filename (including the extension) surrounded by
+			quotation marks.</div>
+			<h4>Example:</h4>
+    	<div class="example">
+			;@ press(&quot;face1.cel&quot;)<br>
+    	;@ &nbsp;&nbsp;unmap(&quot;face1.cel&quot;)<br>
+    	;@ &nbsp;&nbsp;map(&quot;face2.cel&quot;)</div>
+    	<h4>Wrong:</h4>
+    	<div class="example">
+			;@ press(face1.cel) <i>; A cel name must be surrounded by quotes when used as a parameter</i><br>
+    	;@ &nbsp;&nbsp;map(&quot;face2&quot;)&nbsp;&nbsp; <i>; A cel name must be a complete filename</i></div>
+			<h4>Reuse of cels</h4>
+			<div class="indent">
+			<div>It is possible to use the same cel in different objects. For example, you
+    	might want to use the same cel with different
+			<a href="DIRECTKISSKISS_General_Specification_KCF.htm">KCF palette files</a> like this:</div>
+    	<div class="example">
+			#1 hat.cel *1&nbsp; <i>; In object #1, use the second defined KCF with hat.cel.</i><br>
+    	#27 hat.cel *3 <i>; In object #27, use the fourth defined KCF with hat.cel.</i></div>
+
+			<div>This is perfectly acceptable in KiSS. For FKiSS support, most
+			modern viewers support such <a href="DIRECTKISSKISS_Terms.htm#ambiguous">ambiguous</a>
+			cels by applying the <a href="https://otakuworld.com/kiss/kisshelp/DIRECTKISSFKISS_Actions.htm">action</a> or
+			<a href="https://otakuworld.com/kiss/kisshelp/DIRECTKISSFKISS_Events.htm">event</a> to all instances of that cel. For
+			example:</div>
+
+			<div class="example">
+			;@ press(&quot;hat.cel&quot;)<br>
+    	;@ &nbsp;&nbsp;altmap(&quot;hat.cel&quot;)</div>
+			<div>This <a href="DIRECTKISSPress.htm">press</a> event is activated by
+			the user clicking on any instance of hat.cel. The
+			<a href="DIRECTKISSAltmap.htm">altmap</a> command is then performed for
+			each instance of hat.cel individually.</div>
+			</div>
+
+			<table class="tablenote"><tr><td>
+			<div class="note">And remember the quotation marks. You need both of them.</div>
+			</td></tr></table>
+		</div>
+
+		<hr>
+		<h3><a name="object">Objects</a></h3>
+		<div class="indent">
+    	<div>An object is identified by its object number preceeded with <b>#</b>.</div>
+    	<h4>Example:</h4>
+    	<div class="example">;@ in(#1, #2)<br>
+    	;@ &nbsp;&nbsp;movebyx(#2, #1, 14)<br>
+    	;@ &nbsp;&nbsp;movebyy(#2, #1, 37)</div>
+    	<h4>Wrong:</h4>
+    	<div class="example">
+			;@ in(1, 2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; First 2 parameters are objects and need leading #</i><br>
+    	;@ &nbsp;&nbsp;movebyx(2, 1, 14) <i>; First 2 parameters are objects and need leading #</i><br>
+    	;@ &nbsp;&nbsp;movebyy(2, 1, 37) <i>; First 2 parameters are objects and need leading #</i></div>
+		</div>
+
+		<hr>
+		<h3><a name="group">Groups</a></h3>
+		<div class="indent">
+    	<div>Groups are a new concept introduced in FKiSS4. A group is an
+			arbitrary collection of cels that can span multiple objects. Many
+			actions and events can be applied to all cels in a group.</div>
+
+			<h4><a name="groupframe">Group Frames</a></h4>
+			<div class="indent">
+			<div>In addition, cels in a group can be associated with group frames. A
+			frame is nothing more than a collection of visible (mapped) cels.  All
+			other cels in the group that are not in the current frame are hidden
+			(unmapped).  Use the FKiSS <a href="DIRECTKISSSetframe.htm">setframe()</a>
+			command to change the frame number of a group, thereby showing a
+			different set of cels in the group. Use the
+			<a href="DIRECTKISSLetframe.htm">letframe()</a> command to get the
+			current frame of a group.</div>
+
+			<div>Using group frames with the <a href="DIRECTKISSTimer.htm">timer()</a>
+			action and <a href="DIRECTKISSAlarm.htm">alarm</a> event, it is possible
+			to create animations.</div>
+			</div>
+
+			<h4><a name="groupname">Group Names</a></h4>
+			<div class="indent">
+			<div>Groups are identified by the name of the group preceeded by <b>!</b>.  Group names
+			have the following requirements:</div>
+			<ul>
+				<li>Must start with a letter.<br>
+				<li>Can contain up to 32 characters and numbers.<br>
+				<li>Cannot contain spaces.<br>
+				<li>Are case-insensitive (!group is the same as !GROUP).<br>
+				<li>Must not be surrounded by quotation marks.<br>
+			</ul>
+			</div>
+
+    	<h4>Example:</h4>
+    	<div class="example">
+			;@ press(!ThisGroup)<br>
+    	;@ &nbsp;&nbsp;unmap(!Group1)<br>
+    	;@ &nbsp;&nbsp;map(!group2)</div>
+    	<h4>Wrong:</h4>
+    	<div class="example">
+			;@ press(ThisGroup)&nbsp;&nbsp;&nbsp;  <i>; Group name must be preceded by a !</i><br>
+    	;@ &nbsp;&nbsp;unmap(&quot;!ThisGroup&quot;)  <i>; Group names cannot be surrounded by quotes</i><br>
+    	;@ &nbsp;&nbsp;map(!that  group)&nbsp;&nbsp;&nbsp;  <i>; Group names cannot have spaces in them</i><br>
+    	;@ &nbsp;&nbsp;map(!2group)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <i>; Group names cannot start with a number</i></div>
+		</div>
+
+		<hr>
+		<h3><a name="alarm">Alarms</a></h3>
+		<div class="indent">
+    	<div>Alarms are identified by either a number or, in FKiSS4, by a name.
+			Alarm names have the following requirements:</div>
+			<ul>
+				<li>Must start with a letter.<br>
+				<li>Can contain up to 32 characters and numbers.<br>
+				<li>Cannot contain spaces.<br>
+				<li>Are case-insensitive (myalarm is the same as MYALARM).<br>
+				<li>Must not be surrounded by quotation marks.<br>
+			</ul>
+    	<h4>Example:</h4>
+    	<div class="example">
+			;@ alarm(5)<br>
+    	;@ &nbsp;&nbsp;timer(MyAlarm, 100)<br>
+    	;@ &nbsp;&nbsp;timer(Alarm3, 100)</div>
+    	<h4>Wrong:</h4>
+    	<div class="example">;@ alarm(My Alarm)&nbsp;&nbsp;&nbsp; <i>; Alarm name cannot contain spaces</i></div>
+    	<div class="example">
+			;@ alarm(&quot;MyAlarm&quot;)&nbsp;&nbsp; <i>; Alarm name cannot be surrounded by quotes</i><br>
+    	;@ &nbsp;&nbsp;timer(#5, 100)&nbsp;&nbsp;&nbsp;&nbsp; <i>; An alarm number must not be preceded by #</i><br>
+    	;@ &nbsp;&nbsp;timer(3Alarm, 100) <i>; An alarm name cannot start with a number</i></div>
+
+			<div>For more information about the use of alarms, see <a href="DIRECTKISSAlarm.htm">Alarm()</a>
+			 and <a href="DIRECTKISSTimer.htm">Timer()</a>.</div>
+		</div>
+
+		<hr>
+		<h3><a name="label">Labels</a></h3>
+		<div class="indent">
+    	<div>Labels are event fragments or <a href="DIRECTKISSKISS_Terms.htm#procedure">procedures</a>
+			introduced in FKiSS3. They are identified by either a number or, in
+			FKiSS4, by a name.<div>
+
+			<div><br>A label name has the following requirements:
+			<ul>
+				<li>Must start with a letter.<br>
+				<li>Can contain up to 32 characters and numbers.<br>
+				<li>Cannot contain spaces.<br>
+				<li>Are case-insensitive (myalarm is the same as MYALARM).<br>
+				<li>Must not be surrounded by quotation marks.<br>
+			</ul>
+			</div>
+    	<h4>Example:</h4>
+    	<div class="example">
+			;@ label(5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Start of a procedure number 5.  This can be the target of a gosub or a goto action.</i><br>
+    	;@ &nbsp;&nbsp;gosub(MyLabel) <i>; Call another procedure called MyLabel and return here when done.<i><br>
+    	;@ &nbsp;&nbsp;goto(MyLabel5) <i>; Jump to a procedure called MyLabel5 and do not come back.</i></div>
+    	<h4>Wrong:</h4>
+    	<div class="example">;@ label(My Label)&nbsp; <i>; A label name cannot contain spaces</i></div>
+    	<div class="example">
+			;@ label(&quot;MyLabel&quot;) <i>; A label name cannot be surrounded by quotes</i><br>
+    	;@ &nbsp;&nbsp;gosub(#5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; A label number must not be preceded by #</i><br>
+    	;@ &nbsp;&nbsp;goto(5Label)&nbsp;&nbsp;&nbsp;&nbsp; <i>; A label name cannot start with a number</i></div>
+
+			<div>For more information about the use of labels, see <a href="DIRECTKISSLabel.htm">Label()</a>,
+			<a href="DIRECTKISSGosub.htm">Gosub()</a>, and <a href="DIRECTKISSGoto.htm">Goto()</a>.</div>
+
+		</div>
+
+		<hr>
+		<h3><a name="variable">Variables</a></h3>
+		<div class="indent">
+    	<div>Variables were introduced in FKiSS3. In FKiSS3, a variable may be a
+			single letter which may be followed by a single digit (for a total of 36
+			variables). In FKiSS4, a variable must start with a letter and may
+			contain a total of 32 characters and numbers. Variables have the
+			following requirements:</div>
+			<ul>
+				<li>Name must start with a letter.<br>
+				<li>Name can contain up to 32 characters and numbers.<br>
+				<li>Name cannot contain spaces.<br>
+				<li>Name is case-insensitive (myvariable is the same as MYVARIABLE).<br>
+				<li>Name must not be surrounded by quotation marks.<br>
+				<li>Value must be in the range -2147483648 to 2147483647.<br>
+				<li>Value must not include a decimal point.<br>
+			</ul>
+
+			<div>Variables may be used in the place of any number in an action
+			command. In FKiSS4, variables may also take the place of object numbers
+			in action commands. Variables may <i>never</i> be used in an event
+			command.</div>
+
+			<div>Variables can have the same names as alarms or labels. However, in
+			any command that expects an alarm or label value, it will use the alarm
+			or label before checking to see if there is a variable with that
+			name.</div>
+    	<h4>Example:</h4>
+    	<div class="example">
+			;@ alarm(5)<br>
+    	;@ &nbsp;&nbsp;let(X, 1)<br>
+    	;@ &nbsp;&nbsp;add(Sum, B1, B2)</div>
+    	<h4>Wrong:</h4>
+    	<div class="example">
+			;@ label(MyVariable)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; If you do this, it will treat MyVariable as a label name</i><br>
+    	;@ &nbsp;&nbsp;let(&quot;X&quot;, 5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <i>; Variable names cannot be surrounded by quotes</i><br>
+    	;@ &nbsp;&nbsp;let(Name, &quot;Fred&quot;)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <i>; variables cannot hold strings, only integers</i><br>
+    	;@ &nbsp;&nbsp;div(123result, bignumber, 10) <i>; variable names cannot start with a number</i><br>
+    	;@ &nbsp;&nbsp;div(result, big  number, 10)&nbsp;&nbsp; <i>; variable names cannot contain spaces</i></div>
+    </div>
+
+		<hr>
+		<h3>Value Pools</h3>
+		<div class="indent">
+    	<div>Value Pools are a new concept introduced in FKiSS4. Value Pools provide a way
+    	for variable values to be saved to disk and loaded again later, even during
+    	later sessions. For example, a game-based KiSS set could use a Value Pool to save
+    	the high score and load it again the next time that KiSS set is played or a
+    	KiSS doll might use a value pool to remember whether the user wanted the snap-to
+    	feature turned on and start with the same setting the next time that doll is
+    	loaded.</div>
+			<div>Each Value Pool can store any number of values, one for each named value entry.</div>
+			<div>For more details, see <a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>.</div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Data Types</div>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title>Label</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; label</div>
+    <h1>Event: <i>Label(label ID)</i></h1>
+
+		<div class="relatedevents">
+    Related Events: <a href="DIRECTKISSAlarm.htm">alarm</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSGosub.htm">gosub</a>,
+		<a href="DIRECTKISSGosubrandom.htm">gosubrandom</a>,
+		<a href="DIRECTKISSGoto.htm">goto</a>,
+		<a href="DIRECTKISSGotorandom.htm">gotorandom</a>,
+		<a href="DIRECTKISSRepeat.htm">repeat</a>,
+		<a href="DIRECTKISSExitloop.htm">exitloop</a>,
+		<a href="DIRECTKISSExitevent.htm">exitevent</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>label(<i>label ID</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS3</div>
+
+		<div>The <b>label</b> events are really a pseudo-event which provide a way
+		of sharing common actions between multiple events.  These are also called
+		<a href="DIRECTKISSKISS_Terms.htm#procedure">procedures</a>.  A <b>label</b> event
+		can only be activated by a <a href="DIRECTKISSGoto.htm">goto</a>,
+		<a href="DIRECTKISSGosub.htm">gosub</a>, or
+		<a href="DIRECTKISSRepeat.htm">repeat</a> action from another event.</div>
+
+		<div>Every <b>label</b> event must have a unique ID, different from every other label.</div>
+
+		<h3><i>label ID</i></h3>
+		<div class="indent">
+		<div>In FKiSS3, <i>label ID</i> must be a positive integer such as 0 or 250.</div>
+		<div>In FKiSS4, <i>label ID</i> may also be a symbolic name. This name
+		must begin with a letter and may contain additional letters or numbers up
+		to a total length of 32 characters. It is possible for a <i>label ID</i>
+		to be identical to an <i>alarm ID</i> or <i>variable</i> but it is better
+		to avoid such ambiguity.</div>
+		</div>
+
+    <h4>Example:</h4>
+    <div class="example">
+		;@ label(5)<br>
+    ;@ &nbsp;&nbsp;sound(&quot;bells.wav&quot;)
+		</div>
+
+		<div class="example">
+		;@ label(StartBlinking)<br>
+    ;@ &nbsp;&nbsp;unmap(&quot;eyes1.cel&quot;) map(&quot;eyes2.cel&quot;)
+		</div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; label</div>
+  </body>
+</html>

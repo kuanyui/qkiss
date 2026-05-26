@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title>Move</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; move</div>
+    <h1>Action: <i>Move(target, X, Y)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSMoveto.htm">moveto</a>,
+		<a href="DIRECTKISSMovebyx.htm">movebyx</a>,
+		<a href="DIRECTKISSMovebyy.htm">movebyy</a>,
+		<a href="DIRECTKISSMovetorand.htm">movetorand</a>,
+		<a href="DIRECTKISSMoverandx.htm">moverandx</a>,
+		<a href="DIRECTKISSMoverandy.htm">moverandy</a>,
+		<a href="DIRECTKISSRestrictx.htm">restrictx</a>,
+		<a href="DIRECTKISSRestricty.htm">restricty</a>,
+		<a href="DIRECTKISSLetinitx.htm">letinitx</a>,
+		<a href="DIRECTKISSLetinity.htm">letinity</a>,
+		<a href="DIRECTKISSLetobjectx.htm">letobjectx</a>,
+		<a href="DIRECTKISSLetobjecty.htm">letobjecty</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>move(<i>target, X, Y</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>
+		The <b>move</b> action causes <i>target</i> to move <i>X</i> pixels
+		horizontally and <i>Y</i> pixels vertically relative to its current
+		position.  Positive values move to the right and down while negative
+		values move to the left and up.</div>
+
+		<table class="tablenote"><tr><td>
+		<div class="note">FKiSS movement is restricted to the play field unless
+		<a href="DIRECTKISSRestrictx.htm"><b>restrictx</b></a> or<br>
+		<a href="DIRECTKISSRestrictx.htm"><b>restricty</b></a> is used to alter
+		the limits for an object.</div>
+		</td></tr></table>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS3, <i>target</i> must be an object number.</div>
+    <div>In FKiSS4, <i>target</i> may be an object number or a variable representing an object number.</div>
+		</div>
+
+		<h3><i>X</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS2.1, <i>X</i> must be a number.</div>
+		<div>In FKiSS3, <i>X</i> may be number or a variable.</div>
+		</div>
+
+		<h3><i>Y</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS2.1, <i>Y</i> must be a number.</div>
+		<div>In FKiSS3, <i>Y</i> may be number or a variable.</div>
+		</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ move(#5, 10, -25)&nbsp; <i>; Move object #5 to the right 10 pixels and up 25 pixels.</i></div>
+    <div class="example">;@ move(#5, -10, 25)&nbsp; <i>; Move object #5 to the left 10 pixels and down 25 pixels.</i></div>
+    <div class="example">;@ move(VarObj, X, Y) <i>; Move object identified by variable VarObj horizontally by X pixels and vertically by Y pixels.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; move</div>
+  </body>
+</html>

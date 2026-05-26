@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <title>Setkcf</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; setkcf</div>
+    <h1>Action: <i>Setkcf(target, N)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSLetkcf.htm">letkcf</a>,
+		<a href="DIRECTKISSSetfix.htm">setfix</a>,
+		<a href="DIRECTKISSLetfix.htm">letfix</a>,
+		<a href="DIRECTKISSGhost.htm">ghost</a>,
+		<a href="DIRECTKISSTransparent.htm">transparent</a>,
+		<a href="DIRECTKISSLettransparent.htm">lettransparent</a>,
+		<a href="DIRECTKISSLetinitx.htm">letinitx</a>,
+		<a href="DIRECTKISSLetinity.htm">letinity</a>,
+		<a href="DIRECTKISSLetmapped.htm">letmapped</a>,
+		<a href="DIRECTKISSLetobjectx.htm">letobjectx</a>,
+		<a href="DIRECTKISSLetobjecty.htm">letobjecty</a>,
+		<a href="DIRECTKISSLetwidth.htm">letwidth</a>,
+		<a href="DIRECTKISSLetheight.htm">letheight</a>,
+		<a href="DIRECTKISSLetcollide.htm">letcollide</a>,
+		<a href="DIRECTKISSLetinside.htm#2b4d4b1f">letinside</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>,
+		<a href="DIRECTKISSKISS_General_Specification_KCF.htm">KCF</a>
+		</div>
+
+
+		<hr>
+    <h2>setkcf(<i>target, N</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS4</div>
+		<div>The <b>setkcf</b> action sets all cels in <i>target</i> to use the
+		<a href="DIRECTKISSKISS_General_Specification_KCF.htm">KCF</a> <b>N</b>.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">If a cel in <i>target</i> is a CKiSS cel, this command will have no
+		effect.</div>
+		</td></tr></table>
+
+		<h3><i>target</i></h3>
+		<div class="indent"><i>target</i> may be a cel, object number, group, or a
+		variable representing an object number.</div>
+
+		<h3><i>N</i></h3>
+		<div class="indent"><i>N</i> may be a number or variable.</div>
+
+		<h4>Example:</h4>
+    <div class="example">;@ setkcf(&quot;hat.cel&quot;, 0) <i>; Make cel "hat.cel" use KCF 0 (the first KCF defined).</i></div>
+    <div class="example">;@ setkcf(#5, 2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Set object #5 to use KCF 2.</i></div>
+    <div class="example">;@ setkcf(VarObj, N)&nbsp;&nbsp;&nbsp; <i>; Set object defined by variable VarObj to use KCF defined by variable N.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; setkcf</div>
+  </body>
+</html>

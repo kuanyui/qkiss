@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>FKiSS Shortcuts</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Shortcuts</div>
+    <h1>FKiSS Shortcuts</h1>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_General_Syntax.htm">General Syntax</a>,
+		<a href="DIRECTKISSFKiSS_Data_Types.htm">Data Types</a>,
+		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>,
+		<a href="DIRECTKISSFKiSS_tags.htm">%Tags</a>,
+		<a href="DIRECTKISSFKiSS_Cel_Groups.htm">Cel Groups</a>,
+		<a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>,
+		<a href="DIRECTKISSFKiSS_HINTs.htm">HINTs</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<h2>Description</h2>
+		<div class="indent">
+			<div>It is possible to declare certain FKiSS effects as part of the KiSS object declaration.</div>
+
+			<div class="indent">
+			<div>As a reminder, the basic KiSS declaration syntax for an object is:
+			 <span class="monospace">#&lt;obj&gt;[.&lt;Fix&gt;] &lt;cel&gt; [*&lt;palnum&gt;] [:&lt;setnum&gt;...]</span></div>
+
+    	<h4>Example:</h4>
+    	<div class="example">#5.3 doll.cel *5 :1 3 7 8 9</div>
+			</div>
+
+    	<div>The extended declaration syntax is:
+			<span class="monospace">#&lt;mark&gt;[.&lt;Fix&gt;] &lt;cel&gt; [*&lt;palnum&gt;] [:&lt;setnum&gt;...] [;&lt;extensions&gt;]</span></div>
+
+    	<div>Extensions must be preceded by a semi-colon (<b>;</b>) which older
+			KiSS viewers will interpret as a comment. There must be no space between
+			the semi-colon and the first extension. Additional extensions are
+			separated by spaces.</div>
+
+    	<div>There are two types of FKiSS extensions: <a href="DIRECTKISSFKiSS_tags.htm">%Tags</a>
+			 and <a href="DIRECTKISSFKiSS_Cel_Groups.htm">!Cel Groups</a>.</div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Shortcuts</div>
+  </body>
+</html>

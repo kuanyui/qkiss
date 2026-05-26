@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>Repeat</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; repeat</div>
+    <h1>Action: <i>Repeat(label ID, times, count)</i></h1>
+
+		<div class="relatedevents">
+    Related Actions:
+		<a href="DIRECTKISSGosub.htm">gosub</a>,
+		<a href="DIRECTKISSGosubrandom.htm">gosubrandom</a>,
+		<a href="DIRECTKISSGoto.htm">goto</a>,
+		<a href="DIRECTKISSGotorandom.htm">gotorandom</a>,
+		<a href="DIRECTKISSExitloop.htm">exitloop</a>,
+		<a href="DIRECTKISSExitevent.htm">exitevent</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Events: <a href="DIRECTKISSLabel.htm">label</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>repeat(<i>label ID, times, count</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS4</div>
+
+		<div>For the given number of <i>times</i>, the specified label is called
+		as if with <a href="DIRECTKISSGosub.htm"><b>gosub()</b></a>. Before each
+		call, the variable <i>count</i> is set to the current iteration of the
+		loop (starting from 1).</div>
+
+		<h3><i>label ID</i></h3>
+		<div class="indent"><i>label ID</i> may be a label ID (number or symbolic
+		name) or a variable representing a label ID number.</div>
+
+		<h3><i>times</i></h3>
+		<div class="indent"><i>times</i> may be a number or a variable. This value
+		is evaluated before the loop is begun so changing the value of a variable
+		will not affect the number of loops.</div>
+
+		<h3><i>count</i></h3>
+		<div class="indent"><i>count</i> must be a variable name.</div>
+    <h4>Example:</h4>
+    <div class="example">;@ repeat(100, 5, N) <i>; Call subroutine 100 five times, setting variable N to the loop count each time.</i></div>
+    <div class="example">;@ repeat(MyLabel, 5, Count)</div>
+
+    </div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; repeat</div>
+  </body>
+</html>

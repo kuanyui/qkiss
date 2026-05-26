@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <title>FKiSS If-Endif Structure</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS If-Endif Structure</div>
+    <h1>FKiSS If-Endif Structure</h1>
+
+    <div class="seealso">See Also:
+		<a href="DIRECTKISSIfequal.htm">ifequal</a>,
+		<a href="DIRECTKISSIfnotequal.htm">ifnotequal</a>,
+		<a href="DIRECTKISSIfgreaterthan.htm">ifgreaterthan</a>,
+		<a href="DIRECTKISSIflessthan.htm">iflessthan</a>,
+		<a href="DIRECTKISSElse.htm">else</a>,
+		<a href="DIRECTKISSElseifequal.htm">elseifequal</a>,
+		<a href="DIRECTKISSElseifnotequal.htm">elseifnotequal</a>,
+		<a href="DIRECTKISSElseifgreaterthan.htm">elseifgreaterthan</a>,
+		<a href="DIRECTKISSElseiflessthan.htm">elseiflessthan</a>,
+		<a href="DIRECTKISSEndif.htm">endif</a>
+		</div>
+
+		<h2>Description</h2>
+		<div class="indent">
+    <div>If-Endif conditional structure allows you to define special conditions under
+    which blocks of action code are processed or ignored.</div>
+		<div>A block of action code can contain one or more actions.</div>
+
+		<div>FKiSS defines four types of if commands:</div>
+		<ul>
+			<li><div><a href="DIRECTKISSIfequal.htm">ifequal</a>(A,B)<br>
+					Evaluates to true if A equals B.</div>
+			<li><div><a href="DIRECTKISSIfnotequal.htm">ifnotequal</a>(A,B)<br>
+					Evaluates to true if A does not equal B.</div>
+			<li><div><a href="DIRECTKISSIfgreaterthan.htm">ifgreaterthan</a>(A,B)</br>
+					Evaluates to true if A is greater than B.</div>
+			<li><div><a href="DIRECTKISSIflessthan.htm">iflessthan</a>(A,B)<br>
+					Evaluates to true if A is less than B.</div>
+		</ul>
+		<div>FKiSS4 also defines four corresponding types of elseif commands:</div>
+		<ul>
+			<li><div><a href="https://otakuworld.com/kiss/kisshelp/DIRECTKISSelseifequal.htm">elseifequal</a>(A,B)<br>
+					Evaluates to true if A equals B.</div>
+			<li><div><a href="https://otakuworld.com/kiss/kisshelp/DIRECTKISSelseifnotequal.htm">elseifnotequal</a>(A,B)<br>
+					Evaluates to true if A does not equal B.</div>
+			<li><div><a href="https://otakuworld.com/kiss/kisshelp/DIRECTKISSelseifgreaterthan.htm">elseifgreaterthan</a>(A,B)</br>
+					Evaluates to true if A is greater than B.</div>
+			<li><div><a href="https://otakuworld.com/kiss/kisshelp/DIRECTKISSelseiflessthan.htm">elseiflessthan</a>(A,B)<br>
+					Evaluates to true if A is less than B.</div>
+		</ul>
+
+		<div>In any If-Endif conditional block, only one action sub-block will be be
+    processed. If there are multiple sub-blocks, only the first one which has a true
+    if/elseif will be processed.</div>
+		<div>If a previous If-Endif block has not been closed with Endif when an If is
+    encountered, an implicit Endif is assumed.</div>
+
+		<table class="tablenote"><tr><td>
+		<div class="note">Nested If-Endif blocks are not allowed.</div>
+		</td></tr></table>
+
+		<h3>If-Endif</h3>
+		<div class="indent">
+    	<div>The simplest If-Endif conditional structure is:</div>
+    	<div class="example">
+			;@ <b>ifcommand(<i>A</i>)</b><br>
+    	;@ &nbsp;&nbsp;<i>action</i><br>
+    	;@ <b>endif()</b>
+			</div>
+			<div>In this example, <i>action</i> will only be processed if <i>A</i> is true.</div>
+			<div><i>action</i> can be any number of action commands.</div>
+		</div>
+
+		<h3>If-Else-Endif</h3>
+		<div class="indent">
+    	<div>A slightly more complicated If-Endif conditional structure is:</div>
+    	<div class="example">
+			;@ <b>ifcommand(<i>A</i>)</b><br>
+    	;@ &nbsp;&nbsp;<i>action1</i><br>
+    	;@ <b>else()</b><br>
+    	;@ &nbsp;&nbsp;<i>action2</i><br>
+    	;@ <b>endif()</b>
+			</div>
+
+			<div>In this example, <i>action1</i> will be processed if <i>A</i> is true.</div>
+			<div>If <i>A</i> is not true, <i>action2</i> will be processed.</div>
+		</div>
+
+		<h3>If-Elseif-Else-Endif</h3>
+		<div class="indent">
+    	<div>With FKiSS4, a more complicated If-Endif conditional structure is:</div>
+    	<div class="example">
+			;@ <b>ifcommand(<i>A</i>)</b><br>
+    	;@ &nbsp;&nbsp;<i>action1</i><br>
+    	;@ <b>elseifcommand(<i>B</i>)</b><br>
+    	;@ &nbsp;&nbsp;<i>action2</i><br>
+    	;@ <b>else()</b><br>
+    	;@ &nbsp;&nbsp;<i>action3</i><br>
+    	;@ <b>endif()</b>
+			</div>
+			<div>In this example, <i>action1</i> will be processed if <i>A</i> is true.</div>
+			<div>If <i>A</i> is not true and <i>B</i> is true, <i>action2</i> will be processed.</div>
+			<div>If <i>A</i> is not true and <i>B</i> is not true, <i>action3</i> will be processed.</div>
+
+    	<div>An If-Elseif-Endif conditional chain may contain as many Elseif statements as
+    	you need.</div>
+		</div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS If-Endif Structure</div>
+  </body>
+</html>

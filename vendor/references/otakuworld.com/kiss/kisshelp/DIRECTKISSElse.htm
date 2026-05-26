@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Else</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; else</div>
+    <h1>Action: <i>Else()</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSIfequal.htm">ifequal</a>,
+		<a href="DIRECTKISSIfnotequal.htm">ifnotequal</a>,
+		<a href="DIRECTKISSIfgreaterthan.htm">ifgreaterthan</a>,
+		<a href="DIRECTKISSIflessthan.htm">iflessthan</a>,
+		<a href="DIRECTKISSElseifequal.htm">elseifequal</a>,
+		<a href="DIRECTKISSElseifnotequal.htm">elseifnotequal</a>,
+		<a href="DIRECTKISSElseifgreaterthan.htm">elseifgreaterthan</a>,
+		<a href="DIRECTKISSElseiflessthan.htm">elseiflessthan</a>,
+		<a href="DIRECTKISSEndif.htm">endif</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>else()</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS3</div>
+		<div>The <b>else</b> forms the middle of a
+		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">structured if-else-endif block</a>.</div>
+
+		<div>For <b>else</b>, the conditional block is executed only if all
+		previous conditional blocks were false.</div>
+
+    <h4>Example:</h4>
+		<div class="example">
+    ;@ ifequal(X, 1)&nbsp;&nbsp;&nbsp;&nbsp; <i>; If X equals 1 then show "doll.cel".</i><br>
+    ;@ &nbsp;&nbsp;map(&quot;doll.cel&quot;)<br>
+    ;@ else()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Otherwise, X does not equal 1 so hide "doll.cel".</i><br>
+    ;@ &nbsp;&nbsp;unmap(&quot;doll.cel&quot;)<br>
+    ;@ endif()</div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; else</div>
+  </body>
+</html>

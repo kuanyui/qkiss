@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title>Timer</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; timer</div>
+    <h1>Action: <i>Timer(alarm ID, delay)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSRandomtimer.htm">randomtimer</a>,
+		<a href="DIRECTKISSLettimer.htm">lettimer</a>,
+		<a href="DIRECTKISSIffixed.htm">iffixed</a>,
+		<a href="DIRECTKISSIfmapped.htm">ifmapped</a>,
+		<a href="DIRECTKISSIfmoved.htm">ifmoved</a>,
+		<a href="DIRECTKISSIfnotfixed.htm">ifnotfixed</a>,
+		<a href="DIRECTKISSIfnotmapped.htm">ifnotmapped</a>,
+		<a href="DIRECTKISSIfnotmoved.htm">ifnotmoved</a>,
+		<a href="DIRECTKISSExitevent.htm">exitevent</a>
+		</div>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSAlarm.htm">alarm</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>timer(<i>alarm ID, delay</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>
+		The <b>timer</b> action sets the timer for an alarm. If a timer for that alarm is already
+    counting down, the new delay time will replace it, resetting the alarm's timer.</div>
+		<div>
+		Setting <i>delay</i> to zero will cancel the timer for that alarm, preventing the alarm from being
+    activated.</div>
+
+		<h3><i>alarm ID</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS2.1, <i>alarm ID</i> must be an alarm ID
+		number.</div>
+
+		<div>In FKiSS3, <i>alarm ID</i> may be an alarm ID number or a variable
+		representing an alarm ID number.</div>
+
+		<div>In FKiSS4, <i>alarm ID</i> may be an alarm ID (number or symbolic
+		name) or a variable representing an alarm ID number.</div>
+		</div>
+
+		<h3><i>delay</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS2.1, <i>delay</i> must be a number representing the
+		delay time in <a href="DIRECTKISSuntitled00000001.htm">milliseconds</a>.</div>
+
+		<div>In FKiSS3, <i>delay</i> may be a number or a variable representing
+		the delay time in <a href="DIRECTKISSuntitled00000001.htm">milliseconds</a>.</div>
+		</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ timer(5, 1000)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Set alarm 5 to go off in 1 second.</i></div>
+    <div class="example">;@ timer(A, D)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Set alarm whose ID is in variable A to go off in the number of milliseconds stored in variable D.</i></div>
+    <div class="example">;@ timer(MyAlarm, 1000) <i>; Set alarm &quot;MyAlarm&quot; to go off in 1 second.</i></div>
+    <div class="example">;@ timer(17, 0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; cancels the timer for alarm 17.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; timer</div>
+  </body>
+</html>

@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title>Loadvalue</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; loadvalue</div>
+    <h1>Action: <i>Loadvalue(variable, name)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSValuepool.htm">valuepool</a>,
+		<a href="DIRECTKISSSavevalue.htm">savevalue</a>,
+		<a href="DIRECTKISSDeletevalue.htm">deletevalue</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>loadvalue(<i>variable, name</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS4</div>
+		<div>The <b>loadvalue</b> action loads a value from disk which could have
+		been saved earlier, even during previous sessions.</div>
+
+    <div>The value will be loaded from the current pool as specified by the
+		most recent <a href="DIRECTKISSValuepool.htm">valuepool</a> command.</div>
+
+		<div>For more information, see <a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>.</div>
+
+		<h3><i>variable</i></h3>
+		<div class="indent"><i>variable</i> must be the name of a variable.</div>
+
+		<h3><i>name</i></h3>
+		<div class="indent">
+		<div><i>name</i> is an identifier under which the value will be stored. It
+		may be between 1 and 64 characters. They may contain letters, digits,
+		hyphens, and underscores. Value names are case-insensitive. The name must
+		be enclosed with quotation marks.</div>
+
+		<div>If you want to specify a valuepool other than the current pool without
+    changing the current pool, you can specify it in the value name by separating it with
+    a period (.).</div>
+
+    <div>If no value entry exists for this value name in the value pool, the
+		value of <i>variable</i> is unchanged.</div>
+		</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ loadvalue(high, &quot;HighScore&quot;)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; loads value in &quot;HighScore&quot; into the variable high from the current value pool.</i></div>
+    <div class="example">;@ loadvalue(str, &quot;Johns_Adventure1.strength&quot;) <i>; loads value in &quot;strength&quot; into the variable str from the value pool &quot;Johns_Adventure1&quot;</i>.</div>
+    <div class="example">;@ loadvalue(snap, &quot;.SnapTo&quot;)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; loads value in &quot;SnapTo&quot; into the variable snap from the private value pool for this KiSS data set.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; loadvalue</div>
+  </body>
+</html>

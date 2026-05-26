@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title>Gosub</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; gosub</div>
+    <h1>Action: <i>Gosub(label ID)</i></h1>
+
+		<div class="relatedevents">
+    Related Actions:
+		<a href="DIRECTKISSGosubrandom.htm">gosubrandom</a>,
+		<a href="DIRECTKISSGoto.htm">goto</a>,
+		<a href="DIRECTKISSGotorandom.htm">gotorandom</a>,
+		<a href="DIRECTKISSRepeat.htm">repeat</a>,
+		<a href="DIRECTKISSExitloop.htm">exitloop</a>,
+		<a href="DIRECTKISSExitevent.htm">exitevent</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Events: <a href="DIRECTKISSLabel.htm">label</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>gosub(<i>label ID</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS3</div>
+
+		<div>Processing immediately jumps from this action to the specified label.
+		When that label finishes, processing of the current event continues.</div>
+
+		<h3><i>label ID</i></h3>
+		<div>In FKiSS3, <i>label ID</i> may be a label ID number or a variable
+		representing a label ID number.</div>
+
+		<div>In FKiSS4, <i>label ID</i> may be a label ID (number or symbolic
+		name) or a variable representing a label ID number.</div>
+
+    <h4>Example:</h4>
+		<div class="indent">This example shows how a subroutine is created and
+		called with the <b>gosub()</b> action.  A subroutine can perform one or
+		more actions and when done, processing continues with the action after the
+		<b>gosub()</b> action.</div>
+
+    <div class="example">
+		<i>; ... other actions in this event ...</i><br>
+		;@ <b>gosub</b>(NextFrame) <i>; Advance to next frame of !MyAnimation group</i><br>
+		<i>; After the gosub(), processing continues from here.</i><br>
+		<br>
+		<i>... a bunch of actions or events can go here...</i><br>
+		<br>
+		<i>; Subroutine to advance to the next frame of a group, wrapping to the first frame.</i><br>
+		;@ label(NextFrame)<br>
+		;@ &nbsp;&nbsp;letframe(currentFrame, !MyAnimation)<br>
+		;@ &nbsp;&nbsp;add(currentFrame, currentFrame, 1) <i>; Advance the frame by 1.</i><br>
+		;@ &nbsp;&nbsp;mod(currentFrame, currentFrame, 4) <i>; Wrap to first frame when we reach frame 4.</i><br>
+		;@ &nbsp;&nbsp;setframe(!MyAnimation, currentFrame)
+		</div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; gosub</div>
+  </body>
+</html>

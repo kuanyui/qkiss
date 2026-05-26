@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>Begin</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; begin</div>
+    <h1>Event: <i>Begin()</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSInitialize.htm">initialize</a>,
+		<a href="DIRECTKISSEnd.htm">end</a>,
+		<a href="DIRECTKISSOverflow.htm">overflow</a>,
+		<a href="DIRECTKISSNever.htm">never</a>,
+		<a href="DIRECTKISSVersion.htm">version</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>begin()</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>The <b>begin</b> event is called exactly once immediately after the
+		artform is displayed on the screen for the first time. This event occurs
+		after the <a href="DIRECTKISSInitialize.htm"><b>initialize</b></a> event
+		but before any <a href="DIRECTKISSVersion.htm"><b>version</b></a>
+		events.</div>
+
+    <div>Use this event for any actions which should begin when the user is
+		first shown the artform such as starting basic alarm timers.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">There can only be one <b>begin</b> event.</div>
+		</td></tr></table>
+
+		<h4>Example:</h4>
+		<div class="example">
+    ;@ begin()<br>
+    ;@ &nbsp;&nbsp;timer(5, 100)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; After the art is shown, start timer 5 at 100 milliseconds,</i><br>
+    ;@ &nbsp;&nbsp;notify(&quot;Welcome to my doll!&quot;) <i>; and present a welcome message to the user.</i>
+		</div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; begin</div>
+  </body>
+</html>

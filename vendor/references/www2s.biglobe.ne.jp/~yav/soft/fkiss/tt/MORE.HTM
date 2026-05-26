@@ -1,0 +1,967 @@
+<HTML>
+<HEAD>
+<TITLE>fkissの勝手な説明。v0.04 (HTML版)</TITLE>
+</HEAD><BASEFONT SIZE=4>
+<BODY BGCOLOR="#FFDDAA" LINK="#0000FF" VLINK="#000088">
+
+ローダに依存する機能　by えむけいさま 　引用 T_Ten　1997/11/10
+
+<HR SIZE=4>
+<CENTER><FONT SIZE=4>もくじ</FONT></CENTER>
+<HR SIZE=4>
+<OL>
+<LI><A HREF="MORE.HTM#HAJIMENI">はじめに（動作確認環境）</A>
+<LI><A HREF="MORE.HTM#EVENT">fkissのイベント拡張</A>
+    <UL>
+    <LI>１・<A HREF="MORE.HTM#UNSUPPORT">サポートしていない命令</A>
+    <LI>２・<A HREF="MORE.HTM#TIMER">同時に起動するタイマ</A>
+    <LI>３・<A HREF="MORE.HTM#TRANS">transparent命令</A>
+    <LI>４・<A HREF="MORE.HTM#OBJECT">オブジェクトのmap/unmap/altmap</A>
+    <LI>５・<A HREF="MORE.HTM#SAMECEL">同名のセル</A>
+    <LI>６・<A HREF="MORE.HTM#DAISYOU">大文字・小文字の区別</A>
+    <LI>７・<A HREF="MORE.HTM#MUSIC">再生できる音声ファイル</A>
+    <LI>８・<A HREF="MORE.HTM#MOVE">固定値がついたセルのmove</A>
+    <LI>９・<A HREF="MORE.HTM#RELEASE">releaseイベントの起動タイミング</A>
+    </UL>
+<LI><A HREF="MORE.HTM#COMMENT">コメント表示機能</A>
+<LI><A HREF="MORE.HTM#PLAY">PlayFKiSSについて(Macの人も見て！)</A>  (T_Tenが追加)
+    <UL>
+    <LI><A HREF="MORE.HTM#KAIGAI">【海外の動向】</A>
+    <LI><A HREF="MORE.HTM#SARANI">【さらなる拡張への試み】</A>
+    <LI><A HREF="MORE.HTM#FUAN">【データ互換性に関する不安】</A>
+    <LI><A HREF="MORE.HTM#ONEGAI">【データ作成時の御願い】</A>
+    <LI><A HREF="MORE.HTM#ITIRAN">【PlayFKiss,French Kissで使用される命令一覧（だけ）】</A>
+    </UL>
+</OL>
+<BR><BR>
+<HR SIZE=4>
+<DL>
+<DT>
+<DD>
+  　本ファイルは、えむけい氏作 KISSLD v0.07s添付ヘルプに記載されている
+  内容のうち「fkiss命令」と「コメント機能」に関するファイルを取り出し、
+  T_Ten が、えむけい氏の承諾を得て、
+  テキストファイルに直したものです。m(__)m<BR>
+  しかし、一部分表記を変更していますので、まったく同じではありません。<BR>
+  最新の情報につきましては、最新のKISSLDの添付ヘルプをごらんください。
+（【４】は T_Tenが編集しました。）<P>
+
+【TTFKSMN4.HTM】では、一般的な使用法の説明をしましたが、
+  本ファイルは、それでは至らない部分の、特に機種依存する部分の
+  より深い説明となっています。<P>
+
+  <FONT COLOR="#FF0000">データを作成なさる皆様が、他の人の環境を考慮頂ければ
+  より多くの人に、自分の意図した作品を見てもらうことができるでしょう。<P>
+  </FONT>
+</DL>
+注：1997/11/10時点での最新版は<BR>
+KISSLD v0.07sです。<p>
+
+<HR SIZE=4>
+<A NAME="HAJIMENI">【１】はじめに（動作確認環境）</A>
+<BR><BR>
+　現在、KISSのデータをさらに楽しいものにするべく、仕様上のさまざまな
+拡張が試みられています。それらの拡張は、当然ながらその仕様をサポートする
+ローダでしか使えません。<BR>
+  また、KISS/GSであいまいな部分の動作が、ローダによって微妙に異なったりも
+しています。<BR>
+  以下に、私が知っている拡張仕様や、互換性に関して私が気づいた部分をあげて
+おきます。ただしこれは私が勝手に調べたものなので、疑問点などについて各ローダ
+の作者様に直接問い合わせるようなことはご遠慮ください。<P>
+
+　<FONT COLOR="#FF0000">ローダの動作はバージョンによっても異なります。</FONT>
+私が動作の検証に用いた
+ローダとそのバージョンは、以下の通りです。とくにバージョンを明記してい
+ないときは、このバージョンについての説明であるとお考えください。<P>
+
+　WKISS/WKISS32に関しては、最新の公開バージョンであるWKISS ver 2.36a w0.68以降
+とWKISS32 v0.04以降の、バージョンによる違いに触れている場合もあります。<P>
+
+<TABLE BORDER>
+<TR><TD>・WKISS32 v0.04d</TD></TR>
+<TR><TD>・WKISS v0.68c</TD></TR>
+<TR><TD>・KISSGAシリーズ v1.50</TD></TR>
+<TR><TD>・KISS v2.50d</TD></TR>
+<TR><TD>・fkiss v0.25</TD></TR>
+<TR><TD>・KISSLD v0.07s</TD></TR>
+</TABLE>
+<BR>
+<BR>
+<HR SIZE=4>
+<A NAME="EVENT">【２】fkissのイベント拡張</A>
+<BR>
+<BR>
+  　イベント拡張はまだ実験的な規格であり、<A HREF="MORE.HTM#[*1]">fkiss</A>
+  の仕様自体が
+  しばしば変わるうえ、ローダによって微妙に解釈が異なったりするため、
+  データとローダの間にはかなりの「相性」があります。<BR>
+  　ここでは<A HREF="MORE.HTM#FKISSEX">FKISSEX*.DOC</A>の内容を繰り返すことは
+  しません。互換性の問題に限って説明します。<BR>
+  <FONT COLOR="#FF0000">fkissのイベント拡張に関しては、
+  すでにある程度の基礎知識を持っていることを前提にしています。</FONT><P>
+
+<HR SIZE=2>
+<FONT SIZE=-1>
+<DL>
+<DT><A NAME="[*1]">fkiss</A>
+
+<DD>(1)yav氏による、UNIXの X Window System 用KISSローダです。
+  KISSをマルチメディア対応にするための拡張機能をサポートしています。<BR>
+  この拡張機能に対応したデータでは、クリックすると音声が出たり、
+  簡単なアニメーションをしたりします。ただし現時点ではまだ実験的な規格に
+  すぎず、次期KISSにはまったく異なる記述方式が採用される予定だそうです。<P>
+
+<DD>(2)fkiss(1)で実装されている、イベント拡張機能のことを指してfkissと呼ぶ
+  こともあります。<P>
+
+<DT><A NAME="FKISSEX">FKISSEX*.DOC</A>
+<DD>
+  fkissのアーカイブfkiss???.tar.gzに同梱されている、
+  次のファイル群の総称です。<P>
+
+    <DL>
+    <DD>
+    FKISSEX.DOC<BR>
+    FKISSEX1.DOC<BR>
+    FKISSEX2.DOC<BR>
+    FKISSEX3.DOC<P>
+    </DL>
+
+  <FONT COLOR="#FF0000">fkissは実験仕様であって日々変化する可能性があるため、
+  公式なマニュアルは存在しません。</FONT>
+  このドキュメント自体バージョンとともに変化する可能性が
+  あるので、できる限り最新版を参照することをおすすめします。<BR>
+  本ヘルプで参照しているバージョンは、??? = 025です。<P>
+</DL>
+</FONT>
+<HR SIZE=2>
+
+<HR SIZE=4>
+<DL>
+<DT><A NAME="UNSUPPORT">１・サポートしていない命令</A>（オリジナルはえむけい氏作）<P>
+<BR>
+
+　イベント系の命令は、実際に意味のある実装がなされていなくてもキーワード
+として認識している場合があります。これは、未対応だからといって単純に無視
+するとコンフィグの誤動作をまねくおそれがあるからです。<P>
+　たとえば、いまのところleftside,rightside,upside,downsideを実装している
+ローダはありません。<P>
+　なお、すべてのローダですべての命令について実験したわけではないので、
+ウソを書いている可能性もあります(^^;。間違いを見つけられましたらご一報い
+ただけると幸いです。<P>
+</DL>
+<HR SIZE=2>
+<DL>
+    <DL>
+    <DT>・図中で使用した記号<BR>
+    <DD>○：動作可能な命令<BR>
+    <DD>-：動作しない命令<BR>
+    <DD> *：キーワードとしてプログラムの中に予約されているが、動作はしない命令
+    </DL>
+</DL>
+<BR>
+<TABLE BORDER=5 CELLSPACING=1 CELLPADDING=1>
+
+<TR><TH>動作環境</TH><TH>UNIX/X11</TH><TH>Win32</TH><TH>PC-9821</TH><TH>Win32</TH><TH>Win32</TH><TH>Macintosh</TH></TR>
+
+<TR><TH>ローダー</TH><TH>fkiss</TH><TH>WKISS32</TH><TH>KISS21</TH><TH>KISSLD</TH><TH>PlayFKiss</TH><TH>French Kiss</TH></TR>
+
+<TR><TH>バージョン</TH><TH>v0.25</TH><TH>v0.04g</TH><TH>v1.50</TH><TH>v0.07q</TH><TH>alpha 0.71</TH><TH>2.2.0</TH></TR>
+
+<TR><TH>命令数</TH><TH>36</TH><TH>34</TH><TH>30</TH><TH>30</TH><TH>51</TH><TH>29</TH></TR>
+
+<TR><TH>never</TH><TH>○</TH><TH>-</TH><TH>-</TH><TH>○</TH><TH>○</TH><TH>-</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#initialize">initialize</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#alarm">alarm</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#begin">begin</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#end">end</A></TH><TH>○</TH><TH>*</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#press">press</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#release">release</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#catch">catch</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#drop">drop</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#fixcatch">fixcatch</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#fixdrop">fixdrop</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#unfix">unfix</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#set">set</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#col">col</A></TH><TH>○</TH><TH>-</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>in</TH><TH>*</TH><TH>-</TH><TH>-</TH><TH>-</TH><TH>-</TH><TH>-</TH></TR>
+<TR><TH>out</TH><TH>*</TH><TH>-</TH><TH>*</TH><TH>-</TH><TH>-</TH><TH>-</TH></TR>
+<TR><TH>leftside</TH><TH>*</TH><TH>-</TH><TH>*</TH><TH>-</TH><TH>-</TH><TH>-</TH></TR>
+
+<TR><TH>rightside</TH><TH>*</TH><TH>-</TH><TH>*</TH><TH>-</TH><TH>-</TH><TH>-</TH></TR>
+
+<TR><TH>upside</TH><TH>*</TH><TH>-</TH><TH>*</TH><TH>-</TH><TH>-</TH><TH>-</TH></TR>
+
+<TR><TH>downside</TH><TH>*</TH><TH>-</TH><TH>*</TH><TH>-</TH><TH>-</TH><TH>-</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#nop">nop</A></TH><TH>○</TH><TH>-</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH><A HREF="TTFKSMN4.HTM#[*7]">debug</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>-</TH></TR>
+
+<TR><TH><A HREF="MORE.HTM#shell">shell</A></TH><TH>○</TH><TH>-</TH><TH>○</TH><TH>○</TH><TH>-</TH><TH>-</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#unmap">unmap</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#map">map</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#altmap">altmap</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#move">move</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#sound">sound</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#timer">timer</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#randomtimer">randomtimer</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#quit">quit</A></TH><TH>○</TH><TH>-</TH><TH>-</TH><TH>○</TH><TH>*</TH><TH>-</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#changeset">changeset</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>-</TH></TR>
+
+<TR><TH><A HREF="TTFKSMN4.HTM#changecol">changecol</A></TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>○</TH><TH>-</TH></TH>
+
+<TR><TH><A HREF="MORE.HTM#TRANS">transparent</A></TH><TH>○</TH><TH>○</TH><TH>-</TH><TH>○</TH><TH>○</TH><TH>-</TH></TR>
+
+<TR><TH>windowsize</TH><TH>○</TH><TH>-</TH><TH>-</TH><TH>○</TH><TH>*</TH><TH>-</TH></TR>
+
+<TR><TH>viewport</TH><TH>○</TH><TH>-</TH><TH>-</TH><TH>○</TH><TH>*</TH><TH>-</TH></TR>
+
+<TR><TH>ローダー</TH><TH>fkiss</TH><TH>WKISS32</TH><TH>KISS21</TH><TH>KISSLD</TH><TH>PlayFKiss</TH><TH>French Kiss</TH></TR>
+</TABLE>
+<BR>
+<BR>
+
+　以下はFKiSS２命令です。それぞれの命令の互換性はよくわかりません。<BR>
+これらの命令の説明は、ローダー付属のドキュメントをご覧ください。<BR>
+<FONT COLOR="FF0000">また、ご使用の際は、使用ローダーを明示した方が良いでしょう。</FONT><P>
+<TABLE BORDER=5 CELLSPACING=1 CELLPADDING=1>
+<TR><TH>ローダー</TH><TH>WKISS32v0.04g</TH><TH>PlayFKiss alpha 0.71</TH><TH>French Kiss 2.2.0</TH></TR>
+<TR><TH>version</TH><TH>-</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>in<A HREF="MORE.HTM#in/2">/FKiSS2</A></TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>collide</TH><TH>○</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>out<A HREF="MORE.HTM#out/2">/FKiSS2</A></TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>apart</TH><TH>○</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>stillin</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>stillout</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>music</TH><TH>○</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>notify</TH><TH>-</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>moveto</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>movebyx</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>moverandx</TH><TH>-</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>movebyy</TH><TH>○</TH><TH>○</TH><TH>○</TH></TR>
+<TR><TH>moverandy</TH><TH>-</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>movetorand</TH><TH>○</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>ifmapped</TH><TH>-</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>ifnotmapped</TH><TH>-</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>iffixed</TH><TH>-</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>ifnotfixed</TH><TH>-</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>ifmoved</TH><TH>-</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>ifnotmoved</TH><TH>-</TH><TH>○</TH><TH>-</TH></TR>
+<TR><TH>setfix</TH><TH>-</TH><TH>○</TH><TH>-</TH></TR>
+</TABLE>
+
+<HR SIZE=2>
+<FONT SIZE=-1>
+<DL>
+<A NAME="in/2"></A>
+<A NAME="out/2"></A>
+<DT>in/FKiSS２,out/FKiSS２
+<DD>
+　FKiSS２命令で使用されているin,out命令は、fkiss命令でキーワード予約
+されているin,out命令と異なるため、このように表記しています。<BR>
+プログラムの世界は早いもの勝ち。といううわさもありますが、
+出来ることなら互換性の高いものになるといいです。:-( (T_Ten)<P>
+<DT><A NAME="shell">shell</A>
+<DD>
+　インターネットエクスプローラ3.0のセキュリティホール騒動で有名になりました
+が、任意のプログラムを(たとえばFDISKだろうがFORMATだろうが)起動できるという
+のは、とても恐いことなのです。本家fkissでも特別なスイッチを指定して起動しな
+いと有効にならなかったはずです。<BR>
+　とくにクライアントサーバを想定した作りになっているfkissではリモートマシン
+上の任意のプログラムを起動できるケースも考えられ、完璧なセキュリティホール
+になります。<BR>
+　KISSLDでは-dをつけなかった場合、実行するはずだった文字列を診断出力へ送るに
+とどめます。<P>
+
+</DL>
+</FONT>
+
+<HR SIZE=4>
+
+<A NAME="TIMER">２・同時に起動するタイマ<P></A>
+
+　まず、以下のfkiss命令をご覧ください。<P>
+
+<PRE>
+;@press(#1)             ;オブジェクト#1がマウスでクリックされると起動します。
+;@      timer(3,200)    ;200ミリ秒後に鳴るタイマ3を仕掛けます。
+;@      map("huge.cel") ;huge.celを表示状態にします。
+;@      timer(2,100)    ;100ミリ秒後に鳴るタイマ2を仕掛けます。
+;@alarm(2)              ;タイマ2が鳴ったときに起動します。
+;@      timer(1,100)    ;100ミリ秒後に鳴るタイマ1を仕掛けます。
+;@alarm(3)              ;タイマ3が鳴ったときに起動します
+;@      timer(4,1000)   ;1000ミリ秒後に鳴るタイマ4を仕掛けます。
+;@alarm(1)              ;タイマ1が鳴ったときに起動します
+
+;@      timer(4,0)      ;タイマ4が仕掛けられていたら、解除します。
+</PRE>
+　では、問題です。<P>
+<DL>
+<DT><FONT COLOR="#008800">問1</FONT>
+<DD> huge.celは非常に巨大で(あるいはマシンが非力で(;_;))、
+    マップに150ミリ秒かかったとします。<BR>タイマ2が起動するのは
+    #1が押されてから何ミリ秒後でしょうか?<BR>
+    ただし、セルのマップ以外にかかった時間は無視できるものとします。<P>
+
+<DT><FONT COLOR="#008800">問2</FONT>
+<DD> 問1と同じ条件で、タイマ1が起動するのは、
+    #1が押されてから何ミリ秒後でしょうか?<P>
+
+<DT><FONT COLOR="#008800">問3</FONT>
+<DD> タイマ4は鳴るでしょうか?<P>
+</DL>
+
+<HR SIZE=1>
+
+<DL>
+<DT>答1 <FONT COLOR="#008800">150ミリ秒後</FONT>
+<DD>マップに150ミリ秒かかって、それから100ミリ秒後に鳴るから250ミリ秒……
+  というのは間違いです。<BR>
+  timer命令は、自分が実行されたときの時刻ではなく、自分を支配下におく
+  イベント(問題文の例ではpress(#1))が起動されたときの時刻を基準に、
+  タイマを仕掛けます。<P>
+
+
+<DT>答2 <FONT COLOR="#008800">200ミリ秒後</FONT>
+<DD>タイマ2が起動するのが150ミリ秒後で、それから100ミリ秒後に鳴るタイマを
+  仕掛けるから250ミリ秒後……というのは間違いです(T_T)。<BR>
+  alarmは、実際の起動予定より遅れて起動しても、その遅れも計算に入れて
+  動作します。<P>
+
+    だから、問題文の例では実際には150ミリ秒後に起動していますが、
+  タイマ1の起動時刻を決めるときには、あたかも100ミリ秒後に起動したかの
+  ように計算します。<P>
+
+    このへんは雑誌などの〆切りに似ていると思います。今月〆切りに遅れた
+  からといって、来月以降の〆切りも延びるわけではありません:-)。<P>
+
+
+<DT>答3 <FONT COLOR="#008800">わからない</FONT>
+<DD>
+    FKISSEX*.DOCを見ても、同時に発生する(はずである)イベント同士が
+  どういう順番で処理されるかは書かれていません。<BR>
+  同じイベント内でのアクションについては処理系依存
+  (つまり結局わからない(^^;)と明記されています。<P>
+
+    したがってこういう記述はしないほうがいい……のですが、
+  fkissやWKISS32での実装に依存したデータもすでに存在します。<BR>
+  その場合の答は「鳴る」です<BR>
+  (なぜそうなのかは、これ以上ローダ依存のデータを増やしたくないので
+   説明しません)。<BR>
+  しかたがないのでKISSLDでもこの動作に合わせました。<P>
+</DL>
+<BR>
+<BR>
+<HR SIZE=4>
+<DL>
+<DT><A NAME="TRANS">３・transparent命令</A><P>
+<DD>
+    <FONT COLOR="#FF0000">transparent命令で(あるいはコメントの%tで)指定できる
+  透明度の範囲は0～256です。</FONT><P>
+
+    WKISS32 v0.04では付属ヘルプに0～255の範囲で補正すると書いてあり、
+  実際そうするのですがこれはある意味不具合のようです。<P>
+
+    WKISS32でも内部的には256で完全に透明になるよう計算していますし、
+  %tでは補正を行っていないので透明度256も指定できます。<P>
+
+  ですから、完全に透明にしたい場合には<P>
+<DL>
+<DD>transparent("aaa.cel", 256)<P>
+</DL>
+
+<DD>
+のように指定してください。<P>
+
+  　v0.04では間違って255に補正されるWKISS32でもエラーにはなりませんし、
+  v0.04c以降では正しく256になります。<BR>
+  　ローダによっては、256を指定した場合と255を指定した場合とで
+  処理速度がぜんぜん違う可能性があります。<P>
+
+  　なお、transparentおよび%tによって指定できる透明度と、
+  フルカラーセルでピクセル単位に指定できるアルファ値(透明度)は、
+  どちらも<A HREF="MORE.HTM#ckiss">ckiss</A>で規定しているにもかかわらず数値の意味が
+  異なることに注意してください。<BR>
+  前者は範囲が0～256で数値が大きくなるほど透明になりますが、<BR>
+  後者は範囲が0～255で数値が小さくなるほど透明になります。<P>
+
+<DT>追記：97/10/30<BR>
+<DD>
+<FONT COLOR="#FF0000">
+  注：</FONT>現バージョンのWKISS32では、transparent命令を使う場合には
+      KISS領域にて、<BR>
+      %t0,%t256,%t128といった透明色指定の
+      <A HREF="COMMENT.HTM#KINOU">機能文字</A>を、
+      とにかくどこかに一つ以上指定する必要があります。<BR>
+      指定しなかった場合は、fkiss領域にてtransparentを指定しても
+      透明色は表示されません。(未公開版WKISS32 v0.04gで確認)<P>
+      次のバージョン以降で修正されるそうです。<P>
+</DL>
+<HR SIZE=3>
+<DL>
+<FONT SIZE=-1>
+<DT><A NAME="ckiss">ckiss</A>
+<DD>(1)ひゅう氏によるKISSローダです(Win32用です。Macで動くPower PC版もある
+ようですが、詳細は知りません)。KISSでフルカラー/半透明対応のセルファイルや、
+コンフィグファイルのコメント領域を利用して半透明を実現するための拡張機能を
+提唱しています。<P>
+<DD>(2)ckiss(1)で実装されている、フルカラー/半透明拡張仕様のことです。
+</FONT>
+</DL>
+<BR>
+<BR>
+
+<HR SIZE=4>
+<DL>
+<DT><A NAME="OBJECT">４・オブジェクトのmap/unmap/altmap</A><P>
+<DD>
+  　<FONT COLOR="#FF0000">最新の(fkiss 0.25の)解釈では、map/unmap/altmap命令は、
+  セルに対してしか使えないことになっています。</FONT><BR>
+    しかし、多くの互換ローダは、古いデータの互換性のため、
+  引き続きオブジェクトのmap/unmap/altmapをサポートしています<BR>
+  (KISSLDもそうです)。<BR>
+  実はfkissもサポートしていますが、仕様では一切保証されていません。<P>
+<BR>
+</DL>
+
+<HR SIZE=4>
+<DL>
+<DT><A NAME="SAMECEL">５・同名のセル</A><P>
+<DD>
+　複数行コメントなどの関係で、まったく同じ名前のセルを複数回読み込む場合があります。そういうセルをfkissコマンドの引数に使った場合の動作はローダによって異なります。<P>
+
+</DL>
+<PRE>
+例:
+
+#0 abc.cel
+#1 abc.cel
+#2 abc.cel
+(中略)
+;@      altmap("abc.cel")
+</PRE>
+
+<DL>
+<DT>・<B>fkiss/WKISS/WKISS32/KISSLDの場合</B>
+<DD>  いちばん上のセルのみがaltmapされます。また、こちらがfkissとしての
+      正しい（fkissの提唱者であるyavさんの意図している）動作のようです。<P>
+
+<DT>・<B>KISSGAシリーズの場合</B>
+<DD>  同名の、すべてのセルがaltmapされます。
+</DL>
+
+<HR SIZE=4>
+<DL>
+<DT><A NAME="DAISYOU">６・大文字・小文字の区別</A><P>
+<DD>
+  fkissの命令は、すべて<FONT COLOR="#FF0000">大文字・小文字を厳密に区別します。
+</FONT><BR>
+  セルファイル名の指定も大文字・小文字を区別するよう、FKISSEX*.DOCには
+  書かれていますが、実はfkissは、まったく同名のセルが見つからないときは
+  (警告を表示した上で)大文字・小文字の組み合わせを除いて同名のセルで
+  代用するようになっています。<P>
+
+  私の試した限りでは、WKISS/WKISS32/KISSGAシリーズも、セルファイル名に
+  関しては大文字・小文字を区別しないようです。<BR>
+  ちなみに、KISSLDも大文字・小文字を区別しません。<P>
+<DT>  では、すべてのローダが同じ動作なのかというと、残念ながらそうでは
+  ありません。<P>
+</DL>
+<PRE>
+#0 abc.cel
+#1 ABC.CEL
+#2 abc.cel
+(中略)
+;@	unmap("ABC.CEL")
+</PRE>
+<BR>
+
+<DL>
+<DD>上記の例では、<BR>
+  fkissは2番目のセルをunmapします。<BR>
+  KISSGAシリーズは3つともunmapします。<BR>
+  それ以外のローダはいちばん上のセルをunmapします。<P>
+</DL>
+
+<HR SIZE=4>
+<DL>
+<DT><A NAME="MUSIC">７・再生できる音声ファイル</A><P>
+<DD>
+    FKISSEX*.DOCによれば、
+  <FONT COLOR="#FF0000">「オーディオファイルのフォーマットは未定」</FONT>
+  なのだそうです。<BR>
+  とりあえずWindowsのWAVEファイルにしておけば、Windows用のローダでは
+  まず間違いなく鳴りますが、他のOSでの動作も考えると難しいようです。<P>
+</DL>
+
+<HR SIZE=4>
+<DL>
+<DT><A NAME="MOVE">８・固定値がついたセルのmove</A><P>
+<DD>
+  WKISS/WKISS32ではmove命令で動かしているセルをクリックしても、固定値は
+  減算されないようです。それ以外のローダでは減算されます。<BR>
+  なぜWKISS系がこういう仕様なのかは謎です。<P>
+</DL>
+
+<HR SIZE=4>
+<DL>
+<DT><A NAME="RELEASE">９・releaseイベントの起動タイミング</A><P>
+<DD>
+　FKISSEX*.DOCによれば、固定オブジェクト(を構成するセル)に設定されたrelease
+  イベントは、固定オブジェクトが自動的にもとの位置に戻っても、ボタンを離す
+  までは発生しないことになっています。<BR>
+  　しかしKISSGAシリーズ/WKISS w0.68/WKISS32 v0.04bは、固定オブジェクトが
+  もとの位置に戻った時点でreleaseイベントを発生させてしまうようです。<BR>
+<FONT COLOR="#FF0000">WKISS v0.68c/WKISS32 v0.04c以降では、この非互換は修正
+されています。</FONT>
+
+</DL>
+
+<HR SIZE=4>
+<DL>
+<DT><A NAME="COMMENT">【３】コメント表示機能</A><P>
+<DD>
+  　セルをマウスの右ボタンでクリックしたとき、そのセルにコメントがついて
+  いればそれを表示するという機能です。うまく使えば(もちろん発声はしませ
+  んが)KISSで簡単なおしゃべりとか案内図も楽しめます。<BR>
+
+　厳密にいうならコメントがローダの機能で表示されることを想定していないデータ
+  (KISSGAシリーズの登場以前にはけっこうありました)では作者の意図しない表示を
+  してしまう可能性があります。しかし、逆にこの拡張を用いたデータを非対応
+  ローダで読んでも、コメントが見えないだけで動作にまったく問題はありません。
+  そのためもあってか、かなり多くのローダがサポートしていますが、
+  KISS/GSでは何も規定されていません(たとえば本家のPC-9801用KISS v2.50d
+  もサポートしていません)。<P>
+
+  またサポートしている<FONT COLOR="#FF0000">ローダ同士ではかなり動作が異なり、
+  </FONT>凝ったコメントを
+  付けているデータ作者の方々は、
+  <FONT COLOR="#FF0000">ローダ別にコンフィグを用意するなどの対策</FONT>
+  をされているようです。<P>
+<BR>
+
+<DT>私が知っている各ローダの動作を示します。<P>
+
+<A HREF="MORE.HTM#COM_KISS">本家KISS.EXE v2.50d</A><BR>
+<A HREF="MORE.HTM#COM_WKS">WKISS ver 2.36a w0.68</A><BR>
+<A HREF="MORE.HTM#COM_WK32">WKISS v0.68c/WKISS32/fkiss</A><BR>
+<A HREF="MORE.HTM#COM_KSGA">KISSGA/21/CL</A><BR>
+<A HREF="MORE.HTM#COM_MAC">Macintosh用KISSローダ</A><BR>
+<A HREF="MORE.HTM#COM_KSLD">参考: KISSLDでは</A><BR>
+
+
+</DL>
+  長いコメントの表示方法とローダの対応を表にまとめると、<P>
+<TABLE BORDER>
+<TR><TH></TH><TH>fkiss</TH><TH>KISSGA</TH><TH>WKISS</TH><TH>WKISS32</TH>
+<TH>KISSLD</TH></TR>
+<TR><TH>自動折り返し</TH><TD>×</TD><TD>○</TD><TD>○</TD><TD>×</TD>
+<TD><A HREF="MORE.HTM#[*4]">[*]</A></TD></TR>
+<TR><TH>機能文字</TH><TD>○</TD><TD>×</TD><TD>×</TD><TD>○</TD><TD>○</TD>
+</TR>
+<TR><TH>複数セル</TH><TD>○</TD><TD>×</TD><TD>○</TD><TD>○</TD><TD>○</TD>
+</TR>
+</TABLE>
+<BR>
+  となります。<P>
+
+  ご覧のとおり、どのローダでも使える方法はありません。<BR>
+  とくにKISSGAシリーズとfkiss / WKISS32とで両立させるのは不可能です。<BR>
+　また、一見同じ動作をしているように見えるfkiss/WKISS32/KISSLDも、
+  セットに存在しないセルやマップされていないセルの扱いがバラバラです。<P>
+
+　次期KISSではMacintosh(というかボタンがひとつしかない環境)での扱いを
+どうするかも含めて、統一仕様を正式に規格化していただけるといいですね。<BR>
+  それまではローダごとの特徴をつかんで、楽しく利用しましょう(^^)。<P>
+
+<HR SIZE=1>
+<BR>
+<BR>
+
+<DL>
+<DT><B><I><A NAME="COM_KISS">本家KISS.EXE v2.50d</A></I></B>
+<DD>
+    <FONT COLOR="#FF0000">コメント表示機能はありません。</FONT>
+  右クリックすると、マウスカーソルの位置
+  に関わらずツールパレット(?)の表示色が変化します。<P>
+
+<DT><B><I><A NAME="COM_WKS">WKISS ver 2.36a w0.68</A></I></B>
+<DD>
+    右クリックすると、クリックした位置にあるオブジェクトに関して
+    <UL>
+    <LI>オブジェクト番号
+    <LI>そのオブジェクトに所属し、現在のセットに存在するするすべてのセルの
+          ファイル名
+    <LI>セルにコメントがある場合は、そのコメント<BR>
+    </UL>
+      を表示します。<BR>
+
+  WKISS自体は折り返しはしないようですが、表示に使っているMessageBox関数
+の仕様から、あまりに長い行は自動的に<FONT COLOR="#FF0000">(勝手に)折り返されるため、
+</FONT>画面からはみ出すということはありません。<P>
+
+
+<DT><B><I><A NAME="COM_WK32">WKISS v0.68c/WKISS32/fkiss</A></I></B>
+<DD>
+    クリックしたオブジェクトに所属する<FONT COLOR="#FF0000">すべてのセルに
+  関して、
+  コメントを表示します。</FONT>
+  コメントにはいくつか機能文字が使えますが、長い行を自動的に
+  折り返すことはありません。折り返しも機能文字で指定してやらなくてはなら
+  ないのです(複数セルを用いた方法もありますが、コメント付きデータの作者
+  の皆様はよくご存じでしょうから、説明は省略します)。<P>
+
+　WKISSはメッセージボックスを使い、タイトルバーにはオブジェクト番号も表示
+  されます。<BR>
+　WKISS32/fkissはマウスボタンを押している間だけコメントを表示し、
+  オブジェクト番号は表示しません。<BR>
+　fkissは起動時オプションにより、クリックしたセルのみコメントを表示する
+  モードや、セルの(CNF内での)行番号も表示するモードに切り替えられます
+  (両者の併用もできます)。いずれの場合も機能文字は有効で、自動的に
+  折り返すことはありません。<P>
+
+<DT><B><I><A NAME="COM_KSGA">KISSGA/21/CL</A></I></B>
+<DD>
+　クリックしたセルにコメントがあれば、それを表示します。<BR>
+　クリックしたセルにコメントがない場合、<P>
+
+    <UL>
+    <LI>同じオブジェクトに所属し、
+    <LI>コメントを持つ
+    </UL>
+<BR>
+　セルを(重ね合わせ順で)上から探します。そして最初に見つかったセルの
+  コメントを代わりに表示します(それも見つからなければ何も表示しません)。<BR>
+　長いコメントは、半角40桁ごとに自動的に折り返されます。<BR>
+　また、オプションによって本家と同じ動作にもできるようです。<P>
+
+　上記はv1.50以降での動作です。古いバージョンでは、<FONT COLOR="#FF0000">
+表示するのはクリックしたセルのコメントのみです。</FONT>
+同じオブジェクトに所属する他のセルは関係ありません。<P>
+
+<DT><B><I><A NAME="COM_MAC">Macintosh用KISSローダ</A></I></B>
+<DD>
+    Macintoshのマウスには
+  <FONT COLOR="#FF0000">ボタンがひとつしかありません</FONT>から、当然「右クリ
+  ックした場合の動作」なんてあるわけありません。ただし、バルーンヘルプを
+  使ってカーソル位置にあるセルのコメントを表示する、などの試みがなされて
+  いるようです。<P>
+
+
+<DT><B><I><A NAME="COM_KSLD">KISSLD</A></I></B>
+<DD>
+KISSLDでは<BR>
+　拙作KISSLDでは、できるだけ多くのコンフィグに対応させるため、
+<FONT COLOR="#FF0000">2通りの表示モードを用意しています。</FONT><BR>
+それぞれ古いWKISS風の動作と、WKISS32/fkiss風の動作をします。<BR>
+　WKISS32/fkissモードの場合、"/!で囲まれておらず、複数セルも機能文字も
+使っていないコメントは、半角64桁程度で自動的に折り返します。それ以外の
+場合は(作者ご本人による改行の入れかたを尊重するため)
+<A HREF="MORE.HTM#[*4]">自動折り返し</A>はしません。<P>
+　またKISSLDは(どちらのモードでも)<A HREF="MORE.HTM#SETJOU">セット情報</A>を見て、
+現在の<A HREF="MORE.HTM#SET">セット</A>に存在しないセルのコメントは
+表示しないようにします。<BR>
+　WKISS/WKISS32の以前のバージョンおよびfkissはセット情報に関係なく、
+同じオブジェクトに所属し、かつコメントがあるなら、すべて表示します。<P>
+
+　WKISS32 v0.04c以降は現在のセットに存在しないセルのほか、fkiss命令で
+アンマップされたセルのコメントも表示しません。<P>
+</DL>
+
+<HR SIZE=2>
+<FONT SIZE=-1>
+<DL>
+<DT><A NAME="[*4]">KISSLDの自動折り返し</A>
+<DD>「自動折り返し」は KISSLD ver 0.07e以降で可（本ファイル参照）<P>
+
+<DT><A NAME="SETJOU">セット情報</A><BR>
+<DD>
+(1)セット別のデータのうち、セーブ機能で書き換えられるもの
+(オブジェクトの位置情報および選択しているパレット組の番号)のことを、
+私が勝手にこう呼んでいるだけです。公式な用語ではありません。<BR>
+(2)各セットに、セルファイルが存在するかどうかを示す情報など、
+セット別に管理される情報のことは何でも「セット情報」と
+呼ぶ可能性があります。<P>
+
+<DT><A NAME="SET">セット</A><BR>
+<DD>
+(1)セルの有無(使っているかどうか)、選択しているパレット組、および
+オブジェクトの位置情報からなるデータです。
+最大10個までのセットを切り替えられます。<BR>
+パレット組とオブジェクトの位置情報はディスクにセーブできます。<BR>
+(2)1つのコンフィグファイルから生成される、
+最大10個までの切り替え可能なセット(1)全体のことも、
+(広義に)セットと呼ぶ場合があるようです。
+基本セット/追加セットなどという場合は、こちらの使い方です。<P>
+
+
+
+</DL>
+</FONT>
+<HR SIZE=4>
+引用：えむけい氏作  KISSLD v0.07s 添付ヘルプより。<P>
+<BR>
+<BR>
+<BR>
+
+<HR SIZE=4>
+<A NAME="PLAY">【４】PlayFKiSSについて（by T_Ten）</A>
+<HR SIZE=2>
+   <BLINK>あくまで T_Tenの私見ですが</BLINK><P>
+<DL>
+<DD>
+    fkissについて指導頂き、調べてきましたが、
+    一言にfkissと言ってもローダー毎に細かい動作が違うようです。<BR>
+   もちろん統一して欲しいですが、意志疎通の困難さから、
+   これらローダーの動作が統一される事はよほどの事がなければ
+   有り得ないでしょう。<P>
+
+        なので、KISS/GSや fkiss の仕様と違ったデータを作成する方は、
+        いっそのこと<B>「似てるけど違うプログラムなんだ！」</B>と割り切って
+<BR>
+<BR>
+<FONT COLOR="#FF0000"><CENTER><B>「動作するローダーを明確に示す」</B></CENTER>
+</FONT>
+<CENTER>などの自衛策を忘れないでください。</CENTER>
+</DL>
+
+<HR SIZE=2>
+
+さて...。
+<HR SIZE=4>
+<DL>
+<DT><A NAME="KAIGAI">【海外の動向】1997/8/13現在</A><P>
+<DD>
+  海外にもKISSは広まっており、
+  日本とは違った独自のKISS文化を歩んでいるようです。<P>
+
+  Chad Randall氏作の  PlayFKiss    （Windows95/NTで動作します。）  や、<BR>
+  John Stiles 氏作の  French Kiss  （Macintosh で動作するはずです。）<BR>
+                                  MacOSの種類までは知らないので。m(__)m<P>
+
+  も、そういったローダーです。<BR>
+  Macな方々は、French Kissにお世話になっている方が多いと思います。<P>
+<BR>
+<BR>
+
+<DT><A NAME="SARANI">【さらなる拡張への試み】</A><P>
+<DD>
+   PlayFKissの作者 Chad氏は、色々な命令を積極的に実装していまして、
+  「FKiSS２」を新たに提唱し、その命令のランク付けをしています。<P>
+
+    このChad氏独自の「FKiSS２」の分類によると<BR>
+  <FONT COLOR="#FF0000">MacintoshのFrench Kiss 2.2.0の命令が ( version 2 )</FONT>
+  だとわかります。<P>
+
+  その動作の詳細、使い方について
+  詳しくは、PlayFKiSSの添付ドキュメントを見て下さい。     m(__)m<P>
+
+    「fkiss」命令では表現出来ない、アクティブな作品を作りたいのなら
+  「FKiSS２」命令を使用してみても、面白い作品になると思います。<P>
+
+  その際は、皆様のためにも使用ローダーを明記してくださいね。m(__)m<P>
+
+
+
+<DT><A NAME="FUAN">【データ互換性に関する不安】</A><P>
+<DD>
+    将来はわかりませんが、動作がはっきりするまでは<BR>
+  使用の際には、Chad氏提唱の「FKiSS２」とyav氏提唱の「fkiss」とは、
+  <FONT COLOR="#FF0000">全く別個のモノだと割り切った方が現在の所は良い様です。
+</FONT><P>
+
+    なぜなら、現在「fkiss」命令でさえローダー毎に細かい違いがあるのに
+  「FKiSS２」はそれを考慮していない（というか言葉の壁で難しい ?）
+   Chad 氏のさらなる拡張仕様なので、命令の互換性が保たれているかどうか
+   不安な面が無いとはいえないからです。<P>
+
+    せっかくデータを作っても、互換性のない命令を使用した為に
+  他の人に見てもらえなかったり、せっかくデータをダウンロードしても
+  命令に対応していないローダーしか持っていないために、データを観賞
+  出来なかったら、みなさん困るでしょう？<P>
+
+
+
+
+<DT><A NAME="ONEGAI">【データ作成時の御願い】</A><P>
+<DD>
+    PlayFKissもFrench Kissも一応「fkiss」の命令を使用出来るので<BR>
+  データを作成する際は、「fkiss」の命令を使用すれば多くの人が
+  観賞できるデータを作成する事が出来るでしょう。<P>
+<DD>
+    マシンパワーの進化は予想できないのでわかりませんが
+  現在の所は、Windows95/NT用のPlayFKissは動作が重いので
+  各種国産ローダと比べると見劣りしてしまう。というのが
+  私の環境での正直な感想です。
+
+  もちろん、個人使用に関して私がとやかく言う権利は有りません。m(__)m<P>
+
+    将来、「fkiss」にしろ、「FKiSS２」にしろ、<BR>
+  KISSでアニメーションするための命令がどう変化して行くかわかりませんが、
+  みんなで楽しめる命令になると良いなあ、と思います。<P>
+
+</DL>
+<HR SIZE=4>
+<DL>
+<DT><A NAME="ITIRAN">【PlayFKiss,French Kissで使用される命令一覧（だけ）】</A><P>
+
+<DD>
+  以下に列挙するのは、<B>Chad氏による独自の分類の「FKiSS２」命令</B>です。</B>
+<BR>
+ ( version 0 )から( version 3 )まで、分類されています。<P>
+
+  「データの互換性を保ちたい」「より多くのデータを共有したい」<BR>
+  という希望から、あえてその命令の指定方法を説明しません。<A HREF="MORE.HTM#[*5]">
+  [*]</A><P>
+
+  <FONT COLOR="#FF0000">この「FKiSS２」命令を使用したい人は、<BR>
+  PlayFKissに添付されるドキュメントをご覧下さい。</FONT><P>
+
+</DL>
+
+<HR SIZE=1>
+FKiSS  (version 0) で動作する命令
+<HR SIZE=1>
+<B>[Event]</B>
+<TABLE>
+<TR><TD>alarm(n)</TD></TR>
+<TR><TD>begin()</TD></TR>
+<TR><TD>catch(#n)</TD><TD>catch("CELNAME.CEL")</TD></TR>
+<TR><TD>col(n)</TD></TR>
+<TR><TD>drop(#n)</TD><TD>drop("CELNAME.CEL")</TD></TR>
+<TR><TD>end()</TD></TR>
+<TR><TD>fixcatch(#n)　　　</TD><TD>fixcatch("CELNAME.CEL")</TD></TR>
+<TR><TD>fixdrop(#n)</TD><TD>fixdrop("CELNAME.CEL")</TD></TR>
+<TR><TD>initialize()</TD></TR>
+<TR><TD>press(#n)</TD><TD>press("CELNAME.CEL")</TD></TR>
+<TR><TD>release(#n)</TD><TD>release("CELNAME.CEL")</TD></TR>
+<TR><TD>set(n)</TD></TR>
+<TR><TD>unfix(#n)</TD><TD>unfix("CELNAME.CEL")</TD></TR>
+</TABLE>
+<B>[Action]</B>
+<TABLE>
+<TR><TD>altmap(#n)</TD><TD>altmap("CELNAME.CEL")</TD></TR>
+<TR><TD>changecol(n)</TD></TR>
+<TR><TD>changeset(n)</TD></TR>
+<TR><TD>map(#n)</TD><TD>map("CELNAME.CEL")</TD></TR>
+<TR><TD>move(#n,i,j)</TD><TD>move("CELNAME.CEL",i,j)</TD></TR>
+<TR><TD>nop()</TD></TR>
+<TR><TD>randomtimer(n,i,j)</TD></TR>
+<TR><TD>sound("FILENAME.XXX")</TD></TR>
+<TR><TD>timer(n,i)</TD></TR>
+<TR><TD>unmap(#n)</TD><TD>unmap("CELNAME.CEL")</TD></TR>
+</TABLE>
+<HR SIZE=1>
+FKiSSb  (version 1) で動作する命令
+<HR SIZE=1>
+<B>[Event]</B>
+<TABLE>
+<TR><TD>never()</TD></TR>
+</TABLE>
+<B>[Action]</B>
+<TABLE>
+<TR><TD>debug(文字列)</TD></TR>
+<TR><TD>quit()</TD></TR>
+<TR><TD>transparent("CELNAME.CEL")</TD></TR>
+
+<TR><TD>viewport(n,n)</TD><TD>＜謎です。</TD></TR>
+<TR><TD>windowsize(n,n)</TD><TD>＜</TD></TR>
+</TABLE>
+<HR SIZE=1>
+FKiSS2  (version 2) で動作する命令
+<HR SIZE=1>
+<B>[Event]</B>
+<TABLE>
+<TR><TD>in(#m,#n)</TD></TR>
+<TR><TD>out(#m,#n)</TD></TR>
+<TR><TD>stillin(#m,#n)</TD></TR>
+<TR><TD>stillout(#m,#n)</TD></TR>
+<TR><TD>version(n)</TD></TR>
+</TABLE>
+<B>[Action]</B>
+<TABLE>
+<TR><TD>movebyx(#n,i,j)</TD></TR>
+<TR><TD>movebyy(#n,i,j)</TD></TR>
+<TR><TD>moveto(#n,i,j)</TD></TR>
+<TR><TD>music(FILENAME.XXX)</TD></TR>
+<TR><TD>notify(文字列)</TD></TR>
+</TABLE>
+<HR SIZE=1>
+FKiSS2.1  (version 3) で動作する命令
+<HR SIZE=1>
+<B>[Event]</B>
+<TABLE>
+<TR><TD>apart("CELNAME1.CEL","CELNAME2.CEL")</TD></TR>
+<TR><TD>collide("CELNAME1.CEL","CELNAME2.CEL")</TD></TR>
+</TABLE>
+<B>[Action]</B>
+<TABLE>
+<TR><TD>iffixed(#n,i,j)</TD></TR>
+<TR><TD>ifmapped("CELNAME.CEL",i,j)</TD></TR>
+<TR><TD>ifmoved(#n,i,j)</TD></TR>
+<TR><TD>ifnotfixed(#n,i,j)</TD></TR>
+<TR><TD>ifnotmapped("CELNAME.CEL",i,j)</TD></TR>
+<TR><TD>ifnotmoved(#n,i,j)</TD></TR>
+<TR><TD>moverandx(#n,i,j)</TD></TR>
+<TR><TD>moverandy(#n,i,j)</TD></TR>
+<TR><TD>movetorand(#n)</TD></TR>
+<TR><TD>setfix(#n,i)</TD></TR>
+</TABLE>
+<HR SIZE=1>
+なお、使用した記号は次の通りです。
+<PRE>
+#m,#n              ;  #m,#n  で指定するオブジェクト番号です。
+CELNAME.CEL        ;  セルファイル名です。
+FILENAME.XXX       ;  FILENAME.XXX  で指定するファイル名です。
+i,j,m,n            ;  １０進数の整数です。
+</PRE>
+<HR SIZE=1>
+
+<HR SIZE=1>
+<FONT SIZE=-1>
+<DL>
+<DT><A NAME="[*5]">[*]</A>
+<DD>
+    というか、マシンパワー（＝お金）が無いので説明できないのが
+  本当の所です。486 class CPUでは KISSで本格的なアニメーションするのは
+  つらいです  (T-T)
+
+    しかし、将来この命令が「fkiss」との互換性も考慮され、
+  さらに快適に動作するなら、きっと楽しいものになると思います。
+  決して、「FKiSS２」の試みを否定するものではありません。
+
+    残念ながら、現在の所は「fkiss」とは微妙に違う解釈をするようです。
+  また、動作が重く、timerのタイミングなどバラバラになってしまうので
+  使用の際には注意して欲しいと思います。
+
+    PlayFKissの作者 Chad氏は、「fkiss」と互換性のあるローダーを
+  作成したいと考えておられるようなので、将来動作が統一されるなら、
+  この様なことは考え過ぎなのかもしれません。:-)
+</DL>
+</FONT>
+<HR SIZE=4>
+[MORE.HTM]
+</BODY>
+</HTML>

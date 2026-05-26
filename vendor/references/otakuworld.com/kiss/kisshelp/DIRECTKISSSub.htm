@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>Sub</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; sub</div>
+    <h1>Action: <i>Sub(variable, A, B)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSLet.htm">let</a>,
+		<a href="DIRECTKISSAdd.htm">add</a>,
+		<a href="DIRECTKISSMul.htm">mul</a>,
+		<a href="DIRECTKISSDiv.htm">div</a>,
+		<a href="DIRECTKISSmod.htm">mod</a>,
+		<a href="DIRECTKISSrandom.htm">random</a>
+		</div>
+
+		<div class="relatedevents">
+    Related Events:<a href="DIRECTKISSOverflow.htm">overflow</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>sub(<i>variable, A, B</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS3</div>
+		<div>The <b>sub</b> action sets the value of <i>variable</i> to the value
+		of (<i>A</i> - <i>B</i>).</div>
+
+    <div>If the result would be outside the range of a 32-bit integer (from
+		-2147483648 to 2147483647), this action will trigger the <a
+		href="DIRECTKISSOverflow.htm">Overflow</a> event.</div>
+
+		<h3><i>variable</i></h3>
+		<div class="indent"><i>variable</i> must a variable name.</div>
+
+		<h3><i>A</i></h3>
+		<div class="indent"><i>A</i> may be number or a variable.</div>
+
+		<h3><i>B</i></h3>
+		<div class="indent"><i>B</i> may be number or a variable.</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ sub(X, X, 1)&nbsp;&nbsp;&nbsp; <i>; Subtract 1 from X and store the result back in X.</i></div>
+    <div class="example">;@ sub(Diff, A, B) <i>; Subtract B from A and store the result in Diff.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; sub</div>
+  </body>
+</html>

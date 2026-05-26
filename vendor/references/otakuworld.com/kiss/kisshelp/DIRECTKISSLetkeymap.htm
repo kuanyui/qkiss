@@ -1,0 +1,113 @@
+<html>
+  <head>
+    <title>Letkeymap</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letkeymap</div>
+    <h1>Action: <i>Letkeymap(variable, keystring)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSLetmousex.htm">letmousex</a>,
+		<a href="DIRECTKISSLetmousey.htm">letmousey</a>,
+		<a href="DIRECTKISSLetkey.htm">letkey</a>
+		</div>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSKeypress.htm">keypress</a>,
+		<a href="DIRECTKISSKeyrelease.htm">keyrelease</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>letkeymap(<i>variable, keystring</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS4</div>
+		<div>The <b>letkeymap</b> action sets each bit in <i>variable</i> if the
+		corresponding key in <i>keystring</i> is pressed.</div>
+
+		<div>If no key in <i>keystring</i> is pressed, <i>variable</i> is set to
+		0.</div>
+
+		<h3><i>variable</i></h3>
+		<div class="indent"><i>variable</i> must be a variable name.</div>
+
+		<h3><i>keystring</i></h3>
+		<div class="indent">
+		<div><i>keystring</i> must be a string identifying one or
+		more keys. The string is composed of one or more of the following
+		sub-strings concatenated together (All other keys are ignored):
+		<ul>
+			<li>&quot;up&quot; <i>(up arrow)</i><br>
+			<li>&quot;down&quot; <i>(down arrow)</i><br>
+			<li>&quot;left&quot; <i>(left arrow)</i><br>
+			<li>&quot;right&quot; <i>(right arrow)</i><br>
+			<li>&quot;space&quot; <i>(space bar)</i><br>
+			<li>&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;<br>
+			<li>&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;F&quot;, &quot;G&quot;, &quot;H&quot;, &quot;I&quot;,  &quot;J&quot;, &quot;K&quot;, &quot;L&quot;, &quot;M&quot;, &quot;N&quot;, &quot;O&quot;, &quot;P&quot;, &quot;Q&quot;, &quot;R&quot;, &quot;S&quot;, &quot;T&quot;, &quot;U&quot;, &quot;V&quot;, &quot;W&quot;, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;
+		</ul></div>
+		<div><i>keystring</i> is case-insensitive.</div>
+
+		<div><i>keystring</i> is processed in order from left to right.  Each
+		key specified corresponds to a single bit starting with bit 0.  So if
+		three keys are specified in <i>keystring</i>, for example, "ABC", a
+		maximum of three bits might be set.  For the example "ABC", bit 0 is set
+		if "A" is pressed, bit 1 is set if "B" is pressed, and bit 2 is set if "C"
+		is pressed.  If you specify "CAB", then bit 0 is set if "C" is pressed,
+		bit 1 is set if "A" is pressed, and bit 2 is set if "B" is pressed.</div>
+
+		<div>The value that is stored in <i>variable</i> is the sum of all the bits
+		set, where each bit is a power of 2.  The following table shows the powers of 2:
+			<table border="1" cellpadding="2">
+				<tr><th>Bit</th><th>Value</th><th>Bit</th><th>Value</th>
+				<tr><td>0</td><td>1</td><td>1</td><td>2</td></tr>
+				<tr><td>2</td><td>4</td><td>3</td><td>8</td></tr>
+				<tr><td>4</td><td>16</td><td>5</td><td>32</td></tr>
+				<tr><td>6</td><td>64</td><td>7</td><td>128</td></tr>
+				<tr><td>8</td><td>256</td><td>9</td><td>512</td></tr>
+				<tr><td>10</td><td>1024</td><td>11</td><td>2048</td></tr>
+				<tr><td>12</td><td>4096</td><td>13</td><td>8192</td></tr>
+				<tr><td>14</td><td>16384</td><td>15</td><td>32768</td></tr>
+				<tr><td>16</td><td>65536</td><td>17</td><td>131072</td></tr>
+				<tr><td>18</td><td>262144</td><td>19</td><td>524288</td></tr>
+				<tr><td>20</td><td>1048576</td><td>21</td><td>2097152</td></tr>
+				<tr><td>22</td><td>4194304</td><td>23</td><td>8388608</td></tr>
+				<tr><td>24</td><td>16777216</td><td>25</td><td>33554432</td></tr>
+				<tr><td>26</td><td>67108864</td><td>27</td><td>134217728</td></tr>
+				<tr><td>28</td><td>268435456</td><td>29</td><td>536870912</td></tr>
+				<tr><td>30</td><td>1073741824</td><td>31</td><td>-2147483648</td></tr>
+			</table>
+		</div>
+
+		<div>It is recommended the cursor keys and space bar strings be put at the
+		beginning of <i>keystring</i> in lowercase, and all single letters after
+		that in uppercase followed by the digits.  For example, "updownspaceABC0123".</div>
+
+		<table class="tablenote"><tr><td>
+		<div class="note">A maximum of 32 keys can be tracked in one <i>keystring</i>.</div>
+		</td></tr></table>
+
+		</div>
+
+    <h4>Example:</h4>
+		<div class="example">
+		<i>; Watch for up arrow, down arrow, and &quot;F&quot;.</i><br>
+		<i>; If only F is pressed, K = 4 (bit 2 is set; 2 raised to the power of 2 is 4).</i><br>
+		<i>; If up arrow and F are pressed, K = 5 (bit 2 and bit 0 are set: 2 to the power of 2 (4) plus 2 to the power of 0 (1) is 5).</i><br>
+		;@ letkeymap(K, &quot;updownF&quot;)
+    </div>
+
+		</div>
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letkeymap</div>
+  </body>
+</html>

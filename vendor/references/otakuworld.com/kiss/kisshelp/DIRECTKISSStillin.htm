@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <title>Stillin</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; stillin</div>
+    <h1>Event: <i>Stillin(target1, target2)</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSIn.htm">in</a>,
+		<a href="DIRECTKISSOut.htm">out</a>,
+		<a href="DIRECTKISSStillout.htm">stillout</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions: <a href="DIRECTKISSLetinside.htm#2b4d4b1f">letinside</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>stillin(<i>target1, target2</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS2</div>
+		<div>The <b>stillin</b> event makes a comparison based on the individual
+		bounding rectangles of the two targets. If a bounding rectangle for
+		<i>target1</i> overlaps a bounding rectangle for <i>target2</i>,
+		regardless of whether or not the rectangles previously overlapped, this
+		event will occur. When the targets are objects or groups, comparison is
+		made using the individual bounding rectangles of the applicable cels, not
+		the single bounding rectangle for the entire object.</div>
+
+    <div>This event may be triggered by the user picking up an object and dropping it
+    in such a way that it still overlaps another object or by FKiSS movement.</div>
+
+		<div>Use this event to react to collision-detection when pixel-collision detection
+    is not necessary.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">Only one <b>stillin</b> event should exist for any
+		<i>target1</i>-<i>target2</i> pair.</div>
+		</td></tr></table>
+
+		<h3><i>target1</i></h3>
+		<div class="indent">
+		<div>In FKiSS2 to FKiSS3, <i>target1</i> must be an object number.</div>
+    <div>In FKiSS4, <i>target1</i> may be an object number, cel, or group.</div>
+		</div>
+
+		<h3><i>target2</i></h3>
+		<div class="indent">
+		<div>In FKiSS2 to FKiSS3, <i>target2</i> must be an object number.</div>
+    <div>In FKiSS4, <i>target2</i> may be an object number, cel, or group.</div>
+		</div>
+
+		<h4>Example:</h4>
+		<div class="example">
+		<i>; Note: The behavior demonstrated here is a form of snap-to.</i><br>
+		<i>;</i><br>
+    ;@ stillin(#1, #2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; When any cel in object #1 still overlaps any cel in object #2...</i><br>
+    ;@ &nbsp;&nbsp;movebyx(#2, #1, 5)&nbsp; <i>; Move object #2 to 5 pixels right of object #1's position.</i><br>
+    ;@ &nbsp;&nbsp;movebyy(#2, #1, 12) <i>; and move object #2 to 12 pixels down from object #1's position.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; stillin</div>
+  </body>
+</html>

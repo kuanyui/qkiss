@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>Viewport</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; viewport</div>
+    <i>Action: <b>Viewport(X, Y)</b></i>
+
+		<div class="relatedactions">
+    Related Actions: <a href="DIRECTKISSWindowsize.htm">windowsize</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+		<h2>viewport(<i>X, Y</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>The <b>viewport</b> action sets the play field position of the
+		top-left corner of the viewport to &lt;<i>X</i>, <i>Y</i>&gt;.</div>
+
+		<div>The viewport defines the size of the area of the play field which is
+		displayed.  The size of the viewport can be changed with the
+		<a href="DIRECTKISSWindowsize.htm">windowsize</a> action.</div>
+
+		<table class="tablenote"><tr><td>
+		<div class="note">Not all KiSS viewers support this action.</div>
+		</td></tr></table>
+
+		<h3><i>X</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS2.1, <i>X</i> must be a number.</div>
+    <div>In FKiSS3, <i>X</i> may be a number or a variable.</div>
+		</div>
+
+		<h3><i>Y</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS2.1, <i>Y</i> must be a number.</div>
+    <div>In FKiSS3, <i>Y</i> may be a number or a variable.</div>
+		</div>
+
+		<h4>Example:</h4>
+    <div class="example">;@ viewport(31, 25) <i>; Set the viewport position to 31 (x), 25 (y).</i></div>
+    <div class="example">;@ viewport(X, Y)&nbsp;&nbsp; <i>; Set the viewport position to X, Y.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; viewport</div>
+  </body>
+</html>

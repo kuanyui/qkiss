@@ -1,0 +1,146 @@
+<html>
+  <head>
+    <title>FKiSS General Syntax</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS General Syntax</div>
+    <h1>FKiSS General Syntax</h1>
+
+    <div class="seealso">See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Data_Types.htm">Data Types</a>,
+		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>,
+		<a href="DIRECTKISSFKiSS_Shortcuts.htm">Shortcuts</a>,
+		<a href="DIRECTKISSFKiSS_tags.htm">%Tags</a>,
+		<a href="DIRECTKISSFKiSS_Cel_Groups.htm">Cel Groups</a>,
+		<a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>,
+		<a href="DIRECTKISSFKiSS_HINTs.htm">HINTs</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<h2>FKiSS Line Format</h2>
+		<div class="indent">
+    <div>All FKiSS lines must start with the characters <b>;@</b>. There may be
+		additional space between the <b>@</b> and the FKiSS commands and multiple
+		commands may appear on a single line but the first two characters of the
+		line must be <b>;@</b> or the line will not be recognized as FKiSS code.</div>
+		</div>
+
+		<h2>Declaring FKiSS Usage</h2>
+		<div class="indent">
+    	<div>Before any FKiSS code is listed, you must include this line:</div>
+
+    	<div class="example">;@EventHandler</div>
+
+    	<div>This line must appear <i>exactly</i> as shown here. It is
+			case-sensitive so <span class="monospace">;@eventhandler</span> or <span
+			class="monospace">;@EVENTHANDLER</span> are not acceptable.</div>
+
+			<div>It is permissible to use <span class="monospace">;@EventHandler()</span>
+			although the <span class="monospace">()</span> is not necessary. Nothing
+			else should appear on this line.</div>
+			<table class="tablenote"><tr><td>
+			<div class="note">This line should appear only once in a CNF file.</div>
+			</td></tr></table>
+		</div>
+
+		<h2>FKiSS Commands</h2>
+		<div class="indent">
+    <div>An FKiSS command can take a variety of <a
+		href="DIRECTKISSFKiSS_Data_Types.htm">data types</a>, depending on the
+		type of command.</div>
+
+    <div>FKiSS commands come in two types:</div>
+
+		<div class="indent">
+		<h3><a href="DIRECTKISSFKiSS_Events.htm">Events:</a></h3>
+		<div class="indent">
+		An event command specifies the conditions under which a sequence of action commands are
+    executed. All actions listed after an event command are assumed to be part of that
+    event until the next event command is listed.
+    <h4>Examples:</h4>
+    <div class="example">
+		;@ press(&quot;button.cel&quot;) <i>; Start of event when button.cel is clicked</i><br>
+    ;@ &nbsp;&nbsp;move(#37, 24, -10)<br>
+    ;@ &nbsp;&nbsp;move(#38, 1, 0)<br>
+		<br>
+    ;@ alarm(5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Start of alarm 5 event</i><br>
+    ;@ &nbsp;&nbsp;map(&quot;happy.cel&quot;)<br>
+    ;@ &nbsp;&nbsp;unmap(&quot;sad.cel&quot;)</div>
+		</div>
+
+		<h3><a href="DIRECTKISSFKiSS_Actions.htm">Actions</a></h3>
+		<div class="indent">
+    	<div>An Action is a command which is immediately executed in response to
+			an event. An action can change a cel from mapped to unmapped or change
+			its color. An action can move an object to a new location or change the
+			value of a variable. Actions cover a wide-range of functionality.</div>
+			<div>All actions must belong to an FKiSS event.</div>
+
+			<h4>Examples:</h4>
+			<div class="example">;@ map(&quot;hat.cel&quot;)&nbsp;&nbsp;&nbsp;&nbsp; <i>; Map the cel "hat.cel" to the current set (make it visible).</i></div>
+			<div class="example">;@ move(#37, 24, -10) <i>; Move object #37 to the right 24 and up 10.</i></div>
+			<div class="example">;@ let(X, 5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Assign the value 5 to the variable X.</i></div>
+		</div>
+
+		</div>
+
+		<h2>Command Formatting</h2>
+		<div class="indent">
+    	<div>More than one FKiSS command can occur on a single line, separated
+			by spaces. The first command on the line doesn't have to be an event but
+			it is usually easier to read if you do it that way.  No matter what
+			however, an event command must come before any action commands.</div>
+
+    	<h4>Examples:</h4>
+			<div>This layout puts all of the actions for an event on subsequent lines
+			that are indented one or two spaces and each event is separate by a blank line.
+			This makes for more lines in the <a href="DIRECTKISSKISS_General_Specification_CNF.htm">CNF</a>
+			but the FKiSS code is easier to read.</div>
+			<div class="indent">
+  	  <div class="example">
+			;@ press(&quot;button.cel&quot;)<br>
+			;@ &nbsp;&nbsp;move(#37, 24, -10)<br>
+			;@ &nbsp;&nbsp;move(#38, 1, 0)<br>
+			<br>
+    	;@ alarm(5)<br>
+			;@ &nbsp;&nbsp;map(&quot;happy.cel&quot;)<br>
+			;@ &nbsp;&nbsp;unmap(&quot;sad.cel&quot;)</div>
+			</div>
+			<br>
+			<div>This layout puts all of the actions for an event on the same line
+			so only events appear at the beginning.  This works best if the number
+			of actions is small (this is the same example as above).</div>
+			<div class="indent">
+  	  <div class="example">
+			;@ press(&quot;button.cel&quot;) move(#37, 24, -10) move(#38, 1, 0)<br>
+    	;@ alarm(5) map(&quot;happy.cel&quot;) unmap(&quot;sad.cel&quot;)</div>
+			</div>
+			<br>
+
+			<div>This is a minor alternate showing that the space after the ;@ is not needed.</div>
+			<div class="indent">
+    	<div class="example">;@alarm(5) map(&quot;hat.cel&quot;) move(#37, 24, -10)</div>
+			</div>
+			<br>
+
+			<div>This example shows that multiple events can be specified on the
+			same line (the <b>alarm</b> and <b>press</b> events). Be aware that this
+			layout is very hard to read.</div>
+			<div class="indent">
+			<div class="example">;@alarm(5) map(&quot;hat.cel&quot;) press(#1) let(X, 5)</div>
+			</div>
+
+    	<h4>Wrong:</h4>
+    	<div class="example">;@alarm(5)map(&quot;hat.cel&quot;)move(#37, 24, -10)&nbsp;&nbsp;&nbsp;&nbsp; <i>; Spaces must appear between actions</i></div>
+    	<div class="example">;@alarm(5) @map(&quot;hat.cel&quot;) @move(#37, 24, -10) <i>; @ must appear only at the start of the line</i></div>
+		</div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS General Syntax</div>
+  </body>
+</html>

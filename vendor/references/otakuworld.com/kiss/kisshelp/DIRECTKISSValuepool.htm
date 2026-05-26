@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Valuepool</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; valuepool</div>
+    <h1>Action: <i>valuepool(pool)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSSavevalue.htm">savevalue</a>,
+		<a href="DIRECTKISSLoadvalue.htm">loadvalue</a>,
+		<a href="DIRECTKISSDeletevalue.htm">deletevalue</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>valuepool(<i>pool</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS4</div>
+		<div>The <b>valuepool</b> action sets the current value pool where data
+		will be saved, loaded, or deleted.</div>
+
+    <div>For more information, see <a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>.</div>
+
+		<h3><i>pool</i></h3>
+		<div class="indent">
+		<div><i>pool</i> is the name of the value pool. Value Pool names may be between 1 and 64
+    characters. They may contain letters, digits,  hyphens, and underscores. Value Pool
+    names are case-insensitive. The name must be enclosed with quotation marks.</div>
+
+		<div>To use the private pool, use &quot;&quot;.</div>
+		</div>
+
+		<h4>Example:</h4>
+    <div class="example">;@ valuepool(&quot;MyPublicData&quot;) <i>; uses the value pool named &quot;MyPublicData&quot;.</i></div>
+    <div class="example">;@ valuepool(&quot;&quot;)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; uses the private value pool.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; valuepool</div>
+  </body>
+</html>

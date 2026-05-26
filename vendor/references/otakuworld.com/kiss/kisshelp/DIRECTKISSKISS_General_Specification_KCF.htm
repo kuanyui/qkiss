@@ -1,0 +1,238 @@
+<html>
+  <head>
+    <title>KISS General Specification: KCF</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSKISS_General_Specification.htm">KiSS General Specification</a> &gt; KCF</div>
+    <h1>KISS General Specification: KCF</h1>
+
+    <h2>6. Details of KCF palette files</h2>
+		<div class="indent">
+		<h3>Overview</h3>
+		<div class="indent">
+			<div>A KiSS Color File (KCF) contains one or more palettes.  Each palette contains
+			16 or 256 colors (256 is typical). All palettes in a single KCF must contain the same number
+			of colors.  For example, if the first palette in the KCF has 256 colors, all
+			other palettes in the KCF must also have 256 colors.</div>
+
+			<div> Each color in a 256 color palette can be made up of 12 bits or 24
+			bits.  Nowadays, the most common format is a 256 color palette with 24-bit
+			colors.</div>
+
+			<div>KCFs are associated with cel images, where the colors for one or more
+			cels comes from one palette in the specified KCF.  For example, If there
+			are twenty cels, they could all share the same palette from one KCF or
+			they could each have a unique palette in twenty separate KCFs.</div>
+		</div>
+
+		<h3>Palettes That Change</h3>
+		<div class="indent">
+			<div>Where things get interesting is when a set changes which palette to use
+			from each KCF.  This is typically done through the viewer's user interface
+			but FKiSS has an action, <a href="DIRECTKISSChangecol.htm">changecol()</a>,
+			that accomplishes this from within an FKiSS script.  A set is a collection
+			of objects and each object is made of one or more cels. A set uses a
+			palette in each KCF.  If a KCF has five palettes, a set could choose one
+			of those five palettes to use for display.  Change the palette associated
+			with the set and all the cels in that set can change color.</div>
+
+			<div>The tricky part is when cels uses multiple KCFs.  If a set is
+			associated with a palette number, all KCFs should have that palette in
+			their collection of palettes. However, this is often not the case, mainly
+			because it can be challenging to create that many palettes across many
+			KCFs.  So the rule for KCFs is the first palette in a KCF is used to "fill
+			out" that KCF if it does not have enough palettes to match the number or
+			palettes in another KCF.</div>
+
+			<div>For example, given two KCFs.  The first KCF has two palettes and the
+			second KCF has three palettes.  A set could be associated with any of three
+			palettes, because the second KCF has three possible palettes even though
+			the first KCF has only two. If a set uses the third palette, all cels
+			associated with the second KCF use the third palette for display. However,
+			all cels that are associated with the first KCF do not have a third
+			palette.  In this situation, the viewer always uses the first palette to
+			make up for the missing palette.</div>
+
+			<div>If there are multiple KCFs and they contain different numbers of
+			palettes then the KCFs with fewer palettes are filled to match the one
+			with the most using copies of their first palette. Originally, the KCF was
+			expected to contain up to 10 palettes, however some modern viewers are
+			more flexible in how they handle palettes, allowing more than 10 palettes
+			in a single KCF (the KCF specification, detailed below, can support up to
+			65,535 palettes in a single KCF).</div>
+		</div>
+
+		<h3>Color 0</h3>
+		<div class="indent">
+			<div>In palette-based images, color 0 from the palette is not used in a cel.
+			That is because a pixel using color 0 is considered transparent and allows
+			the background to show through (see the section on
+			<a href="DIRECTKISSKISS_General_Specification_CEL.htm#transparent">Transparency and Translucency</a>
+			in the CEL file details).</div>
+			<div>Color 0 from palette 0 file is special in that it is used as the
+			background color of the play field. </div>
+		</div>
+
+		</div>
+
+		<h2>KCF Palette File Details</h2>
+		<div class="indent">
+		<h3>File Header</h3>
+		<div>A KCF is a binary file.  Originally, the KCF was nothing but a
+		collection of palettes, each with 16 colors, concatenated one after the
+		other. Nowadays, a KCF has a 32-byte header that describes the contents of
+		the file.  See <a href="DIRECTKISSKISS_General_Specification_KCF.htm#table61">Table 6-1</a>.</div>
+
+		<div class="tabletitle"><a name="table61">Table 6-1</a>: Modern KCF Header block</div>
+
+    <table class="gridded">
+			<tr>
+				<th>Offset<br>
+          <span class="smallnote">(in bytes)</span></th>
+				<th>Size<br>
+          <span class="smallnote">(in bytes)</span></th>
+				<th>Contents</th>
+      </tr>
+			<tr>
+				<td>+0</td>
+				<td>4</td>
+				<td>Identifier 'KiSS' ( 4Bh 69h 53h 53h )</td>
+      </tr>
+			<tr>
+				<td>+4</td>
+				<td>1</td>
+				<td>Palette file mark ( 10h )</td>
+      </tr>
+			<tr>
+				<td>+5</td>
+				<td>1</td>
+				<td>bits per color ( 12 or 24 )</td>
+      </tr>
+			<tr>
+				<td>+6</td>
+				<td>2</td>
+				<td>Reserved.  Must be 0.</td>
+      </tr>
+			<tr>
+				<td>+8</td>
+				<td>2</td>
+				<td>Number of colors in one palette (16 or 256).<br>
+          <span class="smallnote">(+8 = low byte, +9 = high byte)</span></td>
+      </tr>
+			<tr>
+				<td>+10</td>
+				<td>2</td>
+				<td>Number of palettes (1...65535).<br>
+          <span class="smallnote">(+10 = low byte, +11 = high byte)</span></td>
+      </tr>
+			<tr>
+				<td>+12</td>
+				<td>2</td>
+				<td>Reserved.  Must be 0.</td>
+      </tr>
+			<tr>
+				<td>+14</td>
+				<td>2</td>
+				<td>Reserved.  Must be 0.</td>
+      </tr>
+			<tr>
+				<td>+16</td>
+				<td>16</td>
+				<td>Reserved.  Must be all 0's.</td>
+      </tr>
+			<tr>
+				<td>+32</td>
+				<td>...</td>
+				<td>Palette data</td>
+      </tr>
+    </table>
+		<table class="tablenote"><tr><td>
+			<div class="note">Note: Traditionally, a KCF could have up to 10 palettes.<br>
+          Some older viewers might not be able to handle more than that<br>
+          or might ignore all palettes after the first 10.</div>
+		</td></tr></table>
+
+		</div>
+		<h2>Color Formats</h2>
+		<div class="indent">
+		<div>Each color in a palette is some combination of red,
+		green, and blue components.  When mixed, these three color components can
+		create most any color imaginable. The more bits available for each red,
+		green, blue component, the greater the variety of colors.  A 4-bit value
+		can range from 0 to 15, while an 8-bit value can range from 0 to 255.
+		12-bit colors uses three 4-bit values while 24-bit colors use three 8-bit
+		components.</div>
+
+		<h3>24-bit color palettes</h3>
+		<div class="indent">
+		<div>A 24-bit color palette uses 24 bits to express up to 16,777,216 possible colors.
+		A color in a 24-bit color palette consists of 3 bytes: 8 bits each for red, green, and blue.
+		The layout of the 24 bits is shown in <a href="DIRECTKISSKISS_General_Specification_KCF.htm#table62">Table 6-2</a>.</div>
+
+		<div class="tabletitle"><a name="table62">Table 6-2:</a> 24-bit color layout</div>
+
+    <table class="gridded">
+			<tr>
+        <th>Byte 0</th>
+				<th>Byte 1</th>
+				<th>Byte 2</th>
+      </tr>
+			<tr>
+				<td><span class="monospace"><span class="underline">76543210</span><br>
+          rrrrrrrr</span></td>
+				<td><span class="monospace"><span class="underline">76543210</span><br>
+          gggggggg</span></td>
+				<td><span class="monospace"><span class="underline">76543210</span><br>
+          bbbbbbbb</span></td>
+      </tr>
+    </table>
+		</div>
+
+		<h3>12-bit color palettes</h3>
+		<div class="indent">
+		<div>A 12-bit color palette uses 12 bits to express up to
+		4096 possible colors. A color in a 12-bit color palette consists of 2
+		bytes (which holds 16 bits of data): 4 bits each for red, green, and blue
+		while the remaining 4 bits are set to 0. The layout of the 12 bits is shown in
+		<a href="DIRECTKISSKISS_General_Specification_KCF.htm#table63">Table 6-3</a>.</div>
+
+		<div class="tabletitle"><a name="table63">Table 6-3:</a> 12-bit color layout</div>
+
+    <table class="gridded">
+			<tr>
+        <th>Byte 0</th>
+				<th>Byte 1</th>
+      </tr>
+			<tr>
+				<td><span class="monospace"><span class="underline">76543210</span><br>
+          rrrrbbbb</span></td>
+        <td><span class="monospace"><span class="underline">76543210</span><br>
+          0000gggg</span></td>
+      </tr>
+    </table>
+
+		<table class="tablenote">
+			<tr>
+        <td>
+          <div class="note">A 12-bit color palette usually contains 16 colors and is the original format
+          for a KiSS palette.</div></td>
+      </tr>
+    </table>
+
+		</div>
+		</div>
+		<h2>Old-style KCF Format</h2>
+		<div class="indent">
+		<div>The original KCF format was a binary file containing up to 10 palettes.
+		Each palette contained 16 colors and each color was made up of 12 bits.
+		There was no header at all.</div>
+		<div>All modern KiSS Artforms use the modern KCF format but most KiSS viewers
+		should be able to load the old format.</div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSKISS_General_Specification.htm">KiSS General Specification</a> &gt; KCF</div>
+  </body>
+</html>

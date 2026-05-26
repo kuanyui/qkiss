@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Overflow</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; overflow</div>
+    <h1>Event: <i>Overflow()</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSInitialize.htm">initialize</a>,
+		<a href="DIRECTKISSBegin.htm">begin</a>,
+		<a href="DIRECTKISSEnd.htm">end</a>,
+		<a href="DIRECTKISSNever.htm">never</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>end()</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS3</div>
+		<div>The <b>overflow</b> event is called when a mathematical action
+		attempts to divide by zero or when the result would be outside the range
+		of a 32-bit integer (from -2147483648 to 2147483647). This can be
+		triggered by the <a href="DIRECTKISSDiv.htm">div</a> or
+		<a href="DIRECTKISSmod.htm">mod</a> actions.</div>
+
+    <div>This is probably only useful for error-handling but maybe someone will find a
+    more creative use for it.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">There can only be one <b>overflow</b> event.</div>
+		</td></tr></table>
+
+		<h4>Example:</h4>
+		<div class="example">
+    ;@ overflow()<br>
+    ;@ &nbsp;&nbsp;notify(&quot;Error! Division by zero&quot;)<i>; Notify user of the overflow.</i>
+		</div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; overflow</div>
+  </body>
+</html>

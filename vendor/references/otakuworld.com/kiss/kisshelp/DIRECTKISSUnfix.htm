@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title>Unfix</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; unfix</div>
+    <h1>Event: <i>Unfix(target)</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSFixcatch.htm">fixcatch</a>,
+		<a href="DIRECTKISSFixdrop.htm">fixdrop</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSSetfix.htm">setfix</a>,
+		<a href="DIRECTKISSLetfix.htm">letfix</a>,
+		<a href="DIRECTKISSLetcatch.htm">letcatch</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>unfix(<i>target</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>The <b>unfix</b> event is triggered when the <i>target</i>'s fix
+		value reaches 0.</div>
+
+    <div>This can be triggered by the user causing the fix value to reduce by
+		dragging the <i>target</i> or by the <a href="DIRECTKISSSetfix.htm">setfix</a>
+		action.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">Only one <b>unfix</b> event should exist for any <i>target</i>.</div>
+		</td></tr></table>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS3, <i>target</i> may be an object number or cel.</div>
+    <div>In FKiSS4, <i>target</i> may be an object number, cel, or group.</div>
+		</div>
+
+    <h4>Example:</h4>
+		<div class="example">
+    ;@ unfix(&quot;shirt.cel&quot;)&nbsp;&nbsp;&nbsp; <i>; When the fix value on &quot;shirt.cel&quot; has reached 0...</i><br>
+    ;@ &nbsp;&nbsp;map(&quot;shrttorn.cel&quot;) <i>; Show the torn shirt image</i><br>
+		;@ &nbsp;&nbsp;unmap(&quot;shirt.cel&quot;)&nbsp; <i>; and hide the normal shirt image.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; unfix</div>
+  </body>
+</html>

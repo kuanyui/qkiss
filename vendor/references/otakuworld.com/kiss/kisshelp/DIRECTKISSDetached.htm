@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>Detached</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; detached</div>
+    <h1>Event: <i>Detached(target)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSAttach.htm">attach</a>,
+		<a href="DIRECTKISSGlue.htm">glue</a>,
+		<a href="DIRECTKISSDetach.htm">detach</a>,
+		<a href="DIRECTKISSLetchild.htm">letchild</a>,
+		<a href="DIRECTKISSLetparent.htm">letparent</a>,
+		<a href="DIRECTKISSLetsibling.htm">letsibling</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>detached(<i>target</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS4</div>
+		<div>The <b>detached</b> event is triggered when the <i>target</i> is
+		detached from its parent object.</div>
+
+    <div>This can be triggered by the user dragging a <i>target</i> which is
+		attached but not glued or by the <a href="DIRECTKISSDetach.htm">detach</a>
+		action.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">Only one <b>detached</b> event should exist for any <i>target</i>.</div>
+		</td></tr></table>
+
+		<h3><i>target</i></h3>
+		<div class="indent"><i>target</i> must be an object number.</div>
+
+		<h4>Example:</h4>
+		<div class="example">
+    ;@ detached(#5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; When object #5 becomes detached from its parent...</i><br>
+    ;@ &nbsp;&nbsp;map(&quot;shrttorn.cel&quot;) <i>; Show the torn shirt image</i><br>
+		;@ &nbsp;&nbsp;unmap(&quot;shirt.cel&quot;)&nbsp; <i>; and hide the normal shirt image.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; detached</div>
+  </body>
+</html>

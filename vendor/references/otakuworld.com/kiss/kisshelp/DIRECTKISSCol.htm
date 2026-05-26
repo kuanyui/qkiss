@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>Col</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; col</div>
+    <h1>Event: <i>Col(palette number)</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSSet.htm">set</a>,
+		<a href="DIRECTKISSCol.htm">col</a>,
+		<a href="DIRECTKISSVersion.htm">version</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSChangecol.htm">changecol</a>,
+		<a href="DIRECTKISSLetpal.htm">letpal</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>col(<i>palette number</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>The <b>col</b> events are called when the viewer changes to the palette specified.</div>
+
+		<div>The number of palettes is limited to the KCF with the greatest number
+		of palettes, therefore <i>palette number</i> is limited to that range.</div>
+
+		<div>This event can be triggered by one of the following:
+		<ul>
+			<li><div>The user switches palettes manually through the viewer interface</div>
+			<li><div>Use of the <a href="DIRECTKISSChangecol.htm">changecol</a> action</div>
+			<li><div>A change to the palette caused by changing the current set</div>
+		</ul>
+		</div>
+
+		<table class="tablenote"><tr><td>
+			<div class="note">There can only be one <b>col</b> event for each palette.</div>
+		</tr></td></table>
+    <h4>Example:</h4>
+    <div class="example">
+		;@ col(2) <i> If palette 2 is changed to, notify user</i><br>
+    ;@ notify(&quot;Now in black and white.&quot;)</div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; col</div>
+  </body>
+</html>

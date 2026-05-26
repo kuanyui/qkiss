@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <title>Exitloop</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; exitloop</div>
+    <h1>Action: <i>Exitloop()</i></h1>
+
+		<div class="relatedevents">
+    related actions:
+		<a href="https://otakuworld.com/kiss/kisshelp/directkissgosub.htm">gosub</a>,
+		<a href="https://otakuworld.com/kiss/kisshelp/directkissgosubrandom.htm">gosubrandom</a>,
+		<a href="https://otakuworld.com/kiss/kisshelp/directkissgoto.htm">goto</a>,
+		<a href="https://otakuworld.com/kiss/kisshelp/directkissgotorandom.htm">gotorandom</a>,
+		<a href="https://otakuworld.com/kiss/kisshelp/directkissrepeat.htm">repeat</a>,
+		<a href="https://otakuworld.com/kiss/kisshelp/directkissexitevent.htm">exitevent</a>
+		</div>
+
+		<div class="relatedactions">
+    related events: <a href="https://otakuworld.com/kiss/kisshelp/directkisslabel.htm">label</a>
+		</div>
+
+		<div class="seealso">
+    see also:
+		<a href="https://otakuworld.com/kiss/kisshelp/directkissfkiss_reference_guide.htm">fkiss</a>,
+		<a href="https://otakuworld.com/kiss/kisshelp/directkissfkiss_events.htm">events</a>,
+		<a href="https://otakuworld.com/kiss/kisshelp/directkissfkiss_actions.htm">actions</a>
+		</div>
+
+		<hr>
+    <h2>exitloop()</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS4</div>
+
+		<div>This will exit the current event and terminate the current
+		<a href="DIRECTKISSRepeat.htm"><b>repeat()</b></a> loop. No more code in
+		this event will be processed.</div>
+
+    <h4>Example:</h4>
+		<div class="example">
+		;@ repeat(Mysubroutine, 5, N) <i>; Call MySubroutine 5 times or until object #4 is mapped.</i><br>
+		<br>
+		<i>... more actions and events here...</i><br>
+		<br>
+		;@ label(MySubroutine)<br>
+		;@ &nbsp;&nbsp;ifmapped(#4)<br>
+    ;@ &nbsp;&nbsp;&nbsp;&nbsp;<b>exitloop</b>() <i>; If object #4 is mapped, stop this event right now.</i><br>
+		;@ &nbsp;&nbsp;endif()<br>
+		;@ &nbsp;&nbsp;sound("Uhoh.wav") <i>; If object #4 is mapped, this sound will never be played.</i>
+		</div>
+
+    <div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; exitloop</div>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <title>Gosubrandom</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; gosubrandom</div>
+    <h1>Action: <b>Gosubrandom(chance, label ID A, label ID B)</b></h1>
+
+		<div class="relatedevents">
+    Related Actions:
+		<a href="DIRECTKISSGosub.htm">gosub</a>,
+		<a href="DIRECTKISSGoto.htm">goto</a>,
+		<a href="DIRECTKISSGotorandom.htm">gotorandom</a>,
+		<a href="DIRECTKISSRepeat.htm">repeat</a>,
+		<a href="DIRECTKISSExitloop.htm">exitloop</a>,
+		<a href="DIRECTKISSExitevent.htm">exitevent</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Events: <a href="DIRECTKISSLabel.htm">label</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>gosubrandom(<i>chance, label ID A, label ID B</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS3</div>
+
+		<div>Processing immediately jumps from this action to one of the specified labels.
+    When that label finishes, processing of the current event continues.</div>
+
+		<div>Which label is processed is determined randomly where <i>chance</i>
+		is the percentage that <i>label ID A</i> will be chosen instead of
+		<i>label ID B</i>.</div>
+
+		<h3><i>chance</i></h3>
+		<div class="indent"><i>chance</i> is a value between 1 and 100 and may be
+		a number or a variable.</div>
+
+		<h3><i>label ID A<br>
+		label ID B</i></h3>
+		<div class="indent">
+		<div>In FKiSS3, <i>label ID A</i> and <i>label ID B</i> may be label ID
+		numbers or a variables representing label ID numbers.</div>
+
+		<div>In FKiSS4, <i>label ID A</i> and <i>label ID B</i> may be label IDs
+		(number or symbolic name) or a variables representing label ID
+		numbers.</div>
+		</div>
+
+    <h4>Example:</h4>
+		<div class="example">;@ gosubrandom(50, 5, 7) <i>; 50% chance of calling subroutine at label 5; otherwise, call label 7.</i></div>
+    <div class="example">;@ gosubrandom(Odds, ThisLabel, ThatLabel)</div>
+
+    </div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; gosubrandom</div>
+  </body>
+</html>

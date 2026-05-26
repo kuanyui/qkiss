@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <title>Letchild</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letchild</div>
+    <h1>Action: <i>letchild(variable, target)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSAttach.htm">attach</a>,
+		<a href="DIRECTKISSGlue.htm">glue</a>,
+		<a href="DIRECTKISSDetach.htm">detach</a>,
+		<a href="DIRECTKISSLetparent.htm">letparent</a>,
+		<a href="DIRECTKISSLetsibling.htm">letsibling</a>
+		</div>
+
+		<div class="relatedevents">
+    Related Events: <a href="DIRECTKISSDetached.htm">detached</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>letchild(<i>variable, target</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS4</div>
+		<div>
+		The <b>letchild</b> action sets the value of <i>variable</i> to the
+		lowest-numbered attached child object for <i>target</i>.</div>
+
+		<div>If no child object is attached to <i>target</i>, <i>variable</i> is
+		set to -1.</div>
+
+		<h3><i>variable</i></h3>
+		<div class="indent"><i>variable</i> must be a variable name.</div>
+
+		<h3><i>target</i></h3>
+		<div class="indent"><i>target</i> may be an object number or a variable
+		representing an object number.</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ letchild(C, #5)</div>
+    <div class="example">;@ letchild(C, VarParent)</div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letchild</div>
+  </body>
+</html>

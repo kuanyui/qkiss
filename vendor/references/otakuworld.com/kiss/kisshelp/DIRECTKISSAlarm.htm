@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <title>Alarm</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; alarm</div>
+    <h1>Event: <i>Alarm(alarm ID)</i></h1>
+
+
+		<div class="relatedevents">
+    Related Events: <a href="DIRECTKISSLabel.htm">label</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSTimer.htm">timer</a>,
+		<a href="DIRECTKISSRandomtimer.htm">randomtimer</a>,
+		<a href="DIRECTKISSLettimer.htm">lettimer</a>,
+		<a href="DIRECTKISSIffixed.htm">iffixed</a>,
+		<a href="DIRECTKISSIfmapped.htm">ifmapped</a>,
+		<a href="DIRECTKISSIfmoved.htm">ifmoved</a>,
+		<a href="DIRECTKISSIfnotfixed.htm">ifnotfixed</a>,
+		<a href="DIRECTKISSIfnotmapped.htm">ifnotmapped</a>,
+		<a href="DIRECTKISSIfnotmoved.htm">ifnotmoved</a>,
+		<a href="DIRECTKISSExitevent.htm">exitevent</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>alarm(<i>alarm ID</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS1</div>
+
+		<div>The <b>alarm</b> events are called when the timer for a specified
+		alarm reaches zero.</div>
+
+    <div>Every <b>alarm</b> event must have a unique ID, different from every other alarm.</div>
+
+		<h3><i>alarm ID</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS3, <i>alarm ID</i> must be a positive integer such as 0 or 250.</div>
+
+		<div>In FKiSS4, <i>alarm ID</i> may also be a symbolic name. This name
+		must begin with a letter and may contain additional letters or numbers up
+		to a total length of 32 characters. It is possible for an <i>alarm ID</i>
+		to be identical to a <i>label ID</i> or <i>variable</i> but it is better
+		to avoid such ambiguity.</div>
+		</div>
+
+		<h3>Remarks</h3>
+		<div class="indent">When thinking of alarms, it might be simplest to think of them as
+		individual alarm clocks. You have a whole shelf full of alarm clocks and
+		each one has its own unique ID. At any time, more than one of them may be
+		set to go off but no single alarm has more than one alarm time so, if an
+		alarm is already counting down, any <a href="DIRECTKISSTimer.htm">timer</a>
+		action relating to that alarm will override the previous setting for that
+		alarm.</div>
+
+    <h4>Example:</h4>
+		<div class="example">
+    ;@ alarm(5)<br>
+    ;@ &nbsp;&nbsp;sound(&quot;bells.wav&quot;)
+		</div>
+
+    <div class="example">
+    ;@ alarm(StartBlinking)<br>
+    ;@ &nbsp;&nbsp;unmap(&quot;eyes1.cel&quot;) map(&quot;eyes2.cel&quot;)<br>
+    ;@ &nbsp;&nbsp;timer(Blink2, 100)
+    </div>
+
+		</div>
+
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; alarm</div>
+  </body>
+</html>

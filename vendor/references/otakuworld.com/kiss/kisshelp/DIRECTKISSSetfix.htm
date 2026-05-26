@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <title>Setfix</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; setfix</div>
+    <h1>Action: <i>Setfix(target, N)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSLetfix.htm">letfix</a>,
+		<a href="DIRECTKISSSetkcf.htm">setkcf</a>,
+		<a href="DIRECTKISSLetkcf.htm">letkcf</a>,
+		<a href="DIRECTKISSGhost.htm">ghost</a>,
+		<a href="DIRECTKISSTransparent.htm">transparent</a>,
+		<a href="DIRECTKISSLettransparent.htm">lettransparent</a>,
+		<a href="DIRECTKISSLetinitx.htm">letinitx</a>,
+		<a href="DIRECTKISSLetinity.htm">letinity</a>,
+		<a href="DIRECTKISSLetmapped.htm">letmapped</a>,
+		<a href="DIRECTKISSLetobjectx.htm">letobjectx</a>,
+		<a href="DIRECTKISSLetobjecty.htm">letobjecty</a>,
+		<a href="DIRECTKISSLetwidth.htm">letwidth</a>,
+		<a href="DIRECTKISSLetheight.htm">letheight</a>,
+		<a href="DIRECTKISSLetcollide.htm">letcollide</a>,
+		<a href="DIRECTKISSLetinside.htm#2b4d4b1f">letinside</a>
+	</div>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSFixcatch.htm">fixcatch</a>,
+		<a href="DIRECTKISSFixdrop.htm">fixdrop</a>,
+		<a href="DIRECTKISSUnfix.htm">unfix</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>setfix(<i>target, N</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS2.1</div>
+		<div>The <b>setfix</b> action sets the fix value for <i>target</i> to <b>N</b>.</div>
+
+    <div>If the fix value <i>target</i> was non-zero and <b>N</b> is zero,
+		this can trigger the <a href="DIRECTKISSUnfix.htm">unfix</a> event for
+		<i>target</i>.</div>
+
+		<div>If the user is currently moving <i>target</i> and <b>N</b> is
+		non-zero, this can force the user to drop <i>target</i>, triggering the
+		<a href="DIRECTKISSFixdrop.htm">fixdrop</a> event for <i>target</i>.</div>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS2.1 to FKiSS3, <i>target</i> must be an object number.</div>
+    <div>In FKiSS4, <i>target</i> may be an object number or a variable
+		representing an object number.</div>
+		</div>
+
+		<h3><i>N</i></h3>
+		<div class="indent">
+		<div>In FKiSS2.1, <i>N</i> must be a number.</div>
+    <div>In FKiSS3, <i>N</i> may be a number or variable.</div>
+		</div>
+
+		<h4>Example:</h4>
+    <div class="example">;@ setfix(#5, 0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Set the fix value of object #5 to 0 (object is freely movable).</i></div>
+    <div class="example">;@ setfix(VarObj, 16) <i>; Set the fix value of the object identified by VarObj to 16.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; setfix</div>
+  </body>
+</html>

@@ -1,0 +1,296 @@
+<html>
+  <head>
+    <title>FKiSS Actions</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Actions</div>
+    <h1>FKiSS Actions</h1>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_General_Syntax.htm">General Syntax</a>,
+		<a href="DIRECTKISSFKiSS_Data_Types.htm">Data Types</a>,
+		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>,
+		<a href="DIRECTKISSFKiSS_Shortcuts.htm">Shortcuts</a>,
+		<a href="DIRECTKISSFKiSS_HINTs.htm">HINTs</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>
+		</div>
+
+		<h2>Description</h2>
+		<div class="indent">
+    <div>An Action is a command which is immediately executed. It could change a cel
+    from mapped to unmapped or change its transparency. It could move an object to a
+    new location or change the value of a variable. Actions cover a wide-range of
+    functionality.</div>
+		<table class="tablenote"><tr><td>
+		<div class="note">All actions must belong to an FKiSS event.</div>
+		</td></tr></table>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Alarms</h3>
+		<div class="indent">
+			<div>These actions set up <a href="DIRECTKISSFKiSS_Data_Types.htm#alarm">alarms</a>, which are events triggered when
+			certain conditions occur, such as a timer going off.</div>
+			<div>
+    	<a href="DIRECTKISSTimer.htm">timer</a>
+			<a href="DIRECTKISSRandomtimer.htm">randomtimer</a>
+			<a href="DIRECTKISSLettimer.htm">lettimer</a>
+    	<br>
+			<a href="DIRECTKISSIffixed.htm">iffixed</a>
+			<a href="DIRECTKISSIfmapped.htm">ifmapped</a>
+			<a href="DIRECTKISSIfmoved.htm">ifmoved</a>
+    	<br>
+			<a href="DIRECTKISSIfnotfixed.htm">ifnotfixed</a>
+			<a href="DIRECTKISSIfnotmapped.htm">ifnotmapped</a>
+			<a href="DIRECTKISSIfnotmoved.htm">ifnotmoved</a>
+    	<br>
+			<a href="DIRECTKISSExitevent.htm">exitevent</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Labels</h3>
+		<div class="indent">
+			<div>These actions use <a href="DIRECTKISSFKiSS_Data_Types.htm#label">labels</a> that mark a block of actions to execute
+			that block of actions from several different places.</div>
+			<div>
+    	<a href="DIRECTKISSGosub.htm">gosub</a> <a href="DIRECTKISSGosubrandom.htm">gosubrandom</a>
+    	<br>
+			<a href="DIRECTKISSGoto.htm">goto</a> <a href="DIRECTKISSGotorandom.htm">gotorandom</a>
+    	<br>
+			<a href="DIRECTKISSRepeat.htm">repeat</a> <a href="DIRECTKISSExitloop.htm">exitloop</a>
+    	<br>
+			<a href="DIRECTKISSExitevent.htm">exitevent</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Mapping</h3>
+		<div class="indent">
+			<div>These actions control the visibility of a cel.  A mapped cel is visible while an unmapped cel is not visible.</div>
+			<div>
+    	<a href="DIRECTKISSMap.htm">map</a> <a href="DIRECTKISSUnmap.htm">unmap</a> <a href="DIRECTKISSAltmap.htm">altmap</a>
+    	<br>
+			<a href="DIRECTKISSLetmapped.htm">letmapped</a> <a href="DIRECTKISSIfmapped.htm">ifmapped</a> <a href="DIRECTKISSIfnotmapped.htm">ifnotmapped</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Movement and Position</h3>
+		<div class="indent">
+			<div>These actions control the position of a target and allow an action to move a cel in response to an event.</div>
+			<div>
+    	<a href="DIRECTKISSMove.htm">move</a> <a href="DIRECTKISSMoveto.htm">moveto</a>
+    	<br>
+			<a href="DIRECTKISSMovebyx.htm">movebyx</a> <a href="DIRECTKISSMovebyy.htm">movebyy</a>
+    	<br>
+			<a href="DIRECTKISSMovetorand.htm">movetorand</a> <a href="DIRECTKISSMoverandx.htm">moverandx</a> <a href="DIRECTKISSMoverandy.htm">moverandy</a>
+    	<br>
+			<a href="DIRECTKISSRestrictx.htm">restrictx</a> <a href="DIRECTKISSRestricty.htm">restricty</a>
+    	<br>
+			<a href="DIRECTKISSLetinitx.htm">letinitx</a> <a href="DIRECTKISSLetinity.htm">letinity</a>
+    	<br>
+			<a href="DIRECTKISSLetobjectx.htm">letobjectx</a> <a href="DIRECTKISSLetobjecty.htm">letobjecty</a>
+    	<br>
+			<a href="DIRECTKISSLetcatch.htm">letcatch</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Message</h3>
+		<div class="indent">
+			<div>These actions show messages to the user or trigger a shell command.</div>
+			<div>
+	    <a href="DIRECTKISSDebug.htm">debug</a> <a href="DIRECTKISSNotify.htm">notify</a> <a href="DIRECTKISSShell.htm">shell</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Sound and Music</h3>
+		<div class="indent">
+			<div>These actions control music and sound.</div>
+			<div>
+	    <a href="DIRECTKISSMusic.htm">music</a> <a href="DIRECTKISSSound.htm">sound</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Translucency</h3>
+		<div class="indent">
+			<div>These actions control the <a href="https://otakuworld.com/kiss/kisshelp/DirectKISSKISS_General_Specification_CEL.htm#transparent">translucency</a> of a target.</div>
+			<div>
+	    <a href="DIRECTKISSTransparent.htm">transparent</a> <a href="DIRECTKISSLettransparent.htm">lettransparent</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Attachment</h3>
+		<div class="indent">
+			<div>These actions control the process of attaching or detaching an object to another object.</div>
+			<div>
+    	<a href="DIRECTKISSAttach.htm">attach</a> <a href="DIRECTKISSGlue.htm">glue</a> <a href="DIRECTKISSDetach.htm">detach</a>
+    	<br>
+			<a href="DIRECTKISSLetchild.htm">letchild</a> <a href="DIRECTKISSLetparent.htm">letparent</a> <a href="DIRECTKISSLetsibling.htm">letsibling</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Group Frame</h3>
+		<div class="indent">
+			<div>These actions change the <a href="DIRECTKISSFKiSS_Data_Types.htm#groupframe">frame</a>
+			that is displayed for a <a href="DIRECTKISSFKiSS_Data_Types.htm#group">group</a> of cels.</div>
+			<div>
+	    <a href="DIRECTKISSSetframe.htm">setframe</a> <a href="DIRECTKISSLetframe.htm">letframe</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Arithmetic</h3>
+		<div class="indent">
+			<div>These actions perform arithmetic operations on a variable.</div>
+			<div>
+    	<a href="DIRECTKISSAdd.htm">add</a> <a href="DIRECTKISSSub.htm">sub</a>
+			<a href="DIRECTKISSMul.htm">mul</a> <a href="DIRECTKISSDiv.htm">div</a> <a href="DIRECTKISSmod.htm">mod</a>
+    	<br>
+			<a href="DIRECTKISSrandom.htm">random</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Object/Cel State</h3>
+		<div class="indent">
+			<div>These actions control or read the state of an object.</div>
+			<div>
+    	<a href="DIRECTKISSSetkcf.htm">setkcf</a> <a href="DIRECTKISSLetkcf.htm">letkcf</a>
+    	<br>
+			<a href="DIRECTKISSSetfix.htm">setfix</a> <a href="DIRECTKISSLetfix.htm">letfix</a> <a href="DIRECTKISSGhost.htm">ghost</a>
+    	<br>
+			<a href="DIRECTKISSTransparent.htm">transparent</a> <a href="DIRECTKISSLettransparent.htm">lettransparent</a> <a href="DIRECTKISSLetinitx.htm">letinitx</a>
+    	<br>
+			<a href="DIRECTKISSLetinity.htm">letinity</a> <a href="DIRECTKISSLetmapped.htm">letmapped</a> <a href="DIRECTKISSLetobjectx.htm">letobjectx</a>
+    	<br>
+			<a href="DIRECTKISSLetobjecty.htm">letobjecty</a> <a href="DIRECTKISSLetwidth.htm">letwidth</a> <a href="DIRECTKISSLetheight.htm">letheight</a>
+    	<br>
+			<a href="DIRECTKISSLetcollide.htm">letcollide</a> <a href="DIRECTKISSLetinside.htm#2b4d4b1f">letinside</a>
+    	<br>
+			<a href="DIRECTKISSLetcatch.htm">letcatch</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Conditionals</h3>
+		<div class="indent">
+			<div>These actions control the flow of execution through a block of actions (see <a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>).</div>
+			<div>
+    	<a href="DIRECTKISSIfequal.htm">ifequal</a> <a href="DIRECTKISSIfnotequal.htm">ifnotequal</a>
+    	<br>
+			<a href="DIRECTKISSIfgreaterthan.htm">ifgreaterthan</a> <a href="DIRECTKISSIflessthan.htm">iflessthan</a>
+    	<br>
+			<a href="DIRECTKISSElse.htm">else</a>
+    	<br>
+			<a href="DIRECTKISSElseifequal.htm">elseifequal</a> <a href="DIRECTKISSElseifnotequal.htm">elseifnotequal</a>
+    	<br>
+			<a href="DIRECTKISSElseifgreaterthan.htm">elseifgreaterthan</a> <a href="DIRECTKISSElseiflessthan.htm">elseiflessthan</a>
+    	<br>
+			<a href="DIRECTKISSEndif.htm">endif</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Keyboard</h3>
+		<div class="indent">
+			<div>These actions read the keyboard.</div>
+			<div>
+			<a href="DIRECTKISSLetkey.htm">letkey</a> <a href="DIRECTKISSLetkeymap.htm">letkeymap</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Mouse</h3>
+		<div class="indent">
+			<div>These actions read the position of the mouse cursor.</div>
+			<div>
+    	<a href="DIRECTKISSLetmousex.htm">letmousex</a> <a href="DIRECTKISSLetmousey.htm">letmousey</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Environment</h3>
+		<div class="indent">
+			<div>These actions affect the environment, set, or play field.</div>
+			<div>
+    	<a href="DIRECTKISSChangecol.htm">changecol</a> <a href="DIRECTKISSChangeset.htm">changeset</a>
+    	<br>
+			<a href="DIRECTKISSLetpal.htm">letpal</a> <a href="DIRECTKISSLetset.htm">letset</a>
+    	<br>
+			<a href="DIRECTKISSLetcatch.htm">letcatch</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Viewport</h3>
+		<div class="indent">
+			<div>These actions control the size of the window and view on that window.</div>
+			<div>
+	    <a href="DIRECTKISSWindowsize.htm">windowsize</a> <a href="DIRECTKISSViewport.htm">viewport</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Miscellaneous</h3>
+		<div class="indent">
+			<div>These actions fall in no particular category.</div>
+			<div>
+	    <a href="DIRECTKISSNop.htm">nop</a> <a href="DIRECTKISSQuit.htm">quit</a> <a href="DIRECTKISSExitevent.htm">exitevent</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Pool Values</h3>
+		<div class="indent">
+			<div>These actions control access to <a href="https://otakuworld.com/kiss/kisshelp/DirectKISSFKISS_Value_Pools.htm">value pools</a>.</div>
+			<div>
+	    <a href="DIRECTKISSValuepool.htm">valuepool</a> <a href="DIRECTKISSSavevalue.htm">savevalue</a>
+			<a href="DIRECTKISSLoadvalue.htm">loadvalue</a> <a href="DIRECTKISSDeletevalue.htm">deletevalue</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Variables</h3>
+		<div class="indent">
+			<div>These actions affect <a href="DIRECTKISSFKiSS_Data_Types.htm#variable">variables</a>.</div>
+			<h4>Arithmetic</h4>
+			<div class="indent">
+    	<a href="DIRECTKISSAdd.htm">add</a> <a href="DIRECTKISSSub.htm">sub</a>
+			<a href="DIRECTKISSMul.htm">mul</a> <a href="DIRECTKISSDiv.htm">div</a> <a href="DIRECTKISSmod.htm">mod</a>
+    	<br>
+			<a href="DIRECTKISSrandom.htm">random</a>
+			</div>
+			<h4>Assignment</h4>
+			<div class="indent">
+			<a href="DIRECTKISSLet.htm">let</a> <a href="DIRECTKISSLetcatch.htm">letcatch</a> <a href="DIRECTKISSLetchild.htm">letchild</a>
+    	<br>
+			<a href="DIRECTKISSLetcollide.htm">letcollide</a> <a href="DIRECTKISSLetfix.htm">letfix</a> <a href="DIRECTKISSLetframe.htm">letframe</a>
+    	<br>
+			<a href="DIRECTKISSLetheight.htm">letheight</a> <a href="DIRECTKISSLetinitx.htm">letinitx</a> <a href="DIRECTKISSLetinity.htm">letinity</a>
+    	<br>
+			<a href="DIRECTKISSLetinside.htm#2b4d4b1f">letinside</a> <a href="DIRECTKISSLetkeymap.htm">letkeymap</a> <a href="DIRECTKISSLetkey.htm">letkey</a>
+    	<br>
+			<a href="DIRECTKISSLetmapped.htm">letmapped</a> <a href="DIRECTKISSLetmousex.htm">letmousex</a> <a href="DIRECTKISSLetmousey.htm">letmousey</a>
+    	<br>
+			<a href="DIRECTKISSLetobjectx.htm">letobjectx</a> <a href="DIRECTKISSLetobjecty.htm">letobjecty</a> <a href="DIRECTKISSLetpal.htm">letpal</a>
+    	<br>
+			<a href="DIRECTKISSLetparent.htm">letparent</a> <a href="DIRECTKISSLetset.htm">letset</a> <a href="DIRECTKISSLetsibling.htm">letsibling</a>
+    	<br>
+			<a href="DIRECTKISSLettimer.htm">lettimer</a> <a href="DIRECTKISSLettransparent.htm">lettransparent</a> <a href="DIRECTKISSLetwidth.htm">letwidth</a>
+			</div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Actions</div>
+  </body>
+</html>

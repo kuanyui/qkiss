@@ -1,0 +1,130 @@
+<html>
+  <head>
+    <title>FKiSS Value Pools</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Value Pools</div>
+    <h1>FKiSS Value Pools</h1>
+
+    <div class="seealso">See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_General_Syntax.htm">General Syntax</a>,
+		<a href="DIRECTKISSFKiSS_Data_Types.htm">Data Types</a>,
+		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>,
+		<a href="DIRECTKISSFKiSS_Shortcuts.htm">Shortcuts</a>,
+		<a href="DIRECTKISSFKiSS_tags.htm">%Tags</a>,
+		<a href="DIRECTKISSFKiSS_Cel_Groups.htm">Cel Groups</a>,
+		<a href="DIRECTKISSFKiSS_HINTs.htm">HINTs</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>,
+		<a href="DIRECTKISSValuepool.htm">valuepool</a>,
+		<a href="DIRECTKISSSavevalue.htm">savevalue</a>,
+		<a href="DIRECTKISSLoadvalue.htm">loadvalue</a>,
+		<a href="DIRECTKISSDeletevalue.htm">deletevalue</a>
+		</div>
+
+
+		<h2>Description</h2>
+		<div class="indent">
+    	<div>Value Pools are a new concept introduced in FKiSS4. Value Pools
+			provide a way for variable values to be saved to disk and loaded again
+			later, even during later sessions. For example, a game-based KiSS set
+			could use a Value Pool to save the high score and load it again the next
+			time that KiSS set is played.  Another example is a KiSS doll might use a
+			value pool to remember whether the user wanted the snap-to feature turned
+			on and start with the same setting the next time that doll is
+			loaded.</div>
+
+			<div>Each Value Pool can store any number of values, one for each named value entry.</div>
+		</div>
+
+		<h2>Types of Value Pools</h2>
+		<div class="indent">
+			<div>There are two types of Value Pools: Private Pools and Public Pools.</div>
+
+			<h4>Private Value Pools:</h4>
+			<div class="indent">
+				<div>Each KiSS set has its own Private Value Pool which is unique to that KiSS
+    		set. The Private Value Pool is the default Value Pool for the KiSS set and cannot
+    		be accessed by any other KiSS set, not even different CNFs in the same LZH KiSS
+    		archive. This protects the values from accidental interference from other KiSS
+    		sets. Private Value Pools do not have names since they are identified by the
+    		KiSS set which owns them.</div>
+			</div>
+
+			<h4>Public Value Pools:</h4>
+			<div class="indent">
+    		<div>Public Value Pools have names. Values in a Public Value Pool can be accessed
+    		by any KiSS set which knows the name of that Public Value Pool. This makes it
+    		possible for one KiSS set to react to changes made in a different KiSS set.
+    		However, it is possible for two KiSS sets to use the same Value Pool by accident so
+    		it is strongly recommended that you try to give your Public Value Pool as
+    		unique a name as possible to avoid accidents.</div>
+			</div>
+		</div>
+
+		<h2>Specifying A Value Pool</h2>
+		<div class="indent">
+			<div>Before saving a value to a Value Pool, you can select the Private
+			Value Pool or a Public Value Pool with the
+			<a href="DIRECTKISSValuepool.htm">valuepool</a> action.  Public Value Pools
+			must be named while Private Value Pools have no name.</div>
+
+			<div>Public Value Pool names:
+			<ul>
+				<li>Must be between 1 and 64 characters<br>
+				<li>They may contain letters, digits,	hyphens, and underscores.<br>
+				<li>Are case-insensitive ("mypool" is the same as "MYPOOL")<br>
+				<li>The name must be enclosed with quotation marks.
+			</ul>
+			</div>
+
+    	<h4>Example:</h4>
+			<div class="indent">
+    	<div class="example">;@ valuepool(&quot;DavesAdventure_By_ChibiWuwu&quot;) <i>; uses the specified public value pool</i></div>
+    	<div class="example">;@ valuepool(&quot;&quot;) <i>; uses the private value pool</i></div>
+			</div>
+		</div>
+
+		<h2>Values and Value Pools</h2>
+		<div class="indent">
+			<div>Values can be saved, loaded, and deleted from Value Pools by using
+			the <a href="DIRECTKISSSavevalue.htm">savevalue</a>,
+			<a href="DIRECTKISSLoadvalue.htm">loadvalue</a>, and
+			<a href="DIRECTKISSDeletevalue.htm">deletevalue</a> actions.</div>
+
+			<div>If you want to specify a value pool other than the current pool without
+    	changing the current pool, you can specify it in the value name by separating it with
+    	a period (.).</div>
+
+    	<h4>Example:</h4>
+			<div class="indent">
+    	<div class="example">;@ savevalue(&quot;HighScore&quot;, score)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Save the value in <b>score</b> to the &quot;HighScore&quot; value in the current value pool</i>
+    	<br>
+    	;@ savevalue(&quot;Johns_Adventure1.strength&quot;, str) <i>; Save the value in <b>str</b> to the &quot;strength&quot; value in the public pool &quot;Johns_Adventure1&quot;</i>
+    	<br>
+    	;@ savevalue(&quot;.SnapTo&quot;, snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Save the value in <b>snap</b> to the &quot;SnapTo&quot; value in the private value pool</i>
+			</div>
+			<div class="example">
+    	;@ loadvalue(score, &quot;HighScore&quot;)
+    	<br>
+    	;@ loadvalue(str, &quot;Johns_Adventure1.strength&quot;)
+    	<br>
+    	;@ loadvalue(snap, &quot;.SnapTo&quot;)
+			</div>
+			<div class="example">
+    	;@ deletevalue(&quot;HighScore&quot;)
+    	<br>
+    	;@ deletevalue(&quot;Johns_Adventure1.strength&quot;)
+    	<br>
+    	;@ deletevalue(&quot;.SnapTo&quot;)
+			</div>
+			</div>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Value Pools</div>
+	</body>
+</html>

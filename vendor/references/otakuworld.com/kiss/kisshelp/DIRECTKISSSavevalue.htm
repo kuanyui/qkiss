@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title>Savevalue</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; savevalue</div>
+    <h1>Action: <i>Savevalue(name, value)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSValuepool.htm">valuepool</a>,
+		<a href="DIRECTKISSLoadvalue.htm">loadvalue</a>,
+		<a href="DIRECTKISSDeletevalue.htm">deletevalue</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>savevalue(<i>name, value</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS4</div>
+		<div>The <b>savevalue</b> action saves a value to disk which can be loaded
+		again later, even during future sessions.</div>
+
+    <div>For more information, see <a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>.</div>
+
+		<h3><i>name</i></h3>
+		<div class="indent">
+		<div><i>name</i> is an identifier under which the value
+		will be stored. It may be between 1 and 64 characters. They may contain
+		letters, digits,  hyphens, and underscores. Value names are
+		case-insensitive. The name must be enclosed with quotation marks.</div>
+
+		<div>If you want to specify a valuepool other than the current pool
+		without changing the current pool, you can specify it in the value name by
+		separating it with a period (.).</div>
+		</div>
+
+		<h3><i>name</i></h3>
+		<div class="indent">
+		<div><i>value</i> may be either a variable or a number.</div>
+
+		<div>The value will be stored in the current pool as specified by the most
+		recent <a href="DIRECTKISSValuepool.htm">valuepool</a> command.</div>
+		</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ savevalue(&quot;HighScore&quot;, score)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; stores value in score under &quot;HighScore&quot; in the current value pool.</i></div>
+    <div class="example">;@ savevalue(&quot;Johns_Adventure1.strength&quot;, str) <i>; stores value in str under &quot;strength&quot; in the value pool &quot;Johns_Adventure1&quot;.</i></div>
+    <div class="example">;@ savevalue(&quot;.SnapTo&quot;, snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; stores value in snap under &quot;SnapTo&quot; in the private value pool for this KiSS data set.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; savevalue</div>
+  </body>
+</html>

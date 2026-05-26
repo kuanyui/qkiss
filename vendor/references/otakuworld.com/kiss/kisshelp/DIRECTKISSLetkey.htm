@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <title>Letkey</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letkey</div>
+    <h1>Action: <i>Letkey(variable, keystring)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSLetmousex.htm">letmousex</a>,
+		<a href="DIRECTKISSLetmousey.htm">letmousey</a>,
+		<a href="DIRECTKISSLetkeymap.htm">letkeymap</a>
+		</div>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSKeypress.htm">keypress</a>,
+		<a href="DIRECTKISSKeyrelease.htm">keyrelease</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>letkey(<i>variable, keystring</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS4</div>
+		<div>The <b>letkey</b> action sets the value of <i>variable</i> to the
+		index of the first key in <i>keystring</i> which is pressed. Index starts
+		at 1.</div>
+
+		<div>If no key in <i>keystring</i> is pressed, <i>variable</i> is set to 0.</div>
+
+		<h3><i>variable</i></h3>
+		<div class="indent"><i>variable</i> must be a variable name.</div>
+
+		<h3><i>keystring</i></h3>
+		<div class="indent">
+		<div><i>keystring</i> must be a string identifying one or
+		more keys. The string is composed of one or more of the following
+		sub-strings concatenated together (All other keys are ignored):
+		<ul>
+			<li>&quot;up&quot; <i>(up arrow)</i><br>
+			<li>&quot;down&quot; <i>(down arrow)</i><br>
+			<li>&quot;left&quot; <i>(left arrow)</i><br>
+			<li>&quot;right&quot; <i>(right arrow)</i><br>
+			<li>&quot;space&quot; <i>(space bar)</i><br>
+			<li>&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;<br>
+			<li>&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;F&quot;, &quot;G&quot;, &quot;H&quot;, &quot;I&quot;,  &quot;J&quot;, &quot;K&quot;, &quot;L&quot;, &quot;M&quot;, &quot;N&quot;, &quot;O&quot;, &quot;P&quot;, &quot;Q&quot;, &quot;R&quot;, &quot;S&quot;, &quot;T&quot;, &quot;U&quot;, &quot;V&quot;, &quot;W&quot;, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;
+		</ul></div>
+		<div><i>keystring</i> is case-insensitive.</div>
+
+		<div><i>keystring</i> is processed in order from left to right.  As soon as a specified
+		key is seen as being pressed, no further processing is done.</div>
+
+		</div>
+
+		<h4>Example:</h4>
+		<div class="example">
+		<i>; Watch for up arrow, down arrow, or &quot;F&quot;.</i><br>
+		<i>; If up arrow is pressed, K = 1.</i><br>
+		<i>; If down arrow is pressed, K = 2.</i><br>
+		<i>; If &quot;F&quot; is pressed, K = 3.</i><br>
+		<i>; Otherwise, K = 0.</i><br>
+    ;@ letkey(K, &quot;updownF&quot;)</div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; letkey</div>
+  </body>
+</html>

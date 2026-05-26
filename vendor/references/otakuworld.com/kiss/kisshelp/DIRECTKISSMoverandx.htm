@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <title>Moverandx</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; moverandx</div>
+    <h1>Action: <i>Moverandx(target, min, max)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSMove.htm">move</a>,
+		<a href="DIRECTKISSMoveto.htm">moveto</a>,
+		<a href="DIRECTKISSMovebyx.htm">movebyx</a>,
+		<a href="DIRECTKISSMovebyy.htm">movebyy</a>,
+		<a href="DIRECTKISSMovetorand.htm">movetorand</a>,
+		<a href="DIRECTKISSMoverandy.htm">moverandy</a>,
+		<a href="DIRECTKISSRestrictx.htm">restrictx</a>,
+		<a href="DIRECTKISSRestricty.htm">restricty</a>,
+		<a href="DIRECTKISSLetinitx.htm">letinitx</a>,
+		<a href="DIRECTKISSLetinity.htm">letinity</a>,
+		<a href="DIRECTKISSLetobjectx.htm">letobjectx</a>,
+		<a href="DIRECTKISSLetobjecty.htm">letobjecty</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>moverandx(<i>target, min, max</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS2.1</div>
+		<div>
+		The <b>moverandx</b> action causes <i>target</i> to move by a random
+		horizontal distance in the range <i>min</i> to <i>max</i> relative to its
+		current position. The vertical position of <i>target</i> is not affected.
+		Positive values move <i>target</i> to the right while negative values move
+		<i>target</i> to the left.</div>
+
+		<table class="tablenote"><tr><td>
+		<div class="note">FKiSS movement is restricted to the play field unless
+		<a href="DIRECTKISSRestrictx.htm"><b>restrictx</b></a> or<br>
+		<a href="DIRECTKISSRestrictx.htm"><b>restricty</b></a> is used to alter
+		the limits for an object.</div>
+		</td></tr></table>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS2.1 to FKiSS3, <i>target</i> must be an object number.</div>
+    <div>In FKiSS4, <i>target</i> may be an object number or a variable representing an object number.</div>
+		</div>
+
+		<h3><i>min</i></h3>
+		<div class="indent">
+		<div>In FKiSS2.1, <i>min</i> must be a number.</div>
+		<div>In FKiSS3, <i>min</i> may be number or a variable.</div>
+		</div>
+
+		<h3><i>max</i></h3>
+		<div class="indent">
+		<div>In FKiSS2.1, <i>max</i> must be a number.</div>
+		<div>In FKiSS3, <i>max</i> may be number or a variable.</div>
+		</div>
+
+		<h4>Example:</h4>
+    <div class="example">;@ moverandx(#5, 5, 105)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Move object #5 to the right anywhere between 5 and 105 pixels.</i></div>
+    <div class="example">;@ moverandx(#5, -5, -105)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Move object #5 to the left anywhere between 5 and 105 pixels.</i></div>
+    <div class="example">;@ moverandx(VarObj, Low, High) <i>; Move object identified by variable VarObj horizontally in the range from Low to High.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; moverandx</div>
+  </body>
+</html>

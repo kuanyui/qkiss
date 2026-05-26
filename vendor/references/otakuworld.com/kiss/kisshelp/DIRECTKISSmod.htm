@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>mod</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; mod</div>
+    <h1>Action: <i>Mod(variable, A, B)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSLet.htm">let</a>,
+		<a href="DIRECTKISSAdd.htm">add</a>,
+		<a href="DIRECTKISSSub.htm">sub</a>,
+		<a href="DIRECTKISSMul.htm">mul</a>,
+		<a href="DIRECTKISSDiv.htm">div</a>,
+		<a href="DIRECTKISSrandom.htm">random</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>mod(<i>variable, A, B</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS3</div>
+		<div>The <b>mod</b> action sets the value of <i>variable</i> to the value
+		of (<i>A</i> modulo <i>B</i>).</div>
+
+		<div>Modulo means &quot;divide these numbers and take the remainder&quot;.
+		<i>(5 modulo 2) = 1</i></div>
+
+		<div>If <i>B</i> is zero, this action will trigger the <a
+		href="DIRECTKISSOverflow.htm">Overflow</a> event.</div>
+
+		<h3><i>variable</i></h3>
+		<div class="indent"><i>variable</i> must a variable name.</div>
+
+		<h3><i>A</i></h3>
+		<div class="indent"><i>A</i> may be number or a variable.</div>
+
+		<h3><i>B</i></h3>
+		<div class="indent"><i>B</i> may be number or a variable.</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ mod(X, X, 2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Divide X by 2 and store the remainder back in X.</i></div>
+    <div class="example">;@ mod(Remainder, A, B) <i>; Divide A by B and store the remainder in Remainder.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; mod</div>
+  </body>
+</html>

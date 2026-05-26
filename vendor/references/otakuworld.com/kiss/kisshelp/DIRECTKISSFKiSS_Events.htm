@@ -1,0 +1,147 @@
+<html>
+  <head>
+    <title>FKiSS Events</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Events</div>
+    <h1>FKiSS Events</h1>
+
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_General_Syntax.htm">General Syntax</a>,
+		<a href="DIRECTKISSFKiSS_Data_Types.htm">Data Types</a>,
+		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>,
+		<a href="DIRECTKISSFKiSS_Shortcuts.htm">Shortcuts</a>,
+		<a href="DIRECTKISSFKiSS_HINTs.htm">HINTs</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>,
+		<a href="DIRECTKISSFKiSS_Event_Order.htm">Event Order</a>
+		</div>
+
+		<h2>Description</h2>
+    <div class="indent">
+		<div>An Event defines the conditions under which a block of action code is
+    executed. All actions listed after an event command are assumed to be part of that
+    event until the next event command is listed.</div>
+
+    <div>Some events can trigger other events, creating a stack of events. These events
+    will always trigger in a <a href="DIRECTKISSFKiSS_Event_Order.htm">very specific order</a>.</div>
+
+		<hr class="short" align="left">
+		<h3>Unique</h3>
+		<div class="indent">
+			<div>Only one of each of these events can be defined in a single KiSS Artform.</div>
+
+			<div>
+    	<a href="DIRECTKISSInitialize.htm">initialize</a> <a href="DIRECTKISSBegin.htm">begin</a> <a href="DIRECTKISSEnd.htm">end</a>
+    	<br>
+			<a href="DIRECTKISSOverflow.htm">overflow</a> <a href="DIRECTKISSNever.htm">never</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Specific</h3>
+		<div class="indent">
+			<div>These events are specific to sets, colors, and version.</div>
+
+			<div>
+    	<a href="DIRECTKISSSet.htm">set</a> <a href="DIRECTKISSCol.htm">col</a> <a href="DIRECTKISSVersion.htm">version</a>
+			</div>
+		</div>
+
+
+		<hr class="short" align="left">
+		<h3>Named</h3>
+		<div class="indent">
+			<div>These events are associated with named blocks of code.</div>
+
+			<div>
+    	<a href="DIRECTKISSAlarm.htm">alarm</a> <a href="DIRECTKISSLabel.htm">label</a>
+			</div>
+		</div>
+
+
+		<hr class="short" align="left">
+		<h3>Rectangle-based collision</h3>
+		<div class="indent">
+			<div>These events are associated with collisions between rectangles.</div>
+			<div>Rectangle collision is faster than pixel-based collisions but not pixel accurate.</div>
+
+			<div>
+    	<a href="DIRECTKISSIn.htm">in</a> <a href="DIRECTKISSOut.htm">out</a>
+    	<br>
+			<a href="DIRECTKISSStillin.htm">stillin</a> <a href="DIRECTKISSStillout.htm">stillout</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Pixel-based collision</h3>
+		<div class="indent">
+			<div>These events are associated with collisions between pixels of cels.</div>
+
+			<div>
+	    <a href="DIRECTKISSCollide.htm">collide</a> <a href="DIRECTKISSApart.htm">apart</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Mouse-based collision</h3>
+		<div class="indent">
+			<div>These events are associated with the movement of the mouse cursor.</div>
+
+			<div>
+	    <a href="DIRECTKISSMousein.htm">mousein</a> <a href="DIRECTKISSMouseout.htm">mouseout</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Keyboard</h3>
+		<div class="indent">
+			<div>These events are associated with pressing of keys.</div>
+
+			<div>
+	    <a href="DIRECTKISSKeypress.htm">keypress</a> <a href="DIRECTKISSKeyrelease.htm">keyrelease</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Click-and-drag</h3>
+		<div class="indent">
+			<div>These events are associated with clicking on cels as well as clicking and dragging cels around.</div>
+
+			<div>
+    	<a href="DIRECTKISSPress.htm">press</a> <a href="DIRECTKISSCatch.htm">catch</a> <a href="DIRECTKISSDrop.htm">drop</a>
+    	<br>
+			<a href="DIRECTKISSRelease.htm">release</a> <a href="DIRECTKISSFixcatch.htm">fixcatch</a> <a href="DIRECTKISSFixdrop.htm">fixdrop</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Fix</h3>
+		<div class="indent">
+			<div>These events are associated with the <i>fix</i> value of an object.</div>
+
+			<div>
+	    <a href="DIRECTKISSUnfix.htm">unfix</a> <a href="DIRECTKISSFixcatch.htm">fixcatch</a> <a href="DIRECTKISSFixdrop.htm">fixdrop</a>
+			</div>
+		</div>
+
+		<hr class="short" align="left">
+		<h3>Attachment</h3>
+		<div class="indent">
+			<div>This event is associated with detaching a target from a parent object.</div>
+
+			<div>
+	    <a href="DIRECTKISSDetached.htm">detached</a>
+			</div>
+		</div>
+		<hr class="short" align="left">
+	</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Events</div>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Changecol</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; changecol</div>
+    <h1>Action: <i>Changecol(N)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSChangeset.htm">changeset</a>,
+		<a href="DIRECTKISSLetpal.htm">letpal</a>,
+		<a href="DIRECTKISSLetset.htm">letset</a>,
+		<a href="DIRECTKISSLetcatch.htm">letcatch</a>
+		</div>
+
+		<div class="relatedevents">
+    Related Events: <a href="DIRECTKISSCol.htm">col</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>,
+		<a href="DIRECTKISSKISS_General_Specification_KCF.htm">KCF</a>
+		</div>
+
+		<hr>
+    <h2>changecol(<i>N</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>The <b>changecol</b> action sets the palette for the current page to <i>N</i>. <i>N</i> must be in the range of
+		available palettes.</div>
+		<div>If <i>N</i> is not the current palette, this may trigger the <a href="DIRECTKISSCol.htm">col</a> event for the
+		new palette.</div>
+
+		<h3><i>N</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS2.1, <i>N</i> must be a number.</div>
+		<div>In FKiSS3, <i>N</i> may be a number or variable.</div>
+		</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ changecol(2) <i>; Change to palette 2.</i></div>
+    <div class="example">;@ changecol(P) <i>; Change to the palette specified in variable P.</i></div>
+		</div>
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; changecol</div>
+  </body>
+</html>

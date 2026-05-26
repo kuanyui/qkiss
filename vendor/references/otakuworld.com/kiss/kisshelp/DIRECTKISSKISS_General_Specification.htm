@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <title>KISS General Specification</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; KiSS General Specification</div>
+
+		<h1>KISS General Specification</h1>
+
+    <div>
+		<i>(Based on the KiSS GS/Specs translated by K.O.S.)</i><br>
+		<span class="smallnote">(Updated by Stephen Lepisto (<a href="http://otakuworld.com">http://otakuworld.com</a>) to include additional information and clarification)</span>
+		</div>
+
+		<h1>1. Introduction</h1>
+		<div class="indent">
+		<div>KiSS a "paper doll" program, has been developed for computers based on NEC
+        PC-9801VM2 architecture since March 1991. Many people have enjoyed and implemented
+        KISS for other computers. Now KISS is running on many platforms.</div>
+
+		<div>KiSS, short for Kisekae Set System, is a way to participate in
+		interactive art on the computer.  Originally designed primarily to provide
+		interactive "paper dolls", KiSS has grown into something much, much
+		more.</div>
+
+		<div>Imagine a doll that shows emotions when you touch her/him/it. Imagine
+		clothing that changes when other accessories are placed on the character.
+		Imagine changing that blue suit for a red suit with a click of a button.
+		Imagine playing with make-up or hairstyles or jewelry.</div>
+
+		<div>But wait, there's more!  You can have sound effects and even
+		background music.  If "dolls" are not your thing, how about decorating a
+		building with different facades, windows, or even gargoyles?  How about
+		playing a game in KiSS where your score is expressed in coins that can be
+		used in an interactive shop?  Want to learn how to create KiSS art? Play
+		with a KiSS tutorial that shows you how.</div>
+
+		<div>All this and more await you in the world of KiSS!</div>
+
+		</div>
+
+    <h1>2. General Specifications</h1>
+		<div class="indent">
+			<div>A KiSS Artform is composed of cels (images), color palettes, and a
+			script that specifies how the cels and palettes work together to create
+			the artform.  <a href="DIRECTKISSKISS_General_Specification.htm#talbe21">Table 2-1</a> describes the overall
+			limits of cel sizes and color depths.</div>
+
+		<div class="tabletitle"><a name="table21">Table 2-1:</a> KiSS Artform limits</div>
+
+    <table class="gridded">
+			<tr>
+				<th>Feature</th><th>Limit</th>
+			</tr>
+			<tr>
+				<td>Colors</td><td>16, 256 or full-color (32-bit)</td>
+			</tr>
+			<tr>
+				<td>Palettes</td><td>16 and 256 color</td>
+			</tr>
+			<tr>
+				<td>Screen size</td><td>Unlimited (also known as the play field)</td>
+			</tr>
+			<tr>
+				<td>Cel size</td><td>Unlimited</td>
+			</tr>
+		</table>
+		</div>
+
+    <h1>3. Basic File Types</h1>
+		<div class="indent">
+		<div>KiSS uses the following files:</div>
+
+		<ul>
+    <li><div><a href="DIRECTKISSKISS_General_Specification_CNF.htm"><b>CNF</b>: Configuration file</a>
+    <br>
+		Describes the overlapping order and positions of cels and objects. The KiSS
+    viewer reads this first and refers to it to read other files. This file is a text
+    file which may be created with any simple ASCII editor. It may not contain
+    formatting codes (i.e., you cannot use something like a word processor that embeds
+		formatting codes.  The file must be a plain text file).</div>
+
+    <li><div><a href="DIRECTKISSKISS_General_Specification_CEL.htm"><b>CEL</b>: Cel file</a>
+    <br>
+		Image data file that contains rows of pixels. Cel images have width, height, and an
+    offset describing where the cel should be drawn relative to its screen position.</div>
+
+    <li><div><a href="DIRECTKISSKISS_General_Specification_KCF.htm"><b>KCF</b>: KiSS Color File (palette)</a>
+    <br>
+		Defines the actual colors of pixels for palette-based cels. May contain
+		multiple palettes.</div>
+		</ul>
+		</div>
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; KiSS General Specification</div>
+
+  </body>
+</html>

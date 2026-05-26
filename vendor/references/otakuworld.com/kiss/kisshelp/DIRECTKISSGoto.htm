@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>Goto</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; goto</div>
+    <h1>Action: <i>Goto(label ID)</i></h1>
+
+		<div class="relatedevents">
+    Related Actions:
+		<a href="DIRECTKISSGosub.htm">gosub</a>,
+		<a href="DIRECTKISSGosubrandom.htm">gosubrandom</a>,
+		<a href="DIRECTKISSGoto.htm">goto</a>,
+		<a href="DIRECTKISSGotorandom.htm">gotorandom</a>,
+		<a href="DIRECTKISSRepeat.htm">repeat</a>,
+		<a href="DIRECTKISSExitloop.htm">exitloop</a>,
+		<a href="DIRECTKISSExitevent.htm">exitevent</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Events: <a href="DIRECTKISSLabel.htm">label</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>goto(<i>label ID</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS3</div>
+
+		<div>Processing immediately jumps from this action to the specified label. When
+    that label finishes, processing of the current event does not continue.</div>
+
+		<h3><i>label ID</i></h3>
+		<div>In FKiSS3, <i>label ID</i> may be a label ID number or a variable
+		representing a label ID number.</div>
+
+		<div>In FKiSS4, <i>label ID</i> may be a label ID (number or symbolic
+		name) or a variable representing a label ID number.</div>
+
+    <h4>Example:</h4>
+		<div class="indent">This example shows how to use the <b>goto()</b> action
+		to to test for two possible conditions and if either is true, then the
+		actions starting at the label <i>GloveOrBootMapped</i> are executed to
+		play a sound; otherwise, a different sound is played.</div>
+
+		<div class="example">
+    ;@ ifmapped(#4)<br>
+		;@ &nbsp;&nbsp;goto(GloveOrBootMapped)<br>
+		;@ endif()<br>
+		;@ ifmapped(#5)<br>
+		;@ &nbsp;&nbsp;goto(GloveOrBootMapped)<br>
+		;@ endif()<br>
+		;@ sound("BareLimbs.wav")<br>
+    <br>
+    ;@ label(GloveOrBootMapped)<br>
+		;@ &nbsp;&nbsp;sound("GloveSound.wav")<br>
+    </div>
+
+    </div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; goto</div>
+  </body>
+</html>

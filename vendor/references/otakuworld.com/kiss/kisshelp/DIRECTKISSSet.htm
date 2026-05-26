@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <title>Set</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; set</div>
+    <h1>Event: <i>Set(page number)</i></h1>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSSet.htm">set</a>,
+		<a href="DIRECTKISSCol.htm">col</a>,
+		<a href="DIRECTKISSVersion.htm">version</a>
+		</div>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSChangeset.htm">changeset</a>,
+		<a href="DIRECTKISSLetset.htm">letset</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>set(<i>page number</i>)</h2>
+    <div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>The <b>set</b> events are called when the viewer changes to the set
+		(page) specified.</div>
+
+    <div>This event can be triggered by the user switching pages manually or
+		by the <a href="DIRECTKISSChangeset.htm">changeset</a> action.</div>
+
+		<table class="tablenote"><tr><td>
+    <div class="note">There can only be one <b>set</b> event for each set.</div>
+		</td></tr></table>
+
+		<h3><i>page number</i></h3>
+		<div class="indent"><i>page number</i> must be a number between 0 and 9,
+		since there can only be ten sets.</div>
+
+		<h4>Example:</h4>
+		<div class="example">
+		<i>; This event is triggered when set 5 is made active.</i><br>
+    ;@ set(5)<br>
+    ;@ &nbsp;&nbsp;notify(&quot;Welcome to page five!&quot;)
+		</div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Events.htm">FKiSS Events</a> &gt; set</div>
+  </body>
+</html>

@@ -1,0 +1,198 @@
+<html>
+  <head>
+    <title>FKiSS HINTs</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Hints</div>
+    <h1>FKiSS Hints</h1>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_General_Syntax.htm">General Syntax</a>,
+		<a href="DIRECTKISSFKiSS_Data_Types.htm">Data Types</a>,
+		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>,
+		<a href="DIRECTKISSFKiSS_Shortcuts.htm">Shortcuts</a>,
+		<a href="DIRECTKISSFKiSS_tags.htm">%Tags</a>,
+		<a href="DIRECTKISSFKiSS_Cel_Groups.htm">Cel Groups</a>,
+		<a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<h2>Description</h2>
+    <div class="indent">
+    <div>It is possible for a KiSS set to specify some of the viewer settings which
+    work best with that set by using HINTs.</div>
+
+    <div>A viewer that supports HINTs uses the first form of the HINT which
+    has a valid value.</div>
+
+    <div>If the HINT value is textual, it matches by case-insensitive
+		substring so that &quot;fk&quot; is the same as &quot;FK&quot; and both
+		are taken to mean HINT bounds setting &quot;FKiSS&quot;.</div>
+
+    <div>A HINT may appear anywhere in the CNF but usually appears near the
+    beginning of the CNF, before any CEL and KCF declarations.</div>
+		</div>
+		<table class="tablenote"><tr><td>
+			<div class="note">Not all viewers support HINTs, in which case the HINT is ignored.</div>
+		</td></tr></table>
+
+		<h2>Hint Syntax</h2>
+    <div class="indent">
+		<div>A HINT always takes the following form:</div>
+
+    <div class="example">;HINT <i>name value</i></div>
+
+    <div>The ; and HINT may have space between them but nothing else. &quot;HINT&quot; must be in
+    upper-case. The <i>name</i> and <i>value</i> are case-insensitive.</div>
+		</div>
+
+		<h2>Hint Settings</h2>
+		<div class="indent">
+			<div>There are three settings which can be selected with HINTs:</div>
+
+			<hr class="short" align="left">
+			<h3>MaxFix</h3>
+			<div class="indent">
+    	<div>Syntax: <span class="example">;HINT maxfix <i>value</i></span></div>
+
+			<div>
+    	Each time you click or drag an object which is fixed in place, the fix
+			value for that object is reduced by one unless the fix value is equal to
+			or higher than the Maximum Fix value.</div>
+			<div>An object with fix value equal to or greater than the Maximum Fix
+			value is permanently fixed in place.</div>
+			<table class="tablenote"><tr><td>
+			<div class="note">Maxfix is also known as the <i>MFO
+			(&quot;maximal fix object&quot;)</i> value.</div>
+			</td></tr></table>
+
+			<table class="tablenote"><tr><td>
+    	<div class="note">This value must be at least 2.</div>
+			</td></tr></table>
+
+    	<h4>Example:</h4>
+    	<div class="example">;HINT maxfix 100</div>
+    	<div class="example">;HINT maxfix 5</div>
+    	<div class="example">;HINT maxfix 1000</div>
+	  </div>
+
+		<hr class="short" align="left">
+		<h3>Stack</h3>
+		<div class="indent">
+    	<div>Syntax: <span class="example">;HINT stack <i>value</i></span></div>
+
+    	<div>FKiSS events can trigger other FKiSS events which can trigger other
+			FKiSS events, building up a stack of events. As each event completes, it
+			is removed from the stack. To prevent FKiSS from becoming stuck in an
+			infinite feedback loop, a Maximum Stack Depth is defined and, once the
+			FKiSS stack reaches that depth, no further events will be triggered.
+			Most KiSS viewers, use a Maximum Stack Depth of 10. The first time the
+			FKiSS stack reaches this depth, the user will be shown a warning
+			message.</div>
+
+			<table class="tablenote"><tr><td>
+    	<div class="note">This value must be at least 10.</div>
+			</td></tr></table>
+
+    	<h4>Example:</h4>
+    	<div class="example">;HINT stack 10</div>
+    	<div class="example">;HINT stack 20</div>
+		</div>
+
+		<hr class="short" align="left">
+		<b><i>Bounds</i></b>
+		<div class="indent">
+    	<div class="example">;HINT bounds <i>value</i></div>
+
+    	<div>This will determine how far and under what circumstances objects are allowed
+    	to cross the edges of the play field.</div>
+
+    	<div>This value must be at least a substring of one of the following
+			bounding types:
+
+    	<table>
+    	  <tr valign="TOP">
+    	    <td>
+    	      <br>
+    	    </td>
+    	    <td><b>All</b>
+    	      <br>
+    	    </td>
+    	    <td>Objects and cels will not be allowed to cross the borders of the screen. <i>(PlayFKiSS calls this bounding mode &quot;Compatible&quot;)</i>
+    	      <br>
+    	      <br>
+    	    </td>
+    	  </tr>
+    	  <tr valign=TOP>
+					<td>
+    	      <br>
+    	    </td>
+    	    <td><b>FKiSS</b>
+    	      <br>
+    	    </td>
+    	    <td>FKiSS movement will not allow objects and cels to cross the borders of the
+    	      screen but user movement is unbounded.
+    	      <br>
+    	      <br>
+    	    </td>
+    	  </tr>
+    	  <tr valign=TOP>
+					<td>
+    	      <br>
+    	    </td>
+    	    <td><b>Limited</b>
+    	      <br>
+    	    </td>
+    	    <td>FKiSS movement will not allow the visible portion of objects and cels to cross
+    	      the borders of the screen but user movement is unbounded. <i>(PlayFKiSS calls this bounding mode &quot;None&quot;)</i>
+    	      <br>
+    	      <br>
+    	    </td>
+    	  </tr>
+    	  <tr valign=TOP>
+					<td>
+    	      <br>
+    	    </td>
+    	    <td><b>Visible</b>
+    	      <br>
+    	    </td>
+    	    <td>The visible portion of objects and cels will not be allowed to cross the
+    	      borders of the screen. <i>(PlayFKiSS calls this bounding mode &quot;Enhanced&quot;)</i>
+    	      <br>
+    	      <br>
+    	    </td>
+    	  </tr>
+    	  <tr valign=TOP>
+					<td>
+    	      <br>
+    	    </td>
+    	    <td><b>None</b>
+    	      <br>
+    	    </td>
+    	    <td>Objects and cels will be allowed to cross the borders of the screen as much as
+    	      you want. You can't see or click on things that are off the edges of the
+    	      play field so be careful not to lose anything important.
+    	      <br>
+    	      <br>
+    	    </td>
+    	  </tr>
+    	</table>
+
+			</div>
+
+    	<h4>Example:</h4>
+    	<div class="example">;HINT bounds all&nbsp; <i>; Set bounds to All</i></div>
+    	<div class="example">;HINT bounds None <i>; Set bounds to None</i></div>
+    	<div class="example">;HINT bounds VIS&nbsp; <i>; Set bounds to Visible</i></div>
+			</div>
+	</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; FKiSS Hints</div>
+  </body>
+</html>

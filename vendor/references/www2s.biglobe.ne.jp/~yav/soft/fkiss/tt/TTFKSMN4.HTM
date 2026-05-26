@@ -1,0 +1,1010 @@
+<HTML>
+<!--
+        遅くなってごめんなさい。m(__)m
+        でも、参照する所にリンク張ったので、使いやすくなったはず。(^^;
+        でも、見やすくなったということは、エラーが指摘しやすくなった。(T_T)
+        HTMLの記述は初めてなのでエラーがあったら、びしばし教えてください。
+-->
+<HEAD>
+<TITLE>fkissの勝手な説明。v0.04 (HTML版)</TITLE>
+</HEAD><BASEFONT SIZE=4>
+<BODY BGCOLOR="#FFDDAA" LINK="#0000FF" VLINK="#000088">
+
+fkiss命令の勝手きままなマニュアル。HTML版(Ver. 0.04)  by T_Ten 1997/11/02<br>
+<HR SIZE=4>
+<CENTER><FONT SIZE="4">もくじ</FONT></CENTER>
+<HR SIZE=4>
+<OL>
+<LI><A HREF="TTFKSMN4.HTM#FIRST">はじめに（動作環境）</A><BR>
+<P>
+<LI><A HREF="TTFKSMN4.HTM#ERR">fkiss文法10原則(?)</A>エラーで困ったら、ここを見てみて
+ください。<BR>
+<P>
+<LI><A HREF="TTFKSMN4.HTM#REI">fkiss命令の分類と例</A><BR>
+    <UL>
+        <LI><A HREF="TTFKSMN4.HTM#3-1">3-1</A> Event と Action って何？（用語の説明）
+        <LI><A HREF="TTFKSMN4.HTM#3-2">3-2</A> fkiss命令の大まかな流れと  記述順一例
+    </UL>
+<P>
+<LI><A HREF="TTFKSMN4.HTM#COMMAND">目的別命令説明</A><BR>
+    <UL>
+        <LI><A HREF="TTFKSMN4.HTM#4-1">4-1</A> 初期化および終了
+(<A HREF="TTFKSMN4.HTM#EventHandler">;@EventHandler</A>,
+<A HREF="TTFKSMN4.HTM#initialize">initialize</A>,<A HREF="TTFKSMN4.HTM#begin">begin</A>,
+<A HREF="TTFKSMN4.HTM#end">end</A>)
+        <LI><A HREF="TTFKSMN4.HTM#4-2">4-2</A> beginからendまで。
+        <UL><LI><A HREF="TTFKSMN4.HTM#4-2-1">4-2-1</A>自動実行したいとき
+(<A HREF="TTFKSMN4.HTM#alarm">alarm</A>,<A HREF="TTFKSMN4.HTM#timer">timer</A>,
+<A HREF="TTFKSMN4.HTM#randomtimer">randomtimer</A>)
+            <LI><A HREF="TTFKSMN4.HTM#4-2-2">4-2-2</A>マウスを押したときの[Event]<BR>
+(<A HREF="TTFKSMN4.HTM#press">press</A>,<A HREF="TTFKSMN4.HTM#release">release</A>,
+<A HREF="TTFKSMN4.HTM#catch">catch</A>,<A HREF="TTFKSMN4.HTM#drop">drop</A>,
+<A HREF="TTFKSMN4.HTM#fixcatch">fixcatch</A>,<A HREF="TTFKSMN4.HTM#fixdrop">fixdrop</A>,
+<A HREF="TTFKSMN4.HTM#unfix">unfix</A>,<A HREF="TTFKSMN4.HTM#set">set</A>,<A HREF="TTFKSMN4.HTM#col">col</A>)<P>
+        </UL>
+        <LI><A HREF="TTFKSMN4.HTM#4-3">4-3</A>[Action]一覧(timer,randomtimerは前述)<BR>
+(
+<A HREF="TTFKSMN4.HTM#nop">nop</A>,<A HREF="TTFKSMN4.HTM#unmap">unmap</A>,<A HREF="TTFKSMN4.HTM#map">map</A>,
+<A HREF="TTFKSMN4.HTM#altmap">altmap</A>,<A HREF="TTFKSMN4.HTM#move">move</A>,
+<A HREF="TTFKSMN4.HTM#sound">sound</A>,<A HREF="TTFKSMN4.HTM#changeset">changeset</A>,
+<A HREF="TTFKSMN4.HTM#changecol">changecol</A>,<A HREF="TTFKSMN4.HTM#quit">quit</A>
+)<P>
+        <LI><A HREF="TTFKSMN4.HTM#4-4">4-4</A>セルファイル名とオブジェクト番号
+    </UL>
+</OL>
+
+<HR SIZE=4>
+<A NAME="FIRST"><B>【１】はじめに（動作環境）</A></B>
+<HR SIZE=4><P>
+　このマニュアルは、KISSデータの拡張機能である fkissについての命令を
+私T_Tenが、皆様のご協力を仰ぎつつ、かって気ままに述べた物です。
+<FONT COLOR="#FF0000">普通のKISSデータの製作は既に出来るもの</FONT>
+として考えていますのでご注意下さい。
+<P>
+<DL><DD>
+  <FONT COLOR="#FF0000">なお、fkiss拡張命令を楽しむためには、
+fkissローダーが必要です。</FONT><BR>
+  <FONT COLOR=#FF0000>私が</FONT>現時点で動作確認できるfkissローダーは、以下の通りです。
+</DL>
+<TABLE BORDER>
+<TR><TH>ローダー名</TH><TH>作者</TH><TH>動作環境</TH></TR>
+<TR><TH>fkiss   ver 0.25</TH><TH>yav氏</TH>
+    <TH>fkiss の元祖。UNIX系OSで動作します。</TH></TR>
+<TR><TH>WKISS.EXE   ver 2.36a w0.68</TH><TH>F.K氏</TH>
+    <TH>Microsoft Windows3.1 で動作します。</TH></TR>
+<TR><TH>WKISS32.EXE  ver 0.04</TH><TH>F.K氏</TH>
+    <TH>Microsoft Windows95で動作します。</TH></TR>
+<TR><TH>KISS21.EXE   ver 1.50</TH><TH>Hx2氏</TH>
+    <TH>PC-9821シリーズ DOSで動作します。</TH></TR>
+<TR><TH>KISSLD.EXE   ver 0.07s</TH><TH>えむけい氏</TH>
+    <TH>Microsoft Windows95 及び Windows3.1+Win32s v1.3で動作します。</TH></TR>
+</TABLE>
+<P>
+<DL>
+<DD>
+fkiss実験命令対応ローダーは他にもありますので、
+ここに書かれていないマシンをお持ちの方でも探してみてください。<BR>
+もちろんMacintosh用fkissローダーもどこかに存在します。(^^;
+<P>
+  これからの説明は、以上のローダーでの動作を目標に
+  <FONT COLOR="#FF0000">fkiss ver 0.25 を基準</FONT>として説明します。<BR>
+  しかし、全てのローダー毎の細かい違いや、バージョンによる違いを包含する
+  ものではないので、十分ご注意下さい。
+</DL>
+<P>
+<P>
+<HR SIZE=4>
+<A NAME="ERR"><B>【２】fkiss文法10原則(?)</B></A>
+<HR SIZE=4>
+<OL>
+   <LI>;@EventHandler以降の fkiss領域で使用しているセルファイル名は<BR>
+       CNF ファイル中のセル記述行で使用しているセルファイル名と<BR>
+       同じものを使って指定しましょう。
+       <FONT COLOR="#FF0000">(大文字小文字も厳密に)</FONT>
+<A HREF="TTFKSMN4.HTM#[*1]"> [*1]</A><BR>
+<P>
+
+   <LI>fkiss 命令は、セルをすべて指定した後から、ファイルの終わりまでの間
+      に記述されます。一般のKISSデータに簡単に付加出来ます。
+<P>
+   <LI><FONT COLOR="#FF0000">;@EventHandler</FONT>
+<P>
+                      fkiss命令におけるお約束。
+                      fkissローダーは、これを目印にしています。<BR>
+                     これを最初に書かないと fkiss命令は実行されません。<BR>
+                     <FONT COLOR="#FF0000">;@eventhandlerでは不可です。</FONT>
+<P>
+                     「;@EventHandler」以降の「;@」を行頭にもつ行が
+                      fkiss命令の記述行です。<BR>
+                     セル記述行での「;@」はただのコメント「@」です。
+<P>
+
+
+   <LI>fkissの一行の始まりは「;@」です。<BR>
+      行頭が「;;@」や「@」ではfkiss命令として認識してもらえません。
+<A HREF="TTFKSMN4.HTM#[*2]">[*2]</A>
+<P>
+
+
+   <LI>「エディタ」的一行の数え方と「ワープロ」的一行の数え方は違います。<BR>
+       <FONT COLOR="#FF0000">エラーメッセージは「エディタ」的数え方で行数を
+        表示します。</FONT><BR>
+<P>
+      たとえば、ワープロ的数え方では２行<BR>
+      エディタ（80桁表示の場合）的数え方では１行になる場合があります。
+<A HREF="TTFKSMN4.HTM#[*3]">[*3]</A><BR>
+      そのために、Windows環境では、一行の表示桁数を変えられるエディタも
+      存在するので、どちらの数え方なのか、わからなくなります。
+<P>
+        「ワープロ」的一行の数え方に設定できるテキストエディタを
+      ご使用の方はエラーメッセージの表す行数と違う事があるので、
+      エラー探しの際はご注意下さい。
+<P>
+
+
+   <LI><FONT COLOR="#FF0000">一行は半角253</FONT>（リターンコードの[CR]+[LF]を
+      入れて255）<FONT COLOR="#FF0000">文字まで</FONT>です
+<P>
+      特にコメント機能を使用する時にはこれを超えやすいので注意すること。
+      これを超えると、ローダーはそれ以降の文字を読み取る事ができずに
+      作成者の意図した動作をしなかったり、エラーとなることがあります。
+<P>
+
+
+   <LI>同じ行にある個々の命令は、かならず
+      １つ以上の「半角スペース」または「タブ」で区切るようにしましょう。
+<P>
+      なお、<FONT COLOR="#FF0000">「全角スペース」は、コメント領域以外では
+      使用しないようにして下さい。</FONT><BR>
+      私は、わからないときは「全角スペース」を「半角スペース２個」で
+      全て置換しています。
+<P>
+
+
+   <LI>fkiss命令の一般的な記述の順序についてです。
+<P>
+      fkiss命令は、
+      ;@[Event]命令 [Action]命令1 [Action]命令2 ..... ;注釈[RET]<BR>
+<P>
+      の順番で構成されます。                  *[RET]はリターンのこと。
+<P>
+
+   <LI>[Event]は<FONT COLOR="#FF0000">６４個まで。</FONT>
+      一つの[Event]<A HREF="TTFKSMN4.HTM#[*4]">[*4]</A>
+      に[Action]<A HREF="TTFKSMN4.HTM#[*5]">[*5]</A>は
+       <FONT COLOR="#FF0000">６４個まで。</FONT><BR>
+      64個以内なら、[Action]命令は何行に分けて記述してもかまいません。
+<A HREF="TTFKSMN4.HTM#[*6]">[*6]</A>
+<P>
+      なお、６４個までが  元祖 fkissの保証範囲ですが、
+      ローダーによっては64を超えても動作する物があります。
+<P>
+
+  <LI>fkiss命令は[;@EventHandler]以降、[Event]の記述順を問いません。<BR>
+<P>
+      極端な話、end()をbegin()の前に書いてもいいはずです。
+      しかし、わかりやすさで言えば、極端な順番表記はせずに、
+      initialize,begin,end の順番で命令を並べたほうがいいと思います。
+
+
+</OL>
+<HR SIZE=2>
+<DL>
+<FONT SIZE=-1>
+
+<DT><A NAME="[*1]">[*1]</A><BR>
+<DD>KISS/GSでは、大文字、小文字を区別しない事になっています。
+  そう言った理由で、ほとんどのローダーが大文字小文字を区別していません。
+  なので、大文字小文字を厳密に書かなくても動作する事が多いです。<BR>
+   fkissが実験仕様である事にご注意下さい。
+<DT><A NAME="[*2]">[*2]</A><BR>
+<DD>「;」は、もともとKISSにおいて、行頭に記述する機能文字であって
+  注釈文を記述するためのものです。 <BR>
+  なので、「;」以降、リターンコードまでの文は、KISSにとっては無視
+  されるものです。<BR>
+    しかし、 fkiss命令拡張を行う際に、KISSにとっては意味を持たない「;」
+  を利用して、それに「@」 を付加する事で、 fkiss命令である事を認識させて
+  いる、と考えられます。
+<DT><A NAME="[*3]">[*3]</A><BR>
+<DD>  なので、Windowsで書いた文章を DOSで読むと見た目が異なることが
+    あります。逆もまたそうです。<BR>
+    一般には必要時以外、半角73桁全角36文字までに改行すると見やすいと
+    言われていますが、KISSではよくこれを超えて記述します。
+
+<DT><A NAME="[*4]">[*4]</A><BR>
+<DD>    このようにいきなり行頭に記述できる命令群を[Event]と呼びます。
+<DT><A NAME="[*5]">[*5]</A><BR>
+<DD>    [Event]に続いて記述される命令群を[Action]と呼びます。
+    これら命令の詳細については<A HREF="TTFKSMN4.HTM#REI">【３】</A>以降を参照して下さい。
+<DT><A NAME="[*6]">[*6]</A><BR>
+<DD>    必要な時以外は、ずらっと １行255文字で書くよりは、
+      何行使っても構わないので、半角73文字程度で改行したり、
+      見やすいようにきれいに並べた方が、後でわかりやすいしょう。
+</DL>
+</FONT>
+<BR>
+<BR>
+
+
+<HR SIZE=4>
+<A NAME="REI"><B>【３】fkiss命令の分類と例</B></A>
+<HR SIZE=4>
+
+<HR SIZE=3 WIDTH=300 ALIGN=LEFT>
+<A NAME="3-1">『３－１』Event と Action って何？</A>
+<HR SIZE=3 WIDTH=300 ALIGN=LEFT>
+
+ fkissの命令は<P>
+<OL>
+<LI TYPE=A> <B><FONT COLOR="#FF0000">[Event]</FONT></B>   （入力系命令）
+<LI>        <B><FONT COLOR="#FF0000">[Action]</FONT></B>  （効果系命令）
+</OL>
+  ２つに分類されます。<P>
+  そして、<BR>
+  ある[Event]が起こったときに、それがきっかけで指定された[Action]が起こる。
+  と考えて下さい。
+<P>
+<HR SIZE=1 WIDTH=150 ALIGN=LEFT>
+（Ａ）の [Event] 入力系命令には、<BR>
+<UL>
+<LI>    <FONT COLOR="#008800">initialize,begin,alarm,end</FONT><BR>
+        等の、コンピュータ内部で自動的に入力信号が発生するものと、<P>
+
+<LI>    <FONT COLOR="#008800">
+        press,release,catch,drop,fixcatch,fixdrop,unfix,set,col</FONT><BR>
+        等のマウスのボタンを押したり離したりする事によって入力信号が
+        発生するものがあります。
+</UL><P>
+この、「人間が何かした」事を「イベントが発生した」と言います。<BR>
+　fkissにおいて「イベントが発生」とは、マウスで何かをつかんだり、
+離したり、セルを移動したりなどの人間がコンピュータに働きかける
+事の他に、プログラム自身が、コンピュータに働きかける動作も
+含まれます。<P>
+
+コンピュータの立場から見れば、「仕事が来た」と言う事ですね。<P>
+
+つまり、[Event]命令はコンピュータに[Action]命令を行わせるための
+きっかけを発生するものです。<P>
+
+<HR SIZE=1 WIDTH=150 ALIGN=LEFT>
+（Ｂ）の [Action] 効果系命令には、<BR>
+<UL>
+<LI> 
+<FONT COLOR="#008800"> nop,unmap,map,altmap,move,sound,changeset,changecol,quit
+</FONT></UL><P>
+  が、あります。<BR>
+
+  これは入力系命令の信号を受けて、音を鳴らしたり、セルを消したり等の
+  様々な効果[Action]をもたらす命令です。<P>
+
+    先に述べたように、[Action]命令は、[Event]命令に続いて
+  いくつも記述出来ます。<P>
+
+<HR SIZE=1 WIDTH=150 ALIGN=LEFT>
+
+  記述する順番は、[Event]命令が行頭に記述され、続いて[Action]命令が記述
+  されます。<P>
+<UL>
+  何らかの「入力」(=[Event])（きっかけ）があったとき、<BR>
+  こんな  「出力」(=[Action])（効果,動作）をするよ。<BR>
+  という、順番通りに記述されるわけです。
+</UL>
+<BR><BR>
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+<A NAME="3-2">『３－２』fkiss命令の大まかな流れと  記述順一例</A>
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+<PRE>
+...                              普通のKISSデータを記述してある、と
+(640,400)                        思って下さい。
+#0    LOGO.CEL   *0: 0 1 2....   
+#0    RIBON.CEL  *0: 0 1 2....   
+....                             
+....                             
+#127  SAIGO.CEL *0: 0 1 2....   ＜CEL記述の最後の行と思って下さい。
+;                                
+;                               ＜何行あけても構いません。
+;                                
+;@EventHandler                  ＜ここから fkissデータの記述をします。
+;
+;こめんと。                     ＜普通のコメントも使用できます。
+;
+;@initialize()                  ＜
+;@   unmap(#1)  unmap(#2)       データを読み込んでから、画面に表示する
+;@   unmap(#13) unmap(#14)      までの間に実行する[Event]命令。
+;@...                           ;@initialize()から、;@begin()までの間に
+;@   ...                        画面の初期化の[Action]を記述できるが、
+;@      ...                     <FONT COLOR="#FF0000">現在はunmapしか使用できない事に
+                                なっています。</FONT><A HREF="TTFKSMN4.HTM#[*7]">[*7]</A>
+
+;@begin()                       ここからはじまる。本当は画面を表示する時
+;@    timer(0,1)                の最初の一度だけ実行される[Event]命令。
+;@    timer(10,1)               主に、[timer]等の初期化を行います。
+;@
+;@alarm(0)
+;@    map("EYE2.CEL")           普通は、
+;@    unmap("EYE.CEL")          ;@initialize();@begin()から;@endまで、
+;@                              順番通りに様々な命令を記述します。
+;@                              しかし、ローダーに依存するような記述を
+;@...                           しない限り、[Event]はどの様な順番で
+;@   ...                        並べてもいいはずです。
+;@      ...
+;@
+;@press("BUTTON.CEL");押す。    ＜このようにコメントを記述することも
+;@    move(#8,0,20)             できます。
+;@
+;@
+;@end()                         終わる時の[Event]命令。
+;@    sound("SAYONARA.WAV")     というより、終了ボタンを押したときに
+;                               この[Event]に続く[Action]を実行します。
+;
+*0 123,223 21,23 54,126 .....   ＜位置データが書いてあるはずです。
+....
+</PRE>
+<HR SIZE=2>
+<DL>
+<FONT SIZE=-1>
+<DT><A NAME="[*7]">[*7]</A>
+<DD>   ;@initialize()で使用出来る[Action]には、本当は、nop, debug, shell, 
+       unmap.が許可されています。<BR>
+       しかし、実装されていても unmap 以外ローダー依存しそうなので
+       説明しません。どうしても知りたい方は原典を読んで下さい。<P>
+
+       また、ローダーによってはinitializeでこれ以外の命令が実行できて
+       しまいます。<br>
+       たとえば、timerはbegin以下で記述することが望ましいのですが、
+       その理由はtimerをinitializeで実行すると、皆様のお持ちのマシンの速度
+       により、initializeからbeginまでの処理実行時間が異なっているので
+       せっかく作成したデータが、他のマシンでは思った通りの動作をしないこと
+       もあります。<BR>
+       なので、将来のためにも、できるだけ仕様にあわせて使用しましょう。<P>
+</DL>
+</FONT>
+<BR>
+<BR>
+<HR SIZE=4>
+<A NAME="COMMAND"><B>【４】目的別命令説明</B></A>
+<HR SIZE=4>
+<HR SIZE=3 WIDTH=300 ALIGN=LEFT>
+<A NAME="4-1">『４－１』初期化および終了</A>
+<HR SIZE=3 WIDTH=300 ALIGN=LEFT>
+<DL>
+<DT>初期化／終了  命令群は、
+    <DD>画面に表示する前（データで遊ぶ前）や、
+    <DD>遊び終わった時に実行する [Event]命令と
+    <DD>それに書くことの出来る[Action]命令です。
+</DL>
+<HR SIZE=3>
+<A NAME="EventHandler"></A>
+<PRE>
+;@EventHandler                fkiss命令実行におけるお約束。
+                              これを書かないと、fkissは動かない。
+                              <FONT COLOR="#FF0000">;@eventhandler</FONT>  は不可。
+                              大文字、小文字も正確に書くこと。
+                              <FONT COLOR="#FF0000">イベント拡張の識別子である。</FONT>
+
+                              また「;@ EventHandler」と空白をあけて記述すると
+                              現在は、WKISS v0.68c/WKISS32/KISSLD v0.07q以降
+                              でしか動作しない。
+
+</PRE>
+<A NAME="initialize"></A>
+<PRE>
+;@initialize()                実行前（画面表示前）の
+[Event]                       初期化(initialize)を行う。
+
+                              初期化の時に正式に使える[Action]は
+                              nop, debug, shell, unmap.
+                              の４つだけで、実用になるのは
+                              unmapだけであろう。
+                              それ以外の[Action]は動作の保証が出来ない。
+
+                              timer も使えるが、画面の初期化時間は
+                              マシンに依存するので、一般性のあるデータを
+                              作成する為にも、<FONT COLOR="#FF0000">timer は
+                              ;@begin() 以下で使用した方が望ましい。</FONT>
+</PRE>
+<A NAME="begin"></A>
+<PRE>
+;@begin()                     ここからはじまる。というより、
+[Event]                       初期化し終えた時に一度だけ実行する
+                              [Event]命令である。
+
+                              これに続いて良く使用される[Action]は
+                              timerである。
+                              想像次第で何でも記述可能。
+</PRE>
+<A NAME="end"></A>
+<PRE>
+;@end()                       終わる。というより、終了を選択したときに
+[Event]                       実行される[Event]命令である。
+
+                              終了時に効果を狙う事が可能で、
+                              さよならメッセージを示すのに便利である。
+</PRE>
+<P>
+<HR SIZE=4>
+<HR SIZE=3 WIDTH=300 ALIGN=LEFT>
+<A NAME="4-2">『４－２』begin()からend()まで</A>
+<HR SIZE=3 WIDTH=300 ALIGN=LEFT>
+<P>
+  ここでは、<BR>
+<FONT COLOR="#FF0000">;@begin()</FONT>　　から<P>
+
+  ;@.....<BR>
+  ;@.....<BR>
+  ;@.....<BR>
+<FONT COLOR="#FF0000">;@end()</FONT>　　で、<P>
+
+    はさまれる  ;@.....  で表された行の命令群について説明します。
+<A HREF="TTFKSMN4.HTM#[*8]">[*8]</A><P>
+<HR SIZE=4>
+<DL>
+<DT>fkissの命令を使用する時は、
+<P>
+<DD>1) 人間が何もしていないときに[Action]する事 
+<A HREF="TTFKSMN4.HTM#4-2-1">(4-2-1)参照</A>
+<DD>2) 人間が何かしたときに      [Action]する事 
+<A HREF="TTFKSMN4.HTM#4-2-2">(4-2-2)参照</A>
+</DL>
+<P>
+  の２つに分けられると思います。<BR>
+  以下、その２つに分けて説明します。<P>
+
+<HR SIZE=3>
+<FONT SIZE=-1>
+<A NAME="[*8]">
+[*8]</A><P>
+
+    [Event]の記述順ですが、;@EventHandler  以降の[Event]の
+    <FONT COLOR="#FF0000">順番の制限はないはず</FONT>です。
+    なので以下の例のように、<P>
+<PRE>
+....
+;@<FONT COLOR="#008800">end()</FONT>
+;@    sound("BYE.WAV")
+;@<FONT COLOR="#008800">begin()</FONT>
+;@    timer(0,500) timer(12,1000)
+;@<FONT COLOR="#008800">initialize()</FONT>
+;@     unmap("HOEHOE.CEL") unmap("HYOEHYOE.CEL")
+....
+</PRE>
+
+    の順に[Event]を記述しても動作しますし、文法的に間違いでありません。<P>
+<DL>
+<DD>
+    initialize()等が人間にとっては一見特別な[Event]命令ではあるとはいえ<BR>
+   コンピュータにとってはpress()などと同列の普通の[Event]命令です。<BR>
+   なので、initialize,begin,end,は記述しなくても動作するはずです。<P>
+
+     このマニュアルを作成し始めた時は、多くの既存データーの記述順より<BR>
+   先入観が有りましたので、時間軸にそった説明をしています。    m(__)m<BR>
+   動作順に書いた方が、あとでわかりやすいですしね。(^^)<P>
+</DL>
+</FONT>
+
+<HR SIZE=3>
+
+<HR SIZE=3 WIDTH=450 ALIGN=LEFT>
+<A NAME="4-2-1"><B>●(4-2-1) 自動実行したいとき</B></A>
+   (alarm,timer,randomtimer)<BR>
+<HR SIZE=3 WIDTH=450 ALIGN=LEFT>
+
+　何もしていないときに画面を動かしたりしたい時には、<P>
+
+<FONT COLOR="#008800">;@begin()<BR>
+;@    timer(n,t)</FONT><BR>
+　　　　　　　　　　　　として、<FONT COLOR="#FF0000">最初から動作</FONT>
+させること。<BR>
+<FONT COLOR="#008800">;@press("xxx.CEL")<BR>
+;@    timer(n,t)</FONT><BR>
+　　　　　　　　　　　　等、ある<FONT COLOR="#FF0000">マウス入力をきっかけに
+動作</FONT>させること。<P>
+
+　など、ができます。<P>
+
+　どちらにしろ、上記のように (n)番目のtimerをセット及び起動してから、<P>
+<TABLE>
+<TR>
+<TD>;@alarm(n)</TD><TD>[Action] [Action] ....... timer(n+1,t1)[RET]</TD></TR>
+<TR>
+<TD>;@alarm(n+1)</TD><TD>[Action] [Action] ....... timer(n+2,t2)[RET]</TD></TR>
+<TR>
+<TD>;@alarm(n+2)</TD><TD>[Action] [Action] ....... timer(n+3,t3)[RET]</TD></TR>
+<TR>
+<TD>;@alarm(n+3)</TD><TD>[Action] [Action] .......</TD></TR><P>
+</TABLE><P>
+のように連続して記述すると良いです。<P>
+<DL>
+<DT>例えば、
+<DT>[Action]に<DD> map,unmap を使用してまばたき（通称目ぱち）をさせる時や、
+              <DD> パラパラアニメのような表示をしたい時、
+              <DD>moveを使用してセルの移動を行うときに使用できます。
+</DL>
+<P>
+  timerの番号を繰り返すように指定すると、延々と[Action]を繰り返します。
+<P>
+  以下のように命令の最後にrandomtimerを使用すると、目ぱちにぴったりです。<BR>
+<FONT COLOR="#008800">;@alarm(n) [Action] [Action] ... randomtimer(n+1,t,a)[RET]
+</FONT></P>
+
+  ただし、timerの使いすぎにはご注意ください。<BR>
+  使用可能なtimer数は、ローダーにより異なります。
+<A HREF="TTFKSMN4.HTM#[*9]">[*9]</A><P>
+
+
+<HR SIZE=3>
+<PRE>
+<A NAME="alarm"></A>
+;@alarm(n)                    その性質からラベルみたいな物と思う。
+[Event]                       自動入力系命令の、timer(n,t)と、
+   (n=0,1,2,3...              randomtimer(n,t,a)  によって
+   上限はローダーによる)      この行へジャンプしてくる。
+                              なので、[Event]begin()などに記述された
+                              [Action]timer(n,t)によって呼び出されないと
+                              alarmだけでは何も実行できない。
+
+<A NAME="timer"></A>
+{;@}timer(n,t)                時間 t 後に alarm(n)を呼び出す。<A HREF="TTFKSMN4.HTM#[*10]">[*10]</A>
+[Action]
+                              （BASICで言えば、
+                                「IF timer=t THEN GOTO alarm(n)」
+                                の様な物だとT_Tenは思っています。）
+
+                              timerの中の n には正の正数。<A HREF="TTFKSMN4.HTM#[*9]">[*9]
+</A>
+                              t は、時間であり、1 は0.001秒に相当する。
+                              <FONT COLOR="#FF0000">t=1000なら、 1秒</FONT>である。
+
+                              [Event]begin()の後によく初期化と称して
+                              記述されるほか、[Event]alarmの最後に
+                              よく使われる。
+
+<A NAME="randomtimer"></A>
+{;@}randomtimer(n,t,a)        使用法はtimerとほぼ同じ。
+[Action]                      t ～  [t + (a - 1)]  時間の間の<A HREF="TTFKSMN4.HTM#[*11]">[*11]</A>
+                              ランダムな時間で、
+                              alarm(n)で指定される行を実行する。
+                              少なくとも必ず t時間は経過する。
+
+                               aを 0または 1とすると、timer(n,t)と同じ。
+                               aが小さいと t時間以降の時間間隔は短くなり
+                               aが大きいと t時間以降の時間間隔は長くなる
+                               傾向がある。
+
+                              <FONT COLOR="#FF0000">ただし、
+                               tは 0以上 32767以下、
+                               aは 0以上 32767 - t  以下の値である。</FONT>
+</PRE>
+<HR SIZE=4>
+<FONT SIZE=-1>
+<DL>
+<A NAME="[*9]"></A>
+<DT>[*9]timerの数<P>
+
+<DD>   alarm(n),timer(n,t)で記述されている「n」 の最大数を
+<DD>       使用できるtimerの数と言います。
+<FONT COLOR="#008800">
+<UL>
+<LI>              fkissでは 0～63 の64個<BR>
+<LI>              WKISS,WKISS32では0～127<BR>
+<LI>              KISSGAは255個<BR>
+<LI>              KISSLDではメモリ次第。<BR>
+</UL>
+</FONT>
+   ローダー毎に違う事に注意してください。<BR>
+   しかし、各種ローダーとも多少の超過してもなぜか動作するようです。<P>
+
+<A NAME="[*10]"></A>
+<DT>[*10]timerの時間のずれ<P>
+
+<DD>   コンピュータの実行速度によって指定した時間間隔より実行が<BR>
+   遅れる事があるので注意してください。<BR>
+   timer のより正確なタイミングは<A HREF="MORE.HTM#TIMER">【MORE.HTM[2]2】</A>
+を参照してください。<P>
+
+<A NAME="[*11]"></A>
+<DT>[*11]randomtimer の計算式と例<P>
+
+<DD>randomrtimer(n,t,a)の時間間隔の計算式は、乱数を用いて<BR>
+<FONT COLOR="#FF0000">t ～ [ t + ( 乱数 % a ) ]</FONT>で、計算されます。<BR>
+            乱数は、コンピュータ内部で選ばれる、0～32767までの数値<BR>
+           「%」は「乱数をaで割った余り」という意味です。<P>
+
+  randomtimer の第３引数[a] が大きければ、第２引数[t]時間経過後の<BR>
+  さらなる経過時間のばらつきが大きくなります。<P>
+
+<DL>t 時間以降のタイマ起動のばらつきは、
+<DD>a=300なら、 「0,1,2,...,298,299」ミリ秒の、いずれか。
+<DD>a=3000なら、「0,1,2,...,2998,2999」の、いずれかになります。
+</DL>
+<P>
+
+<DL>極端に言うと randomtimer(n,t,a) が起動するのは、
+<DD>  t=300  ,a=30000なら、0.3秒～30.299秒の範囲に、
+<DD>  t=30000,a= 2000なら、 30秒～31.999秒の範囲になります。
+</DL>
+<P>
+
+<DD>    tは 0～32767、aは 0～ (32767 - t) の範囲の値なので、<BR>
+  合計で、32.767秒を超える時間間隔の指定は出来ないようです。<P>
+</DL>
+</FONT>
+<HR SIZE=3>
+
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+<A NAME="4-2-2"><B>●(4-2-2) マウスを押したときの動作</B></A>
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+<FONT COLOR="#008800">
+;@press("HOEHOE.CEL")       に代表される[Event]です。<P>
+</FONT>
+<DL>
+<DD>    マウスを使用してセルや画面をクリックしたとき等に<BR>
+  何か動作を引き起こしたい時に使用します。<BR>
+  セル上でマウスをクリックするだけなのですが、<BR>
+<FONT COLOR="#FF0000">
+  セルの固定値などの属性により様々な区別があり、動作が異なります。<P>
+</FONT>
+    よく使用されそうな例としては、クリックのたびに表示／非表示を<BR>
+  繰り返す動作です。<P>
+</DL>
+<PRE>
+;-----------------ブラインドの表示／非表示-------------------
+;@press("SWITCH.CEL")
+;@    altmap("BLIND.CEL")  ;表示／非表示
+;@    sound("SHU.WAV")     ;効果音(無くてもぜんぜん構わない)
+;------------------------------------------------------------
+</PRE>
+<DL>
+<DD>
+  「マウスを押したときの動作」をする[Event]命令を記述の後は<BR>
+    改行して揃えた方が見やすいです。個人的な意見ですが....(^^;<P>
+</DL>
+<HR SIZE=3>
+<PRE>
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+1:指を押すか離すか。（マウスの状態に依存する。）                 <A HREF="TTFKSMN4.HTM#[*12]">[*12]</A>
+
+<A NAME="press"></A>
+;@press("CELNAME.CEL")         マウスポインタを"CELNAME.CEL"で指定した
+[Event]                        セルに持って行き、そのときあなたの指が、
+                               マウスを左クリックしたときに
+                               これに続く命令を実行。
+
+                               つまり、セル上でマウスを左クリックした
+                               とき。
+
+<A NAME="release"></A>
+;@release("CELNAME.CEL")       既にあなたは"CELNAME.CEL"で指定したセルを
+[Event]                        左クリックしていて、その状態から指を離した
+                               ときにこれに続く命令を実行。
+
+                               セルの移動後の位置や重ね合わせ
+                               unmap/altmapとは無関係。          <A HREF="TTFKSMN4.HTM#[*13]">[*13]</A>
+
+
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+2:セルをつかむか離すか。（マウスの状態に依存しない。）
+
+<A NAME="catch"></A>
+;@catch(#n)                    マウスポインタで、
+[Event]                        番号 #n で指定されたオブジェクトを
+                               つかんだときに、これに続く命令を実行。
+
+                               <FONT COLOR="#FF0000">pressとcatchの違いは現状では
+                               あまり無い</FONT>らしい。
+                               どちらでも良い場合は pressを推奨。<A HREF="TTFKSMN4.HTM#[*14]">[*14]</A>
+
+
+<A NAME="drop"></A>
+;@drop(#n)                     マウスポインタで、
+[Event]                        番号 #n で指定された既につかんでいる
+                               オブジェクトを離したときにこれに続
+                               く命令を実行する。
+
+                               セルに固定値が設定されている場合、
+                               マウスのボタンを押していても、
+                               セルが自動的に元の位置に戻った場合も
+                               dropとみなす。
+
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+3:固定値と比較してどうか。（マウスの状態に依存しない。）
+<A NAME="fixcatch"></A>
+;@fixcatch(#n)                 固定値が 0でない場合、
+[Event]                        固定値が設定されている、番号 #nで指定
+                               されたオブジェクトを、つっついたときに
+                               これに続く命令を実行する。
+                               
+                               固定値が 0になると、この命令は
+                               発生しない。
+                               
+
+<A NAME="fixdrop"></A>
+;@fixdrop(#n)                  固定値が 0でない場合、
+[Event]                        ぺしぺししていると、セルがちょっとだけ
+                               移動できるが、
+                               そのときに、番号 #n で指定した既に
+                               つかんでいるオブジェクトを離したときに
+                               これに続く命令を実行する。        <A HREF="TTFKSMN4.HTM#[*15]">[*15]</A>
+
+                               固定値が 0になると、この命令は
+                               発生しない。
+
+<A NAME="unfix"></A>
+;@unfix(#n)                    番号 #n で指定されたオブジェクトの
+[Event]                        固定値が0になったとき、これに続く命令
+                               を実行。                          <A HREF="TTFKSMN4.HTM#[*16]">[*16]</A>
+
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+4:セットや色を変えたときに。
+<A NAME="set"></A>
+;@set(n)                       セット番号を、 n番に変えたときに
+[Event]                        これに続く命令を実行。
+                             （ nは 0～ 9の整数 ）
+
+<A NAME="col"></A>
+;@col(n)                       カラーを、n番に変えたときに
+[Event]                        これに続く命令を実行。
+                             （ nは 0～ 9の整数 ）
+</PRE>
+
+
+<HR SIZE=4>
+
+<FONT SIZE=-1>
+<DL>
+<DT><A NAME="[*12]">[*12]</A>
+<DD>
+    pressとcatchの違いですが、実際上はほとんどありません。<BR>
+    しかし、動作上の違いはあります。<BR>
+    本家fkiss では以下に述べる因果関係から、fkissではpressの方がcatchより<BR>
+    先に発生するはずです。（その時間差は人間には速すぎてわかりませんが。）<P>
+
+    <DL><DT>press/release は<DD>「マウスの状態に依存」しますが、<BR>
+    本来ならマウスの入力と直結している（様な動作をする）はずです。</DL><P>
+
+    <DL><DT>cahtch/drop系 は<DD>「マウスポインタの状態に依存」し
+                            <DD>「マウスの状態に依存しません。」</DL><P>
+    マウスの入力をうけて、その結果マウスポインタは
+    セルをつかんだり（移動可能にすること）離したりしますが<BR>
+    固定値などの条件により、マウスボタンを押していても、マウスポインタは
+    セルを離している（移動不能であること）ことがあります。<P>
+
+    これが本家fkiss で設定されているpressとcatch等の違いだと思います。<P>
+
+<A NAME="[*13]"></A>
+<DT>[*13]release の動作の互換性
+   <A HREF="MORE.HTM#RELEASE">【MORE.HTM[2]9】参照</A>
+<DD>
+    fkiss,KISSLDでは固定値の設定されているセルが、自動的に戻ることでは<BR>
+    releaseは発生しません。とにかくマウスボタンを離した時に発生します。<BR>
+    release/pressは常に対になって発生します。<P>
+
+    現時点では、WKISS,WKISS32,KISSGAでは固定値の設定されているセルが、<BR>
+    元の位置に戻った時点でも releaseを発生します。<BR>
+      例えば、固定値の設定されているセルを pressしてその状態で<BR>
+    マウスを移動させただけでreleaseが発生してしまいます。<BR>
+    本来この動作はdropのはずです。<P>
+
+     注：1997/10/31<BR>
+     未公開版WKISS32 v0.04c 以降で修正済です。<P>
+
+<DT><A NAME="[*14]">[*14]</A>
+<DD>    pressとcatchの違いは、先ほどの[*12]と、少しだぶりますが<P>
+
+    元祖fkissでは、固定値が設定されているオブジェクトのうち<BR>
+    最大の固定値をもつものを（複数可）「最大固定オブジェクト」と言い、<BR>
+    決して移動できない事になっています。<BR>
+    最大固定オブジェクトのみcatchできません。<BR>
+    最大固定オブジェクトは 固定値が減算されないので、
+    愛と情熱は実らないのです。<P>
+
+    WKISS,WKISS32,KISSGA,KISSLDには、「最大固定オブジェクト」
+    という概念は無く、<BR>必ず愛と情熱は報われる事になっています。（笑）<P>
+
+<A NAME="[*15]"></A>
+<DT>[*15]fixdropについて
+<DD>
+    マウスのボタンを押していても、セルが自動的に元の位置に戻った場合も
+    fixdropとみなします。<P>
+
+    なお、オブジェクトに固定値が残っているときは、
+    fixcatch/fixdropはcatch/dropと一緒に発生します。<P>
+
+<A NAME="[*16]"></A>
+<DT>[*16]unfixについて
+<DD>
+    愛と情熱の作業が実を結んだ場合とも言う。<BR>
+    そう記述されているんだってば。（笑）<P>
+
+</DL>
+</FONT>
+<HR SIZE=4>
+
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+<A NAME="4-3">『４－３』Action一覧  (timer,randomtimerを除く)</A>
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+
+・[Action]命令は、単独では行頭に記述する事ができません。<BR>
+  もし記述したとしても、前の[Event]に続く[Action]と認識されるでしょう。<BR>
+  必ず[Event]命令の後、または、それに続く行に記述されます。<P>
+<HR SIZE=3>
+<PRE>
+<A NAME="nop"></A>
+{;@}nop()                      「何もしない」という動作。
+<A HREF="TTFKSMN4.HTM#[*17]">[*17]</A>
+[Action]
+
+<A NAME="unmap"></A>
+{;@}unmap("CELNAME.CEL")       "CELNAME.CEL"で指定されたセルを、
+[Action]                       画面から、消去する
+                               命令「map("CELNAME.CEL")」や
+                               命令「altmap("CELNAME.CEL")」等で
+                               再び画面に表示される。
+
+<A NAME="map"></A>
+{;@}map("CELNAME.CEL")         "CELNAME.CEL"で指定されたセルを、
+[Action]                       画面に（再）表示する。
+
+<A NAME="altmap"></A>
+{;@}altmap("CELNAME.CEL")      "CELNAME.CEL"で指定されたセルが、
+[Action]                       表示されていれば、画面から消去し
+                               画面から消去されていれば、(再)表示する。
+
+<A NAME="move"></A>
+{;@}move(#n,x,y)               #nのオブジェクトを
+[Action]                       右へ xドット、下へ yドット移動させる。
+
+                               普通のグラフ座標とは違い、画面座標である
+                               ことに注意。
+
+<A NAME="sound"></A>
+{;@}sound("WAVEFILE.WAV")      "WAVEFILE.WAV"で指定されたファイルを
+[Action]                       効果音として、鳴らす。
+                               Windows,DOSで再生可能な音は主に
+                               拡張子が"*.WAV"のファイルだが
+                               <FONT COLOR="#FF0000">fkissローダーによって鳴らす事のできる
+                               音声ファイルの形式は異なっている。</FONT>
+
+<A NAME="changeset"></A>
+{;@}changeset(n)               セットを n番に変える。
+[Action]                     （ nは 0～ 9の整数です。）
+
+<A NAME="changecol"></A>
+{;@}changecol(n)               色を n番に変える。
+[Action]                     （ nは 0～ 9の整数。）
+
+<A NAME="quit"></A>
+{;@}quit()                     遊んでいるデーターを終了させる。
+[Action]
+</PRE>
+<HR SIZE=3>
+<FONT SIZE=-1>
+<DL><DT><A NAME="[*17]">[*17]</A>
+<DD>{;@}と記入しても、 fkiss命令として受け取ってもらえません。
+    なので、コンフィグファイルに {} は記入しないで下さい。<P>
+
+       [Event]命令も、[Action]命令も、「;@」直後に書く必要性は全くあり
+    ません。行頭に「;@」があれば、半角スペースで見やすいように位置調整
+    をしても、記入場所はどこでもいいはずです。<P>
+
+    でも、大抵の場合、[Event]命令は、「;@」の直後に
+    書くんじゃないかなと.......皆様のご自由にどうぞ。(^^;;<P>
+</DL>
+</FONT>
+
+<HR SIZE=4>
+
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+<A NAME="4-4">
+『４－４』セルファイル名とオブジェクト番号</A>
+<HR SIZE=3 WIDTH=400 ALIGN=LEFT>
+<PRE>
+----いきなり例----------------------------------------------------------
+#9  RIBON.CEL    *0 : 0 1 2 ;りぼん
+#7  SH_COL.CEL   *0 : 0 1 2 ;シャツのえり
+#8  TIE.CEL      *0 : 0 1 2 ;ねくたい
+#7  SH_ARM.CEL   *0 : 0 1 2 ;シャツのうで
+#7  SH_BODY.CEL  *0 : 0 1 2 ;シャツのからだ
+#6  GPAN.CEL     *0 : 0 1 2 ;じーぱん
+------------------------------------------------------------------------
+</PRE>
+上の例では、RIBON.CEL SH_ARM.CEL .... GPAN.CEL 等が
+<FONT COLOR="#008800">セルファイル名。</FONT><BR>
+また、#6 #7 #8 #9で表される番号を
+<FONT COLOR="#008800">オブジェクト番号</FONT>といいます。<P>
+<DL><DT>
+<DD>
+  これが一体 fkissと何の関係があるかというと、
+
+  [Event]命令でも、[Action]命令でも言えることですが<P>
+
+<DT>;@press("HOEHOE.CEL")    で
+<DD>
+    かっこの中("HOEHOE.CEL")の "HOEHOE.CEL"を
+<FONT COLOR="#FF0000">「引数」</FONT>といいますが、
+  この引数には #n で指定される、
+  <DL>
+  <DD>・オブジェクト番号を使用することも
+  <DD>・セルファイル名を直接記入することも可能です。
+  </DL><P>
+  ただしセルファイル名を直接記入するときは
+  示している通りに "" （ダブルクォーテーション）で囲んでください。<BR>
+  逆に、引数をオブジェクト番号で指定する時は "" で囲んではいけません。<P>
+
+
+    【３】章の「命令の説明、一覧部分」では、
+  セルファイル名とオブジェクト番号を区別して書いてありますが、
+  これが 元祖fkissで説明されている引数の指定方法です。<BR>
+  それ以外の指定については、動作の保証が出来ません。<P>
+
+    fkissには、オブジェクトのmap/unmap/altmapは間違いと書いてあります。<BR>
+  オブジェクトは非常にたくさんのセルから構成されていることもあるので、
+  その場合には非常に重い動作になってしまう場合もあるからです。<P>
+
+    しかし、多くのローダーは、既に出回ってしまったデータの互換性の為に
+  オブジェクトのmap/unmap/altmapを一応出来るようにしてはいます。<P>
+</DL>
+以下は、KISSLDの作者えむけい氏が、fkissの作者 yavさんに対して質問した事項です。
+<BR>
+<HR SIZE=1>
+<PRE>
+>・引数のない命令の場合、カッコは省略できるか
+>　たとえば、
+>
+>｜;@initialize
+
+ダメです．
+fkissは，パーサが手抜きなんで，これでも通ってしまいますが，
+やっぱりカッコがついてたほうがカッコいい.............   (ひゅうぅぅぅ..)
+
+
+>・引数にセルやオブジェクトを取る命令
+>　map/unmap/altmapについては、オブジェクトの指定は不可である、と明言さ
+>れていますが、それ以外の命令に関しても、FKISSEX*.DOCで触れている組み合
+>わせ、つまり
+>
+> press/releaseはセルとオブジェクトの両方
+> catch/drop/fixcatxh/fixdrop/move/unfixはオブジェクトのみ
+>
+>が有効で、それ以外は保証されないと考えるべきでしょうか?
+
+そのとおりです．
+とくに，moveについては，（あとあとのことを考えると）
+セルでの指定はしないほうがいいと思います．
+</PRE>
+<HR SIZE=1>
+<DL>
+<DD>
+  　上記のように、fkissで指定したように引数を記述するならば、
+  他のすべてのfkissローターで動作すると思います。<BR>
+  　保証外の記述については、経験的にはローダーによって動作したりしなかったり、
+  解釈が異なっていたり、なぜか記述順によって動作したりしなかったりします。<BR>
+  そのときは、改行してみたりすると動くこともありましたが、
+  恐らく私の記述ミスでしょう。(?_?)<P>
+
+    また、オブジェクト番号とセルファイル名の両方を使用した場合、
+  矛盾した指定をしないようにしてください。<P>
+</DL>
+<HR SIZE=4>
+
+  注：より詳しくは、<A HREF="MORE.HTM#OBJECT">【MORE.HTM [2]4,5,6】</A>参照<P>
+
+<HR SIZE=4>
+<FONT SIZE=-1>
+<DL>
+<DD>
+    セルファイル名とオブジェクト番号は一応両方使用できますが、
+  ローダー毎に違うため、やってみなけりゃわからない。
+  ということを言いたかったのです。<BR>
+  　KISSGAシリーズの解釈は、オブジェクト指定とセルファイル名の指定が
+  独立している傾向にあるようで、私は個人的には好きです。:-)<BR>
+  しかし、<FONT COLOR="#FF0000">保証外の記述をする場合、
+  あなたの fkissローダーで動作するからといって、他のローダーで同じように
+  動作するとは限らない事を忘れないで下さい。</FONT><P>
+</DL>
+</FONT>
+<HR SIZE=4>
+<HR SIZE=4>
+
+[TTFKSMN4.HTM]
+</HTML>

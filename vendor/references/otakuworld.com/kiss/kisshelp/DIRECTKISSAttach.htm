@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title>Attach</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; attach</div>
+    <h1>Action: <i>attach(target, parent)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSGlue.htm">glue</a>,
+		<a href="DIRECTKISSDetach.htm">detach</a>,
+		<a href="DIRECTKISSLetchild.htm">letchild</a>,
+		<a href="DIRECTKISSLetparent.htm">letparent</a>,
+		<a href="DIRECTKISSLetsibling.htm">letsibling</a>
+		</div>
+
+		<div class="relatedevents">
+    Related Events: <a href="DIRECTKISSDetached.htm">detached</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>attach(<i>target, parent</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS4</div>
+		<div>
+		The <b>attach</b> action attaches <i>target</i> to <i>parent</i>, becoming
+		a child object of <i>parent</i>. If <i>target</i> was already attached to
+		an object, it is first detached from that object, triggering a
+		<a href="DIRECTKISSDetached.htm">detached</a> event if necessary.</div>
+
+		<div>An object which is attached will move with its parent object. It can
+		be detached with the <a href="DIRECTKISSDetach.htm"><b>detach</b></a>
+		action or by the user moving the child object.</div>
+
+		<h3><i>target</i></h3>
+		<div class="indent">may be an object number or a variable representing an
+		object number.</div>
+
+		<h3><i>parent</i></h3>
+		<div class="indent">may be an object number or a variable representing an
+		object number.</div>
+
+    <h4>Example:</h4>
+    <div class="example">;@ attach(#5, #10)</div>
+    <div class="example">;@ attach(VarEgg, VarBasket)</div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; attach</div>
+  </body>
+</html>

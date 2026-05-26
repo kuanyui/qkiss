@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <title>FKiSS Cel Groups</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; <a href="DIRECTKISSFKiSS_Shortcuts.htm">FKiSS Shortcuts</a> &gt; FKiSS !Cel Groups</div>
+    <h1>FKiSS !Cel Groups</h1>
+
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+ 		<a href="DIRECTKISSFKiSS_General_Syntax.htm">General Syntax</a>,
+ 		<a href="DIRECTKISSFKiSS_Data_Types.htm">Data Types</a>,
+ 		<a href="DIRECTKISSFKiSS_IfEndif_Structure.htm">If-Endif Structure</a>,
+ 		<a href="DIRECTKISSFKiSS_Shortcuts.htm">Shortcuts</a>,
+ 		<a href="DIRECTKISSFKiSS_tags.htm">%Tags</a>,
+ 		<a href="DIRECTKISSFKiSS_Value_Pools.htm">Value Pools</a>,
+ 		<a href="DIRECTKISSFKiSS_HINTs.htm">HINTs</a>,
+ 		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+ 		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<h2>Description</h2>
+		<div class="indent">
+		<div>In addition to the % extensions, this is the only place where you can
+		declare <a href="DIRECTKISSFKiSS_Data_Types.htm#group">groups</a> and
+		<a href="DIRECTKISSFKiSS_Data_Types.htm#groupframe">group frames</a>.
+		If there are any <a href="DIRECTKISSFKiSS_tags.htm">%tags</a>,
+		the group extensions must appear after the %tags.</div> </div>
+
+		<h2>Syntax</h2>
+		<div class="indent">
+    <div>The syntax for a group declaration is:</div>
+    <div class="monospace">!&lt;groupname&gt;  [:&lt;frame  frame...&gt;]&gt;</div>
+    <h4>Example:</h4>
+    <div class="example">#5.3 doll.cel *5 :1 3 7 8 9&nbsp; ;!MyGroup</div>
+    <div class="example">#5.3 doll2.cel *5 :1 3 7 8 9 ;!MyGroup :3  6  7</div>
+    <div class="example">#5.3 doll.cel *5 :1 3 7 8 9&nbsp; ;%t128  %g  %u  !MyGroup :3  6  7</div>
+    <h4>Wrong:</h4>
+    <div class="example">#5.3 doll.cel *5 :1 3 7 8 9 ;MyGroup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; '!' is missing before "MyGroup"</i></div>
+    <div class="example">#5.3 doll2.cel *5 :1 3 7 8 9 ;   !MyGroup :3  6  7 <i>; space not allowed before first extension character</i></div>
+    <div class="example">#5.3 doll2.cel *5 :1 3 7 8 9 ;!MyGroup:3  6  7&nbsp;&nbsp; <i>; needs space before ':'</i></div>
+    <div class="example">#5.3 doll2.cel *5 :1 3 7 8 9 ;!MyGroup  3  6  7&nbsp;&nbsp; <i>; ':' is missing before '3'</i></div>
+		</div>
+
+		<h2>Group Declarations</h2>
+		<div class="indent">
+		<div>Although % extensions must always appear on the same line as the cel
+		declaration, <a href="DIRECTKISSFKiSS_Data_Types.htm#group">group</a>
+		declarations may appear on immediately following lines.</div>
+
+		<h4>Example:</h4>
+    <div class="example">
+		#5.3 doll.cel *2 :1 4 7 8 9 ;%t128  %g  %u  %x12  !MyGroup<br>
+    ;!ThisGroup :1  13  7<br>
+    ;!ThatGroup</div>
+		<ul>
+      <li>doll.cel is a member of object #5 which has a fix value of 3.
+        <br>
+      <li>doll.cel uses KCF number 2
+        <br>
+      <li>doll.cel appears on sets 1, 4, 7, 8, and 9
+        <br>
+      <li>doll.cel starts with a transparency of 128 (<span class="example">%t128</span>)
+        <br>
+      <li>doll.cel starts ghosted (<span class="example">%g</span> = <i>unclickable</i>)
+        <br>
+      <li>doll.cel starts unmapped (<span class="example">%u</span> = <i>hidden</i>)
+        <br>
+      <li>doll.cel has a horizontal offset of 12 (<span class="example">%x12</span>) for this instance of the cel
+        <br>
+      <li>doll.cel is member of the group <i>!MyGroup</i>
+        <br>
+      <li>doll.cel is member of the group <i>!ThisGroup</i> and appears on frames 1, 7, and 13 of <i>!ThisGroup</i>
+        <br>
+      <li>doll.cel is member of the group <i>!ThatGroup</i>
+    </ul>
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSKISS_and_FKiSS.htm">KiSS and FKiSS</a> &gt; <a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS Reference Guide</a> &gt; <a href="DIRECTKISSFKiSS_Shortcuts.htm">FKiSS Shortcuts</a> &gt; FKiSS !Cel Groups</div>
+  </body>
+</html>

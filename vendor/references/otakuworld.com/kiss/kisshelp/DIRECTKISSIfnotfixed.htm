@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title>Ifnotfixed</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; ifnotfixed</div>
+    <h1>Action: <i>Ifnotfixed(target, alarm ID, delay)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSTimer.htm">timer</a>,
+		<a href="DIRECTKISSRandomtimer.htm">randomtimer</a>,
+		<a href="DIRECTKISSLettimer.htm">lettimer</a>,
+		<a href="DIRECTKISSIffixed.htm">iffixed</a>,
+		<a href="DIRECTKISSIfmapped.htm">ifmapped</a>,
+		<a href="DIRECTKISSIfmoved.htm">ifmoved</a>,
+		<a href="DIRECTKISSIfnotmapped.htm">ifnotmapped</a>,
+		<a href="DIRECTKISSIfnotmoved.htm">ifnotmoved</a>,
+		<a href="DIRECTKISSExitevent.htm">exitevent</a>
+		</div>
+
+		<div class="relatedevents">
+    Related Events:
+		<a href="DIRECTKISSAlarm.htm">alarm</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+		<hr>
+    <h2>ifnotfixed(<i>target, alarm ID, delay</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS2.1</div>
+		<div>If the <a href="DIRECTKISSKISS_General_Specification_CNF.htm#fixed">fix value</a>
+		for the object specified by <i>target</i> is zero, the <b>ifnotfixed</b>
+		action sets the timer for an alarm. If a timer for that alarm is already
+		counting down, the new delay time will replace it, resetting the alarm's
+		timer.</div>
+
+		<div>Setting <i>delay</i> to zero will cancel the timer for that alarm,
+		preventing the alarm from being activated.</div>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+			<div>In FKiSS2.1 to FKiSS3, <i>target</i> must be an object number.</div>
+			<div>In FKiSS4, <i>target</i> may be an object number or a
+			variable representing an object number.</div>
+		</div>
+
+		<h3><i>alarm ID</i></h3>
+		<div class="indent">
+		<div>In FKiSS2.1, <i>alarm ID</i> must be an alarm ID number.</div>
+		<div>In FKiSS3, <i>alarm ID</i> may be an alarm ID number or a variable representing an alarm ID number.</div>
+		<div>In FKiSS4, <i>alarm ID</i> may also be a symbolic name representing
+		an alarm or a variable representing an alarm ID number.</div>
+		</div>
+
+		<h3><i>delay</i></h3>
+		<div class="indent">
+		<div>In FKiSS2.1, <i>delay</i> must be a number representing the delay
+		time in <a href="DIRECTKISSuntitled00000001.htm">milliseconds</a>.</div>
+		<div>In FKiSS3, <i>delay</i> may also be a variable representing the delay
+		time in <a href="DIRECTKISSuntitled00000001.htm">milliseconds</a>.</div>
+		</div>
+    <h4>Example:</h4>
+    <div class="example">;@ ifnotfixed(#5, 10, 1000)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; If the fixed value for object 5 is zero, set alarm 10 to 1000 milliseconds.</i></div>
+    <div class="example">;@ ifnotfixed(VarObj, MyAlarm, VarDelay) <i>; If the fixed value for object identified by VarObj is zero, set alarm MyAlarm to VarDelay milliseconds.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; ifnotfixed</div>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title>Altmap</title>
+    <script language="javascript" type="text/javascript" src="BSSCDHTM.js">
+    </script>
+	  <link rel="StyleSheet" type="text/css" href="styles.css">
+  </head>
+  <body onload="BSSCOnLoad();" onclick="BSSCOnClick();" onunload="BSSCOnUnload();">
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; altmap</div>
+    <h1>Action: <i>Altmap(target)</i></h1>
+
+		<div class="relatedactions">
+    Related Actions:
+		<a href="DIRECTKISSMap.htm">map</a>,
+		<a href="DIRECTKISSUnmap.htm">unmap</a>,
+		<a href="DIRECTKISSLetmapped.htm">letmapped</a>,
+		<a href="DIRECTKISSIfmapped.htm">ifmapped</a>,
+		<a href="DIRECTKISSIfnotmapped.htm">ifnotmapped</a>
+		</div>
+
+		<div class="seealso">
+    See also:
+		<a href="DIRECTKISSFKiSS_Reference_Guide.htm">FKiSS</a>,
+		<a href="DIRECTKISSFKiSS_Events.htm">Events</a>,
+		<a href="DIRECTKISSFKiSS_Actions.htm">Actions</a>
+		</div>
+
+
+		<hr>
+    <h2>altmap(<i>target</i>)</h2>
+		<div class="indent">
+		<div>First defined in: FKiSS1</div>
+		<div>
+		The <b>altmap</b> action causes <i>target</i> to become mapped if it is
+		unmapped and unmapped if it is mapped on all sets in which it is present.
+		When <i>target</i> is an object or group, mapping is switched based on the
+		map-state of the individual cels.  In other words, <b>altmap</b> toggles the
+		visible state of all cels in <i>target</i>.</div>
+
+    <div>Mapped cels may be clickable and visible (although
+		<a href="DIRECTKISSGhost.htm">ghost</a> and
+		<a href="DIRECTKISSTransparent.htm">transparent</a> can also affect this).
+		Unmapped cels are unclickable and invisible.</div>
+
+		<h3><i>target</i></h3>
+		<div class="indent">
+		<div>In FKiSS1 to FKiSS3, <i>target</i> may be an object number or cel.</div>
+
+		<div>In FKiSS4, <i>target</i> may be an object number, cel, group, or a
+		variable representing an object number.</div>
+		</div>
+
+		<h4>Example:</h4>
+		<div class="example">;@ altmap(&quot;doll.cel&quot;) <i>; Toggle visibility of &quot;doll.cel&quot;.</i></div>
+    <div class="example">;@ altmap(#5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>; Toggle visibility of all cels in object #5.</i></div>
+    <div class="example">;@ altmap(!MyGroup)&nbsp;&nbsp; <i>; Toggle visibility of all cels in group !MyGroup.</i></div>
+    <div class="example">;@ altmap(VarObj)&nbsp;&nbsp;&nbsp;&nbsp; <i>; Toggle visibility of all cels that are in the object identified by the variable VarObj.</i></div>
+
+		</div>
+
+		<div class="navigate">Location: <a href="DIRECTKISSFKiSS_Actions.htm">FKiSS Actions</a> &gt; altmap</div>
+  </body>
+</html>
