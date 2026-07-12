@@ -146,7 +146,7 @@ install-git-hooks:     ## Install git-hooks and commit-template.
 	git config commit.template scripts/git_hooks/commit-template.txt
 
 .PHONY: uninstall-git-hooks
-uninstall-git-hooks:     ## Install git-hooks and commit-template.
+uninstall-git-hooks:     ## Uninstall git-hooks and commit-template.
 	rm .git/hooks/commit-msg
 	rm .git/hooks/pre-commit
 	git config --unset commit.template
