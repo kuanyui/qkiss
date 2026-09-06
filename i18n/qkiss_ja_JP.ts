@@ -78,7 +78,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Patch: newly added extra %1 CNF; and replaced %2 CNF.</source>
-        <translatio>パッチ：新しい CNF ファイルを %1 つ追加し、%2 つ CNF ファイルを置き換えました。</translation>
+        <translation>パッチ：新しい CNF ファイルを %1 つ追加し、%2 つ CNF ファイルを置き換えました。</translation>
     </message>
     <message>
         <source>Patch: newly added extra %1 KCF, and replaced %2 KCF.</source>
