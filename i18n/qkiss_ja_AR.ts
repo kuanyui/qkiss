@@ -74,7 +74,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <name>ArchiveFile</name>
     <message>
         <source>Found valid files: %1 CNF, %2 CEL, %3 KCF.</source>
-        <translation>ふふ……ようやく見つけましたわね、有効なファイルを... %1個、CEL %2個、KCF %3 個おーっほっほっほ！ この程度、わたくしにかかれば造作もありませんわ！</translation>
+        <translation>ほぉら、使えるファイルが見つかりましたわ！CNF %1個、CEL %2個、KCF %3個ですの。……探したのはあなた？わたくしの指示で、でしょう？おーっほっほ！</translation>
     </message>
     <message>
         <source>Patch: newly added extra %1 CNF; and replaced %2 CNF.</source>
@@ -109,7 +109,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <name>ArchiveProcessorCnfInFileSystem</name>
     <message>
         <source>Reading a CNF file &quot;%1&quot; directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...</source>
-        <translation>CNFファイル「%1」を直接読み込んで差し上げておりますのよ。同じフォルダ内の関連するCNF/KCF/CELファイルなども拾ってきてあげておりますの。哀れな庶民にはありがたいことでしてよ！</translation>
+        <translation>CNFファイル「%1」を直接読み込み、同じフォルダの関連CNF/KCF/CELファイルも集めて差し上げておりますわ。まあ、庶民はご自分の持ち物まで探していただくのね。おほほほ！</translation>
     </message>
 </context>
 <context>
@@ -120,7 +120,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>The de facto standard implementation of LZH.</source>
-        <translation>LZH形式の事実上の標準実装ですことよ！オホホホ！</translation>
+        <translation>LZHの事実上の標準実装ですわ。……標準がわからない？まあ、いつも標準以下でいらっしゃると、そうなりますのね。</translation>
     </message>
     <message>
         <source>Perfect (theorically can open any LZH file)</source>
@@ -128,47 +128,47 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>External program; manual installation is needed.</source>
-        <translation>外部プログラムでございますのよ、手動インストールが必要ですなんて庶民的ですこと！</translation>
+        <translation>外部プログラムですから、手動で導入なさい。……自分で？ええ、庶民にはお付きの者もいらっしゃらないでしょう？おほほほ！</translation>
     </message>
     <message>
         <source>Available on most of Linux distros, also on MacPorts. Windows supporting is experimental.</source>
-        <translation>LinuxディストリビューションやMacPortsでは利用可能でしてよ。Windowsサポートは実験的ですって？哀れな庶民向けですわね！オホホホ！</translation>
+        <translation>ほとんどのLinuxディストリビューションとMacPortsで使えますわ。Windows対応は実験段階ですの。……「使えるかもしれない」と「必ず使える」の違い、おわかりかしら？</translation>
     </message>
     <message>
         <source>&gt; 95% operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation>95%以上の操作をディスクに展開せずRAM内で実行できるのでしてよ！SSDの寿命に優しいなんて、庶民にはありがたい話ですわね！オホホホ！</translation>
+        <translation>95%を超える操作をディスクへ展開せずRAM内で行えますから、SSDの寿命にも比較的優しいですわ。……そんなに壊れるのが怖いの？あらあら、買い替えるお金もない庶民は、使うだけでも勇気が要りますのね。オホホホ！</translation>
     </message>
     <message>
         <source>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
-        <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;ソースコードですことよ&lt;/a&gt;&lt;/li&gt;オホホホ！</translation>
+        <translation>&lt;a href='https://github.com/jca02266/lha'&gt;ソースコードですことよ&lt;/a&gt;&lt;/li&gt;オホホホ！</translation>
     </message>
     <message>
         <source>External program LHA is not installed or not found.</source>
-        <translation>あらあら、外部プログラムLHAがインストールされていないか見つからないようですわね。庶民にはよくあることですわ！オホホホ！</translation>
+        <translation>LHA！LHAはどこですの！……外部プログラムLHAが未導入か、見つからない？そ、それを先におっしゃい！何度も呼ばせるんじゃありません！</translation>
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
-        <translation>LZHファイル「%1」を展開して差し上げておりますのよ…。</translation>
+        <translation>LHA、LZHファイル「%1」を展開なさい。……わたくしも手伝えと？あら、指示を出すお仕事が見えないなんて、庶民はお気楽ですこと。</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>あらあら、LZHファイル「%1」の展開に失敗いたしましたわ。中止ですって？哀れですこと！</translation>
+        <translation>……え？LZHファイル「%1」の展開に失敗？処理中止ですわ。LHA、こちらへいらっしゃい。わたくしの指示は、完璧でしたわよね？ね？</translation>
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>あら、LZHファイル「%1」の展開に成功いたしましたわ。中には%2個のファイルが入っておりますのよ！庶民にはありがたいことでしてよ！オホホホ！</translation>
+        <translation>ほぉら、LZHファイル「%1」の展開成功ですわ！中にはファイルが%2個。……働いたのはLHA？お黙りなさい、わたくしが命じたのでしょう！オ〜ホホホ！</translation>
     </message>
     <message>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
-        <translation>あら、ネストされたLZHファイル「%1」の展開に失敗いたしましたわ（一時ファイル「%2」を開けませんでしたの）。</translation>
+        <translation>入れ子のLZHファイル「%1」の展開に失敗。一時ファイル「%2」が開けませんでしたわ。扉の奥にまた扉……わたくしを何度ノックさせるおつもり！</translation>
     </message>
     <message>
         <source>Partial write occurred. Expected: %1 bytes, actual: %2 bytes</source>
-        <translation>部分的な書き込みが発生いたしましたの。期待値：%1バイト、実際：%2バイトでございますわ。</translation>
+        <translation>……あら？書き込みが途中までですわ。%1バイトのはずが、%2バイトしかありませんの？ちょっと、残りは？わたくしの顔を見ても増えませんわよ！</translation>
     </message>
     <message>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在いたしませんの。中止いたしますわ。</translation>
+        <translation>アーカイブのパス「%1」が存在しませんわ。処理中止。存在しない屋敷へ招待するとは、いい度胸ですこと。</translation>
     </message>
 </context>
 <context>
@@ -179,19 +179,19 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>An extractor specially focused on archives of old formats containing non UTF-8 encoding file names.</source>
-        <translation>あらあら、非UTF-8エンコーディングのファイル名を含む古い形式のアーカイブに特化した展開ツールですのよ。庶民にはありがたいことでしてよ！</translation>
+        <translation>非UTF-8のファイル名を含む古い形式のアーカイブが得意な展開ツールですわ。……読めないファイルを「呪われている」と呼ぶのは、もうおやめになって？庶民の怪談も底が浅いですこと。</translation>
     </message>
     <message>
         <source>Pretty Good</source>
-        <translation>なかなか上出来ですわね！オホホホ！</translation>
+        <translation>庶民にしては上出来ですこと！</translation>
     </message>
     <message>
         <source>External program; manual installation is needed.</source>
-        <translation>外部プログラムでございますのよ。手動インストールが必要ですなんて、庶民的ですこと！</translation>
+        <translation>外部プログラムですので、手動で導入なさい。使用人が自ら採用手続きを済ませるとでも？</translation>
     </message>
     <message>
         <source>Originally developed for macOS, also available on most of Linux distros. Supports Windows</source>
-        <translation>もともとmacOS向けに開発されましたの。ほとんどのLinuxディストリビューションでも利用可能でしてよ。Windowsもサポートしているなんて、意外とやりますわね！オホホホ！</translation>
+        <translation>macOS生まれで、ほとんどのLinuxディストリビューションでも利用可能。Windowsにも対応ですわ。顔が広いのね。わたくしほどではなくってよ。</translation>
     </message>
     <message>
         <source>All extractions will do writing operations to disk; may shorten the lifespan of SSD.</source>
@@ -203,42 +203,42 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>External program Unar is not installed or not found.</source>
-        <translation>あらあら、外部プログラムUnarがインストールされていないか見つからないようですわね。庶民にはよくあることですわ！オホホホ！</translation>
+        <translation>Unar、出ていらっしゃい！……いませんの？未導入か、見つからない状態ですって？こほん。今のは発声練習ですわ。よろしくて？</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>あら、LZHファイル「%1」の展開に失敗いたしましたわ。中止ですって？哀れですこと！</translation>
+        <translation>あら、LZHファイル「%1」を展開できませんでしたの？……処理は中止ですわ。Unar、わたくしが扇子を閉じるまでに、納得のいく説明をお考えなさい。</translation>
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>あらまあ、LZHファイル「%1」の展開に成功いたしましたわ。中には%2個のファイルが含まれておりますの。</translation>
+        <translation>あら、LZHファイル「%1」を展開できましたのね。ファイルは%2個、と。Unar、よくやりましたわ！……あなたを選んだわたくしが、ですけれど。</translation>
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via Unar...</source>
-        <translation>LZHファイル「%1」を展開いたしておりますわ…。</translation>
+        <translation>UnarにLZHファイル「%1」の展開を命じましたわ。さあ、中身にも身分を明かしていただきましょう……。</translation>
     </message>
     <message>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在いたしませんの。中止いたしますわ。</translation>
+        <translation>アーカイブのパス「%1」がございませんので処理中止ですわ。道中の長さ以前に、行き先が架空ではありませんの！</translation>
     </message>
 </context>
 <context>
     <name>ArchiveProcessorLibarchive</name>
     <message>
         <source>LibArchive (built-in)</source>
-        <translation>LibArchive（内蔵）ですことよ！オホホホ！</translation>
+        <translation>LibArchive（直属の内蔵係）</translation>
     </message>
     <message>
         <source>Multi-format archive and compression library.</source>
-        <translation>マルチフォーマット対応のアーカイブ・圧縮ライブラリですわ。庶民にはありがたいことでしてよ！</translation>
+        <translation>いろいろな形式に対応するアーカイブ・圧縮ライブラリですわ。ひとつ覚えるだけでお疲れになる庶民とは、働きが違いますの。……あら、もうお疲れ？</translation>
     </message>
     <message>
         <source>Poor (some LZH files may be unable to be extracted, and non UTF-8 file names in LZH are totally unsupported.)</source>
-        <translation>あらあら、一部のLZHファイルは展開できませんし、LZH内の非UTF-8ファイル名は完全にサポート外ですのよ。なんとも哀れですこと！オホホホ！</translation>
+        <translation>力不足ですわ。一部のLZHファイルは展開できないことがあり、LZH内の非UTF-8ファイル名はまったく非対応。推薦状だけは立派でしたのに！</translation>
     </message>
     <message>
         <source>Built-in in QKiSS. No extra external program is required.</source>
-        <translation>QKiSSに内蔵されておりますの。追加の外部プログラムなど不要ですわ！庶民には手軽でよろしいですこと！オホホホ！</translation>
+        <translation>QKiSSに内蔵済みですから、追加の外部プログラムは不要ですわ。……使用人を別に雇わずに済むと？まあ、庶民はすぐお財布の心配ですのね。おほほほほ！</translation>
     </message>
     <message>
         <source>Windows, macOS, Linux</source>
@@ -246,15 +246,15 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>All operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation>あらあら、すべての操作をディスクに展開せずRAM内で実行できますので、SSDの寿命に優しいのでしてよ。庶民にはありがたいことですわね！オホホホ！</translation>
+        <translation>すべての操作をディスクへ展開せずRAM内で行えますから、SSDの寿命にも比較的優しいですわ。……買い替えずに済むか、ですって？庶民は機械の寿命まで家計簿とご相談ですのね。おほほほ！</translation>
     </message>
     <message>
         <source>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
-        <translation>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;ソースコードですことよ&lt;/a&gt;&lt;/li&gt;オホホホ！</translation>
+        <translation>&lt;a href='https://github.com/libarchive/libarchive'&gt;ソースコードですことよ&lt;/a&gt;&lt;/li&gt;オホホホ！</translation>
     </message>
     <message>
         <source>Failed to open this file, aborted.</source>
-        <translation>あら、このファイルを開けませんでしたわ。中止ですって？哀れですこと！</translation>
+        <translation>あら？……開きませんわね、このファイル。ちょっと、わたくしが開けなさいと言っておりますのよ！……処理は中止ですわ。扉のくせに、生意気な！</translation>
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
@@ -262,45 +262,45 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Error when opening this archive file (%1). Aborted.</source>
-        <translation>このアーカイブを開く際にエラーが発生いたしましたの（%1）。まあ無様ですこと、中止いたしますわ。おほほほ！</translation>
+        <translation>なっ……アーカイブを開いたらエラーですって（%1）！？しょ、処理は中止ですわ！入れなかったのではなく、入る気がなくなっただけですの！</translation>
     </message>
     <message>
         <source>Fatal error (%1), no more operations are possible., abort.</source>
-        <translation>致命的なエラー（%1）につき、これ以上の処理はできませんの。あらあら、終わりでございますわね。おほほほ！</translation>
+        <translation>ち、致命的エラー（%1）！？もう操作できませんの！？……幕！早く幕を下ろしなさい！処理中止ですわ！この顔を客席に見せるんじゃありません！</translation>
     </message>
     <message>
         <source>Current operation cannot complete (%1), skip.</source>
-        <translation>只今の操作は完了できませんでしたの（%1）。まあ、期待外れですこと。スキップいたしますわ。おほほほ！</translation>
+        <translation>あら、この操作は完了できませんの（%1）？……もう結構、飛ばしますわ。次！いつまでわたくしを待たせるおつもり？</translation>
     </message>
     <message>
         <source>Partial success (%1).</source>
-        <translation>一部のみ成功いたしましたの（%1）。中途半端で笑ってしまいますわねぇ。おほほほ！</translation>
+        <translation>ほら、ご覧なさい！成功ですわ！……一部だけ（%1）？そ、そこはわたくしが担当したところですの。残り？担当者をお呼びなさい！</translation>
     </message>
     <message>
         <source>Retry might succeed (%1)</source>
-        <translation>再試行なさいますと成功するやもしれませんわ（%1）。まあ、運が良ければの話ですけれど。おほほほ！</translation>
+        <translation>しっ、失敗ではなく、先ほどは予行演習だったのです！お、おーほほほほ〜！……もう一度試せば、うまくいくかもしれませんわ（%1）。</translation>
     </message>
     <message>
         <source>when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
-        <translation>LibArchiveでこのアーカイブを読んでいる最中にエラーがございましたの（エラー: %1）。結局中止でございますわ。おほほほ！</translation>
+        <translation>ちょっと、そこで止まりますの！？LibArchiveでアーカイブを読み込み中にエラーですわ（エラー: %1）。……中止いたします。続きが気になってなんか、おりませんことよ！</translation>
     </message>
 </context>
 <context>
     <name>ConfigFile</name>
     <message>
         <source>Auto (System Language)</source>
-        <translation>自動（システム言語に従って決めといてあげるんだから感謝しなよ？オホホホ！）</translation>
+        <translation>自動（システム言語に合わせますわ。ご自分の言葉くらい、ご自分で選べませんの？）</translation>
     </message>
 </context>
 <context>
     <name>FileSystemBrowser</name>
     <message>
         <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
-        <translation>あらあら、ファイルパス「%1」が見つかりませんわ。このパスの読み込みは中止ですって？哀れですこと！</translation>
+        <translation>ファイルパス「%1」が見当たりませんので、このパスの読み込みは中止ですわ。道案内の者、地図を逆さに持っておりませんこと？</translation>
     </message>
     <message>
         <source>Invalid dir path, aborted.</source>
-        <translation>無効なディレクトリパスですわ。中止いたしましたの。庶民にはよくあることですわね！オホホホ！</translation>
+        <translation>ディレクトリパスが無効のため、処理を中止いたしましたわ。架空の住所に馬車を回させないでくださる？</translation>
     </message>
     <message>
         <source>File Name</source>
@@ -316,11 +316,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Go Back</source>
-        <translation>戻りますのよ、あらあら哀れですこと！</translation>
+        <translation>も、戻るだけですわ。逃げてはおりません！</translation>
     </message>
     <message>
         <source>Go Forward</source>
-        <translation>進みますわよ！オホホホ！</translation>
+        <translation>お進みなさい。まだ後ろで迷っていらしたの？</translation>
     </message>
     <message>
         <source>Go Up</source>
@@ -328,7 +328,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Refresh</source>
-        <translation>更新ですことよ！あらあら、凡俗には難しい操作でしょうけれどオホホホ！</translation>
+        <translation>更新なさい。睨んでも新しくなりませんわよ？</translation>
     </message>
     <message>
         <source>Home</source>
@@ -336,7 +336,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Set current folder as Home</source>
-        <translation>このフォルダをホームに設定いたしますわ。下々の者には到底真似できませんこと！</translation>
+        <translation>このフォルダをホームにいたしますわ。ええ、わたくしが気に入りましたの。何かご不満でも？</translation>
     </message>
     <message>
         <source>Open this item</source>
@@ -348,7 +348,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Click to load this file as patch</source>
-        <translation>このファイルをパッチとして読み込むにはクリックなさいませ。あらまあ、哀れな大衆には荷が重い操作ですこと！オホホホ！</translation>
+        <translation>クリックして、このファイルをパッチとして読み込みなさい。……継ぎ当ては得意でしょう？庶民のお召し物で、よくお見かけしますもの。</translation>
     </message>
 </context>
 <context>
@@ -362,7 +362,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <name>FkissParser</name>
     <message>
         <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
-        <translation>二重引用符を見つけましたけれど、対になるお印が見当たりませんことよ。まあ、文字列すらまともに成り立たないなんて滑稽ですわねぇ。おほほほ！ SOURCE: </translation>
+        <translation>二重引用符を見つけましたけれど、対になるものがございませんわ。これでは文字列になりませんの。……ふたつで一組、それだけのお話ですのよ？こんな間違いまでなさるなんて、まあ、お粗末ですこと！おほほほ！SOURCE: </translation>
     </message>
     <message>
         <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
@@ -374,19 +374,19 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Command starts before EventHandler, ignore.</source>
-        <translation>まぁ！EventHandler より先にコマンドを始めるなんて…無視して差し上げますわ！お――ほほほ！</translation>
+        <translation>ちょっとお待ちなさい！EventHandler より先にコマンドが出ておりますわよ！誰が先に入ってよいと申しました？……無視ですわ、無視！</translation>
     </message>
     <message>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
-        <translation>コマンド名 `%1` の後に左かっこがございませんわね？ならば、パラメータ無しと見なして差し上げますわ！</translation>
+        <translation>あら？コマンド名 `%1` の後には左かっこが必要ですのよ。……ないんですのね？では引数なしとして扱いますわ。あとから連れがいるなんて、おっしゃらないでね？</translation>
     </message>
     <message>
         <source>Cannot find the matched right parenthesis. Abort.</source>
-        <translation>右かっこが見当たりませんこと？まぁ、仕方なく中止いたしますわ！お――ほほほ！</translation>
+        <translation>……右かっこは？対になる右かっこはどこですの！？もう、閉じるところまで面倒を見させないでくださる？処理は中止ですわ！</translation>
     </message>
     <message>
         <source>Comma is required between two args.</source>
-        <translation>コンマは引数の区切りでなくてはなりませんのよ？常識ですわ！</translation>
+        <translation>引数ふたつの間にはコンマをお入れなさい。……そんなに詰めて、庶民の満員電車でも再現なさっているの？おほほほ！</translation>
     </message>
     <message>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
@@ -394,7 +394,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Unknown command &quot;%1&quot;, skip.</source>
-        <translation>不明なコマンド「%1」ですことよ。スキップいたしますわ。</translation>
+        <translation>「%1」……？存じ上げないコマンドですわね。飛ばしますわよ。庶民が名乗るだけで謁見できるとでも？おーっほっほ！</translation>
     </message>
     <message>
         <source>[SyntaxWarning] %1   [L%2, C%3] %4</source>
@@ -409,15 +409,15 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <name>GKissScene</name>
     <message>
         <source>No KCF found in this CNF, don&apos;t draw set background.</source>
-        <translation>このCNFにはKCFが見つかりませんので、背景はお描きいたしませんわ。まあ、無様ですことねぇ〜。お――ほほほ！</translation>
+        <translation>あら、このCNFにはKCFがありませんのね。ではセットの背景は描きませんわ。……寂しい？わたくしがいるのに、まだ何か足りませんこと？</translation>
     </message>
     <message>
         <source>No palette in this KCF. Abort.</source>
-        <translation>このKCFにはパレットがございませんの。あらあら、基本も満たせないなんて哀れですこと。中止いたしますわ。お――ほほほ！</translation>
+        <translation>まあ、このKCF、パレットが空っぽではありませんの！これで何色を選べと……？もう結構ですわ、処理中止！</translation>
     </message>
     <message>
         <source>In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.</source>
-        <translation>このCNFでは setNo %1 の既定の paletteNo を %2 と定めておりますけれど、最初のKCFにはパレットが%3個しかございませんの。仕方なく paletteNo 0 に致しますわ。まあ、情けないですこと。お――ほほほ！</translation>
+        <translation>このCNFのsetNo %1 は既定のpaletteNoに%2をご指名ですが、最初のKCFにはパレットが%3個しかございませんわ。最初のKCFのpaletteNo 0を代役にいたします。抜擢ですわよ、感涙なさい！</translation>
     </message>
     <message>
         <source>WTF? In CNF&apos;s set definition, not found palette in first KCF of this CNF. Abort.</source>
@@ -425,11 +425,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>[%1] Unfix (&amp;U)</source>
-        <translation>[%1] 固定解除ですことよ(&amp;U)。まあ、凡俗には難しい操作でしょうけれどオホホホ！</translation>
+        <translation>[%1] 固定解除。お逃げになっても結構よ？(&amp;U)</translation>
     </message>
     <message>
         <source>Reset Object (&amp;R)</source>
-        <translation>オブジェクトをリセットいたしますわ(&amp;R)。下々の者には到底扱えませんこと！</translation>
+        <translation>オブジェクトをリセット。出直しなさい(&amp;R)</translation>
     </message>
     <message>
         <source>Information</source>
@@ -437,14 +437,14 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Click to copy filename to clipboard.</source>
-        <translation>ファイル名をクリップボードにコピーなさるにはクリックなさいませ。あらあら、哀れな大衆には荷が重い操作ですこと！オホホホ！</translation>
+        <translation>クリックすればファイル名をクリップボードに写せますわ。……まだ手で書き写していらしたの？まあ、ご苦労さま。今度はお間違えにならずに済みますわね。おほほほ！</translation>
     </message>
 </context>
 <context>
     <name>GKissView</name>
     <message>
         <source>No CNF file found in this archive file.</source>
-        <translation>このアーカイブにはCNFファイルが見当たりませんわ。まあ、無様ですことねぇ〜。おほほほ！</translation>
+        <translation>このアーカイブにCNFファイルがございませんわ。台本なしでわたくしに主演させるおつもり？</translation>
     </message>
     <message>
         <source>No CNF file named &quot;%1&quot; found in this archive file.</source>
@@ -452,11 +452,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Only %1 scenes in this view but you ask for sceneIndex %2</source>
-        <translation>このビューには%1個のシーンしかございませんのに、sceneIndex %2 をお望みですの？まあ、身の程知らずですこと。おほほほ！</translation>
+        <translation>あのね、このビューにはシーンが%1個しかありませんの。それでsceneIndex %2ですって？……あなた、わたくしよりわがままではなくって！？</translation>
     </message>
     <message>
         <source>CNF requires a CEL &quot;%1&quot;, but not found in this archived file: </source>
-        <translation>CNF は CEL「%1」を要しておりますけれど、このアーカイブには見当たりませんの。あらあら、期待外れでございますわね。おほほほ！</translation>
+        <translation>CNFに必要なCEL「%1」が、このアーカイブに見当たりませんわ。出演者が欠席？代役は自分で探していらして！該当アーカイブ： </translation>
     </message>
     <message>
         <source>In CNF &quot;%1&quot;, the CEL &quot;%2&quot; requires KCF index %3, but no KCF file available in this CNF.</source>
@@ -464,11 +464,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>[Benchmark] Creating all graphics items in %1 scene(s) cost %2 ms</source>
-        <translation>[ベンチマーク] %1シーンにおける全グラフィック項目の作成に%2 msを要しましたわ。まあ、随分と時間がかかりましたのねぇ。おほほほ！</translation>
+        <translation>[ベンチマーク] %1シーンの全グラフィック項目を作るのに%2 msかかりましたわ。……待った？そ、それは「間」ですの！登場には演出が必要でしょう！？</translation>
     </message>
     <message>
         <source>No scene found. Aborted</source>
-        <translation>シーンが見当たりませんの。結局中止でございますわ。まあ、期待外れですこと。おほほほ！</translation>
+        <translation>さあ、わたくしの出番……あら？シーンがありませんの？舞台ごとないですって！？……処理中止ですわ！わたくし、どこへ登場すればよろしいの！？</translation>
     </message>
 </context>
 <context>
@@ -514,7 +514,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>CEL Siblings</source>
-        <translation>CEL姉妹要素</translation>
+        <translation>CELと取り巻きの皆さま</translation>
     </message>
 </context>
 <context>
@@ -592,23 +592,23 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>御助力ですこと(&amp;H)</translation>
+        <translation>御助力。あら、庶民はお困り？(&amp;H)</translation>
     </message>
     <message>
         <source>File System Browser</source>
-        <translation>書庫体系の御鑑ですわ。平民にはただの棚卸しにしか思えませんでしょうね</translation>
+        <translation>書庫体系の御鑑。庶民の棚卸しとは違いましてよ</translation>
     </message>
     <message>
         <source>Inner File Selector</source>
-        <translation>内部文書の御選択でしてよ。平民にはただの羅列にしか映りませんでしょうけれど</translation>
+        <translation>内部文書をお選びなさい。全部欲しいは通りませんわ</translation>
     </message>
     <message>
         <source>Logs</source>
-        <translation>記録簿でしてよ。凡俗にはただの紙束にしか見えませんでしょうね</translation>
+        <translation>記録簿。証拠は揃っておりますわ</translation>
     </message>
     <message>
         <source>CNF Code Viewer</source>
-        <translation>CNF原始コードの御鑑ですわ。庶民にはただの呪文にしか見えませんでしょうに</translation>
+        <translation>CNF原始コードですわ。……庶民には呪文？唱えても何も出ませんわよ</translation>
     </message>
     <message>
         <source>Document Viewer</source>
@@ -616,35 +616,35 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Item Inspector</source>
-        <translation>品目の検分でしてよ。庶民の目では到底見抜けませんわね</translation>
+        <translation>品目を検分しますわ。……眺めるだけなら庶民にもできますものね</translation>
     </message>
     <message>
         <source>&amp;Open File</source>
-        <translation>その文書を開いて差し上げますわ。ご自分では無理でしょう、凡俗には(&amp;O)</translation>
+        <translation>文書を開きなさい。わたくしの御前ですわ(&amp;O)</translation>
     </message>
     <message>
         <source>Open &amp;Directory</source>
-        <translation>書庫を御開帳いたしますの。迷わずに済みましてよ、平民風情でも(&amp;D)</translation>
+        <translation>書庫を開きますわ。庶民は迷子にならないでね(&amp;D)</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation>ここで御退出なさいますのね。賢明ですわ、庶民にしては上出来でしてよ(&amp;Q)</translation>
+        <translation>あら、お帰り？庶民には刺激が強すぎたかしら(&amp;Q)</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation>縮小して差し上げますわ。大きすぎて目が回るのは下々の常ですもの(&amp;O)</translation>
+        <translation>少し小さく……近い、近すぎますわ！(&amp;O)</translation>
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation>拡大して御覧なさいませ。細部を見落とすのは平民の証ですわ(&amp;I)</translation>
+        <translation>もっと大きく！わたくしが見えませんわ(&amp;I)</translation>
     </message>
     <message>
         <source>&amp;Reset Scale</source>
-        <translation>尺度を元に戻して差し上げますの。ありがたく思いなさいませ、俗物の皆さま(&amp;R)</translation>
+        <translation>倍率を元へ。……さすがに盛りすぎましたわね(&amp;R)</translation>
     </message>
     <message>
         <source>Clear All</source>
-        <translation>すべて消し去って差し上げますわ。庶民には到底できませんものね</translation>
+        <translation>すべて消しなさい。……証拠隠滅？せ、整理ですわ！</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
@@ -652,7 +652,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Preferences</source>
-        <translation>御調え</translation>
+        <translation>御裁きですわ。異議でもおあり？</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -660,31 +660,31 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>About QKiSS</source>
-        <translation>QKiSSの由緒書きですわ。平民には難解でしょうけれど</translation>
+        <translation>QKiSSの由緒書き。家柄がないと珍しいでしょう？</translation>
     </message>
     <message>
         <source>Fix: %1, CEL Name: %2, Comment: %3</source>
-        <translation>固定数：%1、CEL名：%2、所感：%3。凡俗には理解不能でしょうね</translation>
+        <translation>固定数：%1、CEL名：%2、批註：%3</translation>
     </message>
     <message>
         <source>Start to parse CNF / KCF / CEL files...</source>
-        <translation>CNF / KCF / CEL文書の解析を開始いたしますわ。平民の皆さまは指をくわえて御覧なさいませ…</translation>
+        <translation>さあ、CNF / KCF / CEL文書を解析いたしますわ。家柄ではなく、中身を見せていただきましょう。……わたくしの中身？あなた、話をそらさないでくださる？</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
-        <translation>「%1」は正規のKiSSパッチではございませんわ。まあ、平民には到底扱えぬ代物ですもの、中止して差し上げますわ</translation>
+        <translation>「%1」は有効なKiSSパッチではございませんわ。処理中止。推薦状を持参しても、書類不備は見逃しませんことよ。</translation>
     </message>
     <message>
         <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
-        <translation>「%1」は正規のKiSS文書ではございませんの。庶民の手に余るのも当然でしてよ、中止いたしましたわ</translation>
+        <translation>「%1」は有効なKiSS文書ではございませんの。処理中止ですわ。名門を騙るなら、せめて中身を整えなさい！</translation>
     </message>
     <message>
         <source>Parsing finished. Now rendering scenes...</source>
-        <translation>解析は完了いたしましたわ。これより場景を描画いたしますの、凡俗の皆さまは大人しく見物なさいませ</translation>
+        <translation>解析は済みましたわ。さあ、場景を描きなさい！照明はこちらへ。……そっちは背景ですわよ！わたくしを照らしなさいと言っておりますの！</translation>
     </message>
     <message>
         <source>KiSS files rendered successfully: %1</source>
-        <translation>KiSS文書の描画が成功いたしましたわ：%1。庶民にしては上出来でしてよ</translation>
+        <translation>おーっほっほ！KiSS文書の描画、大成功ですわ：%1。……あら？拍手は？今、拍手するところですわよ？</translation>
     </message>
     <message>
         <source>Scene Sets</source>
@@ -692,7 +692,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Switch scene set (F1/F2)</source>
-        <translation>御場景集を切り替えて差し上げますの、ありがたく思いなさいませ、俗物の皆さま（F1/F2）。</translation>
+        <translation>御場景集を切り替えますわ（F1/F2）。庶民の皆さま、よくご覧なさい。背景が変わっても、あなたが主役になるわけではなくってよ！</translation>
     </message>
     <message>
         <source>Palette Sets</source>
@@ -700,23 +700,23 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Switch palette set (F3/F4)</source>
-        <translation>御彩盤組を切り替えて差し上げますの（F3/F4）。ありがたく思いなさいませ、平民風情が</translation>
+        <translation>御彩盤組を切り替えますわ（F3/F4）。……またお召し替えか、ですって？庶民は一着で一日お過ごしになりますものね。おほほほ！</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation>文書ですわ。凡俗にはただの紙束にしか見えませんでしょうに</translation>
+        <translation>文書ですわ。裏紙にしないでくださる？</translation>
     </message>
     <message>
         <source>Zooming Tools</source>
-        <translation>拡縮具ですの。庶民の目には到底使いこなせませんわね</translation>
+        <translation>拡縮具。大きくすれば理解できるとでも？</translation>
     </message>
     <message>
         <source>Windows</source>
-        <translation>御窓ですわ。平民には開け閉めすら荷が重いでしょうに</translation>
+        <translation>御窓。庶民のお部屋より多いかしら？</translation>
     </message>
     <message>
         <source>QKiSS ready.</source>
-        <translation>QKiSSの準備は整いましたわ。平民には到底待ちきれなかったでしょうに</translation>
+        <translation>QKiSS、準備できましたわ！……遅い？お、お待たせしたのではなく、皆さまが早すぎたのですわ！</translation>
     </message>
     <message>
         <source>Ctrl+Drag: Force split CEL from Object</source>
@@ -740,29 +740,29 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Open Compressed KiSS File</source>
-        <translation>圧縮KiSS文書を開いて差し上げますわ。庶民には解凍すら荷が重いでしょうに</translation>
+        <translation>圧縮KiSS文書を開いて差し上げますわ。いくら力自慢の庶民でも、腕力では開きませんわよ？おほほほ！</translation>
     </message>
     <message>
         <source>Open Directory</source>
-        <translation>ディレクトリを御開帳いたしますの。俗物の皆さま、迷わずに済みましてよ</translation>
+        <translation>書庫を開きますわ。庶民は迷子にならないでね</translation>
     </message>
 </context>
 <context>
     <name>ParsedCel</name>
     <message>
         <source>Invalid m_bitsPerPixel (4 or 8 or 32): %1</source>
-        <translation>無効な m_bitsPerPixel（4、8、または32）: %1 ですわ。まあ、基本すら守れないなんて無様ですこと。おほほほ！</translation>
+        <translation>m_bitsPerPixel が不正ですわ：%1。4・8・32の三択ですのよ？それでも間違えるなんて、まあ、無様ですこと！やはり庶民は、選べばよいだけでもお困りになるのね。おほほほ！</translation>
     </message>
     <message>
         <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
-        <translation>「%1」はパレット方式のCELであると称しておりますけれど、各ピクセルが%2ビット（想定は32ビット）と申しており、矛盾しておりますの。まあ、滑稽ですことねぇ。パレット方式のCELと見なして進めますわ。おほほほ！</translation>
+        <translation>「%1」はパレット方式のCELであると称しておりますけれど、各ピクセルが%2ビット（想定は32ビット）と申しており、矛盾しておりますの。証言が食い違っておりますわね。今回はパレット方式のCELと見なして進めます。口裏くらい合わせていらっしゃい！</translation>
     </message>
 </context>
 <context>
     <name>ParsedCnf</name>
     <message>
         <source>Wrong playFieldSize format.</source>
-        <translation>playFieldSize の形式が正しくございませんわ。まあ、基本もできないなんて無様ですこと。おほほほ！</translation>
+        <translation>あら、playFieldSize の形式が違いますわ。……舞台の寸法も決まっていませんの？それでよくわたくしを呼べましたわね！</translation>
     </message>
     <message>
         <source>Wrong KCF file name format.</source>
@@ -770,15 +770,15 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Wrong outsideColor format.</source>
-        <translation>outsideColor の形式が正しくございませんわ。まあ、色すらまともに扱えないなんて情けないですこと。おほほほ！</translation>
+        <translation>……あら、outsideColor の形式が違いますわ。外側の色まで、このわたくしに確認させますの？ずいぶんと贅沢ですこと！</translation>
     </message>
     <message>
         <source>Wrong CEL format.</source>
-        <translation>CEL の形式が正しくございませんの。あらあら、初歩で躓くなんて哀れですことねぇ。おほほほ！</translation>
+        <translation>CELの形式が正しくございませんわ。……これで合っているおつもり？まあ、庶民はご自分の間違いをお手本にして、またお間違えになるのね。おほほほ！</translation>
     </message>
     <message>
         <source>Wrong set line format.</source>
-        <translation>set 行の形式が正しくございませんわ。まあ、所詮その程度の腕前ですものね。おほほほ！</translation>
+        <translation>set行の形式が正しくございませんわ。これでは舞台の役者も小道具も、どこに置くのかわかりませんの。……とりあえず並べる？まあ、庶民のお芝居は片づけの途中と見分けがつきませんこと！</translation>
     </message>
     <message>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
@@ -786,30 +786,30 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Wrong objPos format</source>
-        <translation>objPos の形式が正しくございませんわ。あらあら、そんな初歩で躓くなんて哀れですこと。おほほほ！</translation>
+        <translation>objPosの形式が正しくございませんわ。……位置を書くだけですのよ？まあ、庶民は座標をお書きになっても、かえって人を迷わせるのね。おほほほ！</translation>
     </message>
 </context>
 <context>
     <name>ParsedKcf</name>
     <message>
         <source>Not a palette file mark!</source>
-        <translation>パレットファイルの印ではございませんわ！まあ、見間違えるなんて無様ですことねぇ。おほほほ！</translation>
+        <translation>パレットファイルの印ではございませんわ！……似ていたから？まあ、庶民は見分けがつかないと、同じものになさるのね。おほほほ！</translation>
     </message>
     <message>
         <source>Invalid bitsPerColor (12 or 24): %1</source>
-        <translation>無効な bitsPerColor（12 または 24）: %1 ですの。まあ、基本すら守れないなんて滑稽ですこと。おほほほ！</translation>
+        <translation>bitsPerColor が不正ですの：%1。12か24ですわ。……どちらでもない数をお選びに？まあ、庶民は選択肢までご自分で発明なさるのね。おほほほ！</translation>
     </message>
     <message>
         <source>Invalid colorAmountsInOnePalette (1 ~ 256): %1</source>
-        <translation>無効な colorAmountsInOnePalette（1 ～ 256）: %1 ですわ。あらあら、数もまともに扱えませんのね。おほほほ！</translation>
+        <translation>colorAmountsInOnePalette が不正ですわ：%1。1～256の範囲になさい。席数を無視して取り巻きを連れてこないでくださる？</translation>
     </message>
     <message>
         <source>Out of range palatte colors definition, byte offset: %1</source>
-        <translation>パレット色の定義が範囲外でございますの。バイトオフセット: %1。まあ、無様ですこと。おほほほ！</translation>
+        <translation>パレット色の定義が範囲外ですわ。バイトオフセット: %1。……収まらなかったから？まあ、庶民はご自分がはみ出すと、枠のほうがおかしいとおっしゃるのね。おほほほ！</translation>
     </message>
     <message>
         <source>What is this? Unknown KCF bitsPerColor: %1</source>
-        <translation>まあ？ 見知らぬ KCF bitsPerColor ですこと: %1。聞いたこともない値を持ち出すなんて、笑わせてくださいますわね。おほほほ！</translation>
+        <translation>まあ、見知らぬKCF bitsPerColorですわ：%1。……新しくお考えになったの？庶民は間違えるたびに発明家になれて、楽しそうですこと！</translation>
     </message>
     <message>
         <source>This KCF file contains no valid palette, but you try to get palette from it. Abort.</source>
@@ -817,22 +817,22 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback</source>
-        <translation>paletteIdx（%1、0始まりにご注意なさいませ）が実際の paletteAmount（%2）を超えておりますの。仕方なく 0 を用いますわ。まあ、情けないですこと。おほほほ！</translation>
+        <translation>paletteIdx（%1、0から数えることをお忘れなく）が実際のpaletteAmount（%2）の範囲外ですわ。代わりにインデックス0を用います。最前列を譲って差し上げますの、今回だけよ。</translation>
     </message>
 </context>
 <context>
     <name>PreferenceDialog</name>
     <message>
         <source>Preferences</source>
-        <translation>御裁きですわ。庶民には設定すら荷が重いでしょうに</translation>
+        <translation>御裁きですわ。異議でもおあり？</translation>
     </message>
     <message>
         <source>LZH Extractor Backend</source>
-        <translation>LZH展開の後方機構ですわ。平民には裏方の存在など知る由もありませんでしょう</translation>
+        <translation>LZH展開の後方機構。……裏に人がいるわけではなくってよ？</translation>
     </message>
     <message>
         <source>Backend</source>
-        <translation>後方機構ですの。凡俗には理解不能でしょうね</translation>
+        <translation>後方機構ですわ。裏口ではありませんのよ</translation>
     </message>
     <message>
         <source>Status</source>
@@ -840,35 +840,35 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Name</source>
-        <translation>御名ですわ。平民の名など取るに足りませんけれど</translation>
+        <translation>御名。名乗りなさい</translation>
     </message>
     <message>
         <source>Summary</source>
-        <translation>御概要ですの。俗物には長文にしか映らないでしょうね</translation>
+        <translation>御概要。庶民にも読み切れる長さかしら？</translation>
     </message>
     <message>
         <source>LZH Compatibility</source>
-        <translation>LZH互換性ですわ。庶民には夢のまた夢でしてよ</translation>
+        <translation>LZH互換性。根性で開くとでも思って？</translation>
     </message>
     <message>
         <source>Installation</source>
-        <translation>御導入ですわ。庶民には手順すら覚束ないでしょうに</translation>
+        <translation>御導入。お祈りだけでは入りませんわよ</translation>
     </message>
     <message>
         <source>OS Support</source>
-        <translation>OS御支援ですの。凡俗には何の違いも分かりませんでしょうけれど</translation>
+        <translation>対応OSですわ。好みではなく対応のお話よ？</translation>
     </message>
     <message>
         <source>Disk Operation</source>
-        <translation>御盤操作ですわ。平民には触れるだけで恐れ多いでしょうね</translation>
+        <translation>ディスクへの働かせ方</translation>
     </message>
     <message>
         <source>Website</source>
-        <translation>御サイトですの。俗物にはただの画面にしか見えませんでしょう</translation>
+        <translation>御サイト。庶民にも門は開いておりますわ</translation>
     </message>
     <message>
         <source>Backend Information</source>
-        <translation>後方情報ですわ。庶民には裏方の仕組みなど到底理解不能ですもの</translation>
+        <translation>後方機構の情報。……庶民は手品だと思っていらしたの？</translation>
     </message>
     <message>
         <source>Installed</source>
@@ -876,7 +876,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Not Found / Not Installed</source>
-        <translation>見当たりません / 未導入ですわ。まあ、庶民には当然の結末でしてよ</translation>
+        <translation>所在不明／未導入。出頭以前の問題ね</translation>
     </message>
 </context>
 <context>
@@ -887,23 +887,23 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>UTF-8</source>
-        <translation>UTF-8（万国統一符号様式ですわ。凡俗にはありがたがるしか能がございませんでしょうね）</translation>
+        <translation>UTF-8（……万国共通だからこちらに？昔の日本のCNFはほとんどShift JISですのよ。あらあら、庶民には文字化けも異国の詩に見えるのかしら？おーっほっほ！）</translation>
     </message>
     <message>
         <source>Shift JIS</source>
-        <translation>Shift JIS（由緒正しき、正統にして推奨される御和文符号様式ですわね。下々には到底扱いきれませんでしょうけれど）</translation>
+        <translation>Shift JIS（昔の日本のCNFなら、まずはこちらですわ。……ようやく読めましたの？それでも意味がわからない？まあ、もう文字化けのせいにはできませんわね。おほほほ！）</translation>
     </message>
     <message>
         <source>EUC-JP</source>
-        <translation>EUC-JP（UNIX正統の御符号体系ですわ。庶民には古臭いとしか思えませんでしょうけれど）</translation>
+        <translation>EUC-JP（昔のUNIX御用達の和文符号体系ですの。……古臭い？まあ、庶民はご自分が知らないものをすぐ骨董品扱いなさいますのねぇ）</translation>
     </message>
     <message>
         <source>Case Insensitive</source>
-        <translation>大文字小文字など意に介しませんの。平民にはその方が楽でしてよ。</translation>
+        <translation>大文字小文字は不問ですわ。庶民の作法には目をつぶって差し上げます</translation>
     </message>
     <message>
         <source>Case Sensitive</source>
-        <translation>大文字小文字を厳格に区別いたしますの。庶民には細かすぎて理解不能でしょうし。</translation>
+        <translation>大文字小文字は厳格に区別しますわ。……同じに見える？庶民は王冠と鍋蓋の区別もつかないのかしら？</translation>
     </message>
 </context>
 </TS>
