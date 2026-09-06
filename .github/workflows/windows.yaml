@@ -208,6 +208,33 @@ jobs:
           # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ needs.prepare-icon-cache.outputs.commitHash }}
           key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
 
+
+      - name: DEBUG - Inspect generated icons
+        shell: pwsh
+        run: |
+          Write-Host "GITHUB_WORKSPACE = $env:GITHUB_WORKSPACE"
+
+          Write-Host "===== generated/ ====="
+          Get-ChildItem "$env:GITHUB_WORKSPACE/generated" -Force -ErrorAction Continue
+
+          Write-Host "===== CustomizedTango/16x16/apps ====="
+          Get-ChildItem "$env:GITHUB_WORKSPACE/generated/icon_theme__png/CustomizedTango/16x16/apps" `
+            -Force `
+            -ErrorAction Continue
+
+          $icon = "$env:GITHUB_WORKSPACE/generated/icon_theme__png/CustomizedTango/16x16/apps/qkiss.png"
+
+          Write-Host "===== Expected icon ====="
+          Write-Host $icon
+          Write-Host "Exists: $(Test-Path $icon)"
+
+          Write-Host "===== Search all qkiss.png ====="
+          Get-ChildItem "$env:GITHUB_WORKSPACE" `
+            -Filter "qkiss.png" `
+            -Recurse `
+            -ErrorAction SilentlyContinue |
+            Select-Object FullName
+
       # Step 3: [Cache] Try to restore `vcpkg_cache` folder with specified key
       - name: Restore `vcpkg_cache`
         uses: actions/cache@v5
