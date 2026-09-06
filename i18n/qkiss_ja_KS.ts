@@ -78,15 +78,15 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Patch: newly added extra %1 CNF; and replaced %2 CNF.</source>
-        <translation type="unfinished"></translation>
+        <translation>パッチや！CNF を新たに%1個追加、%2個差し替えたで！なんや、増援と選手交代いっぺんかいな！</translation>
     </message>
     <message>
         <source>Patch: newly added extra %1 KCF, and replaced %2 KCF.</source>
-        <translation type="unfinished"></translation>
+        <translation>パッチや！KCF を新たに%1個追加、%2個差し替えたで！なんや、増援と選手交代いっぺんかいな！</translation>
     </message>
     <message>
         <source>Patch: newly added extra %1 CEL, and replaced %2 CEL.</source>
-        <translation type="unfinished"></translation>
+        <translation>パッチや！CEL を新たに%1個追加、%2個差し替えたで！なんや、増援と選手交代いっぺんかいな！</translation>
     </message>
     <message>
         <source>Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.</source>
@@ -258,7 +258,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation type="unfinished"></translation>
+        <translation>どやぁ！LZHファイル「%1」の展開、大成功や！中からファイルが%2個出てきたで！宝箱かいな！</translation>
     </message>
     <message>
         <source>Error when opening this archive file (%1). Aborted.</source>
@@ -340,11 +340,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Open this item</source>
-        <translation type="unfinished"></translation>
+        <translation>ほな、こいつを開くで！</translation>
     </message>
     <message>
         <source>Open containing folder</source>
-        <translation type="unfinished"></translation>
+        <translation>こいつの入っとるフォルダへ突撃や！</translation>
     </message>
     <message>
         <source>Click to load this file as patch</source>
@@ -355,7 +355,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <name>Fkiss</name>
     <message>
         <source>FKiSS Script is found in this CNF file, initialize FKiSS runtime.</source>
-        <translation type="unfinished"></translation>
+        <translation>なんやて！？このCNFファイルにFKiSSスクリプトがおるやんけ！ほな、FKiSSランタイムを初期化するで！出番や、起きぃ！</translation>
     </message>
 </context>
 <context>
@@ -525,7 +525,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Success</source>
-        <translation type="unfinished"></translation>
+        <translation>成功や！どやっ！</translation>
     </message>
     <message>
         <source>Info</source>
