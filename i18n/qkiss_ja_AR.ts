@@ -887,7 +887,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>UTF-8</source>
-        <translation>UTF-8（……万国共通だからこちらに？昔の日本のCNFはほとんどShift JISですのよ。あらあら、庶民には文字化けも異国の詩に見えるのかしら？おーっほっほ！）</translation>
+        <translation>UTF-8（……万国共通だからこちらに？日本の CNF はほとんど Shift JIS ですのよ。あらあら、庶民には文字化けも異国の詩に見えるのかしら？おーっほっほほほ！）</translation>
     </message>
     <message>
         <source>Shift JIS</source>
