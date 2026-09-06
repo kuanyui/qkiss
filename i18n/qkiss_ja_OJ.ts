@@ -24,15 +24,15 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
         <translation>
-QKiSS は Qt 6 で実装され、 KISS/GS、FKiSS 1・2 の仕様に対応した現代的な [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアでございますわ。Linux 上の [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) や [GnomeKiSS](https://devel.tlrmx.org/kiss/) に着想を得ておりますのですわ。
+QKiSS は Qt 6 で実装され、 KISS/GS、FKiSS 1・2 の仕様に対応した現代的な [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアでございますわ。Linux 上の [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) や [GnomeKiSS](https://devel.tlrmx.org/kiss/) に着想を得て、新たに生まれ変わりましたの。
 
-「Kisekae」という名称はご覧の通り、日本語の「着せ替え人形」に由来いたしますのですわ。
+「Kisekae」という名称はご覧の通り、日本語の「着せ替え人形」に由来いたしますわ。
 
-KiSSは1990年代の日本の[ヲタク](https://ja.wikipedia.org/wiki/おたく)さんたちや個人コンピュータ愛好者コミュニティ、特に [NEC PC-9800シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ)から生まれ、あの頃のヲタク殿方たちが熱狂なさっていたのでございますの……まあ、わたくしには到底理解できませんけれど。そして 1990 年代から 2000 年代中頃にかけて流行いたしましたのですわ。
+KiSSは1990年代の日本の[ヲタク](https://ja.wikipedia.org/wiki/おたく)さんたちや個人コンピュータ愛好者コミュニティ、特に [NEC PC-9800シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ)から生まれ、当時の愛好家の皆さまを魅了しておりましたの。1990 年代から 2000 年代初頭にかけて親しまれたものでございますわ。
 
-このプロジェクトは一部、Windows 95/98 やGTK+ 2時代へのノスタルジーからも生まれましたのですわ。それはインターネットがまだ AI 生成のゴミに汚染されていなかった、まさに失われた文明の時代でございましたわ。……もっとも、このプロジェクト自体も多少の AI を利用しておりますのですけれども……。
+このプロジェクトは一部、Windows 95/98 やGTK+ 2時代へのノスタルジーからも生まれたものでございますの。それはインターネットがまだ AI 生成のゴミに汚染されていなかった、まさに失われた文明の時代でございましたわ。……もっとも、このプロジェクト自体も多少の AI を利用しておりますけれども……。
 
-現実世界はすでに十分恐ろしいものでございますわ。しかしながら、少なくとも[二次元](https://ja.wikipedia.org/wiki/2次元)と[異世界](https://w.wiki/4So4)は私たちに純粋なる約束の地を残してくださっておりますのですわ。
+現実世界はすでに十分恐ろしいものでございますわ。しかしながら、少なくとも[二次元](https://ja.wikipedia.org/wiki/2次元)と[異世界](https://w.wiki/4So4)は私たちに純粋なる約束の地を残してくださっておりますわ。
 
 [QKiSSのWebサイト](https://github.com/kuanyui/qkiss) をご覧あそばせ。
 </translation>
@@ -144,11 +144,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>External program LHA is not installed or not found.</source>
-        <translation>あら、外部プログラムLHAがインストールされておりませんか、見つかりませんの。</translation>
+        <translation>あら、外部プログラムLHAは未導入か、所在を確認できないようでございます。</translation>
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
-        <translation>LZHファイル「%1」を展開いたしておりますわ…。</translation>
+        <translation>LHAにて、LZHファイル「%1」の展開を試みておりますの…。</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
@@ -203,7 +203,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>External program Unar is not installed or not found.</source>
-        <translation>あら、外部プログラムUnarがインストールされておりませんか、見つかりませんの。</translation>
+        <translation>外部プログラムUnarが見当たりませんの。未導入、あるいは所在を確認できない状態でございますわ。</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
@@ -211,11 +211,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>あらまあ、LZHファイル「%1」の展開に成功いたしましたわ。中には%2個のファイルが含まれておりますの。</translation>
+        <translation>LZHファイル「%1」の展開が滞りなく済みましたの。中には%2個のファイルがございましたわ。</translation>
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via Unar...</source>
-        <translation>LZHファイル「%1」を展開いたしておりますわ…。</translation>
+        <translation>Unarを用いてLZHファイル「%1」を展開いたしますわ…。</translation>
     </message>
     <message>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
@@ -262,7 +262,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>Error when opening this archive file (%1). Aborted.</source>
-        <translation>このアーカイブを開く際にエラーが発生いたしましたの（%1）。中止いたしますわ。</translation>
+        <translation>このアーカイブを開く際にエラーが生じましたの（%1）。恐れ入りますが、処理を中止いたしますわ。</translation>
     </message>
     <message>
         <source>Fatal error (%1), no more operations are possible., abort.</source>
@@ -278,7 +278,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>Retry might succeed (%1)</source>
-        <translation>再試行にて成功いたしますやもしれませんわ（%1）。</translation>
+        <translation>もう一度お試しになれば、うまく参るやもしれませんわ（%1）。</translation>
     </message>
     <message>
         <source>when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
@@ -370,15 +370,15 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>FKiSS specification requires a case-sensitive mark `EventHandler` to indicate the beginning of FKiSS Script, but encountered `%1` in this file. Ahh.... For compatibility, still accept this.</source>
-        <translation>FKiSS の仕様では、スクリプト開始を示すために大文字小文字を区別した `EventHandler` が必要でございますのに…このファイルでは `%1` が見つかりましたわ。まぁ…仕方ないね、互換性のために受け入れて差し上げますわ。</translation>
+        <translation>FKiSS の仕様では、スクリプト開始を示すために大文字小文字を区別した `EventHandler` が必要でございますのに…このファイルでは `%1` が見つかりましたわ。少々異なりますけれど、互換性のため、こちらも受け入れることにいたしましょう。</translation>
     </message>
     <message>
         <source>Command starts before EventHandler, ignore.</source>
-        <translation>あら？EventHandler より先にコマンドを始めるなんて…無視いたしますわ！</translation>
+        <translation>あら、EventHandler より先にコマンドがございますのね。こちらは読み飛ばすことにいたしますわ。</translation>
     </message>
     <message>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
-        <translation>コマンド名 `%1` の後には左かっこが必要ですのに…ございませんから、引数なしと見なして差し上げますわ。</translation>
+        <translation>コマンド名 `%1` の後には左かっこが必要ですのに…見当たりませんので、引数なしとして扱いますわ。</translation>
     </message>
     <message>
         <source>Cannot find the matched right parenthesis. Abort.</source>
@@ -390,7 +390,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
-        <translation>現在、FKiSS3 の変数や FKiSS4 のラベルは未対応でございますの。実装の予定もございませんわ。</translation>
+        <translation>FKiSS3 の変数や FKiSS4 の名前付きラベルには、今のところ対応しておりませんの。</translation>
     </message>
     <message>
         <source>Unknown command &quot;%1&quot;, skip.</source>
@@ -417,7 +417,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.</source>
-        <translation>このCNFでは setNo %1 の既定 paletteNo が %2 と定められておりますけれど、最初のKCFにはパレットが%3個しかございませんの。最初のKCFの paletteNo 0 に差し戻してさしあげますわ。</translation>
+        <translation>このCNFでは setNo %1 の既定 paletteNo が %2 と定められておりますけれど、最初のKCFにはパレットが%3個しかございませんの。代わりに、最初のKCFの paletteNo 0 を用いることにいたしましょう。</translation>
     </message>
     <message>
         <source>WTF? In CNF&apos;s set definition, not found palette in first KCF of this CNF. Abort.</source>
@@ -464,11 +464,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>[Benchmark] Creating all graphics items in %1 scene(s) cost %2 ms</source>
-        <translation>[ベンチマーク] %1シーンにおける全グラフィック項目の作成に%2 ms でございますわ</translation>
+        <translation>[ベンチマーク] %1シーンにおける全グラフィック項目の作成には、%2 ms を要しましたわ</translation>
     </message>
     <message>
         <source>No scene found. Aborted</source>
-        <translation>シーンが見当たりませんの。中止いたしましたわ。</translation>
+        <translation>場景が見当たりませんでしたので、ここで処理を取りやめましたの。</translation>
     </message>
 </context>
 <context>
@@ -766,11 +766,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>Wrong KCF file name format.</source>
-        <translation>KCF ファイル名のお書式が正しくございませんの。</translation>
+        <translation>KCF ファイル名のお書式に不備がございますわ。</translation>
     </message>
     <message>
         <source>Wrong outsideColor format.</source>
-        <translation>outsideColor のお書式が正しくございませんの。</translation>
+        <translation>outsideColor は所定のお書式に適っておりませんの。</translation>
     </message>
     <message>
         <source>Wrong CEL format.</source>
@@ -778,11 +778,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>Wrong set line format.</source>
-        <translation>set 行のお書式が正しくございませんの。</translation>
+        <translation>set 行のお書式が整っておりませんわ。</translation>
     </message>
     <message>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
-        <translation>fkiss の接頭辞 `:@` は正しくございませんけれど、旧来互換のため受け入れてさしあげますわ =&gt;  </translation>
+        <translation>fkiss の接頭辞 `:@` は正しくございませんけれど、旧来のものとの互換性を保つため、受け入れることにいたしますわ =&gt;  </translation>
     </message>
     <message>
         <source>Wrong objPos format</source>
@@ -813,7 +813,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>This KCF file contains no valid palette, but you try to get palette from it. Abort.</source>
-        <translation>このKCFには有効なパレットがございませんのに、パレットを求めようとなさいますの？ 中止いたしますわ。</translation>
+        <translation>このKCFには有効なパレットがございませんので、ご所望のパレットを取り出すことが叶いませんの。ここで処理を中止いたしますわ。</translation>
     </message>
     <message>
         <source>paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback</source>
@@ -883,7 +883,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     <name>QKiSS</name>
     <message>
         <source>ASCII</source>
-        <translation>ASCII（どうやら古式文字の御符号でしてよ。異国の原始人が用いておりましたの）</translation>
+        <translation>ASCII（英数字などを綴る古式ゆかしき御符号でしてよ）</translation>
     </message>
     <message>
         <source>UTF-8</source>
@@ -899,7 +899,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     </message>
     <message>
         <source>Case Insensitive</source>
-        <translation>大文字小文字をお構いなしですの</translation>
+        <translation>大文字小文字の違いには頓着いたしませんの</translation>
     </message>
     <message>
         <source>Case Sensitive</source>
