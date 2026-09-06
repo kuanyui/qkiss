@@ -24,15 +24,15 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
         <translation>
-QKiSS っちゅうんはな、Qt 6 で作られ、KISS/GS、FKiSS 1・2 の仕様に対応したモデンな [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアやねん。Linux 上の [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) や [GnomeKiSS](https://devel.tlrmx.org/kiss/) からアイデアぱく…いや、インスピレーション受けとるんやで。
+QKiSS っちゅうんはな、Qt 6 で作られ、KISS/GS、FKiSS 1・2 の仕様に対応したモダンな [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアやねん。Linux 上の [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) や [GnomeKiSS](https://devel.tlrmx.org/kiss/) からアイデアぱく…いや、インスピレーション受けとるんやで。
 
 「Kisekae」っちゅうんは、見ての通りや！日本語の「着せ替え人形」から来とるんや。要するに「着せ替え人形」やっちゅうこっちゃ。なんやそのままやんけ！
 
-KiSS はな、日本の 1990 年代の[オタク](https://ja.wikipedia.org/wiki/おたく) サブカルチャーとか、パソコン好きの変態…いや愛好者コミュニティ（特に [NEC PC-9800 シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ) やな）から生まれてん。ほんで 1990 年代から 2000 年代の真ん中くらいまで流行ったんや。いや～懐かしいわ！
+KiSS はな、日本の 1990 年代の[オタク](https://ja.wikipedia.org/wiki/おたく) サブカルチャーとか、パソコン好きの変態…いや愛好者コミュニティ（特に [NEC PC-9800 シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ) やな）から生まれてん。ほんで 1990 年代から 2000 年代の初め頃まで流行ったんや。いや～懐かしいわ！
 
 このプロジェクトはな、Windows 95/98 や GTK+ 2 の時代へのノスタルジーからも生まれとるんやで。あの頃はインターネットがまだ AI 生成のゴミにまみれてへんかった、失われた文明の時代や！せやけど、このプロジェクト自身も多少 AI 使っとるんやけどな…ツッコミどころ満載やろ？
 
-現実世界はもう十分怖いわ！ほんまにカオスや！苦しいや！せやけどな、少なくとも[二次元](https://ja.wikipedia.org/wiki/2次元)と[異世界](https://w.wiki/4So4)は、ワイらに純粋な約束の地を残してくれとるんや。せやから、現実逃避は正義や！ほな、みんなで異世界転生しよか！
+現実世界はもう十分怖いわ！ほんまにカオスや！しんどいっちゅうねん！せやけどな、少なくとも[二次元](https://ja.wikipedia.org/wiki/2次元)と[異世界](https://w.wiki/4So4)は、ワイらに純粋な約束の地を残してくれとるんや。せやから、現実逃避は正義や！ほな、みんなで異世界転生しよか！
 
 [QKiSSのWebサイト](https://github.com/kuanyui/qkiss) も見てみぃや。
 </translation>
@@ -43,19 +43,19 @@ KiSS はな、日本の 1990 年代の[オタク](https://ja.wikipedia.org/wiki/
     </message>
     <message>
         <source>Programming</source>
-        <translation>プログラミングやな</translation>
+        <translation>コードを書く職人さん</translation>
     </message>
     <message>
         <source>Icons &amp; Arts</source>
-        <translation>アイコンとアートやで、見てみぃ</translation>
+        <translation>アイコンとアート、ええ仕事や！</translation>
     </message>
     <message>
         <source>Translators</source>
-        <translation>翻訳してくれた人らや</translation>
+        <translation>翻訳の立役者たち</translation>
     </message>
     <message>
         <source>Authors</source>
-        <translation>作者やで</translation>
+        <translation>作者はこの面々！</translation>
     </message>
     <message>
         <source>QKiSS is licensed under GPLv3.
@@ -74,7 +74,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <name>ArchiveFile</name>
     <message>
         <source>Found valid files: %1 CNF, %2 CEL, %3 KCF.</source>
-        <translation>おおっ、使えるファイル見つかったで！CNF が%1個、CEL が%2個、KCF が%3個や！ぎょうさんあるやん、知らんけど！</translation>
+        <translation>使えるファイル発見！CNF が%1個、CEL が%2個、KCF が%3個や！点呼よーし！</translation>
     </message>
     <message>
         <source>Patch: newly added extra %1 CNF; and replaced %2 CNF.</source>
@@ -82,15 +82,15 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Patch: newly added extra %1 KCF, and replaced %2 KCF.</source>
-        <translation>パッチや！KCF を新たに%1個追加、%2個差し替えたで！なんや、増援と選手交代いっぺんかいな！</translation>
+        <translation>パッチで彩り一新や！KCF を新たに%1個追加、%2個差し替え！色の仕込みは任せとき！</translation>
     </message>
     <message>
         <source>Patch: newly added extra %1 CEL, and replaced %2 CEL.</source>
-        <translation>パッチや！CEL を新たに%1個追加、%2個差し替えたで！なんや、増援と選手交代いっぺんかいな！</translation>
+        <translation>ほい、CEL の出番や！パッチで新たに%1個追加、%2個差し替え！舞台裏も大忙しやな！</translation>
     </message>
     <message>
         <source>Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.</source>
-        <translation>今のCNF用のParsedKcfを取ってこんとあかんけど、このCNFはKCFファイルを宣言してへんねん。中止や。</translation>
+        <translation>今のCNF用のParsedKcfが要るのに、KCFファイルの宣言があらへん！ない袖は振れんわ、処理中止！</translation>
     </message>
     <message>
         <source>The CNF &apos;%1&apos; requires %2 KCF files.</source>
@@ -98,7 +98,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>CNF file &apos;%1&apos; requires KCF file &apos;%2&apos;, but this KCF file is not found in this archived file.</source>
-        <translation>CNF「%1」はKCF「%2」を要るって言うてるけど、このアーカイブにはそのKCFが見つからへんわ。</translation>
+        <translation>CNF「%1」ご指名のKCF「%2」が、このアーカイブにおらへん！どこ行ってもうたんや！</translation>
     </message>
     <message>
         <source>Set current CNF failed; no CNF named &quot;%1&quot; in this archive file.</source>
@@ -124,7 +124,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Perfect (theorically can open any LZH file)</source>
-        <translation>完璧やな（理論上はどんなLZHファイルでも開けるで）。</translation>
+        <translation>文句なしや！（理論上はどんなLZHファイルでも開けるっちゅう寸法や）</translation>
     </message>
     <message>
         <source>External program; manual installation is needed.</source>
@@ -144,19 +144,19 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>External program LHA is not installed or not found.</source>
-        <translation>外部プログラムLHAがインストールされてへんか、見つからへんで。</translation>
+        <translation>LHAさーん、出番……っておらへん！外部プログラムLHAが未インストールか、見つからん状態や。</translation>
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
-        <translation>LZHファイル「%1」を展開しようとしとるで…。</translation>
+        <translation>LHAの出番や！LZHファイル「%1」、いざ展開といこか……！</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>LZHファイル「%1」の展開に失敗したわ。中止やな。</translation>
+        <translation>あかーん！LZHファイル「%1」の展開に失敗！ここで処理中止や。</translation>
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>おお、LZHファイル「%1」の展開に成功したで。中に%2個のファイルが入っとったわ。</translation>
+        <translation>よっしゃ一本！LZHファイル「%1」の展開成功、中身はファイル%2個や！</translation>
     </message>
     <message>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
@@ -164,11 +164,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Partial write occurred. Expected: %1 bytes, actual: %2 bytes</source>
-        <translation>部分的な書き込みが起きたで。期待値：%1バイト、実際：%2バイトや。</translation>
+        <translation>書き込みが途中までやんけ！予定は%1バイト、実際は%2バイトや。残りどないしたん！</translation>
     </message>
     <message>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在せぇへん。中止やな。</translation>
+        <translation>アーカイブのパス「%1」が存在せぇへん！行き先がなかったら進めんわ、処理中止！</translation>
     </message>
 </context>
 <context>
@@ -183,7 +183,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Pretty Good</source>
-        <translation>なかなかええで</translation>
+        <translation>なかなかやるやん！</translation>
     </message>
     <message>
         <source>External program; manual installation is needed.</source>
@@ -203,23 +203,23 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>External program Unar is not installed or not found.</source>
-        <translation>外部プログラムUnarがインストールされてへんか、見つからへんで。</translation>
+        <translation>頼みのUnarが見当たらん！外部プログラムUnarが未インストールか、見つからん状態や。</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
-        <translation>LZHファイル「%1」の展開に失敗したわ。中止やな。</translation>
+        <translation>ぐぬぬ……LZHファイル「%1」を展開でけへんかった！処理はここで打ち切りや。</translation>
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>LZHファイル「%1」の展開に成功したで。中に%2個のファイルが入っとるわ。</translation>
+        <translation>ぱかっと開いたわ！LZHファイル「%1」の展開成功、中にはファイルが%2個！お見事や！</translation>
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via Unar...</source>
-        <translation>LZHファイル「%1」を展開しようとしとるで…。</translation>
+        <translation>Unar、頼んだで！LZHファイル「%1」の中身を取り出すんや……！</translation>
     </message>
     <message>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
-        <translation>アーカイブファイルパス「%1」が存在せぇへん。中止やな。</translation>
+        <translation>アーカイブのパス「%1」があらへん！幻の住所かいな……処理を中止するわ。</translation>
     </message>
 </context>
 <context>
@@ -238,7 +238,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Built-in in QKiSS. No extra external program is required.</source>
-        <translation>QKiSSに内蔵されとるから、追加の外部プログラムはいらんで。</translation>
+        <translation>QKiSSに最初っから入っとる！追加の外部プログラムは不要、お呼び立てせんでええんや。</translation>
     </message>
     <message>
         <source>Windows, macOS, Linux</source>
@@ -254,7 +254,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Failed to open this file, aborted.</source>
-        <translation>このファイルを開けへんかったわ。中止やな。</translation>
+        <translation>このファイル、開かへん……！ここは処理中止や、無念！</translation>
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
@@ -262,27 +262,27 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Error when opening this archive file (%1). Aborted.</source>
-        <translation>このアーカイブ開く時にエラーや（%1）。中止な。</translation>
+        <translation>アーカイブを開こうとしたらエラー（%1）！出鼻くじかれたわ、処理中止！</translation>
     </message>
     <message>
         <source>Fatal error (%1), no more operations are possible., abort.</source>
-        <translation>致命的なエラー（%1）で、もう作業続けられへん。中止や。</translation>
+        <translation>致命的エラー（%1）！もう操作を続けられへん……ここで処理中止や！</translation>
     </message>
     <message>
         <source>Current operation cannot complete (%1), skip.</source>
-        <translation>今の操作は完了できへんかった（%1）。スキップするで。</translation>
+        <translation>今の操作は完了でけへん（%1）。しゃあない、ここは飛ばして次いこ！</translation>
     </message>
     <message>
         <source>Partial success (%1).</source>
-        <translation>一部だけ成功や（%1）。</translation>
+        <translation>一部は成功や（%1）。全部ちゃうんかーい！</translation>
     </message>
     <message>
         <source>Retry might succeed (%1)</source>
-        <translation>もう一回やり直したらいけるかもしれんで（%1）。</translation>
+        <translation>もう一回ならいけるかもしれん（%1）。再挑戦の余地ありや！</translation>
     </message>
     <message>
         <source>when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
-        <translation>LibArchiveでこのアーカイブ読んどるときにエラーや（エラー: %1）。中止な。</translation>
+        <translation>LibArchiveでアーカイブを読んどる途中にエラー発生（エラー: %1）！待った待った、処理中止！</translation>
     </message>
 </context>
 <context>
@@ -304,11 +304,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>File Name</source>
-        <translation>ファイル名や</translation>
+        <translation>ファイル名</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation>サイズや</translation>
+        <translation>大きさ</translation>
     </message>
     <message>
         <source>Patch</source>
@@ -316,23 +316,23 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Go Back</source>
-        <translation>戻るんや</translation>
+        <translation>ひとつ戻ろか</translation>
     </message>
     <message>
         <source>Go Forward</source>
-        <translation>進むで</translation>
+        <translation>ほな、先へ！</translation>
     </message>
     <message>
         <source>Go Up</source>
-        <translation>上へ行くで</translation>
+        <translation>ひとつ上の階層へ</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>更新や</translation>
+        <translation>もっぺん更新！</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation>ホームやで</translation>
+        <translation>ホームへ帰ろ</translation>
     </message>
     <message>
         <source>Set current folder as Home</source>
@@ -362,7 +362,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <name>FkissParser</name>
     <message>
         <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
-        <translation>二重引用符は見つかったけど、対になるやつが見つからんから文字列にならへんわ。SOURCE: </translation>
+        <translation>二重引用符の相方がおらへん！コンビ組めんと文字列にならんやろ！SOURCE: </translation>
     </message>
     <message>
         <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
@@ -374,7 +374,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Command starts before EventHandler, ignore.</source>
-        <translation>コマンドが EventHandler より前に始まっとるやんけ。しゃーないから無視やで。</translation>
+        <translation>EventHandler より先にコマンドが出てきとる！フライングや、これは無視！</translation>
     </message>
     <message>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
@@ -382,19 +382,19 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Cannot find the matched right parenthesis. Abort.</source>
-        <translation>右かっこ見つからへんやん。もう中止するしかあらへんわ。</translation>
+        <translation>対になる右かっこ、どこ行ったんや！話が閉じへん、処理中止！</translation>
     </message>
     <message>
         <source>Comma is required between two args.</source>
-        <translation>コンマは引数の区切りにせなあかんねんで。</translation>
+        <translation>引数ふたつの間にはコンマが要るんや！ぎゅうぎゅう詰めはあかん！</translation>
     </message>
     <message>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
-        <translation>今んとこ FKiSS3 の変数も FKiSS4 のラベルも対応してへんねん。ワイらの時間をそないな仕様に割く気はさらさらあらへんで。</translation>
+        <translation>FKiSS3 の変数も FKiSS4 の名前付きラベルも、今んとこ未対応や。そないな大技、まだ使えへんねん！</translation>
     </message>
     <message>
         <source>Unknown command &quot;%1&quot;, skip.</source>
-        <translation>未知のコマンド「%1」や。スキップするで。</translation>
+        <translation>「%1」っちゅうコマンドは知らんなぁ！ここはスキップさせてもらうわ。</translation>
     </message>
     <message>
         <source>[SyntaxWarning] %1   [L%2, C%3] %4</source>
@@ -413,7 +413,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>No palette in this KCF. Abort.</source>
-        <translation>このKCFにはパレットがあらへん。中止や。</translation>
+        <translation>このKCF、パレットが空っぽやん！色がなけりゃ始まらん、処理中止！</translation>
     </message>
     <message>
         <source>In this CNF, setNo %1 specifies its default paletteNo as %2, but the first KCF contains only %3 palettes. Fallback to paletteNo 0 in the first KCF.</source>
@@ -421,7 +421,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>WTF? In CNF&apos;s set definition, not found palette in first KCF of this CNF. Abort.</source>
-        <translation>えっ？ CNFのset定義で、このCNFの最初のKCFにパレットが見つからへんわ。中止や。</translation>
+        <translation>なんでやねん！CNFのset定義で使うパレットが、このCNFの最初のKCFに見当たらん！処理中止や！</translation>
     </message>
     <message>
         <source>[%1] Unfix (&amp;U)</source>
@@ -452,15 +452,15 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Only %1 scenes in this view but you ask for sceneIndex %2</source>
-        <translation>このビューにはシーンが%1個しかあらへんのに、sceneIndex %2 を要求しとるで。</translation>
+        <translation>このビューのシーンは%1個やのに、sceneIndex %2 をご所望かいな！無茶振りやろ！</translation>
     </message>
     <message>
         <source>CNF requires a CEL &quot;%1&quot;, but not found in this archived file: </source>
-        <translation>CNFはCEL「%1」を要るんやけど、このアーカイブには見つからへん： </translation>
+        <translation>CNFに必要なCEL「%1」が、このアーカイブにはおらへん！捜索願いや： </translation>
     </message>
     <message>
         <source>In CNF &quot;%1&quot;, the CEL &quot;%2&quot; requires KCF index %3, but no KCF file available in this CNF.</source>
-        <translation>CNF「%1」ではCEL「%2」がKCFインデックス %3 を要るんやけど、このCNFにはKCFファイルがないで。</translation>
+        <translation>CNF「%1」のCEL「%2」はKCFインデックス %3 を要求しとるけど、このCNFにはKCFファイル自体があらへん！肝心の役者がおらんやん！</translation>
     </message>
     <message>
         <source>[Benchmark] Creating all graphics items in %1 scene(s) cost %2 ms</source>
@@ -468,7 +468,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>No scene found. Aborted</source>
-        <translation>シーンが見つからへんかったわ。中止したで。</translation>
+        <translation>シーンがひとつも見つからん！舞台がなくては開演でけへん、処理中止や。</translation>
     </message>
 </context>
 <context>
@@ -486,42 +486,42 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <name>ItemInspector</name>
     <message>
         <source>CEL File</source>
-        <translation>CELファイルや</translation>
+        <translation>CELファイル</translation>
     </message>
     <message>
         <source>Object ID</source>
-        <translation>オブジェクトIDや</translation>
+        <translation>オブジェクトID</translation>
     </message>
     <message>
         <source>CEL Position</source>
-        <translation>CEL位置や</translation>
+        <translation>CELの居場所</translation>
     </message>
     <message>
         <source>Fix</source>
-        <translation>固定数や</translation>
+        <translation>固定数</translation>
     </message>
     <message>
         <source>CEL Size</source>
-        <translation>CELサイズや</translation>
+        <translation>CELの大きさ</translation>
     </message>
     <message>
         <source>CEL Comment</source>
-        <translation>CELコメントや</translation>
+        <translation>CELのひとこと</translation>
     </message>
     <message>
         <source>CEL Preview</source>
-        <translation>CELプレビューや</translation>
+        <translation>CELをちら見</translation>
     </message>
     <message>
         <source>CEL Siblings</source>
-        <translation>CEL姉妹要素や</translation>
+        <translation>CELと愉快な仲間たち</translation>
     </message>
 </context>
 <context>
     <name>LogViewer</name>
     <message>
         <source>Debug</source>
-        <translation>デバッグや</translation>
+        <translation>デバッグ</translation>
     </message>
     <message>
         <source>Success</source>
@@ -533,23 +533,23 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Warning</source>
-        <translation>警告や</translation>
+        <translation>警告、気ぃつけや！</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>エラーや</translation>
+        <translation>エラー、あかん！</translation>
     </message>
     <message>
         <source>Fatal</source>
-        <translation>致命的エラーや</translation>
+        <translation>致命的エラー、万事休す！</translation>
     </message>
     <message>
         <source>Severity</source>
-        <translation>重要度や</translation>
+        <translation>重要度</translation>
     </message>
     <message>
         <source>Message</source>
-        <translation>メッセージや</translation>
+        <translation>メッセージ</translation>
     </message>
 </context>
 <context>
@@ -596,11 +596,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>File System Browser</source>
-        <translation>ファイルシステム見やすいやつや</translation>
+        <translation>ファイルシステム探訪</translation>
     </message>
     <message>
         <source>Inner File Selector</source>
-        <translation>内部ファイル選ぶやつや</translation>
+        <translation>内部ファイルの品定め</translation>
     </message>
     <message>
         <source>Logs</source>
@@ -608,15 +608,15 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>CNF Code Viewer</source>
-        <translation>CNFコード見るやつや</translation>
+        <translation>CNFコード拝見</translation>
     </message>
     <message>
         <source>Document Viewer</source>
-        <translation>ドキュメント見るやつや</translation>
+        <translation>ドキュメント立ち読み</translation>
     </message>
     <message>
         <source>Item Inspector</source>
-        <translation>アイテム調べるやつや</translation>
+        <translation>アイテム大調査</translation>
     </message>
     <message>
         <source>&amp;Open File</source>
@@ -628,19 +628,19 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation>終わりや(&amp;Q)</translation>
+        <translation>ほな、さいなら！(&amp;Q)</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation>縮小や(&amp;O)</translation>
+        <translation>ちっちゃくするで(&amp;O)</translation>
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation>拡大やで(&amp;I)</translation>
+        <translation>でっかくしたろ！(&amp;I)</translation>
     </message>
     <message>
         <source>&amp;Reset Scale</source>
-        <translation>元に戻すんや(&amp;R)</translation>
+        <translation>倍率を元に戻そか(&amp;R)</translation>
     </message>
     <message>
         <source>Clear All</source>
@@ -668,7 +668,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Start to parse CNF / KCF / CEL files...</source>
-        <translation>CNF / KCF / CELファイル解析始めるで…</translation>
+        <translation>CNF / KCF / CELファイル、解析開始！中身を見せてもらおか……</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
@@ -680,11 +680,11 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Parsing finished. Now rendering scenes...</source>
-        <translation>解析終わったで。シーン描画中や…</translation>
+        <translation>解析完了！ほなシーンを描くで、開演準備や……</translation>
     </message>
     <message>
         <source>KiSS files rendered successfully: %1</source>
-        <translation>KiSSファイルの描画成功や：%1</translation>
+        <translation>お待ちどうさん！KiSSファイルの描画成功、いざ開演や：%1</translation>
     </message>
     <message>
         <source>Scene Sets</source>
@@ -716,7 +716,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>QKiSS ready.</source>
-        <translation>QKiSS、準備できとるで</translation>
+        <translation>QKiSS、準備万端！さあ幕開けや！</translation>
     </message>
     <message>
         <source>Ctrl+Drag: Force split CEL from Object</source>
@@ -762,23 +762,23 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <name>ParsedCnf</name>
     <message>
         <source>Wrong playFieldSize format.</source>
-        <translation>playFieldSize の書式がおかしいで。</translation>
+        <translation>playFieldSize の書式が変や！舞台の寸法からつまずいてどないすんねん！</translation>
     </message>
     <message>
         <source>Wrong KCF file name format.</source>
-        <translation>KCFファイル名の書式がおかしいで。</translation>
+        <translation>KCFファイル名の書式があかん！名札から書き直しや！</translation>
     </message>
     <message>
         <source>Wrong outsideColor format.</source>
-        <translation>outsideColor の書式がおかしいで。</translation>
+        <translation>おっと、outsideColor の書式が合うてへん！</translation>
     </message>
     <message>
         <source>Wrong CEL format.</source>
-        <translation>CEL の書式がおかしいで。</translation>
+        <translation>なんやこの CEL の書式！これでは読めへんやんけ！</translation>
     </message>
     <message>
         <source>Wrong set line format.</source>
-        <translation>set 行の書式がおかしいで。</translation>
+        <translation>set 行、書式がちゃうやん！そこツッコませてもらうわ！</translation>
     </message>
     <message>
         <source>Wrong fkiss prefix `:@`, but for tolerance of legacy accepts it =&gt;  </source>
@@ -786,7 +786,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Wrong objPos format</source>
-        <translation>objPos の書式がおかしいで</translation>
+        <translation>objPos の書式が不正や！居場所の伝え方がおかしなっとる！</translation>
     </message>
 </context>
 <context>
@@ -805,7 +805,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Out of range palatte colors definition, byte offset: %1</source>
-        <translation>パレット色の定義が範囲外や。バイトオフセット: %1</translation>
+        <translation>パレット色の定義が場外に飛び出しとる！範囲外や、バイトオフセット: %1</translation>
     </message>
     <message>
         <source>What is this? Unknown KCF bitsPerColor: %1</source>
@@ -813,7 +813,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>This KCF file contains no valid palette, but you try to get palette from it. Abort.</source>
-        <translation>このKCFには有効なパレットが入ってへんのに、そこからパレット取ろうとしとるわ。中止や。</translation>
+        <translation>このKCFに有効なパレットはあらへん！そこから取り出せ言われても、手品ちゃうねん！処理中止や。</translation>
     </message>
     <message>
         <source>paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback</source>
@@ -836,39 +836,39 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Status</source>
-        <translation>状態や</translation>
+        <translation>今どんな感じ？</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>名前や</translation>
+        <translation>名前</translation>
     </message>
     <message>
         <source>Summary</source>
-        <translation>概要や</translation>
+        <translation>ざっくり紹介</translation>
     </message>
     <message>
         <source>LZH Compatibility</source>
-        <translation>LZH互換や</translation>
+        <translation>LZH互換性</translation>
     </message>
     <message>
         <source>Installation</source>
-        <translation>インストールや</translation>
+        <translation>導入のしかた</translation>
     </message>
     <message>
         <source>OS Support</source>
-        <translation>OS対応や</translation>
+        <translation>対応OS</translation>
     </message>
     <message>
         <source>Disk Operation</source>
-        <translation>ディスク操作や</translation>
+        <translation>ディスクの使い方</translation>
     </message>
     <message>
         <source>Website</source>
-        <translation>ウェブサイトや</translation>
+        <translation>ウェブサイトはこちら</translation>
     </message>
     <message>
         <source>Backend Information</source>
-        <translation>裏方情報や</translation>
+        <translation>裏方のプロフィール</translation>
     </message>
     <message>
         <source>Installed</source>
