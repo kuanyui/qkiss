@@ -80,15 +80,15 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Patch: newly added extra %1 CNF; and replaced %2 CNF.</source>
-        <translation type="unfinished"></translation>
+        <translation>パッチでCNFを%1個追加、%2個差し替えたよ〜。……ぜんぶ増えたと思った？追加と交換の違いもわかんないの〜？ざぁ〜こ♥</translation>
     </message>
     <message>
         <source>Patch: newly added extra %1 KCF, and replaced %2 KCF.</source>
-        <translation type="unfinished"></translation>
+        <translation>パッチでKCFを%1個追加、%2個差し替え〜。……色が変わっただけで「すごい！」って？ぷっ、感動するのちょろすぎ〜♥</translation>
     </message>
     <message>
         <source>Patch: newly added extra %1 CEL, and replaced %2 CEL.</source>
-        <translation type="unfinished"></translation>
+        <translation>ほら、パッチでCELを%1個追加、%2個差し替えといたよ〜。……自分でやった顔してんじゃん！あたしがやったんですけど〜？</translation>
     </message>
     <message>
         <source>Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.</source>
@@ -260,7 +260,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation type="unfinished"></translation>
+        <translation>はい、LZHファイル「%1」の展開成功〜！中にファイルが%2個あったよ。……まだ開け方調べてたの？もう終わっちゃったけど〜？ちょろ〜い♥</translation>
     </message>
     <message>
         <source>Error when opening this archive file (%1). Aborted.</source>
@@ -342,11 +342,11 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Open this item</source>
-        <translation type="unfinished"></translation>
+        <translation>これ開くよ〜。見てるだけなの？</translation>
     </message>
     <message>
         <source>Open containing folder</source>
-        <translation type="unfinished"></translation>
+        <translation>これが入ってるフォルダまで連れてってあげる〜。迷子ちゃん♥</translation>
     </message>
     <message>
         <source>Click to load this file as patch</source>
@@ -357,7 +357,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <name>Fkiss</name>
     <message>
         <source>FKiSS Script is found in this CNF file, initialize FKiSS runtime.</source>
-        <translation type="unfinished"></translation>
+        <translation>あ、このCNFファイルにFKiSSスクリプトあった〜。FKiSSランタイムを初期化するよ。……「最初から知ってた」？へぇ〜、じゃあなんで黙ってたのかな〜？</translation>
     </message>
 </context>
 <context>
@@ -527,7 +527,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Success</source>
-        <translation type="unfinished"></translation>
+        <translation>成功〜。ちょろ〜い♥</translation>
     </message>
     <message>
         <source>Info</source>
