@@ -38,10 +38,13 @@ QKiSS for Windows is built via GitHub Actions CI/CD, the portable ZIP and NSIS i
   - Linux
   - Windows (requires `vcpkg`)
 
-- Toolchains
+- Build Toolchains (Required when building)
   - C++ 20 compiler (tested on GCC, MSVC)
   - Qt >= 6.4.2 (recommended: >= 6.8.3)
+    - `QtMultimedia`
   - Python >= 3.11
+    - `jsonschema`
+    - `pyyaml`
   - CMake >= 3.25
   - Ninja
   - GNU Make
@@ -49,13 +52,8 @@ QKiSS for Windows is built via GitHub Actions CI/CD, the portable ZIP and NSIS i
   - Magick
 
 - C / C++ Libraries (Required)
-  - `QtMultimedia`
   - `LibArchive`
   - `Iconv` or `ICU` (Requires at least one of them)
-
-- Python 3 Packages (Required)
-  - `jsonschema`
-  - `pyyaml`
 
 - External Programs (Optional)
   - `lha`
