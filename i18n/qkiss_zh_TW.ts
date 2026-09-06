@@ -75,6 +75,18 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
         <translation>找到有效檔案：%1 個 CNF、%2 個 CEL、%3 個 KCF。</translation>
     </message>
     <message>
+        <source>Patch: newly added extra %1 CNF; and replaced %2 CNF.</source>
+        <translation type="unfinished">修補檔：額外加入 %1 個 CNF 檔，並替換 %2 個現有 CNF 檔。</translation>
+    </message>
+    <message>
+        <source>Patch: newly added extra %1 KCF, and replaced %2 KCF.</source>
+        <translation>修補檔：額外加入 %1 個 KCF 檔，並替換 %2 個現有 KCF 檔。</translation>
+    </message>
+    <message>
+        <source>Patch: newly added extra %1 CEL, and replaced %2 CEL.</source>
+        <translation>修補檔：額外加入 %1 個 CEL 檔，並替換 %2 個現有 CEL 檔。</translation>
+    </message>
+    <message>
         <source>Need to get ParsedKcf for current CNF, but this CNF has no KCF file declared. Abort.</source>
         <translation>需要取得當前 CNF 的 ParsedKcf，但此 CNF 未宣告任何 KCF 檔。中止。</translation>
     </message>
@@ -243,6 +255,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
         <translation>無法開啟此檔案，操作中止。</translation>
     </message>
     <message>
+        <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
+        <translation>LZH 檔案「%1」解壓縮成功。裡面共有 %2 個檔案。</translation>
+    </message>
+    <message>
         <source>Error when opening this archive file (%1). Aborted.</source>
         <translation>開啟此壓縮檔時發生錯誤（%1）。已中止。</translation>
     </message>
@@ -321,8 +337,23 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
         <translation>將目前資料夾設為首頁</translation>
     </message>
     <message>
+        <source>Open this item</source>
+        <translation>開啟此項目</translation>
+    </message>
+    <message>
+        <source>Open containing folder</source>
+        <translation>開啟此項目所在資料夾</translation>
+    </message>
+    <message>
         <source>Click to load this file as patch</source>
         <translation>點擊以載入此檔案作為修補檔</translation>
+    </message>
+</context>
+<context>
+    <name>Fkiss</name>
+    <message>
+        <source>FKiSS Script is found in this CNF file, initialize FKiSS runtime.</source>
+        <translation>在此 CNF 檔中發現 FKiSS 腳本，初始化 FKiSS 執行環境。</translation>
     </message>
 </context>
 <context>
@@ -489,6 +520,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
     <message>
         <source>Debug</source>
         <translation>除錯</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>成功</translation>
     </message>
     <message>
         <source>Info</source>
