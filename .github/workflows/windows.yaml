@@ -103,7 +103,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           # PAT token defined in Repository secrets. SHould have read permission of this repo and all submodules
-          token: ${{ secrets.MY_PAT }}
+          # token: ${{ secrets.MY_PAT }}
           submodules: 'recursive'
 
       # Step 2: Get icon submodule commit hash
@@ -193,7 +193,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           # PAT token defined in Repository secrets. SHould have read permission of this repo and all submodules
-          token: ${{ secrets.MY_PAT }}
+          # token: ${{ secrets.MY_PAT }}
           submodules: 'recursive'
 
       # Step 2: [Cache] Restore icon cache
