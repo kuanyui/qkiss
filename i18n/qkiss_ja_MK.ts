@@ -26,7 +26,7 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
         <translation>
 QKiSSはね〜、Qt 6でわざわざ作られた、モダン（笑）の [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューアなんだよ〜。Linux の [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) とか [GnomeKiSS](https://devel.tlrmx.org/kiss/) から「インスパイア」されたらしいけど。つまり…これ…要は…「パ・ク・リ・で・し・ょ？」キャハハ〜ざっこ♥
 
-「Kisekae」っては何？見りゃわかるっしょ！日本語の「着せ替え人形」に決まってるでしょう〜。うわ…そんなの知もらないとか、ざこすぎないじゃない？
+「Kisekae」って何？見りゃわかるっしょ！日本語の「着せ替え人形」に決まってるでしょ〜。うわ…そんなのも知らないとか、ざこすぎじゃない？
 
 でさ〜、KiSSってのは1990年代の日本の[オタク](https://ja.wikipedia.org/wiki/おたく)とか [NEC PC-9800 シリーズ](https://ja.wikipedia.org/wiki/PC-9800シリーズ)にしがみついてたパソコンオタクとか雑魚どもが必死に遊んでたやつ〜。うわ〜、必死すぎて笑えるんだけどwww
 
@@ -111,7 +111,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <name>ArchiveProcessorCnfInFileSystem</name>
     <message>
         <source>Reading a CNF file &quot;%1&quot; directly. Trying to fetch all related CNF/KCF/CEL files in the same folder...</source>
-        <translation>CNFファイル「%1」を直接読み込んでいます。同じフォルダ内の関連するCNF/KCF/CELファイルを取得しています...</translation>
+        <translation>CNFファイル「%1」を直接読んで、同じフォルダの関連CNF/KCF/CELファイルも集めてるよ〜。……まだひとつずつ探してたの？がんばってるね〜、むだに♥</translation>
     </message>
 </context>
 <context>
@@ -158,7 +158,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
-        <translation>LZHファイル「%1」の展開に成功しました。%2個のファイルが含まれてます〜〜〜</translation>
+        <translation>LZHファイル「%1」の展開成功〜。中にはファイルが%2個！……ほっとした顔してる〜。え、開くだけでそんなに緊張してたの？キャハハ♥</translation>
     </message>
     <message>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
@@ -217,7 +217,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via Unar...</source>
-        <translation>UnarでLZH ファイル「%1」を展開中…ほら、見ても理解できないんでしょ？ぷっー</translation>
+        <translation>UnarでLZHファイル「%1」を展開中〜。……連打しても速くなんないよ？指だけは働き者だね〜♥</translation>
     </message>
     <message>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
@@ -248,7 +248,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>All operations can be done in RAM instead of extracting files to disk, relatively friendly to the SSD’s lifespan.</source>
-        <translation>操作は全部RAMで済むんだよ〜。SSDに優しいとか言ってドヤってんの？かわいそ〜</translation>
+        <translation>操作は全部RAMでできるから、ディスクに展開しなくていいんだよ〜。SSDの寿命にもわりと優しいの。……壊れたら買い替えらんないんだ？じゃあ大事に使わないとね〜♥</translation>
     </message>
     <message>
         <source>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
@@ -276,11 +276,11 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Partial success (%1).</source>
-        <translation>一部だけ成功（%1）って感じ〜。中途半端すぎてカッコわる〜♥</translation>
+        <translation>一部だけ成功だって〜（%1）。……いま「できた！」って言いかけた？ねぇ、言いかけたよね？最後まで言ってみてよ〜♥</translation>
     </message>
     <message>
         <source>Retry might succeed (%1)</source>
-        <translation>もう一回やったらイケるかも（%1）。運任せとかだっさ〜♥</translation>
+        <translation>もう一回やったら成功するかもね〜（%1）。……「次は本気」？へぇ〜、さっきまでの必死な顔、あれで遊びだったんだ〜♥</translation>
     </message>
     <message>
         <source>when reading this archive file via LibArchive (Error message: %1). Aborted.</source>
@@ -318,7 +318,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Go Back</source>
-        <translation>戻る〜</translation>
+        <translation>戻るの〜？さっきの自信どこいった？</translation>
     </message>
     <message>
         <source>Go Forward</source>
@@ -330,7 +330,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Refresh</source>
-        <translation>更新〜</translation>
+        <translation>更新〜。にらめっこはもう終わり？</translation>
     </message>
     <message>
         <source>Home</source>
@@ -364,7 +364,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <name>FkissParser</name>
     <message>
         <source>Found a double quote mark, but cannot find another paired quote mark to form a string. SOURCE: </source>
-        <translation>二重引用符は見つかったけど、対になるやつが無いから文字列にならないんだけど。ソース： </translation>
+        <translation>二重引用符、片方しかないじゃん。これじゃ文字列にならないよ〜。……ふたつで一組って、靴はちゃんと履けるのにね？ぷっ♥ ソース： </translation>
     </message>
     <message>
         <source>Ignore this character because it is unexpected [%1:%2]: `%3`</source>
@@ -376,7 +376,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Command starts before EventHandler, ignore.</source>
-        <translation>あれ〜コマンドが EventHandler より前に始まってんじゃん。そんなに簡単な常識も知らないの〜？ざこすぎる〜無視しとくしぃ〜</translation>
+        <translation>あ、コマンドがEventHandlerより先に始まってる〜。フライングだから無視ね。……先に動いても一番にはなれませ〜ん♥</translation>
     </message>
     <message>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
@@ -388,7 +388,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Comma is required between two args.</source>
-        <translation>コンマは引数の区切りにするしかないんだよ？これも知らなくざこすぎ〜</translation>
+        <translation>引数ふたつの間にはコンマが要るんだよ〜。……省略したの？えら〜い、一文字節約して読めなくしちゃったんだ♥</translation>
     </message>
     <message>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
@@ -427,7 +427,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>[%1] Unfix (&amp;U)</source>
-        <translation>[%1] 固定解除(&amp;U)。な〜〜〜んのつもりなの？キモいから地球から消えてくれませんか？</translation>
+        <translation>[%1] 固定解除(&amp;U)。……さっきまで力まかせに引っぱってたの？ぷっ♥</translation>
     </message>
     <message>
         <source>Reset Object (&amp;R)</source>
@@ -439,7 +439,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Click to copy filename to clipboard.</source>
-        <translation>ファイル名をクリップボードにコピーするにはクリック。</translation>
+        <translation>クリックでファイル名をクリップボードにコピーできるよ〜。……覚えた？じゃあ見ないで言ってみ？あ、もう忘れたんだ♥</translation>
     </message>
 </context>
 <context>
@@ -450,11 +450,11 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>No CNF file named &quot;%1&quot; found in this archive file.</source>
-        <translation>このアーカイブに「%1」ってCNFファイルは無いみたい。よわよわ〜♥</translation>
+        <translation>このアーカイブに「%1」ってCNFファイルはないよ〜。……また探すの？見直すたびに増えると思ってんの？</translation>
     </message>
     <message>
         <source>Only %1 scenes in this view but you ask for sceneIndex %2</source>
-        <translation>このビューにはシーンが%1個しかないのに、sceneIndex %2 を要求してるよ。なさけな〜い♥</translation>
+        <translation>このビューにはシーンが%1個しかないのに、sceneIndex %2が欲しいんだ？……ないって言ってんじゃん。おねだりしたら出てくると思った？ざぁ〜こ♥</translation>
     </message>
     <message>
         <source>CNF requires a CEL &quot;%1&quot;, but not found in this archived file: </source>
@@ -630,7 +630,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation>逃げんの？罵倒に耐えない顔きたなーい〜〜キャハハ♥(&amp;Q)</translation>
+        <translation>逃げんの？罵倒に耐えられない顔きたなーい〜〜キャハハ♥(&amp;Q)</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
@@ -674,11 +674,11 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>&quot;%1&quot; is not a valid KiSS patch file. Aborted.</source>
-        <translation>「%1」は有効なKiSSパッチファイルじゃないで処理中止、キャハハ♥</translation>
+        <translation>「%1」は有効なKiSSパッチファイルじゃないから処理中止〜。……名前だけそれっぽくしてもバレるんだよ？キャハハ♥</translation>
     </message>
     <message>
         <source>&quot;%1&quot;is not a valid KiSS file. Aborted.</source>
-        <translation>「%1」は有効なKiSSファイルですらないんだって〜。可哀想〜</translation>
+        <translation>「%1」は有効なKiSSファイルですらないんだって〜。処理中止〜。……「たぶんこれ」で持ってきたの？たぶんじゃ開きませ〜ん♥</translation>
     </message>
     <message>
         <source>Parsing finished. Now rendering scenes...</source>
@@ -730,7 +730,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Middle Click: Unfix</source>
-        <translation>中クリック：変なことをする、キモ〜</translation>
+        <translation>中クリック：固定解除。引っぱるしか知らなかったの〜？</translation>
     </message>
     <message>
         <source>Right Click: More Actions</source>
@@ -757,7 +757,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
-        <translation>「%1」はパレット方式のCELって言ってるのに、各ピクセルが%2ビット（想定は32ビット）だって？矛盾してるね。ま、パレット方式のCELってことで進めといてあげるよ。よわ♥</translation>
+        <translation>「%1」はパレット方式のCELなのに、各ピクセルは%2ビット（想定は32ビット）？言ってること矛盾してんじゃん。……どっちが本当か、自分でも忘れちゃった？パレット方式のCELってことにしとくね〜♥</translation>
     </message>
 </context>
 <context>
@@ -776,7 +776,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Wrong CEL format.</source>
-        <translation>CEL の書式がおかしいよ。根性なし♥</translation>
+        <translation>CELの書式まちがってるよ〜。……「だいたい合ってる」？ぷっ、まちがえたときだけ採点あまくなんのね♥</translation>
     </message>
     <message>
         <source>Wrong set line format.</source>
@@ -788,7 +788,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Wrong objPos format</source>
-        <translation>objPos の書式がきたなーい、キャハハ♥</translation>
+        <translation>objPosの書式まちがってる〜。……どこに置くか書いただけで、どこかわかんなくなるの？道案内へったくそ♥</translation>
     </message>
 </context>
 <context>
@@ -799,7 +799,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Invalid bitsPerColor (12 or 24): %1</source>
-        <translation>bitsPerColor が変だよ（12 か 24）: %1。そんなのも間違えるとか、ざぁ〜こ♥</translation>
+        <translation>bitsPerColorがおかしいよ〜：%1。12か24の二択なんだけど？……それ以外を選ぶほうが難しくない？すご〜い、逆に♥</translation>
     </message>
     <message>
         <source>Invalid colorAmountsInOnePalette (1 ~ 256): %1</source>
@@ -819,7 +819,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback</source>
-        <translation>paletteIdx（%1、0始まりだよ）が実際の paletteAmount（%2）を超えてるよ。代わりに 0 を使うね。だっさ〜♥</translation>
+        <translation>paletteIdx（%1、0から数えるんだよ？）が実際のpaletteAmount（%2）の範囲外〜。代わりにインデックス0を使うね。……じゃ、一緒に数えよっか？ぜ〜ろ、い〜ち♥</translation>
     </message>
 </context>
 <context>
@@ -889,7 +889,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>UTF-8</source>
-        <translation>UTF-8〜〜でも KiSS は流行してた時代に多分誰も採用されなかったんだろ〜可哀想〜</translation>
+        <translation>UTF-8〜。昔のKiSSファイルで使ってるのなんて、ほとんどないんだけど？……新しそうだから選んだ？ぷっ、文字化けまで最新気分なんだ〜♥</translation>
     </message>
     <message>
         <source>Shift JIS</source>
