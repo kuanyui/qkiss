@@ -133,20 +133,20 @@ jobs:
           choco install inkscape --no-progress
           echo "C:/Program Files/Inkscape/bin" >> $env:GITHUB_PATH
 
-      # Step 5: Set up Python 3.11
+      # Step 5: Set up Python 3.13
       - name: Set up Python
         if: steps.icon_cache.outputs.cache-hit != 'true'
         uses: actions/setup-python@v6
-        id: cpython311
+        id: cpython313
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
       # Step 6: Convert icons via CMake script mode (cmake -P <script_file>)
       - name: Convert icons via CMake script mode
         if: steps.icon_cache.outputs.cache-hit != 'true'
         run: cmake `
                  -DTASK=GENERATE_ICONS `
-                 -DWIN_PYTHON3_EXE="${{ steps.cpython311.outputs.python-path }}" `
+                 -DWIN_PYTHON3_EXE="${{ steps.cpython313.outputs.python-path }}" `
                  -P CMakeLists.txt
 
   prepare-external-bin-deps-cache:
@@ -284,12 +284,12 @@ jobs:
       #         }
       #     }
 
-      # Step 7: Set up Python 3.11
+      # Step 7: Set up Python 3.13
       - name: Set up Python
         uses: actions/setup-python@v6
-        id: cpython311
+        id: cpython313
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
       # Step 8: Install required Python packages (jsonschema, pyyaml)
       - name: Install Python dependencies
@@ -349,7 +349,7 @@ jobs:
 
           echo "[DEBUG][PowerShell env] env:pythonLocation: $env:pythonLocation"
           echo "[DEBUG][Github Context] env.pythonLocation: ${{ env.pythonLocation }}"
-          echo "[DEBUG][Github Context] steps.cpython311: ${{ steps.cpython311.outputs.python-path }}"
+          echo "[DEBUG][Github Context] steps.cpython313: ${{ steps.cpython313.outputs.python-path }}"
 
           # Don't use "Visual Studio 17 2022" as generator, it always generate multiple configs (Release, Debug...) during configuration time.
           # This cause `qt_generate_deploy_app_script(OUTPUT_SCRIPT)` create a new filename containig MSVC-specific syntax `$<CONFIG>`.
@@ -358,7 +358,7 @@ jobs:
           cmake -B build -G "Ninja" `
             -DCMAKE_BUILD_TYPE=Release `
             -DWIN_EXTERNAL_BIN_DEPS_DIR="${{ runner.temp }}/bin_deps" `
-            -DWIN_PYTHON3_EXE="${{ steps.cpython311.outputs.python-path }}" `
+            -DWIN_PYTHON3_EXE="${{ steps.cpython313.outputs.python-path }}" `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
           cmake --build build --config Release
 
