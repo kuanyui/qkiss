@@ -10,38 +10,37 @@ AppIcon           qkiss-uninstaller              apps/qkiss-uninstaller
 AppIcon           clothes                        apps/clothes
 Nome              preferences-desktop-theme      apps/palettes
 
-Nome              application-exit
-Nome              help-about
+Nome              application-exit                              {-32}
+Nome              help-about                                    {-32}
 
 # BlueHumanity      document-open-recent      recents
-Tango             document-open-recent      recents
-Nome              edit-clear                edit-clear
+Tango             document-open-recent      recents             {-32}
+Nome              edit-clear                edit-clear          {-32}
 
 
 # ===================================================================
 # General Context Menu
 # ===================================================================
 
-Nome             edit-copy
-Nome             edit-paste
-Nome             edit-cut
-Nome             edit-select-all
-Tango            edit-undo
-Tango            edit-redo
-Tango            edit-delete
+Nome             edit-paste                     {-24}
+Nome             edit-cut                       {-24}
+Nome             edit-select-all                {-24}
+Tango            edit-undo                      {-24}
+Tango            edit-redo                      {-24}
+Tango            edit-delete                    {-24}
 
 # ===================================================================
 # Docks
 # ===================================================================
 
-Nome             apps/system-file-manager
-Nome             utilities-system-monitor       apps/utility-system-monitor
-#Nome             code-viewer-c-liked            applications-development
-AppIcon          cnf-code-editor                applications-development
-Nome             package-x-generic              package-unzipped
-Nome             emblems/emblem-package         package-zipped
-Nome             text-x-readme                  text-x-readme
-Tango            logviewer                      logviewer
+Nome             apps/system-file-manager                                              {-32}
+Nome             utilities-system-monitor       apps/utility-system-monitor            {-32}
+#Nome             code-viewer-c-liked            applications-development              {-32}
+AppIcon          cnf-code-editor                applications-development               {-32}
+Nome             package-x-generic              package-unzipped                       {-32}
+Nome             emblems/emblem-package         package-zipped                         {-32}
+Nome             text-x-readme                  text-x-readme                          {-32}
+Tango            logviewer                      logviewer                              {-32}
 
 # ===================================================================
 # Zooming
@@ -51,29 +50,29 @@ Tango            logviewer                      logviewer
 # Nome             zoom-out
 # Nome             zoom-original
 
-Tango             actions/zoom-in
-Tango             actions/zoom-out
-Tango             actions/zoom-original
+Tango             actions/zoom-in                                        {-32}
+Tango             actions/zoom-out                                       {-32}
+Tango             actions/zoom-original                                  {-32}
 
 # ===================================================================
 # File System Browse
 # ===================================================================
-Tango      actions/go-up            go-up            # BlueHumanity
-Tango      actions/go-down          go-down          # BlueHumanity
-Tango      actions/go-next          go-next          # BlueHumanity
-Tango      actions/go-previous      go-previous      # BlueHumanity
-Tango      actions/view-refresh     view-refresh     # BlueHumanity
-Tango      actions/go-home          go-home          # BlueHumanity
-Tango      actions/go-jump          go-jump          # BlueHumanity
+Tango      actions/go-up            go-up                                {-32}       # BlueHumanity
+Tango      actions/go-down          go-down                              {-32}       # BlueHumanity
+Tango      actions/go-next          go-next                              {-32}       # BlueHumanity
+Tango      actions/go-previous      go-previous                          {-32}       # BlueHumanity
+Tango      actions/view-refresh     view-refresh                         {-32}       # BlueHumanity
+Tango      actions/go-home          go-home                              {-32}       # BlueHumanity
+Tango      actions/go-jump          go-jump                              {-32}       # BlueHumanity
 
-Nome             application-x-addon      addon
+Nome             application-x-addon      addon                          {-32}
 # GimpDefault    gimp-plugin            addon
 
 # ===================================================================
 # Search
 # ===================================================================
 
-BlueNome      actions/window-close
+BlueNome      actions/window-close                                       {-32}
 
 # ===================================================================
 # XDG Standard Places & Folder Icons
@@ -89,9 +88,9 @@ BlueNome      actions/window-close
 #BlueHumanity      places/document-open      folder-open     # blue folder
 #BlueHumanity      places/folder             folder          # blue folder
 
-BlueNome          document-open
-BlueNome          folder-open
-BlueNome          folder
+BlueNome          document-open                                           {-32}
+BlueNome          folder-open                                             {-32}
+BlueNome          folder                                                  {-32}
 # Tango          folder-open
 # Tango          folder
 
@@ -101,28 +100,28 @@ BlueNome          folder
 # ===================================================================
 
 # Nome          mimetypes/text-x-ini          text-x-cnf
-BlueNome        mimetypes/text-x-c-liked      text-x-cnf
-BlueNome        mimetypes/text-x-readme
-BlueNome        mimetypes/text-x-generic
+BlueNome        mimetypes/text-x-c-liked      text-x-cnf                           {-32}
+BlueNome        mimetypes/text-x-readme                                            {-32}
+BlueNome        mimetypes/text-x-generic                                           {-32}
 
 
 # BlueHumanity            actions/preview-file      preview-file
-Tango                actions/edit-find                       preview-file
-Tango                actions/media-playback-start-green      play
+Tango                actions/edit-find                       preview-file          {-32}
+Tango                actions/media-playback-start-green      play                  {-32}
 
 # ===================================================================
 # Context Menu on CEL / Object
 # ===================================================================
 
-BlueNome            changes-allow              unfix
-BlueNome            image-x-generic            image-x-generic
-BlueNome            view-refresh               reset-position
+BlueNome            changes-allow              unfix                               {-32}
+BlueNome            image-x-generic            image-x-generic                     {-32}
+BlueNome            view-refresh               reset-position                      {-32}
 # BlueHumanity         view-refresh               reset-position
 
 # ===================================================================
 # CEL Inspector
 # ===================================================================
-BlueNome              sticky-note            comment
+BlueNome              sticky-note            comment                               {-32}
 # BlueNome            help-faq              comment
 # InkscapeTango            dialog-messages            comment
 
@@ -133,14 +132,14 @@ BlueNome              sticky-note            comment
 # InkscapeTango        tool-pointer               inspector
 # GimpDefault          gimp-lock-position         obj-fix-count
 # InkscapeTango        distribute-randomize       obj-cels
-AppIcon                geometry-size              cel-size
-AppIcon                rename                     cel-file-name
-Nome                   image-x-generic            cel-file-preview
-Nome                   tomboy-tag                 obj-id
-AppIcon                cursor-move                obj-pos
-AppIcon                distributed-objects        obj-cels
-AppIcon                cursor-move-lock           obj-fix-count
-AppIcon                mouse-cursor-question      inspector
+AppIcon                geometry-size              cel-size                         {-32}
+AppIcon                rename                     cel-file-name                    {-32}
+Nome                   image-x-generic            cel-file-preview                 {-32}
+Nome                   tomboy-tag                 obj-id                           {-32}
+AppIcon                cursor-move                obj-pos                          {-32}
+AppIcon                distributed-objects        obj-cels                         {-32}
+AppIcon                cursor-move-lock           obj-fix-count                    {-32}
+AppIcon                mouse-cursor-question      inspector                        {-32}
 
 # ===================================================================
 # Status Bar
@@ -149,21 +148,21 @@ AppIcon                mouse-cursor-question      inspector
 # BlueNome        preferences-desktop-keyboard-shortcuts      keyboard
 # BlueNome        input-mouse                                 mouse
 
-Nome            keyboard-ctrl               keyboard-ctrl
-Nome            keyboard-shift              keyboard-shift
-Nome            keyboard-ctrl-pressed       keyboard-ctrl-pressed
-Nome            keyboard-shift-pressed      keyboard-shift-pressed
-Nome            mouse-right-click           mouse-right-click
-Nome            mouse-left-click            mouse-left-click
-Nome            mouse-middle-click          mouse-middle-click
+Nome            keyboard-ctrl               keyboard-ctrl                          {-32}
+Nome            keyboard-shift              keyboard-shift                         {-32}
+Nome            keyboard-ctrl-pressed       keyboard-ctrl-pressed                  {-32}
+Nome            keyboard-shift-pressed      keyboard-shift-pressed                 {-32}
+Nome            mouse-right-click           mouse-right-click                      {-32}
+Nome            mouse-left-click            mouse-left-click                       {-32}
+Nome            mouse-middle-click          mouse-middle-click                     {-32}
 
 # ===================================================================
 # Settings
 # ===================================================================
 
-Nome            preferences-desktop-font              encoding
-Nome            preferences-desktop-locale            language
-Nome            preferences-system
+Nome            preferences-desktop-font              encoding                     {-32}
+Nome            preferences-desktop-locale            language                     {-32}
+Nome            preferences-system                                                 {-32}
 
 # ===================================================================
 # Preference Dialog
@@ -175,26 +174,26 @@ Nome            preferences-system
 # BlueHumanity               drive-harddisk                       backend-disk
 # BlueHumanity               web-browser                          backend-website
 
-Nome                   application-x-executable             backend-name
-Nome                   text-x-readme                        backend-summary
-Nome                   package-x-generic                    backend-lzh-compatibility  # OPTIMIZE: Same icon should able to have multiple aliases in *.qrc?
-Tango                  system-installer                     backend-installation
-# GimpDefault            gimp-controller-linux-input          backend-os-support
-AppIcon                tux                                  backend-os-support
-Tango                  drive-harddisk                       backend-disk    # TODO: Use `drive-harddisk` in GNOME3
-Nome                   web-browser                          backend-website
+Nome                   application-x-executable             backend-name                {-32}
+Nome                   text-x-readme                        backend-summary             {-32}
+Nome                   package-x-generic                    backend-lzh-compatibility   {-32}            # OPTIMIZE: Same icon should able to have multiple aliases in *.qrc?
+Tango                  system-installer                     backend-installation        {-32}
+# GimpDefault            gimp-controller-linux-input          backend-os-support        {-32}
+AppIcon                tux                                  backend-os-support          {-32}
+Tango                  drive-harddisk                       backend-disk                {-32}         # TODO: Use `drive-harddisk` in GNOME3
+Nome                   web-browser                          backend-website             {-32}
 
 # Nome               dialog-warning                  dialog-warning
 # Nome               emblem-default                  dialog-apply
-Tango                dialog-ok                       dialog-ok
-Tango                dialog-cancel                   dialog-cancel
-Tango                dialog-close                    dialog-close
+Tango                dialog-ok                       dialog-ok                          {-32}
+Tango                dialog-cancel                   dialog-cancel                      {-32}
+Tango                dialog-close                    dialog-close                       {-32}
 
 # =====================================================================
 # Log Viewer
 # =====================================================================
 
-Tango      emblem-success         emblem-success
-Tango      emblem-information     emblem-information
-Tango      emblem-warning         emblem-warning
-Tango      emblem-error           emblem-error
+Tango      emblem-success         emblem-success                     {-32}
+Tango      emblem-information     emblem-information                 {-32}
+Tango      emblem-warning         emblem-warning                     {-32}
+Tango      emblem-error           emblem-error                       {-32}
