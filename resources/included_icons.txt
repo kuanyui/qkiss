@@ -174,14 +174,14 @@ Nome            preferences-system                                              
 # BlueHumanity               drive-harddisk                       backend-disk
 # BlueHumanity               web-browser                          backend-website
 
-Nome                   application-x-executable             backend-name                {-32}
-Nome                   text-x-readme                        backend-summary             {-32}
-Nome                   package-x-generic                    backend-lzh-compatibility   {-32}            # OPTIMIZE: Same icon should able to have multiple aliases in *.qrc?
-Tango                  system-installer                     backend-installation        {-32}
-# GimpDefault            gimp-controller-linux-input          backend-os-support        {-32}
-AppIcon                tux                                  backend-os-support          {-32}
-Tango                  drive-harddisk                       backend-disk                {-32}         # TODO: Use `drive-harddisk` in GNOME3
-Nome                   web-browser                          backend-website             {-32}
+Nome                   application-x-executable             backend-name                   {-32}
+Nome                   text-x-readme                        backend-summary                {-32}
+Nome                   package-x-generic                    backend-lzh-compatibility      {-32}            # OPTIMIZE: Same icon should able to have multiple aliases in *.qrc?
+Tango                  system-installer                     backend-installation           {-32}
+# GimpDefault            gimp-controller-linux-input          backend-os-support           {-32}
+AppIcon                tux                                  backend-os-support             {-32}
+Tango                  drive-harddisk                       backend-disk                   {-32}         # TODO: Use `drive-harddisk` in GNOME3
+Nome                   web-browser                          backend-website                {-32}
 
 # Nome               dialog-warning                  dialog-warning
 # Nome               emblem-default                  dialog-apply
