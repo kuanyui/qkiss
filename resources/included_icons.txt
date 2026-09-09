@@ -22,12 +22,13 @@ Nome              edit-clear                edit-clear          {-32}
 # General Context Menu
 # ===================================================================
 
-Nome             edit-paste                     {-24}
-Nome             edit-cut                       {-24}
-Nome             edit-select-all                {-24}
-Tango            edit-undo                      {-24}
-Tango            edit-redo                      {-24}
-Tango            edit-delete                    {-24}
+Nome             edit-paste                                 {-24}
+Nome             edit-cut                                   {-24}
+Nome             edit-select-all                            {-24}
+Tango            edit-undo                                  {-24}
+Tango            edit-redo                                  {-24}
+# Tango            edit-delete                              {-24}    # SVG is not drawn in all sizes yet
+Nome             user-trash          edit-delete            {-24}
 
 # ===================================================================
 # Docks
