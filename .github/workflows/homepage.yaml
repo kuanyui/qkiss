@@ -1,0 +1,56 @@
+# Publish the website (homepage/) on GitHub Pages: https://kuanyui.github.io/qkiss/
+# (.gitlab-ci.yml does the same on GitLab Pages; see homepage/README.md)
+# One-time setup in the repository: Settings > Pages > Build and deployment > Source: "GitHub Actions".
+# The screenshots are never committed here: they are cloned from the `qkiss-screenshots` repository at build time.
+name: Homepage
+
+on:
+  push:
+    branches: [ "master" ]
+    # What homepage/build.py reads from this repository.
+    paths:
+      - "homepage/**"
+      - "resources/appicon/**"
+      - ".github/workflows/homepage.yaml"
+  # Run it by hand after updating the screenshots repository.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a run already in progress finishes.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & deploy homepage
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      # `qkiss-screenshots` of the same owner, unless the repository variable `SCREENSHOTS_REPO`
+      # (Settings > Secrets and variables > Actions > Variables) says otherwise.
+      SCREENSHOTS_REPO: ${{ vars.SCREENSHOTS_REPO || format('{0}/{1}/qkiss-screenshots.git', github.server_url, github.repository_owner) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Fetch screenshots
+        run: git clone --depth 1 "$SCREENSHOTS_REPO" "$RUNNER_TEMP/screenshots"
+
+      - name: Build homepage
+        run: python3 homepage/build.py _site --screenshots "$RUNNER_TEMP/screenshots"
+
+      - name: Upload homepage
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

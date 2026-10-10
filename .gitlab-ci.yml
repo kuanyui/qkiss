@@ -1,0 +1,28 @@
+# Publish the website (homepage/) on GitLab Pages: https://kuanyui.gitlab.io/qkiss/
+# (.github/workflows/homepage.yaml does the same on GitHub Pages; see homepage/README.md)
+# The screenshots are never committed here: they are cloned from the `qkiss-screenshots` repository at build time.
+homepage:
+  stage: deploy
+  image: python:3.13
+  variables:
+    GIT_SUBMODULE_STRATEGY: none   # the website needs no submodule (and the runner cannot clone the git@github.com: URLs of .gitmodules)
+    # `qkiss-screenshots` in the same namespace, unless the CI/CD variable `SCREENSHOTS_REPO`
+    # (Settings > CI/CD > Variables) says otherwise.
+    SCREENSHOTS_REPO: "$CI_SERVER_URL/$CI_PROJECT_NAMESPACE/qkiss-screenshots.git"
+  script:
+    - git clone --depth 1 "$SCREENSHOTS_REPO" /tmp/screenshots
+    - python3 homepage/build.py public --screenshots /tmp/screenshots
+  # Deploy `public/` to GitLab Pages. (The `pages` keyword; naming the job `pages` instead is deprecated.)
+  pages: true
+  artifacts:
+    paths:
+      - public
+  rules:
+    # On the default branch, when something homepage/build.py reads has changed. A pipeline run by hand
+    # (Build > Pipelines > Run pipeline, e.g. after updating the screenshots) has no push to compare
+    # with, so it always runs this job.
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - homepage/**/*
+        - resources/appicon/**/*
+        - .gitlab-ci.yml
