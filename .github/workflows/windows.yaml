@@ -97,6 +97,10 @@ jobs:
   prepare-icon-cache:
     name: Convert SVG icons into PNG and cache them.
     runs-on: windows-latest
+    # build-main needs the tango-remixer commit too, to build the same cache key.
+    # So this job gives the commit to build-main as a job output.
+    outputs:
+      commitHash: ${{ steps.icon_submodule.outputs.commitHash }}
     steps:
       # Step 1: Download the source code
       - name: Checkout code
@@ -123,8 +127,14 @@ jobs:
             generated/icon_theme__png
             generated/icon_theme__svg
             generated/icons_built.stamp
-          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.icon_submodule.outputs.commitHash }}
-          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
+          # The icons are generated again when either part of this key changes:
+          # - The hash of `included_icons.txt`: which icons we use.
+          # - The tango-remixer commit: which version of the script and of the icon themes
+          #   generates the icons.
+          # A saved cache never changes. Without the commit in the key, CI could keep using
+          # icons that an older tango-remixer generated.
+          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.icon_submodule.outputs.commitHash }}
+          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
 
       # Step 4: Install Inkscape
       - name: Install Inkscape via Chocolatey
@@ -204,9 +214,11 @@ jobs:
             generated/icon_theme__png
             generated/icon_theme__svg
             generated/icons_built.stamp
+          # Must be the same key as in `prepare-icon-cache`.
+          # The tango-remixer commit comes from the `outputs` of that job.
           # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.icon_submodule.outputs.commitHash }}
-          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ needs.prepare-icon-cache.outputs.commitHash }}
-          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
+          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ needs.prepare-icon-cache.outputs.commitHash }}
+          # key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}
 
 
       - name: DEBUG - Inspect generated icons
