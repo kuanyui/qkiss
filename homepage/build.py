@@ -54,15 +54,20 @@ APP_ICONS: dict[str, Path] = {
     "images/tux.svg":             REPO_ROOT_DIR / "resources/appicon/actions/22/tux.svg",
 }
 
+# The flags of the app (lipis/flag-icons, MIT). The `flag` of a language picks
+# `svg/<flag>.svg`, copied to `images/flags/` with the license notice (README.md).
+FLAGS_DIR: Path = REPO_ROOT_DIR / "resources/flags"
+
 SCREENSHOTS_SUBDIR: str = "screenshots"
 SCREENSHOTS_MANIFEST: str = "screenshots.json"
 
 # Fields of an entry of `<script id="languages">` in index.html: name -> required.
-LANGUAGE_FIELDS: dict[str, bool] = {"id": True, "name": True, "lang": False, "fallback": False}
+LANGUAGE_FIELDS: dict[str, bool] = {"id": True, "name": True, "lang": False, "fallback": False, "flag": False}
 
 PATT_KEY = re.compile(r"[a-z][a-z0-9-]*(\.[a-z][a-z0-9-]*)*")
 PATT_ATTRIBUTE = re.compile(r"[a-z][a-z0-9-]*")
 PATT_LANGUAGE_ID = re.compile(r"[A-Za-z]{2,3}(-[A-Za-z0-9]+)*")
+PATT_FLAG = re.compile(r"[a-z]{2}(-[a-z]+)*")
 PATT_IMAGE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\.(png|jpg|jpeg|webp|avif|gif)")
 
 
@@ -168,6 +173,9 @@ def check_languages(text: str | None) -> list[dict[str, str]]:
             errors.append(f"{where}: [{i}]: id {language['id']!r} is duplicated")
         if "fallback" in language and (language["fallback"] not in ids or language["fallback"] == language["id"]):
             errors.append(f"{where}: [{i}]: fallback {language['fallback']!r} must be the id of another language")
+        if "flag" in language and not (PATT_FLAG.fullmatch(language["flag"]) and (FLAGS_DIR / "svg" / f"{language['flag']}.svg").is_file()):
+            available = ", ".join(sorted(path.stem for path in (FLAGS_DIR / "svg").glob("*.svg")))
+            errors.append(f"{where}: [{i}]: flag {language['flag']!r} is not in {FLAGS_DIR / 'svg'}; available: {available}")
     if errors:
         raise BuildError("\n".join(errors))
 
@@ -281,15 +289,21 @@ def check_screenshots(screenshots_dir: Path, languages: list[dict[str, str]]) ->
 # The site
 # ==========================================
 
-def site_files(screenshots_dir: Path | None, images: list[str]) -> dict[str, Path]:
+def site_files(screenshots_dir: Path | None, images: list[str], languages: list[dict[str, str]]) -> dict[str, Path]:
     """Every file of the site: its path in the site -> the file it is copied from."""
     files: dict[str, Path] = {path.relative_to(SRC_DIR).as_posix(): path for path in sorted(SRC_DIR.rglob("*")) if path.is_file()}
+    copied: dict[str, Path] = dict(APP_ICONS)
+    flags = sorted({language["flag"] for language in languages if "flag" in language})
+    for flag in flags:
+        copied[f"images/flags/{flag}.svg"] = FLAGS_DIR / "svg" / f"{flag}.svg"
+    if flags:
+        copied["images/flags/README.md"] = FLAGS_DIR / "README.md"   # MIT: the notice goes with the copies
     errors: list[str] = []
-    for dest, src in APP_ICONS.items():
+    for dest, src in copied.items():
         if dest in files:
-            errors.append(f"{files[dest]}: conflicts with the icon copied from {src} (APP_ICONS)")
+            errors.append(f"{files[dest]}: conflicts with {src}, copied to the same place at build time")
         elif not src.is_file():
-            errors.append(f"{src}: not found (APP_ICONS)")
+            errors.append(f"{src}: not found")
         files[dest] = src
     if any(path.startswith(f"{SCREENSHOTS_SUBDIR}/") for path in files):
         errors.append(f"{SRC_DIR / SCREENSHOTS_SUBDIR}: must not exist; screenshots come from --screenshots")
@@ -313,7 +327,7 @@ def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path], list[str]
     images = check_screenshots(screenshots_dir, languages) if screenshots_dir is not None else []
     if screenshots_dir is None:
         warnings.append("Without screenshots (--no-screenshots): fine for a preview, never publish it.")
-    return site_files(screenshots_dir, images), warnings
+    return site_files(screenshots_dir, images, languages), warnings
 
 
 def check_out_dir(out_dir: Path) -> None:
@@ -347,8 +361,8 @@ def build_into_temp_dir(screenshots_dir: Path | None) -> tuple[Path, list[str]]:
 
 def watched_sources(screenshots_dir: Path | None) -> dict[Path, tuple[int, int]]:
     """The files the site is made from, each with its (mtime, size): everything under
-    `src/`, the APP_ICONS, the files of the screenshots folder, and this script."""
-    paths = [*SRC_DIR.rglob("*"), *APP_ICONS.values(), SCRIPT_PATH]
+    `src/`, the APP_ICONS, the flags, the files of the screenshots folder, and this script."""
+    paths = [*SRC_DIR.rglob("*"), *APP_ICONS.values(), *FLAGS_DIR.rglob("*"), SCRIPT_PATH]
     if screenshots_dir is not None and screenshots_dir.is_dir():
         paths += screenshots_dir.iterdir()
     found: dict[Path, tuple[int, int]] = {}
@@ -452,7 +466,7 @@ def serve(port: int, screenshots_dir: Path | None) -> None:
     threading.Thread(target=watch, args=(screenshots_dir, rebuild, sources), daemon=True).start()
     urls = [f"http://{host}:{port}/" for host in ["127.0.0.1", *lan_ips()]]
     print("Website listening on all interfaces (Ctrl-C to stop). Open one of:\n  " + "\n  ".join(urls)
-          + "\nWatching homepage/src/, the app icons" + (" and the screenshots" if screenshots_dir else "")
+          + "\nWatching homepage/src/, the app icons, the flags" + (" and the screenshots" if screenshots_dir else "")
           + ": a change rebuilds the site (reload the page); a change to build.py restarts this server.", flush=True)
     try:
         server.serve_forever()

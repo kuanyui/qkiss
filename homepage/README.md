@@ -1,6 +1,7 @@
 # QKiSS Homepage
 
-The official website of QKiSS: a single static page, without frameworks, build tools or dependencies.
+The official website of QKiSS: a single static page, without frameworks or build tools.
+Its one dependency, the language picker [@llselect/core](https://gitlab.com/kuanyui/llselect), is loaded from a CDN (see [The language picker](#the-language-picker)).
 It is published on both GitHub Pages and GitLab Pages, by the same script.
 
 ```
@@ -9,13 +10,14 @@ homepage/
 └── src/            # Copied into the site as is
     ├── index.html  # The page. English strings are written here.
     ├── style.css
-    ├── main.js     # Translations and the screenshot gallery
+    ├── main.js     # Translations, the language picker and the screenshot gallery
     └── i18n/       # One JSON file per language other than English
 ```
 
 At build time, `build.py` also copies:
 
 - The app icons it uses from `resources/appicon/` (see `APP_ICONS` in `build.py`), so they are never duplicated.
+- The flags of the languages from `resources/flags/svg/`, with the MIT license notice of flag-icons.
 - The screenshots, from outside this repository (see below).
 
 ## Local preview
@@ -124,13 +126,29 @@ As in the app (`ConfigFile::engOnly()`), a browser for which `isEnglishOnly()` i
    - `name`: shown in the language picker, written in that language.
    - `lang` (optional): the BCP 47 tag for `<html lang>`, which also selects the right CJK fonts. Defaults to `id`.
    - `fallback` (optional): the language shown for untranslated strings, before English.
+   - `flag` (optional): the flag shown in the language picker, a file name in `resources/flags/svg/` without `.svg` (e.g. `jp`). To add one, copy it there from [flag-icons](https://github.com/lipis/flag-icons) first.
 
 2. Create `src/i18n/<id>.json`. Copying an existing one is the easiest start.
 3. Run `build.py` (or keep `make homepage-dev-server` running). It rejects unknown keys and malformed files, and lists the untranslated keys.
 
+### The language picker
+
+The picker is [@llselect/core](https://gitlab.com/kuanyui/llselect), loaded from jsDelivr in `index.html`.
+
+- Its API may change before 0.1.0, so the URL names an exact version.
+- `integrity` makes the browser refuse any file other than the one checked.
+- Its classes are styled in `style.css` from the colors of the page (light and dark), instead of loading one of its themes.
+- If it does not load, the picker stays hidden; the language is still picked as above.
+
+To upgrade it, change the version in the URL, and set `integrity` to `sha384-` followed by the hash of the new file:
+
+```sh
+curl -fsSL https://cdn.jsdelivr.net/npm/@llselect/core@VERSION/dist/index.umd.js | openssl dgst -sha384 -binary | openssl base64 -A
+```
+
 ## Deployment
 
-Both hosts run `homepage/build.py` on every push to `master` that touches `homepage/` or `resources/appicon/`, and can also be run by hand.
+Both hosts run `homepage/build.py` on every push to `master` that touches `homepage/`, `resources/appicon/` or `resources/flags/`, and can also be run by hand.
 The page only uses relative URLs, so it works under any domain or path.
 
 ### GitHub Pages

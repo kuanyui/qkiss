@@ -172,29 +172,59 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Language picker
+  // Language picker (@llselect/core)
   // ---------------------------------------------------------------------------
 
-  function setUpLanguagePicker() {
-    const select = document.getElementById('language-select');
-    for (const language of LANGUAGES) {
-      const option = new Option(language.name, language.id);
-      option.lang = htmlLang(language.id);
-      select.add(option);
+  /** A language the visitor picked: remember it, and put it in the URL for sharing. */
+  function chooseLanguage(id) {
+    storeLanguage(id);
+    const url = new URL(location.href);
+    if (id === SOURCE_LANGUAGE) {
+      url.searchParams.delete('lang');
+    } else {
+      url.searchParams.set('lang', id);
     }
-    select.value = currentLanguage;
-    select.addEventListener('change', () => {
-      const id = select.value;
-      storeLanguage(id);
-      const url = new URL(location.href);
-      if (id === SOURCE_LANGUAGE) {
-        url.searchParams.delete('lang');
-      } else {
-        url.searchParams.set('lang', id);
-      }
-      history.replaceState(history.state, '', url);
-      setLanguage(id);
+    history.replaceState(history.state, '', url);
+    setLanguage(id);
+  }
+
+  /** Flag + native name of a language: a row of the picker, and the picker when closed. */
+  function createLanguageEl(language) {
+    const el = document.createElement('span');
+    el.className = 'language-option';
+    el.lang = htmlLang(language.id);
+    if (language.flag) {
+      const flag = document.createElement('img');
+      flag.className = 'language-flag';
+      flag.src = `images/flags/${language.flag}.svg`;
+      flag.alt = '';   // decorative: the name follows
+      el.append(flag);
+    }
+    el.append(language.name);
+    return el;
+  }
+
+  function setUpLanguagePicker() {
+    const { llselect } = window;
+    if (!llselect) {
+      // The CDN is unreachable: no picker, but `?lang=` and the browser's languages still work.
+      console.error('The language picker is unavailable: @llselect/core did not load.');
+      return;
+    }
+    const picker = new llselect.LLSelectSingle(document.getElementById('language-select'), {
+      ariaLabelledBy: 'language-label',
+      compareFn: (a, b) => a.id === b.id,
+      itemToStringFn: (language) => language.name,
+      createItemContentElFn: createLanguageEl,
+      createTriggerContentElFn: ({ chosenItem }) => (chosenItem ? createLanguageEl(chosenItem) : null),
+      createTriggerArrowContentElFn: () => llselect.createChevronDownSvgEl(),
+      onChange: (language, _previous, meta) => {
+        // Only the visitor's own picks: the setChosenItem() below reports 'api'.
+        if (meta.source === 'user' && language) chooseLanguage(language.id);
+      },
     });
+    picker.setItems(LANGUAGES);
+    picker.setChosenItem(languagesById.get(currentLanguage));
     document.getElementById('language-picker').hidden = false;
   }
 

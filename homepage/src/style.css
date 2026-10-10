@@ -302,14 +302,92 @@ code {
   color: var(--text-muted);
 }
 
-.language-picker select {
-  padding: 0.3rem 0.5rem;
+/*
+ * The picker is @llselect/core. Its classes are styled here from the tokens
+ * above (light and dark), instead of loading one of its themes.
+ */
+.llselect-root {
+  position: relative;
+  display: inline-block;
+  font-size: 0.95rem;
+}
+
+.llselect-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.5rem 0.3rem 0.6rem;
   border: 1px solid var(--border-strong);
   border-radius: 6px;
   background: var(--surface);
   color: var(--text);
-  font: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+  user-select: none;
+}
+
+.llselect-trigger:hover,
+.llselect-trigger[data-state='open'] {
+  border-color: var(--accent);
+}
+
+.llselect-trigger-content {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.llselect-trigger-arrow {
+  display: inline-flex;
+  color: var(--text-muted);
+  transition: transform 0.15s ease;
+}
+
+.llselect-trigger[data-state='open'] .llselect-trigger-arrow {
+  transform: rotate(180deg);
+}
+
+/* Shown in the top layer (as a popover) where supported, so its padding, colors and border must be explicit. */
+.llselect-popup {
+  z-index: 100;
+  padding: 0.25rem 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
   font-size: 0.95rem;
+}
+
+.llselect-item {
+  padding: 0.35rem 0.75rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.llselect-item:hover,
+.llselect-item-focused {
+  background: var(--accent-soft);
+}
+
+.llselect-item[aria-selected='true'] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.language-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* The flags are 4:3; the thin ring outlines the white ones. */
+.language-flag {
+  width: 1.4em;
+  height: 1.05em;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--border);
 }
 
 /* On narrow screens: logo and language on the first row, the sections below. */
@@ -767,7 +845,8 @@ sup {
   }
 
   .gallery-thumb,
-  .site-nav a::after {
+  .site-nav a::after,
+  .llselect-trigger-arrow {
     transition: none;
   }
 
