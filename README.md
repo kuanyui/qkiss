@@ -194,7 +194,7 @@ I've also ever considered several other names:
 ## Disclosuring Usage of LLMs
 
 - This project relies on LLM as developing assistant, but always try to keep everything in control as possible as I can.
-- LLM agents (e.g. Claude Code, Codex) are only be used for i18n translations.
+- LLM agents (e.g. Claude Code, Codex) are only be used for i18n translations, homepage.
 - Never did any fucking vibe code. All codes are manually reviewed line by line. I can understand and explain every lines in this codebase.
 - Detailed contribution ratios are listed below:
 
@@ -207,6 +207,7 @@ I've also ever considered several other names:
 | CMake           | ChatGPT, Gemini                       | 60% codes; survey, learning                 | Survey and discuss best practice of `CPack`, `CMakePresets.json` for a cross-platform Qt app. Learn Windows packaging & NSIS & deploy DLL.              |
 | Github Actions  | Gemini, ChatGPT                       | 60% codes; survey, learning                 | For Windows packaging (I have no Windows development environment). Donno why Gemini do this better, while ChatGPT keeps output bullshits in this field. |
 | osc / RPM / DEB | Gemini, ChatGPT                       | 40% codes; survey, learning                 | Learning lots of detailed rules of DEB & RPM packaging & troubleshooting; and how to build locally via `osc`.                                           |
+| Homepage        | Claude Code                           | 100% codes, 100% translations                | Write HTML / CSS / JS... I'm tired to write website during leisure time anymore.                                                                        |
 
 - ...Argh, I guess this project might be the last project whose codes are mainly written manually... Not only KiSS itself, another era is over.
 
