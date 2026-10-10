@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="meta.title">QKiSS — A modest renaissance of KiSS</title>
+  <meta name="description" data-i18n-attr="content:meta.description"
+        content="QKiSS is a modern KiSS (Kisekae Set System) viewer in Qt 6, compatible with KISS/GS and FKiSS 1 &amp; 2. Free software for Linux and Windows.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f7f7f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b1d18" media="(prefers-color-scheme: dark)">
+  <!-- Link previews. Crawlers never run main.js, so these stay in English. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="QKiSS — A modest renaissance of KiSS">
+  <meta property="og:description" content="A modern KiSS (Kisekae Set System) viewer in Qt 6, compatible with KISS/GS and FKiSS 1 &amp; 2.">
+  <link rel="icon" type="image/svg+xml" href="images/qkiss-32.svg">
+  <link rel="stylesheet" href="style.css">
+
+  <!--
+    Languages of this website, read by main.js and checked by build.py.
+    The first one is the source language: its strings are the ones written in
+    this file. Every other language needs `i18n/<id>.json`.
+    See homepage/README.md.
+  -->
+  <script type="application/json" id="languages">
+    [
+      { "id": "en",    "name": "English" },
+      { "id": "ja",    "name": "日本語" },
+      { "id": "zh-TW", "name": "台灣繁體" }
+    ]
+  </script>
+  <!-- Not deferred on purpose: it hides the page until the translation is applied. -->
+  <script src="main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-bar">
+      <a class="brand" href="#">
+        <img src="images/qkiss-32.svg" alt="" width="32" height="32">
+        <span>QKiSS</span>
+      </a>
+      <nav class="site-nav" aria-label="Sections" data-i18n-attr="aria-label:nav.label">
+        <a href="#about" data-i18n="nav.about">About</a>
+        <a href="#features" data-i18n="nav.features">Highlights</a>
+        <a href="#screenshots" data-i18n="nav.screenshots">Screenshots</a>
+        <a href="#download" data-i18n="nav.download">Download</a>
+      </nav>
+      <label class="language-picker" id="language-picker" hidden>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="12" r="9"/>
+            <ellipse cx="12" cy="12" rx="4" ry="9"/>
+            <path d="M3 12h18M4.6 7.5h14.8M4.6 16.5h14.8"/>
+          </g>
+        </svg>
+        <span class="visually-hidden" data-i18n="nav.language">Language</span>
+        <select id="language-select"></select>
+      </label>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container hero-body">
+        <img class="hero-logo" src="images/qkiss.svg" alt="" width="176" height="176">
+        <div>
+          <h1>QKiSS</h1>
+          <p class="hero-tagline" data-i18n="hero.tagline">A modest renaissance of KiSS</p>
+          <p class="hero-lead" data-i18n-html="hero.lead">QKiSS is a modern implementation of <a href="https://en.wikipedia.org/wiki/Kisekae_Set_System">KiSS</a> viewer in Qt 6, compatible with KISS/GS and FKiSS 1 &amp; 2 specifications.</p>
+          <div class="button-row">
+            <a class="button button-primary" href="#download" data-i18n="hero.download">Download</a>
+            <a class="button" href="https://github.com/kuanyui/qkiss">GitHub</a>
+            <a class="button" href="https://gitlab.com/kuanyui/qkiss">GitLab</a>
+          </div>
+          <p class="hero-note" data-i18n="hero.note">Free software under GPLv3 · Linux · Windows</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container prose">
+        <h2 data-i18n="about.title">What is KiSS?</h2>
+        <p data-i18n-html="about.kiss"><a href="https://en.wikipedia.org/wiki/Kisekae_Set_System">KiSS (Kisekae Set System)</a> is a format of digital paper dolls. You dress the characters up by dragging their clothes with the mouse, and FKiSS scripts add interactions such as animations and sounds.</p>
+        <p data-i18n-html="about.kisekae">“Kisekae” comes from the Japanese word “<span lang="ja">着せ替え人形</span>” (pronunciation: “kisekae ningyou”), meaning “dress-up dolls”.</p>
+        <p data-i18n-html="about.origin">KiSS originated from Japanese <a href="https://ja.wikipedia.org/wiki/おたく">otaku</a> subculture and personal computer enthusiasts community (particularly those using the <a href="https://ja.wikipedia.org/wiki/PC-9800シリーズ">NEC PC-9800 series</a>) in the 1990s, and gained popularity throughout the 1990s and early 2000s.</p>
+
+        <h3 data-i18n="about.why.title">Why QKiSS?</h3>
+        <p data-i18n-html="about.why.body">By 2024, the existing KiSS viewers for Linux had stopped working: <a href="https://www2s.biglobe.ne.jp/~yav/kiss/index.html">fkiss</a> can still be built but no longer runs, and <a href="https://devel.tlrmx.org/kiss/">GnomeKiSS</a> depends on outdated GNOME 2 libraries that most distributions no longer ship. QKiSS is a complete rebirth inspired by both.</p>
+        <blockquote class="musing">
+          <p data-i18n-html="about.nostalgia">This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a lost age before Internet was polluted by AI-generated junk (this project does use some AI though). After all, life is frightening enough as it is; the real world is a hot mess, while <a href="https://ja.wikipedia.org/wiki/2次元">nijigen</a> and <a href="https://w.wiki/4So4">isekai</a> remain a pure promised land.</p>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="features">
+      <div class="container">
+        <h2 data-i18n="features.title">Highlights</h2>
+        <ul class="feature-grid">
+          <li class="feature">
+            <h3 data-i18n="features.ui.title">Full-featured, with a handy UI</h3>
+            <ul>
+              <li data-i18n="features.ui.files">Switch files quickly from the side panels: the sets in your folders, and the CNF files inside an archive.</li>
+              <li data-i18n="features.ui.cnf">Read the CNF, with syntax highlighting.</li>
+              <li data-i18n="features.ui.docs">Read the docs bundled with a set.</li>
+              <li data-i18n="features.ui.objects">Observe objects: point at any part of a doll to see its cel, object and position.</li>
+              <li data-i18n="features.ui.log">Check the log, which points out problems down to the line.</li>
+            </ul>
+          </li>
+          <li class="feature">
+            <h3 data-i18n="features.specs.title">Faithful to the specs, faithful to desire</h3>
+            <ul>
+              <li data-i18n="features.specs.kiss">Implements the KISS/GS base specification, and an interpreter for the interactive scripts of FKiSS 1 &amp; 2 (in tests, 90% of Japanese KiSS sets run fine).</li>
+              <li data-i18n="features.specs.fkiss34">FKiSS 3 &amp; 4 have too few sets, almost none of them by Japanese KiSS artists, so they were not worth the bother.</li>
+              <li data-i18n="features.specs.unfix">One-click unfix: who wants to sit there clicking a fixed item over and over? Playing shouldn't feel like work.</li>
+            </ul>
+          </li>
+          <li class="feature">
+            <h3 data-i18n="features.misc.title">And some less serious ones</h3>
+            <ul>
+              <li id="footnote-ref-website" data-i18n-html="features.misc.handmade">The code of the main program is handcrafted, without LLM agents<sup class="footnote-ref"><a href="#footnote-website">*1</a></sup> (and is probably the author's last hand-written software project, so cherish it while it lasts).</li>
+              <li data-i18n="features.misc.electron">No damn Electron, acting as if your RAM were free.</li>
+              <li data-i18n="features.misc.qt">Linux is no longer a second-class citizen (Windows is): built with the latest Qt 6 and C++.</li>
+              <li id="footnote-ref-tango" data-i18n-html="features.misc.tango">Tango-style UI icons<sup class="footnote-ref"><a href="#footnote-tango">*2</a></sup> take you back to the 2000s.</li>
+              <li data-i18n="features.misc.politics">The author is guaranteed to be politically incorrect.</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="footnotes">
+          <p id="footnote-website">
+            <a class="footnote-back" href="#footnote-ref-website" aria-label="Back to the text" title="Back to the text"
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
+            <span data-i18n="features.footnote.website">This website, though, was left entirely to an LLM agent, because I have no interest in spending my life writing web pages anymore...</span>
+          </p>
+          <p id="footnote-tango">
+            <a class="footnote-back" href="#footnote-ref-tango" aria-label="Back to the text" title="Back to the text"
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
+            <span data-i18n-html="features.footnote.tango">As it turned out, developing <a href="https://kuanyui.github.io/tango-remixer/">Tango Remixer</a>, and sorting out, fixing and drawing a pile of extra tango-flavoured icons, took, without exaggeration, almost longer than developing QKiSS itself. That is why QKiSS, started in 2024, was only first released in 2026...</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="screenshots">
+      <div class="container">
+        <h2 data-i18n="screenshots.title">Screenshots</h2>
+        <!-- Filled by main.js from screenshots/screenshots.json, which build.py copies from the screenshots repository. -->
+        <ul class="gallery" id="gallery"></ul>
+        <p class="notice" id="gallery-notice" hidden data-i18n="screenshots.unavailable">Screenshots are not available in this build of the website.</p>
+        <noscript><p class="notice">Screenshots need JavaScript.</p></noscript>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="download">
+      <div class="container">
+        <h2 data-i18n="download.title">Download</h2>
+        <div class="download-grid">
+          <article class="download-card">
+            <div class="download-head">
+              <img src="images/tux.svg" alt="" width="44" height="44">
+              <h3>Linux</h3>
+            </div>
+            <p data-i18n="download.linux.body">Packages for Debian, Fedora, openSUSE and Ubuntu, built and signed by the Open Build Service.</p>
+            <a class="button button-primary" href="https://software.opensuse.org//download.html?project=home%3Akuanyui%3Astable&amp;package=qkiss" data-i18n="download.linux.link">Installation instructions</a>
+          </article>
+          <article class="download-card">
+            <div class="download-head">
+              <img src="images/qkiss-installer.svg" alt="" width="44" height="44">
+              <h3>Windows</h3>
+            </div>
+            <p data-i18n="download.windows.body">A portable ZIP and an installer, built by GitHub Actions.</p>
+            <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases" data-i18n="download.windows.link">GitHub Releases</a>
+          </article>
+        </div>
+        <p class="notice" data-i18n="download.note">All binaries are currently tested only on x86_64.</p>
+        <p class="notice" data-i18n-html="download.source">Want to build it yourself? See <a href="https://github.com/kuanyui/qkiss#development">Development</a> in the README.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <p class="footer-brand"><img src="images/qkiss-32.svg" alt="" width="24" height="24"> QKiSS</p>
+        <p data-i18n-html="footer.license">QKiSS is free software, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License v3</a>.</p>
+        <p>Copyright © 2024–2026 ono ono (<a href="https://github.com/kuanyui">kuanyui</a>)</p>
+      </div>
+      <div>
+        <h2 class="footer-heading" data-i18n="footer.source">Source code</h2>
+        <ul class="footer-links">
+          <li><a href="https://github.com/kuanyui/qkiss">GitHub</a></li>
+          <li><a href="https://gitlab.com/kuanyui/qkiss">GitLab</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="footer-heading" data-i18n="footer.specs.title">KiSS specifications</h2>
+        <ul class="footer-links">
+          <li><a href="https://www2s.biglobe.ne.jp/~yav/kiss/" hreflang="ja" data-i18n="footer.specs.yav">fkiss by yav (Japanese)</a></li>
+          <li><a href="https://otakuworld.com/kiss/kisshelp/" hreflang="en" data-i18n="footer.specs.otakuworld">Otaku World (English)</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-caption">
+    <button type="button" class="lightbox-button lightbox-close" id="lightbox-close" autofocus
+            aria-label="Close" title="Close" data-i18n-attr="aria-label:lightbox.close;title:lightbox.close">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+    <button type="button" class="lightbox-button lightbox-prev" id="lightbox-prev"
+            aria-label="Previous screenshot" title="Previous screenshot" data-i18n-attr="aria-label:lightbox.prev;title:lightbox.prev">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <figure class="lightbox-figure">
+      <img id="lightbox-image" alt="">
+      <figcaption><span id="lightbox-caption"></span> <span class="lightbox-counter" id="lightbox-counter"></span></figcaption>
+    </figure>
+    <button type="button" class="lightbox-button lightbox-next" id="lightbox-next"
+            aria-label="Next screenshot" title="Next screenshot" data-i18n-attr="aria-label:lightbox.next;title:lightbox.next">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </dialog>
+</body>
+</html>
