@@ -13,11 +13,12 @@ that `homepage/screenshots.json` lists. Everything is checked before anything
 is written: on any error, nothing is built and the exit status is 1.
 
 `--serve` builds the site into a temporary folder instead, and serves it on
-PORT (8000 by default) on every interface, the URLs to open printed (this
-machine's LAN addresses among them, so the host of a VM can open it too). A
-change to a source checks and rebuilds the site (reload the page); when the
-check fails, the last good build stays served and the errors are printed. A
-change to this script restarts the server.
+PORT (8000 by default) on every network interface. It prints the URLs to
+open, including this machine's LAN addresses, so that the host of a VM can
+open the site too. When a source file changes, the script checks and
+rebuilds the site; reload the page to see the result. If the check fails,
+the server keeps serving the last good build and prints the errors. When
+this script itself changes, the server restarts.
 
 Only the Python standard library is used. See `homepage/README.md`.
 """
@@ -54,16 +55,18 @@ APP_ICONS: dict[str, Path] = {
     "images/tux.svg":             REPO_ROOT_DIR / "resources/appicon/actions/22/tux.svg",
 }
 
-# The flags of the app (lipis/flag-icons, MIT). The `flag` of a language picks
-# `svg/<flag>.svg`, copied to `images/flags/` with the license notice (README.md).
+# The flags in `resources/flags/` come from lipis/flag-icons (MIT license). The `flag` field of a
+# language names a file in `svg/`, without `.svg`. The build copies the flags it needs to
+# `images/flags/`, together with their license notice (README.md).
 FLAGS_DIR: Path = REPO_ROOT_DIR / "resources/flags"
 
 SCREENSHOTS_SUBDIR: str = "screenshots"
 SCREENSHOTS_MANIFEST: str = "screenshots.json"
-# The gallery: its order and captions are here, its images in the wiki (--screenshots).
+# This file sets the order and the captions of the screenshots in the gallery. The images
+# themselves come from the wiki, through the folder given with --screenshots.
 SCREENSHOTS_MANIFEST_PATH: Path = HOMEPAGE_DIR / SCREENSHOTS_MANIFEST
 
-# Fields of an entry of `<script id="languages">` in index.html: name -> required.
+# The fields a language may have in `<script id="languages">` of index.html, and whether each one is required.
 LANGUAGE_FIELDS: dict[str, bool] = {"id": True, "name": True, "lang": False, "fallback": False, "flag": False}
 
 PATT_KEY = re.compile(r"[a-z][a-z0-9-]*(\.[a-z][a-z0-9-]*)*")
@@ -233,8 +236,8 @@ def check_translations(languages: list[dict[str, str]], keys: dict[str, str]) ->
 # ==========================================
 
 def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, str]]) -> list[str]:
-    """Validate `homepage/screenshots.json`, and, given screenshots_dir, that its images
-    are there. Returns the image file names it uses."""
+    """Validate `homepage/screenshots.json`. If screenshots_dir is given, also check that it
+    contains every image the manifest lists. Return the image file names the manifest uses."""
     where = str(SCREENSHOTS_MANIFEST_PATH.relative_to(REPO_ROOT_DIR))
     if not SCREENSHOTS_MANIFEST_PATH.is_file():
         raise BuildError(f"{where}: not found")
@@ -293,7 +296,7 @@ def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, st
 # ==========================================
 
 def site_files(screenshots_dir: Path | None, images: list[str], languages: list[dict[str, str]]) -> dict[str, Path]:
-    """Every file of the site: its path in the site -> the file it is copied from."""
+    """Return every file of the site, as a mapping from its path in the site to the file it is copied from."""
     files: dict[str, Path] = {path.relative_to(SRC_DIR).as_posix(): path for path in sorted(SRC_DIR.rglob("*")) if path.is_file()}
     copied: dict[str, Path] = dict(APP_ICONS)
     flags = sorted({language["flag"] for language in languages if "flag" in language})
@@ -348,7 +351,7 @@ def write_site(out_dir: Path, files: dict[str, Path]) -> None:
 
 
 def build_into_temp_dir(screenshots_dir: Path | None) -> tuple[Path, list[str]]:
-    """check_site, then write the site into a new temporary folder. Returns the folder and the warnings."""
+    """Check the site with check_site(), then write it into a new temporary folder. Return that folder and the warnings."""
     files, warnings = check_site(screenshots_dir)
     site_dir = Path(tempfile.mkdtemp(prefix="qkiss-homepage-"))
     try:
@@ -383,9 +386,10 @@ def watched_sources(screenshots_dir: Path | None) -> dict[Path, tuple[int, int]]
 
 def watch(screenshots_dir: Path | None, rebuild: Callable[[list[Path]], None],
           before: dict[Path, tuple[int, int]], interval: float = 1.0) -> None:
-    """Poll watched_sources every `interval` seconds, forever, starting from `before`.
-    When they changed, wait for the change to settle (a poll that finds nothing new:
-    editors save in bursts), then call rebuild() with the files that changed, came or went."""
+    """Poll watched_sources() every `interval` seconds, forever, starting from `before`.
+    When something changes, keep polling until one poll finds no new change, because
+    editors often save a file in several steps. Then call rebuild() with the files that
+    were modified, added or removed."""
     while True:
         time.sleep(interval)
         now = watched_sources(screenshots_dir)
@@ -424,7 +428,7 @@ class _PreviewServer(ThreadingHTTPServer):
 
 
 class _PreviewHandler(SimpleHTTPRequestHandler):
-    """The files of the current build, revalidated by the browser on every load, nothing logged."""
+    """Serve the files of the current build. The browser must check for a newer version on every load, and no request is logged."""
 
     def __init__(self, request: Any, client_address: Any, server: _PreviewServer) -> None:
         super().__init__(request, client_address, server, directory=str(server.site_dir))
@@ -438,7 +442,7 @@ class _PreviewHandler(SimpleHTTPRequestHandler):
 
 
 def serve(port: int, screenshots_dir: Path | None) -> None:
-    """--serve: see the module docstring. Returns on Ctrl-C."""
+    """Build the site, serve it, and rebuild it when its sources change (details in the module docstring). Return when Ctrl-C is pressed."""
     sources = watched_sources(screenshots_dir)   # before building: a change made while it builds is not missed
     site_dir, warnings = build_into_temp_dir(screenshots_dir)
     print_warnings(warnings)
@@ -492,7 +496,7 @@ def print_warnings(warnings: list[str]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Check and assemble the QKiSS website (see the docstring of homepage/build.py).")
     parser.add_argument("out_dir", metavar="OUT_DIR", nargs="?", type=Path, help="Write the site here. It must not exist yet, or be empty.")
-    parser.add_argument("--serve", metavar="PORT", nargs="?", const=8000, type=int, help="Instead of OUT_DIR: serve the site on PORT (default: 8000) on every interface, and rebuild it when its sources change.")
+    parser.add_argument("--serve", metavar="PORT", nargs="?", const=8000, type=int, help="Serve the site on PORT (default: 8000) on every network interface, instead of writing it to OUT_DIR, and rebuild it when its sources change.")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--screenshots", metavar="DIR", type=Path, help="Directory of the images listed in homepage/screenshots.json (the screenshots/ folder of a clone of the wiki).")
     group.add_argument("--no-screenshots", action="store_true", help="Build without screenshots. For a preview only; never publish it.")

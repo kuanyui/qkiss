@@ -1,6 +1,6 @@
 # QKiSS Homepage
 
-The official website of QKiSS: a single static page, without frameworks or build tools.
+The official website of QKiSS: a single static page in plain HTML, CSS and JavaScript, without frameworks or npm. `build.py` checks and assembles it, with the Python standard library only.
 Its one dependency, the language picker [@llselect/core](https://gitlab.com/kuanyui/llselect), is loaded from a CDN (see [The language picker](#the-language-picker)).
 It is published on both GitHub Pages and GitLab Pages, by the same script.
 
@@ -38,7 +38,7 @@ git clone https://github.com/kuanyui/qkiss.wiki.git ~/proj/qkiss.wiki
 make homepage-dev-server HOMEPAGE_SCREENSHOTS=~/proj/qkiss.wiki/screenshots
 ```
 
-`make homepage-build` writes the site into `generated/homepage/` instead, exactly as CI publishes it.
+`make homepage-build` writes the site into `generated/homepage/` instead, the way CI builds it. Set `HOMEPAGE_SCREENSHOTS` to include the screenshots too, as CI does.
 `make help` lists the variables (`HOMEPAGE_OUT`, `HOMEPAGE_PORT`, `HOMEPAGE_SCREENSHOTS`).
 Opening `src/index.html` directly (`file://`) does not work, because translations and screenshots are fetched.
 
@@ -79,7 +79,7 @@ The wiki must exist before the first deployment: create its first page on the we
 ```
 
 - The order of the array is the order on the page.
-- `image` and `caption` are both required. Each one is either a string for every language, or an object `{ "language id": "..." }` that includes `en`. A missing language falls back like any other string (see [Translations](#translations)).
+- `image` and `caption` are both required. Each one is either a single string, used for every language, or an object with one string per language ID, like `{ "en": "...", "ja": "..." }`, which must include `en`. A language missing from the object falls back like any other string (see [Translations](#translations)).
 - The caption is also the alt text of the image.
 - Image file names may only contain letters, digits, `.`, `_` and `-`, with one of the extensions `png`, `jpg`, `jpeg`, `webp`, `avif`, `gif`. They must be regular files in the `screenshots/` folder of the wiki.
 - The gallery shows the same files scaled down, so keep them reasonably small (for example about 1600 px wide, WebP or an optimized PNG).

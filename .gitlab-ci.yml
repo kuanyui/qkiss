@@ -12,7 +12,7 @@ homepage:
   script:
     - git clone --depth 1 "$SCREENSHOTS_REPO" /tmp/wiki
     - python3 homepage/build.py public --screenshots /tmp/wiki/screenshots
-  # Deploy `public/` to GitLab Pages. (The `pages` keyword; naming the job `pages` instead is deprecated.)
+  # Deploy `public/` to GitLab Pages, with the `pages` keyword. (The older way, naming the job `pages`, is deprecated.)
   pages: true
   artifacts:
     paths:

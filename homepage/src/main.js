@@ -249,7 +249,7 @@
     renderGallery();
   }
 
-  /** A value of screenshots.json: one string for every language, or `{ languageId: string }`. */
+  /** A value in screenshots.json: either a single string used for every language, or an object with one string per language ID. */
   function localize(value) {
     if (typeof value === 'string') return value;
     return value[fallbackChain(currentLanguage).find((id) => Object.hasOwn(value, id))];
@@ -328,7 +328,8 @@
 
     function update() {
       scheduled = false;
-      // A section is being read once its top passes a line a third of the way down below the header.
+      // A section counts as "being read" once its top has scrolled above a line. The line is one
+      // third of the way down the visible area under the header.
       const line = header.offsetHeight + (window.innerHeight - header.offsetHeight) / 3;
       let current = -1;
       sections.forEach((section, i) => {

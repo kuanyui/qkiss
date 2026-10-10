@@ -65,7 +65,7 @@ OBS_ARCH :=
 HOMEPAGE_OUT := generated/homepage
 ## Port `homepage-dev-server` serves the website on. (Default: `8000`)
 HOMEPAGE_PORT := 8000
-## The `screenshots/` folder of a clone of the wiki (`qkiss.wiki.git`): the images listed in `homepage/screenshots.json`. Empty: no screenshots. (ex: `~/proj/qkiss.wiki/screenshots`)
+## Path of the `screenshots/` folder in a clone of the wiki (`qkiss.wiki.git`), with the images listed in `homepage/screenshots.json`. Leave it empty to build without screenshots. (ex: `~/proj/qkiss.wiki/screenshots`)
 HOMEPAGE_SCREENSHOTS ?=
 # (expand ~ as $HOME)
 override HOMEPAGE_SCREENSHOTS := $(subst ~,$(HOME),$(HOMEPAGE_SCREENSHOTS))
@@ -182,7 +182,7 @@ add-license-header:    ## Add license header to all .cpp / .h files
 ###
 ### -- Homepage (`homepage/`) -----------------------------------
 
-# The website as plain files, as GitHub Pages and GitLab Pages publish it.
+# Build the website into plain files, the same way CI builds it for GitHub Pages and GitLab Pages.
 .PHONY: homepage-build
 homepage-build:    ## Build the website into `HOMEPAGE_OUT` (with the screenshots of `HOMEPAGE_SCREENSHOTS`, if set).
 	rm -rf "$(HOMEPAGE_OUT)"
