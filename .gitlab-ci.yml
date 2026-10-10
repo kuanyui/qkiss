@@ -25,4 +25,5 @@ homepage:
       changes:
         - homepage/**/*
         - resources/appicon/**/*
+        - resources/flags/**/*
         - .gitlab-ci.yml

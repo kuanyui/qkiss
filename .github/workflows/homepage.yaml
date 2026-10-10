@@ -11,6 +11,7 @@ on:
     paths:
       - "homepage/**"
       - "resources/appicon/**"
+      - "resources/flags/**"
       - ".github/workflows/homepage.yaml"
   # Run it by hand after updating the screenshots repository.
   workflow_dispatch:
