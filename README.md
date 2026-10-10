@@ -2,6 +2,7 @@
   <h1>QKiSS</h1>
   <img src="resources/appicon/apps/48/qkiss.svg" alt="QKiSS's Logo" />
   <h4>A modest renaissance of KiSS</h4>
+  <img src="https://raw.githubusercontent.com/wiki/kuanyui/qkiss/screenshots/qkiss_0_9_0_demo_1.webp" alt="The main window of QKiSS (Japanese UI) with a KiSS set loaded" />
 </div>
 
 QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6, compatible with KISS/GS and FKiSS 1 & 2 specifications, as a complete rebirth inspired by [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) and [GnomeKiSS](https://devel.tlrmx.org/kiss/) on Linux.
