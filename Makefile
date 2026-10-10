@@ -12,8 +12,19 @@ NAME    := qkiss
 ## Version, gotten from `./VERSION` file.
 VERSION := $(shell cat VERSION)
 
-TARBALL_BASENAME := $(NAME)-$(VERSION)
+
+# About `TARBALL_BASENAME`
+#
+# - Base name of the release tarball, ex: `qkiss_0.9.0`.
+# - Used for both the tarball file name and the root folder inside it.
+# - The underscore and format in `${NAME}_${VERSION}` is meaningful and significant, this is naming convention required by Debian's `dpkg-source`, so other distros yield to this rule.
+# - Must to keep `TARBALL_BASENAME` same with the one in `CMakeLists.txt`, which feeds `@TARBALL_BASENAME@` into `.spec` / `PKGBUILD`.
+TARBALL_BASENAME := $(NAME)_$(VERSION)
+# Staging folder for `dpkg-source` to pack. Removed after packing.
+TARBALL_STAGE_DIR := generated/$(TARBALL_BASENAME)
+# The one tarball shared by `.spec`, `PKGBUILD` and `.dsc`. `dpkg-source` creates both files in one run and picks these exact names itself (from `debian/changelog`).
 TARBALL_PATH := generated/$(TARBALL_BASENAME).tar.gz
+DEBIAN_DSC_PATH := generated/$(TARBALL_BASENAME).dsc
 
 ## The root folder of all folders of configured CMake presets. This value is defined in `CMakePresets.json`
 BUILD_ROOT_DIR := build
@@ -100,8 +111,8 @@ osc build --shell --vm-type=kvm --vm-memory 8192 Debian_12 x86_64
 # With `--shell`, `/home/abuild/` should be empty (because it's before extracting tarball...):
 ls /usr/src/packages/SOURCES/
 dpkg-source -x /usr/src/packages/SOURCES/*.dsc
-cd $(TARBALL_BASENAME)
-cd /home/abuild && dpkg-source -x /.build-srcdir/*.dsc && cd $(TARBALL_BASENAME)/ && mkdir -p build && cd build && cmake ..
+cd $(NAME)-$(VERSION)     # `dpkg-source -x` always extracts into `NAME-VERSION` (hyphen), whatever the folder inside the tarball is called
+cd /home/abuild && dpkg-source -x /.build-srcdir/*.dsc && cd $(NAME)-$(VERSION)/ && mkdir -p build && cd build && cmake ..
 endef
 export __DOC_OSC_BUILD__
 
@@ -204,29 +215,34 @@ gitversion.cmake:    # (For tarball) Because tarball doesn't contain .git histor
 	echo 'set(GIT_COMMIT_HASH "$(shell git rev-parse --short HEAD)")' > $@
 	echo 'set(GIT_COMMIT_TIME_UNIX_SEC "$(shell git show --no-patch --format=%ct HEAD)")' >> $@
 
-.PHONY: $(TARBALL_PATH)
-$(TARBALL_PATH): gitversion.cmake _configure  # (Internal, for tarball)
-	cp -r generated/debian ./
+# - `dpkg-source` is the only tarball producer, so Debian's `.dsc` checksum fields are never maintained by us.
+# - Use `-Zgzip` because the default `xz` is too slow.
+# - The expanded `.spec` is shipped inside the tarball too, so the tarball alone is enough for `rpmbuild -ta` / `dpkg-buildpackage -b`.
+.PHONY: $(DEBIAN_DSC_PATH)
+$(DEBIAN_DSC_PATH): gitversion.cmake _configure  # (Internal, for tarball) Creates the tarball and `.dsc` in one run.
+	rm -rf "$(TARBALL_STAGE_DIR)"
+	mkdir -p "$(TARBALL_STAGE_DIR)"
 	tar --exclude-vcs \
-	    --exclude=$(TARBALL_PATH) \
 		--exclude=$(BUILD_ROOT_DIR) \
 		--exclude=CMakeLists.txt.user \
 		--exclude=generated \
 		--exclude=dist \
 		--exclude=__pycache__ \
-		--exclude=humanity_0.4.6 \
-		--exclude=tango-icon-theme-0.8.90 \
 		--exclude=samples \
-		--exclude=$(TARBALL_PATH) \
-		--transform='s|^[.]/|$(TARBALL_BASENAME)/|' -czf $@ .
-	rm gitversion.cmake
-	rm -r debian/
+		--exclude=.qtcreator \
+		--exclude=nome-icon-theme/raw \
+		-cf - . | tar -C "$(TARBALL_STAGE_DIR)" -xf -
+	cp -a "$(CONFIGURED_DEBIAN_DIR)" "$(TARBALL_STAGE_DIR)/"
+	cp -f "$(CONFIGURED_RPM_SPEC_FILE)" "$(TARBALL_STAGE_DIR)/"
+	rm -f gitversion.cmake
+	cd generated && dpkg-source -Zgzip -b "$(TARBALL_BASENAME)"
+	rm -rf "$(TARBALL_STAGE_DIR)"
 
 .PHONY: release-tarball
-release-tarball: $(TARBALL_PATH)    ## Archive the codebase along with `gitversion.cmake` as tarball
+release-tarball: $(DEBIAN_DSC_PATH)    ## Archive the codebase along with `gitversion.cmake` as tarball (+ `.dsc`)
 
 .PHONY: build-rpm-local-rpmbuild
-build-rpm-local-rpmbuild: $(TARBALL_PATH) _configure  ## Local build rpm with `rpmbuild` without `osc`
+build-rpm-local-rpmbuild: $(DEBIAN_DSC_PATH) _configure  ## Local build rpm with `rpmbuild` without `osc`
 	rm -rf "$(RPMBUILD_DIR)"/*
 	mkdir -p $(RPMBUILD_DIR)/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	cp -f $(TARBALL_PATH) $(RPMBUILD_DIR)/SOURCES/
@@ -243,21 +259,17 @@ ifeq ($(wildcard $(OSC_PACKAGE_DIR)/.),)
 	$(error Directory '$(OSC_PACKAGE_DIR)' does not exist)
 endif
 
+# Previous versions' tarball & `.dsc` are deleted first, otherwise `osc addremove` never notices them and they stay in the package forever.
 .PHONY: osc-cp
-osc-cp: _check_osc_var $(TARBALL_PATH)    ## Copy necessary files to osc package folder
+osc-cp: _check_osc_var $(DEBIAN_DSC_PATH)    ## Copy necessary files to osc package folder
+	rm -f "$(OSC_PACKAGE_DIR)"/*.tar.gz "$(OSC_PACKAGE_DIR)"/*.tar.xz "$(OSC_PACKAGE_DIR)"/*.dsc
 	cp -f "$(TARBALL_PATH)" "$(OSC_PACKAGE_DIR)/"
+	cp -f "$(DEBIAN_DSC_PATH)" "$(OSC_PACKAGE_DIR)/"
 	cp -f "${CONFIGURED_RPM_SPEC_FILE}" "$(OSC_PACKAGE_DIR)/"
 	cp -f "${CONFIGURED_PKGBUILD_FILE}" "$(OSC_PACKAGE_DIR)/"
 
-.PHONY: osc-create-debian-dsc
-osc-create-debian-dsc: _check_osc_var osc-cp
-	cd "$(OSC_PACKAGE_DIR)/"; \
-    tar xvf "$(TARBALL_BASENAME).tar.gz"; \
-	dpkg-source -b "$(TARBALL_BASENAME)"; \
-	rm -rf "$(TARBALL_BASENAME)"
-
 .PHONY: osc-build-debian
-osc-build-debian: _check_osc_var osc-create-debian-dsc
+osc-build-debian: _check_osc_var osc-cp
 	cd "$(OSC_PACKAGE_DIR)/"; \
 	osc build --vm-type=kvm --vm-memory=16000M $(OBS_REPO) $(OBS_ARCH)
 

@@ -1,0 +1,261 @@
+name: Publish to OBS
+
+# ============================================================================================
+# What this workflow does
+# ============================================================================================
+#
+#   git tag v0.9.1 && git push --tags
+#            |
+#            v
+#   1. cmake -B build                 -> expands generated/{qkiss.spec,PKGBUILD,debian/}
+#   2. dpkg-source -Zgzip -b          -> generated/qkiss_0.9.1.tar.gz + qkiss_0.9.1.dsc
+#   3. osc commit                     -> uploads those 4 files to OBS
+#   4. softprops/action-gh-release    -> uploads the SAME tarball to the Github release page
+#
+# There is exactly ONE tarball. `.spec` (rpm), `PKGBUILD` (Arch), `.dsc` (deb) and humans
+# downloading it from Github all consume that same file.
+#
+# `windows.yaml` puts the Windows installer and ZIP on the same release page.
+#
+# ============================================================================================
+# Required secrets in the `obs` environment (Settings > Environments > obs)
+# ============================================================================================
+#
+#   OBS_USERNAME / OBS_PASSWORD
+#
+# ATTENTION: do NOT put your personal openSUSE account here. On build.opensuse.org that
+# password is your *whole* openSUSE identity (Bugzilla, wiki, forum...), because the API only
+# offers HTTP Basic auth:
+#
+#     $ curl -i https://api.opensuse.org/source/home:kuanyui
+#     HTTP/2 401
+#     www-authenticate: Basic realm="Use your SUSE developer account"
+#
+# OBS tokens (rebuild / release / service / workflow) cannot upload sources, and osc's SSH
+# key auth is not enabled on the public instance. So: register a dedicated bot account, then
+# grant it maintainer rights on this one package only:
+#
+#     osc meta pkg -e home:kuanyui:stable qkiss
+#     <person userid="kuanyui-ci" role="maintainer"/>
+#
+# If the bot password ever leaks, the blast radius is this one OBS package, and revoking it
+# is deleting that one line.
+#
+# ============================================================================================
+# Prerequisite (one time, by hand)
+# ============================================================================================
+#
+# The OBS package must already exist, otherwise `osc checkout` below fails:
+#
+#     osc meta pkg -e home:kuanyui qkiss
+#
+# ============================================================================================
+# Test before you push a version tag
+# ============================================================================================
+#
+# A broken packaging script should not cost a new version number. So test the scripts first:
+#
+# 1. Push master. This also runs `windows.yaml`, which tests the Windows build.
+# 2. Actions tab > "Publish to OBS" > "Run workflow" on master, with "Test only" checked.
+#    It skips the two publishing steps: it commits nothing to OBS, and it does not touch
+#    the release page. It still logs in to OBS and checks out the OBS package.
+#    It keeps the source package as an artifact of the run, for you to check.
+# 3. When the Windows build and this test both pass, push the tag.
+#
+# If the tag run still fails because of a script, keep the same version.
+# Fix the script on master, then move the tag to the fixed commit:
+#
+#     git tag -f v0.9.0
+#     git push -f origin v0.9.0
+#
+# The moved tag starts this workflow and `windows.yaml` again.
+# Each of them uploads its files again. The new files replace the old ones, because the
+# names are the same.
+# Move a tag only before you announce the release. After that, people may already have
+# downloaded the old files.
+#
+# ============================================================================================
+
+on:
+  push:
+    tags: ['v*']
+  # Allow re-running it manually from the Actions tab (ex: after a transient OBS failure).
+  # - "Test only" checked (the default): build and check, but publish nothing. See above.
+  # - "Test only" unchecked: publish for real.
+  #   Then choose the version tag in "Use workflow from".
+  workflow_dispatch:
+    inputs:
+      test_only:
+        description: 'Test only: do not publish to OBS or to the release page'
+        type: boolean
+        default: true
+
+permissions:
+  # Only needed to create/update the Github release page. Nothing else.
+  contents: write
+
+env:
+  OBS_APIURL: https://api.opensuse.org
+  OBS_PROJECT: 'home:kuanyui:stable'
+  OBS_PACKAGE: 'qkiss'
+  # Step 5 puts the osc working copy of the OBS package here.
+  # It is inside `generated/`, which the tarball leaves out. See step 5.
+  OBS_WORKING_COPY: 'generated/obs-package'
+
+jobs:
+  publish:
+    name: Build the source package and push it to OBS
+    runs-on: ubuntu-latest
+    # OBS_USERNAME and OBS_PASSWORD are secrets of this environment.
+    # Test runs on master use this environment too. So if you ever limit it to some branches
+    # or tags (Settings > Environments > obs), allow master as well.
+    environment: obs
+    # openSUSE image, because `osc` lives there and Qt6/inkscape/dpkg are all one zypper away.
+    container: opensuse/tumbleweed
+
+    steps:
+      # Step 1: Install everything.
+      #
+      # The `cmake(...)` capabilities are copied 1:1 from `packaging/qkiss.spec.in`'s
+      # BuildRequires, so this list cannot silently drift away from the .spec.
+      #
+      # `dpkg` is the openSUSE package that ships `/usr/bin/dpkg-source`.
+      # `git` must be installed BEFORE actions/checkout, otherwise checkout falls back to a
+      # tarball download and submodules are silently skipped.
+      - name: Install build & packaging dependencies
+        run: |
+          zypper --non-interactive --gpg-auto-import-keys refresh
+          zypper --non-interactive install --no-recommends \
+            git tar gzip make cmake gcc-c++ \
+            osc dpkg \
+            inkscape desktop-file-utils \
+            libarchive-devel \
+            python3-jsonschema python3-PyYAML \
+            'cmake(Qt6Core)' \
+            'cmake(Qt6Gui)' \
+            'cmake(Qt6Widgets)' \
+            'cmake(Qt6Multimedia)' \
+            'cmake(Qt6LinguistTools)'
+
+      # Step 2: Let the Makefile's `git rev-parse` (-> gitversion.cmake) work in later steps.
+      #
+      # actions/checkout DOES add `safe.directory` itself, but only into a *temporary*
+      # global config with an overridden HOME (see `configureTempGlobalConfig()` in
+      # git-auth-helper.ts), so it does not carry over into our own steps. Without this,
+      # `git rev-parse` would fail silently and gitversion.cmake would end up empty.
+      #
+      # NOTE: nothing here rewrites the `git@github.com:` submodule URLs -- `.gitmodules`
+      # stays SSH and untouched. actions/checkout already writes
+      # `url.https://github.com/.insteadOf git@github.com:` into the global config *before*
+      # running `submodule update --recursive` (git-source-provider.ts:278 vs :284), which
+      # covers tango-remixer's own nested submodules too.
+      - name: Mark the workspace as a safe git directory
+        run: git config --global --add safe.directory '*'
+
+      # Step 3: Download the source code (+ all nested submodules)
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: 'recursive'
+
+      # Step 4: [Cache] Icon generation runs at *configure* time (CMakeLists.txt), and it is
+      # by far the slowest part of `cmake -B`. Same cache shape as `windows.yaml`.
+      #
+      # NOTE: `generated/` is excluded from the tarball, so nothing restored here can leak
+      # into the released source package.
+      - name: Get the tango-remixer commit
+        id: icon_submodule
+        run: echo "commitHash=$(git -C resources/tango-remixer rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache generated icons
+        uses: actions/cache@v5
+        with:
+          path: |
+            generated/icon_theme__png
+            generated/icon_theme__svg
+            generated/icons_built.stamp
+          # Built like the key in `windows.yaml`: the icons are generated again when the icon
+          # list or the tango-remixer commit changes.
+          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.icon_submodule.outputs.commitHash }}
+
+      # Step 5: Get a working copy of the OBS package.
+      #
+      # `OSC_CONFIG=/dev/null` is REQUIRED. Without it, osc raises `NoConfigfile` when
+      # `~/.config/osc/oscrc` is missing and then waits for interactive input, which would
+      # hang the job forever. With it, osc starts from an empty config and takes the
+      # credentials from the OSC_* environment variables. (see osc/conf.py, `get_config()`)
+      #
+      # NOTE: this also downloads the ~142MB tarball of the *previous* release, which the
+      # next step immediately deletes and replaces. If OBS download speed becomes a problem,
+      # `osc checkout --limit-size=<bytes>` can skip large files -- but verify that
+      # `osc addremove` + `osc commit` still behave correctly before relying on it.
+      #
+      # The working copy goes into `generated/`, because the tarball leaves `generated/` out.
+      # By default, osc would put it in `home:kuanyui:stable/qkiss/` in the repository root.
+      # Then the next step would pack it into the new tarball, together with the tarball of
+      # the previous release.
+      - name: Checkout the OBS package
+        env:
+          OSC_CONFIG: /dev/null
+          OSC_APIURL: ${{ env.OBS_APIURL }}
+          OSC_USERNAME: ${{ secrets.OBS_USERNAME }}
+          OSC_PASSWORD: ${{ secrets.OBS_PASSWORD }}
+        run: |
+          mkdir -p generated
+          osc checkout --output-dir "${OBS_WORKING_COPY}" "${OBS_PROJECT}" "${OBS_PACKAGE}"
+
+      # Step 6: Build the source package and drop it into the osc working copy.
+      #
+      # `osc-cp` depends on the tarball target, so this single `make` call does the whole
+      # `cmake -B` + `dpkg-source` run. Do NOT also call `make release-tarball` here, or the
+      # ~142MB tarball gets built twice.
+      - name: Build the source package
+        run: make osc-cp OSC_PACKAGE_DIR="${PWD}/${OBS_WORKING_COPY}"
+
+      # Test only: keep the files of the working copy as an artifact of this run.
+      # These are the files that the OBS package would contain after step 7.
+      # Download them from the summary page of the run, and check them.
+      - name: Keep the source package for checking (test only)
+        if: ${{ inputs.test_only }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-package
+          # Hidden files, like the `.osc` folder of osc, are left out.
+          path: ${{ env.OBS_WORKING_COPY }}/
+          if-no-files-found: error
+          # The tarball is big (about 142 MB), so delete it after a week.
+          retention-days: 7
+
+      # Step 7: Push it.
+      # A test run stops before `osc commit`: it only shows what would change on OBS.
+      - name: Commit to OBS
+        working-directory: ${{ env.OBS_WORKING_COPY }}
+        env:
+          OSC_CONFIG: /dev/null
+          OSC_APIURL: ${{ env.OBS_APIURL }}
+          OSC_USERNAME: ${{ secrets.OBS_USERNAME }}
+          OSC_PASSWORD: ${{ secrets.OBS_PASSWORD }}
+          TEST_ONLY: ${{ inputs.test_only }}
+        run: |
+          osc addremove
+          osc status
+          if [ -z "$(osc status)" ]; then
+            echo "Nothing changed, skipping commit."
+          elif [ "${TEST_ONLY}" = "true" ]; then
+            echo "Test only, skipping commit."
+          else
+            osc commit -m "Update to ${GITHUB_REF_NAME}"
+          fi
+
+      # Step 8: Publish the very same tarball on the Github release page, so that the URL in
+      # the .spec's `Source0:` is a real, working link.
+      - name: Create/Update the Github release page
+        if: startsWith(github.ref, 'refs/tags/') && !inputs.test_only
+        uses: softprops/action-gh-release@v3
+        with:
+          body_path: ${{ github.workspace }}/generated/latest_changelog.md
+          files: |
+            generated/qkiss_*.tar.gz
+            generated/qkiss_*.dsc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

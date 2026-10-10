@@ -439,6 +439,14 @@ endif()
 # Packaging related files
 # ===============================================
 
+# About `TARBALL_BASENAME`
+#
+# - Base name of the release tarball, ex: `qkiss_0.9.0`.
+# - Used for both the tarball file name and the root folder inside it.
+# - The underscore is important, this is the naming convention required by Debian's `dpkg-source` (`${NAME}_${VERSION}`), other distros yield to this rule.
+# - Must to keep `TARBALL_BASENAME` same with the one in `Makefile`.
+set(TARBALL_BASENAME "${PROJECT_NAME}_${PROJECT_VERSION}")
+
 configure_file("packaging/${PROJECT_NAME}.desktop.in" "${PROJ_GENERATED_DIR}/${PROJECT_NAME}.desktop" @ONLY)
 configure_file("packaging/${PROJECT_NAME}.spec.in"    "${PROJ_GENERATED_DIR}/${PROJECT_NAME}.spec" @ONLY)
 configure_file("packaging/PKGBUILD.in"                "${PROJ_GENERATED_DIR}/PKGBUILD" @ONLY)
@@ -878,4 +886,3 @@ elseif(WIN32)
     set(CPACK_NSIS_URL_INFO_ABOUT "${PROJECT_HOMEPAGE_URL}")
     include(CPack)  # execute CPack to read the defined variables.
 endif()
-

@@ -27,15 +27,17 @@ makedepends=(
 )
 optdepends=('lha: LHA archive support'
             'unar: Universal archive support')
-source=("${pkgname}-${pkgver}.tar.gz")
+# `@TARBALL_BASENAME@` (`NAME_VERSION`) is defined in `CMakeLists.txt`. The underscore is mandatory for Debian compatibility, see there.
+# Deliberately a bare file name, NOT a URL: OBS auto-downloads every `https://` entry of `source=()` (obs-build `Build/Arch.pm`), which fails whenever the Github release isn't published yet.
+source=("@TARBALL_BASENAME@.tar.gz")
 sha256sums=('SKIP')
 
 prepare() {
-  cd "${pkgname}-${pkgver}"
+  cd "@TARBALL_BASENAME@"
 }
 
 build() {
-  cmake -B build -S "${pkgname}-${pkgver}" \
+  cmake -B build -S "@TARBALL_BASENAME@" \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release
 
