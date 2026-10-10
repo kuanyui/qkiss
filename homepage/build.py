@@ -8,9 +8,9 @@ identical.
     python3 homepage/build.py OUT_DIR --no-screenshots          # `make homepage-build`
     python3 homepage/build.py --serve [PORT] --no-screenshots   # `make homepage-dev-server`
 
-DIR contains `screenshots.json` and the images it lists: a clone of the
-`qkiss-screenshots` repository. Everything is checked before anything is
-written: on any error, nothing is built and the exit status is 1.
+DIR is the `screenshots/` folder of the wiki (`qkiss.wiki.git`): the images
+that `homepage/screenshots.json` lists. Everything is checked before anything
+is written: on any error, nothing is built and the exit status is 1.
 
 `--serve` builds the site into a temporary folder instead, and serves it on
 PORT (8000 by default) on every interface, the URLs to open printed (this
@@ -60,6 +60,8 @@ FLAGS_DIR: Path = REPO_ROOT_DIR / "resources/flags"
 
 SCREENSHOTS_SUBDIR: str = "screenshots"
 SCREENSHOTS_MANIFEST: str = "screenshots.json"
+# The gallery: its order and captions are here, its images in the wiki (--screenshots).
+SCREENSHOTS_MANIFEST_PATH: Path = HOMEPAGE_DIR / SCREENSHOTS_MANIFEST
 
 # Fields of an entry of `<script id="languages">` in index.html: name -> required.
 LANGUAGE_FIELDS: dict[str, bool] = {"id": True, "name": True, "lang": False, "fallback": False, "flag": False}
@@ -230,13 +232,15 @@ def check_translations(languages: list[dict[str, str]], keys: dict[str, str]) ->
 # screenshots.json
 # ==========================================
 
-def check_screenshots(screenshots_dir: Path, languages: list[dict[str, str]]) -> list[str]:
-    """Validate `screenshots.json` in screenshots_dir. Returns the image file names it uses."""
-    manifest_path = screenshots_dir / SCREENSHOTS_MANIFEST
-    where = str(manifest_path)
-    if not manifest_path.is_file():
+def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, str]]) -> list[str]:
+    """Validate `homepage/screenshots.json`, and, given screenshots_dir, that its images
+    are there. Returns the image file names it uses."""
+    where = str(SCREENSHOTS_MANIFEST_PATH.relative_to(REPO_ROOT_DIR))
+    if not SCREENSHOTS_MANIFEST_PATH.is_file():
         raise BuildError(f"{where}: not found")
-    manifest = load_json(manifest_path.read_text(encoding="utf-8"), where)
+    if screenshots_dir is not None and not screenshots_dir.is_dir():
+        raise BuildError(f"{screenshots_dir}: not a directory (--screenshots)")
+    manifest = load_json(SCREENSHOTS_MANIFEST_PATH.read_text(encoding="utf-8"), where)
     if not isinstance(manifest, dict) or manifest.keys() != {"screenshots"}:
         raise BuildError(f'{where}: must be an object with exactly one key, "screenshots"')
     entries = manifest["screenshots"]
@@ -273,11 +277,10 @@ def check_screenshots(screenshots_dir: Path, languages: list[dict[str, str]]) ->
             continue
         localized_values(entry["caption"], f"{entry_where}.caption")
         for name in localized_values(entry["image"], f"{entry_where}.image"):
-            path = screenshots_dir / name
             if not PATT_IMAGE_NAME.fullmatch(name):
                 errors.append(f"{entry_where}.image: invalid file name {name!r}; use letters, digits, `.`, `_`, `-` and one of the extensions png, jpg, jpeg, webp, avif, gif")
-            elif path.is_symlink() or not path.is_file():
-                errors.append(f"{entry_where}.image: {name!r} is not a regular file in {screenshots_dir}")
+            elif screenshots_dir is not None and ((screenshots_dir / name).is_symlink() or not (screenshots_dir / name).is_file()):
+                errors.append(f"{entry_where}.image: {name!r} is not a regular file in {screenshots_dir}; push the image to the wiki first")
             else:
                 images.append(name)
     if errors:
@@ -310,7 +313,8 @@ def site_files(screenshots_dir: Path | None, images: list[str], languages: list[
     if errors:
         raise BuildError("\n".join(errors))
     if screenshots_dir is not None:
-        for name in [SCREENSHOTS_MANIFEST, *images]:
+        files[f"{SCREENSHOTS_SUBDIR}/{SCREENSHOTS_MANIFEST}"] = SCREENSHOTS_MANIFEST_PATH
+        for name in images:
             files[f"{SCREENSHOTS_SUBDIR}/{name}"] = screenshots_dir / name
     return files
 
@@ -324,7 +328,7 @@ def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path], list[str]
         raise BuildError("\n".join(page.errors))
     languages = check_languages(page.languages_json)
     warnings = check_translations(languages, page.keys)
-    images = check_screenshots(screenshots_dir, languages) if screenshots_dir is not None else []
+    images = check_screenshots(screenshots_dir, languages)   # screenshots.json is checked even without --screenshots
     if screenshots_dir is None:
         warnings.append("Without screenshots (--no-screenshots): fine for a preview, never publish it.")
     return site_files(screenshots_dir, images, languages), warnings
@@ -361,8 +365,9 @@ def build_into_temp_dir(screenshots_dir: Path | None) -> tuple[Path, list[str]]:
 
 def watched_sources(screenshots_dir: Path | None) -> dict[Path, tuple[int, int]]:
     """The files the site is made from, each with its (mtime, size): everything under
-    `src/`, the APP_ICONS, the flags, the files of the screenshots folder, and this script."""
-    paths = [*SRC_DIR.rglob("*"), *APP_ICONS.values(), *FLAGS_DIR.rglob("*"), SCRIPT_PATH]
+    `src/`, `screenshots.json`, the APP_ICONS, the flags, the files of the screenshots
+    folder, and this script."""
+    paths = [*SRC_DIR.rglob("*"), SCREENSHOTS_MANIFEST_PATH, *APP_ICONS.values(), *FLAGS_DIR.rglob("*"), SCRIPT_PATH]
     if screenshots_dir is not None and screenshots_dir.is_dir():
         paths += screenshots_dir.iterdir()
     found: dict[Path, tuple[int, int]] = {}
@@ -466,7 +471,7 @@ def serve(port: int, screenshots_dir: Path | None) -> None:
     threading.Thread(target=watch, args=(screenshots_dir, rebuild, sources), daemon=True).start()
     urls = [f"http://{host}:{port}/" for host in ["127.0.0.1", *lan_ips()]]
     print("Website listening on all interfaces (Ctrl-C to stop). Open one of:\n  " + "\n  ".join(urls)
-          + "\nWatching homepage/src/, the app icons, the flags" + (" and the screenshots" if screenshots_dir else "")
+          + "\nWatching homepage/src/, homepage/screenshots.json, the app icons, the flags" + (" and the screenshot images" if screenshots_dir else "")
           + ": a change rebuilds the site (reload the page); a change to build.py restarts this server.", flush=True)
     try:
         server.serve_forever()
@@ -489,7 +494,7 @@ def main() -> int:
     parser.add_argument("out_dir", metavar="OUT_DIR", nargs="?", type=Path, help="Write the site here. It must not exist yet, or be empty.")
     parser.add_argument("--serve", metavar="PORT", nargs="?", const=8000, type=int, help="Instead of OUT_DIR: serve the site on PORT (default: 8000) on every interface, and rebuild it when its sources change.")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--screenshots", metavar="DIR", type=Path, help="Directory containing screenshots.json and its images (a clone of the qkiss-screenshots repository).")
+    group.add_argument("--screenshots", metavar="DIR", type=Path, help="Directory of the images listed in homepage/screenshots.json (the screenshots/ folder of a clone of the wiki).")
     group.add_argument("--no-screenshots", action="store_true", help="Build without screenshots. For a preview only; never publish it.")
     args = parser.parse_args()
     if (args.out_dir is None) == (args.serve is None):

@@ -18,7 +18,7 @@ At build time, `build.py` also copies:
 
 - The app icons it uses from `resources/appicon/` (see `APP_ICONS` in `build.py`), so they are never duplicated.
 - The flags of the languages from `resources/flags/svg/`, with the MIT license notice of flag-icons.
-- The screenshots, from outside this repository (see below).
+- The screenshot images, from the wiki (see below).
 
 ## Local preview
 
@@ -27,15 +27,15 @@ make homepage-dev-server
 ```
 
 It builds the site, serves it on port 8000 on every interface, and prints the URLs to open (LAN addresses included, so the host of a VM can open it too).
-A change to `homepage/src/`, the app icons or the screenshots rebuilds it: reload the page.
+A change to `homepage/src/`, `homepage/screenshots.json`, the app icons, the flags or the screenshot images rebuilds it: reload the page.
 When a change breaks a check, the last good build stays served and the errors are printed.
 Ctrl-C stops it.
 
-To see the screenshots too, clone the screenshots repository once, and pass the clone:
+To see the screenshots too, clone the wiki once, and pass its `screenshots/` folder:
 
 ```sh
-git clone https://github.com/kuanyui/qkiss-screenshots ~/proj/qkiss-screenshots
-make homepage-dev-server HOMEPAGE_SCREENSHOTS=~/proj/qkiss-screenshots
+git clone https://github.com/kuanyui/qkiss.wiki.git ~/proj/qkiss.wiki
+make homepage-dev-server HOMEPAGE_SCREENSHOTS=~/proj/qkiss.wiki/screenshots
 ```
 
 `make homepage-build` writes the site into `generated/homepage/` instead, exactly as CI publishes it.
@@ -44,16 +44,17 @@ Opening `src/index.html` directly (`file://`) does not work, because translation
 
 ## Screenshots
 
-Screenshots are not stored in this repository, so they never bloat its history, however often they are replaced.
-They live in a separate repository, `qkiss-screenshots`, in the same namespace on each host:
+Screenshot images are not stored in this repository, so they never bloat its history, however often they are replaced:
 
-- https://github.com/kuanyui/qkiss-screenshots
-- https://gitlab.com/kuanyui/qkiss-screenshots
+- `homepage/screenshots.json`, here, lists them: their order and captions.
+- The images live in the `screenshots/` folder of the wiki, a separate Git repository on each host: https://github.com/kuanyui/qkiss.wiki.git and https://gitlab.com/kuanyui/qkiss.wiki.git. The web pages of a wiki only list its pages, not these files.
 
-At deploy time, CI clones it with `--depth 1`, and `build.py` copies `screenshots.json` and the images it lists into the site.
+At deploy time, CI clones the wiki of its own host with `--depth 1`, and `build.py` copies `homepage/screenshots.json` and the images it lists into the site.
 To clone another URL, set the CI variable `SCREENSHOTS_REPO`.
 
-### `screenshots.json`
+The wiki must exist before the first deployment: create its first page on the web, then clone it and add `screenshots/`.
+
+### `homepage/screenshots.json`
 
 ```json
 {
@@ -80,17 +81,17 @@ To clone another URL, set the CI variable `SCREENSHOTS_REPO`.
 - The order of the array is the order on the page.
 - `image` and `caption` are both required. Each one is either a string for every language, or an object `{ "language id": "..." }` that includes `en`. A missing language falls back like any other string (see [Translations](#translations)).
 - The caption is also the alt text of the image.
-- Image file names may only contain letters, digits, `.`, `_` and `-`, with one of the extensions `png`, `jpg`, `jpeg`, `webp`, `avif`, `gif`. They must be regular files next to `screenshots.json`.
+- Image file names may only contain letters, digits, `.`, `_` and `-`, with one of the extensions `png`, `jpg`, `jpeg`, `webp`, `avif`, `gif`. They must be regular files in the `screenshots/` folder of the wiki.
 - The gallery shows the same files scaled down, so keep them reasonably small (for example about 1600 px wide, WebP or an optimized PNG).
 
-`build.py` rejects anything else, and then nothing is deployed.
+`build.py` rejects anything else, and then nothing is deployed. It checks `homepage/screenshots.json` even without `--screenshots`, so a local preview catches its mistakes too.
 
-### Updating screenshots
+### Adding or replacing a screenshot
 
-1. Commit to `qkiss-screenshots`, and push it to both hosts.
-2. Deploy again, because pushing to `qkiss-screenshots` does not trigger it:
-   - GitHub: Actions → Homepage → Run workflow.
-   - GitLab: Build → Pipelines → Run pipeline, on `master`.
+1. Push the image to `screenshots/` in the wiki, on both hosts. Push it first: a `screenshots.json` listing an image the wiki does not have stops the build.
+2. Then:
+   - To add a screenshot, list it in `homepage/screenshots.json` and push this repository. That deploys.
+   - To replace an image under the same name, deploy again by hand. GitHub: Actions → Homepage → Run workflow (an edit of a wiki page on the web also deploys, through the `gollum` event; whether a `git push` to the wiki does is not documented). GitLab: Build → Pipelines → Run pipeline, on `master`.
 
 ## Translations
 

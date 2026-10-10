@@ -54,7 +54,7 @@ OBS_ARCH :=
 HOMEPAGE_OUT := generated/homepage
 ## Port `homepage-dev-server` serves the website on. (Default: `8000`)
 HOMEPAGE_PORT := 8000
-## A clone of the `qkiss-screenshots` repository, for the screenshots of the website. Empty: no screenshots. (ex: `~/proj/qkiss-screenshots`)
+## The `screenshots/` folder of a clone of the wiki (`qkiss.wiki.git`): the images listed in `homepage/screenshots.json`. Empty: no screenshots. (ex: `~/proj/qkiss.wiki/screenshots`)
 HOMEPAGE_SCREENSHOTS ?=
 # (expand ~ as $HOME)
 override HOMEPAGE_SCREENSHOTS := $(subst ~,$(HOME),$(HOMEPAGE_SCREENSHOTS))
@@ -179,7 +179,8 @@ homepage-build:    ## Build the website into `HOMEPAGE_OUT` (with the screenshot
 
 # The same, built into a temporary folder (not `HOMEPAGE_OUT`) and served on every interface, so the host of a VM
 # can open it too. The URLs to open are printed, this machine's LAN addresses among them. A change to
-# homepage/src/, the app icons or the screenshots rebuilds the site while it is served (reload the page).
+# homepage/src/, homepage/screenshots.json, the app icons, the flags or the screenshot images rebuilds the site
+# while it is served (reload the page).
 .PHONY: homepage-dev-server
 homepage-dev-server:    ## Build the website, serve it on port `HOMEPAGE_PORT` on every interface (the URLs to open are printed, LAN addresses included) and rebuild it when its files change. Ctrl-C stops it.
 	python3 homepage/build.py --serve $(HOMEPAGE_PORT) $(HOMEPAGE_SCREENSHOTS_OPTION)

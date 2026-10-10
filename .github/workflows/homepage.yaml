@@ -1,7 +1,7 @@
 # Publish the website (homepage/) on GitHub Pages: https://kuanyui.github.io/qkiss/
 # (.gitlab-ci.yml does the same on GitLab Pages; see homepage/README.md)
 # One-time setup in the repository: Settings > Pages > Build and deployment > Source: "GitHub Actions".
-# The screenshots are never committed here: they are cloned from the `qkiss-screenshots` repository at build time.
+# The screenshot images are never committed here: they are cloned from the `screenshots/` folder of this repository's wiki at build time (`homepage/screenshots.json` lists them).
 name: Homepage
 
 on:
@@ -13,8 +13,10 @@ on:
       - "resources/appicon/**"
       - "resources/flags/**"
       - ".github/workflows/homepage.yaml"
-  # Run it by hand after updating the screenshots repository.
+  # Run it by hand after replacing a screenshot image in the wiki.
   workflow_dispatch:
+  # An edit of a wiki page on GitHub. (Whether a `git push` to the wiki counts too is not documented.)
+  gollum:
 
 permissions:
   contents: read
@@ -34,18 +36,18 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     env:
-      # `qkiss-screenshots` of the same owner, unless the repository variable `SCREENSHOTS_REPO`
+      # The wiki of this repository, unless the repository variable `SCREENSHOTS_REPO`
       # (Settings > Secrets and variables > Actions > Variables) says otherwise.
-      SCREENSHOTS_REPO: ${{ vars.SCREENSHOTS_REPO || format('{0}/{1}/qkiss-screenshots.git', github.server_url, github.repository_owner) }}
+      SCREENSHOTS_REPO: ${{ vars.SCREENSHOTS_REPO || format('{0}/{1}.wiki.git', github.server_url, github.repository) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
 
       - name: Fetch screenshots
-        run: git clone --depth 1 "$SCREENSHOTS_REPO" "$RUNNER_TEMP/screenshots"
+        run: git clone --depth 1 "$SCREENSHOTS_REPO" "$RUNNER_TEMP/wiki"
 
       - name: Build homepage
-        run: python3 homepage/build.py _site --screenshots "$RUNNER_TEMP/screenshots"
+        run: python3 homepage/build.py _site --screenshots "$RUNNER_TEMP/wiki/screenshots"
 
       - name: Upload homepage
         uses: actions/upload-pages-artifact@v5
