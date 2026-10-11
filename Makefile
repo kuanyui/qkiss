@@ -47,6 +47,9 @@ CONFIGURED_PKGBUILD_FILE := generated/PKGBUILD
 # The `debian/` folder, and all files whose @VAR@ are already expanded by `cmake`
 CONFIGURED_DEBIAN_DIR := generated/debian/
 
+# The 4 packaging files that OBS downloads from the release page: the `.spec`, the `PKGBUILD`, and the `.dsc` + `debian.tar.gz` for Debian. Written by `obs-packaging`.
+OBS_PACKAGING_DIR := generated/obs
+
 ##@ -- OBS (OpenBuildService) ------------------------------------
 
 ## A local package directory for `osc`. (ex: `~/osc/project:user/qkiss/`, created via `osc mkpac qkiss`)
@@ -110,9 +113,11 @@ osc build --shell --vm-type=kvm --vm-memory 8192 Debian_12 x86_64
 
 # With `--shell`, `/home/abuild/` should be empty (because it's before extracting tarball...):
 ls /usr/src/packages/SOURCES/
-dpkg-source -x /usr/src/packages/SOURCES/*.dsc
+# The `$(NAME).dsc` there is only an input of `debtransform` (see `obs-packaging`). Make the real source package first, like OBS does:
+mkdir -p /tmp/deb && /.build/debtransform /usr/src/packages/SOURCES /usr/src/packages/SOURCES/$(NAME).dsc /tmp/deb
+dpkg-source -x /tmp/deb/*.dsc
 cd $(NAME)-$(VERSION)     # `dpkg-source -x` always extracts into `NAME-VERSION` (hyphen), whatever the folder inside the tarball is called
-cd /home/abuild && dpkg-source -x /.build-srcdir/*.dsc && cd $(NAME)-$(VERSION)/ && mkdir -p build && cd build && cmake ..
+cd /home/abuild && dpkg-source -x /tmp/deb/*.dsc && cd $(NAME)-$(VERSION)/ && mkdir -p build && cd build && cmake ..
 endef
 export __DOC_OSC_BUILD__
 
@@ -241,6 +246,24 @@ $(DEBIAN_DSC_PATH): gitversion.cmake _configure  # (Internal, for tarball) Creat
 .PHONY: release-tarball
 release-tarball: $(DEBIAN_DSC_PATH)    ## Archive the codebase along with `gitversion.cmake` as tarball (+ `.dsc`)
 
+# OBS builds the Debian package from `$(NAME).dsc` + `debian.tar.gz`, not from the native `.dsc` above:
+# - OBS gives these 2 files and the tarball to its `debtransform` tool, which makes a `3.0 (quilt)` source package.
+# - When OBS unpacks that source package, the `debian/` of `debian.tar.gz` replaces the `debian/` inside the tarball.
+# - So a broken Debian packaging can be fixed with a new `debian.tar.gz`, while the tarball stays the same.
+#   A native package cannot do this, because it has no packaging revision (the `-2` of `0.9.0-2`).
+# - The `debian/` inside the tarball stays native, for people who run `dpkg-buildpackage` themselves.
+.PHONY: obs-packaging
+obs-packaging: _configure    ## Write the 4 packaging files for OBS into `OBS_PACKAGING_DIR`. Does not build the tarball.
+	rm -rf "$(OBS_PACKAGING_DIR)"
+	mkdir -p "$(OBS_PACKAGING_DIR)/stage"
+	cp -f "$(CONFIGURED_RPM_SPEC_FILE)" "$(CONFIGURED_PKGBUILD_FILE)" "$(OBS_PACKAGING_DIR)/"
+	cp -a "$(CONFIGURED_DEBIAN_DIR)" "$(OBS_PACKAGING_DIR)/stage/debian"
+	echo "3.0 (quilt)" > "$(OBS_PACKAGING_DIR)/stage/debian/source/format"
+	tar -C "$(OBS_PACKAGING_DIR)/stage" -czf "$(OBS_PACKAGING_DIR)/debian.tar.gz" debian
+	rm -rf "$(OBS_PACKAGING_DIR)/stage"
+	python3 packaging/obs/make_dsc.py --control "$(CONFIGURED_DEBIAN_DIR)control" --version "$(VERSION)" \
+		--tarball "$(TARBALL_BASENAME).tar.gz" --debian-tarball debian.tar.gz --output "$(OBS_PACKAGING_DIR)/$(NAME).dsc"
+
 .PHONY: build-rpm-local-rpmbuild
 build-rpm-local-rpmbuild: $(DEBIAN_DSC_PATH) _configure  ## Local build rpm with `rpmbuild` without `osc`
 	rm -rf "$(RPMBUILD_DIR)"/*
@@ -261,12 +284,10 @@ endif
 
 # Previous versions' tarball & `.dsc` are deleted first, otherwise `osc addremove` never notices them and they stay in the package forever.
 .PHONY: osc-cp
-osc-cp: _check_osc_var $(DEBIAN_DSC_PATH)    ## Copy necessary files to osc package folder
+osc-cp: _check_osc_var $(DEBIAN_DSC_PATH) obs-packaging    ## Copy necessary files to osc package folder
 	rm -f "$(OSC_PACKAGE_DIR)"/*.tar.gz "$(OSC_PACKAGE_DIR)"/*.tar.xz "$(OSC_PACKAGE_DIR)"/*.dsc
 	cp -f "$(TARBALL_PATH)" "$(OSC_PACKAGE_DIR)/"
-	cp -f "$(DEBIAN_DSC_PATH)" "$(OSC_PACKAGE_DIR)/"
-	cp -f "${CONFIGURED_RPM_SPEC_FILE}" "$(OSC_PACKAGE_DIR)/"
-	cp -f "${CONFIGURED_PKGBUILD_FILE}" "$(OSC_PACKAGE_DIR)/"
+	cp -f "$(OBS_PACKAGING_DIR)"/* "$(OSC_PACKAGE_DIR)/"
 
 .PHONY: osc-build-debian
 osc-build-debian: _check_osc_var osc-cp

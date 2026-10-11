@@ -8,9 +8,15 @@ name: Publish to OBS
 #            |
 #            v
 #   1. cmake -B build                 -> expands generated/{qkiss.spec,PKGBUILD,debian/}
-#   2. dpkg-source -Zgzip -b          -> generated/qkiss_0.9.1.tar.gz + qkiss_0.9.1.dsc
-#   3. osc commit                     -> uploads those 4 files to OBS
-#   4. softprops/action-gh-release    -> uploads the SAME tarball to the Github release page
+#   2. dpkg-source -Zgzip -b          -> generated/qkiss_0.9.1.tar.gz
+#   3. make obs-packaging             -> generated/obs/{qkiss.spec,PKGBUILD,qkiss.dsc,debian.tar.gz}
+#   4. softprops/action-gh-release    -> uploads the tarball and these 4 packaging files to the
+#                                        Github release page
+#   5. curl .../trigger/runservice    -> tells OBS to download them
+#   6. OBS downloads the 4 packaging files from the latest Github release, and the tarball from
+#      the URL in `Source0:` of qkiss.spec. Then OBS builds.
+#   7. This workflow waits until OBS has all 5 files. It does not wait for the builds: see
+#      their results on the OBS package page.
 #
 # There is exactly ONE tarball. `.spec` (rpm), `PKGBUILD` (Arch), `.dsc` (deb) and humans
 # downloading it from Github all consume that same file.
@@ -18,36 +24,81 @@ name: Publish to OBS
 # `windows.yaml` puts the Windows installer and ZIP on the same release page.
 #
 # ============================================================================================
-# Required secrets in the `obs` environment (Settings > Environments > obs)
+# How OBS gets the files
 # ============================================================================================
 #
-#   OBS_USERNAME / OBS_PASSWORD
+# The only file that you put into the OBS package by hand is `_service`, a copy of
+# `packaging/obs/_service`. `_service` tells OBS to download the files of the latest Github
+# release. OBS does not check Github by itself, so this workflow tells OBS when to download.
 #
-# ATTENTION: do NOT put your personal openSUSE account here. On build.opensuse.org that
-# password is your *whole* openSUSE identity (Bugzilla, wiki, forum...), because the API only
-# offers HTTP Basic auth:
+# The release page of a version has 2 kinds of files:
+#
+#   qkiss_0.9.1.tar.gz    The source code. It is uploaded once, and never replaced.
+#   qkiss.spec            The packaging files. They can be published again for the same
+#   PKGBUILD              version, to fix the packaging. (See "Fix the packaging of a
+#   qkiss.dsc             published version" below.)
+#   debian.tar.gz
+#
+# `_service` downloads the packaging files from URLs that are the same for every version, so
+# their names have no version number. OBS takes the tarball URL from `Source0:` in qkiss.spec.
+# For Debian, OBS uses qkiss.dsc + debian.tar.gz instead of the `debian/` inside the tarball.
+# (See `obs-packaging` in the Makefile.)
+#
+# When only the packaging changes, the packaging revision goes up, so that users get the fixed
+# package as an update:
+#
+#   RPM      `Release:`. OBS raises it by itself.
+#   Debian   The `+N` at the end of the version (like `0.9.1-1+3.1`). OBS raises it by itself.
+#   Arch     `pkgrel`. This workflow raises it when it publishes the packaging files again.
+#
+# "Latest" means the newest release on Github. So OBS builds whichever release is the newest.
+# That is why this workflow refuses to publish a version that is older than the latest release.
+#
+# ============================================================================================
+# Required secret in the `obs` environment (Settings > Environments > obs)
+# ============================================================================================
+#
+#   OBS_RUNSERVICE_TOKEN
+#
+# This token can do only one thing: tell OBS to download the files of this one package again.
+# It cannot upload files. It also cannot change what OBS downloads, because `_service` decides
+# that. So a leaked token can only make OBS download the same files again.
+# "Prerequisite" below shows how to create the token.
+#
+# ATTENTION: do NOT put your openSUSE password here. On build.opensuse.org that password is
+# your *whole* openSUSE identity (Bugzilla, wiki, forum...), because the API only offers HTTP
+# Basic auth:
 #
 #     $ curl -i https://api.opensuse.org/source/home:kuanyui
 #     HTTP/2 401
 #     www-authenticate: Basic realm="Use your SUSE developer account"
 #
-# OBS tokens (rebuild / release / service / workflow) cannot upload sources, and osc's SSH
-# key auth is not enabled on the public instance. So: register a dedicated bot account, then
-# grant it maintainer rights on this one package only:
-#
-#     osc meta pkg -e home:kuanyui:stable qkiss
-#     <person userid="kuanyui-ci" role="maintainer"/>
-#
-# If the bot password ever leaks, the blast radius is this one OBS package, and revoking it
-# is deleting that one line.
-#
 # ============================================================================================
-# Prerequisite (one time, by hand)
+# Prerequisite (one time, by hand, with your own OBS account)
 # ============================================================================================
 #
-# The OBS package must already exist, otherwise `osc checkout` below fails:
+# 1. Put `_service` into the OBS package. Run these commands in the root folder of this
+#    repository:
 #
-#     osc meta pkg -e home:kuanyui qkiss
+#        osc checkout --output-dir /tmp/obs-qkiss home:kuanyui:stable qkiss
+#        cp packaging/obs/_service /tmp/obs-qkiss/
+#        cd /tmp/obs-qkiss
+#        osc add _service
+#        osc commit -m "Download the files from the latest Github release"
+#
+#    OBS runs `_service` when you commit it. Before the first release, the files are not
+#    on the release page yet, so this first run fails. That is expected: the first tag run
+#    uploads the files, and then tells OBS to run `_service` again.
+#
+#    `packaging/obs/_service` changes rarely. When it does, commit the new copy the same way.
+#
+# 2. Create the token. It works only for this one package:
+#
+#        osc token --create --operation runservice home:kuanyui:stable qkiss
+#
+#    Save the token string that this command prints as the secret OBS_RUNSERVICE_TOKEN.
+#    To revoke the token later, `osc token` lists your tokens with their IDs.
+#    Then run `osc token --delete <ID>`.
 #
 # ============================================================================================
 # Test before you push a version tag
@@ -57,13 +108,21 @@ name: Publish to OBS
 #
 # 1. Push master. This also runs `windows.yaml`, which tests the Windows build.
 # 2. Actions tab > "Publish to OBS" > "Run workflow" on master, with "Test only" checked.
-#    It skips the two publishing steps: it commits nothing to OBS, and it does not touch
-#    the release page. It still logs in to OBS and checks out the OBS package.
+#    It skips the publishing steps: it does not touch the release page or OBS.
 #    It keeps the source package as an artifact of the run, for you to check.
+#    It cannot test the build on OBS, because `_service` downloads the files only from a
+#    published release.
 # 3. When the Windows build and this test both pass, push the tag.
 #
-# If the tag run still fails because of a script, keep the same version.
-# Fix the script on master, then move the tag to the fixed commit:
+# Check the tarball in the artifact carefully. Once it is on the release page, it is never
+# replaced, so a broken tarball can only be fixed with a new version.
+#
+# ============================================================================================
+# If the tag run fails
+# ============================================================================================
+#
+# If the run failed before it uploaded the tarball, nothing is published yet. Then you may keep
+# the same version: fix the script on master, then move the tag to the fixed commit:
 #
 #     git tag -f v0.9.0
 #     git push -f origin v0.9.0
@@ -71,8 +130,27 @@ name: Publish to OBS
 # The moved tag starts this workflow and `windows.yaml` again.
 # Each of them uploads its files again. The new files replace the old ones, because the
 # names are the same.
+# (This workflow never replaces a tarball. In this case there is no tarball yet, so it uploads
+# the new one.)
 # Move a tag only before you announce the release. After that, people may already have
 # downloaded the old files.
+#
+# Once the tarball is on the release page, never move the tag. Instead:
+# - A temporary error (like a network error): re-run the failed run in the Actions tab.
+# - A broken packaging file, or a broken step of this workflow: see the next section.
+#
+# ============================================================================================
+# Fix the packaging of a published version
+# ============================================================================================
+#
+# 1. Fix the packaging file or this workflow on master, and push master.
+# 2. Actions tab > "Publish to OBS" > "Run workflow" on master, with "Test only" unchecked.
+#
+# This run publishes the 4 packaging files of the latest release again. It never replaces the
+# tarball on the release page. It takes everything from the tag of that release, except these packaging inputs,
+# which it takes from master:
+#
+#     packaging/qkiss.spec.in, packaging/PKGBUILD.in, packaging/debian/, packaging/obs/
 #
 # ============================================================================================
 
@@ -83,6 +161,8 @@ on:
   # - "Test only" checked (the default): build and check, but publish nothing. See above.
   # - "Test only" unchecked: publish for real.
   #   Then choose the version tag in "Use workflow from".
+  #   Or choose master, to publish the packaging files of the latest release again.
+  #   (See "Fix the packaging of a published version" above.)
   workflow_dispatch:
     inputs:
       test_only:
@@ -94,23 +174,29 @@ permissions:
   # Only needed to create/update the Github release page. Nothing else.
   contents: write
 
+# Run only one run of this workflow at a time. Two runs that publish at the same time could
+# upload different files to the same release page, or choose the same Arch `pkgrel`.
+concurrency:
+  group: publish-to-obs
+  cancel-in-progress: false
+
 env:
   OBS_APIURL: https://api.opensuse.org
   OBS_PROJECT: 'home:kuanyui:stable'
   OBS_PACKAGE: 'qkiss'
-  # Step 5 puts the osc working copy of the OBS package here.
-  # It is inside `generated/`, which the tarball leaves out. See step 5.
-  OBS_WORKING_COPY: 'generated/obs-package'
+  # Step 6 writes the 4 packaging files into this folder (with `make obs-packaging`).
+  # The folder is inside `generated/`, which the tarball leaves out.
+  OBS_PACKAGING_DIR: 'generated/obs'
 
 jobs:
   publish:
     name: Build the source package and push it to OBS
     runs-on: ubuntu-latest
-    # OBS_USERNAME and OBS_PASSWORD are secrets of this environment.
+    # OBS_RUNSERVICE_TOKEN is a secret of this environment.
     # Test runs on master use this environment too. So if you ever limit it to some branches
     # or tags (Settings > Environments > obs), allow master as well.
     environment: obs
-    # openSUSE image, because `osc` lives there and Qt6/inkscape/dpkg are all one zypper away.
+    # openSUSE image, because Qt6/inkscape/dpkg are all one zypper away.
     container: opensuse/tumbleweed
 
     steps:
@@ -120,6 +206,7 @@ jobs:
       # BuildRequires, so this list cannot silently drift away from the .spec.
       #
       # `dpkg` is the openSUSE package that ships `/usr/bin/dpkg-source`.
+      # `curl` talks to Github and OBS.
       # `git` must be installed BEFORE actions/checkout, otherwise checkout falls back to a
       # tarball download and submodules are silently skipped.
       - name: Install build & packaging dependencies
@@ -127,7 +214,7 @@ jobs:
           zypper --non-interactive --gpg-auto-import-keys refresh
           zypper --non-interactive install --no-recommends \
             git tar gzip make cmake gcc-c++ \
-            osc dpkg \
+            curl dpkg \
             inkscape desktop-file-utils \
             libarchive-devel \
             python3-jsonschema python3-PyYAML \
@@ -152,10 +239,61 @@ jobs:
       - name: Mark the workspace as a safe git directory
         run: git config --global --add safe.directory '*'
 
+      # Before step 3: decide what this run does, and for which tag.
+      #
+      #   test       "Test only" is checked. Build everything, but publish nothing.
+      #   publish    A version tag: the pushed tag, or the tag chosen in "Use workflow from".
+      #   republish  "Test only" is unchecked, on a branch. Publish the packaging files of the
+      #              latest release again. (See "Fix the packaging of a published version".)
+      - name: Decide what this run does
+        id: target
+        env:
+          TEST_ONLY: ${{ inputs.test_only }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${TEST_ONLY}" = "true" ]; then
+            echo "This run: test"
+            echo "mode=test" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # The tag of the latest release. 404 means that there is no release yet.
+          status="$(curl --silent --show-error --output "${RUNNER_TEMP}/latest-release.json" --write-out '%{http_code}' \
+            --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/latest")"
+          case "${status}" in
+            200) latest="$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["tag_name"])' "${RUNNER_TEMP}/latest-release.json")" ;;
+            404) latest="" ;;
+            *)   echo "::error::Github answered HTTP ${status} for the latest release."
+                 exit 1 ;;
+          esac
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            mode=publish
+            tag="${GITHUB_REF_NAME}"
+            # OBS builds only the latest release. Stop before uploading anything if this tag is
+            # older, because a newly published release becomes the latest one on Github.
+            newest="$(printf '%s\n%s\n' "${latest#v}" "${tag#v}" | sort -V | tail -n 1)"
+            if [ -n "${latest}" ] && [ "${newest}" != "${tag#v}" ]; then
+              echo "::error::${tag} is older than the latest release ${latest}. OBS builds only the latest release."
+              exit 1
+            fi
+          else
+            mode=republish
+            tag="${latest}"
+            if [ -z "${tag}" ]; then
+              echo "::error::There is no release yet, so there is nothing to publish again."
+              exit 1
+            fi
+          fi
+          echo "This run: ${mode} ${tag}"
+          echo "mode=${mode}" >> "$GITHUB_OUTPUT"
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+
       # Step 3: Download the source code (+ all nested submodules)
+      # A "republish" run downloads the tag of the latest release, not the branch it runs on.
       - name: Checkout code
         uses: actions/checkout@v5
         with:
+          ref: ${{ steps.target.outputs.mode == 'republish' && steps.target.outputs.tag || '' }}
           submodules: 'recursive'
 
       # Step 4: [Cache] Icon generation runs at *configure* time (CMakeLists.txt), and it is
@@ -178,84 +316,223 @@ jobs:
           # list or the tango-remixer commit changes.
           key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.icon_submodule.outputs.commitHash }}
 
-      # Step 5: Get a working copy of the OBS package.
+      # Step 5: Get the tarball.
       #
-      # `OSC_CONFIG=/dev/null` is REQUIRED. Without it, osc raises `NoConfigfile` when
-      # `~/.config/osc/oscrc` is missing and then waits for interactive input, which would
-      # hang the job forever. With it, osc starts from an empty config and takes the
-      # credentials from the OSC_* environment variables. (see osc/conf.py, `get_config()`)
-      #
-      # NOTE: this also downloads the ~142MB tarball of the *previous* release, which the
-      # next step immediately deletes and replaces. If OBS download speed becomes a problem,
-      # `osc checkout --limit-size=<bytes>` can skip large files -- but verify that
-      # `osc addremove` + `osc commit` still behave correctly before relying on it.
-      #
-      # The working copy goes into `generated/`, because the tarball leaves `generated/` out.
-      # By default, osc would put it in `home:kuanyui:stable/qkiss/` in the repository root.
-      # Then the next step would pack it into the new tarball, together with the tarball of
-      # the previous release.
-      - name: Checkout the OBS package
+      # A publishing run never rebuilds or replaces a tarball that is already on the release
+      # page, because people may already have downloaded it. So when the release page already
+      # has the tarball, this step downloads it, and the later steps use exactly that file.
+      # This step also saves the names of the files on the release page into
+      # generated/release-assets.txt, for step 7.
+      - name: Get the tarball
+        id: tarball
         env:
-          OSC_CONFIG: /dev/null
-          OSC_APIURL: ${{ env.OBS_APIURL }}
-          OSC_USERNAME: ${{ secrets.OBS_USERNAME }}
-          OSC_PASSWORD: ${{ secrets.OBS_PASSWORD }}
+          MODE: ${{ steps.target.outputs.mode }}
+          TAG: ${{ steps.target.outputs.tag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          version="$(cat VERSION)"
+          tarball="qkiss_${version}.tar.gz"
           mkdir -p generated
-          osc checkout --output-dir "${OBS_WORKING_COPY}" "${OBS_PROJECT}" "${OBS_PACKAGE}"
+          : > generated/release-assets.txt
+          if [ "${MODE}" != "test" ]; then
+            if [ "${TAG}" != "v${version}" ]; then
+              echo "::error::The tag ${TAG} does not match the VERSION file (${version})."
+              exit 1
+            fi
+            # 404 means that the release page does not exist yet.
+            status="$(curl --silent --show-error --output generated/release.json --write-out '%{http_code}' \
+              --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+              "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}")"
+            if [ "${status}" = "200" ]; then
+              python3 -c 'import json, sys; print("\n".join(asset["name"] for asset in json.load(open(sys.argv[1]))["assets"]))' \
+                generated/release.json > generated/release-assets.txt
+            elif [ "${status}" != "404" ]; then
+              echo "::error::Github answered HTTP ${status} for the release ${TAG}."
+              exit 1
+            fi
+          fi
+          if grep -qxF "${tarball}" generated/release-assets.txt; then
+            echo "The release page already has ${tarball}. Download it, and do not build it."
+            curl --fail --silent --show-error --location --output "generated/${tarball}" \
+              "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/${tarball}"
+            echo "new=false" >> "$GITHUB_OUTPUT"
+          elif [ "${MODE}" = "republish" ]; then
+            echo "::error::The release ${TAG} has no ${tarball}, so there is nothing to publish again."
+            exit 1
+          else
+            make release-tarball
+            echo "new=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "file=generated/${tarball}" >> "$GITHUB_OUTPUT"
 
-      # Step 6: Build the source package and drop it into the osc working copy.
+      # Step 6: Write the 4 packaging files into OBS_PACKAGING_DIR (see `obs-packaging` in the
+      # Makefile). This does not build the tarball.
       #
-      # `osc-cp` depends on the tarball target, so this single `make` call does the whole
-      # `cmake -B` + `dpkg-source` run. Do NOT also call `make release-tarball` here, or the
-      # ~142MB tarball gets built twice.
-      - name: Build the source package
-        run: make osc-cp OSC_PACKAGE_DIR="${PWD}/${OBS_WORKING_COPY}"
+      # A "republish" run first replaces the packaging inputs of the tag with the ones of the
+      # branch that it runs on. So it publishes your fix, while everything else stays as in
+      # the tag.
+      - name: Write the packaging files
+        env:
+          MODE: ${{ steps.target.outputs.mode }}
+        run: |
+          if [ "${MODE}" = "republish" ]; then
+            git fetch --quiet --depth=1 origin "${GITHUB_SHA}"
+            git restore --source="${GITHUB_SHA}" --worktree -- \
+              packaging/qkiss.spec.in packaging/PKGBUILD.in packaging/debian packaging/obs
+            git status --short -- packaging
+          fi
+          make obs-packaging OBS_PACKAGING_DIR="${OBS_PACKAGING_DIR}"
+          ls -l "${OBS_PACKAGING_DIR}"
 
-      # Test only: keep the files of the working copy as an artifact of this run.
-      # These are the files that the OBS package would contain after step 7.
+      # Step 7: Raise the Arch `pkgrel` if needed, and check that all 5 files are for the
+      # version in the VERSION file.
+      #
+      # OBS raises the packaging revision of RPM and Debian by itself, but not the `pkgrel` of
+      # Arch. So when the release page already has a PKGBUILD of the same version, the new
+      # PKGBUILD gets its `pkgrel` + 1. Otherwise `pkgrel` stays as in `packaging/PKGBUILD.in`.
+      - name: Set the Arch pkgrel, and check the versions
+        env:
+          TAG: ${{ steps.target.outputs.tag }}
+          TARBALL_FILE: ${{ steps.tarball.outputs.file }}
+        run: |
+          version="$(cat VERSION)"
+          if grep -qxF PKGBUILD generated/release-assets.txt; then
+            curl --fail --silent --show-error --location --output generated/published-PKGBUILD \
+              "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/PKGBUILD"
+            if grep -qxF "pkgver=${version}" generated/published-PKGBUILD; then
+              pkgrel="$(sed -n 's/^pkgrel=//p' generated/published-PKGBUILD)"
+              case "${pkgrel}" in
+                ''|*[!0-9]*)
+                  echo "::error::The PKGBUILD on the release page has an unexpected pkgrel: '${pkgrel}'"
+                  exit 1 ;;
+              esac
+              sed -i "s/^pkgrel=.*/pkgrel=$((pkgrel + 1))/" "${OBS_PACKAGING_DIR}/PKGBUILD"
+            fi
+          fi
+          grep -H '^pkgrel=' "${OBS_PACKAGING_DIR}/PKGBUILD"
+          # Every file must name the same version and the same tarball. A mismatch means that
+          # the packaging inputs do not fit this release.
+          tarball="$(basename "${TARBALL_FILE}")"
+          spec_version="$(sed -n 's/^Version:[[:space:]]*//p' "${OBS_PACKAGING_DIR}/qkiss.spec")"
+          # The file name at the end of the Source0 URL.
+          spec_source0="$(sed -n 's/^Source0:[[:space:]]*//p' "${OBS_PACKAGING_DIR}/qkiss.spec" | sed 's|.*/||')"
+          failed=0
+          test -f "${TARBALL_FILE}" || { echo "::error::Missing ${TARBALL_FILE}"; failed=1; }
+          [ "${spec_version}" = "${version}" ] || { echo "::error::qkiss.spec is not for ${version}"; failed=1; }
+          [ "${spec_source0}" = "${tarball}" ] || { echo "::error::Source0 of qkiss.spec is not ${tarball}"; failed=1; }
+          grep -qxF "pkgver=${version}" "${OBS_PACKAGING_DIR}/PKGBUILD" || { echo "::error::PKGBUILD is not for ${version}"; failed=1; }
+          grep -qxF "source=(\"${tarball}\")" "${OBS_PACKAGING_DIR}/PKGBUILD" || { echo "::error::source of PKGBUILD is not ${tarball}"; failed=1; }
+          grep -qxF "Version: ${version}" "${OBS_PACKAGING_DIR}/qkiss.dsc" || { echo "::error::qkiss.dsc is not for ${version}"; failed=1; }
+          grep -qxF "DEBTRANSFORM-TAR: ${tarball}" "${OBS_PACKAGING_DIR}/qkiss.dsc" || { echo "::error::DEBTRANSFORM-TAR of qkiss.dsc is not ${tarball}"; failed=1; }
+          grep -qxF "DEBTRANSFORM-FILES-TAR: debian.tar.gz" "${OBS_PACKAGING_DIR}/qkiss.dsc" || { echo "::error::DEBTRANSFORM-FILES-TAR of qkiss.dsc is not debian.tar.gz"; failed=1; }
+          exit "${failed}"
+
+      # Test only: keep the 5 files as an artifact of this run: the tarball, and the 4
+      # packaging files that the release page would get.
       # Download them from the summary page of the run, and check them.
       - name: Keep the source package for checking (test only)
         if: ${{ inputs.test_only }}
         uses: actions/upload-artifact@v4
         with:
           name: source-package
-          # Hidden files, like the `.osc` folder of osc, are left out.
-          path: ${{ env.OBS_WORKING_COPY }}/
+          path: |
+            ${{ steps.tarball.outputs.file }}
+            ${{ env.OBS_PACKAGING_DIR }}/
           if-no-files-found: error
           # The tarball is big (about 142 MB), so delete it after a week.
           retention-days: 7
 
-      # Step 7: Push it.
-      # A test run stops before `osc commit`: it only shows what would change on OBS.
-      - name: Commit to OBS
-        working-directory: ${{ env.OBS_WORKING_COPY }}
-        env:
-          OSC_CONFIG: /dev/null
-          OSC_APIURL: ${{ env.OBS_APIURL }}
-          OSC_USERNAME: ${{ secrets.OBS_USERNAME }}
-          OSC_PASSWORD: ${{ secrets.OBS_PASSWORD }}
-          TEST_ONLY: ${{ inputs.test_only }}
-        run: |
-          osc addremove
-          osc status
-          if [ -z "$(osc status)" ]; then
-            echo "Nothing changed, skipping commit."
-          elif [ "${TEST_ONLY}" = "true" ]; then
-            echo "Test only, skipping commit."
-          else
-            osc commit -m "Update to ${GITHUB_REF_NAME}"
-          fi
-
-      # Step 8: Publish the very same tarball on the Github release page, so that the URL in
-      # the .spec's `Source0:` is a real, working link.
-      - name: Create/Update the Github release page
-        if: startsWith(github.ref, 'refs/tags/') && !inputs.test_only
+      # Step 8: Upload the tarball to the Github release page, only when step 5 built it in
+      # this run. `overwrite_files: false` is a second safety: an existing tarball is never
+      # replaced.
+      - name: Upload the tarball to the Github release page
+        if: steps.target.outputs.mode == 'publish' && steps.tarball.outputs.new == 'true'
         uses: softprops/action-gh-release@v3
         with:
-          body_path: ${{ github.workspace }}/generated/latest_changelog.md
-          files: |
-            generated/qkiss_*.tar.gz
-            generated/qkiss_*.dsc
+          tag_name: ${{ steps.target.outputs.tag }}
+          files: ${{ steps.tarball.outputs.file }}
+          overwrite_files: false
+          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 9: Upload the 4 packaging files to the Github release page. They replace the
+      # packaging files of an earlier run.
+      # OBS downloads the files from this page, so step 9 must come before step 10.
+      - name: Upload the packaging files to the Github release page
+        if: steps.target.outputs.mode != 'test'
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.target.outputs.tag }}
+          body_path: ${{ github.workspace }}/generated/latest_changelog.md
+          files: ${{ env.OBS_PACKAGING_DIR }}/*
+          overwrite_files: true
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 10: Tell OBS to run `_service`. `_service` downloads the files from the latest
+      # release. OBS answers before the download is done, so step 11 waits for the download.
+      #
+      # OBS builds only the latest release. So stop here if this release is not the latest
+      # one, instead of waiting in step 11 for files that never come.
+      - name: Tell OBS to run _service
+        if: steps.target.outputs.mode != 'test'
+        env:
+          TAG: ${{ steps.target.outputs.tag }}
+          OBS_RUNSERVICE_TOKEN: ${{ secrets.OBS_RUNSERVICE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          latest="$(curl --fail-with-body --silent --show-error \
+            --header "Authorization: Bearer ${GITHUB_TOKEN}" \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/latest" \
+            | python3 -c 'import json, sys; print(json.load(sys.stdin)["tag_name"])')"
+          if [ "${latest}" != "${TAG}" ]; then
+            echo "::error::OBS builds only the latest release, which is ${latest}, not ${TAG}."
+            exit 1
+          fi
+          if [ -z "${OBS_RUNSERVICE_TOKEN}" ]; then
+            echo "::error::The secret OBS_RUNSERVICE_TOKEN is missing (Settings > Environments > obs)."
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error --request POST \
+            --header "Authorization: Token ${OBS_RUNSERVICE_TOKEN}" \
+            "${OBS_APIURL}/trigger/runservice"
+
+      # Step 11: Wait until OBS lists all 5 files of this run. If they do not show up within
+      # about 20 minutes, this step fails.
+      #
+      # OBS shows the file list of a package under `/public/`, without login. With `expand=1`,
+      # the list also has the files that `_service` downloaded, with the MD5 checksum of each.
+      # When the list has every file with the same MD5 checksum as ours, OBS has downloaded the
+      # files of this run. Checking only the tarball is not enough: when only the packaging is
+      # published again, the tarball is the same as before.
+      # If `_service` fails, look at the OBS package page for the error.
+      - name: Wait until OBS has the new files
+        if: steps.target.outputs.mode != 'test'
+        env:
+          TARBALL_FILE: ${{ steps.tarball.outputs.file }}
+        run: |
+          # One line per file, like: qkiss.spec" md5="0123456789abcdef0123456789abcdef"
+          # OBS adds a prefix to the names of the files that `_service` downloaded, for example
+          # `_service:download_url:`. So only the end of each name is compared.
+          for file in "${TARBALL_FILE}" "${OBS_PACKAGING_DIR}"/*; do
+            printf '%s" md5="%s"\n' "$(basename "${file}")" "$(md5sum "${file}" | cut -d ' ' -f 1)"
+          done > generated/obs-expected.txt
+          cat generated/obs-expected.txt
+          # 60 checks, 20 seconds apart: about 20 minutes in total.
+          for attempt in $(seq 60); do
+            sleep 20
+            curl --fail --silent --show-error --output generated/obs-files.xml \
+              "${OBS_APIURL}/public/source/${OBS_PROJECT}/${OBS_PACKAGE}?expand=1" || continue
+            missing=0
+            while IFS= read -r expected; do
+              grep -qF -- "${expected}" generated/obs-files.xml || missing=1
+            done < generated/obs-expected.txt
+            if [ "${missing}" = 0 ]; then
+              echo "OBS has all the files of this run."
+              exit 0
+            fi
+          done
+          echo "::error::After 20 minutes, OBS still does not have all the files of this run. See https://build.opensuse.org/package/show/${OBS_PROJECT}/${OBS_PACKAGE}"
+          exit 1

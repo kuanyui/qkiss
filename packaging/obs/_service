@@ -1,0 +1,15 @@
+<services>
+  <service name="download_url">
+    <param name="url">https://github.com/kuanyui/qkiss/releases/latest/download/qkiss.spec</param>
+  </service>
+  <service name="download_url">
+    <param name="url">https://github.com/kuanyui/qkiss/releases/latest/download/qkiss.dsc</param>
+  </service>
+  <service name="download_url">
+    <param name="url">https://github.com/kuanyui/qkiss/releases/latest/download/PKGBUILD</param>
+  </service>
+  <service name="download_url">
+    <param name="url">https://github.com/kuanyui/qkiss/releases/latest/download/debian.tar.gz</param>
+  </service>
+  <service name="download_files"/>
+</services>
