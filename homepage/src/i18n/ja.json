@@ -1,5 +1,5 @@
 {
-  "meta.title": "QKiSS — KiSS のささやかなルネサンス",
+  "meta.title": "QKiSS — 勝手に KiSS ルネサンス",
   "meta.description": "QKiSS は Qt 6 で実装された現代的な KiSS（Kisekae Set System）ビューアです。KISS/GS と FKiSS 1・2 に対応した、Linux・Windows 向けのフリーソフトウェアです。",
   "nav.skip": "本文へスキップ",
   "nav.label": "セクション",
@@ -8,7 +8,7 @@
   "nav.screenshots": "スクリーンショット",
   "nav.download": "ダウンロード",
   "nav.language": "言語",
-  "hero.tagline": "KiSS のささやかなルネサンス",
+  "hero.tagline": "勝手に KiSS ルネサンス",
   "hero.lead": "QKiSS は Qt 6 で実装され、KISS/GS、FKiSS 1・2 の仕様に対応した現代的な <a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS</a> ビューアです。",
   "hero.download": "ダウンロード",
   "hero.note": "GPLv3 のフリーソフトウェア · Linux · Windows",

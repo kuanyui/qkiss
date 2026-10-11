@@ -1,5 +1,5 @@
 {
-  "meta.title": "QKiSS — KiSS 的小小文藝復興",
+  "meta.title": "QKiSS — 自我感覺良好的 KiSS 復興",
   "meta.description": "QKiSS 是以 Qt 6 開發的現代化 KiSS（Kisekae Set System）檢視器，支援 KISS/GS 與 FKiSS 1・2，是適用於 Linux 與 Windows 的自由軟體。",
   "nav.skip": "跳到主要內容",
   "nav.label": "頁面區塊",
@@ -8,7 +8,7 @@
   "nav.screenshots": "截圖",
   "nav.download": "下載",
   "nav.language": "語言",
-  "hero.tagline": "KiSS 的小小文藝復興",
+  "hero.tagline": "自我感覺良好的 KiSS 復興",
   "hero.lead": "QKiSS 是一個以 Qt 6 實作、支援 KISS/GS 與 FKiSS 1・2 規格的現代 <a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS</a> 檢視器。",
   "hero.download": "下載",
   "hero.note": "GPLv3 自由軟體 · Linux · Windows",

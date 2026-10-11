@@ -1,7 +1,7 @@
 <div align="center">
   <h1>QKiSS</h1>
   <img src="resources/appicon/apps/48/qkiss.svg" alt="QKiSS's Logo" />
-  <h4>A modest renaissance of KiSS</h4>
+  <h4>An unsolicited renaissance of KiSS</h4>
   <img src="https://raw.githubusercontent.com/wiki/kuanyui/qkiss/screenshots/main.webp" alt="The main window of QKiSS (Japanese UI) with a KiSS set loaded" />
 </div>
 
