@@ -10,9 +10,12 @@ homepage/
 └── src/            # Copied into the site as is
     ├── index.html  # The page. English strings are written here.
     ├── style.css
-    ├── main.js     # Translations, the language picker and the screenshot gallery
-    └── i18n/       # One JSON file per language other than English
+    ├── main.js     # Translations, the language picker, the screenshot gallery and the download links
+    ├── i18n/       # One JSON file per language other than English
+    └── images/distros/  # Logos of the Linux distributions, from Simple Icons (see its README.md)
 ```
+
+The download links point to the files of the latest release on GitHub. `main.js` looks them up with the GitHub API when the page opens. If that fails, the links open the page of the latest release instead.
 
 At build time, `build.py` also copies:
 

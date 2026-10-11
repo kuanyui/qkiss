@@ -156,14 +156,35 @@
     <section class="section section-alt" id="download">
       <div class="container">
         <h2 data-i18n="download.title">Download</h2>
+        <!-- Filled by main.js from the latest GitHub release. It stays hidden if that fails. -->
+        <p class="download-version" id="download-version" hidden>
+          <span data-i18n="download.version">Latest version:</span>
+          <a id="download-version-link" href="https://github.com/kuanyui/qkiss/releases/latest"></a>
+        </p>
+        <!--
+          main.js points each `data-release-asset` link to the file of the latest release whose
+          name matches that regular expression. Without main.js, the links open the page of the
+          latest release.
+        -->
         <div class="download-grid">
           <article class="download-card">
             <div class="download-head">
               <img src="images/tux.svg" alt="" width="44" height="44">
               <h3>Linux</h3>
             </div>
-            <p data-i18n="download.linux.body">Packages for Debian, Fedora, openSUSE and Ubuntu, built and signed by the Open Build Service.</p>
-            <a class="button button-primary" href="https://software.opensuse.org//download.html?project=home%3Akuanyui%3Astable&amp;package=qkiss" data-i18n="download.linux.link">Installation instructions</a>
+            <p data-i18n="download.linux.body">Packages built and signed by the Open Build Service, for these distributions:</p>
+            <!-- The logos come from Simple Icons. See images/distros/README.md. -->
+            <ul class="distro-list">
+              <li><img src="images/distros/archlinux.svg" alt="" width="24" height="24">Arch Linux</li>
+              <li><img src="images/distros/debian.svg" alt="" width="24" height="24">Debian</li>
+              <li><img src="images/distros/fedora.svg" alt="" width="24" height="24">Fedora</li>
+              <li><img src="images/distros/opensuse.svg" alt="" width="24" height="24">openSUSE</li>
+              <li><img src="images/distros/ubuntu.svg" alt="" width="24" height="24">Ubuntu</li>
+            </ul>
+            <div class="button-row">
+              <a class="button button-primary" href="https://software.opensuse.org/download.html?project=home%3Akuanyui%3Astable&amp;package=qkiss" data-i18n="download.linux.link">Installation instructions</a>
+              <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="^qkiss_.+\.tar\.gz$" data-i18n="download.linux.tarball">Source tarball</a>
+            </div>
           </article>
           <article class="download-card">
             <div class="download-head">
@@ -171,11 +192,15 @@
               <h3>Windows</h3>
             </div>
             <p data-i18n="download.windows.body">A portable ZIP and an installer, built by GitHub Actions.</p>
-            <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases" data-i18n="download.windows.link">GitHub Releases</a>
+            <div class="button-row">
+              <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.exe$" data-i18n="download.windows.installer">Installer</a>
+              <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.zip$" data-i18n="download.windows.portable">Portable ZIP</a>
+              <a class="button" href="https://github.com/kuanyui/qkiss/releases" data-i18n="download.windows.link">GitHub Releases</a>
+            </div>
           </article>
         </div>
         <p class="notice" data-i18n="download.note">All binaries are currently tested only on x86_64.</p>
-        <p class="notice" data-i18n-html="download.source">Want to build it yourself? See <a href="https://github.com/kuanyui/qkiss#development">Development</a> in the README.</p>
+        <p class="notice" data-i18n-html="download.source">Want to build it yourself? Download the <a href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="^qkiss_.+\.tar\.gz$">source tarball</a> and see <a href="https://github.com/kuanyui/qkiss#development">Development</a> in the README.</p>
       </div>
     </section>
   </main>

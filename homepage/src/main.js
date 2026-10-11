@@ -1,5 +1,5 @@
 /*
- * QKiSS website: translations and the screenshot gallery.
+ * QKiSS website: translations, the screenshot gallery and the download links.
  *
  * Loaded synchronously in <head> (not deferred), so that it can choose the
  * language and start downloading its translation before the page is first
@@ -16,6 +16,8 @@
   /** Show the page anyway if the translation takes longer than this. */
   const LOADING_TIMEOUT_MS = 2000;
   const SCREENSHOTS_DIR = 'screenshots/';
+  /** The latest release of QKiSS, in the GitHub API. */
+  const LATEST_RELEASE_API = 'https://api.github.com/repos/kuanyui/qkiss/releases/latest';
 
   const languagesById = new Map(LANGUAGES.map((language) => [language.id, language]));
   const root = document.documentElement;
@@ -168,6 +170,7 @@
     }
     root.lang = htmlLang(id);
     renderGallery();
+    renderReleaseLinks();
     root.classList.remove('i18n-loading');
   }
 
@@ -317,6 +320,45 @@
   }
 
   // ---------------------------------------------------------------------------
+  // Download links: the files of the latest release
+  // ---------------------------------------------------------------------------
+
+  /** The latest release, from the GitHub API. It is null until it is loaded, and stays null if loading fails. */
+  let latestRelease = null;
+
+  async function loadLatestRelease() {
+    try {
+      const response = await fetch(LATEST_RELEASE_API);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      latestRelease = await response.json();
+    } catch (error) {
+      // Then the links keep opening the page of the latest release.
+      console.warn('Cannot load the latest release:', error);
+      return;
+    }
+    renderReleaseLinks();
+  }
+
+  /**
+   * Point each `data-release-asset` link to the file of the latest release whose name matches
+   * the regular expression in that attribute. Also show the version.
+   * setLanguage() calls it again, because a translated `data-i18n-html` string brings back
+   * its links with their original href.
+   */
+  function renderReleaseLinks() {
+    if (latestRelease === null) return;
+    for (const link of document.querySelectorAll('a[data-release-asset]')) {
+      const pattern = new RegExp(link.dataset.releaseAsset);
+      const asset = latestRelease.assets.find((candidate) => pattern.test(candidate.name));
+      if (asset) link.href = asset.browser_download_url;
+    }
+    const versionLink = document.getElementById('download-version-link');
+    versionLink.textContent = latestRelease.tag_name;
+    versionLink.href = latestRelease.html_url;
+    document.getElementById('download-version').hidden = false;
+  }
+
+  // ---------------------------------------------------------------------------
   // Navigation bar: underline the section being read
   // ---------------------------------------------------------------------------
 
@@ -380,5 +422,6 @@
     setUpScrollSpy();
     setLanguage(currentLanguage);
     loadScreenshots();
+    loadLatestRelease();
   });
 })();

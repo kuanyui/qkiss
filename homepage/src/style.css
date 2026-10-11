@@ -788,6 +788,38 @@ sup {
   color: var(--text-muted);
 }
 
+.download-version {
+  margin: -0.75rem 0 1.5rem;
+  color: var(--text-muted);
+}
+
+/* The supported Linux distributions, each with a logo and a name, in aligned columns. */
+.distro-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.6rem 1rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.distro-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+}
+
+/* The logos keep their brand colors. Some of them, like the dark red of Debian, need a light
+   background, also in the dark theme. */
+.distro-list img {
+  padding: 3px;
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
 /* ---- Footer -------------------------------------------------------------- */
 
 .site-footer {
