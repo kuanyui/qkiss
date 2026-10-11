@@ -22,6 +22,8 @@
   const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)');
   /** The latest release of QKiSS, in the GitHub API. */
   const LATEST_RELEASE_API = 'https://api.github.com/repos/kuanyui/qkiss/releases/latest';
+  /** The commits of QKiSS in the GitHub API. Followed by a tag name, the URL gives the commit of that tag. */
+  const COMMITS_API = 'https://api.github.com/repos/kuanyui/qkiss/commits/';
 
   const languagesById = new Map(LANGUAGES.map((language) => [language.id, language]));
   const root = document.documentElement;
@@ -405,6 +407,11 @@
 
   /** The latest release, from the GitHub API. It is null until it is loaded, and stays null if loading fails. */
   let latestRelease = null;
+  /**
+   * The time of the commit of the latest release (ISO 8601), the time that the About dialog of the app shows too
+   * (`git show --format=%ct`). It is null until it is loaded, and stays null if loading fails.
+   */
+  let latestReleaseCommitTime = null;
 
   async function loadLatestRelease() {
     try {
@@ -417,6 +424,28 @@
       return;
     }
     renderReleaseLinks();
+    try {
+      const response = await fetch(COMMITS_API + encodeURIComponent(latestRelease.tag_name));
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      latestReleaseCommitTime = (await response.json()).commit.committer.date;
+    } catch (error) {
+      // Then the version shows without the time.
+      console.warn('Cannot load the commit of the latest release:', error);
+      return;
+    }
+    renderReleaseLinks();
+  }
+
+  /**
+   * A time in the time zone of the browser, in the format of the About dialog of the app:
+   * "2026-10-11 (Sun) 21:45 GMT+8", with the weekday in the language of the page.
+   */
+  function formatLocalTime(isoTime) {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat(root.lang, {
+      year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short',
+      hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZoneName: 'shortOffset',
+    }).formatToParts(new Date(isoTime)).map((part) => [part.type, part.value]));
+    return `${parts.year}-${parts.month}-${parts.day} (${parts.weekday}) ${parts.hour}:${parts.minute} ${parts.timeZoneName}`;
   }
 
   /**
@@ -435,6 +464,12 @@
     const versionLink = document.getElementById('download-version-link');
     versionLink.textContent = latestRelease.tag_name;
     versionLink.href = latestRelease.html_url;
+    const commitTime = document.getElementById('download-version-time');
+    commitTime.hidden = latestReleaseCommitTime === null;
+    if (latestReleaseCommitTime !== null) {
+      commitTime.dateTime = latestReleaseCommitTime;
+      commitTime.textContent = formatLocalTime(latestReleaseCommitTime);
+    }
     document.getElementById('download-version').hidden = false;
   }
 

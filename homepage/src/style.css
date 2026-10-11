@@ -962,6 +962,12 @@ sup {
   color: var(--text-muted);
 }
 
+/* The time of the commit of the latest release, after its version. */
+.download-version time::before {
+  content: "·";
+  margin-inline: 0.4em;
+}
+
 /* The supported Linux distributions, each with a logo and a name, in aligned columns. */
 .distro-list {
   display: grid;

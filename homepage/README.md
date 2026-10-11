@@ -20,6 +20,7 @@ homepage/
 ```
 
 The download links point to the files of the latest release on GitHub. `main.js` looks them up with the GitHub API when the page opens. If that fails, the links open the page of the latest release instead.
+The page also shows the version of that release, and the time of its commit: in the time zone of the visitor, and in the format of the About dialog of the app.
 
 At build time, `build.py` also copies:
 
