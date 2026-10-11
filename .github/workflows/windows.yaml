@@ -477,7 +477,7 @@ jobs:
   # Good to know:
   # - This is a small job of its own, so that only this job gets write permission.
   #   The build jobs above do not need it.
-  # - `obs.yaml` puts the source tarball and the release notes on the same release page.
+  # - `tarball-and-obs.yaml` puts the source tarball and the release notes on the same release page.
   #   It does not matter which workflow finishes first.
   # - A file with the same name is replaced. So running it again for the same tag is safe.
   upload-to-release:

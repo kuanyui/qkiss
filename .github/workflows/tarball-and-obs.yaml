@@ -1,4 +1,4 @@
-name: Publish to OBS
+name: Tarball and OBS
 
 # ============================================================================================
 # What this workflow does
@@ -107,7 +107,7 @@ name: Publish to OBS
 # A broken packaging script should not cost a new version number. So test the scripts first:
 #
 # 1. Push master. This also runs `windows.yaml`, which tests the Windows build.
-# 2. Actions tab > "Publish to OBS" > "Run workflow" on master, with "Test only" checked.
+# 2. Actions tab > "Tarball and OBS" > "Run workflow" on master, with "Test only" checked.
 #    It skips the publishing steps: it does not touch the release page or OBS.
 #    It keeps the source package as an artifact of the run, for you to check.
 #    It cannot test the build on OBS, because `_service` downloads the files only from a
@@ -144,7 +144,7 @@ name: Publish to OBS
 # ============================================================================================
 #
 # 1. Fix the packaging file or this workflow on master, and push master.
-# 2. Actions tab > "Publish to OBS" > "Run workflow" on master, with "Test only" unchecked.
+# 2. Actions tab > "Tarball and OBS" > "Run workflow" on master, with "Test only" unchecked.
 #
 # This run publishes the 4 packaging files of the latest release again. It never replaces the
 # tarball on the release page. It takes everything from the tag of that release, except these packaging inputs,

@@ -6,7 +6,7 @@ OBS does not use the native `.dsc` that `dpkg-source` makes. Instead, OBS gives 
 `debian.tar.gz` and the release tarball to its `debtransform` tool, which makes a
 "3.0 (quilt)" source package out of them. So a broken Debian packaging can be fixed by
 publishing a new `debian.tar.gz`, while the tarball stays the same.
-(See `.github/workflows/obs.yaml`.)
+(See `.github/workflows/tarball-and-obs.yaml`.)
 
 The fields are copied from the configured `debian/control`, so the build dependencies are
 written in one place only.
