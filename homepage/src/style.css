@@ -98,7 +98,8 @@ body {
 }
 
 img,
-svg {
+svg,
+video {
   max-width: 100%;
 }
 
@@ -607,21 +608,10 @@ sup {
 
 /* ---- Screenshots --------------------------------------------------------- */
 
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
-  gap: 1.5rem 1.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.gallery figure {
-  margin: 0;
-}
-
-.gallery-thumb {
+/* A button showing a screenshot: the main one, and the thumbnails of the others. */
+.screenshot-button {
   display: block;
+  position: relative;
   width: 100%;
   padding: 0;
   overflow: hidden;
@@ -629,27 +619,144 @@ sup {
   border-radius: var(--radius);
   background: var(--surface-sunken);
   box-shadow: var(--shadow);
-  cursor: zoom-in;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
 }
 
-.gallery-thumb:hover {
+.screenshot-button:hover {
   border-color: var(--accent);
   transform: translateY(-2px);
 }
 
-.gallery-thumb img {
+.screenshot-button :is(img, video) {
   display: block;
   width: 100%;
+}
+
+/* A play badge on a screenshot that is a video: a white triangle in a dark circle. */
+.screenshot-button.is-video::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.55) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 6.5v11l9-5.5z' fill='%23fff'/%3E%3C/svg%3E") center / 60% no-repeat;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+/* The main screenshot, above "What is KiSS?". Until main.js fills it, it reserves the space of a 4:3 picture,
+   so that the text under it does not move when the picture appears. */
+.main-screenshot {
+  width: min(100% - 2rem, 56rem);
+  margin: 0 auto clamp(2.5rem, 6vw, 4rem);
+}
+
+.main-screenshot:empty {
+  aspect-ratio: 4 / 3;
+}
+
+.main-screenshot .screenshot-button {
+  cursor: zoom-in;
+}
+
+.main-screenshot .screenshot-button :is(img, video) {
+  aspect-ratio: auto 4 / 3;
+}
+
+/* The showcase: the picked screenshot, large. Its box keeps the same size for every screenshot, so that
+   the page does not jump when another one is picked. */
+.showcase {
+  width: min(100%, 56rem);
+  margin: 0 auto 1.25rem;
+}
+
+.showcase-media {
+  position: relative;
   aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-sunken);
+  box-shadow: var(--shadow);
+}
+
+.showcase-media :is(img, video) {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
-.gallery figcaption {
-  margin-top: 0.6rem;
+.showcase-media img {
+  cursor: zoom-in;
+}
+
+.showcase-enlarge {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.55);
+  color: #ffffff;
+  cursor: zoom-in;
+}
+
+.showcase-enlarge:hover {
+  background: rgb(0 0 0 / 0.75);
+}
+
+.showcase figcaption {
+  margin-top: 0.75rem;
   color: var(--text-muted);
   font-size: 0.95rem;
   text-align: center;
+}
+
+/* The gallery: thumbnails under the showcase. A click on one shows that screenshot in the showcase.
+   They wrap into centered rows. Each thumbnail is between 6.5rem and 9.5rem wide, so that a phone still
+   gets two of them per row. */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gallery li {
+  flex: 1 1 6.5rem;
+  max-width: 9.5rem;
+}
+
+.gallery .screenshot-button :is(img, video) {
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+/* The thumbnail of the screenshot shown in the showcase gets an accent ring. The other thumbnails are dimmed,
+   so that the shown one stands out by more than its color. */
+.gallery .screenshot-button[aria-current="true"] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.gallery .screenshot-button:not([aria-current="true"]) {
+  opacity: 0.7;
+}
+
+.gallery .screenshot-button:hover {
+  opacity: 1;
 }
 
 .lightbox {
@@ -686,7 +793,7 @@ sup {
   margin: 0;
 }
 
-.lightbox-figure img {
+.lightbox-figure :is(img, video) {
   max-height: calc(100vh - 8rem);
   max-height: calc(100dvh - 8rem);
   border-radius: 4px;
@@ -875,13 +982,13 @@ sup {
     scroll-behavior: auto;
   }
 
-  .gallery-thumb,
+  .screenshot-button,
   .site-nav a::after,
   .llselect-trigger-arrow {
     transition: none;
   }
 
-  .gallery-thumb:hover {
+  .screenshot-button:hover {
     transform: none;
   }
 }

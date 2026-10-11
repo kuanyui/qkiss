@@ -81,6 +81,8 @@
     </section>
 
     <section class="section" id="about">
+      <!-- The main screenshot: the first one in screenshots/screenshots.json. Filled by main.js, which hides it when there are no screenshots. -->
+      <div class="main-screenshot" id="main-screenshot"></div>
       <div class="container prose">
         <h2 data-i18n="about.title">What is KiSS?</h2>
         <p data-i18n-html="about.kiss"><a href="https://en.wikipedia.org/wiki/Kisekae_Set_System">KiSS (Kisekae Set System)</a> is a format of digital paper dolls. You dress the characters up by dragging their clothes with the mouse, and FKiSS scripts add interactions such as animations and sounds.</p>
@@ -146,7 +148,23 @@
     <section class="section" id="screenshots">
       <div class="container">
         <h2 data-i18n="screenshots.title">Screenshots</h2>
-        <!-- Filled by main.js from screenshots/screenshots.json. build.py copies that file from homepage/screenshots.json in this repository, and the images it lists from the wiki. -->
+        <!--
+          Filled by main.js from screenshots/screenshots.json, without its first screenshot (the main one, above "What is KiSS?").
+          build.py copies that file from homepage/screenshots.json in this repository, and the images it lists from the wiki.
+          The showcase shows one screenshot large; the gallery under it has a thumbnail for each, to pick the one to show.
+        -->
+        <figure class="showcase" id="showcase" hidden>
+          <div class="showcase-media">
+            <img id="showcase-image" alt="">
+            <!-- Used instead of the image above, when the screenshot is a video (webm). -->
+            <video id="showcase-video" controls loop muted playsinline preload="metadata" hidden></video>
+            <button type="button" class="showcase-enlarge" id="showcase-enlarge"
+                    aria-label="Enlarge" title="Enlarge" data-i18n-attr="aria-label:screenshots.enlarge;title:screenshots.enlarge">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <figcaption id="showcase-caption"></figcaption>
+        </figure>
         <ul class="gallery" id="gallery"></ul>
         <p class="notice" id="gallery-notice" hidden data-i18n="screenshots.unavailable">Screenshots are not available in this build of the website.</p>
         <noscript><p class="notice">Screenshots need JavaScript.</p></noscript>
@@ -240,6 +258,8 @@
     </button>
     <figure class="lightbox-figure">
       <img id="lightbox-image" alt="">
+      <!-- Used instead of the image above, when the screenshot is a video (webm). -->
+      <video id="lightbox-video" controls loop muted playsinline hidden></video>
       <figcaption><span id="lightbox-caption"></span> <span class="lightbox-counter" id="lightbox-counter"></span></figcaption>
     </figure>
     <button type="button" class="lightbox-button lightbox-next" id="lightbox-next"

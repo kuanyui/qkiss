@@ -16,6 +16,10 @@
   /** Show the page anyway if the translation takes longer than this. */
   const LOADING_TIMEOUT_MS = 2000;
   const SCREENSHOTS_DIR = 'screenshots/';
+  /** A screenshot with this extension is a video. It plays muted and looping, and only after the visitor picks it. */
+  const VIDEO_EXTENSION = /\.webm$/i;
+  /** The visitor turned on "reduce motion" in their system settings. Then a picked video does not start by itself: its play button starts it. */
+  const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)');
   /** The latest release of QKiSS, in the GitHub API. */
   const LATEST_RELEASE_API = 'https://api.github.com/repos/kuanyui/qkiss/releases/latest';
 
@@ -232,11 +236,13 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Screenshot gallery
+  // Screenshots: the main one above "What is KiSS?", the others in the showcase
   // ---------------------------------------------------------------------------
 
-  /** Entries of screenshots/screenshots.json: null until loaded, [] when there are none. */
+  /** Entries of screenshots/screenshots.json: null until loaded, [] when there are none. The first one is the main screenshot. */
   let screenshots = null;
+  /** The screenshot shown in the showcase: an index in `screenshots`, never 0 (the main screenshot). */
+  let showcaseIndex = 1;
   let lightbox = null;
   let lightboxIndex = 0;
 
@@ -258,31 +264,105 @@
     return value[fallbackChain(currentLanguage).find((id) => Object.hasOwn(value, id))];
   }
 
+  /**
+   * The media inside a screenshot button: an <img>, or for a video, a <video> that is never played.
+   * It is decorative: the button is named after the caption.
+   */
+  function createThumbnail(fileName) {
+    if (VIDEO_EXTENSION.test(fileName)) {
+      const video = document.createElement('video');
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = 'metadata';   // so that the browser can show its first frame
+      video.src = SCREENSHOTS_DIR + fileName;
+      video.setAttribute('aria-hidden', 'true');
+      return video;
+    }
+    const image = document.createElement('img');
+    image.src = SCREENSHOTS_DIR + fileName;
+    image.alt = '';
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    return image;
+  }
+
+  /** A button showing the screenshot at `index`, named after its caption. A video gets a play badge (see style.css). */
+  function createScreenshotButton(index, onClick) {
+    const fileName = localize(screenshots[index].image);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'screenshot-button';
+    button.classList.toggle('is-video', VIDEO_EXTENSION.test(fileName));
+    button.setAttribute('aria-label', localize(screenshots[index].caption));
+    button.append(createThumbnail(fileName));
+    button.addEventListener('click', onClick);
+    return button;
+  }
+
   function renderGallery() {
     if (screenshots === null) return;
-    const items = screenshots.map((screenshot, index) => {
-      const caption = localize(screenshot.caption);
-      const image = document.createElement('img');
-      image.src = SCREENSHOTS_DIR + localize(screenshot.image);
-      image.alt = caption;
-      image.loading = 'lazy';
-      image.decoding = 'async';
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'gallery-thumb';
-      button.append(image);
-      button.addEventListener('click', () => openLightbox(index));
-      const figcaption = document.createElement('figcaption');
-      figcaption.textContent = caption;
-      const figure = document.createElement('figure');
-      figure.append(button, figcaption);
+    // The main screenshot. A click enlarges it.
+    const main = document.getElementById('main-screenshot');
+    if (screenshots.length > 0) main.replaceChildren(createScreenshotButton(0, () => openLightbox(0)));
+    main.hidden = screenshots.length === 0;
+    // The others: one thumbnail each. A click shows that screenshot in the showcase.
+    const items = screenshots.slice(1).map((_, i) => {
       const item = document.createElement('li');
-      item.append(figure);
+      item.append(createScreenshotButton(i + 1, () => showInShowcase(i + 1, true)));
       return item;
     });
     document.getElementById('gallery').replaceChildren(...items);
+    document.getElementById('showcase').hidden = items.length === 0;
     document.getElementById('gallery-notice').hidden = screenshots.length > 0;
+    if (items.length > 0) showInShowcase(showcaseIndex, false);
     if (lightbox.open) showScreenshot(lightboxIndex);
+  }
+
+  /**
+   * Show a screenshot with one of two elements: `image` for a still image, `video` for a video.
+   * The other one is hidden and emptied, so that a hidden video never keeps playing.
+   * A video starts if `play` is true, unless the visitor prefers reduced motion (REDUCED_MOTION).
+   */
+  function showMedia(image, video, screenshot, play) {
+    const url = SCREENSHOTS_DIR + localize(screenshot.image);
+    const caption = localize(screenshot.caption);
+    const isVideo = VIDEO_EXTENSION.test(url);
+    image.hidden = isVideo;
+    video.hidden = !isVideo;
+    if (isVideo) {
+      image.removeAttribute('src');
+      // When it is the same video (for example after a change of language), it goes on instead of restarting.
+      if (video.getAttribute('src') !== url) video.src = url;
+      video.setAttribute('aria-label', caption);
+      if (play && !REDUCED_MOTION.matches) video.play().catch(() => {});   // Else, its controls can start it.
+    } else {
+      video.removeAttribute('src');
+      video.load();
+      image.src = url;
+      image.alt = caption;
+    }
+  }
+
+  /** Show the screenshot at `index` in the showcase, and mark its thumbnail. `play` is true when the visitor picked it. */
+  function showInShowcase(index, play) {
+    showcaseIndex = index;
+    const screenshot = screenshots[index];
+    showMedia(document.getElementById('showcase-image'), document.getElementById('showcase-video'), screenshot, play);
+    document.getElementById('showcase-caption').textContent = localize(screenshot.caption);
+    // The thumbnails start at the second screenshot.
+    document.querySelectorAll('#gallery button').forEach((button, i) => {
+      if (i + 1 === index) {
+        button.setAttribute('aria-current', 'true');
+      } else {
+        button.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  function setUpShowcase() {
+    // The showcase image and the Enlarge button both open the shown screenshot in the lightbox.
+    document.getElementById('showcase-image').addEventListener('click', () => openLightbox(showcaseIndex));
+    document.getElementById('showcase-enlarge').addEventListener('click', () => openLightbox(showcaseIndex));
   }
 
   function setUpLightbox() {
@@ -292,15 +372,18 @@
     document.getElementById('lightbox-close').addEventListener('click', () => lightbox.close());
     lightbox.addEventListener('click', (event) => {
       // A click anywhere but on the screenshot, its caption or a button closes it.
-      if (!event.target.closest('img, figcaption, button')) lightbox.close();
+      if (!event.target.closest('img, video, figcaption, button')) lightbox.close();
     });
+    lightbox.addEventListener('close', () => document.getElementById('lightbox-video').pause());
     lightbox.addEventListener('keydown', (event) => {
+      if (event.target.closest('video')) return;   // When the video has the focus, the arrow keys seek in it.
       if (event.key === 'ArrowLeft') showScreenshot(lightboxIndex - 1);
       if (event.key === 'ArrowRight') showScreenshot(lightboxIndex + 1);
     });
   }
 
   function openLightbox(index) {
+    document.getElementById('showcase-video').pause();   // Only one video plays at a time.
     showScreenshot(index);
     lightbox.showModal();
   }
@@ -309,11 +392,8 @@
     const count = screenshots.length;
     lightboxIndex = (index + count) % count;
     const screenshot = screenshots[lightboxIndex];
-    const caption = localize(screenshot.caption);
-    const image = document.getElementById('lightbox-image');
-    image.src = SCREENSHOTS_DIR + localize(screenshot.image);
-    image.alt = caption;
-    document.getElementById('lightbox-caption').textContent = caption;
+    showMedia(document.getElementById('lightbox-image'), document.getElementById('lightbox-video'), screenshot, true);
+    document.getElementById('lightbox-caption').textContent = localize(screenshot.caption);
     document.getElementById('lightbox-counter').textContent = `${lightboxIndex + 1} / ${count}`;
     document.getElementById('lightbox-prev').hidden = count < 2;
     document.getElementById('lightbox-next').hidden = count < 2;
@@ -418,6 +498,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     collectTargets();
     if (!englishOnly) setUpLanguagePicker();   // Otherwise it stays hidden.
+    setUpShowcase();
     setUpLightbox();
     setUpScrollSpy();
     setLanguage(currentLanguage);

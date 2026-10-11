@@ -73,7 +73,7 @@ PATT_KEY = re.compile(r"[a-z][a-z0-9-]*(\.[a-z][a-z0-9-]*)*")
 PATT_ATTRIBUTE = re.compile(r"[a-z][a-z0-9-]*")
 PATT_LANGUAGE_ID = re.compile(r"[A-Za-z]{2,3}(-[A-Za-z0-9]+)*")
 PATT_FLAG = re.compile(r"[a-z]{2}(-[a-z]+)*")
-PATT_IMAGE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\.(png|jpg|jpeg|webp|avif|gif)")
+PATT_IMAGE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\.(png|jpg|jpeg|webp|avif|gif|webm)")
 
 
 class BuildError(Exception):
@@ -247,8 +247,8 @@ def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, st
     if not isinstance(manifest, dict) or manifest.keys() != {"screenshots"}:
         raise BuildError(f'{where}: must be an object with exactly one key, "screenshots"')
     entries = manifest["screenshots"]
-    if not isinstance(entries, list) or not entries:
-        raise BuildError(f'{where}: "screenshots" must be a non-empty array')
+    if not isinstance(entries, list) or len(entries) < 2:
+        raise BuildError(f'{where}: "screenshots" must be an array of at least 2 screenshots: the main screenshot, then at least one for the Screenshots section')
 
     source_id = languages[0]["id"]
     language_ids = {language["id"] for language in languages}
@@ -281,7 +281,7 @@ def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, st
         localized_values(entry["caption"], f"{entry_where}.caption")
         for name in localized_values(entry["image"], f"{entry_where}.image"):
             if not PATT_IMAGE_NAME.fullmatch(name):
-                errors.append(f"{entry_where}.image: invalid file name {name!r}; use letters, digits, `.`, `_`, `-` and one of the extensions png, jpg, jpeg, webp, avif, gif")
+                errors.append(f"{entry_where}.image: invalid file name {name!r}; use letters, digits, `.`, `_`, `-` and one of the extensions png, jpg, jpeg, webp, avif, gif, webm")
             elif screenshots_dir is not None and ((screenshots_dir / name).is_symlink() or not (screenshots_dir / name).is_file()):
                 errors.append(f"{entry_where}.image: {name!r} is not a regular file in {screenshots_dir}; push the image to the wiki first")
             else:

@@ -40,6 +40,7 @@
   "features.footnote.website": "官網就全部交給 LLM agent 了，因為我沒興趣花費假日時間的生命寫網頁了；我是 OpenAI 與 Anthropic 養的狗，汪汪。",
   "features.footnote.tango": "結果開發 <a href=\"https://kuanyui.github.io/tango-remixer/\">Tango Remixer</a>、以及整理/修正/加畫一堆 tango-flavoured icons 的總時間毫無誇飾地幾乎超過 QKiSS 開發時間，這也是為啥 QKiSS 從 2024 開發到 2026 才初次公開釋出...。",
   "screenshots.title": "截圖",
+  "screenshots.enlarge": "放大",
   "screenshots.unavailable": "這個版本的網站沒有附上截圖。",
   "download.title": "下載",
   "download.version": "最新版本：",

@@ -40,6 +40,7 @@
   "features.footnote.website": "公式サイトは全部 LLM エージェントに任せました。休日という人生の時間を、ウェブページを書くのに費やす気はもうないので。私は OpenAI と Anthropic に飼われている犬です。ワンワン。",
   "features.footnote.tango": "結局、<a href=\"https://kuanyui.github.io/tango-remixer/\">Tango Remixer</a> の開発と、大量の Tango 風アイコンの整理・修正・描き足しにかかった時間は、誇張抜きで QKiSS 本体の開発時間をほぼ上回りました。2024 年から開発していた QKiSS の初公開が 2026 年までずれ込んだのはそのためです……",
   "screenshots.title": "スクリーンショット",
+  "screenshots.enlarge": "拡大",
   "screenshots.unavailable": "このビルドのウェブサイトにはスクリーンショットが含まれていません。",
   "download.title": "ダウンロード",
   "download.version": "最新バージョン：",
