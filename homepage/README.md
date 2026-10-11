@@ -31,14 +31,15 @@ A change to `homepage/src/`, `homepage/screenshots.json`, the app icons, the fla
 When a change breaks a check, the last good build stays served and the errors are printed.
 Ctrl-C stops it.
 
-To see the screenshots too, clone the wiki once, and pass its `screenshots/` folder:
+The screenshots come from the wiki by default. `HOMEPAGE_SCREENSHOTS` picks another source:
 
-```sh
-git clone https://github.com/kuanyui/qkiss.wiki.git ~/proj/qkiss.wiki
-make homepage-dev-server HOMEPAGE_SCREENSHOTS=~/proj/qkiss.wiki/screenshots
-```
+| Command | Screenshots |
+|---|---|
+| `make homepage-dev-server` | From the wiki. Each run downloads it (or updates it) into `generated/wiki/` first. |
+| `make homepage-dev-server HOMEPAGE_SCREENSHOTS=` | None. Nothing is downloaded, so it works offline. |
+| `make homepage-dev-server HOMEPAGE_SCREENSHOTS=~/proj/qkiss.wiki/screenshots` | The screenshots in that folder, used as they are. For example, use your own clone of the wiki to see new screenshots before you push them. |
 
-`make homepage-build` writes the site into `generated/homepage/` instead, the way CI builds it. Set `HOMEPAGE_SCREENSHOTS` to include the screenshots too, as CI does.
+`make homepage-build` writes the site into `generated/homepage/` instead, the way CI builds it. `HOMEPAGE_SCREENSHOTS` works the same way there.
 `make help` lists the variables (`HOMEPAGE_OUT`, `HOMEPAGE_PORT`, `HOMEPAGE_SCREENSHOTS`).
 Opening `src/index.html` directly (`file://`) does not work, because translations and screenshots are fetched.
 

@@ -4,9 +4,9 @@ Assemble the QKiSS website, a single static page, as GitHub Pages and GitLab
 Pages publish it. Both CI pipelines run this script, so both sites are always
 identical.
 
-    python3 homepage/build.py OUT_DIR --screenshots DIR         # what CI runs
-    python3 homepage/build.py OUT_DIR --no-screenshots          # `make homepage-build`
-    python3 homepage/build.py --serve [PORT] --no-screenshots   # `make homepage-dev-server`
+    python3 homepage/build.py OUT_DIR --screenshots DIR         # what CI runs (`make homepage-build` too)
+    python3 homepage/build.py OUT_DIR --no-screenshots          # `make homepage-build HOMEPAGE_SCREENSHOTS=`
+    python3 homepage/build.py --serve [PORT] --screenshots DIR  # `make homepage-dev-server`
 
 DIR is the `screenshots/` folder of the wiki (`qkiss.wiki.git`): the images
 that `homepage/screenshots.json` lists. Everything is checked before anything

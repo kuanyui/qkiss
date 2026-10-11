@@ -68,12 +68,20 @@ OBS_ARCH :=
 HOMEPAGE_OUT := generated/homepage
 ## Port `homepage-dev-server` serves the website on. (Default: `8000`)
 HOMEPAGE_PORT := 8000
-## Path of the `screenshots/` folder in a clone of the wiki (`qkiss.wiki.git`), with the images listed in `homepage/screenshots.json`. Leave it empty to build without screenshots. (ex: `~/proj/qkiss.wiki/screenshots`)
-HOMEPAGE_SCREENSHOTS ?=
+# The wiki, a separate Git repository. Its `screenshots/` folder has the screenshots listed in `homepage/screenshots.json`.
+HOMEPAGE_WIKI_URL := https://github.com/kuanyui/qkiss.wiki.git
+# Where `homepage-wiki` downloads the wiki.
+HOMEPAGE_WIKI_DIR := generated/wiki
+## Folder of the screenshots. To build without them, set it to nothing: `HOMEPAGE_SCREENSHOTS=`. (Default: the `screenshots/` folder of the wiki, downloaded into `generated/wiki/` first) (ex: `~/proj/qkiss.wiki/screenshots`)
+HOMEPAGE_SCREENSHOTS ?= $(HOMEPAGE_WIKI_DIR)/screenshots
 # (expand ~ as $HOME)
 override HOMEPAGE_SCREENSHOTS := $(subst ~,$(HOME),$(HOMEPAGE_SCREENSHOTS))
 # `homepage/build.py` wants either `--screenshots DIR` or `--no-screenshots`.
 HOMEPAGE_SCREENSHOTS_OPTION = $(if $(HOMEPAGE_SCREENSHOTS),--screenshots "$(HOMEPAGE_SCREENSHOTS)",--no-screenshots)
+# Download the wiki first only when `HOMEPAGE_SCREENSHOTS` is the default folder above. A folder set by hand is used as it is.
+ifeq ($(HOMEPAGE_SCREENSHOTS),$(HOMEPAGE_WIKI_DIR)/screenshots)
+HOMEPAGE_SCREENSHOTS_PREREQUISITE := homepage-wiki
+endif
 
 # ██████╗ ███████╗███████╗██╗███╗   ██╗███████╗
 # ██╔══██╗██╔════╝██╔════╝██║████╗  ██║██╔════╝
@@ -187,9 +195,21 @@ add-license-header:    ## Add license header to all .cpp / .h files
 ###
 ### -- Homepage (`homepage/`) -----------------------------------
 
+# Download only the latest commit of the wiki into `HOMEPAGE_WIKI_DIR`, or update an earlier download to that commit:
+# 1. `git init` makes the folder a Git repository. Running it again later is safe.
+# 2. `git fetch` downloads the latest commit of the wiki.
+# 3. `git reset --hard` makes the files match that commit. This works even after the wiki was force-pushed,
+#    which happens sometimes.
+# Do not edit anything in `HOMEPAGE_WIKI_DIR`: it is only a download, and the next update overwrites the wiki's files.
+.PHONY: homepage-wiki
+homepage-wiki:    ## Download or update the wiki in `generated/wiki/`, for its screenshots.
+	git init -q "$(HOMEPAGE_WIKI_DIR)"
+	git -C "$(HOMEPAGE_WIKI_DIR)" fetch --depth 1 "$(HOMEPAGE_WIKI_URL)" HEAD
+	git -C "$(HOMEPAGE_WIKI_DIR)" reset --hard FETCH_HEAD
+
 # Build the website into plain files, the same way CI builds it for GitHub Pages and GitLab Pages.
 .PHONY: homepage-build
-homepage-build:    ## Build the website into `HOMEPAGE_OUT` (with the screenshots of `HOMEPAGE_SCREENSHOTS`, if set).
+homepage-build: $(HOMEPAGE_SCREENSHOTS_PREREQUISITE)    ## Build the website into `HOMEPAGE_OUT`.
 	rm -rf "$(HOMEPAGE_OUT)"
 	python3 homepage/build.py "$(HOMEPAGE_OUT)" $(HOMEPAGE_SCREENSHOTS_OPTION)
 
@@ -198,7 +218,7 @@ homepage-build:    ## Build the website into `HOMEPAGE_OUT` (with the screenshot
 # homepage/src/, homepage/screenshots.json, the app icons, the flags or the screenshot images rebuilds the site
 # while it is served (reload the page).
 .PHONY: homepage-dev-server
-homepage-dev-server:    ## Build the website, serve it on port `HOMEPAGE_PORT` on every interface (the URLs to open are printed, LAN addresses included) and rebuild it when its files change. Ctrl-C stops it.
+homepage-dev-server: $(HOMEPAGE_SCREENSHOTS_PREREQUISITE)    ## Build the website, serve it on port `HOMEPAGE_PORT` on every interface (the URLs to open are printed, LAN addresses included) and rebuild it when its files change. Ctrl-C stops it.
 	python3 homepage/build.py --serve $(HOMEPAGE_PORT) $(HOMEPAGE_SCREENSHOTS_OPTION)
 
 
