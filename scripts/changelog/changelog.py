@@ -219,7 +219,7 @@ def to_markdown_latest(changelog: RootData) -> str:
     """
     if not changelog.releases:
         return ""
-    release = changelog.releases[-1]
+    release = changelog.releases[0]   # The latest release is at the top of the file.
     lines: List[str] = []
     lines.append(f"# {release.srcpkgname} {release.version}")
     lines.append(f"Date: {release.date.strftime(MARKDOWN_TIMESTAMP_FORMAT)}")
