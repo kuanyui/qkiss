@@ -25,6 +25,7 @@ BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6Gui)
 BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6Multimedia)
+BuildRequires:  cmake(Qt6Concurrent)
 
 # Actually this is a little dirty, but QtLinguist binary and `*.cmake` are provided by different package name among different distros, I hate another condition macro for this:
 # openSUSE:   qt6-tools,     qt6-tools-linguist
