@@ -606,6 +606,40 @@ sup {
   background: var(--accent-soft);
 }
 
+/* The advertisement for Tango Remixer, under the footnotes. It is a card like the features. Its top border uses the
+   orange of the Tango palette instead of the accent color, as the logo of Tango Remixer does. Its icon is on the left. */
+.promo {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem 1.25rem;
+  margin-top: 2rem;
+  padding: 1.25rem 1.25rem 1.1rem;
+  border: 1px solid var(--border);
+  border-top: 3px solid #f57900;
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.promo h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.promo p {
+  margin: 0 0 1rem;
+}
+
+.promo-icon {
+  flex: none;
+}
+
+/* On a phone, the icon goes above the text. The text then gets the whole width. */
+@media (max-width: 40rem) {
+  .promo {
+    flex-direction: column;
+  }
+}
+
 /* ---- Screenshots --------------------------------------------------------- */
 
 /* A button showing a screenshot: the main one, and the thumbnails of the others. */

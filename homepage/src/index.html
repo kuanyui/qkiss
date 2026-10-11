@@ -137,7 +137,7 @@
               <li data-i18n="features.misc.electron">No damn Electron, acting as if your RAM were free.</li>
               <li data-i18n="features.misc.qt">Linux is no longer a second-class citizen (Windows is): built with the latest Qt 6 and C++.</li>
               <li data-i18n="features.misc.open">Open source and automated builds make sure nothing weird is inside.</li>
-              <li id="footnote-ref-tango" data-i18n-html="features.misc.tango">Tango-style UI icons<sup class="footnote-ref"><a href="#footnote-tango">*2</a></sup> take you back to the 2000s.</li>
+              <li data-i18n="features.misc.tango">Tango-style UI icons take you back to the 2000s.</li>
               <li data-i18n="features.misc.politics">The author is guaranteed to be politically incorrect.</li>
             </ul>
           </li>
@@ -148,12 +148,20 @@
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
             <span data-i18n="features.footnote.website">This website, though, was left entirely to an LLM agent, because I have no interest in spending the weekend hours of my life writing web pages anymore; I am a dog kept by OpenAI and Anthropic. Woof woof.</span>
           </p>
-          <p id="footnote-tango">
-            <a class="footnote-back" href="#footnote-ref-tango" aria-label="Back to the text" title="Back to the text"
-               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
-            <span data-i18n-html="features.footnote.tango">As it turned out, developing <a href="https://kuanyui.github.io/tango-remixer/">Tango Remixer</a>, and sorting out, fixing and drawing a pile of extra tango-flavoured icons, took, without exaggeration, almost longer than developing QKiSS itself. That is why QKiSS, started in 2024, was only first released in 2026...</span>
-          </p>
         </div>
+        <!--
+          An advertisement for Tango Remixer, the project behind the icons of QKiSS. Its icon is the mark of Tango Remixer
+          (see images/icons/README.md).
+        -->
+        <aside class="promo" aria-labelledby="promo-title">
+          <img class="promo-icon" src="images/icons/start-here.svg" alt="" width="48" height="48">
+          <div>
+            <h3 id="promo-title" data-i18n="features.tango-remixer.title">By the way...</h3>
+            <p data-i18n-html="features.tango-remixer.body">For the 2000s aesthetic romance of Tango-style UI icons, and to bring realistic icons back to a world where flat UIs and monochrome icons, a design fad unfriendly to people with dyslexia, blow around like an ill wind, I ended up making the <a href="https://kuanyui.github.io/tango-remixer/">Tango Remixer</a> project on the side, so I could easily stuff Tango icons into Qt projects like QKiSS; then I also took on maintaining three XDG-compatible icon theme packs from the 2000s. Then I couldn't stand making the app public before its icons were pretty, so it took one more year...</p>
+            <p data-i18n-html="features.tango-remixer.time">As it turned out, developing <a href="https://kuanyui.github.io/tango-remixer/">Tango Remixer</a>, and sorting out, fixing and drawing a pile of extra tango-flavoured icons, came, without exaggeration, close to taking longer than developing QKiSS itself. That is why QKiSS, started in 2024, was only first released in 2026...</p>
+            <a class="button" href="https://kuanyui.github.io/tango-remixer/" data-i18n="features.tango-remixer.link">Visit the Tango Remixer website</a>
+          </div>
+        </aside>
       </div>
     </section>
 

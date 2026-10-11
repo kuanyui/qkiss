@@ -12,7 +12,10 @@ homepage/
     ├── style.css
     ├── main.js     # Translations, the language picker, the screenshot gallery and the download links
     ├── i18n/       # One JSON file per language other than English
-    └── images/distros/  # Logos of the Linux distributions, from Simple Icons (see its README.md)
+    └── images/
+        ├── distros/              # Logos of the Linux distributions, from Simple Icons. See images/distros/README.md.
+        ├── icons/                # The mark of Tango Remixer, from the Tango icon theme. See images/icons/README.md.
+        └── og-image.svg          # The link-preview image (see below)
 ```
 
 The download links point to the files of the latest release on GitHub. `main.js` looks them up with the GitHub API when the page opens. If that fails, the links open the page of the latest release instead.
