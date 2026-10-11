@@ -2,6 +2,15 @@
 releases:
   - srcpkgname: "qkiss"
     maintainer: "kuanyui <azazabc123@gmail.com>"
+    version: "0.9.1"
+    date: "2026-10-12T07:46:00+08:00"
+    deb:
+      urgency: "medium"
+    body:
+      build:
+        - Add the missing build dependency on Qt6Concurrent to the RPM spec.
+  - srcpkgname: "qkiss"
+    maintainer: "kuanyui <azazabc123@gmail.com>"
     version: "0.9.0"
     date: "2026-10-11T20:00:00+08:00"
     deb:
