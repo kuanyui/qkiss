@@ -131,6 +131,7 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 @@@@@
 # %3
 - English: [kuanyui](https://github.com/kuanyui)
+- British English: Claude Code + [kuanyui](https://github.com/kuanyui)
 - 日本語: Claude Code + [kuanyui](https://github.com/kuanyui)
 - 日本語（関西弁）: Copilot + [kuanyui](https://github.com/kuanyui)
 - 日本語（お嬢様）: Copilot + [kuanyui](https://github.com/kuanyui)

@@ -127,8 +127,12 @@ const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
 {
     QString ja ("日本語");
     QString zh_TW ("台灣繁體");
+    QString en_US ("American English");
+    QString en_GB ("British English");
     if (m_uiLanguage.startsWith("ja_") && !m_uiLanguage.endsWith("JP") && !m_uiLanguage.endsWith("KS")) {
         ja = "異世界通用語";
+        en_US = "Simplified English";
+        en_GB = "Traditional English";
     }
     if (m_uiLanguage == "ja_AR") {
         zh_TW = QStringLiteral("ほとんど浸透されきって、哀れな言語ですわね…");
@@ -145,7 +149,8 @@ const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
         {"ja_AR", "🇯🇵", ":/flags/jp.svg", ja + QString("（悪役令嬢）")},
         {"ja_MK", "🇯🇵", ":/flags/jp.svg", ja + QString("（メ〇〇キ）")},
         {"ja_ME", "🇯🇵", ":/flags/jp.svg", ja + QString("（〈沈黙の魔女〉モニカ・エヴァレット）")},
-        {"en_US", "🇺🇸", ":/flags/us.svg", QString("American English")},
+        {"en_US", "🇺🇸", ":/flags/us.svg", en_US},
+        {"en_GB", "🇬🇧", ":/flags/gb.svg", en_GB},
         {"zh_TW", "🇹🇼", ":/flags/tw.svg", zh_TW},
     };
     return list;

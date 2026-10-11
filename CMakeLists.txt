@@ -560,7 +560,7 @@ endif()
 # ===============================================
 # i18n
 # ===============================================
-set(ALL_TR_LANGS ja_JP ja_KS ja_OJ ja_AR ja_MK ja_ME zh_TW)
+set(ALL_TR_LANGS ja_JP ja_KS ja_OJ ja_AR ja_MK ja_ME en_GB zh_TW)
 
 # if(QT_VERSION VERSION_GREATER_EQUAL "6.7")
 # https://doc.qt.io/Qt-6/qtlinguist-cmake-qt-add-translations.html#sources-and-include-directories
