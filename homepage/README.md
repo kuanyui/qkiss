@@ -1,12 +1,12 @@
 # QKiSS Homepage
 
-The official website of QKiSS: a single static page in plain HTML, CSS and JavaScript, without frameworks or npm. `build.py` checks and assembles it, with the Python standard library only.
+The official website of QKiSS: a single static page in plain HTML, CSS and JavaScript, without frameworks or npm. `build.py` checks and assembles it. It uses the Python standard library, and `rsvg-convert` for the link-preview image.
 Its one dependency, the language picker [@llselect/core](https://gitlab.com/kuanyui/llselect), is loaded from a CDN (see [The language picker](#the-language-picker)).
 It is published on both GitHub Pages and GitLab Pages, by the same script.
 
 ```
 homepage/
-├── build.py        # Checks and assembles the site; also the dev server (Python standard library only)
+├── build.py        # Checks and assembles the site, and is the dev server; uses the Python standard library and rsvg-convert
 └── src/            # Copied into the site as is
     ├── index.html  # The page. English strings are written here.
     ├── style.css
@@ -22,6 +22,12 @@ At build time, `build.py` also copies:
 - The app icons it uses from `resources/appicon/` (see `APP_ICONS` in `build.py`), so they are never duplicated.
 - The flags of the languages from `resources/flags/svg/`, with the MIT license notice of flag-icons.
 - The screenshot images, from the wiki (see below).
+
+It also converts `src/images/og-image.svg`, the link-preview image (`og:image`), into `images/og-image.png` with a white background, because link previews do not show SVG:
+
+- It uses `rsvg-convert`, from the package `librsvg2-bin` (Debian, Ubuntu), `rsvg-convert` (openSUSE), `librsvg2-tools` (Fedora) or `librsvg` (Arch Linux).
+- The PNG must be 1280 × 640 pixels, matching `og:image:width` and `og:image:height` in `index.html`. To use another size, change those values and `OG_IMAGE_SIZE` in `build.py`.
+- Some platforms cache link-preview images, so a link shared again may still show the old image.
 
 ## Local preview
 
@@ -157,7 +163,7 @@ curl -fsSL https://cdn.jsdelivr.net/npm/@llselect/core@VERSION/dist/index.umd.js
 ## Deployment
 
 Both hosts run `homepage/build.py` on every push to `master` that touches `homepage/`, `resources/appicon/` or `resources/flags/`, and can also be run by hand.
-The page only uses relative URLs, so it works under any domain or path.
+The page only uses relative URLs, so it works under any domain or path. The one exception is `og:image`, because link previews need a full URL: both sites use the image on GitHub Pages.
 
 ### GitHub Pages
 

@@ -46,6 +46,10 @@ jobs:
       - name: Fetch screenshots
         run: git clone --depth 1 "$SCREENSHOTS_REPO" "$RUNNER_TEMP/wiki"
 
+      # build.py uses rsvg-convert to convert the link-preview image from SVG to PNG.
+      - name: Install rsvg-convert
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends librsvg2-bin
+
       - name: Build homepage
         run: python3 homepage/build.py _site --screenshots "$RUNNER_TEMP/wiki/screenshots"
 

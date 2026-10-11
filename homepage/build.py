@@ -20,7 +20,8 @@ rebuilds the site; reload the page to see the result. If the check fails,
 the server keeps serving the last good build and prints the errors. When
 this script itself changes, the server restarts.
 
-Only the Python standard library is used. See `homepage/README.md`.
+This script uses the Python standard library, and `rsvg-convert` (librsvg) for
+the link-preview image (OG_IMAGE_SVG). See `homepage/README.md`.
 """
 
 import argparse
@@ -30,6 +31,8 @@ import re
 import shutil
 import socket
 import stat
+import struct
+import subprocess
 import sys
 import tempfile
 import threading
@@ -65,6 +68,13 @@ SCREENSHOTS_MANIFEST: str = "screenshots.json"
 # This file sets the order and the captions of the screenshots in the gallery. The images
 # themselves come from the wiki, through the folder given with --screenshots.
 SCREENSHOTS_MANIFEST_PATH: Path = HOMEPAGE_DIR / SCREENSHOTS_MANIFEST
+
+# The link-preview image (`og:image` in index.html). Link previews do not show SVG, so the build uses rsvg-convert
+# to convert this SVG into OG_IMAGE_PNG, with a white background. It also copies the SVG as is.
+OG_IMAGE_SVG: Path = SRC_DIR / "images/og-image.svg"
+OG_IMAGE_PNG: str = "images/og-image.png"
+# Its width and height in pixels. These must match `og:image:width` and `og:image:height` in index.html.
+OG_IMAGE_SIZE: tuple[int, int] = (1280, 640)
 
 # The fields a language may have in `<script id="languages">` of index.html, and whether each one is required.
 LANGUAGE_FIELDS: dict[str, bool] = {"id": True, "name": True, "lang": False, "fallback": False, "flag": False}
@@ -292,6 +302,27 @@ def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, st
 
 
 # ==========================================
+# The image of link previews
+# ==========================================
+
+def og_image_png() -> bytes:
+    """Convert OG_IMAGE_SVG into a PNG with a white background. The result must have the size OG_IMAGE_SIZE."""
+    if (SRC_DIR / OG_IMAGE_PNG).exists():
+        raise BuildError(f"{SRC_DIR / OG_IMAGE_PNG}: must not exist; the build writes it from {OG_IMAGE_SVG.name}")
+    if shutil.which("rsvg-convert") is None:
+        raise BuildError(f"rsvg-convert was not found. It converts {OG_IMAGE_SVG.relative_to(REPO_ROOT_DIR)} into the link-preview PNG. "
+                         "Install it: librsvg2-bin (Debian, Ubuntu), rsvg-convert (openSUSE), librsvg2-tools (Fedora), librsvg (Arch Linux).")
+    result = subprocess.run(["rsvg-convert", "--format=png", "--background-color=white", str(OG_IMAGE_SVG)], capture_output=True)
+    if result.returncode != 0 or not result.stdout.startswith(b"\x89PNG"):
+        raise BuildError(f"{OG_IMAGE_SVG}: rsvg-convert failed: {result.stderr.decode(errors='replace').strip()}")
+    size = struct.unpack(">II", result.stdout[16:24])   # the width and height in the PNG header (IHDR)
+    if size != OG_IMAGE_SIZE:
+        raise BuildError(f"{OG_IMAGE_SVG}: the rendered image is {size[0]}x{size[1]} pixels, not {OG_IMAGE_SIZE[0]}x{OG_IMAGE_SIZE[1]}. "
+                         "For another size, change OG_IMAGE_SIZE in build.py, and og:image:width and og:image:height in index.html.")
+    return result.stdout
+
+
+# ==========================================
 # The site
 # ==========================================
 
@@ -322,8 +353,9 @@ def site_files(screenshots_dir: Path | None, images: list[str], languages: list[
     return files
 
 
-def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path], list[str]]:
-    """Check everything the site is made from. Returns its files (site_files) and the warnings to print."""
+def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path | bytes], list[str]]:
+    """Check everything the site is made from. Return its files and the warnings to print. Each file is either
+    the path to copy it from (from site_files), or its content (the PNG from og_image_png)."""
     page = PageParser()
     page.feed((SRC_DIR / "index.html").read_text(encoding="utf-8"))
     page.close()
@@ -334,7 +366,8 @@ def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path], list[str]
     images = check_screenshots(screenshots_dir, languages)   # screenshots.json is checked even without --screenshots
     if screenshots_dir is None:
         warnings.append("Without screenshots (--no-screenshots): fine for a preview, never publish it.")
-    return site_files(screenshots_dir, images, languages), warnings
+    files: dict[str, Path | bytes] = {**site_files(screenshots_dir, images, languages), OG_IMAGE_PNG: og_image_png()}
+    return files, warnings
 
 
 def check_out_dir(out_dir: Path) -> None:
@@ -344,10 +377,13 @@ def check_out_dir(out_dir: Path) -> None:
         raise BuildError(f"{out_dir}: already exists and is not an empty directory; remove it first")
 
 
-def write_site(out_dir: Path, files: dict[str, Path]) -> None:
+def write_site(out_dir: Path, files: dict[str, Path | bytes]) -> None:
     for path, source in files.items():
         (out_dir / path).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, out_dir / path)
+        if isinstance(source, bytes):
+            (out_dir / path).write_bytes(source)
+        else:
+            shutil.copyfile(source, out_dir / path)
 
 
 def build_into_temp_dir(screenshots_dir: Path | None) -> tuple[Path, list[str]]:

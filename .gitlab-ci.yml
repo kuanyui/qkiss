@@ -11,6 +11,8 @@ homepage:
     SCREENSHOTS_REPO: "$CI_PROJECT_URL.wiki.git"
   script:
     - git clone --depth 1 "$SCREENSHOTS_REPO" /tmp/wiki
+    # build.py uses rsvg-convert to convert the link-preview image from SVG to PNG.
+    - apt-get update && apt-get install -y --no-install-recommends librsvg2-bin
     - python3 homepage/build.py public --screenshots /tmp/wiki/screenshots
   # Deploy `public/` to GitLab Pages, with the `pages` keyword. (The older way, naming the job `pages`, is deprecated.)
   pages: true
