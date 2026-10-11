@@ -64,6 +64,9 @@
   "footer.specs.title": "KiSS 規格",
   "footer.specs.yav": "yav 的 fkiss（日文）",
   "footer.specs.otakuworld": "Otaku World（英文）",
+  "footer.icons.title": "圖示",
+  "footer.icons.tango": "<a href=\"https://github.com/kuanyui/tango-icon-theme\">Tango Icon Theme</a>（作者：Tango Desktop Project contributors from freedesktop.org，GPL）",
+  "footer.icons.simple": "<a href=\"https://simpleicons.org/\">Simple Icons</a>（CC0）：GitHub、GitLab 與各 Linux 發行版的標誌，皆為其所有者的商標",
   "lightbox.close": "關閉",
   "lightbox.prev": "上一張截圖",
   "lightbox.next": "下一張截圖"

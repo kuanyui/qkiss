@@ -193,6 +193,7 @@ code {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-height: 2.75rem;
   padding: 0.55rem 1.15rem;
   border: 1px solid var(--border-strong);
@@ -219,6 +220,32 @@ code {
 .button-primary:hover {
   background: var(--accent-hover);
   color: var(--on-accent);
+}
+
+/* A Tango or Nome icon, shown at 22 px in a button (see images/icons/README.md). */
+.button-icon {
+  flex: none;
+}
+
+/* A brand mark in a button (see images/marks/README.md). It is painted in the text color through a mask, so it
+   follows the colors of the button, in both themes. */
+.button-mark {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  background: currentColor;
+  mask: center / contain no-repeat;
+  -webkit-mask: center / contain no-repeat;
+}
+
+.button-mark.github {
+  mask-image: url(images/marks/github.svg);
+  -webkit-mask-image: url(images/marks/github.svg);
+}
+
+.button-mark.gitlab {
+  mask-image: url(images/marks/gitlab.svg);
+  -webkit-mask-image: url(images/marks/gitlab.svg);
 }
 
 /* ---- Header -------------------------------------------------------------- */
@@ -1007,6 +1034,11 @@ sup {
 
 .footer-links li + li {
   margin-top: 0.35rem;
+}
+
+/* The sources and licenses of the icons span all the columns of the footer. */
+.footer-credits {
+  grid-column: 1 / -1;
 }
 
 /* ---- Motion -------------------------------------------------------------- */

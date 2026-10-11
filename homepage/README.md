@@ -14,7 +14,8 @@ homepage/
     ├── i18n/       # One JSON file per language other than English
     └── images/
         ├── distros/              # Logos of the Linux distributions, from Simple Icons. See images/distros/README.md.
-        ├── icons/                # The mark of Tango Remixer, from the Tango icon theme. See images/icons/README.md.
+        ├── icons/                # Icons of the buttons, and the mark of Tango Remixer, from Tango and Nome. See images/icons/README.md.
+        ├── marks/                # GitHub and GitLab marks for the buttons, from Simple Icons. See images/marks/README.md.
         └── og-image.svg          # The link-preview image (see below)
 ```
 

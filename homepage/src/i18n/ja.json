@@ -64,6 +64,9 @@
   "footer.specs.title": "KiSS の仕様",
   "footer.specs.yav": "yav 氏の fkiss（日本語）",
   "footer.specs.otakuworld": "Otaku World（英語）",
+  "footer.icons.title": "アイコン",
+  "footer.icons.tango": "<a href=\"https://github.com/kuanyui/tango-icon-theme\">Tango Icon Theme</a>（作者：Tango Desktop Project contributors from freedesktop.org、GPL）",
+  "footer.icons.simple": "<a href=\"https://simpleicons.org/\">Simple Icons</a>（CC0）：GitHub、GitLab、各 Linux ディストリビューションのロゴ。いずれもそれぞれの所有者の商標です",
   "lightbox.close": "閉じる",
   "lightbox.prev": "前のスクリーンショット",
   "lightbox.next": "次のスクリーンショット"
