@@ -400,6 +400,8 @@ void MainWindow::setupMenuBar()
             // const QString langLabel = QStringLiteral("%1 %2").arg(lang.flagEmoji).arg(lang.label);
             const QString langText = lang.label;
             act->setText(langText);
+            QIcon langIcon { lang.flagSvgFile };   // The flag of ja_JP also changes with the language.
+            act->setIcon(langIcon);
         }
         const auto &allCaseSensitivity= QKiSS::caseSensitivityNames();
         for (int i = 0; i < allCaseSensitivity.length(); i++) {

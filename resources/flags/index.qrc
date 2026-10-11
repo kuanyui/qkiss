@@ -2,6 +2,7 @@
     <qresource prefix="/flags">
         <file alias="gb.svg">svg/gb.svg</file>
         <file alias="jp.svg">svg/jp.svg</file>
+        <file alias="pw.svg">svg/pw.svg</file>
         <file alias="tw.svg">svg/tw.svg</file>
         <file alias="us.svg">svg/us.svg</file>
     </qresource>

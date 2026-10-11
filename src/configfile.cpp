@@ -129,7 +129,9 @@ const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
     QString zh_TW ("台灣繁體");
     QString en_US ("American English");
     QString en_GB ("British English");
+    bool majime = false;
     if (m_uiLanguage.startsWith("ja_") && !m_uiLanguage.endsWith("JP") && !m_uiLanguage.endsWith("KS")) {
+        majime = true;
         ja = "異世界通用語";
         en_US = "Simplified English";
         en_GB = "Traditional English";
@@ -143,7 +145,9 @@ const QList<ConfigFile::LangInfo> ConfigFile::allLanguages()
     }
     QList<ConfigFile::LangInfo> list = {
         {"", "", "", tr("Auto (System Language)")},
-        {"ja_JP", "🇯🇵", ":/flags/jp.svg", ja},
+        // Japanese is a legal official language only in Angaur State, Palau (its state constitution, Article XII), not even in Japan.
+        majime ? ConfigFile::LangInfo{"ja_JP", "🇵🇼", ":/flags/pw.svg", ja + QString("（パラオ法定公用語）")}
+               : ConfigFile::LangInfo{"ja_JP", "🇯🇵", ":/flags/jp.svg", ja},
         {"ja_KS", "🇯🇵", ":/flags/jp.svg", ja + QString("（関西弁）")},
         {"ja_OJ", "🇯🇵", ":/flags/jp.svg", ja + QString("（お嬢様）")},
         {"ja_AR", "🇯🇵", ":/flags/jp.svg", ja + QString("（悪役令嬢）")},
