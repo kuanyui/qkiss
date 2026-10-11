@@ -2,7 +2,7 @@
   <h1>QKiSS</h1>
   <img src="resources/appicon/apps/48/qkiss.svg" alt="QKiSS's Logo" />
   <h4>A modest renaissance of KiSS</h4>
-  <img src="https://raw.githubusercontent.com/wiki/kuanyui/qkiss/screenshots/qkiss_0_9_0_demo_1.webp" alt="The main window of QKiSS (Japanese UI) with a KiSS set loaded" />
+  <img src="https://raw.githubusercontent.com/wiki/kuanyui/qkiss/screenshots/main.webp" alt="The main window of QKiSS (Japanese UI) with a KiSS set loaded" />
 </div>
 
 QKiSS is a modern implementation of [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) viewer in Qt 6, compatible with KISS/GS and FKiSS 1 & 2 specifications, as a complete rebirth inspired by [fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) and [GnomeKiSS](https://devel.tlrmx.org/kiss/) on Linux.
@@ -19,7 +19,8 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
   - [gnomekiss](http://devel.tlrmx.org/kiss/) depends too many out-dated, about to be deprecated GNOME 2 packages (e.g. `libgnomeui`, `libgnomecanvas`) and no longer available on most of distros.
 - It is very fun and romantic to read and implement some specifications comes from 30 years ago (and nearly as old as myself).
 - Nostalgia and pixel-art from the childhood using Windows 95 / 98 (though I never heard KISS at that time).
-- Real life is so painful. Wellness is in manga and anime.
+- Real life is so painful. Wellness is in light manga, anime, and novel.
+  - Truly, truly I tell you, you should think about isekai. Animen.
 
 # Download Binaries
 > [!NOTE]
