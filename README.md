@@ -163,12 +163,8 @@ This is quite enough to load nearly most of all Japanese KiSS files I'm able to 
 
 But the `shell()` command is not implemented on purpose, to avoid any security vulnerability.
 
-## Is this able to be ported to other OS?
-I guess the main challenge would be the external program `lha`, which is only available on UNIX. Maybe able to port to Windows via MinGW or Cygwin? Donno, not familiar with Windows development.
-
-Also have considered to use [libarchive](https://github.com/libarchive/libarchive) to process LZH files directly in C API instead of calling external programs, but:
-   1. This supports decompression only. Yes, I indeed have plan to reserve the ability to modify the files in compressed LZH (save as another LZH file) via QKiSS directly.
-   2. I don't sure its compatibility for those LZH fossils excavated from the dimmed corners of 1990s ~ 2000s Internet which are already full of dust.
+## Is this able to be ported to macOS?
+- I have no Mac. So donno.
 
 ## Why called "QKiSS"?
 
