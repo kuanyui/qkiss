@@ -12,8 +12,8 @@
 # Not flags=(unconfined): it ignores the deny rules and the Cx transitions.
 #
 # Tested in enforce mode on openSUSE Tumbleweed (apparmor_parser 5.0.2, Linux 7.2.8):
-# lha, unar and "Open this item" work; lha and unar run in their child profiles.
-# Not tested yet at runtime: the exec rules by file name and the profile flags, added later.
+# lha, unar and "Open this item" work, lha and unar run in their child profiles, and
+# the settings are saved.
 # Only compiled, not run, with apparmor_parser 4.1.0 (Debian 13).
 
 abi <abi/4.0>,
