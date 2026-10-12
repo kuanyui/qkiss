@@ -4,6 +4,8 @@ Priority: optional
 Maintainer: kuanyui <azazabc123@gmail.com>
 Build-Depends:
  debhelper-compat (= 13),
+ dh-apparmor,
+ apparmor,
  cmake,
  build-essential,
  g++,
@@ -26,4 +28,10 @@ Package: @PROJECT_NAME@
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: lha, unar
+Suggests: @PROJECT_NAME@-apparmor
 Description: @PROJ_DESCRIPTION_DEBIAN@
+
+Package: @PROJECT_NAME@-apparmor
+Architecture: all
+Depends: @PROJECT_NAME@ (>= ${source:Version}), apparmor (>= 4.1~), ${misc:Depends}
+Description: @PROJ_APPARMOR_DESCRIPTION_DEBIAN@

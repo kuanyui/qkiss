@@ -37,6 +37,17 @@ string(REGEX REPLACE "\n" "\n " PROJ_DESCRIPTION_DEBIAN "${PROJ_DESCRIPTION}")
 string(REGEX REPLACE "\n \n" "\n .\n" PROJ_DESCRIPTION_DEBIAN "${PROJ_DESCRIPTION_DEBIAN}")
 set(PROJ_DESCRIPTION_DEBIAN "${PROJ_SUMMARY}\n ${PROJ_DESCRIPTION_DEBIAN}")
 
+# The optional `qkiss-apparmor` package (see `QKISS_INSTALL_APPARMOR`), and its description for `debian/control`
+set(PROJ_APPARMOR_SUMMARY "Optional AppArmor profile for ${PROJ_DISPLAY_NAME}")
+set(PROJ_APPARMOR_DESCRIPTION "Confines lha and unar, the external programs that ${PROJ_DISPLAY_NAME} runs to extract LZH archives. They can read files, but they cannot write files (unar only into its temporary folder), use the network, or start other programs.
+
+${PROJ_DISPLAY_NAME} itself is not confined, but it cannot read secrets such as ~/.ssh and browser data, nor write startup files such as ~/.bashrc.
+
+Removing this package unloads the profile at once.")
+string(REGEX REPLACE "\n" "\n " PROJ_APPARMOR_DESCRIPTION_DEBIAN "${PROJ_APPARMOR_DESCRIPTION}")
+string(REGEX REPLACE "\n \n" "\n .\n" PROJ_APPARMOR_DESCRIPTION_DEBIAN "${PROJ_APPARMOR_DESCRIPTION_DEBIAN}")
+set(PROJ_APPARMOR_DESCRIPTION_DEBIAN "${PROJ_APPARMOR_SUMMARY}\n ${PROJ_APPARMOR_DESCRIPTION_DEBIAN}")
+
 # ==============================================
 # Folder for generated, platform independent files
 # ==============================================
@@ -734,6 +745,36 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
 
     # XDG desktop file
     install(FILES "${PROJ_GENERATED_DIR}/${PROJECT_NAME}.desktop" DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+
+    # AppArmor profile in `packaging/apparmor/`, for the optional `qkiss-apparmor` package (Debian / Ubuntu / openSUSE).
+    # - Off by default, so `cmake --install` during development never writes into `/etc`.
+    # - Always installed into `/etc/apparmor.d/` (under `DESTDIR`), whatever `CMAKE_INSTALL_PREFIX` is: AppArmor reads profiles only there.
+    # - The source files declare `abi <abi/4.0>`. When the build system has AppArmor 5 (`/etc/apparmor.d/abi/5.0` exists), the installed
+    #   files declare `abi/5.0` instead, which enforces more of the rules (e.g. `deny io_uring`). The packages are built on the distro
+    #   they are for, so this follows the AppArmor version of that distro. Keep this in sync with `apparmor-install` in `Makefile`.
+    option(QKISS_INSTALL_APPARMOR "Install the AppArmor profile into /etc/apparmor.d/ (for distro packages)" OFF)
+    if(QKISS_INSTALL_APPARMOR)
+        if(EXISTS "/etc/apparmor.d/abi/5.0")
+            set(apparmorAbi "5.0")
+        else()
+            set(apparmorAbi "4.0")
+        endif()
+        message(STATUS "AppArmor profile: abi/${apparmorAbi}")
+        foreach(relPath IN ITEMS "qkiss" "abstractions/qkiss-deny-high-value")
+            set(src "${CMAKE_SOURCE_DIR}/packaging/apparmor/etc/apparmor.d/${relPath}")
+            set(dst "${PROJ_GENERATED_DIR}/apparmor.d/${relPath}")
+            file(READ "${src}" content)
+            if(NOT content MATCHES "\nabi <abi/4\\.0>,\n")
+                message(FATAL_ERROR "No `abi <abi/4.0>,` line to replace in ${src}")
+            endif()
+            string(REPLACE "\nabi <abi/4.0>,\n" "\nabi <abi/${apparmorAbi}>,\n" content "${content}")
+            file(WRITE "${dst}" "${content}")
+            # Configure again when the source file changes.
+            set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${src}")
+            get_filename_component(relDir "${relPath}" DIRECTORY)
+            install(FILES "${dst}" DESTINATION "/etc/apparmor.d/${relDir}")
+        endforeach()
+    endif()
 
 elseif(WIN32)
     # ===================================================

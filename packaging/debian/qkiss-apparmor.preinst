@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+# Installed again after `apt remove`: the conffiles are still there, so $2 is the old
+# version. Enable the profile that `prerm` disabled; `postinst` loads it.
+case "$1" in
+    install)
+        if [ -n "$2" ]; then
+            rm -f /etc/apparmor.d/disable/qkiss
+        fi
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

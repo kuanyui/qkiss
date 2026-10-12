@@ -2,3 +2,11 @@
 
 %:
 	dh $@ --buildsystem=cmake --builddirectory=build
+
+# Also install the AppArmor profile, for the `qkiss-apparmor` package.
+override_dh_auto_configure:
+	dh_auto_configure --buildsystem=cmake --builddirectory=build -- -DQKISS_INSTALL_APPARMOR=ON
+
+# Load the profile when `qkiss-apparmor` is installed or upgraded, and create `/etc/apparmor.d/local/qkiss`.
+execute_after_dh_install:
+	dh_apparmor --profile-name=qkiss -pqkiss-apparmor

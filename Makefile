@@ -225,14 +225,17 @@ homepage-dev-server: $(HOMEPAGE_SCREENSHOTS_PREREQUISITE)    ## Build the websit
 ### -- AppArmor profile (`packaging/apparmor/`) -----------------
 
 # - Edit the files in `packaging/apparmor/`, not the copies in `/etc/apparmor.d/`: running this again overwrites the copies and reloads the profile.
+# - Like the packages (`QKISS_INSTALL_APPARMOR` in `CMakeLists.txt`), the copies declare `abi/5.0` when this machine has AppArmor 5.
 # - A QKiSS started before the first load stays unconfined: restart it.
 # - AppArmor loads the profile again at every boot, until `apparmor-uninstall`.
-# - The last command lists the loaded profiles (`qkiss`, `qkiss//lha`, `qkiss//unar`) and their modes.
+# - The last two commands show the abi in use, and list the loaded profiles (`qkiss`, `qkiss//lha`, `qkiss//unar`) with their modes.
 .PHONY: apparmor-install
 apparmor-install:    ## Copy the AppArmor profile into `/etc/apparmor.d/` and load it, for testing.
 	sudo install -m 644 packaging/apparmor/etc/apparmor.d/qkiss /etc/apparmor.d/qkiss
 	sudo install -m 644 packaging/apparmor/etc/apparmor.d/abstractions/qkiss-deny-high-value /etc/apparmor.d/abstractions/qkiss-deny-high-value
+	if [ -e /etc/apparmor.d/abi/5.0 ]; then sudo sed -i 's|^abi <abi/4\.0>,$$|abi <abi/5.0>,|' /etc/apparmor.d/qkiss /etc/apparmor.d/abstractions/qkiss-deny-high-value; fi
 	sudo apparmor_parser -r /etc/apparmor.d/qkiss
+	grep '^abi' /etc/apparmor.d/qkiss
 	sudo grep qkiss /sys/kernel/security/apparmor/profiles
 
 # - `apparmor_parser -R` reads the file to know which profiles to unload, so it runs before the files are removed.

@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+# Removing (not upgrading) this package turns the profile off at once.
+# `apt remove` keeps /etc/apparmor.d/qkiss (a conffile), and AppArmor loads every
+# profile there at boot, so also disable it, the same way `aa-disable` does.
+# `preinst` enables it again when the package is installed again.
+case "$1" in
+    remove)
+        mkdir -p /etc/apparmor.d/disable
+        ln -sf /etc/apparmor.d/qkiss /etc/apparmor.d/disable/qkiss
+        if aa-enabled --quiet 2>/dev/null; then
+            apparmor_parser -R /etc/apparmor.d/qkiss || true
+        fi
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

@@ -54,39 +54,91 @@ BuildRequires:  python3dist(pyyaml)
 Recommends:     lha
 Recommends:     unar
 
+# ----------------------------
+# AppArmor (optional package)
+# ----------------------------
+# The optional `qkiss-apparmor` package, only for openSUSE: Fedora uses SELinux instead.
+# `apparmor-abstractions` has `/etc/apparmor.d/abi/`, which tells CMake whether to use abi 5.0 (see `QKISS_INSTALL_APPARMOR` in `CMakeLists.txt`).
+%if 0%{?suse_version}
+BuildRequires:  apparmor-abstractions
+BuildRequires:  apparmor-rpm-macros
+Suggests:       %{name}-apparmor
 
+# declare a package with suffix "apparmor"
+%package apparmor
+Summary:        @PROJ_APPARMOR_SUMMARY@
+BuildArch:      noarch
+Requires:       %{name} = %{version}-%{release}
+Requires:       apparmor-abstractions
+Requires:       apparmor-parser >= 4.1
+
+%description apparmor
+@PROJ_APPARMOR_DESCRIPTION@
+%endif
+
+
+# ---------------------------- (macro `description` is placed here because it doesn't stop reading lines until next percent symbol macro...)
 %description
 @PROJ_DESCRIPTION@
 
+# ----------------------------
 %prep
 # -n specifies the child folder name after extract.
 %setup -n @TARBALL_BASENAME@
 
-
+# ----------------------------
 %build
+%if 0%{?suse_version}
+%cmake -DQKISS_INSTALL_APPARMOR=ON
+%else
 %cmake
+%endif
 %cmake_build
 
+# ----------------------------
 %install
 %cmake_install
 
-
+# ----------------------------
 %post
 # update‐desktop‐database - Build cache database of MIME types handled by desktop files
 # update‐mime‐database - a program to build the Shared MIME‐Info database cache
 update-desktop-database
 # update-mime-database %{_datadir}/mime
 
+# ----------------------------
 %postun
 update-desktop-database
 # update-mime-database %{_datadir}/mime
 
+# ----------------------------
+%if 0%{?suse_version}
+%post apparmor
+%apparmor_reload %{_sysconfdir}/apparmor.d/qkiss
+
+# ----------------------------
+%preun apparmor
+# Removing (not upgrading) the package unloads the profile at once.
+if [ $1 -eq 0 ]; then
+    /sbin/apparmor_parser -R %{_sysconfdir}/apparmor.d/qkiss > /dev/null 2>&1 || :
+fi
+%endif
+
+# ----------------------------
 %files
 
 %{_datadir}/icons/hicolor/*/apps/%{name}.*
 %{_datadir}/applications/%{name}.desktop
 %{_bindir}/%{name}
 
+# ----------------------------
+%if 0%{?suse_version}
+%files apparmor
+%config(noreplace) %{_sysconfdir}/apparmor.d/qkiss
+%config(noreplace) %{_sysconfdir}/apparmor.d/abstractions/qkiss-deny-high-value
+%endif
+
+# ----------------------------
 %changelog
 
 @CHANGELOG_FOR_RPM_SPEC@
