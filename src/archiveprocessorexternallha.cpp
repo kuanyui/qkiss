@@ -19,6 +19,7 @@
 
 #include "archiveprocessorexternallha.h"
 #include "configfile.h"
+#include "extractorsandbox.h"
 #include "logging.h"
 
 #include <QDirIterator>
@@ -123,6 +124,7 @@ FilesSummaryList ArchiveProcessorExternalLha::getFileSizeList(const QString &lzh
         Q_UNUSED(exitCode);
         ok = exitStatus == QProcess::NormalExit;
     });
+    sandboxExtractorProcess(&process, "lha", lzhFilePath);
     process.start("lha",
                   { "l",  // list files
                     "--archive-kanji-code=%1"_L1.arg(getEncodingParam()),
@@ -261,6 +263,7 @@ bool ArchiveProcessorExternalLha::callExternalProgramOrLibraryToExtractLzh(const
     m_archiveFilePath = lzhFilePath;
     m_filesSummaryList = getFileSizeList(lzhFilePath);
     m_buffer.clear();
+    sandboxExtractorProcess(m_process, "lha", lzhFilePath);
     m_process->start("lha",
                      { "-p",   // print the content of the archived files to stdout.
                        "-q",   // quiet (use along with `-p`; don't display filename header)

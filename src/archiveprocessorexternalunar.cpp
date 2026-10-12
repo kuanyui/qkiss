@@ -19,6 +19,7 @@
 
 #include "archiveprocessorexternalunar.h"
 #include "configfile.h"
+#include "extractorsandbox.h"
 #include "logging.h"
 
 #include <QDirIterator>
@@ -129,6 +130,7 @@ bool ArchiveProcessorExternalUnar::startUnarProcessToExtractLzh(const QString &l
     m_elapsedTimer.start();
     m_archiveFilePath = lzhFilePath;
     m_buffer.clear();
+    sandboxExtractorProcess(m_process, "unar", lzhFilePath, m_tmpDir->path());
     m_process->start("unar",
                      {
                         "-no-directory",

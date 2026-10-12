@@ -544,6 +544,7 @@ qt_add_executable("${PROJ_NAME}"
     src/texteditsearchbar.h src/texteditsearchbar.cpp
     src/codeeditor.h src/codeeditor.cpp
     src/archiveprocessorexternalunar.h src/archiveprocessorexternalunar.cpp
+    src/extractorsandbox.h src/extractorsandbox.cpp
     src/archiveprocessorcnfinfilesystem.h src/archiveprocessorcnfinfilesystem.cpp
     src/preferencedialog.h src/preferencedialog.cpp
     src/zcombobox.h src/zcombobox.cpp
