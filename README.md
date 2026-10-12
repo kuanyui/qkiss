@@ -17,6 +17,12 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 - As of 2024, the existed KISS implementations for Linux:
   - [fkiss](http://www2s.biglobe.ne.jp/~yav/soft/index.html#fkiss) can be built, but not executable anymore (due to 64bit? I don't sure).
   - [gnomekiss](http://devel.tlrmx.org/kiss/) depends too many out-dated, about to be deprecated GNOME 2 packages (e.g. `libgnomeui`, `libgnomecanvas`) and no longer available on most of distros.
+  > [!NOTE]
+  > Yes, I know there are some implementations which can run in Web browser, but:
+  >  - They are (technically and architecturally) ugly when you want to integrate them with your OS and file system,
+  >  - I'm tired of write lots of disgusting HTML / CSS / JS as workaround to pretend a web page to make it look like a native application.
+  >  - I don't like to open a heavy browser nor some Chimera like Electron only for such thing which actually can be done in a light-weight way.
+  > The similar reasons also apply on the implementations in Java which are unbearably slow.
 - It is very fun and romantic to read and implement some specifications comes from 30 years ago (and nearly as old as myself).
 - Nostalgia and pixel-art from the childhood using Windows 95 / 98 (though I never heard KISS at that time).
 - Real life is so painful. Wellness is in light manga, anime, and novel.
@@ -44,7 +50,7 @@ QKiSS for Windows is built via GitHub Actions CI/CD, the portable ZIP and NSIS i
   - C++ 20 compiler (tested on GCC, MSVC)
   - Qt >= 6.4.2 (recommended: >= 6.8.3)
     - `QtMultimedia`
-  - Python >= 3.11
+  - Python >= 3.13
     - `jsonschema`
     - `pyyaml`
   - CMake >= 3.25
@@ -150,7 +156,7 @@ However there're some ambiguities in the documentation. And these documents are 
   - FKiSS Script Language Specification - https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/INDEX.HTM
 
 ## Otaku World (English)
-This website "Big Kiss" is the largest existing KiSS community in the world. Itself provides a KiSS viewer [DirectKiSS](http://otakuworld.com/index.html?/kiss/viewers.htm) (running up to Windows 7). It also serves an online specification. It includes FKiSS version 1 ~ 4.
+This website "Big Kiss" is the largest existing KiSS community in the world. Itself provides a KiSS viewer [Direct KiSS](http://otakuworld.com/index.html?/kiss/viewers.htm) (running up to Windows 7). It also serves an online specification. It includes FKiSS version 1 ~ 4.
 
 - https://otakuworld.com/kiss/kisshelp/
 
@@ -191,9 +197,9 @@ I've also ever considered several other names:
 
 ## Disclosuring Usage of LLMs
 
-- This project relies on LLM as developing assistant, but always try to keep everything in control as possible as I can.
+- This project uses LLMs as development assistants, but keeps them under control as much as possible, with various engineering methods (e.g. isolation in KVM, manual review of commits).
 - LLM agents (e.g. Claude Code, Codex) are only be used for i18n translations, homepage, CI/CD.
-- Never did any fucking vibe code. All codes are manually reviewed line by line. I can understand and explain every lines in this codebase.
+- Never did any fucking vibe coding in the main program (Qt / C++) or in the Python code. Even with LLM assistance, all the code is manually reviewed and modified line by line: I can understand and explain every line of it. Translations are also manually proofread as much as possible, with my broken foreign language skills.
 - Detailed contribution ratios are listed below:
 
 | Fields          | LLMs (roughly sorted by contributions %) | LLM contributed                                  | Usage                                                                                                                                                                                                                                                                                          |
@@ -207,7 +213,7 @@ I've also ever considered several other names:
 | osc / RPM / DEB | Gemini, ChatGPT, Claude Code             | 40% ~ 70% codes; survey, learning, debug, coding | Learning lots of detailed rules of DEB & RPM packaging & troubleshooting; and how to build locally via `osc`. Discuss the methods to connect the CI/CD between Github Actions and OBS `_service`. Before public release, I use LLM agent directly to debug and write the rest codes.           |
 | Homepage        | Claude Code                              | 100% codes, 100% translations                    | Write HTML / CSS / JS... I'm tired to write website during leisure time anymore.                                                                                                                                                                                                               |
 
-- ...Argh, I guess this project might be the last project whose codes are mainly written manually... Not only KiSS itself, another era is over.
+- ...Argh, I guess this might be my last project whose codes are mainly written manually... Not only KiSS itself, another era is over.
 
 # Magіc Spells
 
