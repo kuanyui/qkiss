@@ -155,6 +155,7 @@ add_custom_target(icontheme DEPENDS ${ICON_GENERATED_STAMP_FILE})
 execute_process(
     COMMAND ${__PYTHON3__} ${CMAKE_SOURCE_DIR}/scripts/changelog/changelog.py
             --input-yaml ${CMAKE_SOURCE_DIR}/CHANGELOG.yaml
+            --version-file ${CMAKE_SOURCE_DIR}/VERSION
             --output-rpm ${PROJ_GENERATED_DIR}/changelogs_rpm.txt
             --output-deb ${PROJ_GENERATED_DIR}/debian/changelog
             --output-markdown ${PROJ_GENERATED_DIR}/changelogs.md

@@ -76,6 +76,7 @@ class RootData:
 class Options:
     input_yaml: Path
     json_schema: Path
+    version_file: Optional[Path] = None
     output_rpm: Optional[Path] = None
     output_deb: Optional[Path] = None
     output_markdown: Optional[Path] = None
@@ -146,6 +147,17 @@ class Parser:
             except Exception as e:
                 sys.exit(f"Invalid release at index {i}: {e}")
             releases.append(release)
+
+        # Step 5: The latest release (at the top of the YAML file) must have the version in the VERSION file
+        if self.options.version_file:
+            if not self.options.version_file.exists():
+                sys.exit(f"VERSION file not found: {self.options.version_file}")
+            # Remove the spaces and newlines around the version, like `string(STRIP ...)` in CMakeLists.txt.
+            version = self.options.version_file.read_text(encoding="utf-8").strip()
+            latest = releases[0].version if releases else "(no release)"
+            if latest != version:
+                sys.exit(f"{self.options.version_file} says {version}, but the latest release at the top of {self.options.input_yaml} is {latest}. "
+                         f"Add a release for {version} at the top of {self.options.input_yaml}, or correct {self.options.version_file}.")
 
         return RootData(releases=releases)
 
@@ -295,6 +307,7 @@ def main(argv: List[str]) -> None:
     options = Options(
         input_yaml=args.input_yaml,
         json_schema=args.json_schema,
+        version_file=args.version_file,
         output_rpm=args.output_rpm,
         output_deb=args.output_deb,
         output_markdown=args.output_markdown,
