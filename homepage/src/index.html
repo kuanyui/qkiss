@@ -62,6 +62,7 @@
         <a href="#features" data-i18n="nav.features">Highlights</a>
         <a href="#screenshots" data-i18n="nav.screenshots">Screenshots</a>
         <a href="#download" data-i18n="nav.download">Download</a>
+        <a href="#faq" data-i18n="nav.faq">Q&amp;A</a>
       </nav>
       <!-- Filled by main.js with @llselect/core; it stays hidden if that library did not load. -->
       <div class="language-picker" id="language-picker" hidden>
@@ -159,7 +160,7 @@
           <p id="footnote-website">
             <a class="footnote-back" href="#footnote-ref-website" aria-label="Back to the text" title="Back to the text"
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
-            <span data-i18n="features.footnote.website">This website, though, was left entirely to an LLM agent, because I have no interest in spending the weekend hours of my life writing web pages anymore; I am a dog kept by OpenAI and Anthropic. Woof woof.</span>
+            <span data-i18n-html="features.footnote.website">The use of LLMs in each area of this project is disclosed in <a href="#faq-llm">Q&amp;A</a>. For example, the HTML / CSS / JS of this website was left entirely to an LLM agent, because I have no interest in spending the weekend hours of my life writing web pages anymore; I am a dog kept by OpenAI and Anthropic. Woof woof.</span>
           </p>
           <p id="footnote-browsers">
             <a class="footnote-back" href="#footnote-ref-browsers" aria-label="Back to the text" title="Back to the text"
@@ -247,6 +248,127 @@
         <p class="notice" data-i18n-html="download.source">Want to build it yourself? Download the <a href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="^qkiss_.+\.tar\.gz$">source tarball</a> and see <a href="https://github.com/kuanyui/qkiss#development">Development</a> in the README.</p>
       </div>
     </section>
+
+    <section class="section" id="faq">
+      <div class="container prose">
+        <h2 data-i18n="faq.title">Q&amp;A</h2>
+        <!-- Each question is a <details>: a click on the question shows its answer. A link to one opens it (see main.js). -->
+        <div class="faq">
+          <details class="faq-item">
+            <summary data-i18n="faq.specs.q">Which versions of FKiSS does QKiSS support?</summary>
+            <div class="faq-answer">
+              <ul>
+                <li data-i18n-html="faq.specs.kiss"><a href="https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html">KISS/GS</a> (General Specification), with its <a href="https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/COMMENT.HTM">extended comments</a>.</li>
+                <li data-i18n-html="faq.specs.fkiss"><a href="https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/TTFKSMN4.HTM">FKiSS</a> (the script language): versions 1 and 2.</li>
+              </ul>
+              <p data-i18n="faq.specs.enough">That is quite enough to load nearly all the Japanese KiSS sets I could find on the Internet.</p>
+              <p data-i18n-html="faq.specs.shell">But the <code>shell()</code> command is not implemented, on purpose, to avoid any security hole.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary data-i18n="faq.macos.q">Can QKiSS be ported to macOS?</summary>
+            <div class="faq-answer">
+              <p data-i18n="faq.macos.a">I have no Mac. So, no idea.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary data-i18n="faq.name.q">Why the name “QKiSS”?</summary>
+            <div class="faq-answer">
+              <p data-i18n-html="faq.name.a">A <a href="https://en.wikipedia.org/wiki/Kisekae_Set_System">KiSS</a> viewer implemented in <a href="https://en.wikipedia.org/wiki/Qt_(software)"><strong>Q</strong>t</a> 6. Having “KiSS” in the name is a convention of KiSS viewers, like fkiss, GnomeKiSS, KISSLD, and Direct KiSS.</p>
+              <p data-i18n="faq.name.others">I also considered a few other names:</p>
+              <ul>
+                <li data-i18n-html="faq.name.qtkiss"><strong>QtKISS</strong>: pronounced the same as “Cute Kiss”, and named with the same logic as GnomeKiSS: “platform name + KiSS”. Well, actually, QKiSS had this name in the early days of development. But according to the <a href="https://www.qt.io/trademark/">fair use rules of the Qt trademark</a>, the Qt name may only be used “where the Qt name is not being used in a way which suggests sponsorship or endorsement of the product”. To avoid someone giving me crap about it someday, I had to rename it.</li>
+                <li data-i18n-html="faq.name.qute"><strong>Qute KISS</strong>: also pronounced “Cute Kiss”, but argh… Qute is a trademark of a Japanese computer game company. Too risky.</li>
+              </ul>
+            </div>
+          </details>
+          <details class="faq-item" id="faq-llm">
+            <summary data-i18n="faq.llm.q">Did you use AI (LLMs)?</summary>
+            <div class="faq-answer">
+              <ul>
+                <li data-i18n="faq.llm.assistant">This project does use help from LLMs, but keeps it under control as much as possible, with various engineering methods (e.g. isolation in KVM virtual machines, and reviewing commits by hand).</li>
+                <li data-i18n="faq.llm.agents">LLM agents (e.g. Claude Code, Codex) were used only for the translations, this website and CI/CD.</li>
+                <li data-i18n="faq.llm.review">No damn vibe coding, ever, in the main program (Qt / C++) or in the Python code. Even with help from LLMs, the code was reviewed and modified by hand, line by line: I can understand and explain every line of it. I also proofread the translations by hand, as much as my broken foreign languages allow.</li>
+              </ul>
+              <h3 data-i18n="faq.llm.chart">How much LLMs wrote in each area</h3>
+              <!--
+                One row per area: its icon, the share written by LLMs (a bar, and the number), the LLMs used, and how they
+                were used. `--share` is the width of the bar. For a range like 60–70%, `--share-max` adds a lighter part up
+                to the maximum. The logos are in images/tech/ (see its README.md), the other icons in images/icons/.
+              -->
+              <ul class="llm-usage">
+                <li class="llm-area">
+                  <span class="llm-icon"><img src="images/tech/cplusplus.svg" alt="" width="22" height="22"></span>
+                  <strong class="llm-name">Qt / C++</strong>
+                  <span class="llm-bar" style="--share: 5%" aria-hidden="true"></span>
+                  <span class="llm-share">5%</span>
+                  <ul class="llm-names"><li>Microsoft Copilot</li><li>ChatGPT</li><li>Claude</li></ul>
+                  <p class="llm-note" data-i18n="faq.llm.cpp.note">Discussing design patterns, finding suitable Qt APIs, and writing some examples for difficult Qt APIs (e.g. the delegates of MVC).</p>
+                </li>
+                <li class="llm-area">
+                  <span class="llm-icon"><img src="images/tech/python.svg" alt="" width="22" height="22"></span>
+                  <strong class="llm-name">Python</strong>
+                  <span class="llm-bar" style="--share: 40%" aria-hidden="true"></span>
+                  <span class="llm-share">40%</span>
+                  <ul class="llm-names"><li>Microsoft Copilot</li><li>ChatGPT</li></ul>
+                  <p class="llm-note" data-i18n-html="faq.llm.python.note">Rough scaffolds (e.g. <code>argparse</code>) and some snippets. Learning the latest “Pythonic” ways, and the best practices of type annotations in Python 3.</p>
+                </li>
+                <li class="llm-area">
+                  <span class="llm-icon"><img src="images/icons/preferences-desktop-locale.svg" alt="" width="22" height="22"></span>
+                  <strong class="llm-name" data-i18n="faq.llm.i18n.name">Translations</strong>
+                  <span class="llm-bar" style="--share: 80%" aria-hidden="true"></span>
+                  <span class="llm-share">80%</span>
+                  <ul class="llm-names"><li>Microsoft Copilot</li><li>Codex</li><li>Claude Code</li></ul>
+                  <p class="llm-note" data-i18n-html="faq.llm.i18n.note">Translating the strings in <code>*.ts</code> from English or Japanese into the other languages, then fixing them by hand, line by line.</p>
+                </li>
+                <li class="llm-area">
+                  <span class="llm-icon"><img src="images/icons/accessories-dictionary.svg" alt="" width="22" height="22"></span>
+                  <strong class="llm-name" data-i18n="faq.llm.spec.name">FKiSS specification</strong>
+                  <span class="llm-share llm-share-text" data-i18n="faq.llm.spec.share">Docstrings only</span>
+                  <ul class="llm-names"><li>Claude</li></ul>
+                  <p class="llm-note" data-i18n-html="faq.llm.spec.note">Collecting all the FKiSS commands from the FKiSS references in HTML, and organizing them into a formal list and docstrings in <code>fkiss.cpp</code>.</p>
+                </li>
+                <li class="llm-area">
+                  <span class="llm-icon"><img src="images/tech/cmake.svg" alt="" width="22" height="22"></span>
+                  <strong class="llm-name">CMake</strong>
+                  <span class="llm-bar" style="--share: 60%" aria-hidden="true"></span>
+                  <span class="llm-share">60%</span>
+                  <ul class="llm-names"><li>ChatGPT</li><li>Gemini</li></ul>
+                  <p class="llm-note" data-i18n-html="faq.llm.cmake.note">Surveying and discussing the best practices of <code>CPack</code> and <code>CMakePresets.json</code> for a cross-platform Qt app. Learning Windows packaging, NSIS and the deployment of DLLs.</p>
+                </li>
+                <li class="llm-area">
+                  <span class="llm-icon"><img src="images/tech/githubactions.svg" alt="" width="22" height="22"></span>
+                  <strong class="llm-name">GitHub Actions</strong>
+                  <span class="llm-bar" style="--share: 60%; --share-max: 70%" aria-hidden="true"></span>
+                  <span class="llm-share">60–70%</span>
+                  <ul class="llm-names"><li>Gemini</li><li>ChatGPT</li><li>Claude Code</li></ul>
+                  <p class="llm-note" data-i18n="faq.llm.actions.note">For the Windows packages (I have no Windows development environment). No idea why Gemini does this better, while ChatGPT keeps spouting bullshit in this field. Before the public release, I realized that fighting this was a waste of time, so I let an LLM agent debug it and write the rest of the code.</p>
+                </li>
+                <li class="llm-area">
+                  <span class="llm-icon"><img src="images/icons/package-x-generic.svg" alt="" width="22" height="22"></span>
+                  <strong class="llm-name">osc / RPM / DEB</strong>
+                  <span class="llm-bar" style="--share: 40%; --share-max: 70%" aria-hidden="true"></span>
+                  <span class="llm-share">40–70%</span>
+                  <ul class="llm-names"><li>Gemini</li><li>ChatGPT</li><li>Claude Code</li></ul>
+                  <p class="llm-note" data-i18n-html="faq.llm.packaging.note">Learning the many detailed rules of DEB and RPM packaging, troubleshooting, and how to build locally with <code>osc</code>. Discussing how to connect the CI/CD of GitHub Actions to the <code>_service</code> of OBS. Before the public release, I let an LLM agent debug it and write the rest of the code.</p>
+                </li>
+                <li class="llm-area">
+                  <span class="llm-icon"><img src="images/icons/web-browser.svg" alt="" width="22" height="22"></span>
+                  <strong class="llm-name" data-i18n="faq.llm.website.name">This website</strong>
+                  <span class="llm-bar" style="--share: 80%" aria-hidden="true"></span>
+                  <span class="llm-share">80%</span>
+                  <ul class="llm-names"><li>Claude Code</li></ul>
+                  <p class="llm-note" data-i18n="faq.llm.website.note">All the translations, and all the HTML / CSS / JS… I can't be bothered anymore to spend my free time writing web pages, the bottom of the programmers' food chain.</p>
+                </li>
+              </ul>
+              <blockquote class="musing">
+                <p data-i18n="faq.llm.era">…Argh, I guess this might be my last project whose code is mainly written by hand… Not only KiSS itself: another era is over.</p>
+              </blockquote>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -278,7 +400,8 @@
           <li data-i18n-html="footer.icons.tango"><a href="https://github.com/kuanyui/tango-icon-theme">Tango Icon Theme</a>, by the Tango Desktop Project contributors from freedesktop.org (GPL)</li>
           <li><a href="https://github.com/kuanyui/nome-icon-theme">Nome Icon Theme</a> (LGPL)</li>
           <li><a href="https://github.com/lipis/flag-icons">flag-icons</a> (MIT)</li>
-          <li data-i18n-html="footer.icons.simple"><a href="https://simpleicons.org/">Simple Icons</a> (CC0): the logos of GitHub, GitLab and the Linux distributions, which are trademarks of their owners</li>
+          <li data-i18n-html="footer.icons.simple"><a href="https://simpleicons.org/">Simple Icons</a> (CC0): the logos of GitHub, GitHub Actions, GitLab and the Linux distributions, which are trademarks of their owners</li>
+          <li data-i18n-html="footer.icons.official">The logos of <a href="https://www.python.org/community/logos/">Python</a>, <a href="https://github.com/isocpp/logos">C++</a> and <a href="https://cmake.org/">CMake</a>, trademarks of the Python Software Foundation, of the Standard C++ Foundation and of Kitware. QKiSS is not affiliated with them.</li>
         </ul>
       </div>
     </div>

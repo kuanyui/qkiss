@@ -995,6 +995,228 @@ sup {
   box-shadow: 0 0 0 1px var(--border);
 }
 
+/* ---- Q&A ----------------------------------------------------------------- */
+
+.faq {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* A question: a card whose summary is the question. A click on it shows the answer. */
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+/* Where a link (like the one of the footnote *1) has just jumped to. */
+.faq-item:target {
+  border-color: var(--accent);
+}
+
+.faq-item > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  line-height: 1.5;
+  list-style: none;
+  cursor: pointer;
+}
+
+.faq-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item > summary:hover {
+  color: var(--accent);
+}
+
+/* "Q" before the question, a small tag like the footnote marks. Screen readers skip it. */
+.faq-item > summary::before {
+  content: "Q";
+  content: "Q" / "";
+  flex: none;
+  padding: 0.05em 0.45em;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* A chevron at the end, pointing down. It turns up when the answer is shown. */
+.faq-item > summary::after {
+  content: "";
+  flex: none;
+  align-self: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-inline-start: auto;
+  background: var(--text-muted);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] > summary::after {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  padding: 0 1.25rem 1.25rem;
+}
+
+.faq-answer > :last-child {
+  margin-bottom: 0;
+}
+
+/* Bullet lists, as in the features. :where() lets the lists of the LLM usage below drop the bullets. */
+:where(.faq-answer ul) {
+  margin: 0 0 1.1rem;
+  padding-inline-start: 1.25rem;
+  list-style: square;
+}
+
+:where(.faq-answer li)::marker {
+  color: var(--accent);
+}
+
+.faq-answer h3 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+/*
+ * How much LLMs wrote in each area of the project: one row per area. The bars start at the same place in every row,
+ * so that they can be compared. Each bar is the share written by LLMs, over a track of the whole area. A range like
+ * 60–70% adds a lighter part, up to its maximum. The number is written after the bar, so the bar itself is hidden
+ * from screen readers.
+ */
+.llm-usage {
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.llm-area {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) minmax(5rem, 10rem) 4.5rem;
+  grid-template-areas:
+    "icon name  bar   share"
+    "icon names names names"
+    "icon note  note  note";
+  align-items: center;
+  column-gap: 0.75rem;
+  padding-block: 0.9rem;
+  border-top: 1px solid var(--border);
+}
+
+/* The logos keep their brand colors, so like the logos of the distributions, they are on a white tile, also in the
+   dark theme. The Tango and Nome icons get the same tile, so that all the rows look alike. */
+.llm-icon {
+  grid-area: icon;
+  align-self: start;
+  padding: 7px;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.llm-icon img {
+  display: block;
+}
+
+.llm-name {
+  grid-area: name;
+}
+
+.llm-bar {
+  grid-area: bar;
+  position: relative;
+  height: 0.625rem;
+  border-radius: 0 4px 4px 0;
+  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
+}
+
+.llm-bar::before,
+.llm-bar::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  border-radius: 0 4px 4px 0;
+}
+
+/* The lighter part of a range, up to its maximum. */
+.llm-bar::before {
+  width: var(--share-max, 0%);
+  background: color-mix(in srgb, var(--accent) 45%, var(--surface));
+}
+
+/* The share. Its 2px shadow, in the color of the card, keeps a gap before the rest of the bar. */
+.llm-bar::after {
+  width: var(--share);
+  background: var(--accent);
+  box-shadow: 2px 0 0 var(--surface);
+}
+
+.llm-share {
+  grid-area: share;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  text-align: end;
+  white-space: nowrap;
+}
+
+/* An area without a share: a note in place of the bar and the number. */
+.llm-share-text {
+  grid-column: bar-start / share-end;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+/* The LLMs used: small tags. */
+.llm-names {
+  grid-area: names;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.4rem;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.llm-names li {
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.llm-area .llm-note {
+  grid-area: note;
+  margin: 0.5rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* On a phone, the bar goes under the name, and the LLMs and the note get the whole width. */
+@media (max-width: 36rem) {
+  .llm-area {
+    grid-template-columns: 2.25rem minmax(0, 1fr) 4.5rem;
+    grid-template-areas:
+      "icon  name  name"
+      "icon  bar   share"
+      "names names names"
+      "note  note  note";
+  }
+}
+
 /* ---- Footer -------------------------------------------------------------- */
 
 .site-footer {
@@ -1057,7 +1279,8 @@ sup {
 
   .screenshot-button,
   .site-nav a::after,
-  .llselect-trigger-arrow {
+  .llselect-trigger-arrow,
+  .faq-item > summary::after {
     transition: none;
   }
 

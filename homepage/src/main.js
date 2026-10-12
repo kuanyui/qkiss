@@ -520,6 +520,26 @@
   }
 
   // ---------------------------------------------------------------------------
+  // Q&A: a link to a question opens its answer
+  // ---------------------------------------------------------------------------
+
+  /** Open the <details> that is, or contains, the element with this id. */
+  function openDetailsOf(id) {
+    const details = id ? document.getElementById(id)?.closest('details') : null;
+    if (details) details.open = true;
+  }
+
+  function setUpQuestionLinks() {
+    // On click, before the browser scrolls to the target, so that it scrolls to the opened answer.
+    document.addEventListener('click', (event) => {
+      const link = event.target.closest('a[href^="#"]');
+      if (link) openDetailsOf(link.hash.slice(1));
+    });
+    // A link from another page, like `…/#faq-llm`.
+    openDetailsOf(location.hash.slice(1));
+  }
+
+  // ---------------------------------------------------------------------------
   // Start
   // ---------------------------------------------------------------------------
 
@@ -536,6 +556,7 @@
     setUpShowcase();
     setUpLightbox();
     setUpScrollSpy();
+    setUpQuestionLinks();
     setLanguage(currentLanguage);
     loadScreenshots();
     loadLatestRelease();
