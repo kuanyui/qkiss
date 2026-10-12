@@ -1009,7 +1009,7 @@ sup {
   background: var(--surface);
 }
 
-/* Where a link (like the one of the footnote *1) has just jumped to. */
+/* Where a link (like the one of the footnote *2) has just jumped to. */
 .faq-item:target {
   border-color: var(--accent);
 }
