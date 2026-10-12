@@ -1266,9 +1266,13 @@ sup {
   margin-top: 0.35rem;
 }
 
-/* The sources and licenses of the icons span all the columns of the footer. */
-.footer-credits {
+/* The sources and licenses of the icons, and the disclaimer at the very end of the page, span all the columns of the
+   footer, each under a line. */
+.footer-credits,
+.footer-disclaimer {
   grid-column: 1 / -1;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
 }
 
 /* ---- Motion -------------------------------------------------------------- */
