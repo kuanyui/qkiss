@@ -288,6 +288,35 @@
               </ul>
             </div>
           </details>
+          <details class="faq-item">
+            <summary data-i18n="faq.security.q">What security measures are there for the LZH format and external programs such as lha?</summary>
+            <div class="faq-answer">
+              <p data-i18n-html="faq.security.why"><a href="https://ja.wikipedia.org/wiki/LHA">LZH</a> is an extremely old compression format, and lha and unar extract LZH files of unknown origin, which makes them the easiest target for a malicious file. So on Linux, QKiSS locks them up:</p>
+              <ul>
+                <li data-i18n-html="faq.security.landlock"><strong>Landlock</strong>: they can read only the system files and the archive being opened, nothing else in your home folder, and they can write nowhere except unar's temporary folder.</li>
+                <li data-i18n-html="faq.security.seccomp"><strong>seccomp</strong>: high-risk system calls such as io_uring, sockets and namespaces are turned off.</li>
+                <li data-i18n-html="faq.security.apparmor"><strong>AppArmor</strong> (the optional <code>qkiss-apparmor</code> package, Debian / Ubuntu / openSUSE only): lha and unar are restricted once more, and QKiSS itself cannot read secrets such as <code>~/.ssh</code>, nor write files used for persistent attacks, such as <code>~/.bashrc</code>.</li>
+              </ul>
+              <p data-i18n="faq.security.scope">Landlock and seccomp are built into QKiSS, with nothing to install, but they cover only these two external programs, not QKiSS itself.</p>
+              <p data-i18n="faq.security.windows">As for Windows: as Eisen once said, anyone who uses Windows is a brave warrior, and needs none of these little tricks.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary data-i18n="faq.selinux.q">Why is only AppArmor supported? Is there no SELinux support?</summary>
+            <div class="faq-answer">
+              <p data-i18n-html="faq.selinux.model">It doesn't fit the use case. SELinux's security model is inherently bad at “deny access to a few folders such as <code>~/.config/autostart</code>, and allow access to everything else”, and I can't force users to put their KiSS LZH files only into some hardcoded <code>~/qkiss</code> folder.</p>
+              <p id="footnote-ref-work" data-i18n-html="faq.selinux.rare">Besides, on the Linux desktop, people who deliberately run GUI apps outside <code>unconfined_t</code> must be rare. Such people either work at the Pentagon<sup class="footnote-ref"><a href="#footnote-work">*1</a></sup>, or moved to Qubes OS long ago.</p>
+              <p data-i18n-html="faq.selinux.naming">One more thing: I'm allergic to the taste of SELinux's command names. <code>getenforce</code>, <code>chcon</code>, <code>load_policy</code>, <code>restorecon</code> and a pile of other commands refuse to have an <code>se</code> prefix, and crap all over <code>/sbin/</code>. If writing this in my free time got me a work injury, there would be no insurance payout.</p>
+              <p data-i18n="faq.selinux.landlock">But even if you use SELinux, you still have the protection of Landlock and seccomp, which covers only the extraction by the two external programs, lha and unar.</p>
+              <div class="footnotes">
+                <p id="footnote-work">
+                  <a class="footnote-back" href="#footnote-ref-work" aria-label="Back to the text" title="Back to the text"
+                     data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
+                  <span data-i18n="faq.selinux.footnote">Generally speaking, playing any kind of KiSS viewer in the workplace is not recommended.</span>
+                </p>
+              </div>
+            </div>
+          </details>
           <details class="faq-item" id="faq-llm">
             <summary data-i18n="faq.llm.q">Did you use AI (LLMs)?</summary>
             <div class="faq-answer">

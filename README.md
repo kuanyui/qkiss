@@ -186,6 +186,28 @@ I've also ever considered several other names:
 
 - `Qute KISS`: Also pronounced `Cute Kiss`, but argh... Qute is the trademark of a Japanese **computer game company**... Too risky.
 
+## What security measures are there for the LZH format and external programs such as `lha`?
+[LZH](https://ja.wikipedia.org/wiki/LHA) is an extremely old compression format, and `lha` and `unar` extract LZH files of unknown origin, which makes them the easiest target for a malicious file. So on Linux, QKiSS locks them up:
+
+- **Landlock**: they can read only the system files and the archive being opened, nothing else in your home folder, and they can write nowhere except unar's temporary folder.
+- **seccomp**: high-risk system calls such as `io_uring`, sockets and namespaces are turned off.
+- **AppArmor** (the optional `qkiss-apparmor` package, Debian / Ubuntu / openSUSE only): `lha` and `unar` are restricted once more, and QKiSS itself cannot read secrets such as `~/.ssh`, nor write files used for persistent attacks, such as `~/.bashrc`.
+
+Landlock and seccomp are built into QKiSS, with nothing to install, but they cover only these two external programs, not QKiSS itself.
+
+As for Windows: as Eisen once said, anyone who uses Windows is a brave warrior, and needs none of these little tricks.
+
+## Why is only AppArmor supported? Is there no SELinux support?
+It doesn't fit the use case. SELinux's security model is inherently bad at "deny access to a few folders such as `~/.config/autostart`, and allow access to everything else", and I can't force users to put their KiSS LZH files only into some hardcoded `~/qkiss` folder.
+
+Besides, on the Linux desktop, people who deliberately run GUI apps outside `unconfined_t` must be rare. Such people either work at the Pentagon[^kiss-at-work], or moved to Qubes OS long ago.
+
+One more thing: I'm allergic to the taste of SELinux's command names. `getenforce`, `chcon`, `load_policy`, `restorecon` and a pile of other commands refuse to have an `se` prefix, and crap all over `/sbin/`. If writing this in my free time got me a work injury, there would be no insurance payout.
+
+But even if you use SELinux, you still have the protection of Landlock and seccomp, which covers only the extraction by the two external programs, `lha` and `unar`.
+
+[^kiss-at-work]: Generally speaking, playing any kind of KiSS viewer in the workplace is not recommended.
+
 
 # Acknowledgements
 - For an unified appearance across various platforms, this project adpots icon themes / SVG icons forked from GNOME Project, Ubuntu, Inkscape, GIMP. For detailed information, please see the [README](resources/tango-remixer/README.md) of [`resources/tango-remixer`](resources/tango-remixer/).

@@ -630,6 +630,7 @@ sup {
 /* Where a footnote link (or its back link) has just jumped to. */
 .footnotes p:target,
 .feature li:target,
+.faq-answer p:target,
 .promo span:target {
   background: var(--accent-soft);
 }
