@@ -17,16 +17,18 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 - As of 2024, the existed KISS implementations for Linux:
   - [fkiss](http://www2s.biglobe.ne.jp/~yav/soft/index.html#fkiss) can be built, but not executable anymore (due to 64bit? I don't sure).
   - [gnomekiss](http://devel.tlrmx.org/kiss/) depends too many out-dated, about to be deprecated GNOME 2 packages (e.g. `libgnomeui`, `libgnomecanvas`) and no longer available on most of distros.
-  > [!NOTE]
-  > Yes, I know there are some implementations which can run in Web browser, but:
-  >  - They are (technically and architecturally) ugly when you want to make them into desktop applications integrated with your OS and file system,
-  >  - I'm tired of write lots of disgusting HTML / CSS / JS as workaround to pretend a web page to make it look like a native application, and pack it into a bloated blob of executable.
-  >  - I don't like to open a heavy browser nor some Chimera like Electron only for such thing which actually can be done in a light-weight way.
-  > The similar reasons also apply on the implementations in Java which are unbearably slow.
+
+> [!NOTE]
+> Yes, I know there are some implementations which can run in Web browser, but:
+>  - They are (technically and architecturally) ugly when you want to make them into desktop applications integrated with your OS and file system,
+>  - I'm tired of write lots of disgusting HTML / CSS / JS as workaround to pretend a web page to make it look like a native application, and pack it into a bloated blob of executable.
+>  - I don't like to open a heavy browser nor some Chimera like Electron only for such thing which actually can be done in a light-weight way.
+> The similar reasons also apply on the implementations in Java which are unbearably slow.
+
 - It is very fun and romantic to read and implement some specifications comes from 30 years ago (and nearly as old as myself).
 - Nostalgia and pixel-art from the childhood using Windows 95 / 98 (though I never heard KISS at that time).
 - Real life is so painful. Wellness is in light manga, anime, and novel.
-  - Truly, truly I tell you, you should think about isekai. Animen.
+  > Verily, verily, I say unto you: ye shall consider nijigen and isekai. Animen.
 
 # Download Binaries
 > [!NOTE]

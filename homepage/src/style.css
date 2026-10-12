@@ -539,6 +539,14 @@ code {
   margin: 0;
 }
 
+.musing p + p {
+  margin-top: 1.1rem;
+}
+
+.musing rt {
+  font-size: 70%;   /* the largest size that does not make its line taller */
+}
+
 /* ---- Features ------------------------------------------------------------ */
 
 .feature-grid {
