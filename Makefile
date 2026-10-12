@@ -221,6 +221,27 @@ homepage-build: $(HOMEPAGE_SCREENSHOTS_PREREQUISITE)    ## Build the website int
 homepage-dev-server: $(HOMEPAGE_SCREENSHOTS_PREREQUISITE)    ## Build the website, serve it on port `HOMEPAGE_PORT` on every interface (the URLs to open are printed, LAN addresses included) and rebuild it when its files change. Ctrl-C stops it.
 	python3 homepage/build.py --serve $(HOMEPAGE_PORT) $(HOMEPAGE_SCREENSHOTS_OPTION)
 
+###
+### -- AppArmor profile (`packaging/apparmor/`) -----------------
+
+# - Edit the files in `packaging/apparmor/`, not the copies in `/etc/apparmor.d/`: running this again overwrites the copies and reloads the profile.
+# - A QKiSS started before the first load stays unconfined: restart it.
+# - AppArmor loads the profile again at every boot, until `apparmor-uninstall`.
+# - The last command lists the loaded profiles (`qkiss`, `qkiss//lha`, `qkiss//unar`) and their modes.
+.PHONY: apparmor-install
+apparmor-install:    ## Copy the AppArmor profile into `/etc/apparmor.d/` and load it, for testing.
+	sudo install -m 644 packaging/apparmor/etc/apparmor.d/qkiss /etc/apparmor.d/qkiss
+	sudo install -m 644 packaging/apparmor/etc/apparmor.d/abstractions/qkiss-deny-high-value /etc/apparmor.d/abstractions/qkiss-deny-high-value
+	sudo apparmor_parser -r /etc/apparmor.d/qkiss
+	sudo grep qkiss /sys/kernel/security/apparmor/profiles
+
+# - `apparmor_parser -R` reads the file to know which profiles to unload, so it runs before the files are removed.
+# - Its error is ignored (the `-` prefix), so the files are still removed when the profile is not loaded.
+.PHONY: apparmor-uninstall
+apparmor-uninstall:    ## Unload the AppArmor profile and remove it from `/etc/apparmor.d/`.
+	-sudo apparmor_parser -R /etc/apparmor.d/qkiss
+	sudo rm -f /etc/apparmor.d/qkiss /etc/apparmor.d/abstractions/qkiss-deny-high-value
+
 
 # ████████╗ █████╗ ██████╗ ██████╗  █████╗ ██╗     ██╗
 # ╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║     ██║

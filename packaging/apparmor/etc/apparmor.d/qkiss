@@ -1,0 +1,91 @@
+# QKiSS AppArmor profile - /etc/apparmor.d/qkiss
+#
+# Goal: contain the external LZH extractors lha and unar, which parse untrusted
+# archives. QKiSS itself is NOT confined (`allow all,`): a GUI app needs too much
+# (X11 / Wayland, D-Bus, input methods, audio, fonts) to be confined without breaking.
+# It only gets the denies in qkiss-deny-high-value.
+#
+# Needs AppArmor 4.1+: on 4.0.x, `allow all,` together with `/** pux` fails with
+# "conflicting x modifiers".
+# Not flags=(default_allow): aa-complain / aa-enforce replace that flag, which turns
+# this profile into a default-deny profile that breaks QKiSS.
+# Not flags=(unconfined): it ignores the deny rules and the Cx transitions.
+#
+# Tested in enforce mode on openSUSE Tumbleweed (apparmor_parser 5.0.2, Linux 7.2.8):
+# lha, unar and "Open this item" work; lha and unar run in their child profiles.
+# Only compiled, not run, with apparmor_parser 4.1.0 (Debian 13).
+
+abi <abi/4.0>,
+
+include <tunables/global>
+
+profile qkiss /usr/{,local/}bin/qkiss {
+    include <abstractions/qkiss-deny-high-value>
+
+    allow all,
+
+    # Stacked transitions ("&"): still allowed under no_new_privs (needed by Landlock
+    # and seccomp), where a plain "Cx -> lha" fails with EPERM.
+    # Write the full name: the parser puts "qkiss//" in front of a Cx target, so "&lha"
+    # would become "qkiss//&lha" (a stack with a top-level profile "lha", which does not
+    # exist) and the exec would be denied. Upstream's plasmashell profile does the same.
+    # /usr/bin/lha can be a symlink to lhasa or jlha (e.g. made by update-alternatives),
+    # and AppArmor matches the resolved path. jlha (jlha-utils) is a Java program and
+    # is not covered: like an lha in any other path (e.g. ~/.local/bin), it falls
+    # through to `pux` below.
+    /usr/{,local/}bin/{lha,lhasa} Cx -> &qkiss//lha,
+    /usr/{,local/}bin/unar        Cx -> &qkiss//unar,
+
+    # "Open this item" (QDesktopServices::openUrl) launches arbitrary apps: they use
+    # their own profile if they have one, else they run unconfined.
+    /** pux,
+
+    profile lha {
+        include <abstractions/base>
+        include <abstractions/qkiss-deny-high-value>
+
+        /usr/{,local/}bin/{lha,lhasa} mr,
+
+        # The archive can be anywhere the user can read, so reads are broad. This is a
+        # tradeoff, not secrecy: there is no network, exec or IPC, but whatever is read
+        # can still flow back to QKiSS through the extractor's output.
+        /** r,
+
+        audit deny network,
+        # "deny unix," is not enforced on kernels without fine-grained AF_UNIX mediation
+        # (e.g. Linux 6.12), "deny network unix," is. Blocks X11 / Wayland / D-Bus.
+        audit deny network unix,
+
+        # QProcess::kill() / terminate()
+        signal (receive) peer=qkiss,
+
+        # Site-specific additions and overrides.
+        include if exists <local/qkiss-lha>
+    }
+
+    profile unar {
+        include <abstractions/base>
+        include <abstractions/qkiss-deny-high-value>
+
+        /usr/{,local/}bin/unar mr,
+
+        # Same reason as in the lha profile.
+        /** r,
+        # The only writable place: the QTemporaryDir of
+        # AbstractArchiveProcessor::generateTempDirPath(). Keep the name in sync.
+        # unar fails if TMPDIR points somewhere else. The glob also matches the user's
+        # other qtkiss-extracted-* dirs, not only the one of the current run.
+        owner /tmp/qtkiss-extracted-*/{,**} rw,
+
+        audit deny network,
+        audit deny network unix,
+
+        signal (receive) peer=qkiss,
+
+        # Site-specific additions and overrides.
+        include if exists <local/qkiss-unar>
+    }
+
+    # Site-specific additions and overrides.
+    include if exists <local/qkiss>
+}
