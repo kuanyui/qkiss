@@ -955,10 +955,16 @@ sup {
 
 /* ---- Download ------------------------------------------------------------ */
 
+/* At most two cards per row (24rem is too wide for three), so that the buttons of a card can sit side by side. */
 .download-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
   gap: 1.25rem;
+}
+
+/* The source code card: under Linux and Windows, across the whole row. */
+.download-source {
+  grid-column: 1 / -1;
 }
 
 .download-card {
@@ -989,8 +995,17 @@ sup {
   color: var(--text-muted);
 }
 
-.download-version {
+/* The latest version, followed by the button to every release. */
+.download-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
   margin: -0.75rem 0 1.5rem;
+}
+
+.download-version {
+  margin: 0;
   color: var(--text-muted);
 }
 

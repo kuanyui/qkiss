@@ -54,7 +54,7 @@ REPO_ROOT_DIR: Path = HOMEPAGE_DIR.parent
 APP_ICONS: dict[str, Path] = {
     "images/qkiss.svg":           REPO_ROOT_DIR / "resources/appicon/apps/256/qkiss.svg",
     "images/qkiss-32.svg":        REPO_ROOT_DIR / "resources/appicon/apps/32/qkiss.svg",
-    "images/qkiss-installer.svg": REPO_ROOT_DIR / "resources/appicon/apps/48/qkiss-installer.svg",
+    "images/qkiss-installer.svg": REPO_ROOT_DIR / "resources/appicon/apps/22/qkiss-installer.svg",
     "images/tux.svg":             REPO_ROOT_DIR / "resources/appicon/actions/22/tux.svg",
 }
 

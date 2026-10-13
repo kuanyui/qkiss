@@ -14,10 +14,11 @@ homepage/
     ├── i18n/       # One JSON file per language other than English
     └── images/
         ├── distros/              # Logos of the Linux distributions, from Simple Icons. See images/distros/README.md.
-        ├── icons/                # Icons of the buttons and of Q&A, and the mark of Tango Remixer, from Tango and Nome. See images/icons/README.md.
+        ├── icons/                # Icons from Tango and Nome, and the mark of Tango Remixer. See images/icons/README.md.
         ├── marks/                # GitHub and GitLab marks for the buttons, from Simple Icons. See images/marks/README.md.
         ├── tech/                 # Logos of the technologies in Q&A (Python, C++, CMake, GitHub Actions). See images/tech/README.md.
-        └── og-image.svg          # The link-preview image (see below)
+        ├── og-image.svg          # The link-preview image (see below)
+        └── windows.svg           # The icon of the Windows card in Download, drawn for this website
 ```
 
 The download links point to the files of the latest release on GitHub. `main.js` looks them up with the GitHub API when the page opens. If that fails, the links open the page of the latest release instead.
