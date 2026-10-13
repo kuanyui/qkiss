@@ -238,7 +238,7 @@
               <img src="images/windows.svg" alt="" width="44" height="44">
               <h3>Windows</h3>
             </div>
-            <p id="footnote-ref-attestation" data-i18n-html="download.windows.body">A portable ZIP and an installer, built by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation">*2</a></sup>.</p>
+            <p id="footnote-ref-attestation" data-i18n-html="download.windows.body">A portable ZIP and an installer, built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation">*2</a></sup>.</p>
             <div class="button-row">
               <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.exe$"><img class="button-icon" src="images/qkiss-installer.svg" alt="" width="22" height="22"><span data-i18n="download.windows.installer">Installer</span></a>
               <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.zip$"><img class="button-icon" src="images/icons/package-x-generic.svg" alt="" width="22" height="22"><span data-i18n="download.windows.portable">Portable ZIP</span></a>            </div>
@@ -265,7 +265,7 @@
           <p id="footnote-attestation">
             <a class="footnote-back" href="#footnote-ref-attestation" aria-label="Back to the text" title="Back to the text"
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
-            <span data-i18n-html="download.footnote.attestation">The Windows files and the source tarball come with a <a href="https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations">GitHub artifact attestation</a>: a signed statement that GitHub Actions built them from this repository. To check a downloaded file, run <code>gh attestation verify FILE -R kuanyui/qkiss</code> (GitHub CLI).</span>
+            <span data-i18n-html="download.footnote.attestation">This signature is a <a href="https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations">GitHub artifact attestation</a>: it proves that GitHub Actions built the Windows files and the source tarball from this repository. To check a downloaded file, run <code>gh attestation verify FILE -R kuanyui/qkiss</code> (GitHub CLI). It is not a signature inside the Windows executables themselves (Authenticode), so Windows still shows a warning the first time you run them.</span>
           </p>
         </div>
       </div>
