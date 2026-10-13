@@ -448,6 +448,27 @@ if(LibArchive_FOUND)
 endif()
 
 # ===============================================
+# Package :: Linux kernel headers
+# ===============================================
+# The sandbox of lha / unar (src/extractorsandbox.cpp) uses the Landlock API of Linux 6.12 (the `scoped` field).
+# With older headers, the build would fail halfway with obscure errors, so stop here with a clear message.
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    include(CheckSourceCompiles)
+    check_source_compiles(CXX [[
+        #include <linux/landlock.h>
+        int main() {
+            landlock_ruleset_attr attributes = {};
+            attributes.scoped = LANDLOCK_SCOPE_SIGNAL;
+            return static_cast<int>(attributes.scoped);
+        }
+    ]] HAVE_LINUX_HEADERS_6_12)
+    if(NOT HAVE_LINUX_HEADERS_6_12)
+        unset(HAVE_LINUX_HEADERS_6_12 CACHE)  # Check again on the next run, after the headers are installed.
+        message(FATAL_ERROR "Linux kernel headers >= 6.12 are required, aborted. They come from `linux-libc-dev` (Debian / Ubuntu), `kernel-headers` (Fedora), `linux-glibc-devel` (openSUSE) or `linux-api-headers` (Arch).")
+    endif()
+endif()
+
+# ===============================================
 # Packaging related files
 # ===============================================
 

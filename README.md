@@ -35,6 +35,7 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 > Currently, all binaries are tested only on x86_64 architecture.
 
 ## Linux
+- Only Linux kernel >= 6.12 is supported. (QKiSS still runs on older kernels, but there the sandbox of `lha` / `unar` protects less.)
 - QKiSS for Linux is built & signed via SUSE's Open Build Service, which provides repositories for the package managers of each distribution: **Debian, Fedora, openSUSE, Ubuntu**. [The installation steps are available here](https://software.opensuse.org//download.html?project=home%3Akuanyui%3Astable&package=qkiss).
 - Archlinux is too fucking of a hassle and I'm too lazy to test `osc` for it. After all, Arch users are a bunch of weirdos who enjoy compiling everything from tarball by themselves, ... A `PKGBUILD` is provided for now, though I'm not sure if it actually works.
 
@@ -64,6 +65,7 @@ QKiSS for Windows is built via GitHub Actions CI/CD, the portable ZIP and NSIS i
 - C / C++ Libraries (Required)
   - `LibArchive`
   - `Iconv` or `ICU` (Requires at least one of them)
+  - Linux kernel headers >= 6.12 (Required on Linux)
 
 - External Programs (Optional)
   - `lha`
