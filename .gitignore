@@ -79,3 +79,6 @@ generated/
 
 # QtCreator generate its CMakeLists.txt.user to here...
 .qtcreator/
+
+# Local reference files, such as clones of other projects
+/REFS/
