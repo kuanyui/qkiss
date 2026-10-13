@@ -104,8 +104,11 @@
         <p data-i18n="about.why.web">Yes, I know there are some KiSS implementations which can run in a Web browser by using Web technologies directly, but they are (technically and architecturally) ugly when you want to turn them into a desktop application integrated with your OS and file system; I'm also tired of writing lots of disgusting HTML / CSS / JS as a workaround to make a web page pretend to be a native application, and then pack it into a bloated blob of an executable; and such a thing which actually can be done in a light-weight way should not need a browser at all, nor some Chimera like Electron. Similar reasons also apply to Java, which runs unbearably slow.</p>
         <p data-i18n="about.why.practice">Besides, it was also a chance to practice writing a somewhat sizable project in C++. After all, it really is quite fun to write. (Although by the time I finished, this world of LLMs no longer seems to need a loser like me to write programs: the kind who grinds LeetCode for three months, then starts wishing to be reincarnated in another world.)</p>
         <blockquote class="musing">
-          <p data-i18n-html="about.nostalgia">This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a lost age before Internet was polluted by AI-generated junk (this project does use some AI though). After all, life is frightening enough as it is; the real world is a hot mess, while <a href="https://ja.wikipedia.org/wiki/2次元">nijigen</a> and <a href="https://w.wiki/4So4">isekai</a> remain a pure promised land.</p>
-          <p data-i18n-html="about.animen">Verily, verily, I say unto you: ye shall consider nijigen and isekai. Animen.</p>
+          <img class="musing-icon" src="images/icons/face-angel.svg" alt="" width="48" height="48">
+          <div>
+            <p data-i18n-html="about.nostalgia">This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a lost age before Internet was polluted by AI-generated junk (this project does use some AI though). After all, life is frightening enough as it is; the real world is a hot mess, while <a href="https://ja.wikipedia.org/wiki/2次元">nijigen</a> and <a href="https://w.wiki/4So4">isekai</a> remain a pure promised land.</p>
+            <p data-i18n-html="about.animen">Verily, verily, I say unto you: ye shall consider nijigen and isekai. Animen.</p>
+          </div>
         </blockquote>
       </div>
     </section>
@@ -115,7 +118,7 @@
         <h2 data-i18n="features.title">Highlights</h2>
         <ul class="feature-grid">
           <li class="feature">
-            <h3 data-i18n="features.ui.title">Full-featured, with a handy UI</h3>
+            <h3><img class="feature-icon" src="images/icons/applications-utilities.svg" alt="" width="32" height="32"><span data-i18n="features.ui.title">Full-featured, with a handy UI</span></h3>
             <ul>
               <li data-i18n="features.ui.files">Switch files quickly from the side panels: the sets in your folders, and the CNF files inside an archive.</li>
               <li data-i18n="features.ui.cnf">Read the CNF, with syntax highlighting.</li>
@@ -126,7 +129,7 @@
             </ul>
           </li>
           <li class="feature">
-            <h3 data-i18n="features.specs.title">Faithful to the specs, faithful to the users</h3>
+            <h3><img class="feature-icon" src="images/icons/emblem-favorite.svg" alt="" width="32" height="32"><span data-i18n="features.specs.title">Faithful to the specs, faithful to the users</span></h3>
             <ul>
               <li data-i18n="features.specs.kiss">Implements the KISS/GS base specification, and an interpreter for the interactive scripts of FKiSS 1 &amp; 2 (in tests, 90% of Japanese KiSS sets run fine).</li>
               <li data-i18n="features.specs.fkiss34">FKiSS 3 &amp; 4 have too few sets, almost none of them by Japanese KiSS artists, so they were not worth the bother.</li>
@@ -135,7 +138,7 @@
             </ul>
           </li>
           <li class="feature">
-            <h3 data-i18n="features.misc.title">The romance of engineering and aesthetics</h3>
+            <h3><img class="feature-icon" src="images/icons/applications-engineering.svg" alt="" width="32" height="32"><span data-i18n="features.misc.title">The romance of engineering and aesthetics</span></h3>
             <ul>
               <li id="footnote-ref-website" data-i18n-html="features.misc.handmade">The code of the main program is handcrafted, without LLM agents<sup class="footnote-ref"><a href="#footnote-website">*2</a></sup> (and is probably the author's last hand-written software project, so cherish it while it lasts).</li>
               <li data-i18n="features.misc.linux">Linux is no longer a second-class citizen (Windows is).</li>
@@ -215,11 +218,11 @@
             <p data-i18n="download.linux.body">Packages built and signed by the Open Build Service, for these distributions:</p>
             <!-- The logos come from Simple Icons. See images/distros/README.md. -->
             <ul class="distro-list">
-              <li><img src="images/distros/archlinux.svg" alt="" width="24" height="24">Arch Linux</li>
-              <li><img src="images/distros/debian.svg" alt="" width="24" height="24">Debian</li>
-              <li><img src="images/distros/fedora.svg" alt="" width="24" height="24">Fedora</li>
-              <li><img src="images/distros/opensuse.svg" alt="" width="24" height="24">openSUSE</li>
-              <li><img src="images/distros/ubuntu.svg" alt="" width="24" height="24">Ubuntu</li>
+              <li><img src="images/distros/archlinux.svg" alt="" width="32" height="32">Arch Linux</li>
+              <li><img src="images/distros/debian.svg" alt="" width="32" height="32">Debian</li>
+              <li><img src="images/distros/fedora.svg" alt="" width="32" height="32">Fedora</li>
+              <li><img src="images/distros/opensuse.svg" alt="" width="32" height="32">openSUSE</li>
+              <li><img src="images/distros/ubuntu.svg" alt="" width="32" height="32">Ubuntu</li>
             </ul>
             <div class="button-row">
               <a class="button button-primary" href="https://software.opensuse.org/download.html?project=home%3Akuanyui%3Astable&amp;package=qkiss"><img class="button-icon" src="images/icons/preferences-system.svg" alt="" width="22" height="22"><span data-i18n="download.linux.link">Installation instructions</span></a>
@@ -406,7 +409,10 @@
                 </li>
               </ul>
               <blockquote class="musing">
-                <p data-i18n="faq.llm.era">…Argh, I guess this might be my last project whose code is mainly written by hand… Not only KiSS itself: another era is over.</p>
+                <img class="musing-icon" src="images/icons/face-crying.svg" alt="" width="48" height="48">
+                <div>
+                  <p data-i18n="faq.llm.era">…Argh, I guess this might be my last project whose code is mainly written by hand… Not only KiSS itself: another era is over.</p>
+                </div>
               </blockquote>
             </div>
           </details>

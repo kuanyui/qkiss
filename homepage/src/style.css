@@ -528,11 +528,19 @@ code {
 }
 
 .musing {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem 1.25rem;
   margin: 1.5rem 0 0;
   padding: 1rem 1.25rem;
   border-inline-start: 4px solid var(--accent);
   border-radius: 0 var(--radius) var(--radius) 0;
   background: var(--accent-soft);
+}
+
+/* A Tango emote, shown at 48 px as the face of the author (see images/icons/README.md). */
+.musing-icon {
+  flex: none;
 }
 
 .musing p {
@@ -545,6 +553,13 @@ code {
 
 .musing rt {
   font-size: 70%;   /* the largest size that does not make its line taller */
+}
+
+/* On a phone, the icon goes above the text. The text then gets the whole width. */
+@media (max-width: 40rem) {
+  .musing {
+    flex-direction: column;
+  }
 }
 
 /* ---- Features ------------------------------------------------------------ */
@@ -567,8 +582,16 @@ code {
 }
 
 .feature h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0 0 0.5rem;
   font-size: 1.1rem;
+}
+
+/* A Tango or Nome icon, shown at 32 px before the title (see images/icons/README.md). */
+.feature-icon {
+  flex: none;
 }
 
 .feature p,
@@ -996,10 +1019,11 @@ sup {
 }
 
 /* The logos keep their brand colors. Some of them, like the dark red of Debian, need a light
-   background, also in the dark theme. */
+   background, also in the dark theme. The padding is inside the 32 px, so a logo is drawn at
+   24 px, the size of the Simple Icons grid. */
 .distro-list img {
-  padding: 3px;
-  border-radius: 6px;
+  padding: 4px;
+  border-radius: 8px;
   background: #ffffff;
   box-shadow: 0 0 0 1px var(--border);
 }
