@@ -191,7 +191,9 @@ I've also ever considered several other names:
 - `Qute KISS`: Also pronounced `Cute Kiss`, but argh... Qute is the trademark of a Japanese **computer game company**... Too risky.
 
 ## What security measures are there for the LZH format and external programs such as `lha`?
-[LZH](https://ja.wikipedia.org/wiki/LHA) is an extremely old compression format, and `lha` and `unar` extract LZH files of unknown origin, which makes them the easiest target for a malicious file. So on Linux, QKiSS locks them up:
+[LZH / LHA](https://ja.wikipedia.org/wiki/LHA) is a free compression format and tool, developed in 1988 by Haruyasu Yoshizaki, a Japanese physician. It was very popular in the Japanese personal computer scene of the time (by comparison, PKZIP, the ZIP tool that later became the mainstream, did not appear until 1989, and was shareware), so the KiSS developer community, which originated in Japan, naturally adopted LZH to compress KiSS sets.
+
+But today, both the format and its implementations are old, and `lha` and `unar` extract LZH files of unknown origin, which makes them the easiest target for a malicious file. So on Linux, QKiSS locks them up:
 
 - **Landlock**: they can read only the system files and the archive being opened, nothing else in your home folder, and they can write nowhere except unar's temporary folder.
 - **seccomp**: high-risk system calls such as `io_uring`, sockets and namespaces are turned off.
