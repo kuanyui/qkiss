@@ -473,6 +473,7 @@ jobs:
   # It uploads the two files that build-main made:
   # - the installer: `qkiss-0.9.0-win64.exe`
   # - the portable ZIP: `qkiss-0.9.0-win64.zip`
+  # Before that, it attests their build provenance, so that anyone can check where they come from.
   #
   # Good to know:
   # - This is a small job of its own, so that only this job gets write permission.
@@ -488,6 +489,9 @@ jobs:
     permissions:
       # Needed to create the release page and to upload files to it.
       contents: write
+      # Needed by Step 2: to get the identity of this run that signs the attestation, and to store it on GitHub.
+      id-token: write
+      attestations: write
     steps:
       # Step 1: Download the files that build-main uploaded (its two artifacts).
       - name: Download the Windows files
@@ -498,7 +502,17 @@ jobs:
           # Put the files of both artifacts into the same folder.
           merge-multiple: true
 
-      # Step 2: Upload them to the release page of this tag.
+      # Step 2: Attest their build provenance (GitHub artifact attestations): a statement that this workflow
+      # built these exact files (by their SHA-256), from this commit. It is signed through Sigstore, with a
+      # certificate that lives for a few minutes, so there is no key to keep anywhere. Anyone can check a
+      # downloaded file with the GitHub CLI:
+      #   gh attestation verify qkiss-0.9.0-win64.exe -R kuanyui/qkiss
+      - name: Attest the build provenance of the Windows files
+        uses: actions/attest@v4
+        with:
+          subject-path: windows-files/*
+
+      # Step 3: Upload them to the release page of this tag.
       # If the release page does not exist yet, it is created.
       - name: Upload to the release page
         uses: softprops/action-gh-release@v3

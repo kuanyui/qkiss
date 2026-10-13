@@ -10,7 +10,8 @@ name: Tarball and OBS
 #   1. cmake -B build                 -> expands generated/{qkiss.spec,PKGBUILD,debian/}
 #   2. dpkg-source -Zgzip -b          -> generated/qkiss_0.9.1.tar.gz
 #   3. make obs-packaging             -> generated/obs/{qkiss.spec,PKGBUILD,qkiss.dsc,debian.tar.gz}
-#   4. softprops/action-gh-release    -> uploads the tarball and these 4 packaging files to the
+#   4. actions/attest                 -> attests the build provenance of the tarball (step 8)
+#      softprops/action-gh-release    -> uploads the tarball and these 4 packaging files to the
 #                                        Github release page
 #   5. curl .../trigger/runservice    -> tells OBS to download them
 #   6. OBS downloads the 4 packaging files from the latest Github release, and the tarball from
@@ -171,8 +172,12 @@ on:
         default: true
 
 permissions:
-  # Only needed to create/update the Github release page. Nothing else.
+  # Needed to create/update the Github release page.
   contents: write
+  # Needed by step 8 to attest the tarball: to get the identity of this run that signs the
+  # attestation, and to store it on GitHub.
+  id-token: write
+  attestations: write
 
 # Run only one run of this workflow at a time. Two runs that publish at the same time could
 # upload different files to the same release page, or choose the same Arch `pkgrel`.
@@ -443,9 +448,21 @@ jobs:
           # The tarball is big (about 142 MB), so delete it after a week.
           retention-days: 7
 
-      # Step 8: Upload the tarball to the Github release page, only when step 5 built it in
-      # this run. `overwrite_files: false` is a second safety: an existing tarball is never
-      # replaced.
+      # Step 8: Attest the build provenance of the tarball, then upload it to the Github release
+      # page, only when step 5 built it in this run.
+      #
+      # The attestation (GitHub artifact attestations) is a statement that this workflow built
+      # this exact tarball (by its SHA-256), from this commit. It is signed through Sigstore, with
+      # a certificate that lives for a few minutes, so there is no key to keep anywhere. Anyone
+      # can check a downloaded tarball with the GitHub CLI:
+      #   gh attestation verify qkiss_0.9.1.tar.gz -R kuanyui/qkiss
+      - name: Attest the build provenance of the tarball
+        if: steps.target.outputs.mode == 'publish' && steps.tarball.outputs.new == 'true'
+        uses: actions/attest@v4
+        with:
+          subject-path: ${{ steps.tarball.outputs.file }}
+
+      # `overwrite_files: false` is a second safety: an existing tarball is never replaced.
       - name: Upload the tarball to the Github release page
         if: steps.target.outputs.mode == 'publish' && steps.tarball.outputs.new == 'true'
         uses: softprops/action-gh-release@v3
