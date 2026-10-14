@@ -134,7 +134,7 @@
   "footer.specs.otakuworld": "Otaku World（英文）",
   "footer.icons.title": "圖示",
   "footer.icons.tango": "<a href=\"https://github.com/kuanyui/tango-icon-theme\">Tango Icon Theme</a>（作者：Tango Desktop Project contributors from freedesktop.org，GPL）",
-  "footer.icons.simple": "<a href=\"https://simpleicons.org/\">Simple Icons</a>（CC0）：GitHub、GitHub Actions、GitLab 與各 Linux 發行版的標誌，皆為其所有者的商標",
+  "footer.icons.simple": "<a href=\"https://simpleicons.org/\">Simple Icons</a>（CC0）：GitHub、GitHub Actions 與各 Linux 發行版的標誌，皆為其所有者的商標",
   "footer.icons.official": "<a href=\"https://www.python.org/community/logos/\">Python</a>、<a href=\"https://github.com/isocpp/logos\">C++</a> 與 <a href=\"https://cmake.org/\">CMake</a> 的標誌，分別為 Python Software Foundation、Standard C++ Foundation 與 Kitware 的商標。QKiSS 與這些組織並無關聯。",
   "footer.disclaimer": "<strong>免責聲明：</strong>本專案以 GPLv3 釋出，按「現狀」提供，本專案的一切內容（包含此網站、二進位分發應用程式與原始碼）皆不附帶任何形式的擔保，包括但不限於適銷性、特定用途適用性，且保證政治絕對不正確。畢竟本專案是於一個奧運被禁止使用國旗、被蕭邦鋼琴大賽禁止寫國籍、被聯合國禁止加入、世界衛生組織也不承認這裡有會呼吸的人類存在的國家製造。如使用者幼小的心靈感覺受到了傷害，本專案概不負責。",
   "lightbox.close": "關閉",

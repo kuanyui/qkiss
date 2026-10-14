@@ -134,7 +134,7 @@
   "footer.specs.otakuworld": "Otaku World（英語）",
   "footer.icons.title": "アイコン",
   "footer.icons.tango": "<a href=\"https://github.com/kuanyui/tango-icon-theme\">Tango Icon Theme</a>（作者：Tango Desktop Project contributors from freedesktop.org、GPL）",
-  "footer.icons.simple": "<a href=\"https://simpleicons.org/\">Simple Icons</a>（CC0）：GitHub、GitHub Actions、GitLab、各 Linux ディストリビューションのロゴ。いずれもそれぞれの所有者の商標です",
+  "footer.icons.simple": "<a href=\"https://simpleicons.org/\">Simple Icons</a>（CC0）：GitHub、GitHub Actions、各 Linux ディストリビューションのロゴ。いずれもそれぞれの所有者の商標です",
   "footer.icons.official": "<a href=\"https://www.python.org/community/logos/\">Python</a>、<a href=\"https://github.com/isocpp/logos\">C++</a>、<a href=\"https://cmake.org/\">CMake</a> のロゴ。それぞれ Python Software Foundation、Standard C++ Foundation、Kitware の商標です。QKiSS はこれらの団体とは関係ありません。",
   "footer.disclaimer": "<strong>免責事項：</strong>本プロジェクトは GPLv3 の下で公開されており、「現状のまま」提供されます。本プロジェクトのすべての内容（本ウェブサイト、バイナリ配布物およびソースコードを含む）は、商品性および特定目的への適合性を含みますがこれらに限定されない、いかなる種類の保証も伴いません。しかし、政治的に正しくないことだけは絶対に保証いたします。なにしろ本プロジェクトは、オリンピックでは国旗の使用を禁じられ、ショパン国際ピアノコンクールでは国籍の表記を禁じられ、国際連合には加盟を禁じられ、世界保健機関には息をしている人間の存在すら認められていない国で作られたものですから。ユーザー様のガラスのハートあるいはなんとか人民の感情を傷つけたとしても、本プロジェクトは一切の責任を負いかねます。",
   "lightbox.close": "閉じる",
