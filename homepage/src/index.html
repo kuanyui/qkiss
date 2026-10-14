@@ -211,14 +211,26 @@
           main.js points each `data-release-asset` link to the file of the latest release whose
           name matches that regular expression. Without main.js, the links open the page of the
           latest release.
+          main.js also puts a clone of this template after each of these links: a toggle and its
+          menu, which shows the SHA-256 of the file in #checksum-dialog. The toggle stays hidden
+          until the SHA-256 is known.
         -->
+        <template id="download-menu-template">
+          <button type="button" class="button download-menu-toggle" aria-expanded="false" hidden
+                  aria-label="More options" title="More options" data-i18n-attr="aria-label:download.more;title:download.more">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="download-menu" hidden>
+            <button type="button" class="download-menu-item" data-i18n="download.checksum">SHA-256 checksum</button>
+          </div>
+        </template>
         <div class="download-grid">
           <article class="download-card">
             <div class="download-head">
               <img src="images/tux.svg" alt="" width="44" height="44">
               <h3>Linux</h3>
             </div>
-            <p id="footnote-ref-gpg" data-i18n-html="download.linux.body">Packages built by the Open Build Service and digitally signed with GPG<sup class="footnote-ref"><a href="#footnote-gpg">*1</a></sup>, for these distributions:</p>
+            <p id="footnote-ref-gpg" data-i18n-html="download.linux.body">Packages automatically built by the Open Build Service (OBS) and digitally signed with GPG<sup class="footnote-ref"><a href="#footnote-gpg">*1</a></sup>, for these distributions:</p>
             <!-- The logos come from Simple Icons. See images/distros/README.md. -->
             <ul class="distro-list">
               <li><img src="images/distros/archlinux.svg" alt="" width="32" height="32">Arch Linux</li>
@@ -229,7 +241,7 @@
             </ul>
             <div class="button-row">
               <a class="button button-primary" href="https://software.opensuse.org/download.html?project=home%3Akuanyui%3Astable&amp;package=qkiss"><img class="button-icon" src="images/icons/preferences-system.svg" alt="" width="22" height="22"><span data-i18n="download.linux.link">Installation instructions</span></a>
-              <a class="button" href="https://build.opensuse.org/package/show/home:kuanyui:stable/qkiss"><img class="button-icon" src="images/icons/network-server.svg" alt="" width="22" height="22"><span data-i18n="download.linux.obs">OBS page</span></a>
+              <a class="button" href="https://build.opensuse.org/package/show/home:kuanyui:stable/qkiss"><img class="button-icon" src="images/icons/network-server.svg" alt="" width="22" height="22"><span data-i18n="download.linux.obs">OBS details</span></a>
             </div>
           </article>
           <article class="download-card">
@@ -237,7 +249,7 @@
               <img src="images/windows.svg" alt="" width="44" height="44">
               <h3>Windows</h3>
             </div>
-            <p id="footnote-ref-attestation" data-i18n-html="download.windows.body">A portable ZIP and an installer, built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation">*2</a></sup>.</p>
+            <p id="footnote-ref-attestation" data-i18n-html="download.windows.body">A portable ZIP and an installer, automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation">*2</a></sup>.</p>
             <div class="button-row">
               <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.exe$"><img class="button-icon" src="images/qkiss-installer.svg" alt="" width="22" height="22"><span data-i18n="download.windows.installer">Installer</span></a>
               <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.zip$"><img class="button-icon" src="images/icons/package-x-generic.svg" alt="" width="22" height="22"><span data-i18n="download.windows.portable">Portable ZIP</span></a>            </div>
@@ -553,6 +565,22 @@
             aria-label="Next screenshot" title="Next screenshot" data-i18n-attr="aria-label:lightbox.next;title:lightbox.next">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
+  </dialog>
+
+  <!-- The SHA-256 of a file of the latest release, opened from the menu of its download button (see main.js). -->
+  <dialog class="checksum-dialog" id="checksum-dialog" aria-labelledby="checksum-file">
+    <!-- The padding is on this inner box, so that a click on the dialog itself is a click on the backdrop. -->
+    <div class="checksum-body">
+      <div class="checksum-head">
+        <h2 class="checksum-file" id="checksum-file"></h2>
+        <button type="button" class="checksum-close" id="checksum-close"
+                aria-label="Close" title="Close" data-i18n-attr="aria-label:lightbox.close;title:lightbox.close">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <p class="checksum-label">SHA-256</p>
+      <code class="checksum-value" id="checksum-value"></code>
+    </div>
   </dialog>
 <!--
 # Magіc Spells

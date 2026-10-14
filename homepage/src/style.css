@@ -995,6 +995,129 @@ sup {
   color: var(--text-muted);
 }
 
+/* A download button joined to the toggle of its menu, as one split button (made by main.js from
+   #download-menu-template). The menu opens under it. */
+.split-button {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Square inner corners, once the toggle is shown. */
+.split-button:has(> .download-menu-toggle:not([hidden])) > a.button {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.download-menu-toggle {
+  margin-inline-start: -1px;   /* one border between the two halves */
+  padding-inline: 0.55rem;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  cursor: pointer;   /* a <button>: unlike the links of the other buttons, it has no pointer by default */
+}
+
+.download-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 10;
+  min-width: 100%;
+  padding: 0.25rem 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.download-menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.45rem 1rem;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.download-menu-item:hover,
+.download-menu-item:focus-visible {
+  background: var(--accent-soft);
+}
+
+/* The SHA-256 of a file, opened from the menu of its download button. */
+.checksum-dialog {
+  width: min(100% - 2rem, 36rem);
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.checksum-dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.checksum-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 1.25rem 1.5rem;
+}
+
+/* The name of the file, and the button that closes the dialog. */
+.checksum-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  align-self: stretch;
+}
+
+.checksum-file {
+  flex: 1;
+  margin: 0;
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+}
+
+.checksum-close {
+  display: inline-flex;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.checksum-close:hover {
+  background: var(--surface-sunken);
+  color: var(--text);
+}
+
+.checksum-label {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* One click selects the whole hash, ready to copy. */
+.checksum-value {
+  max-width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: var(--surface-sunken);
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+
 /* The latest version, followed by the button to every release. */
 .download-meta {
   display: flex;

@@ -448,18 +448,24 @@
     return `${parts.year}-${parts.month}-${parts.day} (${parts.weekday}) ${parts.hour}:${parts.minute} ${parts.timeZoneName}`;
   }
 
+  /** The file of the latest release whose name matches the regular expression in the `data-release-asset` of a link. */
+  function releaseAsset(link) {
+    const pattern = new RegExp(link.dataset.releaseAsset);
+    return latestRelease.assets.find((candidate) => pattern.test(candidate.name));
+  }
+
   /**
-   * Point each `data-release-asset` link to the file of the latest release whose name matches
-   * the regular expression in that attribute. Also show the version.
+   * Point each `data-release-asset` link to its file in the latest release (releaseAsset()), and
+   * show the toggle of its menu once the SHA-256 of that file is known. Also show the version.
    * setLanguage() calls it again, because a translated `data-i18n-html` string brings back
    * its links with their original href.
    */
   function renderReleaseLinks() {
     if (latestRelease === null) return;
     for (const link of document.querySelectorAll('a[data-release-asset]')) {
-      const pattern = new RegExp(link.dataset.releaseAsset);
-      const asset = latestRelease.assets.find((candidate) => pattern.test(candidate.name));
+      const asset = releaseAsset(link);
       if (asset) link.href = asset.browser_download_url;
+      link.parentElement.querySelector('.download-menu-toggle').hidden = !asset?.digest;
     }
     const versionLink = document.getElementById('download-version-link');
     versionLink.textContent = latestRelease.tag_name;
@@ -471,6 +477,65 @@
       commitTime.textContent = formatLocalTime(latestReleaseCommitTime);
     }
     document.getElementById('download-version').hidden = false;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Download menus: the SHA-256 of each file of the latest release
+  // ---------------------------------------------------------------------------
+
+  /** The toggle whose menu is open, or null. */
+  let openMenuToggle = null;
+
+  /** Open or close the menu after `toggle`. Only one menu is open at a time. */
+  function setMenuOpen(toggle, open) {
+    if (open && openMenuToggle && openMenuToggle !== toggle) setMenuOpen(openMenuToggle, false);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.nextElementSibling.hidden = !open;
+    openMenuToggle = open ? toggle : null;
+  }
+
+  /**
+   * Put a clone of #download-menu-template (a toggle and its menu) after each `data-release-asset`
+   * link, joined to it as one split button. It runs before collectTargets(), so that the clones are
+   * translated too. Their toggles stay hidden until renderReleaseLinks() knows each SHA-256.
+   */
+  function setUpDownloadMenus() {
+    const template = document.getElementById('download-menu-template');
+    for (const link of document.querySelectorAll('a[data-release-asset]')) {
+      const split = document.createElement('span');
+      split.className = 'split-button';
+      link.replaceWith(split);
+      split.append(link, template.content.cloneNode(true));
+      const toggle = split.querySelector('.download-menu-toggle');
+      toggle.classList.toggle('button-primary', link.classList.contains('button-primary'));
+      toggle.addEventListener('click', () => setMenuOpen(toggle, toggle.getAttribute('aria-expanded') !== 'true'));
+      split.querySelector('.download-menu-item').addEventListener('click', () => {
+        setMenuOpen(toggle, false);
+        showChecksum(releaseAsset(link));
+      });
+    }
+    // A click anywhere else, or Escape, closes the open menu.
+    document.addEventListener('click', (event) => {
+      if (openMenuToggle && !event.target.closest('.split-button')) setMenuOpen(openMenuToggle, false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && openMenuToggle) {
+        openMenuToggle.focus();
+        setMenuOpen(openMenuToggle, false);
+      }
+    });
+    const dialog = document.getElementById('checksum-dialog');
+    document.getElementById('checksum-close').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();   // a click on the backdrop (the padding is on .checksum-body)
+    });
+  }
+
+  /** Show the SHA-256 of a file of the latest release. GitHub gives it as `digest`, like "sha256:df7523…". */
+  function showChecksum(asset) {
+    document.getElementById('checksum-file').textContent = asset.name;
+    document.getElementById('checksum-value').textContent = asset.digest.replace(/^sha256:/, '');
+    document.getElementById('checksum-dialog').showModal();
   }
 
   // ---------------------------------------------------------------------------
@@ -551,6 +616,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    setUpDownloadMenus();   // before collectTargets(): the menus are translated too
     collectTargets();
     if (!englishOnly) setUpLanguagePicker();   // Otherwise it stays hidden.
     setUpShowcase();
