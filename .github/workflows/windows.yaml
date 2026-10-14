@@ -12,6 +12,11 @@ on:
 permissions:
   contents: read
 
+env:
+  # The release of our lha fork that goes into the Windows package: https://github.com/kuanyui/lha/releases
+  # To update lha, change only this line. Both the download URL and the cache key of `bin_deps` use it.
+  LHA_VERSION: 1.14i-ac20260723-ky20261014
+
 # == About actions/cache ==============================================================
 #
 # - Each job is run in separate VM, each VM:
@@ -172,7 +177,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ runner.temp }}/bin_deps
-          key: ${{ runner.os }}-external-binary-dependencies-v1
+          # A saved cache never changes. With LHA_VERSION in the key, a new LHA_VERSION downloads lha again,
+          # instead of restoring the cached old lha.exe.
+          key: ${{ runner.os }}-external-binary-dependencies-v1-lha-${{ env.LHA_VERSION }}
 
       # Step 2: Download and extract external binary dependencies (LHA & unar)
       - name: Download & extract external binary dependencies
@@ -180,8 +187,13 @@ jobs:
         run: |
           mkdir "${{ runner.temp }}/bin_deps"
 
-          # Handle LHA
-          curl -L -o "${{ runner.temp }}/bin_deps/lha.zip" https://github.com/jca02266/lha/releases/download/release-20211125/lha-1.14i-ac20211125-x64.exe.zip
+          # Handle LHA: the release ZIP of our fork has lha.exe, FORK_MODIFICATIONS.md and lha-VERSION-src.zip.
+          # CMakeLists.txt installs all three, because lha.exe must not be distributed without the other two.
+          # pwsh does not stop when a program fails, and the step only checks the exit code of the last command.
+          # So `-f` and the check below are needed: without them, a failed download (for example, LHA_VERSION
+          # has no release yet) would not fail this job, and the cache would keep `bin_deps` without lha.exe.
+          curl -fL -o "${{ runner.temp }}/bin_deps/lha.zip" "https://github.com/kuanyui/lha/releases/download/${{ env.LHA_VERSION }}/lha-${{ env.LHA_VERSION }}-win64.zip"
+          if ($LASTEXITCODE -ne 0) { throw "Cannot download lha ${{ env.LHA_VERSION }}. Is it on https://github.com/kuanyui/lha/releases ?" }
           powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/lha.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
 
           # Handle unar
@@ -263,7 +275,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ runner.temp }}/bin_deps
-          key: ${{ runner.os }}-external-binary-dependencies-v1
+          # Must be the same key as in `prepare-external-bin-deps-cache`.
+          key: ${{ runner.os }}-external-binary-dependencies-v1-lha-${{ env.LHA_VERSION }}
 
       # Step 4.1: Add external binary dependencies directory to system PATH
       - name: Add external dependencies to PATH

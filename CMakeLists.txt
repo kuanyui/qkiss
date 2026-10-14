@@ -838,6 +838,18 @@ elseif(WIN32)
         message(FATAL_ERROR "External dependencies (lha/unar) not found in WIN_EXTERNAL_BIN_DEPS_DIR nor PATH! Installer will be incomplete.")
     endif()
 
+    # The terms of LHa for UNIX (man/lha.man) do not allow distributing lha.exe alone: it must come with its
+    # source code, and with a document that tells what was modified. The release ZIP of our fork
+    # (https://github.com/kuanyui/lha/releases) has both next to lha.exe. The name of the source ZIP has the
+    # version of lha, so it is found by a pattern: a new version of lha needs no change here.
+    get_filename_component(LHA_DIR "${LHA_EXECUTABLE}" DIRECTORY)
+    file(GLOB LHA_SOURCE_ZIP "${LHA_DIR}/lha-*-src.zip")
+    if(EXISTS "${LHA_DIR}/FORK_MODIFICATIONS.md" AND LHA_SOURCE_ZIP)
+        install(FILES "${LHA_DIR}/FORK_MODIFICATIONS.md" ${LHA_SOURCE_ZIP} DESTINATION "third-party/lha")
+    else()
+        message(FATAL_ERROR "FORK_MODIFICATIONS.md and lha-*-src.zip must be next to ${LHA_EXECUTABLE}: lha.exe cannot be distributed without them. Use lha.exe from the release ZIP of https://github.com/kuanyui/lha")
+    endif()
+
     # ===================================================
     # `install()` Qt runtime DLLs via `windeployqt`
     # ===================================================
