@@ -19,6 +19,9 @@ They are copies because the CI of this website does not fetch the submodules. To
 | `applications-utilities.svg` | `nome-icon-theme/src/categories/32/applications-utilities.svg` | LGPL-3.0-only or CC-BY-SA-3.0 |
 | `applications-engineering.svg` | `nome-icon-theme/src/categories/32/applications-engineering.svg` | LGPL-3.0-only or CC-BY-SA-3.0 |
 | `network-server.svg` | `nome-icon-theme/src/places/22/network-server.svg` | LGPL-3.0-only or CC-BY-SA-3.0 |
+| `applications-graphics.svg` | `nome-icon-theme/src/categories/22/applications-graphics.svg` | LGPL-3.0-only or CC-BY-SA-3.0 |
+| `accessories-text-editor.svg` | `nome-icon-theme/src/apps/22/accessories-text-editor.svg` | LGPL-3.0-only or CC-BY-SA-3.0 |
+| `changes-prevent.svg` | `nome-icon-theme/src/status/22/changes-prevent.svg` | LGPL-3.0-only or CC-BY-SA-3.0 |
 
 - `start-here.svg` is the Start Here icon of the [Tango icon theme](https://github.com/kuanyui/tango-icon-theme), by Jakub Steiner. It is the mark of Tango Remixer. The Tango icon theme comes from the Tango Desktop Project of freedesktop.org. Its `COPYING` asks users to credit "Tango Desktop Project contributors from freedesktop.org".
 - The icons of the buttons are from [Nome](https://github.com/kuanyui/nome-icon-theme), which continues the GNOME Icon Theme. Each file states its license in an SPDX comment.
@@ -28,5 +31,7 @@ They are copies because the CI of this website does not fetch the submodules. To
   - `preferences-desktop-locale.svg` for the translations. It is the Tango version, because the Nome one is six times bigger.
   - `accessories-dictionary.svg` for the FKiSS specification.
   - `package-x-generic.svg` for the packages, and `web-browser.svg` for this website.
+  - `changes-prevent.svg` (a padlock) for the security measures.
+  - `applications-graphics.svg` for the icons, and `accessories-text-editor.svg` for the writing.
 - The musings (the author's asides in a box, `blockquote.musing`) show a Tango emote as the author's face: `face-angel.svg` for the nostalgia at the end of "Why QKiSS?", and `face-crying.svg` for the end of an era in the answer about LLMs.
 - This website is part of QKiSS, under the GPL v3. GPL-3.0-only and LGPL-3.0-only are both compatible with it.
