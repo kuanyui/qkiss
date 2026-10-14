@@ -2,6 +2,19 @@
 releases:
   - srcpkgname: "qkiss"
     maintainer: "kuanyui <azazabc123@gmail.com>"
+    version: "0.9.3"
+    date: "2026-10-14T20:51:00+08:00"
+    deb:
+      urgency: "medium"
+    body:
+      added:
+        - Build provenance attestations for the Windows installer, the portable ZIP and the source tarball. Check a downloaded file with `gh attestation verify FILE -R kuanyui/qkiss`.
+      security:
+        - On Windows, the bundled lha is built from a fork of LHa for UNIX (https://github.com/kuanyui/lha), with the fix for a buffer overflow in read_c_len(). Its source code comes with it, in third-party/lha/.
+      build:
+        - On Linux, the build stops with a clear message when the kernel headers are older than 6.12, which the sandbox needs.
+  - srcpkgname: "qkiss"
+    maintainer: "kuanyui <azazabc123@gmail.com>"
     version: "0.9.2"
     date: "2026-10-12T23:45:00+08:00"
     deb:
