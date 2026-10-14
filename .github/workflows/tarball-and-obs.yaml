@@ -11,7 +11,7 @@ name: Tarball and OBS
 #   2. dpkg-source -Zgzip -b          -> generated/qkiss_0.9.1.tar.gz
 #   3. make obs-packaging             -> generated/obs/{qkiss.spec,PKGBUILD,qkiss.dsc,debian.tar.gz}
 #   4. actions/attest                 -> attests the build provenance of the tarball (step 8)
-#      softprops/action-gh-release    -> uploads the tarball and these 4 packaging files to the
+#      gh release upload              -> uploads the tarball and these 4 packaging files to the
 #                                        Github release page
 #   5. curl .../trigger/runservice    -> tells OBS to download them
 #   6. OBS downloads the 4 packaging files from the latest Github release, and the tarball from
@@ -212,6 +212,8 @@ jobs:
       #
       # `dpkg` is the openSUSE package that ships `/usr/bin/dpkg-source`.
       # `curl` talks to Github and OBS.
+      # `gh` (GitHub CLI) uploads to the Github release page (steps 8 and 9). The runner has `gh`
+      # too, but this job runs in a container, which does not see it.
       # `git` must be installed BEFORE actions/checkout, otherwise checkout falls back to a
       # tarball download and submodules are silently skipped.
       - name: Install build & packaging dependencies
@@ -219,7 +221,7 @@ jobs:
           zypper --non-interactive --gpg-auto-import-keys refresh
           zypper --non-interactive install --no-recommends \
             git tar gzip make cmake gcc-c++ \
-            curl dpkg \
+            curl dpkg gh \
             inkscape desktop-file-utils \
             libarchive-devel \
             python3-jsonschema python3-PyYAML \
@@ -462,32 +464,38 @@ jobs:
         with:
           subject-path: ${{ steps.tarball.outputs.file }}
 
-      # `overwrite_files: false` is a second safety: an existing tarball is never replaced.
+      # If the release page does not exist yet, this step creates it. `windows.yaml` may create it at
+      # the same moment: then `gh release create` fails here, and the second `gh release view` finds
+      # the page that the other workflow made. `--verify-tag`: without it, a missing tag would be
+      # created from the default branch.
+      # `gh release upload` without `--clobber` is a second safety: it fails when the release page
+      # already has a file with the same name, so an existing tarball is never replaced.
       - name: Upload the tarball to the Github release page
         if: steps.target.outputs.mode == 'publish' && steps.tarball.outputs.new == 'true'
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ steps.target.outputs.tag }}
-          files: ${{ steps.tarball.outputs.file }}
-          overwrite_files: false
-          fail_on_unmatched_files: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.target.outputs.tag }}
+          TARBALL_FILE: ${{ steps.tarball.outputs.file }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release view "${TAG}" > /dev/null 2>&1 ||
+            gh release create "${TAG}" --verify-tag --title "${TAG}" ||
+            { sleep 10; gh release view "${TAG}" > /dev/null; }
+          gh release upload "${TAG}" "${TARBALL_FILE}"
 
-      # Step 9: Upload the 4 packaging files to the Github release page. They replace the
-      # packaging files of an earlier run.
+      # Step 9: Write the release notes on the Github release page, and upload the 4 packaging files
+      # to it. `--clobber`: they replace the packaging files of an earlier run.
+      # The release page exists here: step 8 created it, or step 5 found the tarball on it.
       # OBS downloads the files from this page, so step 9 must come before step 10.
       - name: Upload the packaging files to the Github release page
         if: steps.target.outputs.mode != 'test'
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ steps.target.outputs.tag }}
-          body_path: ${{ github.workspace }}/generated/latest_changelog.md
-          files: ${{ env.OBS_PACKAGING_DIR }}/*
-          overwrite_files: true
-          fail_on_unmatched_files: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.target.outputs.tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release edit "${TAG}" --notes-file generated/latest_changelog.md
+          gh release upload "${TAG}" "${OBS_PACKAGING_DIR}"/* --clobber
 
       # Step 10: Tell OBS to run `_service`. `_service` downloads the files from the latest
       # release. OBS answers before the download is done, so step 11 waits for the download.

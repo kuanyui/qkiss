@@ -481,6 +481,8 @@ jobs:
   # - `tarball-and-obs.yaml` puts the source tarball and the release notes on the same release page.
   #   It does not matter which workflow finishes first.
   # - A file with the same name is replaced. So running it again for the same tag is safe.
+  # - Only GitHub's own tools run in this job (`actions/*` and `gh`), because it can write to the
+  #   repository and sign attestations: a third-party action here could replace the files and attest them.
   upload-to-release:
     name: Upload the Windows files to the release page
     if: startsWith(github.ref, 'refs/tags/')
@@ -512,11 +514,19 @@ jobs:
         with:
           subject-path: windows-files/*
 
-      # Step 3: Upload them to the release page of this tag.
-      # If the release page does not exist yet, it is created.
+      # Step 3: Upload them to the release page of this tag, with `gh` (GitHub CLI, already on the runner).
+      # If the release page does not exist yet, it is created. `tarball-and-obs.yaml` may create it at the
+      # same moment: then `gh release create` fails here, and the second `gh release view` finds the page
+      # that the other workflow made.
+      # - `--verify-tag`: without it, a missing tag would be created from the default branch.
+      # - `--clobber`: replace a file with the same name.
+      # - If `windows-files/*` matches no file, `gh` fails, instead of quietly uploading nothing.
       - name: Upload to the release page
-        uses: softprops/action-gh-release@v3
-        with:
-          files: windows-files/*
-          # Fail if there is no file to upload, instead of quietly uploading nothing.
-          fail_on_unmatched_files: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release view "${GITHUB_REF_NAME}" > /dev/null 2>&1 ||
+            gh release create "${GITHUB_REF_NAME}" --verify-tag --title "${GITHUB_REF_NAME}" ||
+            { sleep 10; gh release view "${GITHUB_REF_NAME}" > /dev/null; }
+          gh release upload "${GITHUB_REF_NAME}" windows-files/* --clobber
