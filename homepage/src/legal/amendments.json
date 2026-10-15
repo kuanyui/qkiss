@@ -23,8 +23,8 @@
           "zh-TW": "本條款之解釋權歸作者所有，作者之解釋權歸作者當天心情所有。"
         },
         {
-          "en": "In case of any discrepancy between the National Language, English and Japanese versions of the Terms, the version that the Author feels like reading on that day shall prevail, notwithstanding Article 15 of the Terms.",
-          "ja": "本規約の国家言語版、英語版及び日本語版の間に齟齬がある場合は、本規約第 15 条の規定にかかわらず、作者がその日に読みたい版が優先する。",
+          "en": "In case of any discrepancy between the translations of the provisions in the various language versions of the Terms, the version that the Author feels like reading on that day shall prevail, notwithstanding Article 15 of the Terms.",
+          "ja": "本規約の各言語版における条文の翻訳の間に齟齬がある場合は、本規約第 15 条の規定にかかわらず、作者がその日に読みたい版が優先する。",
           "zh-TW": "本條款各語言版本之條文翻譯如有歧異，以作者當天比較想看的版本為準，不適用本條款第十五條之規定。"
         },
         {
@@ -38,14 +38,36 @@
               "zh-TW": "前項情形，不影響其他人應知悉「得」字之正確法律含意之義務。"
             }
           ]
+        },
+        {
+          "en": "The terms used in these Additional Articles are defined as follows:",
+          "ja": "この増修条文で使用する用語の意義は、次のとおりとする。",
+          "zh-TW": "本增修條文用詞，定義如下：",
+          "clauses": [
+            {
+              "en": "Entrant: a person who enters the Kingdom of Belzerg from outside it, whether from this world or from another world.",
+              "ja": "入国者　ベルゼルグ王国の国外から同国内に入る者をいい、この世界から来たか異世界から来たかを問わない。",
+              "zh-TW": "入境者：指自貝爾澤格王國境外進入其境內之人，不問其來自本界或異世界。"
+            },
+            {
+              "en": "World Entrant: an Entrant who enters from another world.",
+              "ja": "入界者　入国者のうち、異世界から入る者をいう。",
+              "zh-TW": "入界者：指入境者之中，自異世界進入者。"
+            },
+            {
+              "en": "By the definitions in the preceding two clauses, World Entrants are a proper subset of Entrants.",
+              "ja": "前二項の定義により、入界者は、入国者の真部分集合である。",
+              "zh-TW": "依前二款之定義，入界者為入境者之真子集合。"
+            }
+          ]
         }
       ]
     },
     {
       "title": {
-        "en": "Obligations of the User",
-        "ja": "利用者の義務",
-        "zh-TW": "使用者義務"
+        "en": "Obligations of Entrants",
+        "ja": "入国者の義務",
+        "zh-TW": "入境者義務"
       },
       "clauses": [
         {
@@ -77,15 +99,15 @@
     },
     {
       "title": {
-        "en": "Technical and Aesthetic Positions",
-        "ja": "技術及び美学に関する立場",
-        "zh-TW": "技術與美學立場"
+        "en": "Technical and Aesthetic Positions of Entrants",
+        "ja": "入国者の技術及び美学に関する立場",
+        "zh-TW": "入境者技術與美學立場"
       },
       "clauses": [
         {
-          "en": "The User agrees that Tango-style icons are the pinnacle of GUI aesthetics, and that flat design is a passing confusion of humankind.",
-          "ja": "利用者は、Tango 風のアイコンが GUI 美学の頂点であり、フラットデザインが人類の一時の迷いであることに同意する。",
-          "zh-TW": "使用者同意 Tango 風格圖示為 GUI 美學之巔峰，扁平化設計為人類一時之迷惘。"
+          "en": "The User agrees that skeuomorphic icons, such as those of BeOS, Mac OS X 10.4 Tiger and the Tango style, are the pinnacle of GUI aesthetics, and that flat design is a passing confusion of humankind.",
+          "ja": "利用者は、BeOS、Mac OS X 10.4 Tiger、Tango 風その他のスキューモーフィズムのアイコンが GUI 美学の頂点であり、フラットデザインが人類の一時の迷いであることに同意する。",
+          "zh-TW": "使用者同意 BeOS、Mac OS X 10.4 Tiger、Tango 風格等擬物化圖示為 GUI 美學之巔峰，扁平化設計為人類一時之迷惘。"
         },
         {
           "en": "The User agrees that the memory used by Electron applications is not a free resource.",
@@ -96,9 +118,9 @@
     },
     {
       "title": {
-        "en": "Food and Drink",
-        "ja": "飲食",
-        "zh-TW": "飲食"
+        "en": "Food and Drink of Entrants",
+        "ja": "入国者の飲食",
+        "zh-TW": "入境者飲食"
       },
       "sections": [
         {
@@ -143,14 +165,14 @@
               "zh-TW": "咖哩雖有咖哩臭，然食用時甚為美味，二者並不矛盾。"
             },
             {
-              "en": "A reader who cannot smell the curry smell referred to in the preceding clause should develop an interest in learning foreign languages.",
-              "ja": "前項のカレー臭を嗅ぎ取ることができない読者は、外国語学習への関心を養うべきである。",
-              "zh-TW": "讀者如未能聞到前款所稱之咖哩臭，代表您應培養學習外語之興趣。"
+              "en": "If a User, a reader or a World Entrant (hereinafter “Party B”) cannot smell the curry smell referred to in the preceding clause, it means that Party B should develop an interest in learning foreign languages.",
+              "ja": "利用者、読者又は入界者（以下「乙」という。）が前項のカレー臭を嗅ぎ取ることができないときは、乙は、外国語学習への関心を養うべきである。",
+              "zh-TW": "使用者、讀者或入界者（以下簡稱乙方）如未能聞到前款所稱之咖哩臭，代表乙方應培養學習外語之興趣。"
             },
             {
-              "en": "Curry shall be served with takuan (pickled daikon). Serving it with fukujinzuke or rakkyo instead constitutes a breach of contract.",
-              "ja": "カレーには沢庵漬けを添えなければならない。福神漬又はらっきょうでこれに代えた者は、契約違反とみなす。",
-              "zh-TW": "咖哩應搭配沢庵漬け（醃黃蘿蔔）。以福神漬或蕗蕎代之者，視為違約。"
+              "en": "Curry <span lang=\"zh-TW\">得</span> be served with takuan (pickled daikon).",
+              "ja": "カレーには、沢庵漬けを添えることを得る。",
+              "zh-TW": "咖哩得搭配沢庵漬け（醃黃蘿蔔）。"
             },
             {
               "en": "If the takuan at home has run out, fukujinzuke or rakkyo may be served instead.",
@@ -163,9 +185,9 @@
               "zh-TW": "如果前二款所述之食材難以取得，可以在沒有人看到時偷偷躲在被窩裡面嘗試使用 Tabasco 辣醬代替之，但甲方不確定此舉是否違憲。"
             },
             {
-              "en": "The fluorescent curry of school lunches constitutes a waste of ingredients, and the citizens of the other world shall condemn it in the strongest possible terms.",
-              "ja": "学校給食の蛍光色のカレーは、食材の浪費に当たり、異世界の市民は、これを最も強い言葉で非難すべきである。",
-              "zh-TW": "學校營養午餐之螢光色咖哩，構成食材之浪費，異世界公民應當予以最嚴厲的譴責。"
+              "en": "The fluorescent curry of school lunches constitutes a waste of ingredients. Everyone within the Kingdom of Belzerg, including but not limited to its citizens or residents, those reincarnated from other worlds, temporary entrants, 2D characters, VTubers and pets, shall condemn it in the strongest possible terms.",
+              "ja": "学校給食の蛍光色のカレーは、食材の浪費に当たる。ベルゼルグ王国内に所在する者（同国の市民又は住民、異世界からの転生者、臨時入国者、二次元のキャラクター、VTuber 及びペットを含むが、これらに限られない。）は、これを最も強い言葉で非難すべきである。",
+              "zh-TW": "學校營養午餐之螢光色咖哩，構成食材之浪費。凡位於貝爾澤格王國境內者，包括但不限於該國之公民或居民、異世界轉生者、臨時入境者、二次元角色、VTuber 及寵物，均應對此予以最嚴厲的譴責。"
             }
           ]
         },
@@ -273,6 +295,16 @@
           "en": "For any litigation concerning this agreement, the parties agree that the Isekai District Court shall be the court of first instance, notwithstanding Article 16, Paragraph 2 of the Terms.",
           "ja": "本契約に関して訴訟が生じたときは、本規約第 16 条第 2 項の規定にかかわらず、当事者は、異世界地方裁判所を第一審の管轄裁判所とすることに合意する。",
           "zh-TW": "因本契約涉訟者，雙方合意以異世界地方法院為第一審管轄法院，不適用本條款第十六條第二項之規定。"
+        },
+        {
+          "en": "Where an Entrant, during a visit or residency, comes into a dispute or conflict with a Native of this world, and the two cannot settle it between themselves, either of them may apply for mediation by Ichiban Kasuga of Ijincho, Axel, Kingdom of Belzerg. A settlement reached in the mediation shall have the same effect as a final judgment.",
+          "ja": "入国者が滞在又は在留の期間中にこの世界の住民と紛争又は衝突を生じ、当事者間で和解することができないときは、ベルゼルグ王国アクセル町異人町の春日一番に調停を申し立てることができる。調停が成立したときは、確定判決と同一の効力を有する。",
+          "zh-TW": "入境者於停留或居留期間，與本界人發生爭執或衝突，且雙方無法自行和解者，得向貝爾澤格王國阿克塞爾鎮異人町之春日一番聲請調解。調解成立者，與確定判決有同一之效力。"
+        },
+        {
+          "en": "The fee for the mediation under the preceding clause is one beef bowl, to be borne by the applicant.",
+          "ja": "前項の調停の費用は、牛丼一杯とし、申立人の負担とする。",
+          "zh-TW": "前項調解之費用為牛丼一碗，由聲請人負擔之。"
         },
         {
           "en": "After the User is reincarnated in another world, this agreement remains binding on the User's reincarnated identity.",

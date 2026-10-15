@@ -399,6 +399,7 @@
    * fits. Returns the function that loads the document, then opens the dialog at its top.
    */
   function setUpDocumentDialog(dialog, name) {
+    const body = dialog.querySelector('.terms-body');
     const text = dialog.querySelector('.terms-text');
     const content = dialog.querySelector('.terms-content');
     const unavailable = dialog.querySelector('.terms-unavailable');
@@ -428,6 +429,7 @@
       continueButton.disabled = true;
       hint.hidden = false;
       ask(dialog);
+      body.scrollTop = 0;   // On a short screen, the whole dialog scrolls (see style.css), and the focus scrolled it.
       text.scrollTop = 0;
     };
   }

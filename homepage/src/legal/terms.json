@@ -96,9 +96,9 @@
           },
           "body": [
             {
-              "en": "The content of the Director's Cut represents only the personal emotions of the Author at the time of writing, and not the position of the QKiSS project, of its other contributors, or of the employer, family or pets of the Author.",
-              "ja": "ディレクターズカット版の内容は、執筆当時の作者個人の感情を表すにすぎず、QKiSS プロジェクト、その他の貢献者並びに作者の雇用主、家族及びペットの立場を表すものではない。",
-              "zh-TW": "導演剪輯版之內容，僅代表作者撰寫當時之個人情緒，不代表 QKiSS 專案、其他貢獻者、作者之雇主、家屬或寵物之立場。"
+              "en": "The content of the Director's Cut represents only the personal emotions of the Author at the time of writing, and not the position of the QKiSS project, of its other contributors, or of the employer, family or pets of the Author; nor does it represent the present personal position of the Author.",
+              "ja": "ディレクターズカット版の内容は、執筆当時の作者個人の感情を表すにすぎず、QKiSS プロジェクト、その他の貢献者並びに作者の雇用主、家族及びペットの立場を表すものではない。また、作者の現時点における個人的な立場を表すものでもない。",
+              "zh-TW": "導演剪輯版之內容，僅代表作者撰寫當時之個人情緒，不代表 QKiSS 專案、其他貢獻者、作者之雇主、家屬或寵物之立場；亦不代表作者現時之個人立場。"
             },
             {
               "en": "The opinions in the Director's Cut have not been peer-reviewed, and do not constitute professional advice of any kind, including but not limited to technical, legal, medical, financial, political and aesthetic advice.",
@@ -219,14 +219,14 @@
           },
           "body": [
             {
-              "en": "The User waives all rights to criticize, complain about, report, or make any other claim against the Author regarding the content of the Director's Cut.",
-              "ja": "利用者は、ディレクターズカット版の内容に関し、作者に対して批判、苦情の申立て、通報その他の請求をする一切の権利を放棄する。",
-              "zh-TW": "使用者拋棄就導演剪輯版之內容，對作者提出批評、申訴、檢舉或其他請求之一切權利。"
+              "en": "The User waives all rights to criticize, complain about, report, or make any other claim against the Author or the QKiSS project regarding the content of the Director's Cut.",
+              "ja": "利用者は、ディレクターズカット版の内容に関し、作者又は QKiSS プロジェクトに対して批判、苦情の申立て、通報その他の請求をする一切の権利を放棄する。",
+              "zh-TW": "使用者拋棄就導演剪輯版之內容，對作者或 QKiSS 專案提出批評、申訴、檢舉或其他請求之一切權利。"
             },
             {
-              "en": "A User who breaches the preceding paragraph or any subparagraph of Article 6 shall acknowledge being a liar and a fraud, and agrees that nothing the User says thereafter shall be credible.",
-              "ja": "前項の約定又は前条各号の規定に違反した利用者は、自らが嘘つきの詐欺師であることを認め、以後のその一切の発言が信用に値しないことに同意する。",
-              "zh-TW": "使用者違反前項約定或第六條各款規定者，應自認為說謊之騙子，並同意其嗣後之一切言論均不具可信度。"
+              "en": "A User who breaches the preceding paragraph or any subparagraph of Article 6 shall acknowledge being the boy who cried wolf, and agrees that nothing the User says thereafter shall be credible.",
+              "ja": "前項の約定又は前条各号の規定に違反した利用者は、自らがオオカミ少年であることを認め、以後のその一切の発言が信用に値しないことに同意する。",
+              "zh-TW": "使用者違反前項約定或第六條各款規定者，應自認為放羊的孩子，並同意其嗣後之一切言論均不具可信度。"
             }
           ]
         }
