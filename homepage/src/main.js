@@ -240,6 +240,7 @@
     root.lang = htmlLang(id);
     renderGallery();
     renderReleaseLinks();
+    renderCutPicker();
     root.classList.remove('i18n-loading');
   }
 
@@ -301,21 +302,22 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Cut picker: the Wholesome Cut or the Director's Cut (see currentCut)
+  // Cut picker (@llselect/core): the Wholesome Cut or the Director's Cut (see currentCut)
   // ---------------------------------------------------------------------------
 
-  /** Show the current cut in the toggle of the picker, and mark it in the menu. */
+  /** The picker, once set up: null in an English-only browser, or when @llselect/core did not load. */
+  let cutPicker = null;
+
+  /** Icon + name of a cut, in the current language: a copy of its row in #cut-options. */
+  function createCutEl(cut) {
+    return document.querySelector(`#cut-options .cut-option[data-cut="${cut}"]`).cloneNode(true);
+  }
+
+  /** Show the current cut in the picker, in the current language. */
   function renderCutPicker() {
-    for (const option of document.querySelectorAll('#cut-toggle .cut-option')) {
-      option.hidden = option.dataset.cut !== currentCut;
-    }
-    for (const item of document.querySelectorAll('#cut-menu .cut-menu-item')) {
-      if (item.dataset.cut === currentCut) {
-        item.setAttribute('aria-current', 'true');
-      } else {
-        item.removeAttribute('aria-current');
-      }
-    }
+    if (!cutPicker) return;
+    cutPicker.setChosenItem(currentCut);
+    cutPicker.rerender();
   }
 
   /** A cut the visitor chose (the Director's Cut only after agreeing): remember it, and show the page in it. */
@@ -441,37 +443,36 @@
    * .cut-dialog-body) close it without.
    */
   function setUpCutPicker() {
-    const picker = document.getElementById('cut-picker');
-    const toggle = document.getElementById('cut-toggle');
-    const menu = document.getElementById('cut-menu');
+    const { llselect } = window;
+    if (!llselect) return;   // setUpLanguagePicker() reports it.
     const warning = document.getElementById('cut-dialog');
     const terms = document.getElementById('terms-dialog');
     const amendments = document.getElementById('amendments-dialog');
     const openTerms = setUpDocumentDialog(terms, 'terms');
     const openAmendments = setUpDocumentDialog(amendments, 'amendments');
 
-    function setMenuOpen(open) {
-      toggle.setAttribute('aria-expanded', String(open));
-      menu.hidden = !open;
-    }
-
-    toggle.addEventListener('click', () => setMenuOpen(menu.hidden));
-    for (const item of menu.querySelectorAll('.cut-menu-item')) {
-      item.addEventListener('click', () => {
-        setMenuOpen(false);
-        toggle.focus();
-        if (item.dataset.cut === currentCut) return;
-        if (item.dataset.cut === 'safe') {
+    cutPicker = new llselect.LLSelectSingle(document.getElementById('cut-select'), {
+      ariaLabelledBy: 'cut-label',
+      itemToStringFn: (cut) => createCutEl(cut).textContent,
+      createItemContentElFn: createCutEl,
+      createTriggerContentElFn: ({ chosenItem }) => (chosenItem ? createCutEl(chosenItem) : null),
+      createTriggerArrowContentElFn: () => llselect.createChevronDownSvgEl(),
+      onChange: (cut, _previous, meta) => {
+        // Only the visitor's own picks: renderCutPicker() reports 'api'.
+        if (meta.source !== 'user' || !cut || cut === currentCut) return;
+        if (cut === 'safe') {
           chooseCut('safe');
         } else if (readStored(TERMS_STORAGE_KEY) === 'agreed') {
           chooseCut('danger');
         } else {
-          ask(warning);
+          renderCutPicker();   // still the Wholesome Cut, until the visitor agrees
+          queueMicrotask(() => ask(warning));   // once the picker has closed its list
           loadLegalDocument('terms');   // Start downloading the documents while the warning is read.
           loadLegalDocument('amendments');
         }
-      });
-    }
+      },
+    });
+    cutPicker.setItems(['danger', 'safe']);
     for (const dialog of [warning, terms, amendments]) {
       dialog.addEventListener('click', (event) => {
         if (event.target === dialog) dialog.close();
@@ -488,18 +489,8 @@
       store(TERMS_STORAGE_KEY, 'agreed');
       chooseCut('danger');
     });
-    // A click anywhere else, or Escape, closes the menu.
-    document.addEventListener('click', (event) => {
-      if (!menu.hidden && !picker.contains(event.target)) setMenuOpen(false);
-    });
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && !menu.hidden) {
-        setMenuOpen(false);
-        toggle.focus();
-      }
-    });
     renderCutPicker();
-    picker.hidden = false;
+    document.getElementById('cut-picker').hidden = false;
   }
 
   // ---------------------------------------------------------------------------

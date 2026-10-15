@@ -1,7 +1,7 @@
 # QKiSS Homepage
 
 The official website of QKiSS: a single static page in plain HTML, CSS and JavaScript, without frameworks or npm. `build.py` checks and assembles it. It uses the Python standard library, and `rsvg-convert` for the link-preview image.
-Its one dependency, the language picker [@llselect/core](https://gitlab.com/kuanyui/llselect), is loaded from a CDN (see [The language picker](#the-language-picker)).
+Its one dependency, [@llselect/core](https://gitlab.com/kuanyui/llselect) for the language and cut pickers, is loaded from a CDN (see [The language picker](#the-language-picker)).
 It is published on both GitHub Pages and GitLab Pages, by the same script.
 
 ```
@@ -161,7 +161,7 @@ The picker is [@llselect/core](https://gitlab.com/kuanyui/llselect), loaded from
 - Its API may change before 0.1.0, so the URL names an exact version.
 - `integrity` makes the browser refuse any file other than the one checked.
 - Its classes are styled in `style.css` from the colors of the page (light and dark), instead of loading one of its themes.
-- If it does not load, the picker stays hidden; the language is still picked as above.
+- If it does not load, both pickers stay hidden: the language is still picked as above, and the cut is the one chosen last.
 
 To upgrade it, change the version in the URL, and set `integrity` to `sha384-` followed by the hash of the new file:
 
@@ -171,7 +171,7 @@ curl -fsSL https://cdn.jsdelivr.net/npm/@llselect/core@VERSION/dist/index.umd.js
 
 ### The Director's Cut
 
-The page has two cuts, and the cut picker next to the language picker switches between them:
+The page has two cuts, and the cut picker next to the language picker (an @llselect/core too) switches between them:
 
 - The Wholesome Cut, shown by default.
 - The Director's Cut, with the author's swearing, dark political jokes and strong opinions. The first switch to it asks three times: a warning (`#cut-dialog` in `index.html`), the terms of the Director's Cut (`#terms-dialog`), then their additional articles (`#amendments-dialog`). In each document, the button that continues (“I have actually read, and fully agree to, all of the provisions above”) is enabled only once the visitor has scrolled to its end. The cut, and the agreement, are remembered in `localStorage` like the language: after agreeing once, switching asks nothing.
