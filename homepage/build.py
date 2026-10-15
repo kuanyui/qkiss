@@ -63,6 +63,11 @@ APP_ICONS: dict[str, Path] = {
 # `images/flags/`, together with their license notice (README.md).
 FLAGS_DIR: Path = REPO_ROOT_DIR / "resources/flags"
 
+# The documents of the Director's Cut (its terms, then their additional articles), that main.js shows in its dialogs.
+# Every text is an object with one string per language (see "The Director's Cut" in homepage/README.md).
+LEGAL_DIR: Path = SRC_DIR / "legal"
+LEGAL_DOCUMENTS: tuple[str, ...] = ("terms.json", "amendments.json")
+
 SCREENSHOTS_SUBDIR: str = "screenshots"
 SCREENSHOTS_MANIFEST: str = "screenshots.json"
 # This file sets the order and the captions of the screenshots in the gallery. The images
@@ -209,33 +214,183 @@ def check_languages(text: str | None) -> list[dict[str, str]]:
 # i18n/*.json
 # ==========================================
 
+# The cuts of the page (see "The Director's Cut" in homepage/README.md). A translation with one version per cut is an
+# object with exactly these keys, in this order. The file of the source language has only the Director's Cut: its
+# Wholesome Cut is index.html itself.
+CUTS: tuple[str, ...] = ("safe", "danger")
+SOURCE_CUTS: tuple[str, ...] = ("danger",)
+
+
 def check_translations(languages: list[dict[str, str]], keys: dict[str, str]) -> list[str]:
-    """Validate every `i18n/<id>.json` against index.html. Returns warnings about untranslated keys."""
+    """Validate every `i18n/<id>.json` against index.html. Returns warnings about untranslated keys, and about keys
+    with one version per cut in some languages but not in others."""
     source_id = languages[0]["id"]
+    source_name = f"{source_id}.json"   # optional: the Director's Cut of the source language
     expected = {f"{language['id']}.json" for language in languages[1:]}
     present = {path.name for path in I18N_DIR.iterdir()} if I18N_DIR.is_dir() else set()
 
     errors: list[str] = []
-    for name in sorted(present - expected):
+    for name in sorted(present - expected - {source_name}):
         errors.append(f"i18n/{name}: not a registered language (the strings of the source language {source_id!r} live in index.html)")
     for name in sorted(expected - present):
         errors.append(f"i18n/{name}: missing; every registered language except {source_id!r} needs one")
 
     warnings: list[str] = []
-    for name in sorted(expected & present):
+    cut_keys: dict[str, set[str]] = {source_name: set()}   # file name -> its keys with one version per cut
+    plain_keys: dict[str, set[str]] = {}                    # file name -> its keys with a single string
+    for name in sorted((expected | {source_name}) & present):
         path = I18N_DIR / name
         translations = load_json(path.read_text(encoding="utf-8"), f"i18n/{name}")
         if not isinstance(translations, dict):
             errors.append(f'i18n/{name}: must be an object of `"key": "translation"`')
             continue
+        cuts = SOURCE_CUTS if name == source_name else CUTS
+        cut_keys[name], plain_keys[name] = set(), set()
         for key, value in translations.items():
+            where = f"i18n/{name}: {key!r}"
             if key not in keys:
                 errors.append(f"i18n/{name}: unknown key {key!r}; it is not used in index.html")
+            elif isinstance(value, dict):
+                if keys[key] == "data-i18n-attr":
+                    errors.append(f"{where}: the strings of data-i18n-attr cannot have a version per cut")
+                elif tuple(value) != cuts or not all(isinstance(v, str) for v in value.values()):
+                    errors.append(f"{where}: one version per cut must be an object with exactly the string(s) {', then '.join(map(repr, cuts))}")
+                elif name != source_name and not any(v.strip() for v in value.values()):
+                    errors.append(f"{where}: both versions are empty; at least one must not be")
+                else:
+                    cut_keys[name].add(key)
+            elif name == source_name:
+                errors.append(f"{where}: i18n/{source_name} only has the Director's Cut, as {{\"danger\": \"...\"}}; the other strings of {source_id!r} live in index.html")
             elif not is_nonempty_string(value):
-                errors.append(f"i18n/{name}: {key!r}: the translation must be a non-empty string")
-        untranslated = [key for key in keys if key not in translations]
-        if untranslated:
-            warnings.append(f"i18n/{name}: {len(untranslated)} untranslated key(s), shown in the fallback language: {', '.join(untranslated)}")
+                errors.append(f"{where}: the translation must be a non-empty string, or an object with one version per cut")
+            else:
+                plain_keys[name].add(key)
+        if name != source_name:
+            untranslated = [key for key in keys if key not in translations]
+            if untranslated:
+                warnings.append(f"i18n/{name}: {len(untranslated)} untranslated key(s), shown in the fallback language: {', '.join(untranslated)}")
+    if errors:
+        raise BuildError("\n".join(errors))
+
+    # A key with one version per cut in one language needs one in every language that translates it.
+    all_cut_keys = set().union(*cut_keys.values())
+    for name in sorted(cut_keys):
+        if name == source_name:
+            single = sorted(all_cut_keys - cut_keys[name])
+            if single:
+                warnings.append(f"i18n/{name}: no Director's Cut for {len(single)} key(s) that have one in another language, so their English is the same in both cuts: {', '.join(single)}")
+        else:
+            single = sorted(all_cut_keys & plain_keys[name])
+            if single:
+                warnings.append(f"i18n/{name}: {len(single)} key(s) have one version per cut in another language, but a single string here, shown in both cuts: {', '.join(single)}")
+    return warnings
+
+
+# ==========================================
+# legal/*.json
+# ==========================================
+
+def check_legal_documents(languages: list[dict[str, str]]) -> list[str]:
+    """Validate the documents of the Director's Cut (LEGAL_DOCUMENTS). Returns warnings about texts that miss a
+    language."""
+    ids = [language["id"] for language in languages]
+    present = {path.name for path in LEGAL_DIR.iterdir()} if LEGAL_DIR.is_dir() else set()
+    errors = [f"legal/{name}: not a document of the Director's Cut; expected: {', '.join(LEGAL_DOCUMENTS)}"
+              for name in sorted(present - set(LEGAL_DOCUMENTS))]
+    warnings: list[str] = []
+    for name in LEGAL_DOCUMENTS:
+        if name not in present:
+            errors.append(f"legal/{name}: missing")
+            continue
+        untranslated = {language_id: 0 for language_id in ids[1:]}
+
+        def text(value: Any, where: str) -> None:
+            """A text: an object with one non-empty string per language, which must include the source language."""
+            if not isinstance(value, dict) or not value:
+                errors.append(f'{where}: must be an object like {{"{ids[0]}": "..."}}')
+                return
+            for language_id in sorted(value.keys() - set(ids)):
+                errors.append(f"{where}: unknown language {language_id!r}; registered: {', '.join(ids)}")
+            if ids[0] not in value:
+                errors.append(f"{where}: must include the source language {ids[0]!r}")
+            for language_id, string in value.items():
+                if not is_nonempty_string(string):
+                    errors.append(f"{where}.{language_id}: must be a non-empty string")
+            for language_id in untranslated.keys() - value.keys():
+                untranslated[language_id] += 1
+
+        def fields(value: Any, where: str, required: tuple[str, ...], optional: tuple[str, ...] = ()) -> bool:
+            """Whether `value` is an object with the `required` keys. Other keys than the `optional` ones are errors."""
+            if not isinstance(value, dict):
+                errors.append(f"{where}: must be an object")
+                return False
+            for key in sorted(value.keys() - {*required, *optional}):
+                errors.append(f"{where}: unknown key {key!r}; allowed: {', '.join((*required, *optional))}")
+            missing = [key for key in required if key not in value]
+            for key in missing:
+                errors.append(f"{where}: {key!r} is required")
+            return not missing
+
+        def array(value: Any, where: str) -> list[Any]:
+            if isinstance(value, list) and value:
+                return value
+            errors.append(f"{where}: must be a non-empty array")
+            return []
+
+        def article(value: Any, where: str) -> None:
+            """An article: its title, and its body of paragraphs (texts) and lists of subparagraphs ({"items": [...]})."""
+            if not fields(value, where, ("title", "body")):
+                return
+            text(value["title"], f"{where}.title")
+            for i, block in enumerate(array(value["body"], f"{where}.body")):
+                if isinstance(block, dict) and "items" in block:
+                    if fields(block, f"{where}.body[{i}]", ("items",)):
+                        for j, item in enumerate(array(block["items"], f"{where}.body[{i}].items")):
+                            text(item, f"{where}.body[{i}].items[{j}]")
+                else:
+                    text(block, f"{where}.body[{i}]")
+
+        def clause(value: Any, where: str) -> None:
+            """A numbered clause: a text, which can also have its own "clauses"."""
+            if isinstance(value, dict) and "clauses" in value:
+                for c, subclause in enumerate(array(value["clauses"], f"{where}.clauses")):
+                    clause(subclause, f"{where}.clauses[{c}]")
+                value = {key: string for key, string in value.items() if key != "clauses"}
+            text(value, where)
+
+        def content(part: dict[str, Any], where: str) -> None:
+            """What a chapter or a section contains: either articles written like a law, or numbered clauses."""
+            if ("articles" in part) == ("clauses" in part):
+                errors.append(f"{where}: must have either 'articles' or 'clauses'")
+            for a, value in enumerate(array(part["articles"], f"{where}.articles") if "articles" in part else []):
+                article(value, f"{where}.articles[{a}]")
+            for c, value in enumerate(array(part["clauses"], f"{where}.clauses") if "clauses" in part else []):
+                clause(value, f"{where}.clauses[{c}]")
+
+        where = f"legal/{name}"
+        document = load_json((LEGAL_DIR / name).read_text(encoding="utf-8"), where)
+        if fields(document, where, ("date", "chapters"), ("preamble", "numberSeparator", "closing")):
+            for key in ("date", "preamble", "numberSeparator", "closing"):
+                if key in document:
+                    text(document[key], f"{where}.{key}")
+            for c, chapter in enumerate(array(document["chapters"], f"{where}.chapters")):
+                chapter_where = f"{where}.chapters[{c}]"
+                if not fields(chapter, chapter_where, ("title",), ("sections", "articles", "clauses")):
+                    continue
+                text(chapter["title"], f"{chapter_where}.title")
+                if "sections" not in chapter:
+                    content(chapter, chapter_where)
+                    continue
+                if "articles" in chapter or "clauses" in chapter:
+                    errors.append(f"{chapter_where}: must have either 'sections', 'articles' or 'clauses'")
+                for s, section in enumerate(array(chapter["sections"], f"{chapter_where}.sections")):
+                    section_where = f"{chapter_where}.sections[{s}]"
+                    if fields(section, section_where, ("title",), ("articles", "clauses")):
+                        text(section["title"], f"{section_where}.title")
+                        content(section, section_where)
+        for language_id, count in untranslated.items():
+            if count:
+                warnings.append(f"{where}: {count} text(s) not translated into {language_id!r}, shown in its fallback language")
     if errors:
         raise BuildError("\n".join(errors))
     return warnings
@@ -363,6 +518,7 @@ def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path | bytes], l
         raise BuildError("\n".join(page.errors))
     languages = check_languages(page.languages_json)
     warnings = check_translations(languages, page.keys)
+    warnings += check_legal_documents(languages)
     images = check_screenshots(screenshots_dir, languages)   # screenshots.json is checked even without --screenshots
     if screenshots_dir is None:
         warnings.append("Without screenshots (--no-screenshots): fine for a preview, never publish it.")

@@ -1,0 +1,438 @@
+{
+  "date": {
+    "en": "Last revised: October 15, 2026",
+    "ja": "最終改定日：2026 年 10 月 15 日",
+    "zh-TW": "最後修訂日期：2026 年 10 月 15 日"
+  },
+  "chapters": [
+    {
+      "title": {
+        "en": "Chapter 1 General Provisions",
+        "ja": "第1章　総則",
+        "zh-TW": "第一章　總則"
+      },
+      "articles": [
+        {
+          "title": {
+            "en": "Article 1 (Purpose and Scope)",
+            "ja": "第1条（目的及び適用範囲）",
+            "zh-TW": "第一條（目的及適用範圍）"
+          },
+          "body": [
+            {
+              "en": "These Terms govern the rights and obligations of the User in reading the Director's Cut of the official website of QKiSS (the “Website”).",
+              "ja": "本規約は、QKiSS 公式ウェブサイト（以下「本サイト」という。）のディレクターズカット版の閲覧に関する利用者の権利義務を定める。",
+              "zh-TW": "本條款規範使用者閱讀 QKiSS 官方網站（以下簡稱本網站）導演剪輯版之權利義務關係。"
+            },
+            {
+              "en": "By clicking “I have actually read the provisions above”, the User is deemed to have read, fully understood and agreed to all of these Terms.",
+              "ja": "利用者が「上記の条項を確かに読みました」をクリックしたときは、本規約の全部を熟読し、十分に理解し、これに同意したものとみなす。",
+              "zh-TW": "使用者點選「我已經確實閱讀以上條文」，即視為已詳細閱讀、充分瞭解並同意本條款之全部內容。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 2 (Definitions)",
+            "ja": "第2条（定義）",
+            "zh-TW": "第二條（定義）"
+          },
+          "body": [
+            {
+              "en": "In these Terms:",
+              "ja": "本規約において、次の各号に掲げる用語の意義は、当該各号に定めるところによる。",
+              "zh-TW": "本條款用詞，定義如下："
+            },
+            {
+              "items": [
+                {
+                  "en": "“Author” means ono ono (kuanyui), the copyright holder of QKiSS.",
+                  "ja": "作者　QKiSS の著作権者である ono ono（kuanyui）をいう。",
+                  "zh-TW": "作者：指 QKiSS 之著作權人 ono ono（kuanyui）。"
+                },
+                {
+                  "en": "“Wholesome Cut” means the version of the Website shown by default.",
+                  "ja": "健全版　本サイトが既定で表示する版をいう。",
+                  "zh-TW": "清新健康版：指本網站預設顯示之版本。"
+                },
+                {
+                  "en": "“Director's Cut” means the version of the Website shown only after the User has agreed to these Terms, including but not limited to the text, swearing, jokes, opinions and rambling therein.",
+                  "ja": "ディレクターズカット版　利用者が本規約に同意した後に限り本サイトが表示する版をいい、これに掲載される文章、暴言、ネタ、主張及びぼやきを含むが、これらに限られない。",
+                  "zh-TW": "導演剪輯版：指使用者依本條款同意後，本網站始顯示之版本，包括但不限於其所載之文字、粗口、梗、主張及碎碎念。"
+                },
+                {
+                  "en": "“Read” means to perceive the content of the Director's Cut by sight, by screen reader, by machine translation or by any other means.",
+                  "ja": "閲覧　目視、スクリーンリーダー、機械翻訳その他一切の方法により、ディレクターズカット版の内容を知覚する行為をいう。",
+                  "zh-TW": "閱讀：指以目視、螢幕報讀軟體、機器翻譯或其他任何方式，感知導演剪輯版內容之行為。"
+                },
+                {
+                  "en": "“User” means the natural person who clicks “I have actually read the provisions above”, and any agent thereof, including but not limited to browser extensions and artificial intelligence agents.",
+                  "ja": "利用者　「上記の条項を確かに読みました」をクリックした自然人及びその代理人（ブラウザ拡張機能及び人工知能エージェントを含むが、これらに限られない。）をいう。",
+                  "zh-TW": "使用者：指點選「我已經確實閱讀以上條文」之自然人，及其代理人（包括但不限於瀏覽器擴充功能及人工智慧代理程式）。"
+                },
+                {
+                  "en": "“National Language” means a national language as defined in Article 3 of the Development of National Languages Act of Taiwan.",
+                  "ja": "国家言語　台湾の国家言語発展法第 3 条に規定する国家言語をいう。",
+                  "zh-TW": "國家語言：指國家語言發展法第三條所定之國家語言。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Chapter 2 Content of the Director's Cut",
+        "ja": "第2章　ディレクターズカット版の内容",
+        "zh-TW": "第二章　導演剪輯版之內容"
+      },
+      "articles": [
+        {
+          "title": {
+            "en": "Article 3 (Nature of the Content)",
+            "ja": "第3条（内容の性質）",
+            "zh-TW": "第三條（內容之性質）"
+          },
+          "body": [
+            {
+              "en": "The content of the Director's Cut represents only the personal emotions of the Author at the time of writing, and not the position of the QKiSS project, of its other contributors, or of the employer, family or pets of the Author.",
+              "ja": "ディレクターズカット版の内容は、執筆当時の作者個人の感情を表すにすぎず、QKiSS プロジェクト、その他の貢献者並びに作者の雇用主、家族及びペットの立場を表すものではない。",
+              "zh-TW": "導演剪輯版之內容，僅代表作者撰寫當時之個人情緒，不代表 QKiSS 專案、其他貢獻者、作者之雇主、家屬或寵物之立場。"
+            },
+            {
+              "en": "The opinions in the Director's Cut have not been peer-reviewed, and do not constitute professional advice of any kind, including but not limited to technical, legal, medical, financial, political and aesthetic advice.",
+              "ja": "ディレクターズカット版に掲載される主張は、査読を経ておらず、技術、法律、医療、財務、政治及び美学に関する意見を含むがこれらに限られない、いかなる専門的意見も構成しない。",
+              "zh-TW": "導演剪輯版所載之主張，未經同儕審查，亦不構成任何專業意見，包括但不限於技術、法律、醫療、財務、政治及美學意見。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 4 (Intellectual Property)",
+            "ja": "第4条（知的財産権）",
+            "zh-TW": "第四條（智慧財產權）"
+          },
+          "body": [
+            {
+              "en": "The content of the Director's Cut, like the rest of the Website, is licensed under the GNU General Public License, version 3.",
+              "ja": "ディレクターズカット版の内容は、本サイトのその他の内容と同様に、GNU 一般公衆利用許諾書第 3 版の下で許諾される。",
+              "zh-TW": "導演剪輯版之內容，與本網站其他內容相同，依 GNU 通用公眾授權條款第三版授權。"
+            },
+            {
+              "en": "Nothing in these Terms limits any right of the User under that License; however, the User shall bear all consequences of exercising such rights.",
+              "ja": "本規約は、同許諾書に基づき利用者が有するいかなる権利も制限しない。ただし、利用者は、当該権利の行使により生じる一切の結果について、自ら責任を負う。",
+              "zh-TW": "本條款不限制使用者依該授權條款所享有之任何權利；惟使用者行使該等權利所生之一切後果，應由使用者自行承擔。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Chapter 3 Representations and Obligations of the User",
+        "ja": "第3章　利用者の表明及び義務",
+        "zh-TW": "第三章　使用者之聲明及義務"
+      },
+      "articles": [
+        {
+          "title": {
+            "en": "Article 5 (Representations and Warranties)",
+            "ja": "第5条（表明及び保証）",
+            "zh-TW": "第五條（聲明及保證）"
+          },
+          "body": [
+            {
+              "en": "The User represents and warrants that the User:",
+              "ja": "利用者は、次の各号に掲げる事項を表明し、保証する。",
+              "zh-TW": "使用者聲明並保證下列事項："
+            },
+            {
+              "items": [
+                {
+                  "en": "is not one of the persons listed in the warning on the previous screen;",
+                  "ja": "前画面の警告事項に掲げられた者に該当しないこと。",
+                  "zh-TW": "非屬前一畫面警告事項所列之人。"
+                },
+                {
+                  "en": "reads the Director's Cut of the User's own free will, without coercion, inducement or peer pressure from anyone; and",
+                  "ja": "何人からも強要、利益誘導又は同調圧力を受けることなく、自らの自由意思によりディレクターズカット版を閲覧すること。",
+                  "zh-TW": "基於自由意志閱讀導演剪輯版，未受任何人之脅迫、利誘或同儕壓力。"
+                },
+                {
+                  "en": "has the mental maturity to judge, alone, whether online content is worth getting angry about.",
+                  "ja": "インターネット上の内容が怒るに値するか否かを自ら判断できる精神的成熟度を有すること。",
+                  "zh-TW": "已具備自行判斷網路內容是否值得生氣之心智成熟度。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 6 (Prohibited Acts)",
+            "ja": "第6条（禁止行為）",
+            "zh-TW": "第六條（禁止行為）"
+          },
+          "body": [
+            {
+              "en": "The User shall not:",
+              "ja": "利用者は、次の各号に掲げる行為をしてはならない。",
+              "zh-TW": "使用者不得為下列行為："
+            },
+            {
+              "items": [
+                {
+                  "en": "argue with the Author or any third party about the content of the Director's Cut, or attempt to persuade or correct them about it;",
+                  "ja": "ディレクターズカット版の内容について、作者若しくは第三者と議論し、又はこれらの者を説得し、若しくは訂正しようとすること。",
+                  "zh-TW": "就導演剪輯版之內容，與作者或第三人爭辯，或試圖說服、糾正之。"
+                },
+                {
+                  "en": "quote the content of the Director's Cut out of context to start a dispute;",
+                  "ja": "紛争を引き起こす目的で、ディレクターズカット版の内容を文脈から切り離して引用すること。",
+                  "zh-TW": "斷章取義引用導演剪輯版之內容，藉以挑起爭端。"
+                },
+                {
+                  "en": "use the content of the Director's Cut as grounds or material for quarrels with others;",
+                  "ja": "ディレクターズカット版の内容を、他人との口論の根拠又は材料とすること。",
+                  "zh-TW": "以導演剪輯版之內容，作為與他人爭吵之依據或素材。"
+                },
+                {
+                  "en": "demand that the Author explain, defend, correct or apologize for the content of the Director's Cut; or",
+                  "ja": "ディレクターズカット版の内容について、作者に説明、弁明、訂正又は謝罪を求めること。",
+                  "zh-TW": "要求作者就導演剪輯版之內容為說明、辯護、更正或道歉。"
+                },
+                {
+                  "en": "commit any other act contrary to public order or good morals, or that depresses the Author.",
+                  "ja": "その他公の秩序若しくは善良の風俗に反し、又は作者を落ち込ませる行為",
+                  "zh-TW": "其他違反公共秩序、善良風俗或致作者心情低落之行為。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 7 (Waiver of Rights)",
+            "ja": "第7条（権利の放棄）",
+            "zh-TW": "第七條（權利之拋棄）"
+          },
+          "body": [
+            {
+              "en": "The User waives all rights to criticize, complain about, report, or make any other claim against the Author regarding the content of the Director's Cut.",
+              "ja": "利用者は、ディレクターズカット版の内容に関し、作者に対して批判、苦情の申立て、通報その他の請求をする一切の権利を放棄する。",
+              "zh-TW": "使用者拋棄就導演剪輯版之內容，對作者提出批評、申訴、檢舉或其他請求之一切權利。"
+            },
+            {
+              "en": "A User who breaches the preceding paragraph or any subparagraph of Article 6 shall acknowledge being a liar and a fraud, and agrees that nothing the User says thereafter shall be credible.",
+              "ja": "前項の約定又は前条各号の規定に違反した利用者は、自らが嘘つきの詐欺師であることを認め、以後のその一切の発言が信用に値しないことに同意する。",
+              "zh-TW": "使用者違反前項約定或第六條各款規定者，應自認為說謊之騙子，並同意其嗣後之一切言論均不具可信度。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Chapter 4 Disclaimer and Limitation of Liability",
+        "ja": "第4章　免責及び責任の制限",
+        "zh-TW": "第四章　免責及責任限制"
+      },
+      "articles": [
+        {
+          "title": {
+            "en": "Article 8 (No Warranty)",
+            "ja": "第8条（無保証）",
+            "zh-TW": "第八條（不提供擔保）"
+          },
+          "body": [
+            {
+              "en": "The Director's Cut is provided “as is”. The Author makes no warranty of any kind, express or implied, including but not limited to warranties of merchantability, of fitness for a particular purpose, of political correctness, and of not hurting the feelings of the User.",
+              "ja": "ディレクターズカット版は、「現状有姿」で提供される。作者は、商品性、特定目的への適合性、政治的正しさ及び利用者の感情を害さないことの保証を含むがこれらに限られない、明示又は黙示のいかなる保証もしない。",
+              "zh-TW": "導演剪輯版係依「現狀」提供。作者不提供任何明示或默示之擔保，包括但不限於適銷性、特定用途適用性、政治正確性，以及不傷害使用者感情之擔保。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 9 (Limitation of Liability)",
+            "ja": "第9条（責任の制限）",
+            "zh-TW": "第九條（責任之限制）"
+          },
+          "body": [
+            {
+              "en": "To the maximum extent permitted by law, the Author shall not be liable for any direct, indirect, incidental, consequential or punitive damages arising from the User's reading of the Director's Cut, including but not limited to raised blood pressure, insomnia, broken relationships, time spent watching Teletubbies, and the legal costs of quarrels with others.",
+              "ja": "法令上許される最大限の範囲において、作者は、利用者がディレクターズカット版を閲覧したことにより生じた一切の直接損害、間接損害、付随的損害、派生的損害及び懲罰的損害（血圧の上昇、不眠、人間関係の破綻、テレタビーズの視聴に費やした時間及び他人との口論に係る訴訟費用を含むが、これらに限られない。）について、賠償責任を負わない。",
+              "zh-TW": "於法律許可之最大範圍內，使用者因閱讀導演剪輯版所生之一切直接、間接、附帶、衍生或懲罰性損害，包括但不限於血壓上升、失眠、人際關係破裂、觀看天線寶寶所耗費之時間，以及與他人爭吵所生之訴訟費用，作者均不負賠償責任。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Chapter 5 Withdrawal and Personal Data",
+        "ja": "第5章　撤回及び個人情報",
+        "zh-TW": "第五章　撤回及個人資料"
+      },
+      "articles": [
+        {
+          "title": {
+            "en": "Article 10 (Withdrawal)",
+            "ja": "第10条（撤回）",
+            "zh-TW": "第十條（撤回）"
+          },
+          "body": [
+            {
+              "en": "The User may switch back to the Wholesome Cut at any time with the cut picker at the top of the Website, without giving any reason and at no cost, and without being bound by the seven-day period of Article 19 of the Consumer Protection Act of Taiwan.",
+              "ja": "利用者は、いつでも、本サイト上部の版選択メニューにより健全版に戻ることができる。この場合において、利用者は、理由を示すことを要せず、いかなる費用も負担せず、台湾の消費者保護法第 19 条に定める 7 日間の期間の制限も受けない。",
+              "zh-TW": "使用者得隨時以頁首之版本選單，切換回清新健康版，無須說明理由，亦無須負擔任何費用，且不受消費者保護法第十九條所定七日期間之限制。"
+            },
+            {
+              "en": "However, content already read by the User cannot be withdrawn from the User's memory.",
+              "ja": "ただし、利用者が既に閲覧した内容は、利用者の記憶から撤回することができない。",
+              "zh-TW": "惟使用者已閱讀之內容，無法自其記憶中撤回。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 11 (Protection of Personal Data)",
+            "ja": "第11条（個人情報の保護）",
+            "zh-TW": "第十一條（個人資料之保護）"
+          },
+          "body": [
+            {
+              "en": "The Website uses no cookies and does not track the User. The choices of language and cut of the User, and the record of the User's agreement to these Terms, are stored only in the local storage (localStorage) of the User's browser.",
+              "ja": "本サイトは、Cookie を使用せず、利用者を追跡しない。利用者の言語及び版の選択並びに本規約への同意の記録は、利用者のブラウザのローカルストレージ（localStorage）にのみ保存される。",
+              "zh-TW": "本網站不使用 Cookie，亦不追蹤使用者。使用者之語言、版本選擇及本條款之同意紀錄，僅儲存於使用者瀏覽器之本機儲存空間（localStorage）。"
+            },
+            {
+              "en": "The Website loads a library from jsDelivr, and queries the GitHub API for the latest version of QKiSS. These third parties, and the hosting providers of the Website, may process the connection information of the User under their own privacy policies.",
+              "ja": "本サイトは、jsDelivr が提供するライブラリを読み込み、また、GitHub API に QKiSS の最新版を照会する。これらの第三者及び本サイトのホスティング事業者は、それぞれのプライバシーポリシーに従い、利用者の接続情報を取り扱うことがある。",
+              "zh-TW": "本網站載入 jsDelivr 提供之程式庫，並向 GitHub API 查詢 QKiSS 之最新版本。該等第三方及本網站之託管服務業者，得依其隱私權政策處理使用者之連線資訊。"
+            },
+            {
+              "en": "The Author has no means of knowing whether the User has read the Director's Cut. Once the User clears the browsing data of the browser, the record ceases to exist.",
+              "ja": "作者は、利用者がディレクターズカット版を閲覧したか否かを知る手段を有しない。利用者がブラウザの閲覧データを消去したときは、当該記録は消滅する。",
+              "zh-TW": "作者無從得知使用者是否曾閱讀導演剪輯版。使用者清除瀏覽器資料後，該紀錄即不復存在。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Chapter 6 Supplementary Provisions",
+        "ja": "第6章　附則",
+        "zh-TW": "第六章　附則"
+      },
+      "articles": [
+        {
+          "title": {
+            "en": "Article 12 (Amendments)",
+            "ja": "第12条（規約の変更）",
+            "zh-TW": "第十二條（條款之修改）"
+          },
+          "body": [
+            {
+              "en": "The Author may amend these Terms at any time. Amended Terms take effect when published on the Website, without further notice.",
+              "ja": "作者は、いつでも本規約を変更することができる。変更後の規約は、本サイトに掲載された時から効力を生じ、別途の通知は行わない。",
+              "zh-TW": "作者得隨時修改本條款，修改後之條款自於本網站公布時起生效，不另行通知。"
+            },
+            {
+              "en": "A User who does not agree to the amended Terms shall immediately stop reading the Director's Cut, and make every effort to forget it.",
+              "ja": "変更後の規約に同意しない利用者は、直ちにディレクターズカット版の閲覧を中止し、その内容を忘れるよう最大限努めなければならない。",
+              "zh-TW": "使用者不同意修改後之條款者，應立即停止閱讀導演剪輯版，並盡力遺忘之。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 13 (Changes to and Termination of the Service)",
+            "ja": "第13条（サービスの変更及び終了）",
+            "zh-TW": "第十三條（服務之變更及終止）"
+          },
+          "body": [
+            {
+              "en": "The Author may change, suspend or terminate all or part of the Director's Cut at any time, for any reason or for no reason, and the User shall raise no objection.",
+              "ja": "作者は、理由の有無を問わず、いつでもディレクターズカット版の全部又は一部を変更し、停止し、又は終了することができ、利用者は、これに異議を述べることができない。",
+              "zh-TW": "作者得基於任何理由或無理由，隨時變更、暫停或終止導演剪輯版之全部或一部，使用者不得異議。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 14 (Severability)",
+            "ja": "第14条（分離可能性）",
+            "zh-TW": "第十四條（可分割性）"
+          },
+          "body": [
+            {
+              "en": "If any provision of these Terms is held invalid or unenforceable by a court of competent jurisdiction, the other provisions shall remain in full force and effect.",
+              "ja": "本規約のいずれかの条項が管轄権を有する裁判所により無効又は執行不能と判断された場合であっても、その他の条項は、引き続き完全に効力を有する。",
+              "zh-TW": "本條款之任一條款經有管轄權之法院認定無效或不得執行者，不影響其他條款之效力。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 15 (Language)",
+            "ja": "第15条（言語）",
+            "zh-TW": "第十五條（語言）"
+          },
+          "body": [
+            {
+              "en": "These Terms are made in a National Language, English and Japanese. In case of any discrepancy between the versions, the National Language version shall prevail.",
+              "ja": "本規約は、国家言語、英語及び日本語により作成される。各言語版の内容に齟齬がある場合は、国家言語版が優先する。",
+              "zh-TW": "本條款以國家語言、英文及日文作成。各語言版本之內容如有歧異，以國家語言版為準。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 16 (Governing Law and Jurisdiction)",
+            "ja": "第16条（準拠法及び管轄裁判所）",
+            "zh-TW": "第十六條（準據法及管轄法院）"
+          },
+          "body": [
+            {
+              "en": "These Terms shall be governed by and construed in accordance with the laws of Taiwan.",
+              "ja": "本規約の解釈及び適用については、台湾法を準拠法とする。",
+              "zh-TW": "本條款之解釋及適用，以台灣法律為準據法。"
+            },
+            {
+              "en": "The parties agree that the Taiwan Keelung District Court shall be the court of first instance for any dispute arising from these Terms.",
+              "ja": "本規約に関して生じる一切の紛争については、台湾基隆地方法院を第一審の管轄裁判所とすることに合意する。",
+              "zh-TW": "因本條款所生之一切爭議，雙方同意以臺灣基隆地方法院為第一審管轄法院。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 17 (Miscellaneous)",
+            "ja": "第17条（雑則）",
+            "zh-TW": "第十七條（其他）"
+          },
+          "body": [
+            {
+              "en": "The headings of the Articles of these Terms are for convenience only, and do not affect their interpretation.",
+              "ja": "本規約の各条の見出しは、便宜上付されたものにすぎず、その解釈に影響を及ぼさない。",
+              "zh-TW": "本條款各條之標題，僅為閱讀方便而設，不影響各條款之解釋。"
+            },
+            {
+              "en": "These Terms constitute the entire agreement between the User and the Author regarding the Director's Cut, and supersede all prior oral or written agreements between them on this subject.",
+              "ja": "本規約は、ディレクターズカット版に関する利用者と作者との間の完全な合意を構成し、これに関する両者間の従前の口頭又は書面による一切の合意に優先する。",
+              "zh-TW": "本條款構成使用者與作者間就導演剪輯版之完整合意，並取代雙方先前就此所為之一切口頭或書面約定。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "closing": {
+    "en": "By clicking “I have actually read the provisions above”, you, of sound mind and under no duress from anyone, voluntarily waive all rights to criticize any sentence or opinion you will read on the QKiSS website from now on, and voluntarily waive all legal claims against the author of QKiSS for any negative consequences of reading it.",
+    "ja": "「上記の条項を確かに読みました」をクリックすることにより、あなたは、正気で、かつ誰からも強要されていない状態で、この先 QKiSS 公式サイトで目にするあらゆる文言や見解を批判する一切の権利を自発的に放棄し、また、それを読んだことによるいかなる悪影響についても、QKiSS の作者に対する一切の法的請求権を自発的に放棄したものとみなされます。",
+    "zh-TW": "點擊「我已經確實閱讀以上條文」即代表、您、在神智清醒且無任何人脅迫的情況下、自願放棄批評接下來在 QKiSS 官網內所見任何文句或觀點之一切權利，亦自願放棄接下來因閱讀而造成的任何負面後果對 QKiSS 作者的任何法律求償權利。"
+  }
+}

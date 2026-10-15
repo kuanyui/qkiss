@@ -16,6 +16,11 @@
   --accent-hover: #445016;
   --accent-soft: #e9eed3;
   --on-accent: #ffffff;
+  --danger-top: #cc0000;        /* the red button (Tango's Scarlet Red), the same in both themes */
+  --danger: #a40000;
+  --danger-hover: #820000;
+  --on-danger: #ffffff;
+  --danger-soft: #f9e0e0;       /* the background of a warning (.musing-warning) */
   --checker: #eef0e4;           /* the "transparent pixels" pattern behind the hero */
   --highlight: rgb(255 255 255 / 0.6);
   --shadow: 0 1px 2px rgb(46 52 54 / 0.08), 0 4px 16px rgb(46 52 54 / 0.06);
@@ -42,6 +47,7 @@
     --accent-hover: #c6d294;
     --accent-soft: #2e3421;
     --on-accent: #1b1d18;
+    --danger-soft: #3b1814;
     --checker: #20231b;
     --highlight: rgb(255 255 255 / 0.06);
     --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 16px rgb(0 0 0 / 0.25);
@@ -220,6 +226,19 @@ code {
 .button-primary:hover {
   background: var(--accent-hover);
   color: var(--on-accent);
+}
+
+/* A red button, for an action to think twice about (agreeing to the Director's Cut). */
+.button-danger {
+  border-color: var(--danger-hover);
+  background: linear-gradient(var(--danger-top), var(--danger));
+  color: var(--on-danger);
+}
+
+.button-danger:hover {
+  border-color: var(--danger-hover);
+  background: var(--danger-hover);
+  color: var(--on-danger);
 }
 
 /* A Tango or Nome icon, shown at 22 px in a button (see images/icons/README.md). */
@@ -417,9 +436,98 @@ code {
   box-shadow: 0 0 0 1px var(--border);
 }
 
-/* On narrow screens: logo and language on the first row, the sections below. */
+/* The cut picker and the language picker, side by side. */
+.header-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* The cut picker: a toggle and its menu, which look like the language picker above. A cut is shown by its icon and
+   its name (.cut-option). */
+.cut-picker {
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.cut-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.5rem 0.3rem 0.6rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.cut-toggle:hover,
+.cut-toggle[aria-expanded="true"] {
+  border-color: var(--accent);
+}
+
+.cut-toggle-arrow {
+  color: var(--text-muted);
+  transition: transform 0.15s ease;
+}
+
+.cut-toggle[aria-expanded="true"] .cut-toggle-arrow {
+  transform: rotate(180deg);
+}
+
+.cut-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.cut-option img {
+  flex: none;
+}
+
+.cut-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 100;
+  padding: 0.25rem 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.cut-menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.35rem 0.75rem;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  line-height: 1.4;
+  text-align: start;
+  cursor: pointer;
+}
+
+.cut-menu-item:hover,
+.cut-menu-item:focus-visible {
+  background: var(--accent-soft);
+}
+
+/* The current cut, like the chosen language. */
+.cut-menu-item[aria-current="true"] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* On narrow screens: logo and pickers on the first row, the sections below. */
 @media (max-width: 44rem) {
-  .language-picker {
+  .header-tools {
     margin-inline-start: auto;
   }
 
@@ -428,6 +536,20 @@ code {
     width: 100%;
     margin-inline-start: 0;
     padding-bottom: 0.25rem;
+  }
+}
+
+/* On a phone, the toggle of the cut picker shows only the icon of the cut, so that the logo and both pickers fit on one
+   row. Screen readers still read the name (as with .visually-hidden). */
+@media (max-width: 32rem) {
+  .cut-toggle .cut-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }
 
@@ -538,7 +660,14 @@ code {
   background: var(--accent-soft);
 }
 
-/* A Tango emote, shown at 48 px as the face of the author (see images/icons/README.md). */
+/* A musing that warns: red instead of green. */
+.musing-warning {
+  border-inline-start-color: var(--danger-top);
+  background: var(--danger-soft);
+}
+
+/* A Tango emote, shown at 48 px as the face of the author, or dialog-warning.svg in a warning (see
+   images/icons/README.md). */
 .musing-icon {
   flex: none;
 }
@@ -1047,8 +1176,10 @@ sup {
   background: var(--accent-soft);
 }
 
-/* The SHA-256 of a file, opened from the menu of its download button. */
-.checksum-dialog {
+/* The SHA-256 of a file, opened from the menu of its download button. The dialog that asks before switching to the
+   Director's Cut (.cut-dialog, at the end) looks the same. */
+.checksum-dialog,
+.cut-dialog {
   width: min(100% - 2rem, 36rem);
   padding: 0;
   border: 1px solid var(--border-strong);
@@ -1058,7 +1189,8 @@ sup {
   box-shadow: var(--shadow);
 }
 
-.checksum-dialog::backdrop {
+.checksum-dialog::backdrop,
+.cut-dialog::backdrop {
   background: rgb(0 0 0 / 0.45);
 }
 
@@ -1445,6 +1577,214 @@ sup {
   border-top: 1px solid var(--border);
 }
 
+/* ---- The dialog before the Director's Cut ------------------------------- */
+
+/* Its frame is the one of .checksum-dialog. The text is long: on a small screen, the dialog scrolls. */
+.cut-dialog {
+  width: min(100% - 2rem, 40rem);
+}
+
+.cut-dialog-body {
+  padding: 1.25rem 1.5rem;
+}
+
+/* The browser focuses the title when the dialog opens (autofocus), so that the dialog shows its top, instead of
+   scrolling down to a button. The title is not a control: no focus ring. */
+.cut-dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.cut-dialog-title:focus {
+  outline: none;
+}
+
+.cut-dialog-body > p,
+.cut-dialog-body > .musing {
+  margin: 0 0 0.75rem;
+}
+
+/* The labels of the buttons are long: one button per row, each as wide as the dialog, the icon then the text. */
+.cut-dialog-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+/* <button>s: unlike the links of the other buttons, they need the font of the page and a pointer. */
+.cut-dialog-buttons .button {
+  justify-content: flex-start;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+/* The button that continues (.terms-continue), until the document is read to its end. */
+.cut-dialog-buttons .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- The terms of the Director's Cut ------------------------------------ */
+
+/* The title and the buttons stay in place; the terms scroll between them. */
+.terms-dialog {
+  height: min(100% - 2rem, 52rem);
+}
+
+.terms-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.terms-body > .terms-reminder {
+  font-weight: 600;
+}
+
+.terms-text {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 1rem 0.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface-sunken);
+  font-size: 0.95rem;
+}
+
+/* The title and the date at the top of a document, as a contract has them: centered, over a double rule. */
+.terms-head {
+  margin: 0.75rem 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px double var(--border-strong);
+  text-align: center;
+}
+
+.terms-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.terms-revised {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+}
+
+.terms-unavailable {
+  margin: 0.75rem 0 0;
+}
+
+/* The preamble of the additional articles. */
+.terms-preamble {
+  margin: 1rem 0 0;
+}
+
+/* The titles of chapters and of sections, centered as in a law. An article has an <h4>, or an <h5> in a section. */
+.terms-chapter > h3,
+.terms-section > h4 {
+  margin: 1.5rem 0 0.25rem;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.terms-section > h4 {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+}
+
+.terms-article > :is(h4, h5) {
+  margin: 1rem 0 0.25rem;
+  font-size: 1rem;
+}
+
+/* The additional articles are not written like a law: numbered clauses (1-2, 4-1-3), with the number in a column of
+   its own, and left-aligned titles. */
+.terms-outline > h3,
+.terms-outline .terms-section > h4 {
+  text-align: start;
+}
+
+.terms-number {
+  margin-inline-end: 0.6em;
+  font-weight: 700;
+}
+
+.terms-clauses {
+  margin: 0.25rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.terms-clauses > li {
+  display: grid;
+  grid-template-columns: 4em minmax(0, 1fr);
+  margin: 0.35rem 0;
+}
+
+/* The clauses of a clause, under its text. */
+.terms-clauses .terms-clauses {
+  margin-bottom: 0;
+}
+
+.terms-article p,
+.terms-items {
+  margin: 0 0 0.35rem;
+}
+
+/* Paragraphs are not numbered. In Taiwan Traditional they start two characters in, as Article 8 of the Central Regulation Standard
+   Act of Taiwan says; in Japanese, one character in. */
+:lang(zh-TW) .terms-article p {
+  text-indent: 2em;
+}
+
+:lang(ja) .terms-article p {
+  text-indent: 1em;
+}
+
+/* Subparagraphs are numbered as in a law, lined up with the start of the paragraphs: 1. in English, and CJK numerals in
+   Taiwan Traditional (followed by an ideographic comma) and in Japanese (followed by an ideographic space, U+3000). */
+@counter-style terms-ja {
+  system: extends japanese-informal;
+  suffix: "\3000";
+}
+
+.terms-items {
+  padding-inline-start: 2em;
+}
+
+:lang(zh-TW) .terms-items {
+  padding-inline-start: 4em;
+  list-style: cjk-ideographic;
+}
+
+:lang(ja) .terms-items {
+  padding-inline-start: 3em;
+  list-style: terms-ja;
+}
+
+.terms-closing {
+  margin: 1.5rem 0 0;
+  font-weight: 600;
+}
+
+/* The end of the terms: once it is visible, the button that continues can be pressed (see main.js). */
+.terms-end {
+  height: 1px;
+}
+
+.terms-body > .terms-hint {
+  margin: 0.75rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
 /* ---- Motion -------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1455,6 +1795,7 @@ sup {
   .screenshot-button,
   .site-nav a::after,
   .llselect-trigger-arrow,
+  .cut-toggle-arrow,
   .faq-item > summary::after {
     transition: none;
   }

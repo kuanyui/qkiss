@@ -1,5 +1,5 @@
 /*
- * QKiSS website: translations, the screenshot gallery and the download links.
+ * QKiSS website: translations and the cuts of the page, the screenshot gallery and the download links.
  *
  * Loaded synchronously in <head> (not deferred), so that it can choose the
  * language and start downloading its translation before the page is first
@@ -12,7 +12,11 @@
   const LANGUAGES = JSON.parse(document.getElementById('languages').textContent);
   /** The language whose strings are written directly in index.html. */
   const SOURCE_LANGUAGE = LANGUAGES[0].id;
-  const STORAGE_KEY = 'qkiss-homepage.language';
+  const LANGUAGE_STORAGE_KEY = 'qkiss-homepage.language';
+  /** The cut the visitor chose last (see currentCut). */
+  const CUT_STORAGE_KEY = 'qkiss-homepage.cut';
+  /** Set once the visitor agreed to the terms of the Director's Cut and their additional articles: then switching to it asks nothing again. */
+  const TERMS_STORAGE_KEY = 'qkiss-homepage.cut-terms';
   /** Show the page anyway if the translation takes longer than this. */
   const LOADING_TIMEOUT_MS = 2000;
   const SCREENSHOTS_DIR = 'screenshots/';
@@ -47,17 +51,18 @@
     })?.id;
   }
 
-  function readStoredLanguage() {
+  /** A choice of the visitor, remembered from a previous visit, or null. */
+  function readStored(key) {
     try {
-      return localStorage.getItem(STORAGE_KEY);
+      return localStorage.getItem(key);
     } catch {
       return null;  // Storage can be disabled by privacy settings.
     }
   }
 
-  function storeLanguage(id) {
+  function store(key, value) {
     try {
-      localStorage.setItem(STORAGE_KEY, id);
+      localStorage.setItem(key, value);
     } catch {
       // Then the choice is just not remembered for the next visit.
     }
@@ -65,7 +70,7 @@
 
   /** `?lang=` in the URL, then the visitor's previous choice, then the browser's languages. */
   function chooseInitialLanguage() {
-    for (const candidate of [new URLSearchParams(location.search).get('lang'), readStoredLanguage()]) {
+    for (const candidate of [new URLSearchParams(location.search).get('lang'), readStored(LANGUAGE_STORAGE_KEY)]) {
       const id = candidate && findLanguage(candidate);
       if (id) return id;
     }
@@ -109,11 +114,21 @@
   // Translations
   // ---------------------------------------------------------------------------
 
+  /**
+   * The cut of the page: "safe" (the Wholesome Cut, the default) or "danger" (the Director's Cut, once the visitor
+   * agreed in #cut-dialog). A string can have one version per cut: an object `{ "safe": …, "danger": … }` in the
+   * dictionaries. The dictionary of the source language has only "danger": its "safe" is the page itself.
+   * See "The Director's Cut" in homepage/README.md.
+   */
+  let currentCut = readStored(CUT_STORAGE_KEY) === 'danger' ? 'danger' : 'safe';
+
   /** Language id -> Promise of its `{ key: translation }` dictionary. */
   const dictionaries = new Map();
 
   function loadDictionary(id) {
-    if (id === SOURCE_LANGUAGE) return Promise.resolve({});  // Its strings are the page itself.
+    // The strings of the source language are the page itself. Its dictionary has only the strings of the Director's
+    // Cut, so it is downloaded only for the Director's Cut.
+    if (id === SOURCE_LANGUAGE && currentCut === 'safe' && !dictionaries.has(id)) return Promise.resolve({});
     if (!dictionaries.has(id)) {
       dictionaries.set(id, fetch(`i18n/${id}.json`)
         .then((response) => {
@@ -135,19 +150,36 @@
    */
   const targets = [];
 
+  /** Elements hidden by showUnlessEmpty(). */
+  const emptied = new Set();
+
+  /**
+   * A string can be empty in one cut, like a footnote that only the Director's Cut has. Then its element is hidden:
+   * for a footnote, the whole footnote. In index.html, such an element is empty and hidden (see homepage/README.md).
+   */
+  function showUnlessEmpty(element, value) {
+    const box = element.closest('.footnotes > p') ?? element;
+    if (value === '') {
+      box.hidden = true;
+      emptied.add(box);
+    } else if (emptied.delete(box)) {
+      box.hidden = false;
+    }
+  }
+
   function collectTargets() {
     for (const element of document.querySelectorAll('[data-i18n]')) {
       targets.push({
         key: element.dataset.i18n,
         source: element.textContent,
-        apply: (value) => { element.textContent = value; },
+        apply: (value) => { element.textContent = value; showUnlessEmpty(element, value); },
       });
     }
     for (const element of document.querySelectorAll('[data-i18n-html]')) {
       targets.push({
         key: element.dataset.i18nHtml,
         source: element.innerHTML,
-        apply: (value) => { element.innerHTML = value; },
+        apply: (value) => { element.innerHTML = value; showUnlessEmpty(element, value); },
       });
     }
     for (const element of document.querySelectorAll('[data-i18n-attr]')) {
@@ -162,18 +194,49 @@
     }
   }
 
+  /**
+   * The string of `target` in the current cut: from the first dictionary of `chain` that has it, else the page itself.
+   * An object without a version for the current cut does not count.
+   */
+  function lookUp(target, chain) {
+    for (const dictionary of chain) {
+      if (!Object.hasOwn(dictionary, target.key)) continue;
+      const value = dictionary[target.key];
+      if (typeof value === 'string') return value;
+      if (Object.hasOwn(value, currentCut)) return value[currentCut];
+    }
+    return target.source;
+  }
+
+  /**
+   * Number the footnotes of each `.footnotes` block from *1, skipping the hidden ones (a cut can hide some), on their
+   * back links and on the references to them. A block whose footnotes are all hidden is hidden too.
+   */
+  function numberFootnotes() {
+    for (const block of document.querySelectorAll('.footnotes')) {
+      let count = 0;
+      for (const footnote of block.querySelectorAll(':scope > p[id]')) {
+        if (footnote.hidden) continue;
+        const label = `*${++count}`;
+        footnote.querySelector('.footnote-back').textContent = label;
+        for (const ref of document.querySelectorAll(`.footnote-ref a[href="#${footnote.id}"]`)) ref.textContent = label;
+      }
+      block.hidden = count === 0;
+    }
+  }
+
   const englishOnly = isEnglishOnly();
-  /** The language chosen last. A translation arriving for an earlier choice is dropped. */
+  /** The language chosen last. A translation arriving for an earlier choice (of language or cut) is dropped. */
   let currentLanguage = englishOnly ? SOURCE_LANGUAGE : chooseInitialLanguage();
 
+  /** Show the page in the language `id`, in the current cut. */
   async function setLanguage(id) {
     currentLanguage = id;
+    const cut = currentCut;
     const chain = await Promise.all(fallbackChain(id).map(loadDictionary));
-    if (currentLanguage !== id) return;
-    for (const target of targets) {
-      const dictionary = chain.find((candidate) => Object.hasOwn(candidate, target.key));
-      target.apply(dictionary ? dictionary[target.key] : target.source);
-    }
+    if (currentLanguage !== id || currentCut !== cut) return;
+    for (const target of targets) target.apply(lookUp(target, chain));
+    numberFootnotes();
     root.lang = htmlLang(id);
     renderGallery();
     renderReleaseLinks();
@@ -186,7 +249,7 @@
 
   /** A language the visitor picked: remember it, and put it in the URL for sharing. */
   function chooseLanguage(id) {
-    storeLanguage(id);
+    store(LANGUAGE_STORAGE_KEY, id);
     const url = new URL(location.href);
     if (id === SOURCE_LANGUAGE) {
       url.searchParams.delete('lang');
@@ -235,6 +298,207 @@
     picker.setItems(LANGUAGES);
     picker.setChosenItem(languagesById.get(currentLanguage));
     document.getElementById('language-picker').hidden = false;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Cut picker: the Wholesome Cut or the Director's Cut (see currentCut)
+  // ---------------------------------------------------------------------------
+
+  /** Show the current cut in the toggle of the picker, and mark it in the menu. */
+  function renderCutPicker() {
+    for (const option of document.querySelectorAll('#cut-toggle .cut-option')) {
+      option.hidden = option.dataset.cut !== currentCut;
+    }
+    for (const item of document.querySelectorAll('#cut-menu .cut-menu-item')) {
+      if (item.dataset.cut === currentCut) {
+        item.setAttribute('aria-current', 'true');
+      } else {
+        item.removeAttribute('aria-current');
+      }
+    }
+  }
+
+  /** A cut the visitor chose (the Director's Cut only after agreeing): remember it, and show the page in it. */
+  function chooseCut(cut) {
+    currentCut = cut;
+    store(CUT_STORAGE_KEY, cut);
+    renderCutPicker();
+    setLanguage(currentLanguage);
+  }
+
+  /** Name ("terms", "amendments") -> Promise of that document of the Director's Cut (legal/<name>.json), or of null. */
+  const legalDocuments = new Map();
+
+  function loadLegalDocument(name) {
+    if (!legalDocuments.has(name)) {
+      legalDocuments.set(name, fetch(`legal/${name}.json`)
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.json();
+        })
+        .catch((error) => {
+          console.error(`Cannot load legal/${name}.json:`, error);
+          legalDocuments.delete(name);  // Try again the next time.
+          return null;
+        }));
+    }
+    return legalDocuments.get(name);
+  }
+
+  /**
+   * The HTML of a document of the Director's Cut in the current language: its chapters and sections, with either
+   * articles written like a law (the terms: their paragraphs and subparagraphs are numbered and indented by style.css
+   * as laws are), or numbered clauses (the additional articles: 1-2, 4-1-3…, numbered here from their position, with
+   * the separator of the document in the current language, `numberSeparator`; a clause can write its own number as
+   * `{number}`).
+   * Its texts are HTML, like the strings of data-i18n-html, each one in the current language or else in its fallback
+   * language (localize()). It starts with `titleHtml` and the date, as a contract does.
+   */
+  function renderLegalDocument(doc, titleHtml) {
+    const title = (tag, value, number) => `<${tag}>`
+      + (number ? `<span class="terms-number">${number}</span>` : '') + `${localize(value)}</${tag}>`;
+    const article = (a, tag) => `<section class="terms-article">${title(tag, a.title)}`
+      + a.body.map((block) => (block.items
+        ? `<ol class="terms-items">${block.items.map((item) => `<li>${localize(item)}</li>`).join('')}</ol>`
+        : `<p>${localize(block)}</p>`)).join('')
+      + '</section>';
+    const separator = doc.numberSeparator ? localize(doc.numberSeparator) : '-';
+    const clauses = (list, prefix) => `<ol class="terms-clauses">${list.map((clause, i) => {
+      const number = `${prefix}${separator}${i + 1}`;
+      return `<li><span class="terms-number">${number}</span><div>${localize(clause).replaceAll('{number}', number)}`
+        + (clause.clauses ? clauses(clause.clauses, number) : '') + '</div></li>';
+    }).join('')}</ol>`;
+    const content = (part, number, articleTag) => (part.clauses
+      ? clauses(part.clauses, number)
+      : part.articles.map((a) => article(a, articleTag)).join(''));
+    const chapters = doc.chapters.map((chapter, c) => {
+      const n = String(c + 1);
+      const numbered = Boolean(chapter.clauses || chapter.sections?.some((section) => section.clauses));
+      return `<section class="terms-chapter${numbered ? ' terms-outline' : ''}">${title('h3', chapter.title, numbered && n)}`
+        + (chapter.sections
+          ? chapter.sections.map((section, s) => `<section class="terms-section">${title('h4', section.title, numbered && `${n}${separator}${s + 1}`)}`
+            + content(section, `${n}${separator}${s + 1}`, 'h5') + '</section>').join('')
+          : content(chapter, n, 'h4'))
+        + '</section>';
+    });
+    return `<header class="terms-head"><p class="terms-title">${titleHtml}</p>`
+      + `<p class="terms-revised">${localize(doc.date)}</p></header>`
+      + (doc.preamble ? `<p class="terms-preamble">${localize(doc.preamble)}</p>` : '')
+      + chapters.join('')
+      + (doc.closing ? `<p class="terms-closing">${localize(doc.closing)}</p>` : '');
+  }
+
+  /** Open a dialog of the cut picker. */
+  function ask(dialog) {
+    dialog.returnValue = '';   // what Escape and a click outside the dialog leave
+    dialog.showModal();
+  }
+
+  /**
+   * Set up a dialog that shows a document of the Director's Cut (legal/<name>.json), loaded when it opens. Its
+   * button that continues (.terms-continue) waits until the end of the document is visible: after scrolling to it, or at once if the document
+   * fits. Returns the function that loads the document, then opens the dialog at its top.
+   */
+  function setUpDocumentDialog(dialog, name) {
+    const text = dialog.querySelector('.terms-text');
+    const content = dialog.querySelector('.terms-content');
+    const unavailable = dialog.querySelector('.terms-unavailable');
+    const continueButton = dialog.querySelector('.terms-continue');
+    const hint = dialog.querySelector('.terms-hint');
+    const heading = dialog.querySelector('.cut-dialog-title [data-i18n]');   // also the title of the document
+    /** Whether `content` holds the document: the button that continues waits for its end. */
+    let loaded = false;
+
+    new IntersectionObserver((entries) => {
+      if (dialog.open && loaded && entries.some((entry) => entry.isIntersecting)) {
+        continueButton.disabled = false;
+        hint.hidden = true;
+      }
+    }, { root: text }).observe(dialog.querySelector('.terms-end'));
+
+    return async () => {
+      const doc = await loadLegalDocument(name);
+      if (document.querySelector('dialog[open]')) return;   // Another dialog was opened in the meantime.
+      if (doc) {
+        content.innerHTML = renderLegalDocument(doc, heading.innerHTML);
+      } else {
+        content.replaceChildren();
+      }
+      loaded = doc !== null;
+      unavailable.hidden = loaded;
+      continueButton.disabled = true;
+      hint.hidden = false;
+      ask(dialog);
+      text.scrollTop = 0;
+    };
+  }
+
+  /**
+   * The first switch to the Director's Cut asks three times: #cut-dialog, the terms (#terms-dialog), then their
+   * additional articles (#amendments-dialog). Each one is a <form method="dialog">: only its first button closes it
+   * with "danger". Escape, the other button and a click outside it (on the backdrop: the padding is on
+   * .cut-dialog-body) close it without.
+   */
+  function setUpCutPicker() {
+    const picker = document.getElementById('cut-picker');
+    const toggle = document.getElementById('cut-toggle');
+    const menu = document.getElementById('cut-menu');
+    const warning = document.getElementById('cut-dialog');
+    const terms = document.getElementById('terms-dialog');
+    const amendments = document.getElementById('amendments-dialog');
+    const openTerms = setUpDocumentDialog(terms, 'terms');
+    const openAmendments = setUpDocumentDialog(amendments, 'amendments');
+
+    function setMenuOpen(open) {
+      toggle.setAttribute('aria-expanded', String(open));
+      menu.hidden = !open;
+    }
+
+    toggle.addEventListener('click', () => setMenuOpen(menu.hidden));
+    for (const item of menu.querySelectorAll('.cut-menu-item')) {
+      item.addEventListener('click', () => {
+        setMenuOpen(false);
+        toggle.focus();
+        if (item.dataset.cut === currentCut) return;
+        if (item.dataset.cut === 'safe') {
+          chooseCut('safe');
+        } else if (readStored(TERMS_STORAGE_KEY) === 'agreed') {
+          chooseCut('danger');
+        } else {
+          ask(warning);
+          loadLegalDocument('terms');   // Start downloading the documents while the warning is read.
+          loadLegalDocument('amendments');
+        }
+      });
+    }
+    for (const dialog of [warning, terms, amendments]) {
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+    }
+    warning.addEventListener('close', () => {
+      if (warning.returnValue === 'danger') openTerms();
+    });
+    terms.addEventListener('close', () => {
+      if (terms.returnValue === 'danger') openAmendments();
+    });
+    amendments.addEventListener('close', () => {
+      if (amendments.returnValue !== 'danger') return;
+      store(TERMS_STORAGE_KEY, 'agreed');
+      chooseCut('danger');
+    });
+    // A click anywhere else, or Escape, closes the menu.
+    document.addEventListener('click', (event) => {
+      if (!menu.hidden && !picker.contains(event.target)) setMenuOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !menu.hidden) {
+        setMenuOpen(false);
+        toggle.focus();
+      }
+    });
+    renderCutPicker();
+    picker.hidden = false;
   }
 
   // ---------------------------------------------------------------------------
@@ -608,8 +872,8 @@
   // Start
   // ---------------------------------------------------------------------------
 
-  if (currentLanguage !== SOURCE_LANGUAGE) {
-    // Hide the page until it is translated, instead of flashing the source language first.
+  if (currentLanguage !== SOURCE_LANGUAGE || currentCut === 'danger') {
+    // Hide the page until it is translated, instead of flashing the source language (or the Wholesome Cut) first.
     root.classList.add('i18n-loading');
     setTimeout(() => root.classList.remove('i18n-loading'), LOADING_TIMEOUT_MS);
     fallbackChain(currentLanguage).forEach(loadDictionary);  // Start downloading right now.
@@ -619,6 +883,7 @@
     setUpDownloadMenus();   // before collectTargets(): the menus are translated too
     collectTargets();
     if (!englishOnly) setUpLanguagePicker();   // Otherwise it stays hidden.
+    setUpCutPicker();
     setUpShowcase();
     setUpLightbox();
     setUpScrollSpy();
