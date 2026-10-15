@@ -75,7 +75,7 @@
           <button type="button" class="cut-toggle" id="cut-toggle" aria-labelledby="cut-label cut-toggle" aria-expanded="false" aria-controls="cut-menu">
             <span class="cut-option" data-cut="safe"><img src="images/icons/face-angel.svg" alt="" width="20" height="20"><span class="cut-name" data-i18n="cut.safe">Wholesome Cut</span></span>
             <span class="cut-option" data-cut="danger" hidden><img src="images/icons/applications-multimedia.svg" alt="" width="20" height="20"><span class="cut-name" data-i18n="cut.danger">Director's Cut</span></span>
-            <svg class="icon cut-toggle-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="cut-toggle-arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z" fill="currentColor"/></svg>
           </button>
           <div class="cut-menu" id="cut-menu" hidden>
             <button type="button" class="cut-menu-item" data-cut="danger"><span class="cut-option"><img src="images/icons/applications-multimedia.svg" alt="" width="20" height="20"><span data-i18n="cut.danger">Director's Cut</span></span></button>
@@ -119,12 +119,12 @@
 
         <h3 data-i18n="about.why.title">Why QKiSS?</h3>
         <p data-i18n-html="about.why.body">By 2024, the existing KiSS viewers for Linux had stopped working: <a href="https://www2s.biglobe.ne.jp/~yav/kiss/index.html">fkiss</a> can still be built but no longer runs, and <a href="https://devel.tlrmx.org/kiss/">GnomeKiSS</a> depends on outdated GNOME 2 libraries that most distributions no longer ship. Inspired by both, QKiSS was built from scratch.</p>
-        <p data-i18n="about.why.web">Yes, I know there are some KiSS implementations which can run in a Web browser by using Web technologies directly, but they are (technically and architecturally) ugly when you want to turn them into a desktop application integrated with your OS and file system; I'm also tired of writing lots of disgusting HTML / CSS / JS as a workaround to make a web page pretend to be a native application, and then pack it into a bloated blob of an executable; and such a thing which actually can be done in a light-weight way should not need a browser at all, nor some Chimera like Electron. Similar reasons also apply to Java, which runs unbearably slow.</p>
-        <p data-i18n="about.why.practice">Besides, it was also a chance to practice writing a somewhat sizable project in C++. After all, it really is quite fun to write. (Although by the time I finished, this world of LLMs no longer seems to need a loser like me to write programs: the kind who grinds LeetCode for three months, then starts wishing to be reincarnated in another world.)</p>
+        <p data-i18n="about.why.web">Yes, I know there are some KiSS implementations which can run in a Web browser by using Web technologies directly, but they are (technically and architecturally) awkward when you want to turn them into a desktop application integrated with your OS and file system; and such a thing which actually can be done in a light-weight way should not need a browser at all.</p>
+        <p data-i18n="about.why.practice">Besides, it was also a chance to practice writing a somewhat sizable project in C++. After all, it really is quite fun to write.</p>
         <blockquote class="musing">
           <img class="musing-icon" src="images/icons/face-angel.svg" alt="" width="48" height="48">
           <div>
-            <p data-i18n-html="about.nostalgia">This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a lost age before Internet was polluted by AI-generated junk (this project does use some AI though). After all, life is frightening enough as it is; the real world is a hot mess, while <a href="https://ja.wikipedia.org/wiki/2次元">nijigen</a> and <a href="https://w.wiki/4So4">isekai</a> remain a pure promised land.</p>
+            <p data-i18n-html="about.nostalgia">This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era. After all, life is frightening enough as it is; the real world is a hot mess, while <a href="https://ja.wikipedia.org/wiki/2次元">nijigen</a> and <a href="https://w.wiki/4So4">isekai</a> remain a pure promised land.</p>
             <p data-i18n-html="about.animen">Verily, verily, I say unto you: ye shall consider nijigen and isekai. Animen.</p>
           </div>
         </blockquote>
@@ -152,41 +152,41 @@
               <li data-i18n="features.specs.kiss">Implements the KISS/GS base specification, and an interpreter for the interactive scripts of FKiSS 1 &amp; 2 (in tests, 90% of Japanese KiSS sets run fine).</li>
               <li data-i18n="features.specs.fkiss34">FKiSS 3 &amp; 4 have too few sets, almost none of them by Japanese KiSS artists, so they were not worth the bother.</li>
               <li data-i18n="features.specs.unfix">One-click unfix: who wants to sit there clicking a fixed item over and over? Playing shouldn't feel like work.</li>
-              <li id="footnote-ref-weblin" data-i18n-html="features.specs.electron">No Electron, which no user likes (these Weblins<sup class="footnote-ref"><a href="#footnote-weblin">*1</a></sup> who use Electron to dress up web pages as native apps seem to think your RAM is free).</li>
+              <li id="footnote-ref-weblin" data-i18n-html="features.specs.electron">No Electron.</li>
             </ul>
           </li>
           <li class="feature">
             <h3><img class="feature-icon" src="images/icons/applications-engineering.svg" alt="" width="32" height="32"><span data-i18n="features.misc.title">The romance of engineering and aesthetics</span></h3>
             <ul>
-              <li id="footnote-ref-website" data-i18n-html="features.misc.handmade">The code of the main program is handcrafted, without LLM agents<sup class="footnote-ref"><a href="#footnote-website">*2</a></sup> (and is probably the author's last hand-written software project, so cherish it while it lasts).</li>
+              <li id="footnote-ref-website" data-i18n-html="features.misc.handmade">The code of the main program is handcrafted, without LLM agents<sup class="footnote-ref"><a href="#footnote-website">*1</a></sup> (and is probably the author's last hand-written software project, so cherish it while it lasts).</li>
               <li data-i18n="features.misc.linux">Linux is no longer a second-class citizen (Windows is).</li>
-              <li id="footnote-ref-supply-chain" data-i18n-html="features.misc.open">Open source and automated builds make sure I didn't sneak anything naughty in<sup class="footnote-ref"><a href="#footnote-supply-chain">*3</a></sup>.</li>
+              <li id="footnote-ref-supply-chain" data-i18n-html="features.misc.open">Open source and automated builds make sure I didn't sneak anything naughty in<sup class="footnote-ref"><a href="#footnote-supply-chain">*2</a></sup>.</li>
               <li data-i18n="features.misc.tango">Tango-style UI icons take you back to the 2000s.</li>
-              <li id="footnote-ref-author" data-i18n-html="features.misc.apparmor">An AppArmor profile for tinfoil-hat security nerds<sup class="footnote-ref"><a href="#footnote-author">*4</a></sup> who get a braingasm whenever the LSM spits out a DENIED audit log.</li>
+              <li id="footnote-ref-author" data-i18n-html="features.misc.apparmor">An AppArmor profile for tinfoil-hat security nerds.</li>
               <li data-i18n="features.misc.qt">Built with Qt 6 / C++ 20, without caring about old systems.</li>
             </ul>
           </li>
         </ul>
         <div class="footnotes">
-          <p id="footnote-weblin">
+          <p id="footnote-weblin" hidden>
             <a class="footnote-back" href="#footnote-ref-weblin" aria-label="Back to the text" title="Back to the text"
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
-            <span data-i18n-html="features.footnote.weblin">Weblin: a goblin who writes for the web, at <a href="https://vinta.ws/blog/695">the bottom of the food chain</a> in the industry jungle. Commonly known as a web developer. For example, the author of QKiSS.</span>
+            <span data-i18n-html="features.footnote.weblin"></span>
           </p>
           <p id="footnote-website">
             <a class="footnote-back" href="#footnote-ref-website" aria-label="Back to the text" title="Back to the text"
-               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
             <span data-i18n-html="features.footnote.website">The use of LLMs in each area of this project is disclosed in <a href="#faq-llm">Q&amp;A</a>. For example, the HTML / CSS / JS of this website was left entirely to an LLM agent, because I have no interest in spending the weekend hours of my life writing web pages anymore; I am a dog kept by OpenAI and Anthropic. Woof woof.</span>
           </p>
           <p id="footnote-supply-chain">
             <a class="footnote-back" href="#footnote-ref-supply-chain" aria-label="Back to the text" title="Back to the text"
-               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*3</a>
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
             <span data-i18n="features.footnote.supply-chain">Force majeure, including but not limited to supply chain attacks (like the incidents of XZ Utils, or of tj-actions/changed-files on GitHub Actions), is not covered.</span>
           </p>
-          <p id="footnote-author">
+          <p id="footnote-author" hidden>
             <a class="footnote-back" href="#footnote-ref-author" aria-label="Back to the text" title="Back to the text"
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*4</a>
-            <span data-i18n="features.footnote.author">For example, the author of QKiSS.</span>
+            <span data-i18n="features.footnote.author"></span>
           </p>
         </div>
       </div>
@@ -366,7 +366,7 @@
             <div class="faq-answer">
               <p data-i18n-html="faq.selinux.model">It doesn't fit the use case. SELinux's security model is inherently bad at “deny access to a few folders such as <code>~/.config/autostart</code>, and allow access to everything else”, and I can't force users to put their KiSS LZH files only into some hardcoded <code>~/qkiss</code> folder.</p>
               <p id="footnote-ref-work" data-i18n-html="faq.selinux.rare">Besides, on the Linux desktop, people who deliberately run GUI apps outside <code>unconfined_t</code> must be rare. Such people either work at the Pentagon<sup class="footnote-ref"><a href="#footnote-work">*1</a></sup>, or moved to Qubes OS long ago.</p>
-              <p data-i18n-html="faq.selinux.naming">One more thing: I'm allergic to the taste of SELinux's command names. <code>getenforce</code>, <code>chcon</code>, <code>load_policy</code>, <code>restorecon</code> and a pile of other commands refuse to have an <code>se</code> prefix, and crap all over <code>/sbin/</code>. If writing this in my free time got me a work injury, there would be no insurance payout.</p>
+              <p data-i18n-html="faq.selinux.naming" hidden></p>
               <p data-i18n="faq.selinux.landlock">But even if you use SELinux, you still have the protection of Landlock and seccomp, which covers only the extraction by the two external programs, lha and unar.</p>
               <div class="footnotes">
                 <p id="footnote-work">
@@ -448,7 +448,7 @@
                   <span class="llm-bar" style="--share: 60%; --share-max: 70%" aria-hidden="true"></span>
                   <span class="llm-share">60–70%</span>
                   <ul class="llm-names"><li>Gemini</li><li>ChatGPT</li><li>Claude Code</li></ul>
-                  <p class="llm-note" data-i18n="faq.llm.actions.note">For the Windows packages (I have no Windows development environment). No idea why Gemini does this better, while ChatGPT keeps spouting bullshit in this field. Before the public release, I realized that fighting this was a waste of time, so I let an LLM agent debug it and write the rest of the code.</p>
+                  <p class="llm-note" data-i18n="faq.llm.actions.note">For the Windows packages (I have no Windows development environment). Before the public release, I realized that fighting this was a waste of time, so I let an LLM agent debug it and write the rest of the code.</p>
                 </li>
                 <li class="llm-area">
                   <span class="llm-icon"><img src="images/icons/package-x-generic.svg" alt="" width="22" height="22"></span>
@@ -472,7 +472,7 @@
                   <span class="llm-bar" style="--share: 80%" aria-hidden="true"></span>
                   <span class="llm-share">80%</span>
                   <ul class="llm-names"><li>Claude Code</li></ul>
-                  <p class="llm-note" data-i18n="faq.llm.website.note">All the translations, and all the HTML / CSS / JS… I can't be bothered anymore to spend my free time writing web pages, the bottom of the programmers' food chain.</p>
+                  <p class="llm-note" data-i18n="faq.llm.website.note">All the translations, and all the HTML / CSS / JS… I can't be bothered anymore to spend my free time writing web pages.</p>
                 </li>
                 <li class="llm-area">
                   <span class="llm-icon"><img src="images/icons/applications-graphics.svg" alt="" width="22" height="22"></span>
@@ -513,7 +513,7 @@
           <div>
             <h3 id="promo-title" data-i18n="features.tango-remixer.title">Have you noticed the style of the icons on this website?</h3>
             <p data-i18n-html="features.tango-remixer.style">It is a style of icon design for graphical user interfaces called <span id="footnote-ref-wikipedia"><a href="https://web.archive.org/web/20250829073407/https://en.wikipedia.org/wiki/Tango_Desktop_Project">Tango Desktop</a></span><sup class="footnote-ref"><a href="#footnote-wikipedia">*1</a></sup>, proposed by freedesktop.org and popular around 2005–2010. If you used some free software back then, you may have seen it.</p>
-            <p data-i18n-html="features.tango-remixer.body">For the 2000s aesthetic romance of Tango-style UI icons, and to bring realistic icons back to <span id="footnote-ref-browsers">a world where flat UIs and monochrome icons, an arbitrary, trend-chasing design fad that never thinks of people with <a href="https://en.wikipedia.org/wiki/Dyslexia">dyslexia</a>, blow around like an ill wind</span><sup class="footnote-ref"><a href="#footnote-browsers">*2</a></sup>, I ended up making the <a href="https://kuanyui.github.io/tango-remixer/">Tango Remixer</a> project on the side, so I could easily stuff Tango icons into Qt projects like QKiSS and keep their look consistent across platforms; then I also took on maintaining three XDG-compatible icon theme packs from the 2000s. Then my OCD couldn't stand making the app public before its icons were pretty, so it took one more year...</p>
+            <p data-i18n-html="features.tango-remixer.body">For the 2000s aesthetic romance of Tango-style UI icons, and to bring realistic icons back, I ended up making the <a href="https://kuanyui.github.io/tango-remixer/">Tango Remixer</a> project on the side, so I could easily stuff Tango icons into Qt projects like QKiSS and keep their look consistent across platforms; then I also took on maintaining three XDG-compatible icon theme packs from the 2000s. Then I couldn't stand making the app public before its icons were pretty, so it took one more year...</p>
             <p data-i18n-html="features.tango-remixer.time">As it turned out, developing <a href="https://kuanyui.github.io/tango-remixer/">Tango Remixer</a>, and sorting out, fixing and drawing a pile of extra tango-flavoured icons, came, without exaggeration, close to taking longer than developing QKiSS itself. That is why QKiSS, started in August 2024, was only first released in October 2026...</p>
             <a class="button" href="https://kuanyui.github.io/tango-remixer/"><img class="button-icon" src="images/icons/web-browser.svg" alt="" width="22" height="22"><span data-i18n="features.tango-remixer.link">Visit the Tango Remixer website</span></a>
           </div>
@@ -524,10 +524,10 @@
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
             <span data-i18n-html="features.footnote.wikipedia">Not only has freedesktop.org removed the Tango Desktop website, <a href="https://tango.freedesktop.org/releases/">leaving only the tarballs</a>, but now even the English Wikipedia has deleted this article; only Archive.org and Wikipedia in other languages (e.g. <a href="https://de.wikipedia.org/wiki/Tango_Desktop_Project">de</a>, <a href="https://es.wikipedia.org/wiki/Tango_Desktop_Project">es</a>, <a href="https://ja.wikipedia.org/wiki/Tango_Desktop_Project">ja</a>) still have it... I can't figure out why it was deleted. Even more absurd, <a href="https://gitlab.freedesktop.org/tango/tango-icon-theme">the tango-icon-theme in the official Git repository of freedesktop.org itself is already incomplete</a>, for unknown reasons. Maybe records were lost when it was migrated from SVN or CVS to Git? Anyway, I at least hope that the Tango Remixer project can keep Tango Desktop alive, even if only as a historical record...</span>
           </p>
-          <p id="footnote-browsers">
+          <p id="footnote-browsers" hidden>
             <a class="footnote-back" href="#footnote-ref-browsers" aria-label="Back to the text" title="Back to the text"
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
-            <span data-i18n="features.footnote.browsers">Oh Firefox, what on earth is wrong with you, insisting on removing a pile of icons from the UI? Did it never occur to you that people with dyslexia quite likely use a UI by relying on “position → icon color → icon details → and only then the text”? Making the icons monochrome wasn't enough, and now you've removed them altogether. Even Chrome and Edge, two rogues who don't care whether their users live or die, do a little better than you on this: at least they kept the icons in their application menu. On icons, DuckDuckGo Browser actually does the best job. As far as I know, DuckDuckGo is currently (as of October 2026) the only mainstream browser that still keeps icons in its right-click context menu, crushing Firefox, Chrome, Edge, Vivaldi and Brave, every single one of them. And the icons of its settings screen are even in color! Do you know how excited I was to see that!</span>
+            <span data-i18n="features.footnote.browsers"></span>
           </p>
         </div>
       </div>
@@ -626,9 +626,12 @@
       <blockquote class="musing musing-warning">
         <img class="musing-icon" src="images/icons/dialog-warning.svg" alt="" width="48" height="48">
         <div>
-          <p data-i18n="cut.dialog.author">The Director's Cut may well be harmful to the mental health of others, but leaving it out is harmful to the author's own mental health.</p>
+          <p data-i18n="cut.dialog.author">The “Director's Cut” may well be harmful to the mental health of others, but leaving out the “Director's Cut” is harmful to the author's own mental health.</p>
+          <p data-i18n="cut.dialog.choice">Of two evils, the lesser is chosen: the author has therefore decided to protect their own sanity. Thank you for your understanding.</p>
+          <p data-i18n="cut.dialog.notice">The author has fulfilled the duty to inform.</p>
         </div>
       </blockquote>
+      <p data-i18n="cut.dialog.waiver">By clicking the agree button below, you, the User, of sound mind and under no duress from anyone, voluntarily waive all rights to criticize any sentence or opinion you will read on the QKiSS website from now on, and voluntarily waive all legal claims against the author of QKiSS for any negative consequences of reading it; nor shall you harass the original author or damage this project in any way, including but not limited to boycotts, harassment, attacks, verbal abuse and sabotage.</p>
       <div class="cut-dialog-buttons">
         <button class="button button-danger" value="danger"><img class="button-icon" src="images/icons/go-next.svg" alt="" width="22" height="22"><span data-i18n="cut.dialog.agree">I agree, I waive my rights and promise to follow the rules above, or else I'm a liar and a fraud, and no one will ever believe a word I say again</span></button>
         <button class="button button-primary" value="safe"><img class="button-icon" src="images/icons/face-angel.svg" alt="" width="22" height="22"><span data-i18n="cut.dialog.stay">I'd rather stay a wholesome person (Recommended)</span></button>
@@ -658,9 +661,9 @@
         <div class="terms-content"></div>
         <div class="terms-end"></div>
       </div>
-      <p class="terms-hint" data-i18n="terms.hint">You may click “I have actually read the provisions above” only after reading these Terms in full.</p>
+      <p class="terms-hint" data-i18n="terms.hint">You may click “I have actually read, and fully agree to, all of the provisions above” only after reading these Terms in full.</p>
       <div class="cut-dialog-buttons">
-        <button class="button button-danger terms-continue" value="danger" disabled><img class="button-icon" src="images/icons/applications-multimedia.svg" alt="" width="22" height="22"><span data-i18n="terms.continue">I have actually read the provisions above</span></button>
+        <button class="button button-danger terms-continue" value="danger" disabled><img class="button-icon" src="images/icons/applications-multimedia.svg" alt="" width="22" height="22"><span data-i18n="terms.continue">I have actually read, and fully agree to, all of the provisions above</span></button>
         <button class="button button-primary" value="safe"><img class="button-icon" src="images/icons/edit-undo.svg" alt="" width="22" height="22"><span data-i18n="terms.back">Turn back (Recommended)</span></button>
       </div>
     </form>
@@ -670,8 +673,9 @@
     <form class="cut-dialog-body terms-body" method="dialog">
       <h2 class="cut-dialog-title" id="amendments-title">
         <img src="images/icons/x-office-document.svg" alt="" width="32" height="32">
-        <span data-i18n="amendments.title">Additional Articles of the Terms of Use Concerning Nijigen and Isekai</span>
+        <span data-i18n="amendments.title">Additional Articles of the Regulations Governing Visiting, Residency, and Temporary World-Entry Permits of Otherworlders</span>
       </h2>
+      <p class="terms-subtitle terms-basis" data-i18n-html="amendments.preamble">These are the Additional Articles prescribed under Article 12, Paragraph 1 of the Terms, in accordance with ISEKAI 62443-4-2:2026 § 7.4, and as required by the Order of the Town Office of Axel, Kingdom of Belzerg (Starburst No. 0x00000C8763). <strong>Please read them carefully:</strong></p>
       <!-- Focused when the dialog opens, so that the keyboard scrolls it. -->
       <div class="terms-text" role="region" aria-labelledby="amendments-title" tabindex="0" autofocus>
         <p class="terms-unavailable" data-i18n="terms.unavailable" hidden>The terms could not be loaded. Check your connection, then try again.</p>
@@ -679,9 +683,9 @@
         <div class="terms-content"></div>
         <div class="terms-end"></div>
       </div>
-      <p class="terms-hint" data-i18n="amendments.hint">You may click “I have actually read the provisions above” only after reading these Additional Articles in full.</p>
+      <p class="terms-hint" data-i18n="amendments.hint">You may click “I have actually read, and fully agree to, all of the provisions above” only after reading these Additional Articles in full.</p>
       <div class="cut-dialog-buttons">
-        <button class="button button-danger terms-continue" value="danger" disabled><img class="button-icon" src="images/icons/applications-multimedia.svg" alt="" width="22" height="22"><span data-i18n="terms.continue">I have actually read the provisions above</span></button>
+        <button class="button button-danger terms-continue" value="danger" disabled><img class="button-icon" src="images/icons/applications-multimedia.svg" alt="" width="22" height="22"><span data-i18n="terms.continue">I have actually read, and fully agree to, all of the provisions above</span></button>
         <button class="button button-primary" value="safe"><img class="button-icon" src="images/icons/edit-undo.svg" alt="" width="22" height="22"><span data-i18n="terms.back">Turn back (Recommended)</span></button>
       </div>
     </form>

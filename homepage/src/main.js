@@ -120,7 +120,7 @@
    * dictionaries. The dictionary of the source language has only "danger": its "safe" is the page itself.
    * See "The Director's Cut" in homepage/README.md.
    */
-  let currentCut = readStored(CUT_STORAGE_KEY) === 'danger' ? 'danger' : 'safe';
+  let currentCut = !isEnglishOnly() && readStored(CUT_STORAGE_KEY) === 'danger' ? 'danger' : 'safe';
 
   /** Language id -> Promise of its `{ key: translation }` dictionary. */
   const dictionaries = new Map();
@@ -383,7 +383,6 @@
     });
     return `<header class="terms-head"><p class="terms-title">${titleHtml}</p>`
       + `<p class="terms-revised">${localize(doc.date)}</p></header>`
-      + (doc.preamble ? `<p class="terms-preamble">${localize(doc.preamble)}</p>` : '')
       + chapters.join('')
       + (doc.closing ? `<p class="terms-closing">${localize(doc.closing)}</p>` : '');
   }
@@ -882,8 +881,10 @@
   document.addEventListener('DOMContentLoaded', () => {
     setUpDownloadMenus();   // before collectTargets(): the menus are translated too
     collectTargets();
-    if (!englishOnly) setUpLanguagePicker();   // Otherwise it stays hidden.
-    setUpCutPicker();
+    if (!englishOnly) {   // Otherwise they stay hidden.
+      setUpLanguagePicker();
+      setUpCutPicker();
+    }
     setUpShowcase();
     setUpLightbox();
     setUpScrollSpy();

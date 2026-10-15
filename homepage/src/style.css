@@ -436,7 +436,12 @@ code {
   box-shadow: 0 0 0 1px var(--border);
 }
 
-/* The cut picker and the language picker, side by side. */
+/* The cut picker and the language picker, side by side, as high as each other. */
+.llselect-trigger,
+.cut-toggle {
+  height: 2.25rem;
+}
+
 .header-tools {
   display: inline-flex;
   align-items: center;
@@ -470,6 +475,7 @@ code {
 }
 
 .cut-toggle-arrow {
+  flex: none;
   color: var(--text-muted);
   transition: transform 0.15s ease;
 }
@@ -1647,6 +1653,17 @@ sup {
   font-weight: 600;
 }
 
+/* The legal basis of the additional articles, in small print like the reference line under the title of a law. Only
+   the request to read them carefully stands out, as in contracts. */
+.terms-body > .terms-basis {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.terms-basis strong {
+  color: var(--text);
+}
+
 .terms-text {
   flex: 1;
   min-height: 0;
@@ -1679,11 +1696,6 @@ sup {
 
 .terms-unavailable {
   margin: 0.75rem 0 0;
-}
-
-/* The preamble of the additional articles. */
-.terms-preamble {
-  margin: 1rem 0 0;
 }
 
 /* The titles of chapters and of sections, centered as in a law. An article has an <h4>, or an <h5> in a section. */

@@ -136,8 +136,6 @@ The page picks the language from, in order:
 3. The browser's preferred languages: `ja-JP` matches `ja`.
 4. Otherwise, English.
 
-As in the app (`ConfigFile::engOnly()`), a browser for which `isEnglishOnly()` in `main.js` holds always gets English, without the language picker.
-
 ### Adding a language
 
 1. Add it to `<script id="languages">` in `index.html`:
@@ -176,7 +174,7 @@ curl -fsSL https://cdn.jsdelivr.net/npm/@llselect/core@VERSION/dist/index.umd.js
 The page has two cuts, and the cut picker next to the language picker switches between them:
 
 - The Wholesome Cut, shown by default.
-- The Director's Cut, with the author's swearing, dark political jokes and strong opinions. The first switch to it asks three times: a warning (`#cut-dialog` in `index.html`), the terms of the Director's Cut (`#terms-dialog`), then their additional articles (`#amendments-dialog`). In each document, the button that continues (“I have actually read the provisions above”) is enabled only once the visitor has scrolled to its end. The cut, and the agreement, are remembered in `localStorage` like the language: after agreeing once, switching asks nothing.
+- The Director's Cut, with the author's swearing, dark political jokes and strong opinions. The first switch to it asks three times: a warning (`#cut-dialog` in `index.html`), the terms of the Director's Cut (`#terms-dialog`), then their additional articles (`#amendments-dialog`). In each document, the button that continues (“I have actually read, and fully agree to, all of the provisions above”) is enabled only once the visitor has scrolled to its end. The cut, and the agreement, are remembered in `localStorage` like the language: after agreeing once, switching asks nothing.
 
 A string that differs between the cuts is an object with one version per cut, instead of a string. For example, in `i18n/ja.json` and `i18n/zh-TW.json` (in their languages):
 
@@ -199,7 +197,7 @@ The terms and their additional articles are documents, not strings of the page: 
 - Each one has `chapters`. A chapter has a `title`, and its content, or `sections` that have a `title` and their content. The content is of one of two kinds:
   - `articles`, written like a law of Taiwan (the terms). Each article has a `title` and a `body`: its paragraphs, and lists of subparagraphs (`{ "items": [...] }`). `style.css` numbers and indents them as laws do in each language.
   - `clauses` (the additional articles). `main.js` numbers them from their position: `1-2`, or `4-1-3` in a section. A clause can have its own `clauses`, numbered like `1-3-1`. `numberSeparator` sets the character between the numbers in each language: `4.1.3` in English, as is usual there, and `4-1-3` in Taiwan Traditional and Japanese. So clauses can be moved or added without renumbering anything by hand. That is also why a clause refers to another one by position (“the preceding clause”), not by number, and writes its own number as `{number}`.
-- A document also has a `date`, and optionally a `preamble` before its chapters and a `closing` after them. It starts with the title of its dialog and its date, centered over a double rule, as a contract does.
+- A document also has a `date`, and optionally a `closing` after its chapters. It starts with the title of its dialog and its date, centered over a double rule, as a contract does.
 - Every text is an object with one string per language, side by side, like the captions of `screenshots.json`: `{ "en": "...", "ja": "...", "zh-TW": "..." }`. So the structure is written once for every language, and the translations of a text are easy to compare. Each string is HTML, like the strings of `data-i18n-html`.
 - Every text needs English. A text missing another language shows its fallback language.
 - `build.py` rejects a malformed document, and lists the texts that miss a language.

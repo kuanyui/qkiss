@@ -369,8 +369,8 @@ def check_legal_documents(languages: list[dict[str, str]]) -> list[str]:
 
         where = f"legal/{name}"
         document = load_json((LEGAL_DIR / name).read_text(encoding="utf-8"), where)
-        if fields(document, where, ("date", "chapters"), ("preamble", "numberSeparator", "closing")):
-            for key in ("date", "preamble", "numberSeparator", "closing"):
+        if fields(document, where, ("date", "chapters"), ("numberSeparator", "closing")):
+            for key in ("date", "numberSeparator", "closing"):
                 if key in document:
                     text(document[key], f"{where}.{key}")
             for c, chapter in enumerate(array(document["chapters"], f"{where}.chapters")):

@@ -25,9 +25,9 @@
               "zh-TW": "本條款規範使用者閱讀 QKiSS 官方網站（以下簡稱本網站）導演剪輯版之權利義務關係。"
             },
             {
-              "en": "By clicking “I have actually read the provisions above”, the User is deemed to have read, fully understood and agreed to all of these Terms.",
-              "ja": "利用者が「上記の条項を確かに読みました」をクリックしたときは、本規約の全部を熟読し、十分に理解し、これに同意したものとみなす。",
-              "zh-TW": "使用者點選「我已經確實閱讀以上條文」，即視為已詳細閱讀、充分瞭解並同意本條款之全部內容。"
+              "en": "By clicking “I have actually read, and fully agree to, all of the provisions above”, the User is deemed to have read, fully understood and agreed to all of these Terms.",
+              "ja": "利用者が「上記のすべての条項を確かに読み、完全に同意しました」をクリックしたときは、本規約の全部を熟読し、十分に理解し、これに同意したものとみなす。",
+              "zh-TW": "使用者點選「我已經確實閱讀、並完全同意以上所有條文」，即視為已詳細閱讀、充分瞭解並同意本條款之全部內容。"
             }
           ]
         },
@@ -66,9 +66,9 @@
                   "zh-TW": "閱讀：指以目視、螢幕報讀軟體、機器翻譯或其他任何方式，感知導演剪輯版內容之行為。"
                 },
                 {
-                  "en": "“User” means the natural person who clicks “I have actually read the provisions above”, and any agent thereof, including but not limited to browser extensions and artificial intelligence agents.",
-                  "ja": "利用者　「上記の条項を確かに読みました」をクリックした自然人及びその代理人（ブラウザ拡張機能及び人工知能エージェントを含むが、これらに限られない。）をいう。",
-                  "zh-TW": "使用者：指點選「我已經確實閱讀以上條文」之自然人，及其代理人（包括但不限於瀏覽器擴充功能及人工智慧代理程式）。"
+                  "en": "“User” means the natural person who clicks “I have actually read, and fully agree to, all of the provisions above”, and any agent thereof, including but not limited to browser extensions and artificial intelligence agents.",
+                  "ja": "利用者　「上記のすべての条項を確かに読み、完全に同意しました」をクリックした自然人及びその代理人（ブラウザ拡張機能及び人工知能エージェントを含むが、これらに限られない。）をいう。",
+                  "zh-TW": "使用者：指點選「我已經確實閱讀、並完全同意以上所有條文」之自然人，及其代理人（包括但不限於瀏覽器擴充功能及人工智慧代理程式）。"
                 },
                 {
                   "en": "“National Language” means a national language as defined in Article 3 of the Development of National Languages Act of Taiwan.",
@@ -431,8 +431,8 @@
     }
   ],
   "closing": {
-    "en": "By clicking “I have actually read the provisions above”, you, of sound mind and under no duress from anyone, voluntarily waive all rights to criticize any sentence or opinion you will read on the QKiSS website from now on, and voluntarily waive all legal claims against the author of QKiSS for any negative consequences of reading it.",
-    "ja": "「上記の条項を確かに読みました」をクリックすることにより、あなたは、正気で、かつ誰からも強要されていない状態で、この先 QKiSS 公式サイトで目にするあらゆる文言や見解を批判する一切の権利を自発的に放棄し、また、それを読んだことによるいかなる悪影響についても、QKiSS の作者に対する一切の法的請求権を自発的に放棄したものとみなされます。",
-    "zh-TW": "點擊「我已經確實閱讀以上條文」即代表、您、在神智清醒且無任何人脅迫的情況下、自願放棄批評接下來在 QKiSS 官網內所見任何文句或觀點之一切權利，亦自願放棄接下來因閱讀而造成的任何負面後果對 QKiSS 作者的任何法律求償權利。"
+    "en": "By clicking “I have actually read, and fully agree to, all of the provisions above”, you, of sound mind and under no duress from anyone, voluntarily waive all rights to criticize any sentence or opinion you will read on the QKiSS website from now on, and voluntarily waive all legal claims against the author of QKiSS for any negative consequences of reading it.",
+    "ja": "「上記のすべての条項を確かに読み、完全に同意しました」をクリックすることにより、あなたは、正気で、かつ誰からも強要されていない状態で、この先 QKiSS 公式サイトで目にするあらゆる文言や見解を批判する一切の権利を自発的に放棄し、また、それを読んだことによるいかなる悪影響についても、QKiSS の作者に対する一切の法的請求権を自発的に放棄したものとみなされます。",
+    "zh-TW": "點擊「我已經確實閱讀、並完全同意以上所有條文」即代表、您、在神智清醒且無任何人脅迫的情況下、自願放棄批評接下來在 QKiSS 官網內所見任何文句或觀點之一切權利，亦自願放棄接下來因閱讀而造成的任何負面後果對 QKiSS 作者的任何法律求償權利。"
   }
 }
