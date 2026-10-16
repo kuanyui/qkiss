@@ -9,6 +9,30 @@
   "nav.download": "ダウンロード",
   "nav.faq": "Q&A",
   "nav.language": "言語",
+  "cut.label": "サイトの版",
+  "cut.safe": "健全版",
+  "cut.danger": "ディレクターズカット版",
+  "cut.dialog.leaving": "ただいまご覧の QKiSS 公式サイトは、ご家族そろってお楽しみいただける「健全版」です。これから「ディレクターズカット版」に移ります。",
+  "cut.dialog.contents": "「ディレクターズカット版」には NSFW な内容も、流血や暴力の表現もありません。ですが、読むと体調を崩したり心が汚れたりするおそれが極めて高いものでいっぱいです。たとえば（ただしこれらに限りません）、感情的な暴言、政治ブラックジョーク、あらゆる技術や美的センスについての強い主張、そしてこの警告文と同じくらい長ったらしく、口にゆで卵を突っ込んで黙らせたくなるほどうっとうしい作者のぼやきです。",
+  "cut.dialog.note": "なお、「健全版」でも、このプロジェクトの特長や必要な技術情報の理解には一切支障ありません。むしろ「ディレクターズカット版」は、あなたにさまざまな悪影響を及ぼすおそれがあります。たとえば（ただしこれらに限りません）、怒りや不快感、精神的損傷、てんかん発作の誘発、身体への永久的かつ不可逆的な損傷、さらには、さっき読んだことを全部忘れるためにテレタビーズを見始めたくなる衝動です。",
+  "cut.dialog.warning": "意思無能力者、制限行為能力者、22 歳以下または 70 歳以上の方、高血圧・脳心血管疾患の既往歴のある方、精神的に敏感な方、他人に自分の意見を受け入れさせるのが好きな方、人にケンカを売るのを暇つぶしにしている方は、この先へ進むのをご遠慮ください。",
+  "cut.dialog.author": "「ディレクターズカット版」は他人の心の健康に有害かもしれませんが、「ディレクターズカット版」を載せないことは作者本人の心の健康に有害です。",
+  "cut.dialog.choice": "二つの害を比べて軽いほうを取るのが道理です。そこで作者は、自分の正気を守ることを選びました。どうかご理解ください。",
+  "cut.dialog.notice": "作者は告知義務を果たしました。",
+  "cut.dialog.waiver": "以下の同意ボタンをクリックすることにより、あなたは、利用者として、正気で、かつ誰からも強要されていない状態で、この先 QKiSS 公式サイトで目にするあらゆる文言や見解を批判する一切の権利を自発的に放棄し、また、それを読んだことによるいかなる悪影響についても、QKiSS の作者に対する一切の法的請求権を自発的に放棄したものとみなされます。さらに、ボイコット、嫌がらせ、攻撃、罵倒、破壊その他（これらに限りません）いかなる方法によっても、原作者に嫌がらせをし、又は本プロジェクトを妨害してはなりません。",
+  "cut.dialog.agree": "同意します。権利を放棄し、以上の規定を守ると誓います。破ったら私はオオカミ少年で、今後なにを言っても誰にも信じてもらえません",
+  "cut.dialog.stay": "やっぱり健全な人間のままでいます（推奨）",
+  "terms.title": "QKiSS 公式サイト ディレクターズカット版 エンドユーザー利用規約",
+  "terms.subtitle": "引き返すなら今のうちです。今ならまだ考え直せます。ご家族のことを考えてください。ペットのことを考えてください。ご自身の健康のことを考えてください。まだ書き終えていないサイドプロジェクトのことを考えてください。まだマージしていないプルリクエストのことを考えてください。まだクローズしていない Issue のことを考えてください。人生でこんな危険を冒す必要はありません。",
+  "terms.reminder": "改めて申し上げますが、「健全版」でも、QKiSS に関する必要な技術情報を知り損なうことは一切ありません。",
+  "terms.unavailable": "規約を読み込めませんでした。接続を確認してから、もう一度お試しください。",
+  "terms.hint": "本規約の全文を熟読した後でなければ、「上記のすべての条項を確かに読み、完全に同意しました」をクリックすることはできません。",
+  "terms.continue": "上記のすべての条項を確かに読み、完全に同意しました",
+  "terms.back": "やっぱりやめておきます（推奨）",
+  "amendments.title": "異世界人停留居留臨時入界許可弁法増修条文",
+  "amendments.preamble": "本篇は、ISEKAI 62443-4-2:2026 § 7.4 に準拠し、ベルゼルグ王国アクセル町役場令（星爆字第 <code>0x00000C8763</code> 号）の要求に応じて、本規約第 12 条第 1 項の規定に基づき定める増修条文である。<strong>よくお読みください：</strong>",
+  "amendments.hint": "本増修条文の全文を熟読した後でなければ、「上記のすべての条項を確かに読み、完全に同意しました」をクリックすることはできません。",
+  "amendments.back": "やっぱりやめておきます（強く推奨）",
   "hero.tagline": "勝手に KiSS ルネサンス",
   "hero.lead": "QKiSS は Qt 6 で実装され、KISS/GS、FKiSS 1・2 の仕様に対応した現代的な <a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS</a> ビューアです。",
   "hero.download": "ダウンロード",
@@ -19,9 +43,18 @@
   "about.origin": "KiSS は日本の 1990 年代の<a href=\"https://ja.wikipedia.org/wiki/おたく\">オタク</a> サブカルチャーや個人コンピュータ愛好者コミュニティ（特に <a href=\"https://ja.wikipedia.org/wiki/PC-9800シリーズ\">NEC PC-9800 シリーズ</a>）から生まれ、1990 年代から 2000 年代中頃にかけて流行しました。",
   "about.why.title": "なぜ QKiSS？",
   "about.why.body": "2024 年の時点で、Linux 向けの既存の KiSS ビューアはどれも使えなくなっていました。<a href=\"https://www2s.biglobe.ne.jp/~yav/kiss/index.html\">fkiss</a> はビルドこそできるものの実行できず、<a href=\"https://devel.tlrmx.org/kiss/\">GnomeKiSS</a> は古い GNOME 2 のライブラリに依存していて、ほとんどのディストリビューションではもう入手できません。QKiSS はこの二つに触発されて、ゼロから作り上げたものです。",
-  "about.why.web": "うん、ウェブ技術をそのまま使ってブラウザで動く KiSS の実装があるのは知ってる。でも、このやり方でデスクトップアプリにして OS やファイルシステムと連携させようとすると、（技術的にも設計的にも）不格好になる。それに、ウェブページをネイティブアプリっぽく見せかけて、そのうえぶくぶくに太った実行ファイルに詰め込むためだけに、気持ち悪い HTML / CSS / JS を山ほど書くのにはもう疲れた。そもそも軽く作れるはずのものにブラウザを使うべきじゃないし、Electron みたいなキメラなんてなおさらだ。Java も似たような状況で、しかも気が狂いそうなほど遅い。",
-  "about.why.practice": "それに、ついでに C++ でそこそこ規模のあるプロジェクトを書く練習も兼ねてた。だって書いてて本当に結構楽しいし（まあ、書き終わる頃には、LLM が出てきたこの世界はもう、LeetCode を三か月やっただけで異世界転生したくなるような私みたいなダメ人間がプログラムを書く必要なんて、なさそうだけど）。",
-  "about.nostalgia": "このプロジェクトは一部、Windows 95/98 や GTK+ 2 時代へのノスタルジーからも生まれました —— それはインターネットがまだ AI 生成のゴミに汚染されていなかった失われた文明の時代です（もっとも、このプロジェクト自体も多少の AI を利用していますが…）。現実世界はすでに十分恐ろしいものですが、少なくとも<a href=\"https://ja.wikipedia.org/wiki/2次元\">二次元</a>と<a href=\"https://w.wiki/4So4\">異世界</a>は、私たちに純粋な約束の地を残してくれています。",
+  "about.why.web": {
+    "safe":   "うん、ウェブ技術をそのまま使ってブラウザで動く KiSS の実装があるのは知ってる。でも、このやり方でデスクトップアプリにして OS やファイルシステムと連携させようとすると、（技術的にも設計的にも）面倒になる。そもそも軽く作れるはずのものにブラウザを使うべきじゃない。",
+    "danger": "うん、ウェブ技術をそのまま使ってブラウザで動く KiSS の実装があるのは知ってる。でも、このやり方でデスクトップアプリにして OS やファイルシステムと連携させようとすると、（技術的にも設計的にも）不格好になる。それに、ウェブページをネイティブアプリっぽく見せかけて、そのうえぶくぶくに太った実行ファイルに詰め込むためだけに、気持ち悪い HTML / CSS / JS を山ほど書くのにはもう疲れた。そもそも軽く作れるはずのものにブラウザを使うべきじゃないし、Electron みたいなキメラなんてなおさらだ。Java も似たような状況で、しかも気が狂いそうなほど遅い。"
+  },
+  "about.why.practice": {
+    "safe":   "それに、ついでに C++ でそこそこ規模のあるプロジェクトを書く練習も兼ねてた。だって書いてて本当に結構楽しいし。",
+    "danger": "それに、ついでに C++ でそこそこ規模のあるプロジェクトを書く練習も兼ねてた。だって書いてて本当に結構楽しいし（まあ、書き終わる頃には、LLM が出てきたこの世界はもう、LeetCode を三か月やっただけで異世界転生したくなるような私みたいなダメ人間がプログラムを書く必要なんて、なさそうだけど）。"
+  },
+  "about.nostalgia": {
+    "safe":   "このプロジェクトは一部、Windows 95/98 や GTK+ 2 時代へのノスタルジーからも生まれました。現実世界はすでに十分恐ろしいものですが、少なくとも<a href=\"https://ja.wikipedia.org/wiki/2次元\">二次元</a>と<a href=\"https://w.wiki/4So4\">異世界</a>は、私たちに純粋な約束の地を残してくれています。",
+    "danger": "このプロジェクトは一部、Windows 95/98 や GTK+ 2 時代へのノスタルジーからも生まれました —— それはインターネットがまだ AI 生成のゴミに汚染されていなかった失われた文明の時代です（もっとも、このプロジェクト自体も多少の AI を利用していますが…）。現実世界はすでに十分恐ろしいものですが、少なくとも<a href=\"https://ja.wikipedia.org/wiki/2次元\">二次元</a>と<a href=\"https://w.wiki/4So4\">異世界</a>は、私たちに純粋な約束の地を残してくれています。"
+  },
   "about.animen": "まことに誠に汝らに告ぐ、二次元と異世界のことを考えて見よ。アニメン。",
   "features.title": "特徴",
   "features.ui.title": "多機能で、使いやすい UI",
@@ -35,18 +68,31 @@
   "features.specs.kiss": "KISS/GS の基本仕様と、FKiSS 1・2 のインタラクティブなスクリプトのインタプリタを実装（実測で日本の KiSS データの 9 割が正常に動作）。",
   "features.specs.fkiss34": "FKiSS 3・4 はデータが少なすぎるうえ、日本の KiSS 作者はほとんど使っていないので、めんどくさくて実装はパス。",
   "features.specs.unfix": "ワンクリックで固定解除：外れるまでちまちまクリックし続けるなんて、誰がやるの？　遊びが仕事になっちゃダメ。",
-  "features.specs.electron": "ユーザーの誰にも好かれていない Electron は不使用（Electron でウェブページをネイティブアプリに着せ替える Weblin<sup class=\"footnote-ref\"><a href=\"#footnote-weblin\">*1</a></sup> たちは、あなたのメモリがタダだとでも思っているらしい）。",
+  "features.specs.electron": {
+    "safe":   "Electron は不使用。",
+    "danger": "ユーザーの誰にも好かれていない Electron は不使用（Electron でウェブページをネイティブアプリに着せ替える Weblin<sup class=\"footnote-ref\"><a href=\"#footnote-weblin\">*1</a></sup> たちは、あなたのメモリがタダだとでも思っているらしい）。"
+  },
   "features.misc.title": "エンジニアリングと美学のロマン",
   "features.misc.handmade": "本体プログラムのコードは純手作りで、LLM エージェントは不使用<sup class=\"footnote-ref\"><a href=\"#footnote-website\">*2</a></sup>（そしてたぶん、作者が手で書く最後のソフトウェアプロジェクト。大事に使ってね）。",
   "features.misc.linux": "Linux はもう二級市民じゃない（Windows のほうこそ）。",
-  "features.misc.open": "オープンソース＋自動ビルドで、変なものが紛れ込んでいないことを保証。",
+  "features.misc.open": "オープンソース＋自動ビルドで、私が中にこっそりわるいものを仕込んでいないことを保証<sup class=\"footnote-ref\"><a href=\"#footnote-supply-chain\">*3</a></sup>。",
   "features.misc.tango": "Tango アイコン風の UI アイコンで、2000 年代の夢をもう一度。",
-  "features.misc.apparmor": "セキュリティに偏執的な傾向があり、LSM が DENIED の audit ログを吐き出すのを見ると脳汁がドバドバ出る変態ユーザー<sup class=\"footnote-ref\"><a href=\"#footnote-author\">*3</a></sup>向けに、AppArmor プロファイルを用意。",
+  "features.misc.apparmor": {
+    "safe":   "セキュリティに偏執的な傾向があるユーザー向けに、AppArmor プロファイルを用意。",
+    "danger": "セキュリティに偏執的な傾向があり、LSM が DENIED の audit ログを吐き出すのを見ると脳汁がドバドバ出る変態ユーザー<sup class=\"footnote-ref\"><a href=\"#footnote-author\">*4</a></sup>向けに、AppArmor プロファイルを用意。"
+  },
   "features.misc.qt": "Qt 6 / C++ 20 製、古いシステムなんてどーーでもいいや。",
   "features.footnote.back": "本文に戻る",
   "features.footnote.website": "このプロジェクトの各分野での LLM の使用状況は、<a href=\"#faq-llm\">Q&amp;A</a> で開示しています。たとえば公式サイトの HTML / CSS / JS は全部 LLM エージェントに任せた。休日という人生の時間を、ウェブページを書くのに使う気はもうないから。私は OpenAI と Anthropic に飼われてる犬。ワンワン。",
-  "features.footnote.author": "たとえば QKiSS の作者。",
-  "features.footnote.weblin": "Weblin：Web を書くゴブリン。業界というジャングルの<a href=\"https://vinta.ws/blog/695\">食物連鎖の最底辺</a>。俗に言う Web 開発者。たとえば QKiSS の作者。",
+  "features.footnote.supply-chain": "サプライチェーン攻撃（XZ Utils や、GitHub Actions の tj-actions/changed-files のような事件）を含むがこれらに限られない不可抗力については、この限りではありません。",
+  "features.footnote.author": {
+    "safe":   "",
+    "danger": "たとえば QKiSS の作者。"
+  },
+  "features.footnote.weblin": {
+    "safe":   "",
+    "danger": "Weblin：Web を書くゴブリン。業界というジャングルの<a href=\"https://vinta.ws/blog/695\">食物連鎖の最底辺</a>。俗に言う Web 開発者。たとえば QKiSS の作者。"
+  },
   "screenshots.title": "スクリーンショット",
   "screenshots.enlarge": "拡大",
   "screenshots.unavailable": "このビルドのウェブサイトにはスクリーンショットが含まれていません。",
@@ -96,7 +142,10 @@
   "faq.selinux.q": "なぜ AppArmor にしか対応していないのですか？ SELinux には対応しないのですか？",
   "faq.selinux.model": "使い方に合わないからです。SELinux のセキュリティモデルは、「<code>~/.config/autostart</code> など少数のフォルダへのアクセスだけを禁止し、ほかはすべて許可する」というのが根本的に苦手です。だからといって、KiSS の LZH ファイルを決め打ちの <code>~/qkiss</code> フォルダにしか置けないよう、ユーザーに強制するわけにもいきません。",
   "faq.selinux.rare": "それに Linux デスクトップで、GUI アプリをわざわざ <code>unconfined_t</code> の外で動かす人なんて、めったにいないでしょう。そういう人はペンタゴン勤務<sup class=\"footnote-ref\"><a href=\"#footnote-work\">*1</a></sup>か、とっくに Qubes OS に移っているかのどちらかです。",
-  "faq.selinux.naming": "もう一つ、私は SELinux のコマンドの命名センスにアレルギーがあります。<code>getenforce</code>、<code>chcon</code>、<code>load_policy</code>、<code>restorecon</code> など、たくさんのコマンドがかたくなに <code>se</code> の接頭辞を付けず、<code>/sbin/</code> のあちこちに垂れ流しています。趣味の時間にこれを書いて労災になったとしても、保険は下りません。",
+  "faq.selinux.naming": {
+    "safe":   "",
+    "danger": "もう一つ、私は SELinux のコマンドの命名センスにアレルギーがあります。<code>getenforce</code>、<code>chcon</code>、<code>load_policy</code>、<code>restorecon</code> など、たくさんのコマンドがかたくなに <code>se</code> の接頭辞を付けず、<code>/sbin/</code> のあちこちに垂れ流しています。趣味の時間にこれを書いて労災になったとしても、保険は下りません。"
+  },
   "faq.selinux.landlock": "とはいえ SELinux を使っていても、Landlock と seccomp による保護はちゃんとあります。ただし守るのは、lha と unar という 2 つの外部プログラムによる展開処理だけです。",
   "faq.selinux.footnote": "一般的に、職場でどんな種類の KiSS ビューアで遊ぶことも、おすすめはしません。",
   "faq.rust.q": "なぜ Rust を使わないのですか？",
@@ -117,12 +166,18 @@
   "faq.llm.spec.share": "docstring のみ",
   "faq.llm.spec.note": "HTML 形式の FKiSS リファレンスから FKiSS のコマンドをすべて集め、<code>fkiss.cpp</code> の正式な一覧と docstring に整理。",
   "faq.llm.cmake.note": "クロスプラットフォームな Qt アプリのための <code>CPack</code> や <code>CMakePresets.json</code> のベストプラクティスの調査と相談。Windows のパッケージング、NSIS、DLL のデプロイの勉強。",
-  "faq.llm.actions.note": "Windows 版のパッケージングのため（Windows の開発環境を持っていない）。なぜか Gemini のほうが得意で、ChatGPT はこの分野ではデタラメばかり出してくる。公開リリースの前に、これと格闘するのは時間の無駄だと悟ったので、デバッグと残りのコードは LLM エージェントに任せた。",
+  "faq.llm.actions.note": {
+    "safe":   "Windows 版のパッケージングのため（Windows の開発環境を持っていない）。公開リリースの前に、これと格闘するのは時間の無駄だと悟ったので、デバッグと残りのコードは LLM エージェントに任せた。",
+    "danger": "Windows 版のパッケージングのため（Windows の開発環境を持っていない）。なぜか Gemini のほうが得意で、ChatGPT はこの分野ではデタラメばかり出してくる。公開リリースの前に、これと格闘するのは時間の無駄だと悟ったので、デバッグと残りのコードは LLM エージェントに任せた。"
+  },
   "faq.llm.packaging.note": "DEB や RPM のパッケージングの細かいルールやトラブルシューティング、<code>osc</code> でローカルにビルドする方法の勉強。GitHub Actions と OBS の <code>_service</code> の間で CI/CD をつなぐ方法の相談。公開リリースの前に、デバッグと残りのコードは LLM エージェントに直接任せた。",
   "faq.llm.security.name": "セキュリティ対策",
   "faq.llm.security.note": "Claude Code の担当は、Landlock や seccomp といった Linux API を使うコードを直接書くことと、<a href=\"https://github.com/kuanyui/.ansible-dotfiles-public\">QKiSS の作者が個人的に使っている AppArmor プロファイル</a>を参考に QKiSS に適した部分を抜き出し、各ディストリビューション向けの互換パッケージにまとめること。ChatGPT も C++ のセキュリティレビューに参加した。",
   "faq.llm.website.name": "この公式サイト",
-  "faq.llm.website.note": "翻訳も HTML / CSS / JS も全部…… 余暇に、プログラマーカースト最底辺のウェブページなんて書くのは、もうめんどくさい。",
+  "faq.llm.website.note": {
+    "safe":   "翻訳も HTML / CSS / JS も全部…… 余暇にウェブページなんて書くのは、もうめんどくさい。",
+    "danger": "翻訳も HTML / CSS / JS も全部…… 余暇に、プログラマーカースト最底辺のウェブページなんて書くのは、もうめんどくさい。"
+  },
   "faq.llm.icons.name": "アイコン",
   "faq.llm.icons.note": "Tango / Nome / Humanity は、どれも LLM がまだ登場していなかった時代のバージョンから fork したもの。その後 fork したアイコンも、QKiSS 独自のアイコンも、すべて QKiSS の作者が Inkscape で手描きした。",
   "faq.llm.writing.name": "文章",
@@ -130,11 +185,17 @@
   "faq.llm.era": "……たぶんこれが、コードの大部分を手で書いた、私の最後のソフトウェアプロジェクトになるんだろうな。もし LLM が 2024 年の時点で 2026 年のレベルまで進化していたら、QKiSS もそもそも最初から LLM エージェントに書かせていたかもしれない。",
   "features.tango-remixer.title": "このサイトのアイコンのスタイルに気づきましたか？",
   "features.tango-remixer.style": "これは freedesktop.org が提唱した、<span id=\"footnote-ref-wikipedia\"><a href=\"https://web.archive.org/web/20250829073407/https://en.wikipedia.org/wiki/Tango_Desktop_Project\">Tango Desktop</a></span><sup class=\"footnote-ref\"><a href=\"#footnote-wikipedia\">*1</a></sup> と呼ばれる GUI アイコンのデザインスタイルで、2005〜2010 年ごろに流行しました。当時なにかしらのフリーソフトウェアを使っていたなら、見覚えがあるかもしれません。",
-  "features.tango-remixer.body": "Tango 風 UI アイコンという 2000 年代の美学のロマンのため、そして<span id=\"footnote-ref-browsers\">フラット UI とモノクロアイコンという、<a href=\"https://ja.wikipedia.org/wiki/ディスレクシア\">ディスレクシア</a>の人のことなど考えもしない、主体性も信念もなく流されるだけのデザインの悪しき流行が吹き荒れるこの世界</span><sup class=\"footnote-ref\"><a href=\"#footnote-browsers\">*2</a></sup>にリアル系アイコンを復活させるため、<a href=\"https://kuanyui.github.io/tango-remixer/\">Tango Remixer</a> なんてプロジェクトまで作って、Tango アイコンを QKiSS みたいな Qt プロジェクトに手軽に詰め込んで、どのプラットフォームでも見た目を揃えられるようにした上に、2000 年代の XDG 互換アイコンテーマパックを三つも保守する羽目に。しかも強迫症気味で、アイコンを綺麗にしないままアプリを公開するのが我慢できなくて、結局もう一年かかった…",
+  "features.tango-remixer.body": {
+    "safe":   "Tango 風 UI アイコンという 2000 年代の美学のロマンのため、そしてリアル系アイコンを復活させるため、<a href=\"https://kuanyui.github.io/tango-remixer/\">Tango Remixer</a> なんてプロジェクトまで作って、Tango アイコンを QKiSS みたいな Qt プロジェクトに手軽に詰め込んで、どのプラットフォームでも見た目を揃えられるようにした上に、2000 年代の XDG 互換アイコンテーマパックを三つも保守する羽目に。しかもアイコンを綺麗にしないままアプリを公開するのが我慢できなくて、結局もう一年かかった…",
+    "danger": "Tango 風 UI アイコンという 2000 年代の美学のロマンのため、そして<span id=\"footnote-ref-browsers\">フラット UI とモノクロアイコンという、<a href=\"https://ja.wikipedia.org/wiki/ディスレクシア\">ディスレクシア</a>の人のことなど考えもしない、主体性も信念もなく流されるだけのデザインの悪しき流行が吹き荒れるこの世界</span><sup class=\"footnote-ref\"><a href=\"#footnote-browsers\">*2</a></sup>にリアル系アイコンを復活させるため、<a href=\"https://kuanyui.github.io/tango-remixer/\">Tango Remixer</a> なんてプロジェクトまで作って、Tango アイコンを QKiSS みたいな Qt プロジェクトに手軽に詰め込んで、どのプラットフォームでも見た目を揃えられるようにした上に、2000 年代の XDG 互換アイコンテーマパックを三つも保守する羽目に。しかも強迫症気味で、アイコンを綺麗にしないままアプリを公開するのが我慢できなくて、結局もう一年かかった…"
+  },
   "features.tango-remixer.time": "結局、<a href=\"https://kuanyui.github.io/tango-remixer/\">Tango Remixer</a> の開発と、大量の Tango 風アイコンの整理・修正・描き足しにかかった時間は、誇張抜きで QKiSS 本体の開発時間をほぼ上回りました。2024 年 8 月から開発していた QKiSS の初公開が 2026 年 10 月までずれ込んだのはそのためです……",
   "features.tango-remixer.link": "Tango Remixer の公式サイトへ",
   "features.footnote.wikipedia": "freedesktop.org はすでに Tango Desktop の紹介サイトを削除し、<a href=\"https://tango.freedesktop.org/releases/\">残っているのは tarball だけ</a>です。それだけでなく、今では英語版の Wikipedia でさえこの記事が削除され、Archive.org か、ほかの言語版の Wikipedia（<a href=\"https://de.wikipedia.org/wiki/Tango_Desktop_Project\">de</a>、<a href=\"https://es.wikipedia.org/wiki/Tango_Desktop_Project\">es</a>、<a href=\"https://ja.wikipedia.org/wiki/Tango_Desktop_Project\">ja</a> など）でしか見られなくなってしまいました……削除の理由はよくわかりません。さらに呆れたことに、<a href=\"https://gitlab.freedesktop.org/tango/tango-icon-theme\">freedesktop.org の公式 Git リポジトリにある tango-icon-theme でさえ、すでに不完全です</a>。原因は不明ですが、SVN か CVS から Git へ移行したときに記録が失われたのでしょうか？とにかく、せめて Tango Remixer というプロジェクトで Tango Desktop の存在を残し続けられたらと思います。たとえ歴史の記録としてだけでも……。",
-  "features.footnote.browsers": "おい Firefox、UI からアイコンを山ほど消すのにこだわるなんて、いったい何が問題なんだ？ ディスレクシアの人が UI を操作するときは、「位置 → アイコンの色 → アイコンの細部 → 最後にやっと文字」の順に頼っている可能性が高いって、考えたこともないのか？ アイコンをモノクロにしただけじゃ飽き足らず、今度はアイコンそのものまで消すなんて。ユーザーの生死なんてお構いなしのならず者、Chrome と Edge ですら、この点ではお前より少しマシだ。少なくともあっちはアプリのメインメニューにアイコンを残している。アイコンについては、むしろ DuckDuckGo Browser がいちばんよくやっている。私の知る限り、2026 年 10 月時点では、DuckDuckGo は右クリックのコンテキストメニューにまだアイコンを残している唯一のメジャーなブラウザで、Firefox、Chrome、Edge、Vivaldi、Brave を全員打ち負かしている。しかも設定画面のアイコンはカラーなんだ！ これを見たとき、私がどれだけ興奮したかわかるか！",
+  "features.footnote.browsers": {
+    "safe":   "",
+    "danger": "おい Firefox、UI からアイコンを山ほど消すのにこだわるなんて、いったい何が問題なんだ？ ディスレクシアの人が UI を操作するときは、「位置 → アイコンの色 → アイコンの細部 → 最後にやっと文字」の順に頼っている可能性が高いって、考えたこともないのか？ アイコンをモノクロにしただけじゃ飽き足らず、今度はアイコンそのものまで消すなんて。ユーザーの生死なんてお構いなしのならず者、Chrome と Edge ですら、この点ではお前より少しマシだ。少なくともあっちはアプリのメインメニューにアイコンを残している。アイコンについては、むしろ DuckDuckGo Browser がいちばんよくやっている。私の知る限り、2026 年 10 月時点では、DuckDuckGo は右クリックのコンテキストメニューにまだアイコンを残している唯一のメジャーなブラウザで、Firefox、Chrome、Edge、Vivaldi、Brave を全員打ち負かしている。しかも設定画面のアイコンはカラーなんだ！ これを見たとき、私がどれだけ興奮したかわかるか！"
+  },
   "footer.license": "QKiSS は <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License v3</a> の下で公開されているフリーソフトウェアです。",
   "footer.source": "ソースコード",
   "footer.specs.title": "KiSS の仕様",
@@ -144,7 +205,10 @@
   "footer.icons.tango": "<a href=\"https://github.com/kuanyui/tango-icon-theme\">Tango Icon Theme</a>（作者：Tango Desktop Project contributors from freedesktop.org、GPL）",
   "footer.icons.simple": "<a href=\"https://simpleicons.org/\">Simple Icons</a>（CC0）：GitHub、GitHub Actions、各 Linux ディストリビューションのロゴ。いずれもそれぞれの所有者の商標です",
   "footer.icons.official": "<a href=\"https://www.python.org/community/logos/\">Python</a>、<a href=\"https://github.com/isocpp/logos\">C++</a>、<a href=\"https://cmake.org/\">CMake</a> のロゴ。それぞれ Python Software Foundation、Standard C++ Foundation、Kitware の商標です。QKiSS はこれらの団体とは関係ありません。",
-  "footer.disclaimer": "<strong>免責事項：</strong>本プロジェクトは GPLv3 の下で公開されており、「現状のまま」提供されます。本プロジェクトのすべての内容（本ウェブサイト、バイナリ配布物およびソースコードを含む）は、商品性および特定目的への適合性を含みますがこれらに限定されない、いかなる種類の保証も伴いません。しかし、政治的に正しくないことだけは絶対に保証いたします。なにしろ本プロジェクトは、オリンピックでは国旗の使用を禁じられ、ショパン国際ピアノコンクールでは国籍の表記を禁じられ、国際連合には加盟を禁じられ、世界保健機関には息をしている人間の存在すら認められていない国で作られたものですから。ユーザー様のガラスのハートあるいはなんとか人民の感情を傷つけたとしても、本プロジェクトは一切の責任を負いかねます。",
+  "footer.disclaimer": {
+    "safe":   "<strong>免責事項：</strong>QKiSS は有用であることを願って頒布されますが、<strong>全くの無保証</strong>です。<strong>商品性</strong>や<strong>特定目的への適合性</strong>の黙示の保証すらありません。詳しくは <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU 一般公衆利用許諾書</a>（英語の原文）をご覧ください。",
+    "danger": "<strong>免責事項：</strong>QKiSS は有用であることを願って頒布されますが、<strong>全くの無保証</strong>です。<strong>商品性</strong>や<strong>特定目的への適合性</strong>の黙示の保証すらありません。詳しくは <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU 一般公衆利用許諾書</a>（英語の原文）をご覧ください。しかし、政治的に正しくないことだけは絶対に保証いたします。なにしろ本プロジェクトは、オリンピックでは国旗の使用を禁じられ、ショパン国際ピアノコンクールでは国籍の表記を禁じられ、国際連合には加盟を禁じられ、世界保健機関には息をしている人間の存在すら認められていない国で作られたものですから。ユーザー様のガラスのハートあるいはなんとか人民の感情を傷つけたとしても、本プロジェクトは一切の責任を負いかねます。"
+  },
   "lightbox.close": "閉じる",
   "lightbox.prev": "前のスクリーンショット",
   "lightbox.next": "次のスクリーンショット"

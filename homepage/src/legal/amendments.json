@@ -1,0 +1,424 @@
+{
+  "date": {
+    "en": "Promulgated: the 15th of the Harvest Moon, 28 years after the death of Himmel the Hero",
+    "ja": "公布日：勇者ヒンメルの死から 28 年後　収穫の月 15 日",
+    "zh-TW": "公布日期：勇者欣梅爾死後 28 年　收穫之月 15 日"
+  },
+  "numberSeparator": {
+    "en": ".",
+    "ja": "-",
+    "zh-TW": "-"
+  },
+  "chapters": [
+    {
+      "title": {
+        "en": "General Provisions",
+        "ja": "総則",
+        "zh-TW": "總則"
+      },
+      "clauses": [
+        {
+          "en": "The right to interpret the Terms belongs to the Author; the Author's right to interpret belongs to the Author's mood of the day.",
+          "ja": "本規約の解釈権は作者に帰属し、作者の解釈権は作者のその日の気分に帰属する。",
+          "zh-TW": "本條款之解釋權歸作者所有，作者之解釋權歸作者當天心情所有。"
+        },
+        {
+          "en": "In case of any discrepancy between the translations of the provisions in the various language versions of the Terms, the version that the Author feels like reading on that day shall prevail, notwithstanding Article 15 of the Terms.",
+          "ja": "本規約の各言語版における条文の翻訳の間に齟齬がある場合は、本規約第 15 条の規定にかかわらず、作者がその日に読みたい版が優先する。",
+          "zh-TW": "本條款各語言版本之條文翻譯如有歧異，以作者當天比較想看的版本為準，不適用本條款第十五條之規定。"
+        },
+        {
+          "en": "Party A has never understood whether the word “shall” means should, may or must, and these Additional Articles therefore contain undefined behavior.",
+          "ja": "甲は、「ものとする」が should、may、must のいずれを意味するのかを今もって理解できず、そのため本増修条文には未定義動作が含まれる。",
+          "zh-TW": "甲方始終無法理解「得」字究竟係 should、may 抑或 must，此亦為甲方學測國文成績低於英文之原因。",
+          "clauses": [
+            {
+              "en": "The circumstance in the preceding clause does not affect the obligation of everyone else to know the correct legal meaning of “shall”.",
+              "ja": "前項の事情は、他の者が「ものとする」の正しい法的意味を知るべき義務に影響を及ぼさない。",
+              "zh-TW": "前項情形，不影響其他人應知悉「得」字之正確法律含意之義務。"
+            }
+          ]
+        },
+        {
+          "en": "<code class=\"terms-error\">error: ‘PartyA’ was not declared in this scope</code>",
+          "ja": "<code class=\"terms-error\">error: ‘甲’ was not declared in this scope</code>",
+          "zh-TW": "<code class=\"terms-error\">error: ‘甲方’ was not declared in this scope</code>"
+        },
+        {
+          "en": "The terms used in these Additional Articles are defined as follows:",
+          "ja": "この増修条文で使用する用語の意義は、次のとおりとする。",
+          "zh-TW": "本增修條文用詞，定義如下：",
+          "clauses": [
+            {
+              "en": "Entrant: a person who enters the Kingdom of Belzerg from outside it, whether from this world or from another world.",
+              "ja": "入国者　ベルゼルグ王国の国外から同国内に入る者をいい、この世界から来たか異世界から来たかを問わない。",
+              "zh-TW": "入境者：指自貝爾澤格王國境外進入其境內之人，不問其來自本界或異世界。"
+            },
+            {
+              "en": "World Entrant: an Entrant who enters from another world.",
+              "ja": "入界者　入国者のうち、異世界から入る者をいう。",
+              "zh-TW": "入界者：指入境者之中，自異世界進入者。"
+            },
+            {
+              "en": "By the definitions in the preceding two clauses, World Entrants are a proper subset of Entrants.",
+              "ja": "前二項の定義により、入界者は、入国者の真部分集合である。",
+              "zh-TW": "依前二款之定義，入界者為入境者之真子集合。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Obligations of Entrants",
+        "ja": "入国者の義務",
+        "zh-TW": "入境者義務"
+      },
+      "clauses": [
+        {
+          "en": "The User may browse the Website with Firefox.",
+          "ja": "利用者は、Firefox により本サイトを閲覧することができる。",
+          "zh-TW": "使用者得以 Firefox 瀏覽本網站。"
+        },
+        {
+          "en": "Nothing in particular happens to a User who browses the Website with a browser other than Firefox. However, Party A reserves the right to mourn for Firefox.",
+          "ja": "Firefox 以外のブラウザにより閲覧する者は、実のところ別にどうということはない。ただし、甲は、Firefox のために黙祷する権利を留保する。",
+          "zh-TW": "使用 Firefox 以外瀏覽器瀏覽者，其實也不會怎樣。但甲方保留為 Firefox 默哀之權利。"
+        },
+        {
+          "en": "While reading the Terms, the User shall keep the eyes at least thirty centimeters away from the screen.",
+          "ja": "本規約を閲覧する際は、目と画面との距離を 30 センチメートル以上保たなければならない。",
+          "zh-TW": "閱讀本條款時，眼睛與螢幕應保持三十公分以上之距離。"
+        },
+        {
+          "en": "This law has no clause {number}.",
+          "ja": "本法に {number} 条は存在しない。",
+          "zh-TW": "此法沒有 {number} 條。"
+        },
+        {
+          "en": "When reporting an issue, the User shall not attach any suggestion to “Rewrite it in Rust”.",
+          "ja": "利用者は、issue を報告するに当たり、「Rewrite it in Rust」との提案を付してはならない。",
+          "zh-TW": "使用者回報 issue 時，不得附帶「Rewrite it in Rust」之建議。"
+        },
+        {
+          "en": "The User shall not complain to the Author about the content of the Website on any platform, including but not limited to GitHub Issues and GitLab Issues.",
+          "ja": "利用者は、本サイトの内容について、いかなるプラットフォーム（GitHub Issues 及び GitLab Issues を含むが、これらに限られない。）においても、作者に対して一切の苦情を申し立ててはならない。",
+          "zh-TW": "使用者不得就本網站之內容，於任何平台（包括但不限於 GitHub Issues、GitLab Issues）對作者提出任何抱怨。"
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Technical and Aesthetic Positions of Entrants",
+        "ja": "入国者の技術及び美学に関する立場",
+        "zh-TW": "入境者技術與美學立場"
+      },
+      "clauses": [
+        {
+          "en": "The User agrees that skeuomorphic icons, such as those of BeOS, Mac OS X 10.4 Tiger, iPhone OS 1 and the Tango style, are the pinnacle of GUI aesthetics, and that flat design is a passing confusion of humankind.",
+          "ja": "利用者は、BeOS、Mac OS X 10.4 Tiger、iPhone OS 1、Tango 風その他のスキューモーフィズムのアイコンが GUI 美学の頂点であり、フラットデザインが人類の一時の迷いであることに同意する。",
+          "zh-TW": "使用者同意 BeOS、Mac OS X 10.4 Tiger、iPhone OS 1、Tango 風格等擬物化圖示為 GUI 美學之巔峰，扁平化設計為人類一時之迷惘。"
+        },
+        {
+          "en": "The User agrees that the memory used by Electron applications is not a free resource.",
+          "ja": "利用者は、Electron アプリケーションが占有するメモリが無料の資源ではないことに同意する。",
+          "zh-TW": "使用者同意 Electron 應用程式所佔用之記憶體，非屬免費資源。"
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Food and Drink of Entrants",
+        "ja": "入国者の飲食",
+        "zh-TW": "入境者飲食"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Controversial Ingredients",
+            "ja": "論争のある食材",
+            "zh-TW": "爭議食材"
+          },
+          "clauses": [
+            {
+              "en": "Pineapple may be put on pizza.",
+              "ja": "パイナップルは、ピザに載せることができる。",
+              "zh-TW": "鳳梨可以放在披薩上。"
+            },
+            {
+              "en": "Liking or disliking cilantro is a matter of genes, and neither party may terminate this agreement on that ground.",
+              "ja": "パクチーの好き嫌いは遺伝子の発現であり、いずれの当事者も、これを理由として本契約を終了させることはできない。",
+              "zh-TW": "香菜之好惡屬基因表現，雙方均不得以此為由終止本契約。"
+            },
+            {
+              "en": "Mixed vegetables (peas, corn and diced carrots) actually taste fine.",
+              "ja": "ミックスベジタブルは、実はそれほどまずくない。",
+              "zh-TW": "三色豆其實不難吃。"
+            },
+            {
+              "en": "The mixed vegetables referred to in the preceding clause include those of school lunches, which may be cooked with potatoes and minced pork, and thickened with starch.",
+              "ja": "前項のミックスベジタブルには、学校給食のミックスベジタブルを含み、これにじゃがいも及び豚ひき肉を加え、とろみをつけることができる。",
+              "zh-TW": "前款所稱三色豆，包含學校營養午餐之三色豆，並得加上馬鈴薯與豬絞肉並勾芡之。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Curry",
+            "ja": "カレー",
+            "zh-TW": "咖哩"
+          },
+          "clauses": [
+            {
+              "en": "Although curry has a curry smell, it is delicious to eat, and the two are not contradictory.",
+              "ja": "カレーにはカレー臭があるが、食べると非常に美味であり、両者は矛盾しない。",
+              "zh-TW": "咖哩雖有咖哩臭，然食用時甚為美味，二者並不矛盾。"
+            },
+            {
+              "en": "If a User, a reader or a World Entrant (hereinafter “Party B”) cannot smell the curry smell referred to in the preceding clause, it means that Party B should develop an interest in learning foreign languages.",
+              "ja": "利用者、読者又は入界者（以下「乙」という。）が前項のカレー臭を嗅ぎ取ることができないときは、乙は、外国語学習への関心を養うべきである。",
+              "zh-TW": "使用者、讀者或入界者（以下簡稱乙方）如未能聞到前款所稱之咖哩臭，代表乙方應培養學習外語之興趣。"
+            },
+            {
+              "en": "Curry shall be served with takuan (pickled daikon).",
+              "ja": "カレーには、沢庵漬けを添えるものとする。",
+              "zh-TW": "咖哩得搭配沢庵漬け（醃黃蘿蔔）。"
+            },
+            {
+              "en": "If the takuan at home has run out, fukujinzuke or rakkyo may be served instead.",
+              "ja": "家の沢庵漬けを切らしている場合は、福神漬又はらっきょうで代えても差し支えない。",
+              "zh-TW": "如家裡的沢庵漬け已經吃完，以福神漬或蕗蕎代之亦可。"
+            },
+            {
+              "en": "If the foods described in the preceding two clauses are hard to obtain, Tabasco sauce may be tried instead, secretly, under the covers, when no one is watching; however, Party A is not sure whether this is unconstitutional.",
+              "ja": "前二項に掲げる食材の入手が困難な場合は、誰も見ていないときに、こっそり布団にもぐってタバスコで代えてみてもよい。ただし、甲は、これが違憲であるか否かについて確信を持てない。",
+              "zh-TW": "如果前二款所述之食材難以取得，可以在沒有人看到時偷偷躲在被窩裡面嘗試使用 Tabasco 辣醬代替之，但甲方不確定此舉是否違憲。"
+            },
+            {
+              "en": "The fluorescent curry of school lunches constitutes a waste of ingredients. Everyone within the Kingdom of Belzerg, including but not limited to its citizens or residents, those reincarnated from other worlds, temporary entrants, 2D characters, VTubers and pets, shall condemn it in the strongest possible terms.",
+              "ja": "学校給食の蛍光色のカレーは、食材の浪費に当たる。ベルゼルグ王国内に所在する者（同国の市民又は住民、異世界からの転生者、臨時入国者、二次元のキャラクター、VTuber 及びペットを含むが、これらに限られない。）は、これを最も強い言葉で非難すべきである。",
+              "zh-TW": "學校營養午餐之螢光色咖哩，構成食材之浪費。凡位於貝爾澤格王國境內者，包括但不限於該國之公民或居民、異世界轉生者、臨時入境者、二次元角色、VTuber 及寵物，均應對此予以最嚴厲的譴責。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Prohibited Foods",
+            "ja": "禁制食品",
+            "zh-TW": "違禁食品"
+          },
+          "clauses": [
+            {
+              "en": "Asparagus has been determined by the Author of QKiSS (hereinafter “Party A”) to be an illegal food.",
+              "ja": "アスパラガスは、QKiSS の作者（以下「甲」という。）により違法な食べ物と認定されている。",
+              "zh-TW": "蘆筍經 QKiSS 作者（以下簡稱甲方）認定為非法食物。"
+            },
+            {
+              "en": "No one shall ask the Author of QKiSS (here still “Party A”) to eat the illegal food referred to in the preceding clause.",
+              "ja": "何人も、QKiSS の作者（ここでも「甲」という。）に前項の違法な食べ物を食べるよう求めてはならない。",
+              "zh-TW": "任何人均不得請 QKiSS 作者（此處仍簡稱甲方）食用前款所稱之非法食物。"
+            },
+            {
+              "en": "The preceding two clauses do not apply to asparagus juice. Party A (hereinafter “the Author of QKiSS”) does not know why either: asparagus simply will not go down, however hard Party A tries, but asparagus juice goes down just fine.",
+              "ja": "前二項の規定は、アスパラガスジュースについては、適用しない。その理由は甲（以下「QKiSS の作者」という。）にも分からないが、とにかくアスパラガスはどうしても飲み込めないのに、アスパラガスジュースなら飲めるのである。",
+              "zh-TW": "前二款規定，於蘆筍汁不適用之。其理由甲方（以下簡稱 QKiSS 作者）亦不得而知，反正蘆筍怎麼咽就是咽不下去，但蘆筍汁他就喝得下去。"
+            },
+            {
+              "en": "However, the Author of QKiSS (hereinafter “Party A”) is not particularly fond of asparagus juice either, so no one needs to treat Party A (hereinafter “the Author of QKiSS”) to asparagus juice.",
+              "ja": "ただし、QKiSS の作者（以下「甲」という。）は、実のところアスパラガスジュースが特に好きなわけでもないので、わざわざ甲（以下「QKiSS の作者」という。）にアスパラガスジュースをおごる必要はない。",
+              "zh-TW": "但是 QKiSS 作者（以下簡稱甲方）其實也沒特別喜歡蘆筍汁，故不用特別請甲方（以下簡稱 QKiSS 作者）喝蘆筍汁。"
+            },
+            {
+              "en": "The packaging of asparagus juice shall not bear photographs of real people, or overly realistic images of humans, since 3D is illegal.",
+              "ja": "アスパラガスジュースの包装には、実在の人物の写真又は写実的に過ぎる人間の画像を印刷してはならない。三次元は違法だからである。",
+              "zh-TW": "蘆筍汁之包裝，不得印有真人之照片、或過於寫實的人類圖像，蓋三次元屬非法。"
+            },
+            {
+              "en": "If the photograph referred to in the preceding clause is a 2D illustration, the preceding clause does not apply.",
+              "ja": "前項の写真が二次元のイラストである場合は、この限りでない。",
+              "zh-TW": "前款照片如為二次元插圖者，不在此限。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Jiansu Candy",
+            "ja": "健素糖",
+            "zh-TW": "健素糖"
+          },
+          "clauses": [
+            {
+              "en": "Whoever invented Jiansu candy (Taiwanese sugar-coated yeast tablets) shall be sentenced to fixed-term imprisonment of 36.7 years (that is, 36 years, 8 months and 12 days), in memory of the average human body temperature, notwithstanding the maximum term of fixed-term imprisonment under the Criminal Code.",
+              "ja": "健素糖（台湾の糖衣酵母錠）を発明した者は、36.7 年（すなわち 36 年 8 か月 12 日）の有期懲役に処する。これは人間の平均体温を記念するためであり、刑法に定める有期懲役の上限の制限を受けない。",
+              "zh-TW": "發明健素糖者，處有期徒刑 36.7 年（即三十六年八月又十二日），用以紀念人類平均體溫，不受刑法有期徒刑上限之限制。"
+            },
+            {
+              "en": "While serving the sentence, the prisoner referred to in the preceding clause shall have Jiansu candy make up half the weight of each of the three daily meals, and no Jiansu candy shall be left over.",
+              "ja": "前項の受刑者は、服役期間中、毎日の三食の重量の半分を健素糖としなければならず、かつ、健素糖を残してはならない。",
+              "zh-TW": "前款受刑人於服刑期間，每日三餐應有一半重量為健素糖，且健素糖不得剩下。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Dangerous Creatures",
+        "ja": "危険生物",
+        "zh-TW": "危險生物"
+      },
+      "clauses": [
+        {
+          "en": "This world harbors dangerous creatures that do not exist in other worlds, and Entrants shall not underestimate the danger they pose. The Kingdom accepts no liability whatsoever for any loss of life, bodily injury or damage to property suffered by anyone who disregards this Chapter.",
+          "ja": "この世界には異世界に存在しない危険生物が生息しており、入国者は、その危険性を軽視してはならない。本章の規定を無視した者が被った生命、身体又は財産の損害について、本王国は一切の責任を負わない。",
+          "zh-TW": "本界存有異世界所無之危險生物，入境者不得輕忽其危險性。無視本章規定者，其所受之一切生命、身體或財產損害，本王國概不負責。"
+        },
+        {
+          "en": "An Entrant who encounters griffins, goblins or similar creatures shall give priority to their own safety, and shall not attack them recklessly.",
+          "ja": "入国者は、グリフィン、ゴブリンその他これに類する生物に遭遇したときは、自身の安全の確保を優先し、みだりにこれを攻撃してはならない。",
+          "zh-TW": "入境者遭遇獅鷲獸、哥布林等生物時，應以確保自身安全為優先，不得任意攻擊之。"
+        },
+        {
+          "en": "Having returned to a safe place, the Entrant shall place a contract with Geralt of Rivia, of Kaer Morhen, Kingdom of Belzerg. The letter of contract shall be encrypted with his GPG public key (key ID: <code>0xFEE1DEAD28121969</code>; fingerprint: <code>DEAD BEEF CCCC 8763 4649 3939 FEE1 DEAD 2812 1969</code>), and its ciphertext copied by hand onto paper scented with lilac and gooseberries, and sent by registered express mail.",
+          "ja": "入国者は、安全な場所に戻った後、ベルゼルグ王国ケィア・モルヘンのリヴィアのゲラルトに依頼をしなければならない。依頼書の内容は、同人の GPG 公開鍵（鍵 ID：<code>0xFEE1DEAD28121969</code>、フィンガープリント：<code>DEAD BEEF CCCC 8763 4649 3939 FEE1 DEAD 2812 1969</code>）で暗号化し、その暗号文をリラとスグリの香りのする紙に手書きで写した上、速達書留で送付しなければならない。",
+          "zh-TW": "入境者返抵安全處所後，應向貝爾澤格王國凱爾莫罕之利維亞的傑洛特提出委託。委託書之內容應以其 GPG 公鑰（公鑰 ID：<code>0xFEE1DEAD28121969</code>；指紋：<code>DEAD BEEF CCCC 8763 4649 3939 FEE1 DEAD 2812 1969</code>）加密，並將密文手抄於帶有丁香與醋栗香氣之紙張，以限時掛號寄送之。"
+        },
+        {
+          "en": "The fee for the contract under the preceding clause shall be paid by Emhyr var Emreis (alias “the Hedgehog”), King of Belzerg.",
+          "ja": "前項の依頼の報酬は、ベルゼルグ国王エムヒル・ヴァル・エムレイス（通称「ハリネズミ」）が支払うものとする。",
+          "zh-TW": "前項委託之報酬，由貝爾澤格王國國王恩希爾·瓦·恩瑞斯（綽號「刺蝟」）支付之。"
+        },
+        {
+          "en": "No Entrant shall place a contract with Geralt of Rivia to hunt a dragon.",
+          "ja": "入国者は、リヴィアのゲラルトに竜の討伐を依頼してはならない。",
+          "zh-TW": "入境者不得向利維亞的傑洛特提出以龍為獵殺對象之委託。"
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Nijigen",
+        "ja": "二次元",
+        "zh-TW": "二次元"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "General Rules",
+            "ja": "通則",
+            "zh-TW": "通則"
+          },
+          "clauses": [
+            {
+              "en": "Tatsuki Fujimoto ought to be awarded the Nobel Prize.",
+              "ja": "藤本タツキは、ノーベル賞を受賞すべきである。",
+              "zh-TW": "藤本樹應當得到諾貝爾獎。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Legal Status of Hatsune Miku",
+            "ja": "初音ミクの法的地位",
+            "zh-TW": "初音未來之法律地位"
+          },
+          "clauses": [
+            {
+              "en": "Party A holds that Hatsune Miku, in this world, is a real being with emotions and self-awareness. Believing the next clause is prohibited.",
+              "ja": "甲は、この世界における初音ミクは、感情と自我を持つ実在の存在であると考える。次項の記述を信じることを禁ずる。",
+              "zh-TW": "甲方認為初音在本界是有情感與自我意識的真實存在。禁止相信次款之敘述。"
+            },
+            {
+              "en": "Party A holds that Hatsune Miku, in this world, is only software, developed by Crypton Future Media, Inc. of Japan. Please believe the preceding clause.",
+              "ja": "甲は、この世界における初音ミクは、日本のクリプトン・フューチャー・メディア株式会社が開発したソフトウェアにすぎないと考える。前項の記述を信じてください。",
+              "zh-TW": "甲方認為初音在本界只是軟體，由日本 Crypton Future Media 株式會社開發。請相信前款之敘述。"
+            },
+            {
+              "en": "The preceding two clauses do not apply at concert venues.",
+              "ja": "前二項の規定は、コンサート会場においては、適用しない。",
+              "zh-TW": "前二款規定，於演唱會現場不適用之。"
+            },
+            {
+              "en": "Because it is too much trouble, Party A does not wish to retain the final right to interpret whether Hatsune Miku, in this world, is software.",
+              "ja": "面倒なので、甲は、この世界における初音ミクがソフトウェアであるか否かについての最終解釈権を留保しないこととする。",
+              "zh-TW": "因為很麻煩，所以甲方不想保留初音在本界中是否為軟體之最終解釋權。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Dispute Resolution",
+        "ja": "紛争の処理",
+        "zh-TW": "爭議處理"
+      },
+      "clauses": [
+        {
+          "en": "For any litigation concerning this agreement, the parties agree that the Belzerg Axel District Court shall be the court of first instance, notwithstanding Article 16, Paragraph 2 of the Terms.",
+          "ja": "本契約に関して訴訟が生じたときは、本規約第 16 条第 2 項の規定にかかわらず、当事者は、ベルゼルグ・アクセル地方法院を第一審の管轄裁判所とすることに合意する。",
+          "zh-TW": "因本契約涉訟者，雙方合意以貝爾澤格阿克塞爾地方法院為第一審管轄法院，不適用本條款第十六條第二項之規定。"
+        },
+        {
+          "en": "Where an Entrant, during a visit or residency, comes into a dispute or conflict with a Native of this world, and the two cannot settle it between themselves, either of them may apply for mediation by Ichiban Kasuga of Ijincho, Axel, Kingdom of Belzerg. A settlement reached in the mediation shall have the same effect as a final judgment.",
+          "ja": "入国者が滞在又は在留の期間中にこの世界の住民と紛争又は衝突を生じ、当事者間で和解することができないときは、ベルゼルグ王国アクセル町異人町の春日一番に調停を申し立てることができる。調停が成立したときは、確定判決と同一の効力を有する。",
+          "zh-TW": "入境者於停留或居留期間，與本界人發生爭執或衝突，且雙方無法自行和解者，得向貝爾澤格王國阿克塞爾鎮異人町之春日一番聲請調解。調解成立者，與確定判決有同一之效力。"
+        },
+        {
+          "en": "The fee for the mediation under the preceding clause is one beef bowl, to be borne by the applicant.",
+          "ja": "前項の調停の費用は、牛丼一杯とし、申立人の負担とする。",
+          "zh-TW": "前項調解之費用為牛丼一碗，由聲請人負擔之。"
+        },
+        {
+          "en": "Anyone who wishes to brawl may apply for a lawful and unexpired Royal Brawling Permit.",
+          "ja": "喧嘩をしようとする者は、適法かつ有効期間内の王室喧嘩許可証の交付を申請することができる。",
+          "zh-TW": "欲打架鬥毆者，得申請合法且於有效期間內之王室鬥毆許可證。"
+        },
+        {
+          "en": "Anyone who wishes to apply for a Royal Brawling Permit shall file a challenge to a one-on-one fight with Ichiban Kasuga of Ijincho, Axel, Kingdom of Belzerg; only by winning it may they obtain the Royal Brawling Permit.",
+          "ja": "王室喧嘩許可証の交付を申請しようとする者は、ベルゼルグ王国アクセル町異人町の春日一番にタイマンを申し立てなければならず、これに勝った場合に限り、王室喧嘩許可証を取得することができる。",
+          "zh-TW": "欲申請王室鬥毆許可證者，須向貝爾澤格王國阿克塞爾鎮異人町之春日一番聲請單挑，打贏方可取得王室鬥毆許可證。"
+        },
+        {
+          "en": "If Ichiban Kasuga cannot be found, please go to the Shizuya Kondo Memorial Hall at 28 Ijincho (diagonally across from Gyomu Super) and ask its curator, Ikkaku Chichikuri.",
+          "ja": "春日一番を見つけることができないときは、異人町 28 番地の近藤静也記念館（業務スーパーの斜め向かい）を訪れ、館長の乳栗一角に尋ねてください。",
+          "zh-TW": "無法找到春日一番，請至該町 28 號的近藤静也記念館（業務スーパー斜對角），詢問館長乳栗一角。"
+        },
+        {
+          "en": "After the User is reincarnated in this world, this agreement remains binding on the User's reincarnated identity.",
+          "ja": "利用者がこの世界に転生した後も、本契約の効力は、その転生後の身分に及ぶ。",
+          "zh-TW": "使用者轉生至本界後，本契約效力及於其轉生後之身分。"
+        },
+        {
+          "en": "A User who obtains cheat abilities in this world shall not use them for revenge on the Author of the Website.",
+          "ja": "この世界でチート能力を得た利用者は、これを本サイトの作者への報復に用いてはならない。",
+          "zh-TW": "使用者於本界獲得外掛能力者，不得用以報復本網站作者。"
+        },
+        {
+          "en": "A User who obtains cheat abilities in this world may tell the Author of QKiSS where to obtain such abilities and the full conditions for obtaining them, and shall disclose honestly, in detail and in full whether there are any hidden trap clauses of the kind that Kyubey (QB) never mentions unless asked.",
+          "ja": "この世界でチート能力を得た利用者は、チート能力の入手先及び入手のための条件の全部を QKiSS の作者に告げることができ、また、キュゥべえ（QB）のように聞かれなければ分からない隠れた罠の条項の有無について、誠実に、詳細に、かつ漏れなく告げなければならない。",
+          "zh-TW": "使用者於本界獲得外掛能力者，得告知 QKiSS 作者該從何處獲得外掛能力以及完整獲得條件，並應誠實、詳細、如數告知是否有 QB 那種不問就不會知道的隱藏陷阱條款。"
+        }
+      ]
+    },
+    {
+      "title": {
+        "en": "Supplementary Provisions",
+        "ja": "附則",
+        "zh-TW": "附則"
+      },
+      "clauses": [
+        {
+          "en": "Matters not covered by the Terms shall be supplemented in the spirit of the Teletubbies.",
+          "ja": "本規約に定めのない事項は、テレタビーズの精神に基づき補充する。",
+          "zh-TW": "本條款未盡事宜，依天線寶寶之精神補充之。"
+        },
+        {
+          "en": "Anyone who fails to strictly observe the provisions above shall, when following any new anime series in the future, be spoiled by force majeure before watching any of its episodes.",
+          "ja": "以上の条項を厳格に遵守しなかった者は、今後いかなる新作アニメを追う場合においても、各話を視聴する前に、不可抗力によりネタバレを食らうものとする。",
+          "zh-TW": "未嚴格遵循以上條款者，未來追任何新番時，在看任何一話之前都會因不可抗力因素被爆雷。"
+        }
+      ]
+    }
+  ]
+}

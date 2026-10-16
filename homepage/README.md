@@ -1,7 +1,7 @@
 # QKiSS Homepage
 
 The official website of QKiSS: a single static page in plain HTML, CSS and JavaScript, without frameworks or npm. `build.py` checks and assembles it. It uses the Python standard library, and `rsvg-convert` for the link-preview image.
-Its one dependency, the language picker [@llselect/core](https://gitlab.com/kuanyui/llselect), is loaded from a CDN (see [The language picker](#the-language-picker)).
+Its one dependency, [@llselect/core](https://gitlab.com/kuanyui/llselect) for the language and cut pickers, is loaded from a CDN (see [The language picker](#the-language-picker)).
 It is published on both GitHub Pages and GitLab Pages, by the same script.
 
 ```
@@ -10,8 +10,9 @@ homepage/
 └── src/            # Copied into the site as is
     ├── index.html  # The page. English strings are written here.
     ├── style.css
-    ├── main.js     # Translations, the language picker, the screenshot gallery and the download links
-    ├── i18n/       # One JSON file per language other than English
+    ├── main.js     # Translations, the language and cut pickers, the screenshot gallery and the download links
+    ├── i18n/       # One JSON file per language other than English, and en.json for the English of the Director's Cut
+    ├── legal/      # The documents of the Director's Cut: terms.json, and amendments.json for their additional articles
     └── images/
         ├── distros/              # Logos of the Linux distributions, from Simple Icons. See images/distros/README.md.
         ├── icons/                # Icons from Tango and Nome, and the mark of Tango Remixer. See images/icons/README.md.
@@ -126,6 +127,7 @@ English is the source language: its strings are written in `index.html`, marked 
 
 Every other language has `src/i18n/<id>.json`: a flat object `{ "key": "translation" }`.
 A translation of a `data-i18n-html` key is HTML too, so links can point to localized pages.
+A translation can also have one version per cut of the page: see [The Director's Cut](#the-directors-cut).
 
 The page picks the language from, in order:
 
@@ -133,8 +135,6 @@ The page picks the language from, in order:
 2. The visitor's previous choice in the language picker (stored in `localStorage`).
 3. The browser's preferred languages: `ja-JP` matches `ja`.
 4. Otherwise, English.
-
-As in the app (`ConfigFile::engOnly()`), a browser for which `isEnglishOnly()` in `main.js` holds always gets English, without the language picker.
 
 ### Adding a language
 
@@ -151,7 +151,8 @@ As in the app (`ConfigFile::engOnly()`), a browser for which `isEnglishOnly()` i
    - `flag` (optional): the flag shown in the language picker, a file name in `resources/flags/svg/` without `.svg` (e.g. `jp`). To add one, copy it there from [flag-icons](https://github.com/lipis/flag-icons) first.
 
 2. Create `src/i18n/<id>.json`. Copying an existing one is the easiest start.
-3. Run `build.py` (or keep `make homepage-dev-server` running). It rejects unknown keys and malformed files, and lists the untranslated keys.
+3. Optionally, translate the documents of the Director's Cut: each text of `src/legal/*.json` (see [The Director's Cut](#the-directors-cut)).
+4. Run `build.py` (or keep `make homepage-dev-server` running). It rejects unknown keys and malformed files, and lists the untranslated keys.
 
 ### The language picker
 
@@ -160,13 +161,47 @@ The picker is [@llselect/core](https://gitlab.com/kuanyui/llselect), loaded from
 - Its API may change before 0.1.0, so the URL names an exact version.
 - `integrity` makes the browser refuse any file other than the one checked.
 - Its classes are styled in `style.css` from the colors of the page (light and dark), instead of loading one of its themes.
-- If it does not load, the picker stays hidden; the language is still picked as above.
+- If it does not load, both pickers stay hidden: the language is still picked as above, and the cut is the one chosen last.
 
 To upgrade it, change the version in the URL, and set `integrity` to `sha384-` followed by the hash of the new file:
 
 ```sh
 curl -fsSL https://cdn.jsdelivr.net/npm/@llselect/core@VERSION/dist/index.umd.js | openssl dgst -sha384 -binary | openssl base64 -A
 ```
+
+### The Director's Cut
+
+The page has two cuts, and the cut picker next to the language picker (an @llselect/core too) switches between them:
+
+- The Wholesome Cut, shown by default.
+- The Director's Cut, with the author's swearing, dark political jokes and strong opinions. The first switch to it asks three times: a warning (`#cut-dialog` in `index.html`), the terms of the Director's Cut (`#terms-dialog`), then their additional articles (`#amendments-dialog`). In each document, the button that continues (“I have actually read, and fully agree to, all of the provisions above”) is enabled only once the visitor has scrolled to its end. The cut, and the agreement, are remembered in `localStorage` like the language: after agreeing once, switching asks nothing.
+
+A string that differs between the cuts is an object with one version per cut, instead of a string. For example, in `i18n/ja.json` and `i18n/zh-TW.json` (in their languages):
+
+```json
+"footer.disclaimer": {
+  "safe":   "<strong>Disclaimer:</strong> … FITNESS FOR A PARTICULAR PURPOSE.",
+  "danger": "<strong>Disclaimer:</strong> … NONETHELESS, POLITICAL INCORRECTNESS IS ABSOLUTELY GUARANTEED. …"
+},
+```
+
+- The two versions are always next to each other, so that they are easy to compare, and neither one is forgotten.
+- English: the Wholesome Cut is written in `index.html`, like every English string. The Director's Cut is in `i18n/en.json`, whose strings are all such objects with only `"danger"`. `main.js` downloads it only for the Director's Cut, so crawlers, link previews and visitors without JavaScript only ever see the Wholesome Cut.
+- Only the strings of `data-i18n` and `data-i18n-html` can have a version per cut, not attributes.
+- An empty version hides its element. For example, `"safe": ""` for a paragraph or a footnote that only the Director's Cut has. In `index.html`, such an element is empty and `hidden` (for a footnote, its `<p>`), so that it stays hidden without JavaScript too.
+- `main.js` numbers the footnotes of each `.footnotes` block (`*1`, `*2`, …), skipping the hidden ones, so the numbers written in the strings do not matter. Only the numbers in `index.html` must be right for the Wholesome Cut, for visitors without JavaScript.
+- `build.py` rejects malformed versions, and warns about a string that has a version per cut in one language but not in another.
+
+The terms and their additional articles are documents, not strings of the page: `src/legal/terms.json` and `src/legal/amendments.json`. `main.js` downloads one when its dialog opens, and writes it into the `.terms-content` of the dialog, in the language of the page. So the page does not grow with them.
+
+- Each one has `chapters`. A chapter has a `title`, and its content, or `sections` that have a `title` and their content. The content is of one of two kinds:
+  - `articles`, written like a law of Taiwan (the terms). Each article has a `title` and a `body`: its paragraphs, and lists of subparagraphs (`{ "items": [...] }`). `style.css` numbers and indents them as laws do in each language.
+  - `clauses` (the additional articles). `main.js` numbers them from their position: `1-2`, or `4-1-3` in a section. A clause can have its own `clauses`, numbered like `1-3-1`. `numberSeparator` sets the character between the numbers in each language: `4.1.3` in English, as is usual there, and `4-1-3` in Taiwan Traditional and Japanese. So clauses can be moved or added without renumbering anything by hand. That is also why a clause refers to another one by position (“the preceding clause”), not by number, and writes its own number as `{number}`.
+- A document also has a `date`, and optionally a `closing` after its chapters. It starts with the title of its dialog and its date, centered over a double rule, as a contract does.
+- Every text is an object with one string per language, side by side, like the captions of `screenshots.json`: `{ "en": "...", "ja": "...", "zh-TW": "..." }`. So the structure is written once for every language, and the translations of a text are easy to compare. Each string is HTML, like the strings of `data-i18n-html`.
+- Every text needs English. A text missing another language shows its fallback language.
+- `build.py` rejects a malformed document, and lists the texts that miss a language.
+- The dialog around them (its title, the buttons…) is translated like the rest of the page.
 
 ## Deployment
 

@@ -1,0 +1,41 @@
+{
+  "footer.disclaimer": {
+    "danger": "<strong>Disclaimer:</strong> QKiSS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License</a> for more details. NONETHELESS, POLITICAL INCORRECTNESS IS ABSOLUTELY GUARANTEED. After all, this project was made in a country banned from flying its flag at the Olympics, banned from listing its nationality at the Chopin Competition, banned from joining the United Nations, and where the WHO doesn’t believe a single breathing human lives. The author(s) accept(s) no liability for hurting the feelings of the Whatever people."
+  },
+  "about.why.web": {
+    "danger": "Yes, I know there are some KiSS implementations which can run in a Web browser by using Web technologies directly, but they are (technically and architecturally) ugly when you want to turn them into a desktop application integrated with your OS and file system; I'm also tired of writing lots of disgusting HTML / CSS / JS as a workaround to make a web page pretend to be a native application, and then pack it into a bloated blob of an executable; and such a thing which actually can be done in a light-weight way should not need a browser at all, nor some Chimera like Electron. Similar reasons also apply to Java, which runs unbearably slow."
+  },
+  "about.why.practice": {
+    "danger": "Besides, it was also a chance to practice writing a somewhat sizable project in C++. After all, it really is quite fun to write. (Although by the time I finished, this world of LLMs no longer seems to need a loser like me to write programs: the kind who grinds LeetCode for three months, then starts wishing to be reincarnated in another world.)"
+  },
+  "about.nostalgia": {
+    "danger": "This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a lost age before Internet was polluted by AI-generated junk (this project does use some AI though). After all, life is frightening enough as it is; the real world is a hot mess, while <a href=\"https://ja.wikipedia.org/wiki/2次元\">nijigen</a> and <a href=\"https://w.wiki/4So4\">isekai</a> remain a pure promised land."
+  },
+  "features.specs.electron": {
+    "danger": "No Electron, which no user likes (these Weblins<sup class=\"footnote-ref\"><a href=\"#footnote-weblin\">*1</a></sup> who use Electron to dress up web pages as native apps seem to think your RAM is free)."
+  },
+  "features.footnote.weblin": {
+    "danger": "Weblin: a goblin who writes for the web, at <a href=\"https://vinta.ws/blog/695\">the bottom of the food chain</a> in the industry jungle. Commonly known as a web developer. For example, the author of QKiSS."
+  },
+  "features.misc.apparmor": {
+    "danger": "An AppArmor profile for tinfoil-hat security nerds<sup class=\"footnote-ref\"><a href=\"#footnote-author\">*4</a></sup> who get a braingasm whenever the LSM spits out a DENIED audit log."
+  },
+  "features.footnote.author": {
+    "danger": "For example, the author of QKiSS."
+  },
+  "faq.selinux.naming": {
+    "danger": "One more thing: I'm allergic to the taste of SELinux's command names. <code>getenforce</code>, <code>chcon</code>, <code>load_policy</code>, <code>restorecon</code> and a pile of other commands refuse to have an <code>se</code> prefix, and crap all over <code>/sbin/</code>. If writing this in my free time got me a work injury, there would be no insurance payout."
+  },
+  "faq.llm.actions.note": {
+    "danger": "For the Windows packages (I have no Windows development environment). No idea why Gemini does this better, while ChatGPT keeps spouting bullshit in this field. Before the public release, I realized that fighting this was a waste of time, so I let an LLM agent debug it and write the rest of the code."
+  },
+  "faq.llm.website.note": {
+    "danger": "All the translations, and all the HTML / CSS / JS… I can't be bothered anymore to spend my free time writing web pages, the bottom of the programmers' food chain."
+  },
+  "features.tango-remixer.body": {
+    "danger": "For the 2000s aesthetic romance of Tango-style UI icons, and to bring realistic icons back to <span id=\"footnote-ref-browsers\">a world where flat UIs and monochrome icons, an arbitrary, trend-chasing design fad that never thinks of people with <a href=\"https://en.wikipedia.org/wiki/Dyslexia\">dyslexia</a>, blow around like an ill wind</span><sup class=\"footnote-ref\"><a href=\"#footnote-browsers\">*2</a></sup>, I ended up making the <a href=\"https://kuanyui.github.io/tango-remixer/\">Tango Remixer</a> project on the side, so I could easily stuff Tango icons into Qt projects like QKiSS and keep their look consistent across platforms; then I also took on maintaining three XDG-compatible icon theme packs from the 2000s. Then my OCD couldn't stand making the app public before its icons were pretty, so it took one more year..."
+  },
+  "features.footnote.browsers": {
+    "danger": "Oh Firefox, what on earth is wrong with you, insisting on removing a pile of icons from the UI? Did it never occur to you that people with dyslexia quite likely use a UI by relying on “position → icon color → icon details → and only then the text”? Making the icons monochrome wasn't enough, and now you've removed them altogether. Even Chrome and Edge, two rogues who don't care whether their users live or die, do a little better than you on this: at least they kept the icons in their application menu. On icons, DuckDuckGo Browser actually does the best job. As far as I know, DuckDuckGo is currently (as of October 2026) the only mainstream browser that still keeps icons in its right-click context menu, crushing Firefox, Chrome, Edge, Vivaldi and Brave, every single one of them. And the icons of its settings screen are even in color! Do you know how excited I was to see that!"
+  }
+}
