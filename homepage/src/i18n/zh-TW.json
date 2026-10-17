@@ -41,21 +41,21 @@
   "about.kiss": "<a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS（Kisekae Set System）</a>是一種數位紙娃娃的格式。用滑鼠拖曳衣服就能幫角色換裝，FKiSS 腳本還能加入動畫、音效等互動。",
   "about.kisekae": "「Kisekae」源自日文「<span lang=\"ja\">着せ替え人形</span>」（發音：「kisekae ningyou」），意思是「換裝人偶」。",
   "about.origin": "KiSS 起源於日本 1990 年代的<a href=\"https://ja.wikipedia.org/wiki/おたく\">御宅族</a>次文化，以及個人電腦愛好者社群（特別是 <a href=\"https://ja.wikipedia.org/wiki/PC-9800シリーズ\">NEC PC-9800 系列</a>），並流行於 1990 年代到 2000 年代中之間。",
-  "about.why.title": "為什麼要做 QKiSS？",
-  "about.why.body": "到了 2024 年，Linux 上既有的 KiSS 檢視器都已經無法使用：<a href=\"https://www2s.biglobe.ne.jp/~yav/kiss/index.html\">fkiss</a> 雖然還能編譯，卻已無法執行；<a href=\"https://devel.tlrmx.org/kiss/\">GnomeKiSS</a> 則依賴過時的 GNOME 2 函式庫，大多數發行版都已不再收錄。QKiSS 以這兩者為啟發，從零開始打造。卅年傳統，全新感受。",
-  "about.why.web": {
-    "safe":   "對，我知道有些 KiSS 實作直接用 Web 技術可以在瀏覽器裡跑，但這種方法如果想要做成桌面應用程式跟作業系統和檔案系統整合時（技術上和架構上都）會很麻煩；而且這種明明可以做得很輕量的東西本來就不該用瀏覽器。",
-    "danger": "對，我知道有些 KiSS 實作直接用 Web 技術可以在瀏覽器裡跑，但這種方法如果想要做成桌面應用程式跟作業系統和檔案系統整合時（技術上和架構上都）會很醜；我也受夠了寫一堆噁心的 HTML / CSS / JS，只為了把網頁偽裝成看起來像原生應用程式還包成一坨肥大執行檔；而且這種明明可以做得很輕量的東西本來就不該用瀏覽器，更別說 Electron 這種奇美拉。Java 狀況也類似，跑起來還慢到讓人抓狂。"
-  },
-  "about.why.practice": {
-    "safe":   "另外也是順便練習拿 C++ 寫個稍微有規模的專案，畢竟寫起來真的蠻有趣的。",
-    "danger": "另外也是順便練習拿 C++ 寫個稍微有規模的專案，畢竟寫起來真的蠻有趣的（雖然等我寫完時，有了 LLM 的這個世界，似乎已經不需要我這種 LeetCode 刷三個月就開始想轉生異世界的廢物寫程式了）。"
+  "about.why.title": "為什麼要開發 QKiSS？",
+  "about.why.charm": "KiSS 充滿了大量二次元同人社群令人著迷的創作熱情，在那種電腦硬體資源限制下盡可能展現出的 8bit（甚至更低）的美學、還有各種奇葩的腦洞很大的創意跟幽默感，而且很多作者作的衣服穿搭設計真的很有品味，光是看了心情就很好。",
+  "about.why.story": "本臭宅是 2007 左右才第一次聽說 KiSS<sup class=\"footnote-ref\"><a href=\"#footnote-palmkiss\">*1</a></sup>，是因為在 Ubuntu 的 Synaptic 裡面亂翻常常看到「GnomeKiSS」這搶眼的怪名字，但好奇裝了一下也不知道要怎用，直到了 2012 左右調查了才知道 KiSS 是什麼並開始玩，即使當時都已經是 KiSS 沒落的年代了，但裡面那些日本動漫角色與漂亮的服裝、動漫惡搞梗與 Windows 95/98 時代的像素美學的回憶還是讓我玩了很久。",
+  "about.why.body": "然而到了 2024 年，有陣子想要重溫一下那些 KiSS 檔，卻發現當時 Linux 上現有的原生 KiSS 檢視器都已經無法使用：<a href=\"https://www2s.biglobe.ne.jp/~yav/kiss/index.html\">fkiss</a> 雖然還能編譯，卻已無法執行；<a href=\"https://devel.tlrmx.org/kiss/\">GnomeKiSS</a> 則依賴過時的 GNOME 2 函式庫，大多數發行版都已不再收錄。於是想說不然自己來寫一個，而且要做就絕對要作一個 Linux 上面原生支援且 UI/UX 要讓自己滿意的，另外也是順便練習拿 Qt / C++ 寫個稍微有規模的專案，所以就開始用 Qt / C++ 一邊啃 KISS/GS 規格書從零開始打造 QKiSS 這個全新的 KiSS 檢視器。卅年傳統，全新感受。",
+  "about.why.practice": "而且寫起來也真的饒富趣味：從理解 KISS/GS 調色盤與點陣圖專屬的格式讓圖片正確顯示出來，再根據 FKiSS 規格實作出腳本語言的解析器與直譯器讓畫面動起來，由於是年代久遠的格式，還會遇到一堆我這種現代開發者從沒想過的事情（比如 Mac OS 以前是拿 <code>\\r</code> 來當換行符號的），寫這些東西的樂趣早就超過 KiSS 檔案本身。",
+  "about.why.burnout": {
+    "safe":   "",
+    "danger": "雖然等我寫完時除了奔奧外，有了 LLM 的這個世界，似乎也已經不需要我這種 LeetCode 刷三個月就開始想轉生異世界的廢物寫程式了。"
   },
   "about.nostalgia": {
     "safe":   "這個專案一部分也是源自對 Windows 95/98 與 GTK+ 2 時代的懷舊。現實世界已經足夠可怕，至少<a href=\"https://ja.wikipedia.org/wiki/2次元\">二次元</a>與<a href=\"https://w.wiki/4So4\">異世界</a>保留著賜予我們純淨的應許之地。",
     "danger": "這個專案一部分也是源自對 Windows 95/98 與 GTK+ 2 時代的懷舊 —— 那是一個在網際網路還沒被 AI 生成的垃圾污染之前的已失落的文明年代（雖然這個專案本身也有用到一些 AI...）。現實世界已經足夠可怕，至少<a href=\"https://ja.wikipedia.org/wiki/2次元\">二次元</a>與<a href=\"https://w.wiki/4So4\">異世界</a>保留著賜予我們純淨的應許之地。"
   },
   "about.animen": "我實實在在地告訴你們：你們應當思考二次元與異世界。<ruby>阿宅們<rt>Animen</rt></ruby>。",
+  "about.footnote.palmkiss": "嚴格來說其實更早還有玩過 Palm OS 上的 PalmKiss，不過那實作似乎比較尷尬，無法自行載入 LZH，只有一套程式內建的 KiSS，我也搞不清那 KiSS 原來是一整個那麼大的社群，還以為只是那 Palm OS App 哪根筋不對叫這怪名字。",
   "features.title": "特色",
   "features.ui.title": "功能齊全、UI 方便",
   "features.ui.files": "從側邊面板快速切換檔案：資料夾裡的資料、壓縮檔裡的各個 CNF。",
@@ -73,7 +73,7 @@
     "danger": "不用沒有使用者喜歡的 Electron（這些用 Electron 把網頁打扮成原生應用程式的 Weblin<sup class=\"footnote-ref\"><a href=\"#footnote-weblin\">*1</a></sup> 好像以為你的記憶體不用錢一樣）。"
   },
   "features.misc.title": "工程與美學的浪漫",
-  "features.misc.handmade": "主程式程式碼純手工打造、無使用 LLM agent<sup class=\"footnote-ref\"><a href=\"#footnote-website\">*2</a></sup>（而且恐怕是作者最後一次手寫軟體專案，且用且珍惜）。",
+  "features.misc.handmade": "主程式的程式碼 > 95% 為人類手敲程式碼<sup class=\"footnote-ref\"><a href=\"#footnote-website\">*2</a></sup> <sup class=\"footnote-ref\"><a href=\"#footnote-handtyped\">*3</a></sup>（而且恐怕是作者最後一次手寫軟體專案，且用且珍惜）。",
   "features.misc.linux": "Linux 不再是次等公民（Windows 才是）。",
   "features.misc.open": "開放原始碼 + 自動化建置，確定我沒有在裡面偷塞壞壞的東西<sup class=\"footnote-ref\"><a href=\"#footnote-supply-chain\">*3</a></sup>。",
   "features.misc.tango": "Tango Icon 風格的 UI 圖標，讓你夢回 2000 年代。",
@@ -84,7 +84,8 @@
   "features.misc.qt": "採用 Qt 6 / C++ 20 打造，沒在管老系統啦。",
   "features.footnote.back": "回到內文",
   "features.footnote.website": "本專案於各部份的 LLM 使用狀況揭露請見 <a href=\"#faq-llm\">Q&amp;A</a>。像是官網 HTML / CSS / JS 就全部交給 LLM agent 了，因為我沒興趣再花費假日時間的生命寫網頁了；我是 OpenAI 與 Anthropic 養的狗，汪汪。",
-  "features.footnote.supply-chain": "包含但不限於供應鏈攻擊（如 XZ Utils 或 GitHub Actions 的 tj-actions/changed-files 類似事件）等不可抗力因素不在此限。",
+  "features.footnote.handtyped": "雖然這年頭標榜人類鍵盤手敲程式碼並不代表程式碼品質就一定比 LLM 產出的高，但你可以從程式碼中感受到人類手掌傳遞到鍵盤上濕漉漉的手汗與怡人的體溫、以及隔著螢幕就能聞到的作者散發出的宅臭。",
+  "features.footnote.supply-chain": "供應鏈攻擊（如 XZ Utils 或 GitHub Actions 的 tj-actions/changed-files 類似事件）等不可抗力因素不在此限。",
   "features.footnote.author": {
     "safe":   "",
     "danger": "比如 QKiSS 的作者。"
@@ -119,11 +120,11 @@
   "faq.specs.kiss": "<a href=\"https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html\">KISS/GS</a>（General Specification，基本規格），以及它的<a href=\"https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/COMMENT.HTM\">擴充註解</a>。",
   "faq.specs.fkiss": "<a href=\"https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/TTFKSMN4.HTM\">FKiSS</a>（腳本語言）：版本 1、2。",
   "faq.specs.enough": "這已經足以載入我在網路上找得到的幾乎所有日本 KiSS 檔案了。",
-  "faq.specs.shell": "不過 <code>shell()</code> 指令是故意不實作的，以免造成任何資安漏洞。",
+  "faq.specs.shell": "不過 <code>shell()</code> 指令是故意決定不實作的，以免造成不必要的資安漏洞。（我好像也沒看過哪個 KiSS 檔有這個。）",
   "faq.macos.q": "QKiSS 能移植到 macOS 嗎？",
   "faq.macos.a": "我沒有 Mac，所以不知道。",
   "faq.name.q": "為什麼叫「QKiSS」？",
-  "faq.name.a": "以 <a href=\"https://zh.wikipedia.org/zh-tw/Qt\"><strong>Q</strong>t</a> 6 實作的 <a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS</a> 檢視器。名稱有個 KiSS 是 KiSS Viewer 的慣例，像 fkiss, GnomeKiSS, KISSLD, Direct KiSS 之類的。",
+  "faq.name.a": "以 <a href=\"https://zh.wikipedia.org/zh-tw/Qt\"><strong>Q</strong>t</a> 6 實作的 <a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS</a> 檢視器。名稱有個 KiSS 是 KiSS 檢視器的慣例，像 fkiss, GnomeKiSS, KISSLD, Direct KiSS 之類的。",
   "faq.name.others": "我也考慮過其他幾個名字：",
   "faq.name.qtkiss": "<strong>QtKISS</strong>：唸起來跟「Cute Kiss」一樣，命名邏輯也跟 GnomeKiSS 一樣是「平台名稱 + KiSS」。嗯其實 QKiSS 開發初期就是用這個名字，但根據 <a href=\"https://www.qt.io/trademark/\">Qt 商標的合理使用規範</a>，只有在「不暗示贊助或背書的情況下，才能使用 Qt 這個名稱」。為了避免將來被靠北只好改名。",
   "faq.name.qute": "<strong>Qute KISS</strong>：一樣唸作「Cute Kiss」，但是啊…… Qute 是日本一家電腦遊戲公司的商標…… 風險太高。",
@@ -147,15 +148,40 @@
     "danger": "還有一點是我對 SELinux 的指令命名品味過敏。<code>getenforce</code>、<code>chcon</code>、<code>load_policy</code>、<code>restorecon</code> 一堆指令堅持不加 <code>se</code> 前綴，在 <code>/sbin/</code> 裡面到處拉屎。業餘時間寫這個如果因此得到工傷，沒有保險給付。"
   },
   "faq.selinux.landlock": "不過就算你用 SELinux，依舊還是有 Landlock 與 seccomp 的保護，但只保護 lha 與 unar 這兩個外部程式的解壓過程。",
-  "faq.selinux.footnote": "一般來說，通常並不建議使用者在工作場所玩任何種類的 KiSS Viewer。",
+  "faq.selinux.footnote": "一般來說，通常並不建議使用者在工作場所玩任何種類的 KiSS 檢視器。",
+  "faq.web.q": "為什麼不用 Electron 或 Web 技術實作？",
+  "faq.web.intro": "雖然我前面有提到我這專案本來就想要做成原生桌面應用程式，不過這個屬於我實際經常被人問過的問題，不想以後再次回答，所以還是講一下。",
+  "faq.web.a": {
+    "safe":   "我知道有些 KiSS 實作直接用 Web 技術可以在瀏覽器裡跑，但這種方法如果想要做成桌面應用程式跟作業系統和檔案系統整合時（技術上和架構上都）會很麻煩；而且這種明明可以做得很輕量的東西本來就不該用瀏覽器。",
+    "danger": "我知道有些 KiSS 實作直接用 Web 技術可以在瀏覽器裡跑，我最一開始確實也有認真考慮過用 Electron 來包裝這些別人寫好的 KiSS 實作，但我真的很不喜歡寫 Electron，當然亂硬拼湊是可以但真的很沒有美感，也作不太到我預期想要的 UI 那種操作體驗（硬要作也許可以，但要付出的成本恐怕會比起我實作 KiSS 本身還多，而且寫這很無聊...我不想花時間在這裡）。"
+  },
+  "faq.web.tired": {
+    "safe":   "而且還要一直追 Electron 的 API breaking changes、還多了 npm 這個讓打包過程變麻煩還可能被投毒的超級不可控的東西、還要處理 Node 版本與 Electron 版本的相容問題（各 distro 的版本更別說）....，諸如此類等等等等、考量以上種種因素，以 QKiSS 這種類型的小規模專案，我<strong>完全不認為</strong>用 Electron 或 Web 技術開發與維護的成本會比較低，<strong>而且我能保證我一定會開發與維護得很不愉快。</strong>",
+    "danger": "我也受夠了寫一堆噁心的 HTML / CSS / JS，只為了把網頁偽裝成看起來像原生應用程式還包成一坨肥大執行檔，還要一直追 Electron 的 API breaking changes。而且還多了 npm 這個讓打包過程變麻煩還可能被投毒的超級不可控的東西、還要處理 Node 版本與 Electron 版本的相容問題（各 distro 的版本更別說）....，諸如此類等等等等、考量以上種種因素，以 QKiSS 這種類型的小規模專案，我<strong>完全不認為</strong>用 Electron 或 Web 技術開發與維護的成本會比較低，<strong>而且我能保證我一定會開發與維護得很不愉快。</strong>"
+  },
+  "faq.web.chimera": {
+    "safe":   "",
+    "danger": "總之這種明明可以做得很輕量的桌面應用，我完全不想用 Electron 這種 Web 跟桌面混種的奇美拉。"
+  },
+  "faq.web.love": {
+    "safe":   "",
+    "danger": "不要誤會我，我很喜歡 Web 技術，Web 技術與網頁瀏覽器能作到的事情多到令人讚嘆簡直是現代人類科技文明最偉大的工程奇蹟之一，只是覺得以 KiSS 檢視器這種用途以及我預想中的完成品樣貌來說完全不搭，光是要用 HTML CSS JS 刻出一個假裝是原生桌面應用的 UI、還要刻一個 file manager 在裡面就已經是一件不合理的事情了，但 Qt 這類框架早就都做好了。（當然這裡所說的不合適不合理只是至少截至 QKiSS 開始開發的 2024 為止。2026 的 LLM 用 Web 技術搞不好還用 WebGL 加速 + WASM 寫這種檢視器可能就一兩天...）"
+  },
+  "faq.web.apps": {
+    "safe":   "",
+    "danger": "另外 Web 技術當然可以做出令人驚嘆的優秀桌面應用（比如 VS Code、Figma），但恐怕僅限開發資源充足且願意認真專注一堆細節的公司（顯然大部分都不是），而且必須很清楚自己在做什麼，UI flow 要事先有良好規劃不能直接照搬傳統 GUI 桌面應用的設計邏輯（比如傳統 GUI 應用程式裡面多視窗是很基本的 UI pattern，但 Electron 硬要作多視窗簡直是惡夢：多視窗之間共用狀態是 IPC，那個真他媽難寫且令人煩躁...，VS Code 這種有足夠開發資源的軟體，仔細看他們其實也盡可能的讓你自然的沒有覺得缺了子視窗的存在，像是設定那一頁是直接做成分頁而不是子視窗，到 2026 左右才變成看起來像子視窗但其實還是畫在同個視窗裡的 modal，而且那個 modal 當然也是無法拖出主視窗的，畢竟它只是蓋在主視窗上的一層），不然很容易只會覺得我現在用的只是有點像是網頁的程式而不是桌面應用程式。"
+  },
+  "faq.web.landmines": {
+    "safe":   "",
+    "danger": "為什麼我這裡會突然廢話那麼多呢？因為我在 ChatGPT 出現之前開發過五個左右的 Electron 應用程式，踩過不少地雷所以順便說說...欸嘿。"
+  },
   "faq.rust.q": "為什麼不用 Rust？",
   "faq.rust.kde": "我是 KDE 使用者，Qt 用起來最無縫。",
   "faq.rust.widgets": "Qt Widgets 提供的元件足夠成熟穩定、更新週期夠長、少 API breaks，也不需要自己刻什麼元件，不太需要第三方 library 就能把八成功能做出來。",
   "faq.rust.binding": "用 Rust 就得靠 binding，還要擔心 binding 的 API breaking、品質或者額外的坑，還有難以直接翻譯成 Rust 的 Qt C++ pattern。Qt 和 binding 兩套都要煩惱，也失去 Qt Creator 那些開發輔助。",
   "faq.rust.practice": "我想練習 C++。",
   "faq.llm.q": "QKiSS 有用 AI（LLM）嗎？",
-  "faq.llm.assistant": "這專案有使用到 LLM 輔助，但盡量用各種工程方法保持在可控制範圍內（如 KVM 隔離、commit 人工審查）。",
-  "faq.llm.agents": "LLM agent（例如 Claude Code、Codex）只用在翻譯、這個官網與 CI/CD。",
+  "faq.llm.assistant": "這專案有使用到 LLM 輔助，但盡量用各種工程方法保持在可控制範圍內（如 LLM agent 的 KVM 隔離、最小權限原則、commit 人工審查）。",
   "faq.llm.review": "Qt C++ 主程式以及 Python 程式碼部份從來沒搞過什麼該死的 vibe coding、即使使用 LLM 輔助，程式碼也都經過人工逐行審查與修改：每一行我都看得懂，也解釋得出來。翻譯也有用我破爛的外語能力盡量人工校對。",
   "faq.llm.chart": "各部份由 LLM 直接生成的比例",
   "faq.llm.cpp.note": "討論設計模式、尋找合適的 Qt API，以及為難懂的 Qt API 寫一些範例（例如 MVC 的 delegate）。",

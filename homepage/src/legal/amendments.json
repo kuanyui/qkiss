@@ -281,7 +281,14 @@
         {
           "en": "Having returned to a safe place, the Entrant shall place a contract with Geralt of Rivia, of Kaer Morhen, Kingdom of Belzerg. The letter of contract shall be encrypted with his GPG public key (key ID: <code>0xFEE1DEAD28121969</code>; fingerprint: <code>DEAD BEEF CCCC 8763 4649 3939 FEE1 DEAD 2812 1969</code>), and its ciphertext copied by hand onto paper scented with lilac and gooseberries, and sent by registered express mail.",
           "ja": "入国者は、安全な場所に戻った後、ベルゼルグ王国ケィア・モルヘンのリヴィアのゲラルトに依頼をしなければならない。依頼書の内容は、同人の GPG 公開鍵（鍵 ID：<code>0xFEE1DEAD28121969</code>、フィンガープリント：<code>DEAD BEEF CCCC 8763 4649 3939 FEE1 DEAD 2812 1969</code>）で暗号化し、その暗号文をリラとスグリの香りのする紙に手書きで写した上、速達書留で送付しなければならない。",
-          "zh-TW": "入境者返抵安全處所後，應向貝爾澤格王國凱爾莫罕之利維亞的傑洛特提出委託。委託書之內容應以其 GPG 公鑰（公鑰 ID：<code>0xFEE1DEAD28121969</code>；指紋：<code>DEAD BEEF CCCC 8763 4649 3939 FEE1 DEAD 2812 1969</code>）加密，並將密文手抄於帶有丁香與醋栗香氣之紙張，以限時掛號寄送之。"
+          "zh-TW": "入境者返抵安全處所後，應向貝爾澤格王國凱爾莫罕之利維亞的傑洛特提出委託。委託書之內容應以其 GPG 公鑰（公鑰 ID：<code>0xFEE1DEAD28121969</code>；指紋：<code>DEAD BEEF CCCC 8763 4649 3939 FEE1 DEAD 2812 1969</code>）加密，並將密文手抄於帶有丁香與醋栗香氣之紙張，以限時掛號寄送之。",
+          "clauses": [
+            {
+              "en": "An application for the public key referred to in the preceding clause shall be made at the Town Office of Axel, on Form X.509.",
+              "ja": "前項の公開鍵の交付を受けようとする者は、様式第 X.509 号による申請書をアクセル町役場に提出しなければならない。",
+              "zh-TW": "前項公鑰，應至阿克塞爾鎮公所填具第 X.509 號表格申請之。"
+            }
+          ]
         },
         {
           "en": "The fee for the contract under the preceding clause shall be paid by Emhyr var Emreis (alias “the Hedgehog”), King of Belzerg.",

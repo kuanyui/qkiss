@@ -155,10 +155,13 @@
 
   /**
    * A string can be empty in one cut, like a footnote that only the Director's Cut has. Then its element is hidden:
-   * for a footnote, the whole footnote. In index.html, such an element is empty and hidden (see homepage/README.md).
+   * for a footnote, the whole footnote, and for a musing, the whole musing. In index.html, such an element is empty
+   * and hidden (see homepage/README.md).
+   * collectTargets() also calls it with the strings of index.html, to put these elements in `emptied`. Otherwise, a
+   * page that opens in the Director's Cut would never show them.
    */
   function showUnlessEmpty(element, value) {
-    const box = element.closest('.footnotes > p') ?? element;
+    const box = element.closest('.footnotes > p, .musing') ?? element;
     if (value === '') {
       box.hidden = true;
       emptied.add(box);
@@ -174,6 +177,7 @@
         source: element.textContent,
         apply: (value) => { element.textContent = value; showUnlessEmpty(element, value); },
       });
+      showUnlessEmpty(element, element.textContent);
     }
     for (const element of document.querySelectorAll('[data-i18n-html]')) {
       targets.push({
@@ -181,6 +185,7 @@
         source: element.innerHTML,
         apply: (value) => { element.innerHTML = value; showUnlessEmpty(element, value); },
       });
+      showUnlessEmpty(element, element.innerHTML);
     }
     for (const element of document.querySelectorAll('[data-i18n-attr]')) {
       for (const item of element.dataset.i18nAttr.split(';')) {

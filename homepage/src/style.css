@@ -726,6 +726,7 @@ sup {
 
 /* Where a footnote link (or its back link) has just jumped to. */
 .footnotes p:target,
+.prose > p:target,
 .feature li:target,
 .faq-answer p:target,
 .promo span:target {
@@ -1308,7 +1309,8 @@ sup {
   padding: 0 1.25rem 1.25rem;
 }
 
-.faq-answer > :last-child {
+/* No room under the last element of an answer. The elements after it that the current cut hides do not count. */
+.faq-answer > :not([hidden]):not(:has(~ :not([hidden]))) {
   margin-bottom: 0;
 }
 

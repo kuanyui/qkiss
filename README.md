@@ -225,8 +225,7 @@ But even if you use SELinux, you still have the protection of Landlock and secco
 
 ## Disclosuring Usage of LLMs
 
-- This project uses LLMs as development assistants, but keeps them under control as much as possible, with various engineering methods (e.g. isolation in KVM, manual review of commits).
-- LLM agents (e.g. Claude Code, Codex) are only be used for i18n translations, homepage, CI/CD.
+- This project uses LLMs as development assistants, but keeps them under control as much as possible, with various engineering methods (e.g. isolating LLM agents in KVM, the principle of least privilege, manual review of commits).
 - Never did any fucking vibe coding in the main program (Qt / C++) or in the Python code. Even with LLM assistance, all the code is manually reviewed and modified line by line: I can understand and explain every line of it. Translations are also manually proofread as much as possible, with my broken foreign language skills.
 - Detailed contribution ratios are listed below:
 

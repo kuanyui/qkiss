@@ -115,9 +115,11 @@
         <p data-i18n-html="about.origin">KiSS originated from Japanese <a href="https://ja.wikipedia.org/wiki/おたく">otaku</a> subculture and personal computer enthusiasts community (particularly those using the <a href="https://ja.wikipedia.org/wiki/PC-9800シリーズ">NEC PC-9800 series</a>) in the 1990s, and gained popularity throughout the 1990s and early 2000s.</p>
 
         <h3 data-i18n="about.why.title">Why QKiSS?</h3>
-        <p data-i18n-html="about.why.body">By 2024, the existing KiSS viewers for Linux had stopped working: <a href="https://www2s.biglobe.ne.jp/~yav/kiss/index.html">fkiss</a> can still be built but no longer runs, and <a href="https://devel.tlrmx.org/kiss/">GnomeKiSS</a> depends on outdated GNOME 2 libraries that most distributions no longer ship. Inspired by both, QKiSS was built from scratch.</p>
-        <p data-i18n="about.why.web">Yes, I know there are some KiSS implementations which can run in a Web browser by using Web technologies directly, but they are (technically and architecturally) awkward when you want to turn them into a desktop application integrated with your OS and file system; and such a thing which actually can be done in a light-weight way should not need a browser at all.</p>
-        <p data-i18n="about.why.practice">Besides, it was also a chance to practice writing a somewhat sizable project in C++. After all, it really is quite fun to write.</p>
+        <p data-i18n="about.why.charm">KiSS is full of the fascinating creative passion of the nijigen doujin communities: the 8-bit (or even lower) aesthetics that they showed off as best they could within the hardware limits of the computers of that time, and all kinds of bizarre, wildly imaginative ideas and humor. Many artists' outfit designs really have great taste, too: just looking at them puts me in a good mood.</p>
+        <p id="footnote-ref-palmkiss" data-i18n-html="about.why.story">This stinky otaku first heard of KiSS<sup class="footnote-ref"><a href="#footnote-palmkiss">*1</a></sup> around 2007, from often seeing the eye-catching, weird name “GnomeKiSS” while poking around in Synaptic on Ubuntu. Out of curiosity, I installed it once, but had no idea how to use it. It was only around 2012 that I looked into it, learned what KiSS was, and started playing. Even though KiSS was already in decline by then, its Japanese anime characters and pretty outfits, its anime parody jokes, and the memories of the pixel aesthetics of the Windows 95/98 era still kept me playing for a long time.</p>
+        <p data-i18n-html="about.why.body">But in 2024, when I felt like revisiting those KiSS sets for a while, I found that the native KiSS viewers that Linux had at the time had all stopped working: <a href="https://www2s.biglobe.ne.jp/~yav/kiss/index.html">fkiss</a> can still be built but no longer runs, and <a href="https://devel.tlrmx.org/kiss/">GnomeKiSS</a> depends on outdated GNOME 2 libraries that most distributions no longer ship. So I thought: why not write one myself? And if I was going to make one, it absolutely had to run natively on Linux, with a UI/UX that I was happy with; it would also be a chance to practice writing a somewhat sizable project in Qt / C++. So I started building QKiSS, a brand-new KiSS viewer, from scratch in Qt / C++, while chewing through the KISS/GS specification.</p>
+        <p data-i18n-html="about.why.practice">And writing it really is a lot of fun: first understanding KISS/GS's own palette and bitmap formats, so that the images show up correctly, then implementing a parser and an interpreter of the FKiSS script language from its specification, so that things start to move. Since the formats are so old, you also run into lots of things that a modern developer like me never thought of (for example, the old Mac OS used <code>\r</code> for line breaks). The fun of writing all this has long since surpassed the KiSS sets themselves.</p>
+        <p data-i18n="about.why.burnout" hidden></p>
         <blockquote class="musing">
           <img class="musing-icon" src="images/icons/face-angel.svg" alt="" width="48" height="48">
           <div>
@@ -125,6 +127,13 @@
             <p data-i18n-html="about.animen">Verily, verily, I say unto you: ye shall consider nijigen and isekai. Animen.</p>
           </div>
         </blockquote>
+        <div class="footnotes">
+          <p id="footnote-palmkiss">
+            <a class="footnote-back" href="#footnote-ref-palmkiss" aria-label="Back to the text" title="Back to the text"
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
+            <span data-i18n="about.footnote.palmkiss">Strictly speaking, I had played with PalmKiss on Palm OS even earlier. But that implementation was rather awkward: it could not load LZH files by itself, and had only one KiSS set built into the program. I had no idea that KiSS was actually such a huge community; I just thought that Palm OS app had a screw loose to be called such a weird name.</span>
+          </p>
+        </div>
       </div>
     </section>
 
@@ -155,9 +164,9 @@
           <li class="feature">
             <h3><img class="feature-icon" src="images/icons/applications-engineering.svg" alt="" width="32" height="32"><span data-i18n="features.misc.title">The romance of engineering and aesthetics</span></h3>
             <ul>
-              <li id="footnote-ref-website" data-i18n-html="features.misc.handmade">The code of the main program is handcrafted, without LLM agents<sup class="footnote-ref"><a href="#footnote-website">*1</a></sup> (and is probably the author's last hand-written software project, so cherish it while it lasts).</li>
+              <li id="footnote-ref-website" data-i18n-html="features.misc.handmade">The code of the main program is over 95% typed by human hands<sup class="footnote-ref"><a href="#footnote-website">*1</a></sup> <sup class="footnote-ref"><a href="#footnote-handtyped">*2</a></sup> (and is probably the author's last hand-written software project, so cherish it while it lasts).</li>
               <li data-i18n="features.misc.linux">Linux is no longer a second-class citizen (Windows is).</li>
-              <li id="footnote-ref-supply-chain" data-i18n-html="features.misc.open">Open source and automated builds make sure I didn't sneak anything naughty in<sup class="footnote-ref"><a href="#footnote-supply-chain">*2</a></sup>.</li>
+              <li id="footnote-ref-supply-chain" data-i18n-html="features.misc.open">Open source and automated builds make sure I didn't sneak anything naughty in<sup class="footnote-ref"><a href="#footnote-supply-chain">*3</a></sup>.</li>
               <li data-i18n="features.misc.tango">Tango-style UI icons take you back to the 2000s.</li>
               <li id="footnote-ref-author" data-i18n-html="features.misc.apparmor">An AppArmor profile for tinfoil-hat security nerds.</li>
               <li data-i18n="features.misc.qt">Built with Qt 6 / C++ 20, without caring about old systems.</li>
@@ -175,14 +184,19 @@
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
             <span data-i18n-html="features.footnote.website">The use of LLMs in each area of this project is disclosed in <a href="#faq-llm">Q&amp;A</a>. For example, the HTML / CSS / JS of this website was left entirely to an LLM agent, because I have no interest in spending the weekend hours of my life writing web pages anymore; I am a dog kept by OpenAI and Anthropic. Woof woof.</span>
           </p>
+          <p id="footnote-handtyped">
+            <a class="footnote-back" href="#footnote-ref-website" aria-label="Back to the text" title="Back to the text"
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
+            <span data-i18n="features.footnote.handtyped">These days, boasting that code was typed by human hands on a keyboard doesn't mean its quality is necessarily higher than what an LLM produces. But in this code, you can feel the sopping-wet hand sweat and the pleasant body heat passed from human palms to the keyboard, and the otaku stench the author gives off, which you can smell even through the screen.</span>
+          </p>
           <p id="footnote-supply-chain">
             <a class="footnote-back" href="#footnote-ref-supply-chain" aria-label="Back to the text" title="Back to the text"
-               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
-            <span data-i18n="features.footnote.supply-chain">Force majeure, including but not limited to supply chain attacks (like the incidents of XZ Utils, or of tj-actions/changed-files on GitHub Actions), is not covered.</span>
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*3</a>
+            <span data-i18n="features.footnote.supply-chain">Force majeure, such as supply chain attacks (for example, the incidents of XZ Utils, or of tj-actions/changed-files on GitHub Actions), is not covered.</span>
           </p>
           <p id="footnote-author" hidden>
             <a class="footnote-back" href="#footnote-ref-author" aria-label="Back to the text" title="Back to the text"
-               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*4</a>
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*5</a>
             <span data-i18n="features.footnote.author"></span>
           </p>
         </div>
@@ -316,7 +330,7 @@
                 <li data-i18n-html="faq.specs.fkiss"><a href="https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/TTFKSMN4.HTM">FKiSS</a> (the script language): versions 1 and 2.</li>
               </ul>
               <p data-i18n="faq.specs.enough">That is quite enough to load nearly all the Japanese KiSS sets I could find on the Internet.</p>
-              <p data-i18n-html="faq.specs.shell">But the <code>shell()</code> command is not implemented, on purpose, to avoid any security hole.</p>
+              <p data-i18n-html="faq.specs.shell">But I deliberately decided not to implement the <code>shell()</code> command, to avoid unnecessary security holes. (I don't think I've ever seen a KiSS set that uses it, either.)</p>
             </div>
           </details>
           <details class="faq-item">
@@ -375,6 +389,23 @@
             </div>
           </details>
           <details class="faq-item">
+            <summary data-i18n="faq.web.q">Why not Electron or Web technologies?</summary>
+            <div class="faq-answer">
+              <p data-i18n="faq.web.intro">Although I already mentioned that this project was meant to be a native desktop application from the start, people actually ask me this a lot, and I don't want to answer it again in the future, so let me answer it here anyway.</p>
+              <p data-i18n="faq.web.a">I know there are some KiSS implementations which can run in a Web browser by using Web technologies directly, but they are (technically and architecturally) awkward when you want to turn them into a desktop application integrated with your OS and file system; and such a thing which actually can be done in a lightweight way should not need a browser at all.</p>
+              <p data-i18n-html="faq.web.tired">On top of that, I would have to keep chasing Electron's breaking API changes, there's npm, a super uncontrollable thing that makes packaging a hassle and can even get poisoned, and the compatibility between Node versions and Electron versions to deal with (not to mention the versions of each distro)...., and so on and so forth. Taking all of this into account, for a small project like QKiSS, I <strong>don't believe at all</strong> that developing and maintaining it with Electron or Web technologies would cost less, <strong>and I can guarantee that I would have a miserable time developing and maintaining it.</strong></p>
+              <p data-i18n="faq.web.chimera" hidden></p>
+              <blockquote class="musing musing-warning" hidden>
+                <img class="musing-icon" src="images/icons/dialog-warning.svg" alt="" width="48" height="48">
+                <div>
+                  <p data-i18n="faq.web.love"></p>
+                  <p data-i18n="faq.web.apps"></p>
+                  <p data-i18n="faq.web.landmines"></p>
+                </div>
+              </blockquote>
+            </div>
+          </details>
+          <details class="faq-item">
             <summary data-i18n="faq.rust.q">Why not Rust?</summary>
             <div class="faq-answer">
               <ul>
@@ -389,8 +420,7 @@
             <summary data-i18n="faq.llm.q">Did you use AI (LLMs)?</summary>
             <div class="faq-answer">
               <ul>
-                <li data-i18n="faq.llm.assistant">This project does use help from LLMs, but keeps it under control as much as possible, with various engineering methods (e.g. isolation in KVM virtual machines, and reviewing commits by hand).</li>
-                <li data-i18n="faq.llm.agents">LLM agents (e.g. Claude Code, Codex) were used only for the translations, this website and CI/CD.</li>
+                <li data-i18n="faq.llm.assistant">This project does use help from LLMs, but keeps it under control as much as possible, with various engineering methods (e.g. isolating LLM agents in KVM virtual machines, the principle of least privilege, and reviewing commits by hand).</li>
                 <li data-i18n="faq.llm.review">No damn vibe coding, ever, in the main program (Qt / C++) or in the Python code. Even with help from LLMs, the code was reviewed and modified by hand, line by line: I can understand and explain every line of it. I also proofread the translations by hand, as much as my broken foreign languages allow.</li>
               </ul>
               <h3 data-i18n="faq.llm.chart">How much LLMs directly generated in each area</h3>
