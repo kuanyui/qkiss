@@ -209,6 +209,14 @@
   "faq.llm.icons.note": "Tango / Nome / Humanity 皆為 Fork 自 LLM 尚未出現的年代的版本。隨後所有 fork 出的 Icon、以及 QKiSS 本專案專有圖示皆為 QKiSS 的作者用 Inkscape 手繪。",
   "faq.llm.writing.name": "文章",
   "faq.llm.writing.note": "官網以及 README 內的所有文章皆為人類手寫。LLM 只負責翻譯或者語法校正，以及勸說作者不要再寫出更激烈的內容。",
+  "faq.llm.legal.name": {
+    "safe":   "",
+    "danger": "法律顧問"
+  },
+  "faq.llm.legal.note": {
+    "safe":   "",
+    "danger": "協助在《QKiSS 官網導演剪輯版 EULA》把 QKiSS 作者的白話文翻譯成正式的法律條文。於貝爾澤格王國國會內政委員會訂定《異世界人停留居留臨時入界許可辦法增修條文》時作為書記。"
+  },
   "faq.llm.era": "...這大概是我最後一個程式碼大部分為手寫的軟體專案了吧，假如 LLM 在 2024 就已經進化到 2026 的水準，一開始 QKiSS 可能根本直接用 LLM agent 寫了。",
   "features.tango-remixer.title": "你有注意到這個網站的圖示風格嗎？",
   "features.tango-remixer.style": "這是 Freedesktop 提出的被稱為 <span id=\"footnote-ref-wikipedia\"><a href=\"https://web.archive.org/web/20250829073407/https://en.wikipedia.org/wiki/Tango_Desktop_Project\">Tango Desktop</a></span><sup class=\"footnote-ref\"><a href=\"#footnote-wikipedia\">*1</a></sup> 的一種圖形使用者界面的圖標設計風格，流行於 2005-2010 左右，如果你在那時用過一些自由軟體那你可能看過。",

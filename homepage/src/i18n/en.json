@@ -47,6 +47,12 @@
   "faq.llm.website.note": {
     "danger": "All the translations, and all the HTML / CSS / JS… I can't be bothered anymore to spend my free time writing web pages, the bottom of the programmers' food chain."
   },
+  "faq.llm.legal.name": {
+    "danger": "Legal counsel"
+  },
+  "faq.llm.legal.note": {
+    "danger": "Helping translate the plain words of the author of QKiSS into formal legal provisions, in the “QKiSS Website Director's Cut EULA”. Serving as a clerk when the Internal Administration Committee of the Parliament of the Kingdom of Belzerg adopted the “Additional Articles of the Regulations Governing Visiting, Residency, and Temporary World-Entry Permits of Otherworlders”."
+  },
   "features.tango-remixer.body": {
     "danger": "For the 2000s aesthetic romance of Tango-style UI icons, and to bring realistic icons back to <span id=\"footnote-ref-browsers\">a world where flat UIs and monochrome icons, an arbitrary, trend-chasing design fad that never thinks of people with <a href=\"https://en.wikipedia.org/wiki/Dyslexia\">dyslexia</a>, blow around like an ill wind</span><sup class=\"footnote-ref\"><a href=\"#footnote-browsers\">*2</a></sup>, I ended up making the <a href=\"https://kuanyui.github.io/tango-remixer/\">Tango Remixer</a> project on the side, so I could easily stuff Tango icons into Qt projects like QKiSS and keep their look consistent across platforms; then I also took on maintaining three XDG-compatible icon theme packs from the 2000s. Then my OCD couldn't stand making the app public before its icons were pretty, so it took one more year..."
   },

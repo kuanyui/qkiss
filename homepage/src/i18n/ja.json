@@ -209,6 +209,14 @@
   "faq.llm.icons.note": "Tango / Nome / Humanity は、どれも LLM がまだ登場していなかった時代のバージョンから fork したもの。その後 fork したアイコンも、QKiSS 独自のアイコンも、すべて QKiSS の作者が Inkscape で手描きした。",
   "faq.llm.writing.name": "文章",
   "faq.llm.writing.note": "公式サイトと README の文章は、すべて人間が手で書いたもの。LLM が担当するのは、翻訳か文法の校正と、作者がこれ以上過激な内容を書かないよう説得することだけ。",
+  "faq.llm.legal.name": {
+    "safe":   "",
+    "danger": "法律顧問"
+  },
+  "faq.llm.legal.note": {
+    "safe":   "",
+    "danger": "『QKiSS 公式サイト ディレクターズカット版 EULA』で、QKiSS の作者の平易な文章を正式な法律の条文に翻訳する手伝い。ベルゼルグ王国国会の内政委員会が『異世界人停留居留臨時入界許可弁法増修条文』を制定した際に、書記を務めた。"
+  },
   "faq.llm.era": "……たぶんこれが、コードの大部分を手で書いた、私の最後のソフトウェアプロジェクトになるんだろうな。もし LLM が 2024 年の時点で 2026 年のレベルまで進化していたら、QKiSS もそもそも最初から LLM エージェントに書かせていたかもしれない。",
   "features.tango-remixer.title": "このサイトのアイコンのスタイルに気づきましたか？",
   "features.tango-remixer.style": "これは freedesktop.org が提唱した、<span id=\"footnote-ref-wikipedia\"><a href=\"https://web.archive.org/web/20250829073407/https://en.wikipedia.org/wiki/Tango_Desktop_Project\">Tango Desktop</a></span><sup class=\"footnote-ref\"><a href=\"#footnote-wikipedia\">*1</a></sup> と呼ばれる GUI アイコンのデザインスタイルで、2005〜2010 年ごろに流行しました。当時なにかしらのフリーソフトウェアを使っていたなら、見覚えがあるかもしれません。",

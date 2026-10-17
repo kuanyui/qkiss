@@ -1,7 +1,7 @@
 # QKiSS Homepage
 
 The official website of QKiSS: a single static page in plain HTML, CSS and JavaScript, without frameworks or npm. `build.py` checks and assembles it. It uses the Python standard library, and `rsvg-convert` for the link-preview image.
-Its one dependency, [@llselect/core](https://gitlab.com/kuanyui/llselect) for the language and cut pickers, is loaded from a CDN (see [The language picker](#the-language-picker)).
+Its two dependencies are loaded from a CDN: [@llselect/core](https://gitlab.com/kuanyui/llselect) for the language and cut pickers (see [The language picker](#the-language-picker)), and [KaTeX](https://katex.org/) for the formulas of the Director's Cut (see [Formulas](#formulas)).
 It is published on both GitHub Pages and GitLab Pages, by the same script.
 
 ```
@@ -188,7 +188,7 @@ A string that differs between the cuts is an object with one version per cut, in
 - The two versions are always next to each other, so that they are easy to compare, and neither one is forgotten.
 - English: the Wholesome Cut is written in `index.html`, like every English string. The Director's Cut is in `i18n/en.json`, whose strings are all such objects with only `"danger"`. `main.js` downloads it only for the Director's Cut, so crawlers, link previews and visitors without JavaScript only ever see the Wholesome Cut.
 - Only the strings of `data-i18n` and `data-i18n-html` can have a version per cut, not attributes.
-- An empty version hides its element. For example, `"safe": ""` for a paragraph, a footnote or a musing that only the Director's Cut has. In `index.html`, such an element is empty and `hidden` (for a footnote, its `<p>`; for a musing, its `<blockquote>`, whose strings are then all like this), so that it stays hidden without JavaScript too.
+- An empty version hides its element. For example, `"safe": ""` for a paragraph, a footnote or a musing that only the Director's Cut has. In `index.html`, such an element is empty and `hidden` (for a footnote, its `<p>`; for a musing, its `<blockquote>`, and for a row of the chart of LLMs, its `<li>`, whose strings are then all like this), so that it stays hidden without JavaScript too.
 - `main.js` numbers the footnotes of each `.footnotes` block (`*1`, `*2`, …), skipping the hidden ones, so the numbers written in the strings do not matter. Only the numbers in `index.html` must be right for the Wholesome Cut, for visitors without JavaScript.
 - `build.py` rejects malformed versions, and warns about a string that has a version per cut in one language but not in another.
 
@@ -202,6 +202,21 @@ The terms and their additional articles are documents, not strings of the page: 
 - Every text needs English. A text missing another language shows its fallback language.
 - `build.py` rejects a malformed document, and lists the texts that miss a language.
 - The dialog around them (its title, the buttons…) is translated like the rest of the page.
+
+### Formulas
+
+A formula is written in TeX, in the `data-tex` attribute of its element. `main.js` typesets it with [KaTeX](https://katex.org/), loaded from jsDelivr.
+
+- Only the Director's Cut has formulas, so `main.js` loads KaTeX only the first time the page is shown in it.
+- Until KaTeX has typeset a formula, or if KaTeX cannot be loaded, its element shows what `index.html` has in it.
+- As for @llselect/core, the URLs name an exact version, and `integrity` checks the script and the stylesheet. The fonts that the stylesheet loads cannot be checked this way.
+
+To upgrade it, change the version in `KATEX_JS` and `KATEX_CSS` in `main.js`, and set `KATEX_JS_INTEGRITY` and `KATEX_CSS_INTEGRITY` to `sha384-` followed by the hash of each new file:
+
+```sh
+curl -fsSL https://cdn.jsdelivr.net/npm/katex@VERSION/dist/katex.min.js | openssl dgst -sha384 -binary | openssl base64 -A
+curl -fsSL https://cdn.jsdelivr.net/npm/katex@VERSION/dist/katex.min.css | openssl dgst -sha384 -binary | openssl base64 -A
+```
 
 ## Deployment
 

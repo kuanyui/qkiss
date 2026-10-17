@@ -404,7 +404,7 @@
               "zh-TW": "QKiSS 作者雖想吃 Cookie，惟本網站不使用 Cookie，亦不追蹤使用者。使用者之語言、版本選擇及本條款之同意紀錄，僅儲存於使用者瀏覽器之本機儲存空間（localStorage）。"
             },
             {
-              "en": "The Website loads a library from jsDelivr, and queries the GitHub API for the latest version of QKiSS. These third parties, and the hosting providers of the Website, may process the connection information of the User under their own privacy policies.",
+              "en": "The Website loads libraries from jsDelivr, and queries the GitHub API for the latest version of QKiSS. These third parties, and the hosting providers of the Website, may process the connection information of the User under their own privacy policies.",
               "ja": "本サイトは、jsDelivr が提供するライブラリを読み込み、また、GitHub API に QKiSS の最新版を照会する。これらの第三者及び本サイトのホスティング事業者は、それぞれのプライバシーポリシーに従い、利用者の接続情報を取り扱うことがある。",
               "zh-TW": "本網站載入 jsDelivr 提供之程式庫，並向 GitHub API 查詢 QKiSS 之最新版本。該等第三方及本網站之託管服務業者，得依其隱私權政策處理使用者之連線資訊。"
             },

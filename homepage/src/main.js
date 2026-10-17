@@ -28,6 +28,14 @@
   const LATEST_RELEASE_API = 'https://api.github.com/repos/kuanyui/qkiss/releases/latest';
   /** The commits of QKiSS in the GitHub API. Followed by a tag name, the URL gives the commit of that tag. */
   const COMMITS_API = 'https://api.github.com/repos/kuanyui/qkiss/commits/';
+  /**
+   * KaTeX, for the formulas of the Director's Cut. Like @llselect/core in index.html, the URLs name an exact version,
+   * and `integrity` makes the browser refuse any other file (see homepage/README.md).
+   */
+  const KATEX_JS = 'https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.js';
+  const KATEX_JS_INTEGRITY = 'sha384-QFFtAGzvvj+bfgCGxXJlNZZR1nXEZgvG8tDLCCY1F19xl20WlfTYgguB4VcNdxYk';
+  const KATEX_CSS = 'https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.css';
+  const KATEX_CSS_INTEGRITY = 'sha384-3rdsX6e5mueWyoweR9NIVmtEsUkokpBT/0ALqKKIBMr9j4qhHkaIkAcGgsE6uVlp';
 
   const languagesById = new Map(LANGUAGES.map((language) => [language.id, language]));
   const root = document.documentElement;
@@ -155,13 +163,13 @@
 
   /**
    * A string can be empty in one cut, like a footnote that only the Director's Cut has. Then its element is hidden:
-   * for a footnote, the whole footnote, and for a musing, the whole musing. In index.html, such an element is empty
-   * and hidden (see homepage/README.md).
+   * for a footnote, the whole footnote, for a musing, the whole musing, and for a row of the chart of LLMs, the whole
+   * row. In index.html, such an element is empty and hidden (see homepage/README.md).
    * collectTargets() also calls it with the strings of index.html, to put these elements in `emptied`. Otherwise, a
    * page that opens in the Director's Cut would never show them.
    */
   function showUnlessEmpty(element, value) {
-    const box = element.closest('.footnotes > p, .musing') ?? element;
+    const box = element.closest('.footnotes > p, .musing, .llm-area') ?? element;
     if (value === '') {
       box.hidden = true;
       emptied.add(box);
@@ -242,11 +250,45 @@
     if (currentLanguage !== id || currentCut !== cut) return;
     for (const target of targets) target.apply(lookUp(target, chain));
     numberFootnotes();
+    if (cut === 'danger') typesetFormulas();
     root.lang = htmlLang(id);
     renderGallery();
     renderReleaseLinks();
     renderCutPicker();
     root.classList.remove('i18n-loading');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Formulas (KaTeX): only the Director's Cut has them
+  // ---------------------------------------------------------------------------
+
+  /** Load a script or a stylesheet from a CDN, refused by the browser unless it matches its `integrity`. */
+  function loadChecked(tag, attributes) {
+    return new Promise((resolve, reject) => {
+      const element = Object.assign(document.createElement(tag), attributes, { crossOrigin: 'anonymous' });
+      element.addEventListener('load', resolve);
+      element.addEventListener('error', reject);
+      document.head.append(element);
+    });
+  }
+
+  /** Set once typesetFormulas() has started. */
+  let formulasTypeset = null;
+
+  /**
+   * Typeset the formulas of the page: each element with `data-tex`, from the TeX in it. KaTeX is loaded only the first
+   * time the page is shown in the Director's Cut. Until then, or if KaTeX cannot be loaded, an element keeps what
+   * index.html has in it.
+   */
+  function typesetFormulas() {
+    formulasTypeset ??= Promise.all([
+      loadChecked('link', { rel: 'stylesheet', href: KATEX_CSS, integrity: KATEX_CSS_INTEGRITY }),
+      loadChecked('script', { src: KATEX_JS, integrity: KATEX_JS_INTEGRITY }),
+    ]).then(() => {
+      for (const element of document.querySelectorAll('[data-tex]')) {
+        window.katex.render(element.dataset.tex, element, { throwOnError: false });
+      }
+    }).catch(() => {});  // The elements keep what index.html has in them.
   }
 
   // ---------------------------------------------------------------------------

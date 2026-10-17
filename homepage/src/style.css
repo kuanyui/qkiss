@@ -1420,6 +1420,28 @@ sup {
   font-weight: 400;
 }
 
+/* A share written as a formula (see main.js): no bar, and the formula gets a line of its own, under the name. */
+.llm-area-formula {
+  grid-template-areas:
+    "icon name    name    name"
+    "icon formula formula formula"
+    "icon names   names   names"
+    "icon note    note    note";
+}
+
+.llm-formula {
+  grid-area: formula;
+  min-width: 0;
+  padding-block: 0.3rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Until KaTeX has typeset the formula: its letters are in italic serif, as in math books. */
+.llm-formula var {
+  font-family: serif;
+}
+
 /* The LLMs used: small tags. */
 .llm-names {
   grid-area: names;
@@ -1456,6 +1478,14 @@ sup {
       "icon  bar   share"
       "names names names"
       "note  note  note";
+  }
+
+  .llm-area-formula {
+    grid-template-areas:
+      "icon    name    name"
+      "formula formula formula"
+      "names   names   names"
+      "note    note    note";
   }
 }
 
@@ -1571,6 +1601,18 @@ sup {
 .cut-dialog-buttons .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* After a recommended choice: an arrow that keeps pointing at it, `--per-second` times each second. */
+.pointing-arrow {
+  display: inline-block;
+  animation: point-left calc(1s / var(--per-second)) ease-in-out infinite;
+}
+
+@keyframes point-left {
+  50% {
+    transform: translateX(-0.5em);
+  }
 }
 
 /* ---- The terms of the Director's Cut ------------------------------------ */
@@ -1759,5 +1801,9 @@ sup {
 
   .screenshot-button:hover {
     transform: none;
+  }
+
+  .pointing-arrow {
+    animation: none;
   }
 }
