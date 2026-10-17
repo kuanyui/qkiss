@@ -75,8 +75,8 @@
           <span class="visually-hidden" id="cut-label" data-i18n="cut.label">Cut of this website</span>
           <div id="cut-select"></div>
           <div id="cut-options" hidden>
-            <span class="cut-option" data-cut="danger"><img src="images/icons/applications-multimedia.svg" alt="" width="20" height="20"><span class="cut-name" data-i18n="cut.danger">Director's Cut</span></span>
             <span class="cut-option" data-cut="safe"><img src="images/icons/face-angel.svg" alt="" width="20" height="20"><span class="cut-name" data-i18n="cut.safe">Wholesome Cut</span></span>
+            <span class="cut-option" data-cut="danger"><img src="images/icons/applications-multimedia.svg" alt="" width="20" height="20"><span class="cut-name" data-i18n="cut.danger">Director's Cut</span></span>
           </div>
         </div>
         <!-- Filled by main.js with @llselect/core; it stays hidden if that library did not load. -->
@@ -391,7 +391,7 @@
           <details class="faq-item">
             <summary data-i18n="faq.web.q">Why not Electron or Web technologies?</summary>
             <div class="faq-answer">
-              <p data-i18n="faq.web.intro">Although I already mentioned that this project was meant to be a native desktop application from the start, people actually ask me this a lot, and I don't want to answer it again in the future, so let me answer it here anyway.</p>
+              <p id="footnote-ref-native" data-i18n-html="faq.web.intro">Although I already mentioned that this project was meant to be a “native desktop application”<sup class="footnote-ref"><a href="#footnote-native">*1</a></sup> from the start, this is a question people really do ask sometimes, so let me answer it here anyway.</p>
               <p data-i18n="faq.web.a">I know there are some KiSS implementations which can run in a Web browser by using Web technologies directly, but they are (technically and architecturally) awkward when you want to turn them into a desktop application integrated with your OS and file system; and such a thing which actually can be done in a lightweight way should not need a browser at all.</p>
               <p data-i18n-html="faq.web.tired">On top of that, I would have to keep chasing Electron's breaking API changes, there's npm, a super uncontrollable thing that makes packaging a hassle and can even get poisoned, and the compatibility between Node versions and Electron versions to deal with (not to mention the versions of each distro)...., and so on and so forth. Taking all of this into account, for a small project like QKiSS, I <strong>don't believe at all</strong> that developing and maintaining it with Electron or Web technologies would cost less, <strong>and I can guarantee that I would have a miserable time developing and maintaining it.</strong></p>
               <p data-i18n="faq.web.chimera" hidden></p>
@@ -403,6 +403,13 @@
                   <p data-i18n="faq.web.landmines"></p>
                 </div>
               </blockquote>
+              <div class="footnotes">
+                <p id="footnote-native">
+                  <a class="footnote-back" href="#footnote-ref-native" aria-label="Back to the text" title="Back to the text"
+                     data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
+                  <span data-i18n="faq.web.footnote">At least as far as Linux / KDE is concerned.</span>
+                </p>
+              </div>
             </div>
           </details>
           <details class="faq-item">

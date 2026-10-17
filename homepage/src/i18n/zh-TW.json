@@ -150,7 +150,7 @@
   "faq.selinux.landlock": "不過就算你用 SELinux，依舊還是有 Landlock 與 seccomp 的保護，但只保護 lha 與 unar 這兩個外部程式的解壓過程。",
   "faq.selinux.footnote": "一般來說，通常並不建議使用者在工作場所玩任何種類的 KiSS 檢視器。",
   "faq.web.q": "為什麼不用 Electron 或 Web 技術實作？",
-  "faq.web.intro": "雖然我前面有提到我這專案本來就想要做成原生桌面應用程式，不過這個屬於我實際經常被人問過的問題，不想以後再次回答，所以還是講一下。",
+  "faq.web.intro": "雖然我前面有提到我這專案本來就想要做成「原生桌面應用程式」<sup class=\"footnote-ref\"><a href=\"#footnote-native\">*1</a></sup>，不過這個屬於有時真的會有人問的問題，所以還是講一下。",
   "faq.web.a": {
     "safe":   "我知道有些 KiSS 實作直接用 Web 技術可以在瀏覽器裡跑，但這種方法如果想要做成桌面應用程式跟作業系統和檔案系統整合時（技術上和架構上都）會很麻煩；而且這種明明可以做得很輕量的東西本來就不該用瀏覽器。",
     "danger": "我知道有些 KiSS 實作直接用 Web 技術可以在瀏覽器裡跑，我最一開始確實也有認真考慮過用 Electron 來包裝這些別人寫好的 KiSS 實作，但我真的很不喜歡寫 Electron，當然亂硬拼湊是可以但真的很沒有美感，也作不太到我預期想要的 UI 那種操作體驗（硬要作也許可以，但要付出的成本恐怕會比起我實作 KiSS 本身還多，而且寫這很無聊...我不想花時間在這裡）。"
@@ -175,6 +175,7 @@
     "safe":   "",
     "danger": "為什麼我這裡會突然廢話那麼多呢？因為我在 ChatGPT 出現之前開發過五個左右的 Electron 應用程式，踩過不少地雷所以順便說說...欸嘿。"
   },
+  "faq.web.footnote": "至少對 Linux / KDE 而言。",
   "faq.rust.q": "為什麼不用 Rust？",
   "faq.rust.kde": "我是 KDE 使用者，Qt 用起來最無縫。",
   "faq.rust.widgets": "Qt Widgets 提供的元件足夠成熟穩定、更新週期夠長、少 API breaks，也不需要自己刻什麼元件，不太需要第三方 library 就能把八成功能做出來。",

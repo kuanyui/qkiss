@@ -19,9 +19,9 @@
     {
       "image": "switch_page_eva.webm",
       "caption": {
-        "en": "The buttons to switch scenes",
-        "ja": "シーン切り替えボタン",
-        "zh-TW": "切換場景的按鈕"
+        "en": "Cycle through the scenes with one click",
+        "ja": "ワンクリックでシーンを順繰りに切り替え",
+        "zh-TW": "一鍵循環切換場景"
       }
     },
     {
@@ -35,17 +35,17 @@
     {
       "image": "kiss_gs_4bits_palatte.webp",
       "caption": {
-        "en": "Support for the earliest KISS/GS, with 4-bit palettes",
-        "ja": "最初期の 4 ビットパレットの KISS/GS に対応",
-        "zh-TW": "支援最早期 4 位元調色盤的 KISS/GS"
+        "en": "Support for the earliest KISS/GS specification, with 4-bit palettes",
+        "ja": "最初期の 4 ビットパレットの KISS/GS 規格に対応",
+        "zh-TW": "支援最早期 4 位元調色盤的 KISS/GS 規格"
       }
     },
     {
       "image": "fullcolor.webp",
       "caption": {
-        "en": "Support for full color (not palette-based)",
-        "ja": "フルカラー（パレットなし）に対応",
-        "zh-TW": "支援全彩（非調色盤）"
+        "en": "Support for the full-color KISS/GS specification, without palettes",
+        "ja": "フルカラー・パレットなしの KISS/GS 規格に対応",
+        "zh-TW": "支援全彩、無調色盤的 KISS/GS 規格"
       }
     }
   ]

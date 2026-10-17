@@ -46,6 +46,11 @@
             {
               "items": [
                 {
+                  "en": "“QKiSS” means the QKiSS software project, including its source code and executables.",
+                  "ja": "QKiSS　QKiSS というソフトウェアプロジェクトをいい、そのソースコード及び実行ファイルを含む。",
+                  "zh-TW": "QKiSS：指 QKiSS 軟體專案，包括其原始碼及執行檔。"
+                },
+                {
                   "en": "“Author” means ono ono (kuanyui), the copyright holder of QKiSS.",
                   "ja": "作者　QKiSS の著作権者である ono ono（kuanyui）をいう。",
                   "zh-TW": "作者：指 QKiSS 之著作權人 ono ono（kuanyui）。"
@@ -76,6 +81,92 @@
                   "zh-TW": "國家語言：指國家語言發展法第三條所定之國家語言。"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 2-1 (Official URLs)",
+            "ja": "第2条の2（公式 URL）",
+            "zh-TW": "第二條之一（官方網址）"
+          },
+          "body": [
+            {
+              "en": "The official source code repository of QKiSS, the Website and the official download locations of QKiSS are limited to the following URLs and the pages under them:",
+              "ja": "QKiSS の公式ソースコードリポジトリ、本サイト及び QKiSS の公式ダウンロード先は、次の各号に掲げる URL 及びその配下のページに限る。",
+              "zh-TW": "QKiSS 之官方原始碼儲存庫、本網站及 QKiSS 之官方下載位置，以下列網址及其下之頁面為限："
+            },
+            {
+              "items": [
+                {
+                  "en": "The official source code repository: <a href=\"https://github.com/kuanyui/qkiss\">https://github.com/kuanyui/qkiss</a>.",
+                  "ja": "公式ソースコードリポジトリ　<a href=\"https://github.com/kuanyui/qkiss\">https://github.com/kuanyui/qkiss</a>",
+                  "zh-TW": "官方原始碼儲存庫：<a href=\"https://github.com/kuanyui/qkiss\">https://github.com/kuanyui/qkiss</a>。"
+                },
+                {
+                  "en": "The Website: <a href=\"https://kuanyui.github.io/qkiss/\">https://kuanyui.github.io/qkiss/</a>.",
+                  "ja": "本サイト　<a href=\"https://kuanyui.github.io/qkiss/\">https://kuanyui.github.io/qkiss/</a>",
+                  "zh-TW": "本網站：<a href=\"https://kuanyui.github.io/qkiss/\">https://kuanyui.github.io/qkiss/</a>。"
+                },
+                {
+                  "en": "The official download locations: the download locations listed in the download section of the Website.",
+                  "ja": "公式ダウンロード先　本サイトのダウンロード欄に掲げるダウンロード先",
+                  "zh-TW": "官方下載位置：本網站下載區所列之下載位置。"
+                }
+              ]
+            },
+            {
+              "en": "No URL other than those of the preceding paragraph is maintained by the Author, and none is related to the Author or QKiSS. The same applies to derivative works made by others under the license, and to anything that claims to be the official website, the official source code repository or the upstream of QKiSS.",
+              "ja": "前項に規定する URL 以外の URL は、いずれも作者が管理するものではなく、作者及び QKiSS とは関係がない。他人がライセンスに基づいて作成した派生物、及び QKiSS の公式サイト、公式ソースコードリポジトリ又は上流を自称するものについても、同様とする。",
+              "zh-TW": "前項以外之網址，均非作者所維護，與作者及 QKiSS 無關；他人依授權條款所為之派生作品，及自稱為 QKiSS 之官方網站、官方原始碼儲存庫或上游者，亦同。"
+            },
+            {
+              "en": "Anyone who misuses the name of the Author or of QKiSS to commit malicious acts (including but not limited to distributing malicious binaries) shall bear their own civil and criminal liability, and the Author reserves the right to pursue it in accordance with the law.",
+              "ja": "作者又は QKiSS の名義を冒用して悪意ある行為（悪意あるバイナリの頒布を含むが、これに限られない。）をした者は、自らその民事上及び刑事上の責任を負うものとし、作者は、法令に基づきその責任を追及する権利を留保する。",
+              "zh-TW": "冒用作者或 QKiSS 之名義而為惡意行為（包括但不限於散布惡意之二進位檔）者，應自負其民事及刑事責任；作者並保留依法追究之權利。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Article 2-2 (Signatures of Commits)",
+            "ja": "第2条の3（コミットの署名）",
+            "zh-TW": "第二條之二（commit 之簽章）"
+          },
+          "body": [
+            {
+              "en": "Since July 2026, the Author has signed the Git commits of QKiSS with the SSH public keys whose fingerprints are listed below, although not every commit is signed:",
+              "ja": "作者は、2026 年 7 月以降、次の各号に掲げるフィンガープリントで示される SSH 公開鍵により、QKiSS の Git コミットに署名している。ただし、すべてのコミットに署名しているわけではない。",
+              "zh-TW": "作者自 2026 年 7 月起，以下列指紋所示之 SSH 公鑰簽署 QKiSS 之 Git commit，惟並非所有 commit 均經簽署："
+            },
+            {
+              "items": [
+                {
+                  "en": "<code>SHA256:CUjrbZKeWrIvfknF6VpoF24TqaB/EO+mlcbVsJBeDAk</code>",
+                  "ja": "<code>SHA256:CUjrbZKeWrIvfknF6VpoF24TqaB/EO+mlcbVsJBeDAk</code>",
+                  "zh-TW": "<code>SHA256:CUjrbZKeWrIvfknF6VpoF24TqaB/EO+mlcbVsJBeDAk</code>"
+                },
+                {
+                  "en": "<code>SHA256:TDQ0OzxCRUKGGUUa5Gbeqr6ifRtdiEKKXn+2qEQ7dsg</code>",
+                  "ja": "<code>SHA256:TDQ0OzxCRUKGGUUa5Gbeqr6ifRtdiEKKXn+2qEQ7dsg</code>",
+                  "zh-TW": "<code>SHA256:TDQ0OzxCRUKGGUUa5Gbeqr6ifRtdiEKKXn+2qEQ7dsg</code>"
+                }
+              ]
+            },
+            {
+              "en": "The public keys of the preceding paragraph are also published on the Author's GitHub account (<a href=\"https://api.github.com/users/kuanyui/ssh_signing_keys\">https://api.github.com/users/kuanyui/ssh_signing_keys</a>).",
+              "ja": "前項の公開鍵は、作者の GitHub アカウント（<a href=\"https://api.github.com/users/kuanyui/ssh_signing_keys\">https://api.github.com/users/kuanyui/ssh_signing_keys</a>）にも掲載する。",
+              "zh-TW": "前項公鑰，並登載於作者之 GitHub 帳號（<a href=\"https://api.github.com/users/kuanyui/ssh_signing_keys\">https://api.github.com/users/kuanyui/ssh_signing_keys</a>）。"
+            },
+            {
+              "en": "The latest commit signed with a public key of paragraph 1, and the history before it, are presumed not to have been tampered with.",
+              "ja": "第 1 項の公開鍵により署名された最新のコミット及びそれ以前の履歴は、改ざんされていないものと推定する。",
+              "zh-TW": "最新一筆經第一項公鑰簽署之 commit，及其以前之歷史，推定未經竄改。"
+            },
+            {
+              "en": "The author name recorded in a commit is not proof that the commit comes from the Author.",
+              "ja": "コミットに記載された作者名は、当該コミットが作者によるものであることの証明とはならない。",
+              "zh-TW": "commit 所載之作者姓名，不得作為該 commit 出自作者之證明。"
             }
           ]
         }
@@ -123,6 +214,11 @@
               "en": "Nothing in these Terms limits any right of the User under that License; however, the User shall bear all consequences of exercising such rights.",
               "ja": "本規約は、同許諾書に基づき利用者が有するいかなる権利も制限しない。ただし、利用者は、当該権利の行使により生じる一切の結果について、自ら責任を負う。",
               "zh-TW": "本條款不限制使用者依該授權條款所享有之任何權利；惟使用者行使該等權利所生之一切後果，應由使用者自行承擔。"
+            },
+            {
+              "en": "Paragraph 1 does not apply to third-party works and trademarks on the Website, including but not limited to icons, logos and the KiSS dolls in the screenshots. Their use is subject to the terms set by their respective right holders.",
+              "ja": "第 1 項の規定は、本サイトに掲載される第三者の著作物及び商標（アイコン、ロゴ及びスクリーンショット中の KiSS 人形を含むが、これらに限られない。）については、適用しない。これらの著作物及び商標の利用については、各権利者の定めるところによる。",
+              "zh-TW": "第一項規定，不適用於本網站所載第三人之著作及商標，包括但不限於圖示、標誌及截圖中之 KiSS 人偶。該等著作及商標之使用，依各該權利人所定之條件。"
             }
           ]
         }
@@ -303,9 +399,9 @@
           },
           "body": [
             {
-              "en": "The Website uses no cookies and does not track the User. The choices of language and cut of the User, and the record of the User's agreement to these Terms, are stored only in the local storage (localStorage) of the User's browser.",
-              "ja": "本サイトは、Cookie を使用せず、利用者を追跡しない。利用者の言語及び版の選択並びに本規約への同意の記録は、利用者のブラウザのローカルストレージ（localStorage）にのみ保存される。",
-              "zh-TW": "本網站不使用 Cookie，亦不追蹤使用者。使用者之語言、版本選擇及本條款之同意紀錄，僅儲存於使用者瀏覽器之本機儲存空間（localStorage）。"
+              "en": "Although the Author of QKiSS would like to eat cookies, the Website uses no cookies and does not track the User. The choices of language and cut of the User, and the record of the User's agreement to these Terms, are stored only in the local storage (localStorage) of the User's browser.",
+              "ja": "QKiSS の作者はクッキーを食べたいのだが、本サイトは、Cookie を使用せず、利用者を追跡しない。利用者の言語及び版の選択並びに本規約への同意の記録は、利用者のブラウザのローカルストレージ（localStorage）にのみ保存される。",
+              "zh-TW": "QKiSS 作者雖想吃 Cookie，惟本網站不使用 Cookie，亦不追蹤使用者。使用者之語言、版本選擇及本條款之同意紀錄，僅儲存於使用者瀏覽器之本機儲存空間（localStorage）。"
             },
             {
               "en": "The Website loads a library from jsDelivr, and queries the GitHub API for the latest version of QKiSS. These third parties, and the hosting providers of the Website, may process the connection information of the User under their own privacy policies.",
@@ -431,8 +527,8 @@
     }
   ],
   "closing": {
-    "en": "By clicking “I have actually read, and fully agree to, all of the provisions above”, you, of sound mind and under no duress from anyone, voluntarily waive all rights to criticize any sentence or opinion you will read on the QKiSS website from now on, and voluntarily waive all legal claims against the author of QKiSS for any negative consequences of reading it.",
-    "ja": "「上記のすべての条項を確かに読み、完全に同意しました」をクリックすることにより、あなたは、正気で、かつ誰からも強要されていない状態で、この先 QKiSS 公式サイトで目にするあらゆる文言や見解を批判する一切の権利を自発的に放棄し、また、それを読んだことによるいかなる悪影響についても、QKiSS の作者に対する一切の法的請求権を自発的に放棄したものとみなされます。",
-    "zh-TW": "點擊「我已經確實閱讀、並完全同意以上所有條文」即代表、您、在神智清醒且無任何人脅迫的情況下、自願放棄批評接下來在 QKiSS 官網內所見任何文句或觀點之一切權利，亦自願放棄接下來因閱讀而造成的任何負面後果對 QKiSS 作者的任何法律求償權利。"
+    "en": "By clicking “I have actually read, and fully agree to, all of the provisions above”, you, of sound mind and under no duress from anyone, voluntarily waive all rights to criticize any sentence or opinion you will read on the QKiSS website from now on, and voluntarily waive all legal claims against the author of QKiSS for any negative consequences of reading it. Under no circumstances shall anyone harass the Author or obstruct QKiSS by any means, including but not limited to threats, verbal abuse, personal attacks and sabotage. For the purposes of the preceding sentence, harassment or obstruction does not include fair comment on matters subject to public criticism, such as QKiSS or the content of the Website; not using QKiSS; or exercising the rights granted by the GNU General Public License.",
+    "ja": "「上記のすべての条項を確かに読み、完全に同意しました」をクリックすることにより、あなたは、正気で、かつ誰からも強要されていない状態で、この先 QKiSS 公式サイトで目にするあらゆる文言や見解を批判する一切の権利を自発的に放棄し、また、それを読んだことによるいかなる悪影響についても、QKiSS の作者に対する一切の法的請求権を自発的に放棄したものとみなされます。何人も、いかなる場合においても、脅迫、罵倒、人身攻撃及び破壊を含むがこれらに限られない一切の方法により、作者に嫌がらせをし、又は QKiSS を妨害してはならない。ただし、QKiSS 又は本サイトの内容その他の公の批評の対象となり得る事項についての適切な論評、QKiSS を使用しないこと及び GNU 一般公衆利用許諾書により与えられた権利の行使は、ここにいう嫌がらせ又は妨害に当たらない。",
+    "zh-TW": "點擊「我已經確實閱讀、並完全同意以上所有條文」即代表、您、在神智清醒且無任何人脅迫的情況下、自願放棄批評接下來在 QKiSS 官網內所見任何文句或觀點之一切權利，亦自願放棄接下來因閱讀而造成的任何負面後果對 QKiSS 作者的任何法律求償權利。任何人於任何情形下，均不得騷擾作者或妨害 QKiSS，包括但不限於恐嚇、謾罵、人身攻擊及破壞。前述騷擾或妨害，不包括對於 QKiSS 或本網站內容等可受公評之事所為之適當評論、不使用 QKiSS，以及行使 GNU 通用公眾授權條款所賦予之權利。"
   }
 }

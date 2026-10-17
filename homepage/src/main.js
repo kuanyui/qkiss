@@ -477,7 +477,7 @@
         }
       },
     });
-    cutPicker.setItems(['danger', 'safe']);
+    cutPicker.setItems(['safe', 'danger']);
     for (const dialog of [warning, terms, amendments]) {
       dialog.addEventListener('click', (event) => {
         if (event.target === dialog) dialog.close();
