@@ -1,0 +1,54 @@
+name: Other problem
+description: A problem outside the app itself, such as the website or CI/CD.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please report in English. You cannot assume that other contributors understand the language you use. Issues written in a language other than English will be ignored and closed right away. Comments written in a language other than English will be ignored.
+
+        This is not a message board. Please do not use this issue tracker to report anything unrelated to QKiSS itself. Content unrelated to the development of QKiSS, including political statements, pranks and chit-chat, will be deleted right away. The person who posts such content may be blocked.
+
+        Never report a security problem in a public issue. Report it privately on the [Report a security vulnerability](https://github.com/kuanyui/qkiss/security/advisories/new) page.
+
+        Screenshots must not contain NSFW content (nudity, sexual content, gore, violence, and so on). If you cannot explain the problem without showing such content, edit the screenshot yourself first, for example by masking it.
+  - type: dropdown
+    id: area
+    attributes:
+      label: What is the problem about?
+      options:
+        - The website
+        - CI/CD, packages or downloads
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened? What did you expect to happen?
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Link
+      description: Enter a link to the affected web page or the failed GitHub Actions run.
+      placeholder: "https://kuanyui.github.io/qkiss/"
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and operating system
+      description: Complete this field only if the problem affects the website.
+      placeholder: "Firefox 140, Windows 11"
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Before submitting
+      options:
+        - label: I confirm that I wrote the title and body in English.
+          required: true
+        - label: I confirm that my report is related to the development of QKiSS itself.
+          required: true
+        - label: I did not upload any KiSS file. If a KiSS set is needed, I provided a working download link instead.
+          required: true
+        - label: If I uploaded screenshots, they contain no NSFW content.
+          required: true

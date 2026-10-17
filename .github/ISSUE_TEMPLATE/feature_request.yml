@@ -1,0 +1,39 @@
+name: Feature request
+description: An idea for QKiSS.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please report in English. You cannot assume that other contributors understand the language you use. Issues written in a language other than English will be ignored and closed right away. Comments written in a language other than English will be ignored.
+
+        This is not a message board. Please do not use this issue tracker to report anything unrelated to QKiSS itself. Content unrelated to the development of QKiSS, including political statements, pranks and chit-chat, will be deleted right away. The person who posts such content may be blocked.
+
+        Never report a security problem in a public issue. Report it privately on the [Report a security vulnerability](https://github.com/kuanyui/qkiss/security/advisories/new) page.
+
+        Screenshots must not contain NSFW content (nudity, sexual content, gore, violence, and so on). If you cannot explain the problem without showing such content, edit the screenshot yourself first, for example by masking it.
+  - type: textarea
+    id: need
+    attributes:
+      label: What would you like to do?
+      description: Describe what you want to do with QKiSS. Explain what prevents you from doing that now.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Possible solution
+      description: If you have a solution in mind, describe how QKiSS could support this task.
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Before submitting
+      options:
+        - label: I confirm that I wrote the title and body in English.
+          required: true
+        - label: I confirm that my report is related to the development of QKiSS itself.
+          required: true
+        - label: I did not upload any KiSS file. If a KiSS set is needed, I provided a working download link instead.
+          required: true
+        - label: If I uploaded screenshots, they contain no NSFW content.
+          required: true

@@ -1,0 +1,87 @@
+name: Bug report
+description: Something in QKiSS does not work as it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug. Please fill in every required field. This information makes the bug easier to reproduce.
+
+        Please report in English. You cannot assume that other contributors understand the language you use. Issues written in a language other than English will be ignored and closed right away. Comments written in a language other than English will be ignored.
+
+        This is not a message board. Please do not use this issue tracker to report anything unrelated to QKiSS itself. Content unrelated to the development of QKiSS, including political statements, pranks and chit-chat, will be deleted right away. The person who posts such content may be blocked.
+
+        Never report a security problem in a public issue. Report it privately on the [Report a security vulnerability](https://github.com/kuanyui/qkiss/security/advisories/new) page.
+  - type: input
+    id: version
+    attributes:
+      label: QKiSS version
+      description: You can find it in Help → About.
+      placeholder: "0.9.3"
+    validations:
+      required: true
+  - type: dropdown
+    id: installation
+    attributes:
+      label: How you got QKiSS
+      options:
+        - Linux package from the openSUSE Build Service (OBS)
+        - Windows installer
+        - Windows portable ZIP
+        - Built from source
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Operating system and version
+      description: On Linux, also include your desktop environment and whether you use Wayland or X11.
+      placeholder: "openSUSE Tumbleweed, KDE Plasma 6, Wayland"
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened? What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the KiSS set …
+        2. Click …
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: kiss-set
+    attributes:
+      label: KiSS set
+      description: Enter the name of the KiSS set and a download link. The affected set is needed to reproduce most display and FKiSS bugs. Do not attach the KiSS set. Give a working download link instead.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Copy the logs from Window → Logs. You can also copy the output produced when QKiSS is started from a terminal.
+      render: text
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Screenshots must not contain NSFW content (nudity, sexual content, gore, violence, and so on). If you cannot explain the bug without showing such content, edit the screenshot yourself first, for example by masking it. Usually, screenshots are not needed. The name of the KiSS set and a working download link are more useful for analyzing the bug. You can drag and drop images here.
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Before submitting
+      options:
+        - label: I confirm that I wrote the title and body in English.
+          required: true
+        - label: I confirm that my report is related to the development of QKiSS itself.
+          required: true
+        - label: I did not upload any KiSS file. If a KiSS set is needed, I provided a working download link instead.
+          required: true
+        - label: If I uploaded screenshots, they contain no NSFW content.
+          required: true

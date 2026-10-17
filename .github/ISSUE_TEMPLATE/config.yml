@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/kuanyui/qkiss/security/advisories/new
+    about: Report a security problem privately. Never report it in a public issue.
