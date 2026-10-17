@@ -42,8 +42,8 @@
   "about.kisekae": "「Kisekae」源自日文「<span lang=\"ja\">着せ替え人形</span>」（發音：「kisekae ningyou」），意思是「換裝人偶」。",
   "about.origin": "KiSS 起源於日本 1990 年代的<a href=\"https://ja.wikipedia.org/wiki/おたく\">御宅族</a>次文化，以及個人電腦愛好者社群（特別是 <a href=\"https://ja.wikipedia.org/wiki/PC-9800シリーズ\">NEC PC-9800 系列</a>），並流行於 1990 年代到 2000 年代中之間。",
   "about.why.title": "為什麼要開發 QKiSS？",
-  "about.why.charm": "KiSS 充滿了大量二次元同人社群令人著迷的創作熱情，在那種電腦硬體資源限制下盡可能展現出的 8bit（甚至更低）的美學、還有各種奇葩的腦洞很大的創意跟幽默感，而且很多作者作的衣服穿搭設計真的很有品味，光是看了心情就很好。",
-  "about.why.story": "本臭宅是 2007 左右才第一次聽說 KiSS<sup class=\"footnote-ref\"><a href=\"#footnote-palmkiss\">*1</a></sup>，是因為在 Ubuntu 的 Synaptic 裡面亂翻常常看到「GnomeKiSS」這搶眼的怪名字，但好奇裝了一下也不知道要怎用，直到了 2012 左右調查了才知道 KiSS 是什麼並開始玩，即使當時都已經是 KiSS 沒落的年代了，但裡面那些日本動漫角色與漂亮的服裝、動漫惡搞梗與 Windows 95/98 時代的像素美學的回憶還是讓我玩了很久。",
+  "about.why.charm": "KiSS 充滿了大量<a href=\"https://ja.wikipedia.org/wiki/2次元\">二次元</a>同人<a href=\"https://ja.wikipedia.org/wiki/同人サークル\">社群</a>令人著迷的創作熱情，在那種電腦硬體資源限制下盡可能展現出的 8bit（甚至更低）的、充滿 90 年代個人電腦風味的像素美學、還有各種日本二次元<a href=\"https://ja.wikipedia.org/wiki/同人\">同人</a>社群的動漫梗、腦洞很大的奇葩創意跟幽默感，而且很多作者作的衣服穿搭設計真的很有品味，光是看了心情就很好。",
+  "about.why.story": "本臭宅是 2007 左右才第一次聽說 KiSS<sup class=\"footnote-ref\"><a href=\"#footnote-palmkiss\">*1</a></sup>，是因為在 Ubuntu 的 Synaptic 裡面亂翻常常看到「<a href=\"https://devel.tlrmx.org/kiss/\">GnomeKiSS</a>」這搶眼的怪名字，但當時也不知道要怎用，直到了 2012 左右調查了才搞清楚 KiSS 是什麼，即使當時都已經是 KiSS 沒落的年代了，但裡面那些日本動漫角色與漂亮的服裝、動漫梗與 Windows 95/98 時代的像素美學的回憶還是讓我用 GnomeKiSS 玩了很久。",
   "about.why.body": "然而到了 2024 年，有陣子想要重溫一下那些 KiSS 檔，卻發現當時 Linux 上現有的原生 KiSS 檢視器都已經無法使用：<a href=\"https://www2s.biglobe.ne.jp/~yav/kiss/index.html\">fkiss</a> 雖然還能編譯，卻已無法執行；<a href=\"https://devel.tlrmx.org/kiss/\">GnomeKiSS</a> 則依賴過時的 GNOME 2 函式庫，大多數發行版都已不再收錄。於是想說不然自己來寫一個，而且要做就絕對要作一個 Linux 上面原生支援且 UI/UX 要讓自己滿意的，另外也是順便練習拿 Qt / C++ 寫個稍微有規模的專案，所以就開始用 Qt / C++ 一邊啃 KISS/GS 規格書從零開始打造 QKiSS 這個全新的 KiSS 檢視器。卅年傳統，全新感受。",
   "about.why.practice": "而且寫起來也真的饒富趣味：從理解 KISS/GS 調色盤與點陣圖專屬的格式讓圖片正確顯示出來，再根據 FKiSS 規格實作出腳本語言的解析器與直譯器讓畫面動起來，由於是年代久遠的格式，還會遇到一堆我這種現代開發者從沒想過的事情（比如 Mac OS 以前是拿 <code>\\r</code> 來當換行符號的），寫這些東西的樂趣早就超過 KiSS 檔案本身。",
   "about.why.burnout": {

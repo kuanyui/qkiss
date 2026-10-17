@@ -30,7 +30,7 @@
         {
           "en": "Party A has never understood whether the word “shall” means should, may or must, and these Additional Articles therefore contain undefined behavior.",
           "ja": "甲は、「ものとする」が should、may、must のいずれを意味するのかを今もって理解できず、そのため本増修条文には未定義動作が含まれる。",
-          "zh-TW": "甲方始終無法理解「得」字究竟係 should、may 抑或 must，此亦為甲方學測國文成績低於英文之原因。",
+          "zh-TW": "甲方始終無法理解「得」字究竟係 should、may 抑或 must，甲方亦從未理解「前方常有測速照相」之「常」字究竟係 constantly、frequently 抑或 usually，此亦為甲方學測國文成績低於英文之原因。",
           "clauses": [
             {
               "en": "The circumstance in the preceding clause does not affect the obligation of everyone else to know the correct legal meaning of “shall”.",
@@ -146,9 +146,9 @@
               "zh-TW": "鳳梨可以放在披薩上。"
             },
             {
-              "en": "Liking or disliking cilantro is a matter of genes, and neither party may terminate this agreement on that ground.",
-              "ja": "パクチーの好き嫌いは遺伝子の発現であり、いずれの当事者も、これを理由として本契約を終了させることはできない。",
-              "zh-TW": "香菜之好惡屬基因表現，雙方均不得以此為由終止本契約。"
+              "en": "The Author likes eating cilantro, bananas and broccoli, and does not dislike eating cucumbers either, but also understands that liking or disliking these particular foods is a matter of genes. Neither party may terminate this agreement on that ground.",
+              "ja": "作者は、パクチー、バナナ及びブロッコリーを好んで食べ、キュウリを食べるのも嫌いではないが、以上の特殊な食物の好き嫌いが遺伝子の発現であることも理解している。いずれの当事者も、これを理由として本契約を終了させることはできない。",
+              "zh-TW": "作者喜歡吃香菜、香蕉、花椰菜，亦不討厭吃小黃瓜，但也明白以上特殊食物之好惡屬基因表現，雙方均不得以此為由終止本契約。"
             },
             {
               "en": "Mixed vegetables (peas, corn and diced carrots) actually taste fine.",
