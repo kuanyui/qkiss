@@ -43,6 +43,7 @@ public:
 
     GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, ParsedKcf *kcf, uint16_t paletteNoInKcf = 0, QGraphicsItem *parent = nullptr);
     GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, QGraphicsItem *parent = nullptr);
+    ~GKissItem();
     void rerenderImage();
     void setPaletteNoInKcfAndRender(uint8_t newPaletteNoInKcf);
 
@@ -84,7 +85,7 @@ private:
     ParsedKcf *m_kcf = nullptr;
     uint8_t m_paletteNoInKcf;
     // ==========================
-    QImage *m_image;
+    QImage *m_image = nullptr;    // REFACTOR: pointer is actually unnecessary (I don't remember why I use  QImage*` instead of `QImage`) it's CoW container after all.
     int32_t m_fix;
     /// The translucency of a cel is in the range 0 to 255. 0 is fully opaque (the default). 255 is fully invisible.
     uint8_t m_kissTranslucency = 0;

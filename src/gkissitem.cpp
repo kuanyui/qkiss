@@ -42,6 +42,11 @@ GKissItem::GKissItem(ParsedCnfCel *cnfCel, ParsedCel *cel, QGraphicsItem *parent
     init();
 }
 
+GKissItem::~GKissItem()
+{
+    delete m_image;
+}
+
 void GKissItem::init()
 {
     // setFlag(QGraphicsItem::ItemIsMovable, true);
