@@ -170,6 +170,35 @@ void GKissScene::setItemsVisibilityByObjId(int32_t objId, bool visibility)
     }
 }
 
+void GKissScene::toggleItemsVisibility(const FkissVariant &target)
+{
+    switch (target.type()) {
+    case FkissVariant::Type::Object: return toggleItemsVisibilityByObjId(target.getObjectId());
+    case FkissVariant::Type::Int: return;
+    case FkissVariant::Type::String:
+        qkDebug << "[WARNING][Bug] This should not happen.";
+        return toggleItemVisibilityByCelName(target.getOriginalString());  // FIXME: Unreasonable
+    case FkissVariant::Type::Cel: return toggleItemVisibilityByCelName(target.getCelName());
+        break;
+    }
+}
+
+void GKissScene::toggleItemVisibilityByCelName(const QString &celFileName)
+{
+    GKissItem *item = m_celNameToItemMap.value(celFileName, nullptr);
+    if (item == nullptr) { return; }
+    item->setVisible(!item->isVisible());
+}
+
+void GKissScene::toggleItemsVisibilityByObjId(int32_t objId)
+{
+    QList<GKissItem *> *items = m_objIdToItemsMap.value(objId, nullptr);
+    if (items == nullptr) { return; }
+    foreach (GKissItem *item, *items) {
+        item->setVisible(!item->isVisible());
+    }
+}
+
 #define argnum(num) arg(QString::number(num))
 
 void GKissScene::bindItemsToObjects()

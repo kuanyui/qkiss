@@ -178,7 +178,7 @@ public:
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_EVENT;
     static const QHash<QString, FkissKeywordInfo> KEYWORDS_ACTION;
     void parseAndCacheFkissScript(QList<FkissLineInfo> fkissScriptLines);
-    void startRuntime(GKissScene *kissScene);
+    void startRuntime(const QVector<GKissScene *> &kissScenes, GKissScene *currentKissScene);
     void stopRuntime();
     FkissRuntime *runtime();
 

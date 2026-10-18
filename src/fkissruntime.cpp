@@ -61,26 +61,9 @@ void FkissRuntime::receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtTy
 void FkissRuntime::setCurKissScene(GKissScene *newCurKissScene)
 {
     m_curKissScene = newCurKissScene;
-    if (m_curKissScene == nullptr) { return; }
-    // Set visibility of CELs / Objects for this new scene, according to the stored mapped / unmapped state.
-    QHashIterator<FkissVariant, bool> it(m_mapState);
-    while (it.hasNext()) {
-        it.next();
-        const FkissVariant &key = it.key();
-        bool visible = it.value();
-        if (key.type() == FkissVariant::Type::Cel) {
-            auto _item = m_curKissScene->getItemByCelName(key.getCelName());
-            if (!_item.has_value()) { qkDebug << "[DEBUG] FkissRuntime::setCurKissScene(), m_mapState has CEL '%1', but current cannot find this CEL in this scene..."_L1.arg(key.getCelName()); continue; }
-            _item.value()->setVisible(visible);
-        } else if (key.type() == FkissVariant::Type::Object) {
-            std::optional<QVector<GKissItem *> *> _items = m_curKissScene->getItemsByObjId(key.getObjectId());
-            if (!_items.has_value()) { qkDebug << "[DEBUG] FkissRuntime::setCurKissScene(), m_mapState has ObjectId '%1', but current cannot find this ObjectId in this scene..."_L1.arg(QString::number(key.getObjectId())); continue; }
-            auto *items = _items.value();
-            foreach (auto *item, *items) {
-                item->setVisible(visible);
-            }
-        }
-    }
+}
+void FkissRuntime::setKissScenes(const QVector<GKissScene *> &kissScenes) {
+    m_kissScenes = kissScenes;
 }
 
 void FkissRuntime::loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedCommands> > parsedFkissScript)
@@ -131,34 +114,26 @@ void FkissRuntime::triggerCol(uint8_t paletteNo)
     tryToRunActionsByEvent(FKK::E::Col, { FkissVariant::fromInt(paletteNo) });
 }
 
-bool FkissRuntime::getMap(FkissVariant target)
-{
-    return m_mapState.value(target, true);
-}
+
 
 void FkissRuntime::runMap(FkissVariant target)
 {
-    m_mapState.insert(target, true);
-    if (m_curKissScene) {
-        m_curKissScene->setItemsVisibility(target, true);
+    for (GKissScene *scene: m_kissScenes) {
+        scene->setItemsVisibility(target, true);
     }
 }
 
 void FkissRuntime::runUnmap(FkissVariant target)
 {
-    m_mapState.insert(target, false);
-    if (m_curKissScene) {
-        m_curKissScene->setItemsVisibility(target, false);
+    for (GKissScene *scene: m_kissScenes) {
+        scene->setItemsVisibility(target, false);
     }
 }
 
 void FkissRuntime::runAltmap(FkissVariant target)
 {
-    bool oldVal = getMap(target);
-    bool newVal = !oldVal;
-    m_mapState.insert(target, newVal);
-    if (m_curKissScene) {
-        m_curKissScene->setItemsVisibility(target, newVal);
+    for (GKissScene *scene: m_kissScenes) {
+        scene->toggleItemsVisibility(target);
     }
 }
 

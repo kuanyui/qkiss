@@ -41,6 +41,11 @@ public:
     void setItemsVisibility(const FkissVariant &target, bool visibility);
     void setItemVisibilityByCelName(const QString &celFileName, bool visibility);
     void setItemsVisibilityByObjId(int32_t objId, bool visibility);
+    /// toggle the visibility of each item separately, for `altmap()`
+    void toggleItemsVisibility(const FkissVariant &target);
+    void toggleItemVisibilityByCelName(const QString &celFileName);
+    void toggleItemsVisibilityByObjId(int32_t objId);
+
     void bindItemsToObjects();
     /// Get object's "current" position, instead of the position defined in CNF's set.
     std::optional<QPoint > getObjectCurrentPos(size_t objId) const;

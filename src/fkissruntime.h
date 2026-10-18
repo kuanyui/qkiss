@@ -33,6 +33,8 @@ public:
     void receiveUserEventFromGraphicsItem(FkissUserMovementEvent evtType, QVector<FkissVariant> vars);
     GKissScene *curKissScene() const;
     void setCurKissScene(GKissScene *newCurKissScene);
+    /// Set all scenes of this CNF. `map()`, `unmap()`, `altmap()` modify the states of all of them.
+    void setKissScenes(const QVector<GKissScene *> &kissScenes);
     /// Load parsed FKiSS scripts (AST). WILL NOT AUTO RUN. You need to call initializeAndBegin() later.
     void loadParsedFkissScript(QVector<std::shared_ptr<ASTPairedCommands>> parsedFkissScript);
     void stopTimersAndUnloadFkissScript();
@@ -45,10 +47,6 @@ public:
     /// Trigger the event `col(paletteNo)`
     void triggerCol(uint8_t paletteNo);
 private:
-    /// for map(), unmap(), altmap().
-    /// Return true if a target (cel or object) is mapped currently.
-    /// This is stored in FKiSS runtime, doesn't actually reflect the state of scene.
-    bool getMap(FkissVariant target);
     /// run action map()
     void runMap(FkissVariant target);
     void runUnmap(FkissVariant target);
@@ -85,10 +83,13 @@ private:
     /// Currently active scene, all operations and manipulations will be applied on this scene.
     /// @borrowed
     GKissScene *m_curKissScene = nullptr;
+    /// All scenes (surely, in this CNF only).
+    /// `map()`, `unmap()`, `altmap()` should modify all targets (Cel / Object) on the EVERY scenes which the target is inside.
+    /// This is explicitly defined in newer spec. (UB in original fkiss spec.)
+    /// @borrowed
+    QVector<GKissScene *> m_kissScenes;
     /// Key is alarmId. Runtime.
     QHash<FkissVariant, std::shared_ptr<FkissAlarmTimer>> m_alarmTimerPool;
-    /// Store the visibility modified via FKiSS script (e.g. map(), unmap()). May be a cel or an obj.
-    QHash<FkissVariant, bool> m_mapState;
     AudioPlayer *m_audioPlayer;
 };
 

@@ -99,7 +99,7 @@ bool GKissView::setCurCnfAndRenderScenes(CPString cnfFileName)
     ok = showKissSceneByIndex(0);
     if (!ok) { return false; }
     setScaleModeForAllItems();
-    m_archiveFile->curCnf()->fkiss()->startRuntime(curKissScene());
+    m_archiveFile->curCnf()->fkiss()->startRuntime(m_scenes, curKissScene());
     m_archiveFile->curCnf()->fkiss()->runtime()->triggerSet(0);   // REFACTOR: triggering set(), col() in here is ... so fucking ugly.
     m_archiveFile->curCnf()->fkiss()->runtime()->triggerCol(curKissScene()->paletteNoInKcf());   // NOTE: The default paletteNo is defined in CNF, the lines starts with `$`.
     return true;
