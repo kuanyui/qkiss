@@ -24,6 +24,8 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 [Website of QKiSS](https://github.com/kuanyui/qkiss).
 </source>
         <translation>
+なっ、なななななななななんで私が、Q、QKiSSを、しょ、紹介しなきゃいけないんでふかぁっ！？
+
 Q、QKiSS は……ㇰ、Qt 6 でっ、じ、じじじじじじ実装されて、き、KISS/GS、FKiSS 1・2 の仕様に、い、いちおう、対応した…現代的な、 [KiSS (Kisekae Set System)](https://ja.wikipedia.org/wiki/KISekae_Set_system) ビューア……でふっ。Li、Linux 上の……[fkiss](https://www2s.biglobe.ne.jp/~yav/kiss/index.html) や……[GnomeKiSS](https://devel.tlrmx.org/kiss/) に……着想を……え、えええええええ……得てまふ……っ。
 
 「Kisekae」っては、通用語で「着せ替え人形」、そ、その意味、です。
