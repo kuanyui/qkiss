@@ -70,6 +70,7 @@ void GKissItem::rerenderImage()
     //             .arg(m_cel->x())
     //             .arg(m_cel->y())
     //             ;
+    if (m_image->isNull()) { return; }   // QImage gives a null image when it cannot allocate the memory, for example for a huge CEL.
     switch (m_cel->celType()) {
     case ParsedCel::Type::PaletteBased: return renderPaletteBasedImage();
     case ParsedCel::Type::FullColor: return renderColorBasedImage();
