@@ -88,7 +88,7 @@ private:
      * - 12 or 24 bits
      * - Offset +5, 1 byte
      */
-    uint8_t m_bitsPerColor;
+    uint8_t m_bitsPerColor = 0;
     /**
      * == [ATTENTION] ===============
      *
@@ -107,12 +107,12 @@ private:
      *
      * And the latter one seems more generic, so take this.
      */
-    uint16_t m_colorAmountsInOnePalette;
+    uint16_t m_colorAmountsInOnePalette = 0;
     /**
      * - 1 ~ 65535
      * - Offset +10, 2 bytes (+10 low, +11 high)
      */
-    uint16_t m_paletteAmounts;
+    uint16_t m_paletteAmounts = 0;
     /**
 
     ◎１色当たり 12 ビット（4096色）の場合のパレット・データの構成

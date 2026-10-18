@@ -39,6 +39,9 @@ void ParsedKcf::parseModernKcf(QByteArray data)
 {
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     qkDebug << "[LOG] Parse Moden KCF file";
+    if (data.size() < 32) {   // The header is 32 bytes.
+        qkCritical.noquote() << tr(R"("%1" is truncated: it needs at least %2 bytes, but it has only %3 bytes.)").arg(m_fileName.original()).arg(32).arg(data.size()); return;
+    }
     if (data[4] != 0x10) {
         qkCritical << tr("Not a palette file mark!"); return;
     }
@@ -62,7 +65,7 @@ void ParsedKcf::parseModernKcf(QByteArray data)
                 }
                 uint8_t r = udata[i] >> 4;
                 uint8_t b = udata[i] & 0b00001111;
-                uint8_t g = udata[i+1];
+                uint8_t g = (i + 1 < data.size()) ? udata[i+1] : 0;  // Lenient on purpose: if the file ends inside this color, the missing byte is 0 and the palette is kept.
                 QRgb color = qRgb(r<<4, g<<4, b<<4);
                 // qkDebug << "[12 bits]" << color;
                 palette.append(color);
@@ -79,8 +82,8 @@ void ParsedKcf::parseModernKcf(QByteArray data)
                     qkCritical << tr("Out of range palatte colors definition, byte offset: %1").arg(i); return;
                 }
                 uint8_t r = udata[i];
-                uint8_t g = udata[i+1];
-                uint8_t b = udata[i+2];
+                uint8_t g = (i + 1 < data.size()) ? udata[i+1] : 0;  // Lenient on purpose: if the file ends inside this color, the missing bytes are 0 and the palette is kept.
+                uint8_t b = (i + 2 < data.size()) ? udata[i+2] : 0;
                 QRgb color = qRgb(r, g, b);
                 // qkDebug << "[24 bits]" << color;
                 palette.append(color);
@@ -114,7 +117,7 @@ void ParsedKcf::parseLegacyKcf(QByteArray data)
             }
             uint8_t r = udata[i] >> 4;
             uint8_t b = udata[i] & 0b1111;
-            uint8_t g = udata[i+1];
+            uint8_t g = (i + 1 < data.size()) ? udata[i+1] : 0;  // Lenient on purpose: if the file ends inside this color, the missing byte is 0 and the palette is kept.
             QRgb color = qRgb(r<<4, g<<4, b<<4);
             palette.append(color);
         }
@@ -143,8 +146,8 @@ ParsedKcfPalette *ParsedKcf::getPaletteInKcf(uint16_t paletteIdxInKcf)
         qkCritical << tr("This KCF file contains no valid palette, but you try to get palette from it. Abort.");
         return nullptr;
     }
-    if (paletteIdxInKcf >= m_paletteAmounts) {
-        qkCritical.noquote() << tr("paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback").arg(QString::number((int)paletteIdxInKcf)).arg(QString::number((int)m_paletteAmounts));
+    if (paletteIdxInKcf >= m_palettesList.length()) {
+        qkCritical.noquote() << tr("paletteIdx (%1, note this is counted from 0) is out of actual paletteAmount (%2), use index 0 as fallback").arg(QString::number((int)paletteIdxInKcf)).arg(QString::number(m_palettesList.length()));
         paletteIdxInKcf = 0;
     }
     return &m_palettesList[paletteIdxInKcf];
