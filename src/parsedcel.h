@@ -45,6 +45,7 @@ public:
         FullColor
     };
     ParsedCel(CPString fileName, const QByteArray &rawData);
+    ~ParsedCel();
     std::unique_ptr<QVector<QRgb> > getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, uint16_t paletteIdxInKcf) const;  // REFACTOR: const reference
     QVector<QRgb> *getColorBasedPixels() const;
     QRect getGeometry() const;

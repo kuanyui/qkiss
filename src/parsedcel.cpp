@@ -34,6 +34,17 @@ ParsedCel::ParsedCel(CPString fileName, const QByteArray &rawData):
     qkDebug << "[DEBUG][ParsedCel] ctor: " << *this;
 }
 
+ParsedCel::~ParsedCel()
+{
+
+    if (m_cachedPaletteBasedPixels) {    // NOTE: I hear `delete nullptr` in C++ actually do nothing, so this if condition is actually unnecessary... orz
+        delete m_cachedPaletteBasedPixels;
+    }
+    if (m_cachedColorBasedPixels) {
+        delete m_cachedColorBasedPixels;
+    }
+}
+
 std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, uint16_t paletteIdxInKcf) const
 {
     ParsedKcfPalette *paletteInKcf = kcf.getPaletteInKcf(paletteIdxInKcf);
