@@ -307,7 +307,7 @@ void MainWindow::switchToPalette(uint8_t paletteIdx, bool requestFromFkissScript
     btn->setChecked(true);   // NOTE: DO NOT USE `setDown()` here, it's merely a visual state, and doesn't effect `checked` state. May cause unexpected behavior when programatically triggering `click` event.
     m_archiveFile->setPaletteNo(paletteIdx);
     if (!requestFromFkissScript) {   // triggered by user (from QWidget)
-        m_archiveFile->setPaletteNoFromMainWindow(requestFromFkissScript);
+        m_archiveFile->setPaletteNoFromMainWindow(paletteIdx);
     }
     m_kissView->curKissScene()->setPaletteNoInKcfAndRender(paletteIdx);
 }
