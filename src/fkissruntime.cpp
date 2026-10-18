@@ -427,7 +427,8 @@ std::shared_ptr<FkissAlarmTimer> FkissRuntime::getOrCreateAlarmTimer(FkissVarian
         tmp->qTimer = std::make_unique<QTimer>();
         tmp->qTimer->setSingleShot(true);
         tmp->qTimer->setInterval(delay);
-        connect(tmp->qTimer.get(), &QTimer::timeout, [=, this]() {
+        connect(tmp->qTimer.get(), &QTimer::timeout, this, [=, this]() {
+            // The third arg (`this`) is receiver (context object), the QTimer will be execute only in the same thread of the context object. (if not in the same thread, add it into queue of that context)
             runActionsInAlarm(alarmID);
         });
         if (delay == 0) {
