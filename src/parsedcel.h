@@ -46,6 +46,8 @@ public:
     };
     ParsedCel(CPString fileName, const QByteArray &rawData);
     ~ParsedCel();
+    /** False when the file is truncated or has an invalid header. Do not use an invalid CEL. */
+    bool isValid() const;
     std::unique_ptr<QVector<QRgb> > getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, uint16_t paletteIdxInKcf) const;  // REFACTOR: const reference
     QVector<QRgb> *getColorBasedPixels() const;
     QRect getGeometry() const;
@@ -63,6 +65,8 @@ public:
 private:
     void parseModernCel(const QByteArray &data);
     void parseLegacyCel(const QByteArray &data);
+    /** Logs an error and returns false when `data` is shorter than `requiredBytes`. */
+    bool isLongEnough(const QByteArray &data, qsizetype requiredBytes) const;
     /** Palette Based, NOT colorized yet. (4 bits) */
     QVector<uint8_t> *parse4BitsPixelsAsCache(QByteArray *pixelRawData);  // REFACTOR: Use reference instead?
     /** 32 bits full-color (rgba) */
@@ -75,17 +79,17 @@ private:
      * - 20h = Palette-based cel, colors come from a palette.
      * - 21h = Color-based cel, each pixel in the cel is a 32-bit color with alpha (transparency) control.
      */
-    Type m_celType;
+    Type m_celType = Type::PaletteBased;
     /**
      * - 4: palette-based image (16 colors per pixel in a palette)
      * - 8: palette-based image (256 colors per pixel in a palette)
      * - 32: color-based image (16,777,216 colors per pixel, no palette)
      */
-    uint8_t m_bitsPerPixel;
-    uint16_t m_x;
-    uint16_t m_y;
-    uint16_t m_width;
-    uint16_t m_height;
+    uint8_t m_bitsPerPixel = 0;
+    uint16_t m_x = 0;
+    uint16_t m_y = 0;
+    uint16_t m_width = 0;
+    uint16_t m_height = 0;
     /*
     ◎１ピクセル当たり 4 ビット（16色）の場合のピクセル・データの構成
     With 4 bits per pixel, each byte in a cel row contains 2 pixels. In the situation where the number of pixels is odd, the remaining 4 bits are set to 0.
@@ -136,6 +140,8 @@ private:
 
     QVector<uint8_t> *m_cachedPaletteBasedPixels = nullptr;
     QVector<QRgb> *m_cachedColorBasedPixels = nullptr;
+    /** Becomes true only after the header and all the pixels are parsed. */
+    bool m_isValid = false;
 };
 
 QDebug operator<<(QDebug debug, const ParsedCel &cel);
