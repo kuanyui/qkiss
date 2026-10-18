@@ -9,8 +9,9 @@ homepage/
 ├── build.py        # Checks and assembles the site, and is the dev server; uses the Python standard library and rsvg-convert
 └── src/            # Copied into the site as is
     ├── index.html  # The page. English strings are written here.
+    ├── controls.html  # The two pickers, and the dialogs of the Director's Cut. main.js puts them into the page (see below).
     ├── style.css
-    ├── main.js     # Translations, the language and cut pickers, the screenshot gallery and the download links
+    ├── main.js     # The list of languages, translations, the language and cut pickers, the screenshot gallery and the download links
     ├── i18n/       # One JSON file per language other than English, and en.json for the English of the Director's Cut
     ├── legal/      # The documents of the Director's Cut: terms.json, and amendments.json for their additional articles
     └── images/
@@ -117,7 +118,7 @@ The wiki must exist before the first deployment: create its first page on the we
 
 ## Translations
 
-English is the source language: its strings are written in `index.html`, marked with a key:
+English is the source language: its strings are written in `index.html` (and `controls.html`, see [The language picker](#the-language-picker)), marked with a key:
 
 | Attribute | Replaces | Example |
 |---|---|---|
@@ -138,7 +139,7 @@ The page picks the language from, in order:
 
 ### Adding a language
 
-1. Add it to `<script id="languages">` in `index.html`:
+1. Add it to `LANGUAGES` in `main.js`, between `/* languages: */` and `/* :languages */`. `build.py` reads that part as JSON:
 
    ```json
    { "id": "zh-HK", "name": "香港繁體", "fallback": "zh-TW" }
@@ -162,6 +163,8 @@ The picker is [@llselect/core](https://gitlab.com/kuanyui/llselect), loaded from
 - `integrity` makes the browser refuse any file other than the one checked.
 - Its classes are styled in `style.css` from the colors of the page (light and dark), instead of loading one of its themes.
 - If it does not load, both pickers stay hidden: the language is still picked as above, and the cut is the one chosen last.
+- The two pickers, and the three dialogs of the Director's Cut, are in `controls.html`, not in `index.html`. `main.js` fetches it only for a browser that gets the pickers (see `isEnglishOnly()`), and puts it into the page before translating it. So the page itself, as a crawler or an LLM reads it, shows neither the pickers nor the dialogs, and does not list the languages either: they are in `main.js`. `build.py` checks the strings of both files, and rejects the pickers, the dialogs and the list of languages in `index.html`.
+- If `controls.html` does not arrive within 2 seconds, that page load has no pickers, and shows the Wholesome Cut.
 
 To upgrade it, change the version in the URL, and set `integrity` to `sha384-` followed by the hash of the new file:
 
@@ -174,7 +177,7 @@ curl -fsSL https://cdn.jsdelivr.net/npm/@llselect/core@VERSION/dist/index.umd.js
 The page has two cuts, and the cut picker next to the language picker (an @llselect/core too) switches between them:
 
 - The Wholesome Cut, shown by default.
-- The Director's Cut, with the author's swearing, dark political jokes and strong opinions. The first switch to it asks three times: a warning (`#cut-dialog` in `index.html`), the terms of the Director's Cut (`#terms-dialog`), then their additional articles (`#amendments-dialog`). In each document, the button that continues (“I have actually read, and fully agree to, all of the provisions above”) is enabled only once the visitor has scrolled to its end. The cut, and the agreement, are remembered in `localStorage` like the language: after agreeing once, switching asks nothing.
+- The Director's Cut, with the author's swearing, dark political jokes and strong opinions. The first switch to it asks three times: a warning (`#cut-dialog` in `controls.html`), the terms of the Director's Cut (`#terms-dialog`), then their additional articles (`#amendments-dialog`). In each document, the button that continues (“I have actually read, and fully agree to, all of the provisions above”) is enabled only once the visitor has scrolled to its end. The cut, and the agreement, are remembered in `localStorage` like the language: after agreeing once, switching asks nothing.
 
 A string that differs between the cuts is an object with one version per cut, instead of a string. For example, in `i18n/ja.json` and `i18n/zh-TW.json` (in their languages):
 
@@ -186,7 +189,7 @@ A string that differs between the cuts is an object with one version per cut, in
 ```
 
 - The two versions are always next to each other, so that they are easy to compare, and neither one is forgotten.
-- English: the Wholesome Cut is written in `index.html`, like every English string. The Director's Cut is in `i18n/en.json`, whose strings are all such objects with only `"danger"`. `main.js` downloads it only for the Director's Cut, so crawlers, link previews and visitors without JavaScript only ever see the Wholesome Cut.
+- English: the Wholesome Cut is written in `index.html` (or `controls.html`), like every English string. The Director's Cut is in `i18n/en.json`, whose strings are all such objects with only `"danger"`. `main.js` downloads it only for the Director's Cut, so crawlers, link previews and visitors without JavaScript only ever see the Wholesome Cut.
 - Only the strings of `data-i18n` and `data-i18n-html` can have a version per cut, not attributes.
 - An empty version hides its element. For example, `"safe": ""` for a paragraph, a footnote or a musing that only the Director's Cut has. In `index.html`, such an element is empty and `hidden` (for a footnote, its `<p>`; for a musing, its `<blockquote>`, and for a row of the chart of LLMs, its `<li>`, whose strings are then all like this), so that it stays hidden without JavaScript too.
 - `main.js` numbers the footnotes of each `.footnotes` block (`*1`, `*2`, …), skipping the hidden ones, so the numbers written in the strings do not matter. Only the numbers in `index.html` must be right for the Wholesome Cut, for visitors without JavaScript.

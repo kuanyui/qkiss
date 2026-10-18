@@ -8,8 +8,16 @@
 'use strict';
 
 (() => {
-  /** Registry of languages: `<script id="languages">` in index.html. */
-  const LANGUAGES = JSON.parse(document.getElementById('languages').textContent);
+  /**
+   * Languages of this website. The first one is the source language: its strings are the ones written in index.html.
+   * Every other language needs `i18n/<id>.json`. They are here rather than in index.html, so that the page itself
+   * does not list them. build.py reads and checks the JSON between the two markers. See homepage/README.md.
+   */
+  const LANGUAGES = /* languages: */ [
+    { "id": "en",    "name": "English",  "flag": "us" },
+    { "id": "ja",    "name": "日本語",   "flag": "jp" },
+    { "id": "zh-TW", "name": "台灣繁體", "flag": "tw" }
+  ] /* :languages */;
   /** The language whose strings are written directly in index.html. */
   const SOURCE_LANGUAGE = LANGUAGES[0].id;
   const LANGUAGE_STORAGE_KEY = 'qkiss-homepage.language';
@@ -908,6 +916,31 @@
   }
 
   // ---------------------------------------------------------------------------
+  // The pickers and the dialogs of the cuts (controls.html)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Put controls.html into the page: the two pickers into the header, the dialogs at the end of <body>. Returns
+   * whether it did. Without them, this page load stays in the Wholesome Cut, because nothing could switch back from
+   * the Director's Cut.
+   */
+  async function insertControls() {
+    if (!controlsLoading) return false;
+    const html = await controlsLoading;
+    if (html === null) {
+      currentCut = 'safe';
+      return false;
+    }
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    const headerTools = document.querySelector('.header-tools');
+    for (const element of [...template.content.children]) {
+      (element.localName === 'dialog' ? document.body : headerTools).append(element);
+    }
+    return true;
+  }
+
+  // ---------------------------------------------------------------------------
   // Start
   // ---------------------------------------------------------------------------
 
@@ -918,10 +951,29 @@
     fallbackChain(currentLanguage).forEach(loadDictionary);  // Start downloading right now.
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  /**
+   * The text of controls.html, downloaded right now too. It is null if it could not be downloaded, or not within
+   * LOADING_TIMEOUT_MS: the same time limit as the page hidden above, so that the page never waits longer for it.
+   * Not for an English-only browser.
+   */
+  const controlsLoading = englishOnly ? null : Promise.race([
+    fetch('controls.html')
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.text();
+      })
+      .catch((error) => {
+        console.error('controls.html:', error);
+        return null;
+      }),
+    new Promise((resolve) => setTimeout(() => resolve(null), LOADING_TIMEOUT_MS)),
+  ]);
+
+  document.addEventListener('DOMContentLoaded', async () => {
     setUpDownloadMenus();   // before collectTargets(): the menus are translated too
+    const hasControls = await insertControls();   // before collectTargets() too, for the same reason
     collectTargets();
-    if (!englishOnly) {   // Otherwise they stay hidden.
+    if (hasControls) {
       setUpLanguagePicker();
       setUpCutPicker();
     }

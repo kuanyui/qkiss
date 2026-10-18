@@ -81,7 +81,7 @@ OG_IMAGE_PNG: str = "images/og-image.png"
 # Its width and height in pixels. These must match `og:image:width` and `og:image:height` in index.html.
 OG_IMAGE_SIZE: tuple[int, int] = (1280, 640)
 
-# The fields a language may have in `<script id="languages">` of index.html, and whether each one is required.
+# The fields a language may have in `LANGUAGES` of main.js, and whether each one is required.
 LANGUAGE_FIELDS: dict[str, bool] = {"id": True, "name": True, "lang": False, "fallback": False, "flag": False}
 
 PATT_KEY = re.compile(r"[a-z][a-z0-9-]*(\.[a-z][a-z0-9-]*)*")
@@ -115,18 +115,27 @@ def is_nonempty_string(value: Any) -> bool:
 
 
 # ==========================================
-# index.html: translation keys and the language registry
+# index.html and controls.html: translation keys. main.js: the language registry
 # ==========================================
 
-class PageParser(HTMLParser):
-    """Collect the translation keys and the language registry of index.html."""
+# The page is index.html, plus controls.html: main.js fetches it, and puts it into the page, only when the browser
+# gets the language picker and the cut picker (see isEnglishOnly() in main.js). So the page itself shows neither the
+# pickers nor the dialogs of the Director's Cut, and does not list the languages. They must not come back into
+# index.html: build.py rejects the elements with these IDs in it.
+PAGE_FILES: tuple[str, ...] = ("index.html", "controls.html")
+NOT_IN_INDEX: tuple[str, ...] = ("cut-picker", "language-picker", "cut-dialog", "terms-dialog", "amendments-dialog", "languages")
+# The language registry: the JSON between these two markers of main.js.
+LANGUAGES_MARKERS: tuple[str, str] = ("/* languages: */", "/* :languages */")
 
-    def __init__(self) -> None:
+
+class PageParser(HTMLParser):
+    """Collect the translation keys of one HTML file of the page (`name`, in SRC_DIR)."""
+
+    def __init__(self, name: str) -> None:
         super().__init__()
+        self.name = name
         self.keys: dict[str, str] = {}       # key -> how it is used: "data-i18n", "data-i18n-html" or "data-i18n-attr"
-        self.languages_json: str | None = None
         self.errors: list[str] = []
-        self._in_languages_script = False
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         for name, value in attrs:
@@ -139,17 +148,9 @@ class PageParser(HTMLParser):
                         self._add_key(key, name)
                     else:
                         self._error(f"data-i18n-attr: invalid item {item!r}; expected `attribute:key`, items separated by `;` without spaces")
-        if tag == "script" and ("id", "languages") in attrs:
-            self._in_languages_script = True
-            self.languages_json = ""
-
-    def handle_endtag(self, tag: str) -> None:
-        if tag == "script":
-            self._in_languages_script = False
-
-    def handle_data(self, data: str) -> None:
-        if self._in_languages_script:
-            self.languages_json = (self.languages_json or "") + data
+            elif name == "id" and self.name == "index.html" and value in NOT_IN_INDEX:
+                home = "LANGUAGES in main.js" if value == "languages" else "controls.html"
+                self._error(f"must not contain #{value}; it belongs in {home}")
 
     def _add_key(self, key: str | None, usage: str) -> None:
         if key is None or not PATT_KEY.fullmatch(key):
@@ -159,14 +160,41 @@ class PageParser(HTMLParser):
 
     def _error(self, message: str) -> None:
         line, column = self.getpos()
-        self.errors.append(f"index.html:{line}:{column + 1}: {message}")
+        self.errors.append(f"{self.name}:{line}:{column + 1}: {message}")
+
+
+def check_page() -> dict[str, str]:
+    """Collect the translation keys of the page (PAGE_FILES). PageParser also rejects NOT_IN_INDEX in index.html."""
+    keys: dict[str, str] = {}
+    errors: list[str] = []
+    for name in PAGE_FILES:
+        text = (SRC_DIR / name).read_text(encoding="utf-8")
+        page = PageParser(name)
+        page.feed(text)
+        page.close()
+        errors += page.errors
+        for key, usage in page.keys.items():
+            if keys.setdefault(key, usage) != usage:
+                errors.append(f"{name}: key {key!r} is used by both {keys[key]} and {usage}; use one key per usage")
+    if errors:
+        raise BuildError("\n".join(errors))
+    return keys
+
+
+def languages_json() -> str | None:
+    """The text of the language registry: the JSON between the LANGUAGES_MARKERS of main.js, or None."""
+    text = (SRC_DIR / "main.js").read_text(encoding="utf-8")
+    start, end = text.find(LANGUAGES_MARKERS[0]), text.find(LANGUAGES_MARKERS[1])
+    if start < 0 or end < start:
+        return None
+    return text[start + len(LANGUAGES_MARKERS[0]):end]
 
 
 def check_languages(text: str | None) -> list[dict[str, str]]:
-    """Validate the language registry (`<script type="application/json" id="languages">` in index.html)."""
-    where = 'index.html <script id="languages">'
+    """Validate the language registry (`LANGUAGES` in main.js)."""
+    where = "main.js LANGUAGES"
     if text is None:
-        raise BuildError(f"{where}: not found")
+        raise BuildError(f"{where}: not found between {LANGUAGES_MARKERS[0]} and {LANGUAGES_MARKERS[1]}")
     languages = load_json(text, where)
     if not isinstance(languages, list) or not languages:
         raise BuildError(f"{where}: must be a non-empty array of languages")
@@ -222,7 +250,7 @@ SOURCE_CUTS: tuple[str, ...] = ("danger",)
 
 
 def check_translations(languages: list[dict[str, str]], keys: dict[str, str]) -> list[str]:
-    """Validate every `i18n/<id>.json` against index.html. Returns warnings about untranslated keys, and about keys
+    """Validate every `i18n/<id>.json` against the page. Returns warnings about untranslated keys, and about keys
     with one version per cut in some languages but not in others."""
     source_id = languages[0]["id"]
     source_name = f"{source_id}.json"   # optional: the Director's Cut of the source language
@@ -231,7 +259,7 @@ def check_translations(languages: list[dict[str, str]], keys: dict[str, str]) ->
 
     errors: list[str] = []
     for name in sorted(present - expected - {source_name}):
-        errors.append(f"i18n/{name}: not a registered language (the strings of the source language {source_id!r} live in index.html)")
+        errors.append(f"i18n/{name}: not a registered language (the strings of the source language {source_id!r} live in index.html and controls.html)")
     for name in sorted(expected - present):
         errors.append(f"i18n/{name}: missing; every registered language except {source_id!r} needs one")
 
@@ -249,7 +277,7 @@ def check_translations(languages: list[dict[str, str]], keys: dict[str, str]) ->
         for key, value in translations.items():
             where = f"i18n/{name}: {key!r}"
             if key not in keys:
-                errors.append(f"i18n/{name}: unknown key {key!r}; it is not used in index.html")
+                errors.append(f"i18n/{name}: unknown key {key!r}; it is used in neither index.html nor controls.html")
             elif isinstance(value, dict):
                 if keys[key] == "data-i18n-attr":
                     errors.append(f"{where}: the strings of data-i18n-attr cannot have a version per cut")
@@ -260,7 +288,7 @@ def check_translations(languages: list[dict[str, str]], keys: dict[str, str]) ->
                 else:
                     cut_keys[name].add(key)
             elif name == source_name:
-                errors.append(f"{where}: i18n/{source_name} only has the Director's Cut, as {{\"danger\": \"...\"}}; the other strings of {source_id!r} live in index.html")
+                errors.append(f"{where}: i18n/{source_name} only has the Director's Cut, as {{\"danger\": \"...\"}}; the other strings of {source_id!r} live in index.html and controls.html")
             elif not is_nonempty_string(value):
                 errors.append(f"{where}: the translation must be a non-empty string, or an object with one version per cut")
             else:
@@ -511,13 +539,9 @@ def site_files(screenshots_dir: Path | None, images: list[str], languages: list[
 def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path | bytes], list[str]]:
     """Check everything the site is made from. Return its files and the warnings to print. Each file is either
     the path to copy it from (from site_files), or its content (the PNG from og_image_png)."""
-    page = PageParser()
-    page.feed((SRC_DIR / "index.html").read_text(encoding="utf-8"))
-    page.close()
-    if page.errors:
-        raise BuildError("\n".join(page.errors))
-    languages = check_languages(page.languages_json)
-    warnings = check_translations(languages, page.keys)
+    keys = check_page()
+    languages = check_languages(languages_json())
+    warnings = check_translations(languages, keys)
     warnings += check_legal_documents(languages)
     images = check_screenshots(screenshots_dir, languages)   # screenshots.json is checked even without --screenshots
     if screenshots_dir is None:
