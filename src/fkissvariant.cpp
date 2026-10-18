@@ -186,7 +186,7 @@ size_t qHash(const FkissVariant &key, size_t seed)
 {
     switch (key.type()) {
     case FkissVariant::Type::String: return qHash(key.getOriginalString(), seed);
-    case FkissVariant::Type::Cel: return qHash(key.getOriginalString(), seed);
+    case FkissVariant::Type::Cel: return qHash(key.getCelName(), seed);
     case FkissVariant::Type::Int: return qHash(key.getInt(), seed);
     case FkissVariant::Type::Object: return qHash(key.getObjectId(), seed);
     default: return qHash(0, seed);
