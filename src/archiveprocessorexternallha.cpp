@@ -89,6 +89,7 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     qkInfo.noquote() << tr("Trying to extract LZH file \"%1\" via LHA...").arg(fileName);
     this->callExternalProgramOrLibraryToExtractLzh(lzhOrCnfFilePath);
     QObject::connect(this, &ArchiveProcessorExternalLha::extractFail, [promise, fileName](QString compressedFilePath, QString errMsg) {
+        qkCritical.noquote() << errMsg;
         qkCritical.noquote() << tr("Extracting LZH file \"%1\" failed. Abort.").arg(fileName);
         Q_UNUSED(compressedFilePath);
         promise->setException(std::make_exception_ptr(
@@ -204,6 +205,10 @@ void ArchiveProcessorExternalLha::onQProcessFinished(int exitCode, QProcess::Exi
     foreach (const auto fileSummary, m_filesSummaryList)  {
         QString fileName = fileSummary.first;
         uint byteSize = static_cast<qsizetype>(static_cast<uint>(fileSummary.second));
+        if (qsizetype(pos) + byteSize > m_buffer.size()) {   // When the archive is truncated or damaged, lha extracts less than its file list.
+            emit extractFail(m_archiveFilePath, tr("The LZH file may be damaged: lha extracted only %1 bytes in total, but \"%2\" needs %3 bytes from offset %4.").argn(m_buffer.size()).arg(fileName).argn(byteSize).argn(pos));
+            return;
+        }
         QByteArray data = m_buffer.sliced(pos, byteSize);
         // qkDebug << "=====================================";
         // qkDebug << fileName << byteSize;
