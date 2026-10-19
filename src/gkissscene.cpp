@@ -664,7 +664,22 @@ void GKissScene::emitPixelOverlapEventsLater(const QVector<GKissItem *> &movedIt
     QList<QSet<GKissItem *>> currentPixelOverlappedItems = getPixelOverlappedItems(movedItems);
     QMetaObject::invokeMethod(this, [=, this]() {
         for (qsizetype i = 0; i < movedItems.length(); i++) {
-            emitPixelOverlapEvents(movedItems[i], originalPixelOverlappedItems[i], currentPixelOverlappedItems[i]);
+            GKissItem *movedItem = movedItems[i];
+            // The items of the same object are all in movedItems: count each pair once.
+            const QSet<GKissItem *> countedItems { movedItems.begin(), movedItems.begin() + i };
+            const QSet<GKissItem *> original = originalPixelOverlappedItems[i] - countedItems;
+            const QSet<GKissItem *> current = currentPixelOverlappedItems[i] - countedItems;
+            emitPixelOverlapEvents(movedItem, original, current);
+            // mouseReleaseEvent() compares with the overlaps at mouse press, so don't let it emit these again.
+            if (movedItem == m_draggingItem) {
+                m_originalPixelOverlappedItems.unite(current - original).subtract(original - current);
+            } else if (m_draggingItem != nullptr && current.contains(m_draggingItem) != original.contains(m_draggingItem)) {
+                if (current.contains(m_draggingItem)) {
+                    m_originalPixelOverlappedItems.insert(movedItem);
+                } else {
+                    m_originalPixelOverlappedItems.remove(movedItem);
+                }
+            }
         }
     }, Qt::QueuedConnection);
 }
