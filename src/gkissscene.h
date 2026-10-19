@@ -81,6 +81,12 @@ protected:
 private:
     /// pass nullptr means clear
     void storeCurrentOverlappedItems(GKissItem *targetItem);
+    /// For collide(), apart(): the items whose pixels overlap each of `targetItems`, in the same order.
+    QList<QSet<GKissItem *>> getPixelOverlappedItems(const QVector<GKissItem *> &targetItems) const;
+    void emitPixelOverlapEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems);
+    /// FKiSS movement also triggers collide() and apart(). They run after the actions of the current event,
+    /// so that `timer(N, 0)` in collide() can cancel the alarm N which is moving the object.
+    void emitPixelOverlapEventsLater(const QVector<GKissItem *> &movedItems, const QList<QSet<GKissItem *>> &originalPixelOverlappedItems);
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
     QHash<CPString, GKissItem *> m_celNameToItemMap;
     ArchiveFile *m_archiveFile;
