@@ -21,6 +21,9 @@
 #define AUDIOPLAYER_H
 
 #include <QObject>
+#include <QQueue>
+
+class QMediaPlayer;
 
 class AudioPlayer : public QObject
 {
@@ -28,6 +31,10 @@ class AudioPlayer : public QObject
 public:
     AudioPlayer(QObject *parent = nullptr);
     void playWavFromMemory(const QByteArray &wavData);
+private:
+    /// Each player holds several file descriptors, set a limitation to prevent crash due to "Too many open files".
+    static constexpr int MAX_CONCURRENT_PLAYERS = 4;
+    QQueue<QMediaPlayer *> m_players;
 };
 
 #endif // AUDIOPLAYER_H

@@ -30,6 +30,9 @@ AudioPlayer::AudioPlayer(QObject *parent) :
 
 void AudioPlayer::playWavFromMemory(const QByteArray &wavData)
 {
+    if (m_players.length() >= MAX_CONCURRENT_PLAYERS) {
+        return;  // Drop the new `sound()` and let the existing ones finish, because some weird FKiSS script calls `sound()` too frequently.
+    }
     // audioOutput is required
     // https://doc.qt.io/qt-6/audiooverview.html
     QMediaPlayer *player = new QMediaPlayer{this};
@@ -37,16 +40,22 @@ void AudioPlayer::playWavFromMemory(const QByteArray &wavData)
     player->setAudioOutput(audioOutput);
     QBuffer *buf = new QBuffer{player};
     buf->setData(wavData);
-    player->setSourceDevice(buf, QUrl{"audio/wav"});
-    player->play();
-    connect(player, &QMediaPlayer::playbackStateChanged, [=](QMediaPlayer::PlaybackState newState) {
+    m_players.enqueue(player);
+    auto releasePlayer = [=, this]() {
+        m_players.removeOne(player);
+        player->deleteLater();
+        audioOutput->deleteLater();
+    };
+    connect(player, &QMediaPlayer::playbackStateChanged, this, [=](QMediaPlayer::PlaybackState newState) {
         switch (newState) {
         case QMediaPlayer::PlaybackState::StoppedState:
-            player->deleteLater();
-            audioOutput->deleteLater();
+            releasePlayer();
             return;
         default: {
         }
         }
     });
+    connect(player, &QMediaPlayer::errorOccurred, this, releasePlayer);
+    player->setSourceDevice(buf, QUrl{"audio/wav"});
+    player->play();
 }
