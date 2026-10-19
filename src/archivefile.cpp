@@ -84,7 +84,12 @@ KissFilesParsingResult ArchiveFile::parseKissFiles(std::shared_ptr<QMap<QString,
         } else if (fileNameUpper.endsWith(".KCF")) {
             res.parsedKcfFiles.insert(cpFileName, new ParsedKcf {cpFileName, fileRawContent});
         } else if (fileNameUpper.endsWith(".CEL")) {
-            res.parsedCelFiles.insert(cpFileName, new ParsedCel {cpFileName, fileRawContent});
+            std::unique_ptr<ParsedCel> cel = std::make_unique<ParsedCel>(cpFileName, fileRawContent);
+            if (cel->isValid()) {
+                res.parsedCelFiles.insert(cpFileName, cel.release());
+            } else {
+                qkDebug << "[ArchiveFile] Skipping invalid CEL file:" << cpFileName;
+            }
         } else if (fileNameUpper.endsWith(".DOC") || fileNameUpper.endsWith(".TXT") || fileNameUpper == "README") {
             res.docFiles.insert(cpFileName, Encoding::toUtf8(fileRawContent, encoding));
         } else {

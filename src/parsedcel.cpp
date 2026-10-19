@@ -45,14 +45,27 @@ ParsedCel::~ParsedCel()
     }
 }
 
+bool ParsedCel::isValid() const
+{
+    return m_isValid;
+}
+
 std::unique_ptr<QVector<QRgb>> ParsedCel::getColorizedPaletteBasedCelPixels(ParsedKcf &kcf, uint16_t paletteIdxInKcf) const
 {
     ParsedKcfPalette *paletteInKcf = kcf.getPaletteInKcf(paletteIdxInKcf);
     std::unique_ptr<QVector<QRgb>> colorizedPixels = std::make_unique<QVector<QRgb>>();
+    // If the KCF has no valid palette, `paletteInKcf` would be nullptr, this means every pixel is transparent
+    if (paletteInKcf == nullptr) {
+        colorizedPixels->fill(qRgba(0, 0, 0, 0), m_cachedPaletteBasedPixels->length());
+        return colorizedPixels;
+    }
     colorizedPixels->reserve(m_cachedPaletteBasedPixels->length());
     for (uint32_t i = 0; i < m_cachedPaletteBasedPixels->length(); i++) {
         uint8_t colorNo = m_cachedPaletteBasedPixels->at(i);
-        // (palette-based) a color in a palette is indexed from 1. if a pixel of a CEL is 0, it's transparent.
+        // colorNo == 0 means this pixel is transparent
+        //   - colorNo 0 is never been used to draw CEL. For CEL, colorNo 0 always means transparent.
+        //   - colorNo 0 is reserved in each paletteInKcf.  (paletteInKcf[0])
+        //   - In a CNF, the paletteInKcf[0] in the first KCF file defined in CNF represents the "play field color" of each paletteInKcf.
         if (colorNo == 0) {  // means transparent
             colorizedPixels->append(qRgba(0, 0, 0, 0));
         } else {
@@ -80,6 +93,7 @@ QVector<QRgb> *ParsedCel::getColorBasedPixels() const
 
 void ParsedCel::parseModernCel(const QByteArray &data)
 {
+    if (!isLongEnough(data, 32)) { return; }   // The header is 32 bytes.
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     switch (data[4]) {
     case 0x20: m_celType = Type::PaletteBased; break;
@@ -96,20 +110,28 @@ void ParsedCel::parseModernCel(const QByteArray &data)
                                 .arg(QString::number(m_bitsPerPixel));
         m_celType = Type::PaletteBased;
     }
+    if (m_celType == Type::PaletteBased && m_bitsPerPixel == 32) {
+        qkCritical.noquote() << tr(R"("%1" is a palette-based CEL file, but it says each pixel is 32 bits (expected: 4 or 8 bits).)").arg(m_fileName.original()); return;
+    }
     m_width = (static_cast<uint16_t>(udata[9]) << 8) | udata[8];
     m_height = (static_cast<uint16_t>(udata[11]) << 8) | udata[10];
     m_x = (static_cast<uint16_t>(udata[13]) << 8) | udata[12];
     m_y = (static_cast<uint16_t>(udata[15]) << 8) | udata[14];
+    // Rounded up to whole bytes: with 4 bits per pixel and an odd width, each row ends with half a byte of padding.
+    qsizetype bytesPerRow = (qsizetype(m_width) * m_bitsPerPixel + 7) / 8;
+    if (!isLongEnough(data, 32 + bytesPerRow * m_height)) { return; }
     QByteArray pixelRawData = data.mid(32);  // OPTIMIZE: Don't use mid()
     switch (m_bitsPerPixel) {
     case 4: m_cachedPaletteBasedPixels = parse4BitsPixelsAsCache(&pixelRawData); break;
     case 8: m_cachedPaletteBasedPixels = new QVector<uint8_t>(pixelRawData.begin(), pixelRawData.end()); break;
     case 32: m_cachedColorBasedPixels = parse32BitsPixelsAsCache(&pixelRawData); break;
     }
+    m_isValid = true;
 }
 
 void ParsedCel::parseLegacyCel(const QByteArray &data)
 {
+    if (!isLongEnough(data, 4)) { return; }   // The header is 4 bytes.
     const unsigned char* udata = reinterpret_cast<const unsigned char*>(data.constData());
     m_celType = Type::PaletteBased;
     m_bitsPerPixel = 4;
@@ -117,8 +139,21 @@ void ParsedCel::parseLegacyCel(const QByteArray &data)
     m_y = 0;
     m_width = (static_cast<uint16_t>(udata[1]) << 8) | udata[0];
     m_height = (static_cast<uint16_t>(udata[3]) << 8) | udata[2];
+    qsizetype bytesPerRow = (qsizetype(m_width) * m_bitsPerPixel + 7) / 8;
+    if (!isLongEnough(data, 4 + bytesPerRow * m_height)) { return; }
     QByteArray pixelRawData = data.mid(4);  // OPTIMIZE: Don't use mid()
     m_cachedPaletteBasedPixels = parse4BitsPixelsAsCache(&pixelRawData);
+    m_isValid = true;
+}
+
+bool ParsedCel::isLongEnough(const QByteArray &data, qsizetype requiredBytes) const
+{
+    if (data.size() >= requiredBytes) { return true; }
+    qkCritical.noquote() << tr(R"("%1" is truncated: it needs at least %2 bytes, but it has only %3 bytes.)")
+                            .arg(m_fileName.original())
+                            .arg(requiredBytes)
+                            .arg(data.size());
+    return false;
 }
 
 uint16_t ParsedCel::height() const
@@ -190,12 +225,12 @@ QVector<uint8_t> *ParsedCel::parse4BitsPixelsAsCache(QByteArray *pixelRawData)
 
 QVector<QRgb> *ParsedCel::parse32BitsPixelsAsCache(QByteArray *pixelRawData)
 {
-    qsizetype pxCount = m_width * m_height;
+    qsizetype pxCount = qsizetype(m_width) * m_height;
     QVector<QRgb> *vec = new QVector<QRgb>();
     vec->reserve(pxCount);
     for (size_t y = 0; y < m_height; y++) {
         for (size_t x = 0; x < m_width; x++) {
-            uint32_t byteOffset = ((y * m_width) + x) * 4;
+            qsizetype byteOffset = ((y * m_width) + x) * 4;
             uint8_t b = static_cast<uint8_t>(pixelRawData->at(byteOffset + 0));
             uint8_t g = static_cast<uint8_t>(pixelRawData->at(byteOffset + 1));
             uint8_t r = static_cast<uint8_t>(pixelRawData->at(byteOffset + 2));
