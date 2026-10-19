@@ -69,6 +69,8 @@ private:
     int findNearestToken(const QVector<Token> &tokens, Token::Type type, int fromIndex) const;
     /** Remove `;@` prefix and `; comment` suffix. */
     QString removePrefixAndCommentOfLine(QString line);
+    /** Add strict tolerance for malformed *.{cel,wav} whose quotes are not closed properly. ex: `map("a.cel) unmap("b.cel")` */
+    QString tryToAddMissingClosingQuote(const FkissLineInfo &lineInfo) const;
     /** AST -> Commands (Event command + Action command(s)). Traverse across all commands, bind each event + its action(s) (procedure) pair, and store to pairs list. */
     QVector<std::shared_ptr<ASTPairedCommands>> pairAstCommands(FkissProcedure &commands);;
     void logSyntaxWarning(const Token &token, QString msg) const;

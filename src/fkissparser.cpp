@@ -20,6 +20,7 @@
 #include "fkissparser.h"
 #include "configfile.h"
 #include "logging.h"
+#include <QRegularExpression>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -87,7 +88,7 @@ QVector<Token> FkissParser::tokenize(const QList<FkissLineInfo> &lineInfoList) {
     for (int r = 0; r < lineInfoList.length(); ++r) {  // row index (line index)
         auto lineInfo = lineInfoList[r];
         int oriLineNo = lineInfo.lineNoInCnf;
-        QString line = removePrefixAndCommentOfLine(lineInfo.line);
+        QString line = removePrefixAndCommentOfLine(tryToAddMissingClosingQuote(lineInfo));
         int c = 0;  // column index
         while (c < line.length()) {
             if (line[c].isSpace()) {
@@ -278,6 +279,29 @@ QString FkissParser::removePrefixAndCommentOfLine(QString line) {
         } else if (line[i] == ';' && !inStr) {
             auto tmp = line.left(i);
             return tmp.trimmed();
+        }
+    }
+    return line;
+}
+
+QString FkissParser::tryToAddMissingClosingQuote(const FkissLineInfo &lineInfo) const
+{
+    const QString &line = lineInfo.line;
+    QList<int> quoteIdxs;
+    for (int i = 0; i < line.length(); ++i) {
+        if (line[i] == '"' && (i == 0 || line[i-1] != '\\')) {
+            quoteIdxs.append(i);
+        }
+    }
+    if (quoteIdxs.length() % 2 == 0) { return line; }
+    static const QRegularExpression reFileNameBeforeRParenOrComma(R"#([a-z0-9_-]+[.](?:cel|wav)(?=[,)]))#", QRegularExpression::CaseInsensitiveOption);   // (?=)  means look ahead, (?<=) is behind
+    for (int q = 0; q < quoteIdxs.length(); q += 2) {
+        QRegularExpressionMatch m = reFileNameBeforeRParenOrComma.match(line, quoteIdxs[q] + 1, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+        if (m.hasMatch()) {
+            QString fixedLine = line;
+            fixedLine.insert(m.capturedEnd(), QChar('"'));
+            logSyntaxWarning(Token(Token::Type::String, fixedLine, lineInfo.lineNoInCnf, m.capturedEnd()), tr("A string has no closing quote, so assume it ends after the file name."));
+            return fixedLine;
         }
     }
     return line;
