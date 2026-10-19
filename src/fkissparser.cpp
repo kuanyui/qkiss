@@ -162,7 +162,7 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
     FkissProcedure astCmds;
     bool bodyStarted = false;
     const QString TOKEN_EVENT_HANDLER = QStringLiteral("EventHandler");
-    // const QKiSS::Case caseSensitivity = ConfigFile::instance().caseSensitivity();
+    const QKiSS::Case caseSensitivity = ConfigFile::instance().caseSensitivity();
     bool hasCaseSensitiveEventHandler = false;   /// More tolerance for non-standard FKiSS script which use a case-insensitive `EventHandler`
     foreach (const Token &token , tokens) {
         // qkDebug << "[DEBUG] Current Token = " << token;
@@ -194,6 +194,14 @@ QVector<std::shared_ptr<ASTCommand> > FkissParser::parse0(const QVector<Token> &
         // Parse a full command calling
         if (token.type == Token::Type::Identifier) {
             QString cmdName = token.value;
+            if (caseSensitivity == QKiSS::Case::Insensitive && !commandIsEvent(cmdName) && !commandIsAction(cmdName)) {
+                // FKiSS commands are all in lower case, and the original fkiss is case-sensitive. So accept other cases only when the global case sensitivity is Insensitive.
+                QString lowerCmdName = cmdName.toLower();
+                if (commandIsEvent(lowerCmdName) || commandIsAction(lowerCmdName)) {
+                    logSyntaxWarning(token, tr("Command name `%1` is not in lower case. For compatibility, still accept it as `%2`.").arg(cmdName).arg(lowerCmdName));
+                    cmdName = lowerCmdName;
+                }
+            }
             ++i;
             while (i+1 < tokens.length() && (tokens[i].type == Token::Type::Space)) {
 	        // Add tolerance for some lunatics who add space after command (ex: `press	("hat.cel")`)
