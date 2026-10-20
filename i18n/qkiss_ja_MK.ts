@@ -150,7 +150,7 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via LHa...</source>
-        <translation>LZHファイル「%1」を展開中…、見ても理解できないんでしょ？ぷっ、ざぁーこ。</translation>
+        <translation>LHaでLZHファイル「%1」を展開中…、見ても理解できないんでしょ？ぷっ、ざぁーこ。</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>

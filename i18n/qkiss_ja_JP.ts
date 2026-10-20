@@ -148,7 +148,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via LHa...</source>
-        <translation>LZHファイル「%1」を展開しています...</translation>
+        <translation>LHaでLZHファイル「%1」を展開しています...</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>
@@ -215,7 +215,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>Trying to extract LZH file &quot;%1&quot; via Unar...</source>
-        <translation>LZHファイル「%1」を展開しています...</translation>
+        <translation>UnarでLZHファイル「%1」を展開しています...</translation>
     </message>
     <message>
         <source>Archive file path &apos;%1&apos; doesn&apos;t exist, abort.</source>
