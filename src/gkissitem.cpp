@@ -187,6 +187,12 @@ QVariant GKissItem::itemChange(GraphicsItemChange change, const QVariant &value)
     return value;
 }
 
+bool GKissItem::collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode) const
+{
+    if (!isVisible() || other == nullptr || !other->isVisible()) { return false; }
+    return QGraphicsPixmapItem::collidesWithItem(other, mode);
+}
+
 GKissScene *GKissItem::kissScene()
 {
     return m_cachedKissScene;

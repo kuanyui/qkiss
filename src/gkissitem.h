@@ -73,6 +73,8 @@ public:
     void setInitialPos(QPointF newInitialPos);
 
     // QGraphicsItem interface
+    /// Unmapped cels collide with nothing (collide(), in(), ...): some sets map a cel to enable its collide() event.
+    virtual bool collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const override;
 protected:
     virtual QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
 
