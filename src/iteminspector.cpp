@@ -48,6 +48,7 @@ ItemInspector::ItemInspector(QWidget *parent)
     appendKvRow(&m_twObjId, "obj-id", [](){ return tr("Object ID"); });
     appendKvRow(&m_twCelPos, "obj-pos", [](){ return tr("CEL Position"); });
     appendKvRow(&m_twFix, "obj-fix-count", [](){ return tr("Fix"); });
+    appendKvRow(&m_twCelColorDepth, "cel-color-depth", [](){ return tr("CEL Color Depth"); });
     appendKvRow(&m_twCelSize, "cel-size", [](){ return tr("CEL Size"); });
     appendKvRow(&m_twCelComment, "comment", [](){ return tr("CEL Comment"); });
     appendKvRow(&m_twCelPreview, "cel-file-preview", [](){ return tr("CEL Preview"); });
@@ -65,6 +66,7 @@ void ItemInspector::setInspectedItem(GKissItem *item)
         m_twObjId->setText("");
         m_twCelPos->setText("");
         m_twCelSize->setText("");
+        m_twCelColorDepth->setText("");
         m_twCelComment->setText("");
         m_twFix->setText("");
         m_twCelSiblings->setText("");
@@ -86,6 +88,7 @@ void ItemInspector::setInspectedItem(GKissItem *item)
                         .argn(cel->x()).argn(cel->y())
                         .argn(celItemCurPos.x()).argn(celItemCurPos.y()));
     m_twCelSize->setText("%1 x %2"_L1.argn(cel->width()).argn(cel->height()));
+    m_twCelColorDepth->setText(cel->celType() == ParsedCel::Type::FullColor ? tr("Full color") : tr("%1 bits").argn(cel->bitsPerPixel()));
     m_twCelComment->setText(item->cnfCel()->comment());
     m_twFix->setText(QString::number(item->fix()));
     m_twCelSiblings->setText("(%1) %2"_L1

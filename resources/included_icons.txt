@@ -134,6 +134,7 @@ BlueNome              sticky-note            comment                            
 # GimpDefault          gimp-lock-position         obj-fix-count
 # InkscapeTango        distribute-randomize       obj-cels
 AppIcon                geometry-size              cel-size                         {-32}
+Nome                   applications-graphics      cel-color-depth                  {-32}
 AppIcon                rename                     cel-file-name                    {-32}
 Nome                   image-x-generic            cel-file-preview                 {-32}
 Nome                   tomboy-tag                 obj-id                           {-32}

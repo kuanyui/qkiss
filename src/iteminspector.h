@@ -45,6 +45,7 @@ private:
     QLabel *m_twCelPos;
     QLabel *m_twCelName;
     QLabel *m_twCelSize;
+    QLabel *m_twCelColorDepth;
     QLabel *m_twCelComment;
     QLabel *m_twCelSiblings;
     QLabel *m_twCelPreview;
