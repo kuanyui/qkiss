@@ -134,6 +134,9 @@ private:
     bool m_draggingWithCtrl = false;
     /// pause any fkiss events triggered by user press/drag.
     bool m_draggingWithShift = false;
+    /// FKiSS moveto(), movebyx() or movebyy() moved the dragged object: it stays there instead of following the mouse,
+    /// until mouse release. move() doesn't stop it: some sets nudge the dragged object to make FKiSS check its collisions.
+    bool m_draggingStoppedByFkissMoveto = false;
     /// FKiSS movement events can move objects again, so they can nest. Some script may do this forever.
     int m_fkissMovementDepth = 0;
     static constexpr int MAX_FKISS_MOVEMENT_DEPTH = 16;

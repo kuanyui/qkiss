@@ -266,6 +266,9 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
         item->setPos(x + item->cel()->x(),
                      y + item->cel()->y());
     }
+    if (m_draggingItem != nullptr && m_draggingItem->objId() == static_cast<int32_t>(objId)) {
+        m_draggingStoppedByFkissMoveto = true;
+    }
     emitFkissMovementEvents(objId, *items, originalPixelOverlappedItems, originalBoundingRectOverlappedObjIds);
     return true;
 }
@@ -431,6 +434,7 @@ void GKissScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     qkDebug << "[DEBUG] mousePressEvent " << item << event->scenePos();
     m_dragStartMouseScenePos = event->scenePos();
     m_fixDecreasedWhileDraggingItem = false;
+    m_draggingStoppedByFkissMoveto = false;
     receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Press, { FV::fromCelName(m_draggingItem->celFileName()) });
     receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Press, { FV::fromObjectId(m_draggingItem->objId()) }); // press(target) - Triggered when the user clicks on the target.
     if (event->button() == Qt::MouseButton::MiddleButton) {
@@ -466,6 +470,7 @@ void GKissScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         m_fixDecreasedWhileDraggingItem = true;
     }
     if (m_draggingItem->fix() > 0) { return; }
+    if (m_draggingStoppedByFkissMoveto) { return; }
     QPointF mouseDelta = event->scenePos() - event->lastScenePos();
     m_draggingItem->setPos(m_draggingItem->pos() + mouseDelta);
     if (!m_draggingWithCtrl) {
