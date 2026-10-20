@@ -95,9 +95,13 @@ private:
     ///         => move(), moveto(), movebyx(), movebyy() trigger these events too, not only the mouse release.
     ///     "FKiSS actions continue executing after the FKiSS action which started this sequence"
     ///         => These events run immediately, not queued.
-    /// Not implemented: the first step of that section, the collide() check before movement. The page doesn't say what to
-    /// compare that position with.
+    /// Its first step, the collide() check before movement, is emitCollideEventsBeforeFkissMovement().
     void emitFkissMovementEvents(int32_t objId, const QVector<GKissItem *> &movedItems, const QList<QSet<GKissItem *>> &originalPixelOverlappedItems, const QSet<int> &originalBoundingRectOverlappedObjIds);
+    /// The first step of "FKiSS movement":
+    ///     "The object's current position (before movement) is checked to see if it has collided with other objects"
+    /// collide() compares with the last check ("no pixels previously overlapped", DIRECTKISSCollide.htm). Only the dragged
+    /// object can have moved since then (the mouse triggers nothing until mouse release), so only its cels are checked.
+    void emitCollideEventsBeforeFkissMovement(int32_t objId, const QVector<GKissItem *> &items);
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
     QHash<CPString, GKissItem *> m_celNameToItemMap;
     ArchiveFile *m_archiveFile;
@@ -120,7 +124,8 @@ private:
     bool m_fixDecreasedWhileDraggingItem = false;
     /// @borrowed
     /// For collide(), apart()
-    QSet<GKissItem*> m_originalPixelOverlappedItems;
+    /// Each cel of the dragged object -> the cels it overlapped at mouse press, updated by the FKiSS checks during the drag.
+    QHash<GKissItem*, QSet<GKissItem*>> m_originalPixelOverlappedItems;
     /// @borrowed
     /// For in(), stillin(), out(), stillout()
     // QSet<GKissItem*> m_originalBoundingRectOverlappedItems;
