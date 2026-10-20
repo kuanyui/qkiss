@@ -284,6 +284,7 @@ bool GKissScene::moveObject(size_t objId, int dx, int dy)
     emitCollideEventsBeforeFkissMovement(objId, *items);
     auto originalPixelOverlappedItems = getPixelOverlappedItems(*items);
     auto originalBoundingRectOverlappedObjIds = getBoundingRectOverlappedObjIds(objId, *items);
+    restrictMovementToPlayField(*items, dx, dy);
     foreach (GKissItem *item, *items) {
         item->setPos(dx + item->x(),
                      dy + item->y());
@@ -651,6 +652,21 @@ QSet<int> GKissScene::getBoundingRectOverlappedObjIds(int32_t objId, const QVect
         }
     }
     return result;
+}
+
+void GKissScene::restrictMovementToPlayField(const QVector<GKissItem *> &items, int &dx, int &dy) const
+{
+    QRect rect;
+    foreach (GKissItem *item, items) {
+        rect |= item->sceneBoundingRect().toAlignedRect();
+    }
+    if (rect.isNull()) { return; }
+    const QRect playField = sceneRect().toRect();
+    // If the object is larger than the play field, its left / top edge stays in it.
+    if (rect.right() + dx > playField.right()) { dx = playField.right() - rect.right(); }
+    if (rect.left() + dx < playField.left()) { dx = playField.left() - rect.left(); }
+    if (rect.bottom() + dy > playField.bottom()) { dy = playField.bottom() - rect.bottom(); }
+    if (rect.top() + dy < playField.top()) { dy = playField.top() - rect.top(); }
 }
 
 void GKissScene::emitCollideEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems)

@@ -85,6 +85,9 @@ private:
     QList<QSet<GKissItem *>> getPixelOverlappedItems(const QVector<GKissItem *> &targetItems) const;
     /// For in(), out(): the other objects which have a cel whose bounding rectangle overlaps any of `targetItems`.
     QSet<int> getBoundingRectOverlappedObjIds(int32_t objId, const QVector<GKissItem *> &targetItems);
+    /// "FKiSS movement is restricted to the play field" (DIRECTKISSMove.htm): shorten (dx, dy) so that `items` stay in
+    /// sceneRect(). Some sets rely on it, e.g. move(#5, -999, 0) puts object #5 at the left edge.
+    void restrictMovementToPlayField(const QVector<GKissItem *> &items, int &dx, int &dy) const;
     void emitCollideEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems);
     void emitApartEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems);
     void emitBoundingRectOverlapEvents(int32_t objId, const QSet<int> &originalOverlappedObjIds, const QSet<int> &currentOverlappedObjIds, const QSet<int> &currentNonOverlappedObjIds);
