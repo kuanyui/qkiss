@@ -145,11 +145,11 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;ソースコード&lt;/a&gt;&lt;/li&gt;読める？ざっこ</translation>
     </message>
     <message>
-        <source>External program LHA is not installed or not found.</source>
-        <translation>LHAが入ってないか見つからないって〜？インストールもできないの？ぷっ、よっわ</translation>
+        <source>External program LHa is not installed or not found.</source>
+        <translation>LHaが入ってないか見つからないって〜？インストールもできないの？ぷっ、よっわ</translation>
     </message>
     <message>
-        <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
+        <source>Trying to extract LZH file &quot;%1&quot; via LHa...</source>
         <translation>LZHファイル「%1」を展開中…、見ても理解できないんでしょ？ぷっ、ざぁーこ。</translation>
     </message>
     <message>

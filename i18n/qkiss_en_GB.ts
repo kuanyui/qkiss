@@ -141,12 +141,12 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
         <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;The Source Code&lt;/a&gt;&lt;/li&gt;</translation>
     </message>
     <message>
-        <source>External program LHA is not installed or not found.</source>
-        <translation>I regret to report that the external program LHA is either not installed or cannot be found.</translation>
+        <source>External program LHa is not installed or not found.</source>
+        <translation>I regret to report that the external program LHa is either not installed or cannot be found.</translation>
     </message>
     <message>
-        <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
-        <translation>Endeavouring to extract the LZH file &quot;%1&quot; by way of LHA...</translation>
+        <source>Trying to extract LZH file &quot;%1&quot; via LHa...</source>
+        <translation>Endeavouring to extract the LZH file &quot;%1&quot; by way of LHa...</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>

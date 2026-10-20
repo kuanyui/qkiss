@@ -79,14 +79,14 @@ QFuture<std::shared_ptr<ExtractedRawFilesMap> > ArchiveProcessorExternalLha::ext
     m_extractedFiles = std::make_shared<QMap<QString, QByteArray>>();
     promise->start();
     if (!checkAvailability()) {
-        qkCritical.noquote() << tr("External program LHA is not installed or not found.");
+        qkCritical.noquote() << tr("External program LHa is not installed or not found.");
         promise->setException(std::make_exception_ptr(
-                                  std::runtime_error("External program LHA is not installed or not found.")
+                                  std::runtime_error("External program LHa is not installed or not found.")
                                   ));
         promise->finish();
         delete promise;
     }
-    qkInfo.noquote() << tr("Trying to extract LZH file \"%1\" via LHA...").arg(fileName);
+    qkInfo.noquote() << tr("Trying to extract LZH file \"%1\" via LHa...").arg(fileName);
     this->callExternalProgramOrLibraryToExtractLzh(lzhOrCnfFilePath);
     QObject::connect(this, &ArchiveProcessorExternalLha::extractFail, [promise, fileName](QString compressedFilePath, QString errMsg) {
         qkCritical.noquote() << errMsg;

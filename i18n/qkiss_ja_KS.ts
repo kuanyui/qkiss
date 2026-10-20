@@ -143,12 +143,12 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
         <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;ソースコードやで&lt;/a&gt;&lt;/li&gt;</translation>
     </message>
     <message>
-        <source>External program LHA is not installed or not found.</source>
-        <translation>LHAさーん、出番……っておらへん！外部プログラムLHAが未インストールか、見つからん状態や。</translation>
+        <source>External program LHa is not installed or not found.</source>
+        <translation>LHaさーん、出番……っておらへん！外部プログラムLHaが未インストールか、見つからん状態や。</translation>
     </message>
     <message>
-        <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
-        <translation>LHAの出番や！LZHファイル「%1」、いざ展開といこか……！</translation>
+        <source>Trying to extract LZH file &quot;%1&quot; via LHa...</source>
+        <translation>LHaの出番や！LZHファイル「%1」、いざ展開といこか……！</translation>
     </message>
     <message>
         <source>Extracting LZH file &quot;%1&quot; failed. Abort.</source>

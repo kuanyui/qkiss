@@ -141,11 +141,11 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
         <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;原始碼&lt;/a&gt;&lt;/li&gt;</translation>
     </message>
     <message>
-        <source>External program LHA is not installed or not found.</source>
-        <translation>外部程式 LHA 未安裝或找不到。</translation>
+        <source>External program LHa is not installed or not found.</source>
+        <translation>外部程式 LHa 未安裝或找不到。</translation>
     </message>
     <message>
-        <source>Trying to extract LZH file &quot;%1&quot; via LHA...</source>
+        <source>Trying to extract LZH file &quot;%1&quot; via LHa...</source>
         <translation>正在嘗試解壓縮 LZH 檔案「%1」...</translation>
     </message>
     <message>
