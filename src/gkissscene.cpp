@@ -260,11 +260,12 @@ bool GKissScene::moveObjectTo(size_t objId, int x, int y)
     }
     auto items = _items.value();
     auto originalPixelOverlappedItems = getPixelOverlappedItems(*items);
+    auto originalBoundingRectOverlappedObjIds = getBoundingRectOverlappedObjIds(objId, *items);
     foreach (GKissItem *item, *items) {
         item->setPos(x + item->cel()->x(),
                      y + item->cel()->y());
     }
-    emitPixelOverlapEventsLater(*items, originalPixelOverlappedItems);
+    emitFkissMovementEvents(objId, *items, originalPixelOverlappedItems, originalBoundingRectOverlappedObjIds);
     return true;
 }
 
@@ -277,11 +278,12 @@ bool GKissScene::moveObject(size_t objId, int dx, int dy)
     }
     auto items = _items.value();
     auto originalPixelOverlappedItems = getPixelOverlappedItems(*items);
+    auto originalBoundingRectOverlappedObjIds = getBoundingRectOverlappedObjIds(objId, *items);
     foreach (GKissItem *item, *items) {
         item->setPos(dx + item->x(),
                      dy + item->y());
     }
-    emitPixelOverlapEventsLater(*items, originalPixelOverlappedItems);
+    emitFkissMovementEvents(objId, *items, originalPixelOverlappedItems, originalBoundingRectOverlappedObjIds);
     return true;
 }
 #define argnum(num) arg(QString::number(num))
@@ -477,6 +479,9 @@ void GKissScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     Q_UNUSED(event);
     if (m_draggingItem == nullptr) { return; }
     m_dragRelatedFkissEventsAreAlreadyEmitted = false;
+    // Compute all overlaps before emitting any event: the FKiSS actions of these events may move objects, even this one.
+    const QSet<GKissItem *> originalPixelOverlappedItems = m_originalPixelOverlappedItems;
+    const QSet<int> originalBoundingRectOverlappedObjIds = m_originalBoundingRectOverlappedObjIds;
     // =======================================================================
     // Pixel overlapping checking (collide / apart)
     // =======================================================================
@@ -486,7 +491,6 @@ void GKissScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (item == nullptr) { continue; }
         currentPixelOverlappedItems.insert(item);
     }
-    emitPixelOverlapEvents(m_draggingItem, m_originalPixelOverlappedItems, currentPixelOverlappedItems);
 
     // =======================================================================
     // Bounding rectangle overlapping checking (in / stillin / out / stillout)
@@ -501,26 +505,9 @@ void GKissScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             currentBoundingRectNonOverlappedObjectIds.insert(item->objId());
         }
     }
-    QSet<int> newlyBoundingRectInObjectIds = currentBoundingRectOverlappedObjectIds;
-    newlyBoundingRectInObjectIds.subtract(m_originalBoundingRectOverlappedObjIds);
-    foreach (auto otherObjId, newlyBoundingRectInObjectIds) {
-        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
-        receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::In, { FV::fromObjectId(m_draggingItem->objId()), FV::fromObjectId(otherObjId) });
-    }
-    foreach (auto otherObjId, currentBoundingRectOverlappedObjectIds) {
-        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
-        receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Stillin, { FV::fromObjectId(m_draggingItem->objId()), FV::fromObjectId(otherObjId) });
-    }
-    QSet<int> newlyBoundingRectOutObjectIds = m_originalBoundingRectOverlappedObjIds;
-    newlyBoundingRectOutObjectIds.subtract(currentBoundingRectOverlappedObjectIds);
-    foreach (auto otherObjId, newlyBoundingRectOutObjectIds) {
-        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
-        receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Out, { FV::fromObjectId(m_draggingItem->objId()), FV::fromObjectId(otherObjId) });
-    }
-    foreach (auto otherObjId, currentBoundingRectNonOverlappedObjectIds) {
-        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
-        receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Stillout, { FV::fromObjectId(m_draggingItem->objId()), FV::fromObjectId(otherObjId) });
-    }
+    emitCollideEvents(m_draggingItem, originalPixelOverlappedItems, currentPixelOverlappedItems);
+    emitApartEvents(m_draggingItem, originalPixelOverlappedItems, currentPixelOverlappedItems);
+    emitBoundingRectOverlapEvents(m_draggingItem->objId(), originalBoundingRectOverlappedObjIds, currentBoundingRectOverlappedObjectIds, currentBoundingRectNonOverlappedObjectIds);
     // =======================================================================
     // Other events
     // =======================================================================
@@ -643,7 +630,22 @@ QList<QSet<GKissItem *>> GKissScene::getPixelOverlappedItems(const QVector<GKiss
     return result;
 }
 
-void GKissScene::emitPixelOverlapEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems)
+QSet<int> GKissScene::getBoundingRectOverlappedObjIds(int32_t objId, const QVector<GKissItem *> &targetItems)
+{
+    QSet<int> result;
+    foreach (GKissItem *item, allKissItems()) {
+        if (item->objId() == objId) { continue; }
+        foreach (GKissItem *targetItem, targetItems) {
+            if (item->collidesWithItem(targetItem, Qt::IntersectsItemBoundingRect)) {
+                result.insert(item->objId());
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+void GKissScene::emitCollideEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems)
 {
     QSet<GKissItem *> newlyPixelOverlappedItems = currentPixelOverlappedItems;
     newlyPixelOverlappedItems.subtract(originalPixelOverlappedItems);
@@ -651,6 +653,10 @@ void GKissScene::emitPixelOverlapEvents(GKissItem *movedItem, const QSet<GKissIt
         // In FKiSS2 to FKiSS3, both target1 and target2 must be a cel.
         receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Collide, { FV::fromCelName(movedItem->celFileName()), FV::fromCelName(item->celFileName()) });
     }
+}
+
+void GKissScene::emitApartEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems)
+{
     QSet<GKissItem *> newlyPixelApartedItems = originalPixelOverlappedItems;
     newlyPixelApartedItems.subtract(currentPixelOverlappedItems);
     foreach (auto item, newlyPixelApartedItems) {
@@ -659,29 +665,80 @@ void GKissScene::emitPixelOverlapEvents(GKissItem *movedItem, const QSet<GKissIt
     }
 }
 
-void GKissScene::emitPixelOverlapEventsLater(const QVector<GKissItem *> &movedItems, const QList<QSet<GKissItem *>> &originalPixelOverlappedItems)
+void GKissScene::emitBoundingRectOverlapEvents(int32_t objId, const QSet<int> &originalOverlappedObjIds, const QSet<int> &currentOverlappedObjIds, const QSet<int> &currentNonOverlappedObjIds)
 {
-    QList<QSet<GKissItem *>> currentPixelOverlappedItems = getPixelOverlappedItems(movedItems);
-    QMetaObject::invokeMethod(this, [=, this]() {
-        for (qsizetype i = 0; i < movedItems.length(); i++) {
-            GKissItem *movedItem = movedItems[i];
-            // The items of the same object are all in movedItems: count each pair once.
-            const QSet<GKissItem *> countedItems { movedItems.begin(), movedItems.begin() + i };
-            const QSet<GKissItem *> original = originalPixelOverlappedItems[i] - countedItems;
-            const QSet<GKissItem *> current = currentPixelOverlappedItems[i] - countedItems;
-            emitPixelOverlapEvents(movedItem, original, current);
-            // mouseReleaseEvent() compares with the overlaps at mouse press, so don't let it emit these again.
-            if (movedItem == m_draggingItem) {
-                m_originalPixelOverlappedItems.unite(current - original).subtract(original - current);
-            } else if (m_draggingItem != nullptr && current.contains(m_draggingItem) != original.contains(m_draggingItem)) {
-                if (current.contains(m_draggingItem)) {
-                    m_originalPixelOverlappedItems.insert(movedItem);
-                } else {
-                    m_originalPixelOverlappedItems.remove(movedItem);
-                }
-            }
+    QSet<int> newlyBoundingRectInObjectIds = currentOverlappedObjIds;
+    newlyBoundingRectInObjectIds.subtract(originalOverlappedObjIds);
+    foreach (auto otherObjId, newlyBoundingRectInObjectIds) {
+        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::In, { FV::fromObjectId(objId), FV::fromObjectId(otherObjId) });
+    }
+    foreach (auto otherObjId, currentOverlappedObjIds) {
+        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Stillin, { FV::fromObjectId(objId), FV::fromObjectId(otherObjId) });
+    }
+    QSet<int> newlyBoundingRectOutObjectIds = originalOverlappedObjIds;
+    newlyBoundingRectOutObjectIds.subtract(currentOverlappedObjIds);
+    foreach (auto otherObjId, newlyBoundingRectOutObjectIds) {
+        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Out, { FV::fromObjectId(objId), FV::fromObjectId(otherObjId) });
+    }
+    foreach (auto otherObjId, currentNonOverlappedObjIds) {
+        // In FKiSS2 to FKiSS3, both target1 and target2 must be an object number.
+        receiveFkissUserEventFromSceneItem(FkissUserMovementEvent::Stillout, { FV::fromObjectId(objId), FV::fromObjectId(otherObjId) });
+    }
+}
+
+/// When FKiSS moves something while the user is dragging an item, mouseReleaseEvent() should not emit the same events again,
+/// so update what it will compare with: the overlaps at mouse press.
+template <typename T>
+static void syncOverlapsAtMousePress(QSet<T> &overlapsAtMousePress, const T &moved, const T &dragging, const QSet<T> &original, const QSet<T> &current)
+{
+    if (moved == dragging) {
+        overlapsAtMousePress.unite(current - original).subtract(original - current);
+    } else if (current.contains(dragging) && !original.contains(dragging)) {
+        overlapsAtMousePress.insert(moved);
+    } else if (original.contains(dragging) && !current.contains(dragging)) {
+        overlapsAtMousePress.remove(moved);
+    }
+}
+
+void GKissScene::emitFkissMovementEvents(int32_t objId, const QVector<GKissItem *> &movedItems, const QList<QSet<GKissItem *>> &originalPixelOverlappedItems, const QSet<int> &originalBoundingRectOverlappedObjIds)
+{
+    if (m_fkissMovementDepth >= MAX_FKISS_MOVEMENT_DEPTH) {
+        qkWarning.noquote() << tr("FKiSS movement events are nested more than %1 levels, so skip the events of moving object #%2.").arg(MAX_FKISS_MOVEMENT_DEPTH).arg(objId);
+        return;
+    }
+    // The items of the same object are all in movedItems: count each pair once.
+    const QList<QSet<GKissItem *>> currentPixelOverlappedItems = getPixelOverlappedItems(movedItems);
+    QList<QSet<GKissItem *>> originalPixel, currentPixel;
+    for (qsizetype i = 0; i < movedItems.length(); i++) {
+        const QSet<GKissItem *> countedItems { movedItems.begin(), movedItems.begin() + i };
+        originalPixel.append(originalPixelOverlappedItems[i] - countedItems);
+        currentPixel.append(currentPixelOverlappedItems[i] - countedItems);
+    }
+    const QSet<int> currentBoundingRectOverlappedObjIds = getBoundingRectOverlappedObjIds(objId, movedItems);
+    QSet<int> currentBoundingRectNonOverlappedObjIds;
+    foreach (GKissItem *item, allKissItems()) {
+        if (item->objId() != objId && !currentBoundingRectOverlappedObjIds.contains(item->objId())) {
+            currentBoundingRectNonOverlappedObjIds.insert(item->objId());
         }
-    }, Qt::QueuedConnection);
+    }
+    if (m_draggingItem != nullptr) {
+        for (qsizetype i = 0; i < movedItems.length(); i++) {
+            syncOverlapsAtMousePress(m_originalPixelOverlappedItems, movedItems[i], m_draggingItem, originalPixel[i], currentPixel[i]);
+        }
+        syncOverlapsAtMousePress<int>(m_originalBoundingRectOverlappedObjIds, objId, m_draggingItem->objId(), originalBoundingRectOverlappedObjIds, currentBoundingRectOverlappedObjIds);
+    }
+    m_fkissMovementDepth++;
+    for (qsizetype i = 0; i < movedItems.length(); i++) {
+        emitApartEvents(movedItems[i], originalPixel[i], currentPixel[i]);
+    }
+    emitBoundingRectOverlapEvents(objId, originalBoundingRectOverlappedObjIds, currentBoundingRectOverlappedObjIds, currentBoundingRectNonOverlappedObjIds);
+    for (qsizetype i = 0; i < movedItems.length(); i++) {
+        emitCollideEvents(movedItems[i], originalPixel[i], currentPixel[i]);
+    }
+    m_fkissMovementDepth--;
 }
 
 

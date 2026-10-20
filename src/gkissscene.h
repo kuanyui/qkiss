@@ -83,10 +83,21 @@ private:
     void storeCurrentOverlappedItems(GKissItem *targetItem);
     /// For collide(), apart(): the items whose pixels overlap each of `targetItems`, in the same order.
     QList<QSet<GKissItem *>> getPixelOverlappedItems(const QVector<GKissItem *> &targetItems) const;
-    void emitPixelOverlapEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems);
-    /// FKiSS movement also triggers collide() and apart(). They run after the actions of the current event,
-    /// so that `timer(N, 0)` in collide() can cancel the alarm N which is moving the object.
-    void emitPixelOverlapEventsLater(const QVector<GKissItem *> &movedItems, const QList<QSet<GKissItem *>> &originalPixelOverlappedItems);
+    /// For in(), out(): the other objects which have a cel whose bounding rectangle overlaps any of `targetItems`.
+    QSet<int> getBoundingRectOverlappedObjIds(int32_t objId, const QVector<GKissItem *> &targetItems);
+    void emitCollideEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems);
+    void emitApartEvents(GKissItem *movedItem, const QSet<GKissItem *> &originalPixelOverlappedItems, const QSet<GKissItem *> &currentPixelOverlappedItems);
+    void emitBoundingRectOverlapEvents(int32_t objId, const QSet<int> &originalOverlappedObjIds, const QSet<int> &currentOverlappedObjIds, const QSet<int> &currentNonOverlappedObjIds);
+    /// FKiSS movement triggers apart(), in(), stillin(), out(), stillout(), collide() in this order, before the next
+    /// FKiSS action runs. See "FKiSS Event Order" (vendor/references/otakuworld.com/kiss/kisshelp/DIRECTKISSFKiSS_Event_Order.htm).
+    /// mouseReleaseEvent() follows its section "User movement". This follows the section above it, "FKiSS movement":
+    ///     "When an FKiSS action causes an object to move, the following sequence occurs:"
+    ///         => move(), moveto(), movebyx(), movebyy() trigger these events too, not only the mouse release.
+    ///     "FKiSS actions continue executing after the FKiSS action which started this sequence"
+    ///         => These events run immediately, not queued.
+    /// Not implemented: the first step of that section, the collide() check before movement. The page doesn't say what to
+    /// compare that position with.
+    void emitFkissMovementEvents(int32_t objId, const QVector<GKissItem *> &movedItems, const QList<QSet<GKissItem *>> &originalPixelOverlappedItems, const QSet<int> &originalBoundingRectOverlappedObjIds);
     QHash<int32_t, QVector<GKissItem*>*> m_objIdToItemsMap;
     QHash<CPString, GKissItem *> m_celNameToItemMap;
     ArchiveFile *m_archiveFile;
@@ -118,6 +129,9 @@ private:
     bool m_draggingWithCtrl = false;
     /// pause any fkiss events triggered by user press/drag.
     bool m_draggingWithShift = false;
+    /// FKiSS movement events can move objects again, so they can nest. Some script may do this forever.
+    int m_fkissMovementDepth = 0;
+    static constexpr int MAX_FKISS_MOVEMENT_DEPTH = 16;
 };
 
 #endif // GKISSSCENE_H
