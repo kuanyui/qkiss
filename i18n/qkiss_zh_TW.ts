@@ -76,7 +76,7 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
     </message>
     <message>
         <source>Patch: newly added extra %1 CNF; and replaced %2 CNF.</source>
-        <translation type="unfinished">修補檔：額外加入 %1 個 CNF 檔，並替換 %2 個現有 CNF 檔。</translation>
+        <translation>修補檔：額外加入 %1 個 CNF 檔，並替換 %2 個現有 CNF 檔。</translation>
     </message>
     <message>
         <source>Patch: newly added extra %1 KCF, and replaced %2 KCF.</source>
@@ -155,6 +155,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
         <translation>LZH 檔案「%1」解壓縮成功。其中包含 %2 個檔案</translation>
+    </message>
+    <message>
+        <source>The LZH file may be damaged: lha extracted only %1 bytes in total, but &quot;%2&quot; needs %3 bytes from offset %4.</source>
+        <translation>LZH 檔案可能已損壞：lha 總共只解壓出 %1 位元組，但「%2」需要從偏移量 %4 開始的 %3 位元組。</translation>
     </message>
     <message>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
@@ -375,6 +379,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
         <translation>指令在 EventHandler 之前就開始，將忽略。</translation>
     </message>
     <message>
+        <source>Command name `%1` is not in lower case. For compatibility, still accept it as `%2`.</source>
+        <translation>指令名稱 `%1` 不是小寫。為了相容性，仍然當作 `%2` 接受。</translation>
+    </message>
+    <message>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
         <translation>指令名稱 `%1` 必須接在左括號之後，否則視為沒有參數。</translation>
     </message>
@@ -389,6 +397,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
     <message>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
         <translation>目前不支援 FKiSS3 的變數或 FKiSS4 的命名標籤。</translation>
+    </message>
+    <message>
+        <source>A string has no closing quote, so assume it ends after the file name.</source>
+        <translation>字串缺少結尾的引號，因此視為在檔名之後結束。</translation>
     </message>
     <message>
         <source>Unknown command &quot;%1&quot;, skip.</source>
@@ -436,6 +448,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
     <message>
         <source>Click to copy filename to clipboard.</source>
         <translation>點擊以複製檔案名稱到剪貼簿。</translation>
+    </message>
+    <message>
+        <source>FKiSS movement events are nested more than %1 levels, so skip the events of moving object #%2.</source>
+        <translation>FKiSS 移動事件的巢狀層數超過 %1 層，因此略過移動物件 #%2 的事件。</translation>
     </message>
 </context>
 <context>
@@ -499,6 +515,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
         <translation>固定次數</translation>
     </message>
     <message>
+        <source>CEL Color Depth</source>
+        <translation>CEL 色彩深度</translation>
+    </message>
+    <message>
         <source>CEL Size</source>
         <translation>CEL 大小</translation>
     </message>
@@ -513,6 +533,14 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
     <message>
         <source>CEL Siblings</source>
         <translation>CEL 同組元素</translation>
+    </message>
+    <message>
+        <source>Full color</source>
+        <translation>全彩</translation>
+    </message>
+    <message>
+        <source>%1 bits</source>
+        <translation>%1 位元</translation>
     </message>
 </context>
 <context>
@@ -755,6 +783,14 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
         <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
         <translation>「%1」聲稱是以調色盤為基礎的 CEL 檔，但其表示每個像素為 %2 位元（預期：32 位元），前後矛盾。將視為調色盤式 CEL。</translation>
     </message>
+    <message>
+        <source>&quot;%1&quot; is a palette-based CEL file, but it says each pixel is 32 bits (expected: 4 or 8 bits).</source>
+        <translation>「%1」是調色盤式 CEL 檔，但其表示每個像素為 32 位元（預期：4 或 8 位元）。</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>「%1」不完整：至少需要 %2 位元組，但只有 %3 位元組。</translation>
+    </message>
 </context>
 <context>
     <name>ParsedCnf</name>
@@ -789,6 +825,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
 </context>
 <context>
     <name>ParsedKcf</name>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>「%1」不完整：至少需要 %2 位元組，但只有 %3 位元組。</translation>
+    </message>
     <message>
         <source>Not a palette file mark!</source>
         <translation>並非調色盤檔案標記！</translation>

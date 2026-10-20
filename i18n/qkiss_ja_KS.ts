@@ -159,6 +159,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
         <translation>よっしゃ一本！LZHファイル「%1」の展開成功、中身はファイル%2個や！</translation>
     </message>
     <message>
+        <source>The LZH file may be damaged: lha extracted only %1 bytes in total, but &quot;%2&quot; needs %3 bytes from offset %4.</source>
+        <translation>LZHファイル、壊れとるかもしれへんで。lhaが展開できたんは合計%1バイトだけやのに、「%2」はオフセット%4から%3バイト要るねん。点呼したら人数足らんやないか。</translation>
+    </message>
+    <message>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
         <translation>ネストされたLZHファイル「%1」の展開に失敗したで（一時ファイル「%2」を開けへんかったわ）。</translation>
     </message>
@@ -377,6 +381,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
         <translation>EventHandler より先にコマンドが出てきとる！フライングや、これは無視！</translation>
     </message>
     <message>
+        <source>Command name `%1` is not in lower case. For compatibility, still accept it as `%2`.</source>
+        <translation>コマンド名 `%1`、小文字ちゃうで。看板だけでかくして目立とうとしてもあかん。互換性のため `%2` として受け付けとくわ。</translation>
+    </message>
+    <message>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
         <translation>コマンド名 `%1` のあとに左かっこ付けなあかんねん。ないからパラメータ無し扱いやで。</translation>
     </message>
@@ -391,6 +399,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <message>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
         <translation>FKiSS3 の変数も FKiSS4 の名前付きラベルも、今んとこ未対応や。そないな大技、まだ使えへんねん！</translation>
+    </message>
+    <message>
+        <source>A string has no closing quote, so assume it ends after the file name.</source>
+        <translation>文字列に閉じ引用符があらへんで。傘を開きっぱなしみたいやから、ファイル名の後で畳んだことにしとくわ。</translation>
     </message>
     <message>
         <source>Unknown command &quot;%1&quot;, skip.</source>
@@ -438,6 +450,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <message>
         <source>Click to copy filename to clipboard.</source>
         <translation>ファイル名をクリップボードにコピーするにはクリックやで。</translation>
+    </message>
+    <message>
+        <source>FKiSS movement events are nested more than %1 levels, so skip the events of moving object #%2.</source>
+        <translation>FKiSSの移動イベントが%1段を超えて入れ子になっとる。重箱なんぼ積むねん。オブジェクト#%2の移動イベントは飛ばすで。</translation>
     </message>
 </context>
 <context>
@@ -501,6 +517,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
         <translation>固定数</translation>
     </message>
     <message>
+        <source>CEL Color Depth</source>
+        <translation>CELの色の深さ</translation>
+    </message>
+    <message>
         <source>CEL Size</source>
         <translation>CELの大きさ</translation>
     </message>
@@ -515,6 +535,14 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <message>
         <source>CEL Siblings</source>
         <translation>CELと愉快な仲間たち</translation>
+    </message>
+    <message>
+        <source>Full color</source>
+        <translation>フルカラー</translation>
+    </message>
+    <message>
+        <source>%1 bits</source>
+        <translation>%1ビット</translation>
     </message>
 </context>
 <context>
@@ -757,6 +785,14 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
         <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
         <translation>「%1」はパレット方式のCELや言うてるけど、各ピクセルが%2ビット（想定は32ビット）って書いてあって矛盾しとるわ。パレット方式のCELやとみなすで。</translation>
     </message>
+    <message>
+        <source>&quot;%1&quot; is a palette-based CEL file, but it says each pixel is 32 bits (expected: 4 or 8 bits).</source>
+        <translation>「%1」はパレット方式のCELやのに、各ピクセルが32ビット（想定は4か8ビット）言うとる。たこ焼き頼んでピザ出てきたくらい話がちゃうで。</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>「%1」は途中で切れとるで。最低%2バイト要るのに、%3バイトしかあらへん。漫才のオチ手前で幕が下りたんかい。</translation>
+    </message>
 </context>
 <context>
     <name>ParsedCnf</name>
@@ -791,6 +827,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
 </context>
 <context>
     <name>ParsedKcf</name>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>「%1」は途中で切れとるで。最低%2バイト要るのに、%3バイトしかあらへん。漫才のオチ手前で幕が下りたんかい。</translation>
+    </message>
     <message>
         <source>Not a palette file mark!</source>
         <translation>パレットファイルの印とちゃうで！</translation>

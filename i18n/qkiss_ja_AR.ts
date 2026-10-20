@@ -140,7 +140,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
-        <translation>&lt;a href='https://github.com/jca02266/lha'&gt;ソースコードですことよ&lt;/a&gt;&lt;/li&gt;オホホホ！</translation>
+        <translation>&lt;a href=&apos;https://github.com/jca02266/lha&apos;&gt;ソースコードですことよ&lt;/a&gt;&lt;/li&gt;オホホホ！</translation>
     </message>
     <message>
         <source>External program LHa is not installed or not found.</source>
@@ -157,6 +157,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <message>
         <source>LZH file &quot;%1&quot; is extracted successfully. Got %2 file(s) in it</source>
         <translation>ほぉら、LZHファイル「%1」の展開成功ですわ！中にはファイルが%2個。……働いたのはLHA？お黙りなさい、わたくしが命じたのでしょう！オ〜ホホホ！</translation>
+    </message>
+    <message>
+        <source>The LZH file may be damaged: lha extracted only %1 bytes in total, but &quot;%2&quot; needs %3 bytes from offset %4.</source>
+        <translation>LZH書庫が破損しているかもしれませんわ。lhaが展開したのは合計%1バイトのみ、「%2」にはオフセット%4から%3バイト必要ですの。晩餐の皿を途中で下げるなど無礼千万ですわ！</translation>
     </message>
     <message>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
@@ -250,7 +254,7 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
     <message>
         <source>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;Source Code&lt;/a&gt;&lt;/li&gt;</source>
-        <translation>&lt;a href='https://github.com/libarchive/libarchive'&gt;ソースコードですことよ&lt;/a&gt;&lt;/li&gt;オホホホ！</translation>
+        <translation>&lt;a href=&apos;https://github.com/libarchive/libarchive&apos;&gt;ソースコードですことよ&lt;/a&gt;&lt;/li&gt;オホホホ！</translation>
     </message>
     <message>
         <source>Failed to open this file, aborted.</source>
@@ -377,6 +381,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
         <translation>ちょっとお待ちなさい！EventHandler より先にコマンドが出ておりますわよ！誰が先に入ってよいと申しました？……無視ですわ、無視！</translation>
     </message>
     <message>
+        <source>Command name `%1` is not in lower case. For compatibility, still accept it as `%2`.</source>
+        <translation>コマンド名 `%1` は小文字ではありませんわ。お辞儀もできない名前ですが、互換性のため `%2` として受理して差し上げます。</translation>
+    </message>
+    <message>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
         <translation>あら？コマンド名 `%1` の後には左かっこが必要ですのよ。……ないんですのね？では引数なしとして扱いますわ。あとから連れがいるなんて、おっしゃらないでね？</translation>
     </message>
@@ -391,6 +399,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <message>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
         <translation>あらあら…FKiSS3 の変数も FKiSS4 のラベルも未対応ですの。わたくしの貴重なお時間を、平民のその面倒くさい仕様に割いて実装するつもりはございませんことよ！お――ほほほ！</translation>
+    </message>
+    <message>
+        <source>A string has no closing quote, so assume it ends after the file name.</source>
+        <translation>文字列に閉じ引用符がありませんわ。招待状に封蝋すらないようなものですから、ファイル名の後で終わったものと見なします。</translation>
     </message>
     <message>
         <source>Unknown command &quot;%1&quot;, skip.</source>
@@ -438,6 +450,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <message>
         <source>Click to copy filename to clipboard.</source>
         <translation>クリックすればファイル名をクリップボードに写せますわ。……まだ手で書き写していらしたの？まあ、ご苦労さま。今度はお間違えにならずに済みますわね。おほほほ！</translation>
+    </message>
+    <message>
+        <source>FKiSS movement events are nested more than %1 levels, so skip the events of moving object #%2.</source>
+        <translation>FKiSSの移動イベントが%1段を超えて入れ子ですわ。曲芸の塔が崩れる前に、オブジェクト#%2の移動イベントは省きます。</translation>
     </message>
 </context>
 <context>
@@ -501,6 +517,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
         <translation>固定数</translation>
     </message>
     <message>
+        <source>CEL Color Depth</source>
+        <translation>CEL色彩階級</translation>
+    </message>
+    <message>
         <source>CEL Size</source>
         <translation>CEL規模</translation>
     </message>
@@ -515,6 +535,14 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <message>
         <source>CEL Siblings</source>
         <translation>CELと取り巻きの皆さま</translation>
+    </message>
+    <message>
+        <source>Full color</source>
+        <translation>フルカラー</translation>
+    </message>
+    <message>
+        <source>%1 bits</source>
+        <translation>%1ビット</translation>
     </message>
 </context>
 <context>
@@ -757,6 +785,14 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
         <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
         <translation>「%1」はパレット方式のCELであると称しておりますけれど、各ピクセルが%2ビット（想定は32ビット）と申しており、矛盾しておりますの。証言が食い違っておりますわね。今回はパレット方式のCELと見なして進めます。口裏くらい合わせていらっしゃい！</translation>
     </message>
+    <message>
+        <source>&quot;%1&quot; is a palette-based CEL file, but it says each pixel is 32 bits (expected: 4 or 8 bits).</source>
+        <translation>「%1」はパレット方式のCELですのに、各画素が32ビットと記されていますわ（想定は4または8ビット）。小広間が大宮殿を名乗るとは大仰ですこと。</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>「%1」は途中でぷつりと途切れておりますわ。最低%2バイト必要なのに%3バイトのみ。裾の足りないドレスでは舞台に出せませんわ！</translation>
+    </message>
 </context>
 <context>
     <name>ParsedCnf</name>
@@ -791,6 +827,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
 </context>
 <context>
     <name>ParsedKcf</name>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>「%1」は途中でぷつりと途切れておりますわ。最低%2バイト必要なのに%3バイトのみ。裾の足りないドレスでは舞台に出せませんわ！</translation>
+    </message>
     <message>
         <source>Not a palette file mark!</source>
         <translation>パレットファイルの印ではございませんわ！……似ていたから？まあ、庶民は見分けがつかないと、同じものになさるのね。おほほほ！</translation>

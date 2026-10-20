@@ -157,6 +157,10 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
         <translation>The LZH file &quot;%1&quot; has been extracted with consummate success. %2 file(s) emerged from within.</translation>
     </message>
     <message>
+        <source>The LZH file may be damaged: lha extracted only %1 bytes in total, but &quot;%2&quot; needs %3 bytes from offset %4.</source>
+        <translation>I fear the LZH file may be damaged: lha extracted only %1 bytes in total, while &quot;%2&quot; requires %3 bytes from offset %4. Someone evidently packed before the luggage arrived.</translation>
+    </message>
+    <message>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
         <translation>Most regrettably, extracting the nested LZH file &quot;%1&quot; has failed (I could not open the temporary file &quot;%2&quot;).</translation>
     </message>
@@ -375,6 +379,10 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
         <translation>A command begins before EventHandler; I shall disregard it.</translation>
     </message>
     <message>
+        <source>Command name `%1` is not in lower case. For compatibility, still accept it as `%2`.</source>
+        <translation>The command name `%1` has arrived with capital letters rather than in lower case. I will nevertheless place it on the guest list as `%2`, for compatibility.</translation>
+    </message>
+    <message>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
         <translation>The command name `%1` ought to be followed by a left parenthesis, so I shall assume it takes no parameters.</translation>
     </message>
@@ -389,6 +397,10 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
     <message>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
         <translation>FKiSS3 variables and FKiSS4 named labels are not, at present, supported.</translation>
+    </message>
+    <message>
+        <source>A string has no closing quote, so assume it ends after the file name.</source>
+        <translation>This string lacks its closing quotation mark, rather like an unlatched gate; I will take it to end after the file name.</translation>
     </message>
     <message>
         <source>Unknown command &quot;%1&quot;, skip.</source>
@@ -436,6 +448,10 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
     <message>
         <source>Click to copy filename to clipboard.</source>
         <translation>Kindly click to copy the file name to the clipboard.</translation>
+    </message>
+    <message>
+        <source>FKiSS movement events are nested more than %1 levels, so skip the events of moving object #%2.</source>
+        <translation>The FKiSS movement events descend beyond %1 nested levels. I must therefore close the staircase and skip the events of moving object #%2.</translation>
     </message>
 </context>
 <context>
@@ -499,6 +515,10 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
         <translation>Fix</translation>
     </message>
     <message>
+        <source>CEL Color Depth</source>
+        <translation>CEL Colour Depth</translation>
+    </message>
+    <message>
         <source>CEL Size</source>
         <translation>CEL Size</translation>
     </message>
@@ -513,6 +533,14 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
     <message>
         <source>CEL Siblings</source>
         <translation>CEL Siblings</translation>
+    </message>
+    <message>
+        <source>Full color</source>
+        <translation>Full colour</translation>
+    </message>
+    <message>
+        <source>%1 bits</source>
+        <translation>%1 bits</translation>
     </message>
 </context>
 <context>
@@ -755,6 +783,14 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
         <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
         <translation>&quot;%1&quot; professes to be a palette-based CEL file, yet claims %2 bits for each pixel (32 bits were expected), which is rather contradictory. I shall assume it is a palette-based CEL.</translation>
     </message>
+    <message>
+        <source>&quot;%1&quot; is a palette-based CEL file, but it says each pixel is 32 bits (expected: 4 or 8 bits).</source>
+        <translation>&quot;%1&quot; presents itself as a palette-based CEL file, yet claims 32 bits per pixel rather than the expected 4 or 8. I find that its cellar label and its contents tell quite different stories.</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>&quot;%1&quot; is truncated: it requires at least %2 bytes, yet offers only %3. I regret to report that the curtain has fallen before the final act.</translation>
+    </message>
 </context>
 <context>
     <name>ParsedCnf</name>
@@ -789,6 +825,10 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
 </context>
 <context>
     <name>ParsedKcf</name>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>&quot;%1&quot; is truncated: it requires at least %2 bytes, yet offers only %3. I regret to report that the curtain has fallen before the final act.</translation>
+    </message>
     <message>
         <source>Not a palette file mark!</source>
         <translation>That is not the mark of a palette file!</translation>

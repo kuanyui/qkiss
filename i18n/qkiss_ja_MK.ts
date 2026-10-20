@@ -161,6 +161,10 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <translation>LZHファイル「%1」の展開成功〜。中にはファイルが%2個！……ほっとした顔してる〜。え、開くだけでそんなに緊張してたの？キャハハ♥</translation>
     </message>
     <message>
+        <source>The LZH file may be damaged: lha extracted only %1 bytes in total, but &quot;%2&quot; needs %3 bytes from offset %4.</source>
+        <translation>LZHファイル、壊れてるかもね〜。lhaが展開できたのは合計%1バイトだけなのに、「%2」はオフセット%4から%3バイト必要だって。クレーンのアーム弱すぎて景品落としたの〜？</translation>
+    </message>
+    <message>
         <source>Failed when extracting nested LZH file &quot;%1&quot; (failed to open tmp file &quot;%2&quot;).</source>
         <translation>ネストされたLZHファイル「%1」の展開に失敗。一時ファイル「%2」すら開けないの？ぷっ、能無し♥</translation>
     </message>
@@ -379,6 +383,10 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <translation>あ、コマンドがEventHandlerより先に始まってる〜。フライングだから無視ね。……先に動いても一番にはなれませ〜ん♥</translation>
     </message>
     <message>
+        <source>Command name `%1` is not in lower case. For compatibility, still accept it as `%2`.</source>
+        <translation>コマンド名 `%1`、小文字じゃないよ。名札だけ派手にデコってイキってるじゃん。互換性のため `%2` として受け付けてあげる〜</translation>
+    </message>
+    <message>
         <source>Command name `%1` must be followed by a left parenthesis, so assume it has no parameter.</source>
         <translation>ざこーいコマンド `%1` のあとに左かっこないじゃん。パラメータ無しって決めちゃうもんね〜。</translation>
     </message>
@@ -393,6 +401,10 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <source>Currently FKiSS3 variable, or FKiSS4 named label, is not supported.</source>
         <translation>FKiSS3 の変数も FKiSS4 のラベルも未対応だしぃ〜。そんなの面倒臭い仕様を実装する気なんてないもんね〜！キャハハ〜</translation>
+    </message>
+    <message>
+        <source>A string has no closing quote, so assume it ends after the file name.</source>
+        <translation>文字列の閉じ引用符がないよ。チャック閉め忘れてるから、ファイル名の後で終わりってことにしとくね〜</translation>
     </message>
     <message>
         <source>Unknown command &quot;%1&quot;, skip.</source>
@@ -440,6 +452,10 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <source>Click to copy filename to clipboard.</source>
         <translation>クリックでファイル名をクリップボードにコピーできるよ〜。……覚えた？じゃあ見ないで言ってみ？あ、もう忘れたんだ♥</translation>
+    </message>
+    <message>
+        <source>FKiSS movement events are nested more than %1 levels, so skip the events of moving object #%2.</source>
+        <translation>FKiSSの移動イベント、%1段を超えて入れ子になってるよ。布団重ねすぎでしょ。オブジェクト#%2の移動イベントは抜いちゃお〜</translation>
     </message>
 </context>
 <context>
@@ -503,6 +519,10 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <translation>固定数〜</translation>
     </message>
     <message>
+        <source>CEL Color Depth</source>
+        <translation>CEL色深度〜</translation>
+    </message>
+    <message>
         <source>CEL Size</source>
         <translation>CELサイズ〜</translation>
     </message>
@@ -517,6 +537,14 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <source>CEL Siblings</source>
         <translation>CEL姉妹要素〜</translation>
+    </message>
+    <message>
+        <source>Full color</source>
+        <translation>フルカラー〜</translation>
+    </message>
+    <message>
+        <source>%1 bits</source>
+        <translation>%1ビット〜</translation>
     </message>
 </context>
 <context>
@@ -759,6 +787,14 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <source>&quot;%1&quot; claims it is a palette-based CEL file, but it said each pixel is %2 bits (expected: 32 bits), this is contradicted. Assume it is a palette-based CEL.</source>
         <translation>「%1」はパレット方式のCELなのに、各ピクセルは%2ビット（想定は32ビット）？言ってること矛盾してんじゃん。……どっちが本当か、自分でも忘れちゃった？パレット方式のCELってことにしとくね〜♥</translation>
     </message>
+    <message>
+        <source>&quot;%1&quot; is a palette-based CEL file, but it says each pixel is 32 bits (expected: 4 or 8 bits).</source>
+        <translation>「%1」はパレット方式のCELなのに、各ピクセル32ビットだって（想定は4か8ビット）。盛りすぎて設定がバレバレ〜</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>「%1」は途中で切れてるよ。最低%2バイト要るのに%3バイトだけ。肝心なとこで息切れとか、よわ〜♥</translation>
+    </message>
 </context>
 <context>
     <name>ParsedCnf</name>
@@ -793,6 +829,10 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
 </context>
 <context>
     <name>ParsedKcf</name>
+    <message>
+        <source>&quot;%1&quot; is truncated: it needs at least %2 bytes, but it has only %3 bytes.</source>
+        <translation>「%1」は途中で切れてるよ。最低%2バイト要るのに%3バイトだけ。肝心なとこで息切れとか、よわ〜♥</translation>
+    </message>
     <message>
         <source>Not a palette file mark!</source>
         <translation>これはパレットファイルの印じゃないよ！見間違えるとか、はずかしくないのぉ♥</translation>
