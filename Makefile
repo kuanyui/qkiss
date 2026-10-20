@@ -192,6 +192,11 @@ uninstall-git-hooks:     ## Uninstall git-hooks and commit-template.
 add-license-header:    ## Add license header to all .cpp / .h files
 	./scripts/add_license_header.py
 
+# `update_translations` is made by `qt_add_lupdate()` in `CMakeLists.txt`, and runs `lupdate`.
+.PHONY: update-translations
+update-translations: _configure    ## Add new or changed `tr()` strings from the source code to `i18n/*.ts`.
+	cmake --build $(BUILD_ROOT_DIR) --target update_translations
+
 ###
 ### -- Homepage (`homepage/`) -----------------------------------
 
