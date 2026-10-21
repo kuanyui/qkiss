@@ -476,18 +476,31 @@ code {
   }
 }
 
-/* On a phone, the cut picker shows only the icon of the cut when closed, so that the logo and both pickers fit on one
-   row. Screen readers still read the name (as with .visually-hidden). */
-@media (max-width: 32rem) {
-  .cut-picker .llselect-trigger .cut-name {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
+/* The same on a wider screen, when the logo, the sections and the pickers do not fit on one row: set by main.js (see
+   fitHeader()). */
+.header-bar.is-stacked .header-tools {
+  margin-inline-start: auto;
+}
+
+.header-bar.is-stacked .site-nav {
+  order: 1;
+  width: 100%;
+  margin-inline-start: 0;
+  padding-bottom: 0.25rem;
+}
+
+/* On a phone, when the logo and both pickers do not fit on one row, main.js hides the name in the closed pickers (see
+   fitHeader()): first the name of the language, leaving its flag, then the name of the cut, leaving its icon. Screen
+   readers still read the names (as with .visually-hidden). */
+.language-picker.is-name-hidden .llselect-trigger .language-name,
+.cut-picker.is-name-hidden .llselect-trigger .cut-name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 /* ---- Hero ---------------------------------------------------------------- */

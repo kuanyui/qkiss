@@ -328,7 +328,10 @@
       flag.alt = '';   // decorative: the name follows
       el.append(flag);
     }
-    el.append(language.name);
+    const name = document.createElement('span');
+    name.className = 'language-name';   // hidden in the closed picker when the header is too narrow (see fitHeader())
+    name.textContent = language.name;
+    el.append(name);
     return el;
   }
 
@@ -373,6 +376,7 @@
     if (!cutPicker) return;
     cutPicker.setChosenItem(currentCut);
     cutPicker.rerender();
+    fitHeader();   // The names in both pickers, and the sections, may have changed.
   }
 
   /** A cut the visitor chose (the Director's Cut only after agreeing): remember it, and show the page in it. */
@@ -940,6 +944,29 @@
     return true;
   }
 
+  /**
+   * The logo, the sections and the two pickers share one row of the header when they fit on it. Otherwise, as on a
+   * phone, the sections go to the next row (.is-stacked, see style.css). When the logo and the pickers still do not
+   * fit, hide the name in the closed pickers: first the name of the language, leaving its flag, then the name of the
+   * cut, leaving its icon.
+   */
+  function fitHeader() {
+    const bar = document.querySelector('.header-bar');
+    const [brand, nav, tools] = ['.brand', '.site-nav', '.header-tools'].map((selector) => bar.querySelector(selector));
+    const width = (element) => element.getBoundingClientRect().width;
+    const gap = parseFloat(getComputedStyle(bar).columnGap);
+    const pickers = [document.getElementById('language-picker'), document.getElementById('cut-picker')];
+    // Measured on one row, with both names, first.
+    bar.classList.remove('is-stacked');
+    for (const picker of pickers) picker.classList.remove('is-name-hidden');
+    if (width(brand) + gap + width(nav) + gap + width(tools) <= width(bar)) return;
+    bar.classList.add('is-stacked');
+    for (const picker of pickers) {
+      if (width(brand) + gap + width(tools) <= width(bar)) return;
+      picker.classList.add('is-name-hidden');
+    }
+  }
+
   // ---------------------------------------------------------------------------
   // Start
   // ---------------------------------------------------------------------------
@@ -976,6 +1003,7 @@
     if (hasControls) {
       setUpLanguagePicker();
       setUpCutPicker();
+      window.addEventListener('resize', fitHeader);
     }
     setUpShowcase();
     setUpLightbox();
