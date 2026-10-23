@@ -25,6 +25,18 @@
   const CUT_STORAGE_KEY = 'qkiss-homepage.cut';
   /** Set once the visitor agreed to the terms of the Director's Cut and their additional articles: then switching to it asks nothing again. */
   const TERMS_STORAGE_KEY = 'qkiss-homepage.cut-terms';
+  /**
+   * The additional articles of the Director's Cut take about 6 (English) to 10 minutes (Japanese, Taiwan Traditional)
+   * to read. Scrolling through the whole of them in fewer seconds than this is skimming them (see setUpReadingCheck()).
+   */
+  const MIN_READING_SECONDS = 120;
+  /** How far ahead of that pace the visitor may scroll, in seconds of reading: for a quick look at what follows. */
+  const READING_HEAD_START_SECONDS = 10;
+  /**
+   * A visitor caught skimming the additional articles sooner than this is also told that even Kirito needs ten seconds
+   * (#amendments-check-kirito).
+   */
+  const KIRITO_SECONDS = 10;
   /** Show the page anyway if the translation takes longer than this. */
   const LOADING_TIMEOUT_MS = 2000;
   const SCREENSHOTS_DIR = 'screenshots/';
@@ -457,7 +469,8 @@
   /**
    * Set up a dialog that shows a document of the Director's Cut (legal/<name>.json), loaded when it opens. Its
    * button that continues (.terms-continue) waits until the end of the document is visible: after scrolling to it, or at once if the document
-   * fits. Returns the function that loads the document, then opens the dialog at its top.
+   * fits. Returns `open`, the function that loads the document, then opens the dialog at its top, and `rewind`, which
+   * shows the open dialog at its top again, its button that continues waiting again.
    */
   function setUpDocumentDialog(dialog, name) {
     const body = dialog.querySelector('.terms-body');
@@ -477,7 +490,15 @@
       }
     }, { root: text }).observe(dialog.querySelector('.terms-end'));
 
-    return async () => {
+    function rewind() {
+      continueButton.disabled = true;
+      hint.hidden = false;
+      text.focus();   // The keyboard scrolls the document, as when the dialog opens.
+      body.scrollTop = 0;   // On a short screen, the whole dialog scrolls (see style.css), and the focus scrolled it.
+      text.scrollTop = 0;
+    }
+
+    const open = async () => {
       const doc = await loadLegalDocument(name);
       if (document.querySelector('dialog[open]')) return;   // Another dialog was opened in the meantime.
       if (doc) {
@@ -487,11 +508,47 @@
       }
       loaded = doc !== null;
       unavailable.hidden = loaded;
-      continueButton.disabled = true;
-      hint.hidden = false;
       ask(dialog);
-      body.scrollTop = 0;   // On a short screen, the whole dialog scrolls (see style.css), and the focus scrolled it.
-      text.scrollTop = 0;
+      rewind();
+    };
+    return { open, rewind };
+  }
+
+  /**
+   * Check that the visitor reads the document of a dialog of setUpDocumentDialog(), rather than scrolling through it:
+   * once a second while it is open, and when its button that continues is pressed. The visitor skimmed it if they
+   * scrolled past more of it than they could have read since the check started, at the pace of MIN_READING_SECONDS
+   * for the whole of it, with a head start of READING_HEAD_START_SECONDS. Then the check stops, and calls `onSkimmed`
+   * with the seconds since it started.
+   * It measures the share of the document scrolled past, not pixels: so the pace depends neither on the language nor
+   * on the size of the screen or of the text.
+   * Returns the function that starts the check, once the document is shown at its top.
+   */
+  function setUpReadingCheck(dialog, onSkimmed) {
+    const text = dialog.querySelector('.terms-text');
+    let startTime = 0;
+    let timer = 0;
+
+    const seconds = () => (performance.now() - startTime) / 1000;
+    const skimmed = () => (text.scrollTop / text.scrollHeight) * MIN_READING_SECONDS
+      > seconds() + READING_HEAD_START_SECONDS;
+
+    function caught() {
+      clearInterval(timer);
+      onSkimmed(seconds());
+    }
+
+    dialog.querySelector('.terms-continue').addEventListener('click', (event) => {
+      if (!skimmed()) return;
+      event.preventDefault();   // The dialog stays open.
+      caught();
+    });
+    dialog.addEventListener('close', () => clearInterval(timer));
+    return () => {
+      startTime = performance.now();
+      timer = setInterval(() => {
+        if (skimmed()) caught();
+      }, 1000);
     };
   }
 
@@ -500,6 +557,10 @@
    * additional articles (#amendments-dialog). Each one is a <form method="dialog">: only its first button closes it
    * with "danger". Escape, the other button and a click outside it (on the backdrop: the padding is on
    * .cut-dialog-body) close it without.
+   * The additional articles also check that they are read (setUpReadingCheck()). A visitor caught skimming them is
+   * asked whether they read them carefully (#amendments-check-dialog), then whether they are sure
+   * (#amendments-recheck-dialog). Insisting twice refuses them (#amendments-refused-dialog): no more cut picker until
+   * the page is loaded again. Any other answer sends them back to the top of the additional articles.
    */
   function setUpCutPicker() {
     const { llselect } = window;
@@ -507,8 +568,15 @@
     const warning = document.getElementById('cut-dialog');
     const terms = document.getElementById('terms-dialog');
     const amendments = document.getElementById('amendments-dialog');
-    const openTerms = setUpDocumentDialog(terms, 'terms');
-    const openAmendments = setUpDocumentDialog(amendments, 'amendments');
+    const check = document.getElementById('amendments-check-dialog');
+    const recheck = document.getElementById('amendments-recheck-dialog');
+    const refused = document.getElementById('amendments-refused-dialog');
+    const openTerms = setUpDocumentDialog(terms, 'terms').open;
+    const { open: openAmendments, rewind: rewindAmendments } = setUpDocumentDialog(amendments, 'amendments');
+    const checkReading = setUpReadingCheck(amendments, (seconds) => {
+      document.getElementById('amendments-check-kirito').hidden = seconds >= KIRITO_SECONDS;
+      ask(check);
+    });
 
     cutPicker = new llselect.LLSelectSingle(document.getElementById('cut-select'), {
       ariaLabelledBy: 'cut-label',
@@ -532,7 +600,7 @@
       },
     });
     cutPicker.setItems(['safe', 'danger']);
-    for (const dialog of [warning, terms, amendments]) {
+    for (const dialog of [warning, terms, amendments, check, recheck, refused]) {
       dialog.addEventListener('click', (event) => {
         if (event.target === dialog) dialog.close();
       });
@@ -540,13 +608,43 @@
     warning.addEventListener('close', () => {
       if (warning.returnValue === 'danger') openTerms();
     });
-    terms.addEventListener('close', () => {
-      if (terms.returnValue === 'danger') openAmendments();
+    terms.addEventListener('close', async () => {
+      if (terms.returnValue !== 'danger') return;
+      await openAmendments();
+      if (amendments.open) checkReading();
     });
     amendments.addEventListener('close', () => {
       if (amendments.returnValue !== 'danger') return;
       store(TERMS_STORAGE_KEY, 'agreed');
       chooseCut('danger');
+    });
+    /** Back to the top of the additional articles, to read them again. */
+    function readAgain() {
+      // From now on, until the page is loaded again, the button that turns back points at itself five times as hard.
+      // No-break spaces between the arrows: they stay on one line.
+      amendments.querySelector('.pointing-arrow').textContent = '←\u00a0←\u00a0←\u00a0←\u00a0←';
+      rewindAmendments();
+      checkReading();
+    }
+    check.addEventListener('close', () => {
+      if (check.returnValue === 'danger') {
+        ask(recheck);
+      } else {
+        readAgain();
+      }
+    });
+    recheck.addEventListener('close', () => {
+      if (recheck.returnValue === 'danger') {
+        ask(refused);
+      } else {
+        readAgain();
+      }
+    });
+    refused.addEventListener('close', () => {
+      amendments.close();
+      // No more Director's Cut for this visitor, until the page is loaded again.
+      document.getElementById('cut-picker').hidden = true;
+      fitHeader();
     });
     renderCutPicker();
     document.getElementById('cut-picker').hidden = false;

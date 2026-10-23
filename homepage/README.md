@@ -163,7 +163,7 @@ The picker is [@llselect/core](https://gitlab.com/kuanyui/llselect), loaded from
 - `integrity` makes the browser refuse any file other than the one checked.
 - Its classes are styled in `style.css` from the colors of the page (light and dark), instead of loading one of its themes.
 - If it does not load, both pickers stay hidden: the language is still picked as above, and the cut is the one chosen last.
-- The two pickers, and the three dialogs of the Director's Cut, are in `controls.html`, not in `index.html`. `main.js` fetches it only for a browser that gets the pickers (see `isEnglishOnly()`), and puts it into the page before translating it. So the page itself, as a crawler or an LLM reads it, shows neither the pickers nor the dialogs, and does not list the languages either: they are in `main.js`. `build.py` checks the strings of both files, and rejects the pickers, the dialogs and the list of languages in `index.html`.
+- The two pickers, and the dialogs of the Director's Cut, are in `controls.html`, not in `index.html`. `main.js` fetches it only for a browser that gets the pickers (see `isEnglishOnly()`), and puts it into the page before translating it. So the page itself, as a crawler or an LLM reads it, shows neither the pickers nor the dialogs, and does not list the languages either: they are in `main.js`. `build.py` checks the strings of both files, and rejects the pickers, the dialogs and the list of languages in `index.html`.
 - If `controls.html` does not arrive within 2 seconds, that page load has no pickers, and shows the Wholesome Cut.
 
 To upgrade it, change the version in the URL, and set `integrity` to `sha384-` followed by the hash of the new file:
@@ -178,6 +178,7 @@ The page has two cuts, and the cut picker next to the language picker (an @llsel
 
 - The Wholesome Cut, shown by default.
 - The Director's Cut, with the author's swearing, dark political jokes and strong opinions. The first switch to it asks three times: a warning (`#cut-dialog` in `controls.html`), the terms of the Director's Cut (`#terms-dialog`), then their additional articles (`#amendments-dialog`). In each document, the button that continues (“I have actually read, and fully agree to, all of the provisions above”) is enabled only once the visitor has scrolled to its end. The cut, and the agreement, are remembered in `localStorage` like the language: after agreeing once, switching asks nothing.
+  - The additional articles also check, once a second, that they are read: scrolling through them faster than one could read them all in 2 minutes (`MIN_READING_SECONDS` in `main.js`) asks whether the visitor read them carefully (`#amendments-check-dialog`, which first notes that even Kirito needs ten seconds when the visitor took less), then whether they are sure (`#amendments-recheck-dialog`). Insisting twice refuses the visitor (`#amendments-refused-dialog`), and hides the cut picker until the page is loaded again. Any other answer sends them back to the top of the additional articles.
 
 A string that differs between the cuts is an object with one version per cut, instead of a string. For example, in `i18n/ja.json` and `i18n/zh-TW.json` (in their languages):
 

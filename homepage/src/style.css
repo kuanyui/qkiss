@@ -1798,6 +1798,22 @@ sup {
   font-size: 0.9rem;
 }
 
+/* ---- The questions about reading the additional articles ----------------- */
+
+/* Asked over the additional articles when they are scrolled through too fast (see main.js): a question and its
+   buttons, in a smaller dialog. */
+.reading-check-dialog {
+  width: min(100% - 2rem, 28rem);
+}
+
+/* Meanwhile, the additional articles behind it stay still. A scroll gesture that was scrolling them (a touchpad, a
+   mouse wheel still turning) goes on sending its wheel events to them, which cannot be canceled: only this stops it.
+   The gutter of their scrollbar stays, so that their text does not reflow. */
+html:has(.reading-check-dialog[open]) .terms-text {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
 /* ---- Motion -------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {

@@ -123,7 +123,8 @@ def is_nonempty_string(value: Any) -> bool:
 # pickers nor the dialogs of the Director's Cut, and does not list the languages. They must not come back into
 # index.html: build.py rejects the elements with these IDs in it.
 PAGE_FILES: tuple[str, ...] = ("index.html", "controls.html")
-NOT_IN_INDEX: tuple[str, ...] = ("cut-picker", "language-picker", "cut-dialog", "terms-dialog", "amendments-dialog", "languages")
+NOT_IN_INDEX: tuple[str, ...] = ("cut-picker", "language-picker", "cut-dialog", "terms-dialog", "amendments-dialog",
+                                 "amendments-check-dialog", "amendments-recheck-dialog", "amendments-refused-dialog", "languages")
 # The language registry: the JSON between these two markers of main.js.
 LANGUAGES_MARKERS: tuple[str, str] = ("/* languages: */", "/* :languages */")
 

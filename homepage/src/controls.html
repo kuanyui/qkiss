@@ -112,3 +112,52 @@
     </div>
   </form>
 </dialog>
+
+<!--
+  Asked over the additional articles when the visitor scrolls through them faster than they can be read (see main.js).
+  Like the dialogs above, the form of each one closes it with the value of the button pressed: "danger" in
+  #amendments-check-dialog asks again with #amendments-recheck-dialog, and "danger" there refuses the visitor with
+  #amendments-refused-dialog. The other buttons, Escape and a click outside them go back to the top of the additional
+  articles, to read them again.
+-->
+<dialog class="cut-dialog reading-check-dialog" id="amendments-check-dialog" aria-labelledby="amendments-check-title">
+  <form class="cut-dialog-body" method="dialog">
+    <h2 class="cut-dialog-title" id="amendments-check-title" tabindex="-1" autofocus>
+      <img src="images/icons/dialog-warning.svg" alt="" width="32" height="32">
+      <span data-i18n="amendments.check.title">Wait!</span>
+    </h2>
+    <!-- Only for a visitor caught within ten seconds (see main.js). -->
+    <p id="amendments-check-kirito" data-i18n="amendments.check.kirito" hidden>Even Kirito needs ten seconds, and you read this far in less than ten?</p>
+    <p data-i18n-html="amendments.check.question">Now tell the truth: <strong>did you really read them carefully?</strong></p>
+    <div class="cut-dialog-buttons">
+      <button class="button button-primary" value="safe"><img class="button-icon" src="images/icons/edit-undo.svg" alt="" width="22" height="22"><span data-i18n="amendments.check.reread">Uh… busted. I'll read them again properly</span></button>
+      <button class="button button-danger" value="danger"><img class="button-icon" src="images/icons/emblem-important.svg" alt="" width="22" height="22"><span data-i18n="amendments.check.deny">What? I did!</span></button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="cut-dialog reading-check-dialog" id="amendments-recheck-dialog" aria-labelledby="amendments-recheck-title">
+  <form class="cut-dialog-body" method="dialog">
+    <h2 class="cut-dialog-title" id="amendments-recheck-title" tabindex="-1" autofocus>
+      <img src="images/icons/dialog-warning.svg" alt="" width="32" height="32">
+      <span data-i18n="amendments.recheck.title">Are you sure you really read them carefully just now?</span>
+    </h2>
+    <div class="cut-dialog-buttons">
+      <button class="button button-danger" value="danger"><img class="button-icon" src="images/icons/emblem-important.svg" alt="" width="22" height="22"><span data-i18n="amendments.recheck.insist">I really did! I read every single word carefully</span></button>
+      <button class="button button-primary" value="safe"><img class="button-icon" src="images/icons/edit-undo.svg" alt="" width="22" height="22"><span data-i18n="amendments.recheck.admit">Uh… actually, I didn't read them carefully</span></button>
+    </div>
+  </form>
+</dialog>
+
+<!-- However it closes, it closes the additional articles too, and hides the cut picker until the page is loaded again. -->
+<dialog class="cut-dialog reading-check-dialog" id="amendments-refused-dialog" aria-labelledby="amendments-refused-title">
+  <form class="cut-dialog-body" method="dialog">
+    <h2 class="cut-dialog-title" id="amendments-refused-title" tabindex="-1" autofocus>
+      <img src="images/icons/application-certificate-nome.svg" alt="" width="32" height="32">
+      <span data-i18n="amendments.refused.title">We are sorry, but having assessed your case, the Otherworlder Entry Committee has decided that you may not be suitable for entry</span>
+    </h2>
+    <div class="cut-dialog-buttons">
+      <button class="button button-primary" value="safe"><span data-i18n="amendments.refused.close">Okra</span></button>
+    </div>
+  </form>
+</dialog>
