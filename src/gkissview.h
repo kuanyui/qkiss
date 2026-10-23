@@ -40,6 +40,8 @@ public:
     bool showKissSceneByIndex(uint8_t setIndex);
     void scaleAbs(qreal targetScale);
     void setScaleModeForAllItems();
+    /// Makes the view look like a CRT monitor: neighboring pixels blend, and bright areas glow. See CrtFilter.
+    void setCrtFilterEnabled(bool enabled);
     GKissScene *curKissScene();
     /** create scenes & items according to current CNF. */
     bool renderCurCnfAllSets();
@@ -60,8 +62,12 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dropEvent(QDropEvent *event) override;
     virtual void wheelEvent(QWheelEvent *event) override;
+    virtual void drawForeground(QPainter *painter, const QRectF &rect) override;
 
 private:
+    /// For the CRT filter: paints a filtered copy of the items in `rect` over them. Called by drawForeground().
+    void drawCrtFilteredItems(QPainter *painter, const QRectF &rect);
+
     ArchiveFile *m_archiveFile = nullptr;
     /// Each set is stored in its scene.
     QVector<GKissScene *> m_scenes;
@@ -69,6 +75,7 @@ private:
     uint8_t m_curSceneIdx = 0;
     GKissItem *m_curHoveredCelItem;
     QList<QMetaObject::Connection> m_connectionsOfArchiveFile;
+    bool m_crtFilterEnabled = false;
 
 
 };

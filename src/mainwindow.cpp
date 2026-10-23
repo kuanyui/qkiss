@@ -126,6 +126,15 @@ MainWindow::MainWindow(QWidget *parent)
         m_cfg.zoomOut();
     });
 
+    // CRT filter
+    ui->action_crtFilter->setChecked(m_cfg.crtFilterEnabled());
+    m_kissView->setCrtFilterEnabled(m_cfg.crtFilterEnabled());
+    connect(ui->action_crtFilter, &QAction::toggled, &m_cfg, &ConfigFile::setCrtFilterEnabled);
+    connect(&m_cfg, &ConfigFile::crtFilterEnabledChanged, this, [=, this](){
+        ui->action_crtFilter->setChecked(m_cfg.crtFilterEnabled());
+        m_kissView->setCrtFilterEnabled(m_cfg.crtFilterEnabled());
+    });
+
     // Other
     connect(ui->action_openFile, &QAction::triggered, this, &MainWindow::openFilePicker);
     connect(ui->action_openDirectory, &QAction::triggered, this, &MainWindow::openDirPicker);

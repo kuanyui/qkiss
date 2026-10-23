@@ -402,6 +402,19 @@ bool ConfigFile::zoomOutByPredefinedSteps()
     return false;
 }
 
+bool ConfigFile::crtFilterEnabled() const
+{
+    return m_set.value(CPath::View_CrtFilter, false).toBool();
+}
+
+void ConfigFile::setCrtFilterEnabled(bool enabled)
+{
+    if (crtFilterEnabled() == enabled) { return; }
+    m_set.setValue(CPath::View_CrtFilter, enabled);
+    m_set.sync();
+    emit crtFilterEnabledChanged();
+}
+
 void ConfigFile::loadAll()
 {
     // LZH backend

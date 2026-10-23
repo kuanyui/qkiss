@@ -61,6 +61,8 @@
     <addaction name="action_zoomOut"/>
     <addaction name="action_zoomIn"/>
     <addaction name="action_zoomReset"/>
+    <addaction name="separator"/>
+    <addaction name="action_crtFilter"/>
    </widget>
    <widget class="QMenu" name="menu_Window">
     <property name="title">
@@ -232,6 +234,14 @@
    </property>
    <property name="text">
     <string>&amp;Reset Scale</string>
+   </property>
+  </action>
+  <action name="action_crtFilter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;CRT Filter</string>
    </property>
   </action>
   <action name="action_clearAll">
