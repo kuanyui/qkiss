@@ -579,6 +579,7 @@ qt_add_executable("${PROJ_NAME}"
     src/dockwidgetproxystyle.h src/dockwidgetproxystyle.cpp
     src/mycstr.h
     src/unipath.h src/unipath.cpp
+    src/crtfilter.h src/crtfilter.cpp
 
 )
 add_dependencies("${PROJ_NAME}" icontheme)
