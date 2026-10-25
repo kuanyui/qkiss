@@ -772,6 +772,14 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
         <source>Open Directory</source>
         <translation>Open a Folder</translation>
     </message>
+    <message>
+        <source>&amp;CRT Simulation</source>
+        <translation>&amp;CRT Presentation</translation>
+    </message>
+    <message>
+        <source>3D acceleration is strongly recommended; without it, performance will be very poor.</source>
+        <translation>It is most strongly recommended that 3D acceleration be available; otherwise, performance will be decidedly poor.</translation>
+    </message>
 </context>
 <context>
     <name>ParsedCel</name>
@@ -942,6 +950,22 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
     <message>
         <source>Case Sensitive</source>
         <translation>Most Particular About Case</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation>Quite Unembellished</translation>
+    </message>
+    <message>
+        <source>Sharp</source>
+        <translation>Immaculately Crisp</translation>
+    </message>
+    <message>
+        <source>Soft</source>
+        <translation>Agreeably Soft</translation>
+    </message>
+    <message>
+        <source>Glow</source>
+        <translation>A Most Becoming Glow</translation>
     </message>
 </context>
 </TS>

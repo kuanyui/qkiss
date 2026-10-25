@@ -774,6 +774,14 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
         <source>Open Directory</source>
         <translation>書庫を開きますの</translation>
     </message>
+    <message>
+        <source>&amp;CRT Simulation</source>
+        <translation>CRT映像の趣ですの(&amp;C)</translation>
+    </message>
+    <message>
+        <source>3D acceleration is strongly recommended; without it, performance will be very poor.</source>
+        <translation>3Dアクセラレーションの整った環境でお使いになることを、強くおすすめいたしますわ。さもなくば、性能がたいそう悪くなりますの。</translation>
+    </message>
 </context>
 <context>
     <name>ParsedCel</name>
@@ -944,6 +952,22 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
     <message>
         <source>Case Sensitive</source>
         <translation>大文字小文字をきっちり区別いたしますわ</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation>何もいたしませんの</translation>
+    </message>
+    <message>
+        <source>Sharp</source>
+        <translation>くっきり鮮やかですわ</translation>
+    </message>
+    <message>
+        <source>Soft</source>
+        <translation>やわらかになじみますの</translation>
+    </message>
+    <message>
+        <source>Glow</source>
+        <translation>優雅に輝きますわ</translation>
     </message>
 </context>
 </TS>

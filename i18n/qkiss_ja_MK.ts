@@ -776,6 +776,14 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <source>Open Directory</source>
         <translation>ディレクトリを開く〜〜</translation>
     </message>
+    <message>
+        <source>&amp;CRT Simulation</source>
+        <translation>CRTシミュレーション〜？古い画面が好きなの？(&amp;C)</translation>
+    </message>
+    <message>
+        <source>3D acceleration is strongly recommended; without it, performance will be very poor.</source>
+        <translation>3Dアクセラレーションある環境で使うの、超おすすめ〜。ないとパフォーマンス激悪なんだけどw</translation>
+    </message>
 </context>
 <context>
     <name>ParsedCel</name>
@@ -946,6 +954,22 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <source>Case Sensitive</source>
         <translation>大文字小文字を区別する〜。細かいとこ気にしすぎじゃない？神経質〜w</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation>なし〜。そのまんまでいいんだ？</translation>
+    </message>
+    <message>
+        <source>Sharp</source>
+        <translation>くっきり〜。画質くらいシャキッとしてよね♥</translation>
+    </message>
+    <message>
+        <source>Soft</source>
+        <translation>ふんわり〜。ギザギザも見分けられないね♥</translation>
+    </message>
+    <message>
+        <source>Glow</source>
+        <translation>きらきら〜。光らせないと目立てないの？w</translation>
     </message>
 </context>
 </TS>
