@@ -313,35 +313,45 @@ void GKissView::drawForeground(QPainter *painter, const QRectF &rect)
     // them. Don't override paintEvent() to skip that work. QGraphicsView::paintEvent() resets the "update all" flag of
     // the scene, which QGraphicsScene::update() sets (for example in setBackgroundBrush()). While that flag is set, the
     // scene ignores changed items, so without QGraphicsView::paintEvent() the view would stop updating.
-    drawCrtFilteredItems(painter, rect);
-    CrtFilter::drawPhosphorStripes(painter, rect, transform().m11() * viewport()->devicePixelRatioF());
+    drawCrtFilteredScene(painter, rect, transform().m11() * viewport()->devicePixelRatioF());
 }
 
-void GKissView::drawCrtFilteredItems(QPainter *painter, const QRectF &rect)
+void GKissView::drawCrtFilteredScene(QPainter *painter, const QRectF &rect, qreal devicePixelsPerKissPixel)
 {
-    // A pixel changes only when a pixel of another color is within CrtFilter::REACH. One more pixel keeps the edge of
-    // the filtered image unchanged, so it matches the background around it.
+    // Pixels up to CrtFilter::REACH outside `rect` can still change the pixels in it. One more pixel keeps the edge of
+    // the image from CrtFilter::apply() unchanged, so it matches the background around it.
     const int margin = CrtFilter::REACH + 1;
-    const QRectF area = rect.adjusted(-margin, -margin, margin, margin);   // Pixels just outside `rect` can glow into it.
-    // The bounding rectangle of the visible items in `area`. (QGraphicsScene::items() skips invisible items.)
-    QRectF itemsRect;
-    for (const QGraphicsItem *item : scene()->items(area, Qt::IntersectsItemBoundingRect)) {
-        itemsRect |= item->sceneBoundingRect();
+    const QRectF area = rect.adjusted(-margin, -margin, margin, margin);
+    const bool zoomedIn = devicePixelsPerKissPixel >= CrtFilter::MIN_RENDER_SCALE;
+    QRectF filteredRect = area;
+    if (!zoomedIn) {
+        // CrtFilter::apply() doesn't change the flat background away from the items. So filter only the items, and
+        // keep the background that QGraphicsView has painted. (CrtFilter::render() draws scanlines on the background.)
+        // The bounding rectangle of the visible items in `area`. (QGraphicsScene::items() skips invisible items.)
+        QRectF itemsRect;
+        for (const QGraphicsItem *item : scene()->items(area, Qt::IntersectsItemBoundingRect)) {
+            itemsRect |= item->sceneBoundingRect();
+        }
+        if (itemsRect.isEmpty()) { return; }
+        filteredRect = itemsRect.adjusted(-margin, -margin, margin, margin) & area;
     }
-    if (itemsRect.isEmpty()) { return; }
-    // Away from the items, there is only the flat background, which the filter doesn't change.
-    const QRect sourceRect = (itemsRect.adjusted(-margin, -margin, margin, margin) & area).toAlignedRect();
+    const QRect sourceRect = filteredRect.toAlignedRect();
     // A very large area (e.g. an item dragged far away at a very small zoom) would need too much memory.
     constexpr qsizetype MAX_PIXELS = 2048 * 2048;
     if (qsizetype(sourceRect.width()) * sourceRect.height() > MAX_PIXELS) { return; }
-    // Filter at the resolution of the KiSS set (1 image pixel = 1 KiSS pixel), so the effect looks the same at any zoom.
+    // Render the scene at the resolution of the KiSS set: 1 image pixel = 1 KiSS pixel.
     QImage frame(sourceRect.size(), QImage::Format_RGB32);
     if (frame.isNull()) { return; }
     frame.fill(viewport()->palette().color(viewport()->backgroundRole()));   // Shown where the scene has no background brush
     QPainter framePainter(&frame);
     scene()->render(&framePainter, frame.rect(), sourceRect);
     framePainter.end();
-    CrtFilter::apply(frame);
-    // Scaled like the items: smoothly only at a zoom that is not a whole number. See setScaleModeForAllItems().
+    if (zoomedIn) {
+        // The result is at device resolution, so the painter scales it by about 1 (exactly 1 at a whole-number zoom).
+        frame = CrtFilter::render(frame, sourceRect.topLeft(), devicePixelsPerKissPixel);
+    } else {
+        // Scaled like the items: smoothly only at a zoom that is not a whole number. See setScaleModeForAllItems().
+        CrtFilter::apply(frame);
+    }
     painter->drawImage(QRectF(sourceRect), frame);
 }

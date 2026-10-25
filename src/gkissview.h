@@ -65,8 +65,8 @@ protected:
     virtual void drawForeground(QPainter *painter, const QRectF &rect) override;
 
 private:
-    /// For the CRT filter: paints a filtered copy of the items in `rect` over them. Called by drawForeground().
-    void drawCrtFilteredItems(QPainter *painter, const QRectF &rect);
+    /// For the CRT filter: paints a filtered copy of the scene in `rect` over it. Called by drawForeground().
+    void drawCrtFilteredScene(QPainter *painter, const QRectF &rect, qreal devicePixelsPerKissPixel);
 
     ArchiveFile *m_archiveFile = nullptr;
     /// Each set is stored in its scene.

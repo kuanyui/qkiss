@@ -21,7 +21,6 @@
 #define CRTFILTER_H
 
 #include <QImage>
-#include <QPainter>
 
 /**
  * Makes an image look like a CRT monitor shows it: neighboring pixels blend, and bright areas glow.
@@ -34,20 +33,28 @@
 class CrtFilter
 {
 public:
-    /// How far the glow reaches, in KiSS pixels.
+    /// How far the glow reaches, in KiSS pixels. The other values that change the look are at the top of crtfilter.cpp.
     static constexpr int GLOW_RADIUS = 6;
-    /// How far apply() spreads one pixel into its neighbors, in KiSS pixels: 1 for the beam, plus the glow.
-    /// A pixel changes only when a pixel of another color is within this distance.
-    static constexpr int REACH = 1 + GLOW_RADIUS;
-    /// Filters `image` in place. It must be QImage::Format_RGB32, with one KiSS pixel per image pixel.
+    /// How far one pixel can change other pixels, in KiSS pixels: 1 for the beam, GLOW_RADIUS for the glow, and 1 more
+    /// because render() interpolates the glow between pixels. In apply(), a pixel changes only when a pixel of another
+    /// color is within this distance.
+    static constexpr int REACH = 1 + GLOW_RADIUS + 1;
+    /// Use render() from this many device pixels per KiSS pixel, and apply() below it. A scanline needs at least 2 rows
+    /// of device pixels: a bright one and a darker one.
+    static constexpr qreal MIN_RENDER_SCALE = 2;
+
+    /// For a small zoom: filters `image` in place, so that neighboring pixels blend and bright areas glow.
+    /// `image` must be QImage::Format_RGB32, with one KiSS pixel per image pixel.
     static void apply(QImage &image);
-    /// Darkens `rect` with red, green and blue stripes, like the phosphor stripes of a CRT.
-    /// - Each stripe is a whole number of device pixels wide. The stripes get wider when you zoom in.
-    /// - The 3 colors together are at most 1 KiSS pixel wide. They are exactly 1 KiSS pixel wide when a KiSS pixel is
-    ///   3, 6, 9... device pixels wide.
-    /// - Does nothing when a KiSS pixel is narrower than 3 device pixels, because the stripes wouldn't fit.
-    /// `painter` must use scene coordinates (1 unit = 1 KiSS pixel).
-    static void drawPhosphorStripes(QPainter *painter, const QRectF &rect, qreal devicePixelsPerKissPixel);
+    /// For a large zoom: returns `image` as a CRT shows it, at device resolution. The result is
+    /// `devicePixelsPerKissPixel` times as wide and as tall as `image` (QImage::Format_RGB32, one KiSS pixel per pixel).
+    /// - Each pixel is a spot of light that spreads to the left and right. A bright spot reaches into darker neighbors.
+    /// - Each row of pixels is a scanline, brightest in its middle. A bright scanline is thicker than a dark one.
+    /// - From 3 device pixels per KiSS pixel, there are red, green and blue phosphor stripes. Each stripe is a whole
+    ///   number of device pixels wide, and the 3 colors together are at most 1 KiSS pixel wide.
+    /// - The glow comes last, so the scanlines and the stripes don't cover it.
+    /// `topLeft` is the scene position of `image`, in KiSS pixels. It keeps the stripes in place when the view scrolls.
+    static QImage render(const QImage &image, QPoint topLeft, qreal devicePixelsPerKissPixel);
 };
 
 #endif // CRTFILTER_H
