@@ -126,13 +126,10 @@ MainWindow::MainWindow(QWidget *parent)
         m_cfg.zoomOut();
     });
 
-    // CRT filter
-    ui->action_crtFilter->setChecked(m_cfg.crtFilterEnabled());
-    m_kissView->setCrtFilterEnabled(m_cfg.crtFilterEnabled());
-    connect(ui->action_crtFilter, &QAction::toggled, &m_cfg, &ConfigFile::setCrtFilterEnabled);
-    connect(&m_cfg, &ConfigFile::crtFilterEnabledChanged, this, [=, this](){
-        ui->action_crtFilter->setChecked(m_cfg.crtFilterEnabled());
-        m_kissView->setCrtFilterEnabled(m_cfg.crtFilterEnabled());
+    // CRT simulation (its menu is made in setupMenuBar())
+    m_kissView->setCrtSimulation(m_cfg.crtSimulation());
+    connect(&m_cfg, &ConfigFile::crtSimulationChanged, this, [=, this](){
+        m_kissView->setCrtSimulation(m_cfg.crtSimulation());
     });
 
     // Other
@@ -395,7 +392,53 @@ void MainWindow::setupMenuBar()
         }
         connect(act, &QAction::toggled, this, [=, this] () { m_cfg.setCaseSensitivity(key); });
     }
-    TranslationManager::instance().registerLanguageChangeCallback(this, [this]() {
+
+    const auto &allCrtSimulationPresets = QKiSS::crtSimulationPresetNames();
+    // View > CRT Simulation starts with a check box that turns the CRT Simulation on and off (None is unchecked). The
+    // language callback below sets its text.
+    QAction *crtSimulationEnabled = ui->menu_crtSimulation->addAction(QString());
+    crtSimulationEnabled->setCheckable(true);
+    // The button on the toolbar (added in setupToolBars()) turns the CRT Simulation on and off. Its arrow opens a menu
+    // of the presets, without None. While it is off, that menu shows the preset that the button turns on.
+    m_crtSimulationToggle = new QAction(ui->menu_crtSimulation->icon(), ui->menu_crtSimulation->title(), this);
+    m_crtSimulationToggle->setCheckable(true);
+    for (QAction *toggle : { crtSimulationEnabled, m_crtSimulationToggle }) {
+        connect(toggle, &QAction::triggered, this, [this] (bool checked) {
+            m_cfg.setCrtSimulation(checked ? m_cfg.crtSimulationPreset() : QKiSS::CrtSimulationPreset::None);
+        });
+    }
+    // Below the check box: a note about it, then a line. The note is disabled, so it is gray and can't be chosen. The
+    // language callback below sets its text.
+    QAction *crtSimulationNote = ui->menu_crtSimulation->addAction(QString());
+    crtSimulationNote->setEnabled(false);
+    ui->menu_crtSimulation->addSeparator();
+    QMenu *crtSimulationPresets = new QMenu(this);
+    crtSimulationPresets->addAction(crtSimulationNote);
+    // Both menus share the actions of the presets.
+    QActionGroup *crtSimulationPresetGroup = new QActionGroup {ui->menu_crtSimulation};
+    QMap<QKiSS::CrtSimulationPreset, QAction *> crtSimulationPresetActions;   // No None
+    for (const auto &x : allCrtSimulationPresets) {
+        QKiSS::CrtSimulationPreset key = x.first;
+        if (key == QKiSS::CrtSimulationPreset::None) { continue; }
+        QAction *act = crtSimulationPresetGroup->addAction(x.second);
+        act->setCheckable(true);
+        ui->menu_crtSimulation->addAction(act);
+        crtSimulationPresets->addAction(act);
+        crtSimulationPresetActions.insert(key, act);
+        // Choosing a preset turns the CRT Simulation on, also the checked one (which sends no toggled).
+        connect(act, &QAction::triggered, this, [=, this] () { m_cfg.setCrtSimulation(key); });
+    }
+    m_crtSimulationToggle->setMenu(crtSimulationPresets);
+    // Both menus and the button follow the setting, also when one of the others changes it.
+    const auto showCrtSimulation = [=, this] () {
+        crtSimulationPresetActions.value(m_cfg.crtSimulationPreset())->setChecked(true);   // Never None
+        const bool enabled = m_cfg.crtSimulation() != QKiSS::CrtSimulationPreset::None;
+        crtSimulationEnabled->setChecked(enabled);
+        m_crtSimulationToggle->setChecked(enabled);
+    };
+    showCrtSimulation();
+    connect(&m_cfg, &ConfigFile::crtSimulationChanged, this, showCrtSimulation);
+    TranslationManager::instance().registerLanguageChangeCallback(this, [=, this]() {
         const QStringList &allEncodingNames = QKiSS::encodingNames();
         for (int i = 0; i < allEncodingNames.length(); i++) {
             QAction *act = ui->menu_encoding->actions().at(i);
@@ -418,6 +461,12 @@ void MainWindow::setupMenuBar()
             const auto &cs = allCaseSensitivity.at(i);
             act->setText(cs.second);
         }
+        crtSimulationEnabled->setText(tr("Enabled"));
+        for (const auto &x : QKiSS::crtSimulationPresetNames()) {
+            // There is no action for None.
+            if (QAction *act = crtSimulationPresetActions.value(x.first)) { act->setText(x.second); }
+        }
+        crtSimulationNote->setText(tr("3D acceleration is strongly recommended; without it, performance will be very poor."));
     });
 }
 
@@ -447,6 +496,13 @@ void MainWindow::setupToolBars()
     m_toolbarZooms->addAction(ui->action_zoomOut);
     m_toolbarZooms->addAction(ui->action_zoomIn);
     m_toolbarZooms->addWidget(m_cboxZoomScale);
+    // The CRT Simulation, as a button with a small arrow beside it (like the Home button of the File System Browser).
+    // The button turns it on and off, and the arrow opens the menu of the presets (see setupMenuBar()).
+    m_toolbarZooms->addAction(m_crtSimulationToggle);
+    QWidget *crtSimulationWidget = m_toolbarZooms->widgetForAction(m_crtSimulationToggle);
+    if (QToolButton *crtSimulationBtn = qobject_cast<QToolButton *>(crtSimulationWidget)) {
+        crtSimulationBtn->setPopupMode(QToolButton::ToolButtonPopupMode::MenuButtonPopup);
+    }
     // Dock Window
     m_toolbarWindows = new QToolBar(this);
     m_toolbarWindows->setWindowTitle(tr("Windows"));
@@ -643,6 +699,7 @@ void MainWindow::restoreWindowSettings()
 void MainWindow::retranslate()
 {
     ui->retranslateUi(this);
+    m_crtSimulationToggle->setText(ui->menu_crtSimulation->title());   // The same text as View > CRT Simulation
 }
 
 void MainWindow::renderRecentFiles()

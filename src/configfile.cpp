@@ -402,17 +402,33 @@ bool ConfigFile::zoomOutByPredefinedSteps()
     return false;
 }
 
-bool ConfigFile::crtFilterEnabled() const
+QKiSS::CrtSimulationPreset ConfigFile::crtSimulation() const
 {
-    return m_set.value(CPath::View_CrtFilter, false).toBool();
+    if (!m_set.value(CPath::View_CrtSimulationEnabled, false).toBool()) { return QKiSS::CrtSimulationPreset::None; }
+    return crtSimulationPreset();
 }
 
-void ConfigFile::setCrtFilterEnabled(bool enabled)
+void ConfigFile::setCrtSimulation(QKiSS::CrtSimulationPreset preset)
 {
-    if (crtFilterEnabled() == enabled) { return; }
-    m_set.setValue(CPath::View_CrtFilter, enabled);
+    if (crtSimulation() == preset) { return; }
+    m_set.setValue(CPath::View_CrtSimulationEnabled, preset != QKiSS::CrtSimulationPreset::None);
+    if (preset != QKiSS::CrtSimulationPreset::None) {
+        m_set.setValue(CPath::View_CrtSimulationPreset, static_cast<int>(preset));
+    }
     m_set.sync();
-    emit crtFilterEnabledChanged();
+    emit crtSimulationChanged();
+}
+
+QKiSS::CrtSimulationPreset ConfigFile::crtSimulationPreset() const
+{
+    const int value = m_set.value(CPath::View_CrtSimulationPreset,
+                                  static_cast<int>(QKiSS::CrtSimulationPreset::Sharp)).toInt();
+    // A number that is none of the presets (for example, edited by hand) is the first preset.
+    if (value < static_cast<int>(QKiSS::CrtSimulationPreset::Sharp)
+        || value > static_cast<int>(QKiSS::CrtSimulationPreset::Glow)) {
+        return QKiSS::CrtSimulationPreset::Sharp;
+    }
+    return static_cast<QKiSS::CrtSimulationPreset>(value);
 }
 
 void ConfigFile::loadAll()

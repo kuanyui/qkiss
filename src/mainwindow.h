@@ -100,6 +100,7 @@ protected:
     QButtonGroup *m_btnGroupSceneSets;
     QButtonGroup *m_btnGroupColorSets;
     QComboBox *m_cboxZoomScale;
+    QAction *m_crtSimulationToggle;
     ArchiveFile *m_archiveFile;
     GKissView *m_kissView;
     FileSystemBrowser *m_fileSystemBrowser;

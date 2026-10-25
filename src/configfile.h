@@ -36,7 +36,8 @@ class ConfigFile : public QObject
         static constexpr auto Global_CaseSensitivity        = "Global/CaseSensitivity";
         static constexpr auto Global_LzhDecompressorBackend = "Global/LzhDecompressorBackend ";
         static constexpr auto View_Zoom                     = "View/Zoom";
-        static constexpr auto View_CrtFilter                = "View/CrtFilter";
+        static constexpr auto View_CrtSimulationEnabled     = "View/CrtSimulationEnabled";
+        static constexpr auto View_CrtSimulationPreset      = "View/CrtSimulationPreset";
         static constexpr auto File_RecentFiles              = "File/RecentFiles";
         static constexpr auto File_RecentDirs               = "File/RecentDirs";
         static constexpr auto File_HomeDirectory            = "File/HomeDirectory";
@@ -95,8 +96,12 @@ public:
     QString zoomAsPercent() const;
     bool canZoomIn() const;
     bool canZoomOut() const;
-    bool crtFilterEnabled() const;
-    void setCrtFilterEnabled(bool enabled);
+    /// The preset of the CRT Simulation, or None when it is off.
+    QKiSS::CrtSimulationPreset crtSimulation() const;
+    /// None turns the CRT Simulation off and keeps its preset, for turning it on again.
+    void setCrtSimulation(QKiSS::CrtSimulationPreset preset);
+    /// The preset of the CRT Simulation, also while it is off. Never None.
+    QKiSS::CrtSimulationPreset crtSimulationPreset() const;
 
 public slots:
     qreal zoomReset();
@@ -123,7 +128,7 @@ signals:
     void uiLanguageChanged();
 
     void zoomChanged();
-    void crtFilterEnabledChanged();
+    void crtSimulationChanged();
 
 private:
     /** Avoid initialized from outside. */

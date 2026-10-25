@@ -163,14 +163,15 @@ void GKissView::setScaleModeForAllItems()
     }
 }
 
-void GKissView::setCrtFilterEnabled(bool enabled)
+void GKissView::setCrtSimulation(QKiSS::CrtSimulationPreset preset)
 {
-    m_crtFilterEnabled = enabled;
-    // With the filter, a changed pixel also changes the glow around it. So repaint the whole viewport, not only the
+    m_crtSimulation = preset;
+    // With the filter, a changed pixel also changes the pixels around it. So repaint the whole viewport, not only the
     // changed items. This also makes scrolling repaint everything, instead of moving the old pixels.
     // Without the filter, go back to MinimalViewportUpdate, the default of QGraphicsView.
-    setViewportUpdateMode(enabled ? FullViewportUpdate : MinimalViewportUpdate);
-    viewport()->update();
+    const bool filtered = preset != QKiSS::CrtSimulationPreset::None;
+    setViewportUpdateMode(filtered ? FullViewportUpdate : MinimalViewportUpdate);
+    viewport()->update();   // Also when only the preset changes
 }
 
 GKissScene *GKissView::curKissScene()
@@ -308,7 +309,7 @@ void GKissView::wheelEvent(QWheelEvent *event)
 void GKissView::drawForeground(QPainter *painter, const QRectF &rect)
 {
     QGraphicsView::drawForeground(painter, rect);
-    if (!m_crtFilterEnabled || scene() == nullptr) { return; }
+    if (m_crtSimulation == QKiSS::CrtSimulationPreset::None || scene() == nullptr) { return; }
     // NOTE: QGraphicsView::paintEvent() has already painted the background and the items, and the filtered image covers
     // them. Don't override paintEvent() to skip that work. QGraphicsView::paintEvent() resets the "update all" flag of
     // the scene, which QGraphicsScene::update() sets (for example in setBackgroundBrush()). While that flag is set, the
@@ -348,7 +349,7 @@ void GKissView::drawCrtFilteredScene(QPainter *painter, const QRectF &rect, qrea
     framePainter.end();
     if (zoomedIn) {
         // The result is at device resolution, so the painter scales it by about 1 (exactly 1 at a whole-number zoom).
-        frame = CrtFilter::render(frame, sourceRect.topLeft(), devicePixelsPerKissPixel);
+        frame = CrtFilter::render(frame, sourceRect.topLeft(), devicePixelsPerKissPixel, m_crtSimulation);
     } else {
         // Scaled like the items: smoothly only at a zoom that is not a whole number. See setScaleModeForAllItems().
         CrtFilter::apply(frame);

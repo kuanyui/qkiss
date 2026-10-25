@@ -53,6 +53,17 @@ public:
         /// Libarchive
         Libarchive,
     };
+    /// The preset of View > CRT Simulation. See CrtFilter. The numbers are saved in the settings file, so don't change them.
+    enum class CrtSimulationPreset {
+        /// Off
+        None = 0,
+        /// Copies CRT-Royale: every pixel stays sharp, and the colors have more contrast.
+        Sharp = 1,
+        /// Like Sharp, but neighboring pixels blend, so a checkerboard becomes one color.
+        Soft = 2,
+        /// Our own look: neighboring pixels blend, the colors stay the same, and bright areas glow.
+        Glow = 3,
+    };
     static const QStringList encodingNames() {
         return {
             tr("ASCII"),
@@ -65,6 +76,14 @@ public:
         return {
             { QKiSS::Case::Insensitive, tr("Case Insensitive") },
             { QKiSS::Case::Sensitive, tr("Case Sensitive") },
+        };
+    }
+    static const QList<QPair<CrtSimulationPreset, QString>> crtSimulationPresetNames() {
+        return {
+            { QKiSS::CrtSimulationPreset::None, tr("None") },
+            { QKiSS::CrtSimulationPreset::Sharp, tr("Sharp") },
+            { QKiSS::CrtSimulationPreset::Soft, tr("Soft") },
+            { QKiSS::CrtSimulationPreset::Glow, tr("Glow") },
         };
     }
 };

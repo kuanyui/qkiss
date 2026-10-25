@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/crt-royale">
+        <file alias="slot-mask.png">TileableLinearSlotMaskTall15Wide9And4d5Horizontal9d14VerticalSpacingResizeTo64.png</file>
+    </qresource>
+</RCC>

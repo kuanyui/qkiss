@@ -26,6 +26,7 @@
 #include <QWidget>
 #include "gkissscene.h"
 #include "gkissitem.h"
+#include "enums.h"
 
 class GKissView : public QGraphicsView
 {
@@ -40,8 +41,9 @@ public:
     bool showKissSceneByIndex(uint8_t setIndex);
     void scaleAbs(qreal targetScale);
     void setScaleModeForAllItems();
-    /// Makes the view look like a CRT monitor: neighboring pixels blend, and bright areas glow. See CrtFilter.
-    void setCrtFilterEnabled(bool enabled);
+    /// Makes the view look like a CRT monitor, in the preset `preset` (View > CRT Simulation). None turns it off.
+    /// See CrtFilter.
+    void setCrtSimulation(QKiSS::CrtSimulationPreset preset);
     GKissScene *curKissScene();
     /** create scenes & items according to current CNF. */
     bool renderCurCnfAllSets();
@@ -75,7 +77,7 @@ private:
     uint8_t m_curSceneIdx = 0;
     GKissItem *m_curHoveredCelItem;
     QList<QMetaObject::Connection> m_connectionsOfArchiveFile;
-    bool m_crtFilterEnabled = false;
+    QKiSS::CrtSimulationPreset m_crtSimulation = QKiSS::CrtSimulationPreset::None;
 
 
 };
