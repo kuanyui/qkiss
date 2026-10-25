@@ -35,10 +35,14 @@ class CrtFilter
 public:
     /// How far the glow reaches, in KiSS pixels. The other values that change the look are at the top of crtfilter.cpp.
     static constexpr int GLOW_RADIUS = 6;
-    /// How far one pixel can change other pixels, in KiSS pixels: 1 for the beam, GLOW_RADIUS for the glow, and 1 more
-    /// because render() interpolates the glow between pixels. In apply(), a pixel changes only when a pixel of another
-    /// color is within this distance.
-    static constexpr int REACH = 1 + GLOW_RADIUS + 1;
+    /// How far colors bleed to the left and right, in KiSS pixels, like on a TV with an S-Video cable. 0 turns this off.
+    /// The cable carries the brightness and the color on separate wires, and the color wire carries much less detail.
+    /// So a small red dot becomes a short red streak, while the edges between bright and dark stay sharp.
+    static constexpr int SVIDEO_RADIUS = 2;
+    /// How far one pixel can change other pixels, in KiSS pixels: SVIDEO_RADIUS for the S-Video cable, 1 for the beam,
+    /// GLOW_RADIUS for the glow, and 1 more because render() interpolates the glow between pixels. In apply(), a pixel
+    /// changes only when a pixel of another color is within this distance.
+    static constexpr int REACH = SVIDEO_RADIUS + 1 + GLOW_RADIUS + 1;
     /// Use render() from this many device pixels per KiSS pixel, and apply() below it. A scanline needs at least 2 rows
     /// of device pixels: a bright one and a darker one.
     static constexpr qreal MIN_RENDER_SCALE = 2;
@@ -46,12 +50,15 @@ public:
     /// For a small zoom: filters `image` in place, so that neighboring pixels blend and bright areas glow.
     /// `image` must be QImage::Format_RGB32, with one KiSS pixel per image pixel.
     static void apply(QImage &image);
-    /// For a large zoom: returns `image` as a CRT shows it, at device resolution. The result is
-    /// `devicePixelsPerKissPixel` times as wide and as tall as `image` (QImage::Format_RGB32, one KiSS pixel per pixel).
+    /// For a large zoom: returns `image` as a CRT shows it, at device resolution. `image` must be QImage::Format_RGB32,
+    /// with one KiSS pixel per image pixel. The result is `devicePixelsPerKissPixel` times as wide and as tall, with one
+    /// device pixel per image pixel.
     /// - Each pixel is a spot of light that spreads to the left and right. A bright spot reaches into darker neighbors.
-    /// - Each row of pixels is a scanline, brightest in its middle. A bright scanline is thicker than a dark one.
+    /// - Each row of pixels is a scanline, brightest in its middle. A bright scanline is thicker than a dark one, and a
+    ///   thin scanline is brighter in its middle, so the scanlines don't make the picture darker.
     /// - From 3 device pixels per KiSS pixel, there are red, green and blue phosphor stripes. Each stripe is a whole
     ///   number of device pixels wide, and the 3 colors together are at most 1 KiSS pixel wide.
+    /// - Light above full brightness can't be shown, so it spreads to the pixels around it.
     /// - The glow comes last, so the scanlines and the stripes don't cover it.
     /// `topLeft` is the scene position of `image`, in KiSS pixels. It keeps the stripes in place when the view scrolls.
     static QImage render(const QImage &image, QPoint topLeft, qreal devicePixelsPerKissPixel);
