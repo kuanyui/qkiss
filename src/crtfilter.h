@@ -21,6 +21,8 @@
 #define CRTFILTER_H
 
 #include <QImage>
+#include <cstdint>
+#include <vector>
 #include "enums.h"
 
 /**
@@ -72,6 +74,89 @@ public:
     /// place when the view scrolls.
     static QImage render(const QImage &image, QPoint topLeft, qreal devicePixelsPerKissPixel,
                          QKiSS::CrtSimulationPreset preset);
+
+    /// The kernels, tables and other numbers of apply() and render(), computed once. CrtFilterGL needs them to do the
+    /// same work on the graphics card. The values that change the look are at the top of crtfilter.cpp.
+    /// A kernel holds the weights of a blur, from left to right (or from top to bottom): 2 * radius + 1 weights.
+    struct LookData
+    {
+        /// apply() and every preset: the blur of the S-Video cable, at KiSS resolution. Empty when SVIDEO_RADIUS is 0.
+        std::vector<float> sVideoKernel;
+
+        // apply() and Glow
+        /// The beam blend, at KiSS resolution. Soft uses it too.
+        std::vector<float> beamKernel;
+        /// The glow around bright areas: its blur at KiSS resolution, and how strong it is.
+        std::vector<float> glowKernel;
+        float glowAmount = 0;
+        /// Linear light -> sRGB value (0 ~ 255), like linearToSrgb() in crtfilter.cpp: the light is cut off to 0 ~ 1
+        /// and rounded to one of srgbTable.size() even steps, which are the indexes of this table.
+        std::vector<uint8_t> srgbTable;
+
+        // Glow and Soft: the spots
+        /// The sigma of a spot for black and for full brightness, in KiSS pixels.
+        float spotSigmaDark = 0;
+        float spotSigmaBright = 0;
+        /// How much of a Gaussian with sigma 1 lies to the left of t, for t = -gaussianCdfMax ~ gaussianCdfMax in
+        /// gaussianCdf.size() - 1 even steps. Between two steps, the value is interpolated.
+        std::vector<float> gaussianCdf;
+        float gaussianCdfMax = 0;
+
+        // Every preset: the scanlines
+        /// A table of the scanlines, for the brightness levels 0 (black) ~ scanlineLevels (full brightness). For each
+        /// level: alpha, the width of the scanline in rows of KiSS pixels, and the share of its light between its
+        /// middle and t * alpha rows below it, for t = 0 ~ scanlineTMax in scanlineSteps steps.
+        struct ScanlineTable
+        {
+            std::vector<float> alpha;   // scanlineLevels + 1 values
+            std::vector<float> share;   // scanlineLevels + 1 rows of scanlineSteps + 1 values
+        };
+        int scanlineLevels = 0;
+        int scanlineSteps = 0;
+        float scanlineTMax = 0;
+        ScanlineTable glowScanlines;   // For Glow
+        ScanlineTable royaleScanlines;   // For Sharp and Soft, as wide as in CRT-Royale
+
+        // Glow: the phosphor stripes (see also stripeWidth() and stripeCompensation())
+        /// How much light of the other two colors a stripe lets through.
+        float stripeOtherLight = 0;
+
+        // Sharp and Soft, which copy CRT-Royale
+        /// The gamma of the CRT.
+        float crtGamma = 0;
+        /// The two blurred copies of the light, at KiSS resolution: the light around each pixel, and the light that
+        /// scatters in the glass of the screen.
+        std::vector<float> areaKernel;
+        std::vector<float> diffusionKernel;
+        /// The slot mask: a square tile of maskSize x maskSize device pixels, which repeats across the screen. For each
+        /// pixel, row by row: the share of its red, green and blue light that the mask lets through (0 ~ 1).
+        int maskSize = 0;
+        std::vector<float> mask;
+        /// How much light the mask lets through on average.
+        float maskAverage = 0;
+        /// The bloom, which gives back the light that the mask takes away: the share of the light that it counts, the
+        /// weight of the middle pixel of its blur, and its blur, at device resolution.
+        float bloomUnderestimate = 0;
+        float bloomCenterWeight = 0;
+        std::vector<float> bloomKernel;
+        /// How much of the light scatters in the glass of the screen.
+        float diffusionWeight = 0;
+        /// The gamma of the screen that shows the picture now.
+        float lcdGamma = 0;
+    };
+    /// See LookData.
+    static const LookData &lookData();
+    /// Where the middle of each scanline is, inside its row of KiSS pixels (0 ~ 1), at the zoom `scale` (device pixels
+    /// per KiSS pixel). render() uses it for every preset. See crtfilter.cpp.
+    static float scanlineMiddle(float scale);
+    /// render() for Glow: how wide each phosphor stripe is at the zoom `scale`, in device pixels. 0 means no stripes.
+    static int stripeWidth(float scale);
+    /// render() for Glow: the stripes take away light of the other colors. Multiplying the light by this number adds it
+    /// back, so that the picture keeps its brightness. `stripeWidth` comes from stripeWidth(). Without stripes, this
+    /// number is 1.
+    static float stripeCompensation(int stripeWidth);
+    /// render() for Glow: the blur of the bloom at the zoom `scale`, at device resolution. Empty without the bloom.
+    static std::vector<float> glowBloomKernel(float scale);
 };
 
 #endif // CRTFILTER_H

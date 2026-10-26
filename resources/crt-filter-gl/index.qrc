@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/crt-filter-gl">
+        <file>fullscreen.vert</file>
+        <file>common.glsl</file>
+        <file>video.frag</file>
+        <file>blur.frag</file>
+        <file>halo.frag</file>
+        <file>spots.frag</file>
+        <file>scanlines.frag</file>
+        <file>screen.frag</file>
+        <file>stripes.frag</file>
+        <file>royaleresult.frag</file>
+        <file>glowresult.frag</file>
+        <file>apply.frag</file>
+    </qresource>
+</RCC>

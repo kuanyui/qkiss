@@ -128,8 +128,8 @@ float srgbToLinear(float c)
     return (c <= 0.04045f) ? c / 12.92f : std::pow((c + 0.055f) / 1.055f, 2.4f);
 }
 
-/// Linear light (any value; it is clamped to 0.0 ~ 1.0) -> sRGB value (0 ~ 255).
-uint8_t linearToSrgb(float light)
+/// The table of linearToSrgb(): the sRGB value (0 ~ 255) of each of the LINEAR_LEVELS steps of linear light.
+const std::array<uint8_t, LINEAR_LEVELS> &srgbTable()
 {
     static const std::array<uint8_t, LINEAR_LEVELS> table = [] {
         std::array<uint8_t, LINEAR_LEVELS> t {};
@@ -140,22 +140,40 @@ uint8_t linearToSrgb(float light)
         }
         return t;
     }();
-    return table[std::clamp(int(light * (LINEAR_LEVELS - 1) + 0.5f), 0, LINEAR_LEVELS - 1)];
+    return table;
+}
+
+/// Linear light (any value; it is clamped to 0.0 ~ 1.0) -> sRGB value (0 ~ 255).
+uint8_t linearToSrgb(float light)
+{
+    return srgbTable()[std::clamp(int(light * (LINEAR_LEVELS - 1) + 0.5f), 0, LINEAR_LEVELS - 1)];
+}
+
+/// The table of gaussianCdf() has GAUSSIAN_CDF_STEPS + 1 values, for t = -GAUSSIAN_CDF_MAX ~ GAUSSIAN_CDF_MAX.
+constexpr int GAUSSIAN_CDF_STEPS = 1024;
+constexpr float GAUSSIAN_CDF_MAX = 4;
+
+/// The table of gaussianCdf().
+const std::array<float, GAUSSIAN_CDF_STEPS + 1> &gaussianCdfTable()
+{
+    static const std::array<float, GAUSSIAN_CDF_STEPS + 1> table = [] {
+        std::array<float, GAUSSIAN_CDF_STEPS + 1> c {};
+        for (int i = 0; i <= GAUSSIAN_CDF_STEPS; i++) {
+            const float t = -GAUSSIAN_CDF_MAX + 2 * GAUSSIAN_CDF_MAX * i / GAUSSIAN_CDF_STEPS;
+            c[i] = 0.5f * (1 + std::erf(t / std::sqrt(2.0f)));
+        }
+        return c;
+    }();
+    return table;
 }
 
 /// How much of a Gaussian with sigma 1 lies to the left of `t`: 0 ~ 1.
 float gaussianCdf(float t)
 {
-    constexpr int STEPS = 1024;   // Over t = -4 ~ 4
-    static const std::array<float, STEPS + 1> table = [] {
-        std::array<float, STEPS + 1> c {};
-        for (int i = 0; i <= STEPS; i++) {
-            c[i] = 0.5f * (1 + std::erf((-4 + 8.0f * i / STEPS) / std::sqrt(2.0f)));
-        }
-        return c;
-    }();
-    const float position = (std::clamp(t, -4.0f, 4.0f) + 4) * (STEPS / 8.0f);
-    const int i = std::min(int(position), STEPS - 1);
+    const std::array<float, GAUSSIAN_CDF_STEPS + 1> &table = gaussianCdfTable();
+    const float position = (std::clamp(t, -GAUSSIAN_CDF_MAX, GAUSSIAN_CDF_MAX) + GAUSSIAN_CDF_MAX)
+                         * (GAUSSIAN_CDF_STEPS / (2 * GAUSSIAN_CDF_MAX));
+    const int i = std::min(int(position), GAUSSIAN_CDF_STEPS - 1);
     return table[i] + (position - i) * (table[i + 1] - table[i]);
 }
 
@@ -223,6 +241,20 @@ void blurColumns(const std::vector<float> &src, std::vector<float> &dst, int wid
 /// The shift of red, green and blue (0, 1, 2) in a QRgb.
 constexpr int shiftOf(int color) { return 16 - 8 * color; }
 
+/// The weights of the blur of the S-Video cable in videoSignal(). Only for CrtFilter::SVIDEO_RADIUS > 0.
+const std::vector<float> &sVideoKernel()
+{
+    static const std::vector<float> kernel = gaussianKernel(CrtFilter::SVIDEO_RADIUS);
+    return kernel;
+}
+
+/// The weights of the blur of the glow in computeBeamAndHalo().
+const std::vector<float> &glowKernel()
+{
+    static const std::vector<float> kernel = gaussianKernel(CrtFilter::GLOW_RADIUS);
+    return kernel;
+}
+
 /// The sRGB values of `image` (0.0 ~ 1.0), as the video signal brings them to the CRT. With CrtFilter::SVIDEO_RADIUS,
 /// the signal comes through an S-Video cable, so the colors bleed to the left and right.
 /// The cable carries the brightness (luma) and the color differences (red - luma, blue - luma), and only the color
@@ -244,7 +276,7 @@ Planes videoSignal(const QImage &image)
         }
     }
     if constexpr (CrtFilter::SVIDEO_RADIUS > 0) {
-        static const std::vector<float> kernel = gaussianKernel(CrtFilter::SVIDEO_RADIUS);
+        const std::vector<float> &kernel = sVideoKernel();
         auto &[red, green, blue] = signal;
         std::vector<float> luma(pixelCount);
         for (qsizetype i = 0; i < pixelCount; i++) {
@@ -276,27 +308,24 @@ Planes videoSignal(const QImage &image)
 
 /// Steps of brightness in the table of scanlineShare(): 0 (black) ~ SCANLINE_LEVELS (full brightness).
 constexpr int SCANLINE_LEVELS = 256;
+/// The table of scanlineShare() goes from t = 0 to T_MAX in T_STEPS steps, where t = |distance| / alpha.
+constexpr float T_MAX = 6;   // Beyond |distance| = 6 * alpha, no light is left.
+constexpr int T_STEPS = 600;
 
-/// render() only: the share of a scanline's light that lies between its middle and `distance` rows of KiSS pixels
-/// below it: 0 ~ 0.5. For a negative `distance` (above the middle), the share is negative. `level` is the brightness of
-/// the scanline: 0 ~ SCANLINE_LEVELS.
-/// Like the beam of CRT-Royale, a scanline fades like a generalized Gaussian, exp(-(|distance| / alpha) ^ shape), and
-/// all of its light adds up to its brightness. So a thin scanline is brighter in its middle, and the scanlines don't
-/// make the picture darker. See SCANLINE_SIGMA_DARK and SCANLINE_SHAPE_DARK. For Sharp and Soft (`preset`), the
-/// scanlines are as wide as in CRT-Royale (ROYALE_SCANLINE_SIGMA_DARK and ROYALE_SCANLINE_SIGMA_BRIGHT).
-float scanlineShare(int level, float distance, QKiSS::CrtSimulationPreset preset)
+/// The table of scanlineShare().
+struct ScanlineTable
 {
-    constexpr float T_MAX = 6;   // Beyond |distance| = 6 * alpha, no light is left.
-    constexpr int T_STEPS = 600;
-    struct Table
-    {
-        std::array<float, SCANLINE_LEVELS + 1> alpha {};   // In rows of KiSS pixels
-        /// For each level: the share between the middle and t * alpha rows below it, for t = 0 ~ T_MAX.
-        std::vector<std::array<float, T_STEPS + 1>> share = std::vector<std::array<float, T_STEPS + 1>>(SCANLINE_LEVELS + 1);
-    };
+    std::array<float, SCANLINE_LEVELS + 1> alpha {};   // In rows of KiSS pixels
+    /// For each level: the share between the middle and t * alpha rows below it, for t = 0 ~ T_MAX.
+    std::vector<std::array<float, T_STEPS + 1>> share = std::vector<std::array<float, T_STEPS + 1>>(SCANLINE_LEVELS + 1);
+};
+
+/// The table of scanlineShare() for `preset` (see there).
+const ScanlineTable &scanlineTable(QKiSS::CrtSimulationPreset preset)
+{
     // The table for scanlines with the sigma `sigmaDark` for black and `sigmaBright` for full brightness
     const auto makeTable = [](float sigmaDark, float sigmaBright) {
-        Table t;
+        ScanlineTable t;
         for (int level = 0; level <= SCANLINE_LEVELS; level++) {
             const float brightness = float(level) / SCANLINE_LEVELS;
             const float sigma = sigmaDark + (sigmaBright - sigmaDark) * std::pow(brightness, SCANLINE_SIGMA_POWER);
@@ -322,9 +351,21 @@ float scanlineShare(int level, float distance, QKiSS::CrtSimulationPreset preset
         }
         return t;
     };
-    static const Table ourTable = makeTable(SCANLINE_SIGMA_DARK, SCANLINE_SIGMA_BRIGHT);
-    static const Table royaleTable = makeTable(ROYALE_SCANLINE_SIGMA_DARK, ROYALE_SCANLINE_SIGMA_BRIGHT);
-    const Table &table = (preset == QKiSS::CrtSimulationPreset::Glow) ? ourTable : royaleTable;
+    static const ScanlineTable ourTable = makeTable(SCANLINE_SIGMA_DARK, SCANLINE_SIGMA_BRIGHT);
+    static const ScanlineTable royaleTable = makeTable(ROYALE_SCANLINE_SIGMA_DARK, ROYALE_SCANLINE_SIGMA_BRIGHT);
+    return (preset == QKiSS::CrtSimulationPreset::Glow) ? ourTable : royaleTable;
+}
+
+/// render() only: the share of a scanline's light that lies between its middle and `distance` rows of KiSS pixels
+/// below it: 0 ~ 0.5. For a negative `distance` (above the middle), the share is negative. `level` is the brightness of
+/// the scanline: 0 ~ SCANLINE_LEVELS.
+/// Like the beam of CRT-Royale, a scanline fades like a generalized Gaussian, exp(-(|distance| / alpha) ^ shape), and
+/// all of its light adds up to its brightness. So a thin scanline is brighter in its middle, and the scanlines don't
+/// make the picture darker. See SCANLINE_SIGMA_DARK and SCANLINE_SHAPE_DARK. For Sharp and Soft (`preset`), the
+/// scanlines are as wide as in CRT-Royale (ROYALE_SCANLINE_SIGMA_DARK and ROYALE_SCANLINE_SIGMA_BRIGHT).
+float scanlineShare(int level, float distance, QKiSS::CrtSimulationPreset preset)
+{
+    const ScanlineTable &table = scanlineTable(preset);
     const float t = std::abs(distance) / table.alpha[level] * (T_STEPS / T_MAX);   // In steps of the table
     if (t >= T_STEPS) { return std::copysign(0.5f, distance); }
     const int step = int(t);
@@ -340,7 +381,6 @@ void computeBeamAndHalo(const QImage &image, Planes &beam, Planes &halo)
     const int width = image.width();
     const int height = image.height();
     const qsizetype pixelCount = qsizetype(width) * height;
-    static const std::vector<float> glowKernel = gaussianKernel(CrtFilter::GLOW_RADIUS);
     Planes light = videoSignal(image);
     std::vector<float> blurredRows(pixelCount);
     std::vector<float> glow(pixelCount);
@@ -351,8 +391,8 @@ void computeBeamAndHalo(const QImage &image, Planes &beam, Planes &halo)
         beam[color].resize(pixelCount);
         halo[color].resize(pixelCount);
         blurRows(light[color], beam[color], width, height, BEAM_KERNEL);
-        blurRows(beam[color], blurredRows, width, height, glowKernel);
-        blurColumns(blurredRows, glow, width, height, glowKernel);
+        blurRows(beam[color], blurredRows, width, height, glowKernel());
+        blurColumns(blurredRows, glow, width, height, glowKernel());
         for (qsizetype i = 0; i < pixelCount; i++) {
             halo[color][i] = std::max(0.0f, glow[i] - beam[color][i]);
         }
@@ -366,14 +406,7 @@ void computeBeamAndHalo(const QImage &image, Planes &beam, Planes &halo)
 Planes addScanlines(const Planes &rows, int columns, int height, int outHeight, float scale,
                     QKiSS::CrtSimulationPreset preset)
 {
-    // Where the middle of each scanline is, inside its row of KiSS pixels (0 ~ 1). At a whole-number zoom, it is the
-    // middle of a row of device pixels, so that each scanline has a brightest row of device pixels. (At 200%, the middle
-    // of the KiSS row would lie between its 2 rows of device pixels and light both of them equally: no gaps at all.)
-    // GKissView passes an image that starts at a whole KiSS pixel, so the rows of device pixels start at a KiSS row, and
-    // the scanlines stay in place.
-    const float wholeScale = std::round(scale);
-    const float scanlineMiddle =
-        (std::abs(scale - wholeScale) < 0.001f) ? (std::floor((wholeScale - 1) / 2) + 0.5f) / wholeScale : 0.5f;
+    const float scanlineMiddle = CrtFilter::scanlineMiddle(scale);
     const float outRowHeight = 1 / scale;   // In rows of KiSS pixels
     Planes result;
     for (std::vector<float> &channel : result) {
@@ -548,18 +581,17 @@ QImage renderRoyale(const QImage &image, QPoint topLeft, float scale, QKiSS::Crt
     }
     // Two blurred copies of the light, at KiSS resolution: the light around each pixel (for the bloom in 3.) and the
     // light that scatters in the glass (in 4.).
-    static const std::vector<float> areaKernel = gaussianKernel(ROYALE_AREA_RADIUS, ROYALE_AREA_SIGMA);
-    static const std::vector<float> diffusionKernel = gaussianKernel(CrtFilter::DIFFUSION_RADIUS);
+    const CrtFilter::LookData &data = CrtFilter::lookData();
     Planes area;
     Planes diffusion;
     std::vector<float> blurredRows(pixelCount);
     for (int color = 0; color < 3; color++) {
         area[color].resize(pixelCount);
         diffusion[color].resize(pixelCount);
-        blurRows(light[color], blurredRows, width, height, areaKernel);
-        blurColumns(blurredRows, area[color], width, height, areaKernel);
-        blurRows(light[color], blurredRows, width, height, diffusionKernel);
-        blurColumns(blurredRows, diffusion[color], width, height, diffusionKernel);
+        blurRows(light[color], blurredRows, width, height, data.areaKernel);
+        blurColumns(blurredRows, area[color], width, height, data.areaKernel);
+        blurRows(light[color], blurredRows, width, height, data.diffusionKernel);
+        blurColumns(blurredRows, diffusion[color], width, height, data.diffusionKernel);
     }
 
     // 2. The scanlines, in each column of KiSS pixels. Then the light spreads to the left and right, to each column of
@@ -626,15 +658,7 @@ QImage renderRoyale(const QImage &image, QPoint topLeft, float scale, QKiSS::Crt
     const int firstColumn = qRound(topLeft.x() * scale);
     const int firstRow = qRound(topLeft.y() * scale);
     const float amplify = 1 / ROYALE_MASK_AVERAGE;
-    // The sigma of the blur, in device pixels: just enough to blur a triad into one even color (within 1/256)
-    // [get_min_sigma_to_blur_triad()]. CRT-Royale found this formula by fitting a curve.
-    const float bloomSigma =
-        -0.05168f + 0.6113f * ROYALE_TRIAD_SIZE - 1.122f * ROYALE_TRIAD_SIZE * std::sqrt(0.000416f + 1 / 256.0f);
-    // The weight of the middle pixel of the blur in one direction [get_center_weight()], also from a fitted curve.
-    // CRT-Royale uses it like this with its default settings. (Without runtime settings, it uses the square of this
-    // weight instead: the weight in both directions. The curve also has a second part, which matters only for much
-    // smaller blurs.)
-    const float centerWeight = 0.399334576340352f / bloomSigma;
+    const float centerWeight = data.bloomCenterWeight;
     Planes brightpass;
     for (int color = 0; color < 3; color++) {
         brightpass[color].resize(outPixelCount);
@@ -664,12 +688,11 @@ QImage renderRoyale(const QImage &image, QPoint topLeft, float scale, QKiSS::Crt
             }
         }
     }
-    static const std::vector<float> bloomKernel = gaussianKernel(ROYALE_BLOOM_RADIUS, bloomSigma);
     std::vector<float> blurredOutRows(outPixelCount);
     std::vector<float> bloom(outPixelCount);
     for (int color = 0; color < 3; color++) {
-        blurRows(brightpass[color], blurredOutRows, outWidth, outHeight, bloomKernel);
-        blurColumns(blurredOutRows, bloom, outWidth, outHeight, bloomKernel);
+        blurRows(brightpass[color], blurredOutRows, outWidth, outHeight, data.bloomKernel);
+        blurColumns(blurredOutRows, bloom, outWidth, outHeight, data.bloomKernel);
         for (qsizetype i = 0; i < outPixelCount; i++) {
             screen[color][i] = (screen[color][i] - brightpass[color][i] + bloom[i]) * amplify;
         }
@@ -764,12 +787,10 @@ QImage CrtFilter::render(const QImage &image, QPoint topLeft, qreal devicePixels
     // 2. The scanlines (see addScanlines()). Then come the phosphor stripes.
     const qsizetype outPixelCount = qsizetype(outWidth) * outHeight;
     Planes screen = addScanlines(rowLight, outWidth, height, outHeight, scale, preset);   // The light on the screen, before the bloom and the glow
-    // Each stripe is a whole number of device pixels, and the 3 colors are equally wide.
-    // Otherwise one color would cover more device pixels than the others, and the whole picture would get its tint.
-    const int stripeWidth = int(scale / 3);   // 0: no stripes
+    const int stripeWidth = CrtFilter::stripeWidth(scale);   // 0: no stripes
     const int firstColumn = qRound(topLeft.x() * scale);   // Counted from x = 0 of the scene, so the stripes stay in place
     // The stripes take away light of the other colors. Add it back, so that the picture keeps its brightness.
-    const float stripeCompensation = (stripeWidth > 0) ? 3 / (1 + 2 * STRIPE_OTHER_LIGHT) : 1;
+    const float stripeCompensation = CrtFilter::stripeCompensation(stripeWidth);
     for (int y = 0; y < outHeight; y++) {
         for (int x = 0; x < outWidth; x++) {
             int stripeColor = -1;   // Red, green or blue (0, 1, 2), or -1 without stripes
@@ -790,9 +811,8 @@ QImage CrtFilter::render(const QImage &image, QPoint topLeft, qreal devicePixels
     // 3. Light above full brightness can't be shown. Like the bloom of CRT-Royale, it spreads to the pixels around it
     //    instead of being cut off. So bright areas keep their brightness, and the light fills the dark gaps between their
     //    scanlines and stripes.
-    const int bloomRadius = int(std::ceil(3 * BLOOM_SIGMA * scale));   // In device pixels. gaussianKernel(): sigma = radius / 3
-    if (bloomRadius > 0) {
-        const std::vector<float> bloomKernel = gaussianKernel(bloomRadius);
+    const std::vector<float> bloomKernel = CrtFilter::glowBloomKernel(scale);
+    if (!bloomKernel.empty()) {
         std::vector<float> excess(outPixelCount);
         std::vector<float> blurredRows(outPixelCount);
         std::vector<float> bloom(outPixelCount);
@@ -838,4 +858,90 @@ QImage CrtFilter::render(const QImage &image, QPoint topLeft, qreal devicePixels
         }
     }
     return result;
+}
+
+const CrtFilter::LookData &CrtFilter::lookData()
+{
+    static const LookData data = [] {
+        LookData d;
+        if constexpr (SVIDEO_RADIUS > 0) {
+            d.sVideoKernel = sVideoKernel();
+        }
+        d.beamKernel.assign(BEAM_KERNEL.begin(), BEAM_KERNEL.end());
+        d.glowKernel = glowKernel();
+        d.glowAmount = GLOW_AMOUNT;
+        d.srgbTable.assign(srgbTable().begin(), srgbTable().end());
+        d.spotSigmaDark = SPOT_SIGMA_DARK;
+        d.spotSigmaBright = SPOT_SIGMA_BRIGHT;
+        d.gaussianCdf.assign(gaussianCdfTable().begin(), gaussianCdfTable().end());
+        d.gaussianCdfMax = GAUSSIAN_CDF_MAX;
+        d.scanlineLevels = SCANLINE_LEVELS;
+        d.scanlineSteps = T_STEPS;
+        d.scanlineTMax = T_MAX;
+        const auto copyTable = [](const auto &table) {
+            LookData::ScanlineTable t;
+            t.alpha.assign(table.alpha.begin(), table.alpha.end());
+            for (const auto &share : table.share) {
+                t.share.insert(t.share.end(), share.begin(), share.end());
+            }
+            return t;
+        };
+        d.glowScanlines = copyTable(scanlineTable(QKiSS::CrtSimulationPreset::Glow));
+        d.royaleScanlines = copyTable(scanlineTable(QKiSS::CrtSimulationPreset::Sharp));
+        d.stripeOtherLight = STRIPE_OTHER_LIGHT;
+        d.crtGamma = ROYALE_CRT_GAMMA;
+        d.areaKernel = gaussianKernel(ROYALE_AREA_RADIUS, ROYALE_AREA_SIGMA);
+        d.diffusionKernel = gaussianKernel(DIFFUSION_RADIUS);
+        const MaskTile &mask = royaleMask();
+        d.maskSize = mask.size;
+        for (qsizetype i = 0; i < qsizetype(mask.size) * mask.size; i++) {
+            for (const std::vector<float> &channel : mask.light) {
+                d.mask.push_back(channel[i]);
+            }
+        }
+        d.maskAverage = ROYALE_MASK_AVERAGE;
+        d.bloomUnderestimate = ROYALE_BLOOM_UNDERESTIMATE;
+        // The sigma of the blur of the bloom, in device pixels: just enough to blur a triad into one even color (within
+        // 1/256) [get_min_sigma_to_blur_triad()]. CRT-Royale found this formula by fitting a curve.
+        const float bloomSigma =
+            -0.05168f + 0.6113f * ROYALE_TRIAD_SIZE - 1.122f * ROYALE_TRIAD_SIZE * std::sqrt(0.000416f + 1 / 256.0f);
+        // The weight of the middle pixel of the blur in one direction [get_center_weight()], also from a fitted curve.
+        // CRT-Royale uses it like this with its default settings. (Without runtime settings, it uses the square of this
+        // weight instead: the weight in both directions. The curve also has a second part, which matters only for much
+        // smaller blurs.)
+        d.bloomCenterWeight = 0.399334576340352f / bloomSigma;
+        d.bloomKernel = gaussianKernel(ROYALE_BLOOM_RADIUS, bloomSigma);
+        d.diffusionWeight = ROYALE_DIFFUSION_WEIGHT;
+        d.lcdGamma = ROYALE_LCD_GAMMA;
+        return d;
+    }();
+    return data;
+}
+
+float CrtFilter::scanlineMiddle(float scale)
+{
+    // At a whole-number zoom, it is the middle of a row of device pixels, so that each scanline has a brightest row of
+    // device pixels. (At 200%, the middle of the KiSS row would lie between its 2 rows of device pixels and light both
+    // of them equally: no gaps at all.) GKissView passes an image that starts at a whole KiSS pixel, so the rows of
+    // device pixels start at a KiSS row, and the scanlines stay in place.
+    const float wholeScale = std::round(scale);
+    return (std::abs(scale - wholeScale) < 0.001f) ? (std::floor((wholeScale - 1) / 2) + 0.5f) / wholeScale : 0.5f;
+}
+
+int CrtFilter::stripeWidth(float scale)
+{
+    // Each stripe is a whole number of device pixels, and the 3 colors are equally wide.
+    // Otherwise one color would cover more device pixels than the others, and the whole picture would get its tint.
+    return int(scale / 3);
+}
+
+float CrtFilter::stripeCompensation(int stripeWidth)
+{
+    return (stripeWidth > 0) ? 3 / (1 + 2 * STRIPE_OTHER_LIGHT) : 1;
+}
+
+std::vector<float> CrtFilter::glowBloomKernel(float scale)
+{
+    const int radius = int(std::ceil(3 * BLOOM_SIGMA * scale));   // In device pixels. gaussianKernel(): sigma = radius / 3
+    return (radius > 0) ? gaussianKernel(radius) : std::vector<float>();
 }

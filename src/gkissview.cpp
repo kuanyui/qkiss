@@ -171,6 +171,7 @@ void GKissView::setCrtSimulation(QKiSS::CrtSimulationPreset preset)
     // Without the filter, go back to MinimalViewportUpdate, the default of QGraphicsView.
     const bool filtered = preset != QKiSS::CrtSimulationPreset::None;
     setViewportUpdateMode(filtered ? FullViewportUpdate : MinimalViewportUpdate);
+    if (!filtered) { m_crtFilterGL.freeBuffers(); }   // Until the CRT Simulation is turned on again
     viewport()->update();   // Also when only the preset changes
 }
 
@@ -349,10 +350,18 @@ void GKissView::drawCrtFilteredScene(QPainter *painter, const QRectF &rect, qrea
     framePainter.end();
     if (zoomedIn) {
         // The result is at device resolution, so the painter scales it by about 1 (exactly 1 at a whole-number zoom).
-        frame = CrtFilter::render(frame, sourceRect.topLeft(), devicePixelsPerKissPixel, m_crtSimulation);
+        // On the graphics card if possible, because it is much faster. CrtFilterGL returns a null image when it can't.
+        QImage rendered = m_crtFilterGL.render(frame, sourceRect.topLeft(), devicePixelsPerKissPixel, m_crtSimulation);
+        if (rendered.isNull()) {
+            rendered = CrtFilter::render(frame, sourceRect.topLeft(), devicePixelsPerKissPixel, m_crtSimulation);
+        }
+        frame = rendered;
     } else {
         // Scaled like the items: smoothly only at a zoom that is not a whole number. See setScaleModeForAllItems().
-        CrtFilter::apply(frame);
+        // On the graphics card if possible, like render().
+        if (!m_crtFilterGL.apply(frame)) {
+            CrtFilter::apply(frame);
+        }
     }
     painter->drawImage(QRectF(sourceRect), frame);
 }

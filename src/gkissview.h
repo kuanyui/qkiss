@@ -27,6 +27,7 @@
 #include "gkissscene.h"
 #include "gkissitem.h"
 #include "enums.h"
+#include "crtfiltergl.h"
 
 class GKissView : public QGraphicsView
 {
@@ -78,6 +79,8 @@ private:
     GKissItem *m_curHoveredCelItem;
     QList<QMetaObject::Connection> m_connectionsOfArchiveFile;
     QKiSS::CrtSimulationPreset m_crtSimulation = QKiSS::CrtSimulationPreset::None;
+    /// Does the work of CrtFilter::render() and CrtFilter::apply() on the graphics card, when it can.
+    CrtFilterGL m_crtFilterGL;
 
 
 };

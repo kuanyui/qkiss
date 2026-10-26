@@ -230,6 +230,7 @@ jobs:
             'cmake(Qt6Widgets)' \
             'cmake(Qt6Multimedia)' \
             'cmake(Qt6Concurrent)' \
+            'cmake(Qt6OpenGL)' \
             'cmake(Qt6LinguistTools)'
 
       # Step 2: Let the Makefile's `git rev-parse` (-> gitversion.cmake) work in later steps.
