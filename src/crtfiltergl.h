@@ -20,6 +20,7 @@
 #ifndef CRTFILTERGL_H
 #define CRTFILTERGL_H
 
+#include <QCoreApplication>
 #include <QElapsedTimer>
 #include <QImage>
 #include <functional>
@@ -49,6 +50,7 @@ class QOpenGLContext;
  */
 class CrtFilterGL
 {
+    Q_DECLARE_TR_FUNCTIONS(CrtFilterGL)
 public:
     CrtFilterGL();
     ~CrtFilterGL();

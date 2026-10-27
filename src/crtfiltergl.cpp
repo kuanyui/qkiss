@@ -82,8 +82,8 @@ std::unique_ptr<QOpenGLShaderProgram> createProgram(const QString &name, const Q
     if (!defines.isEmpty()) {
         shader += " ("_L1 + QString::fromLatin1(defines.trimmed()).remove(u"#define "_s).replace(u'\n', u", "_s) + u')';
     }
-    qkWarning.noquote() << QStringLiteral("[CRT Simulation] The OpenGL shader %1 failed, so the CRT Simulation runs on "
-                                          "the CPU:\n").arg(shader) + program->log();
+    qkWarning.noquote() << CrtFilterGL::tr("[CRT Simulation] The OpenGL shader %1 failed, so the CRT Simulation runs "
+                                           "on the CPU:").arg(shader) + u'\n' + program->log();
     return nullptr;
 }
 
@@ -558,7 +558,7 @@ QImage CrtFilterGL::run(const QImage &image, QSize resultSize, QLatin1StringView
 
     // 2. Draw the steps of CrtFilter. Each step draws into its own framebuffer.
     if (!drawSteps(objects)) {
-        stopUsingOpenGL(QStringLiteral("OpenGL can't create a framebuffer (%1)").arg(name));
+        stopUsingOpenGL(tr("OpenGL can't create a framebuffer (%1)").arg(name));
         return QImage();
     }
     // Wait until the graphics card has finished, so that the log can show the time of each step. This costs no time,
@@ -576,7 +576,7 @@ QImage CrtFilterGL::run(const QImage &image, QSize resultSize, QLatin1StringView
     // An error in any step above (for example, no memory for the texture, or a lost context) makes the result wrong.
     // OpenGL keeps an error until it is read, so one check here is enough.
     if (const GLenum error = gl->glGetError(); error != GL_NO_ERROR) {
-        stopUsingOpenGL(QStringLiteral("OpenGL error 0x%1 (%2)").arg(error, 4, 16, QChar(u'0')).arg(name));
+        stopUsingOpenGL(tr("OpenGL error 0x%1 (%2)").arg(error, 4, 16, QChar(u'0')).arg(name));
         return QImage();
     }
 
@@ -596,13 +596,13 @@ bool CrtFilterGL::init()
 {
     const QString renderer = qEnvironmentVariable("QKISS_RENDERER");
     if (renderer == "software"_L1) {
-        qkInfo.noquote() << "[CRT Simulation] QKISS_RENDERER is software, so the CRT Simulation runs on the CPU.";
+        qkInfo.noquote() << tr("[CRT Simulation] QKISS_RENDERER is software, so the CRT Simulation runs on the CPU.");
         return false;
     }
     const bool forced = renderer == "opengl"_L1;
     if (!forced && !renderer.isEmpty() && renderer != "auto"_L1) {
-        qkWarning.noquote() << QStringLiteral("[CRT Simulation] QKISS_RENDERER is \"%1\", but it can only be auto, "
-                                              "opengl or software. Using auto.").arg(renderer);
+        qkWarning.noquote() << tr("[CRT Simulation] QKISS_RENDERER is \"%1\", but it can only be auto, "
+                                  "opengl or software. Using auto.").arg(renderer);
     }
 
     // OpenGL 3.3 has everything that the shaders need. Graphics cards since about 2010 have it. The core profile leaves
@@ -622,14 +622,14 @@ bool CrtFilterGL::init()
     };
     if (!createContext(true)) { createContext(false); }
     if (!m_context->isValid()) {
-        qkInfo.noquote() << "[CRT Simulation] OpenGL is not available, so the CRT Simulation runs on the CPU.";
+        qkInfo.noquote() << tr("[CRT Simulation] OpenGL is not available, so the CRT Simulation runs on the CPU.");
         return false;
     }
     // The system can give an older version than asked for.
     const QSurfaceFormat actualFormat = m_context->format();
     if (m_context->isOpenGLES() || actualFormat.version() < qMakePair(3, 3)) {
-        qkInfo.noquote() << QStringLiteral("[CRT Simulation] It needs OpenGL 3.3, but this system has %1 %2.%3, so the "
-                                           "CRT Simulation runs on the CPU.")
+        qkInfo.noquote() << tr("[CRT Simulation] It needs OpenGL 3.3, but this system has %1 %2.%3, so the "
+                               "CRT Simulation runs on the CPU.")
                             .arg(m_context->isOpenGLES() ? "OpenGL ES"_L1 : "OpenGL"_L1)
                             .arg(actualFormat.majorVersion()).arg(actualFormat.minorVersion());
         return false;
@@ -638,7 +638,7 @@ bool CrtFilterGL::init()
     m_surface->setFormat(actualFormat);
     m_surface->create();
     if (!m_surface->isValid() || !m_context->makeCurrent(m_surface.get())) {
-        qkInfo.noquote() << "[CRT Simulation] OpenGL can't be used, so the CRT Simulation runs on the CPU.";
+        qkInfo.noquote() << tr("[CRT Simulation] OpenGL can't be used, so the CRT Simulation runs on the CPU.");
         return false;
     }
     const auto doneCurrent = qScopeGuard([this] { m_context->doneCurrent(); });
@@ -647,14 +647,14 @@ bool CrtFilterGL::init()
         return QString::fromUtf8(reinterpret_cast<const char *>(gl->glGetString(name)));
     };
     const QString rendererName = glString(GL_RENDERER);
-    qkInfo.noquote() << QStringLiteral("[CRT Simulation] OpenGL renderer: %1. Version: %2.")
+    qkInfo.noquote() << tr("[CRT Simulation] OpenGL renderer: %1. Version: %2.")
                         .arg(rendererName, glString(GL_VERSION));
     const bool runsOnCpu = std::ranges::any_of(SOFTWARE_RENDERERS, [&rendererName](const char *softwareRenderer) {
         return rendererName.contains(QLatin1StringView(softwareRenderer), Qt::CaseInsensitive);
     });
     if (runsOnCpu && !forced) {
-        qkInfo.noquote() << "[CRT Simulation] This OpenGL renderer has no 3D acceleration, so the CRT Simulation runs "
-                            "on the CPU without it. QKISS_RENDERER=opengl uses it anyway.";
+        qkInfo.noquote() << tr("[CRT Simulation] This OpenGL renderer has no 3D acceleration, so the CRT Simulation "
+                               "runs on the CPU without it. QKISS_RENDERER=opengl uses it anyway.");
         return false;
     }
 
@@ -762,8 +762,8 @@ bool CrtFilterGL::init()
     gl->glGenVertexArrays(1, &vertexArray);
     gl->glBindVertexArray(vertexArray);
     if (const GLenum error = gl->glGetError(); error != GL_NO_ERROR) {
-        qkWarning.noquote() << QStringLiteral("[CRT Simulation] OpenGL error 0x%1 while preparing, so the CRT Simulation "
-                                              "runs on the CPU.").arg(error, 4, 16, QChar(u'0'));
+        qkWarning.noquote() << tr("[CRT Simulation] OpenGL error 0x%1 while preparing, so the CRT Simulation "
+                                  "runs on the CPU.").arg(error, 4, 16, QChar(u'0'));
         return false;
     }
     m_objects = std::move(objects);
@@ -786,9 +786,9 @@ bool CrtFilterGL::test()
         if (result.isNull()) { return false; }   // When OpenGL fails, run() writes the reason to the log.
         const int difference = largestDifference(result, expected);
         if (difference > MAX_TEST_DIFFERENCE) {
-            qkWarning.noquote() << QStringLiteral("[CRT Simulation] OpenGL draws the test picture of %1 wrongly (a "
-                                                  "color differs from the CPU by %2 of 255 levels), so the CRT "
-                                                  "Simulation runs on the CPU.").arg(name).arg(difference);
+            qkWarning.noquote() << tr("[CRT Simulation] OpenGL draws the test picture of %1 wrongly (a "
+                                      "color differs from the CPU by %2 of 255 levels), so the CRT "
+                                      "Simulation runs on the CPU.").arg(name).arg(difference);
             return false;
         }
         largest = std::max(largest, difference);
@@ -805,9 +805,9 @@ bool CrtFilterGL::test()
     QImage expected = picture;
     CrtFilter::apply(expected);
     if (!check("small zoom"_L1, apply(applied) ? applied : QImage(), expected)) { return false; }
-    qkInfo.noquote() << QStringLiteral("[CRT Simulation] OpenGL draws the test picture correctly (the colors differ "
-                                       "from the CPU by at most %1 of 255 levels), so the CRT Simulation runs on the "
-                                       "graphics card.").arg(largest);
+    qkInfo.noquote() << tr("[CRT Simulation] OpenGL draws the test picture correctly (the colors differ "
+                           "from the CPU by at most %1 of 255 levels), so the CRT Simulation runs on the "
+                           "graphics card.").arg(largest);
     return true;
 }
 
@@ -816,14 +816,14 @@ bool CrtFilterGL::makeCurrent()
     if (m_context->makeCurrent(m_surface.get())) { return true; }
     // isValid() becomes false when the context is lost, for example after the graphics card has been reset. See init().
     stopUsingOpenGL(m_context->isValid()
-                        ? u"OpenGL stopped working"_s
-                        : u"OpenGL lost its context (for example, after a reset of the graphics card)"_s);
+                        ? tr("OpenGL stopped working")
+                        : tr("OpenGL lost its context (for example, after a reset of the graphics card)"));
     return false;
 }
 
 void CrtFilterGL::stopUsingOpenGL(const QString &problem)
 {
-    qkWarning.noquote() << QStringLiteral("[CRT Simulation] %1, so the CRT Simulation runs on the CPU from now on.")
+    qkWarning.noquote() << tr("[CRT Simulation] %1, so the CRT Simulation runs on the CPU from now on.")
                            .arg(problem);
     destroyContext();
 }
