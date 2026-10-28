@@ -53,6 +53,16 @@ uniform float spotSigmaBright;
 layout(location = 0) out vec4 kept;
 layout(location = 1) out vec4 brightpass;
 
+// The share of the light of one color that goes to the bloom: just enough that the pixel doesn't get brighter than 1,
+// assuming that its neighbors give all their light to the bloom too.
+float bloomShare(float intensity, float around)
+{
+    if (!(intensity > 0.0)) { return 0.0; }
+    float fromNeighbors = max(0.0, around - centerWeight * intensity);
+    return clamp(((1.0 - bloomUnderestimate * fromNeighbors) / (bloomUnderestimate * intensity) - 1.0)
+                 / (centerWeight - 1.0), 0.0, 1.0);
+}
+
 void main()
 {
     ivec2 pixel = ivec2(gl_FragCoord.xy);
@@ -84,17 +94,12 @@ void main()
     vec3 masked = screen * texelFetch(mask, (maskOffset + pixel) % maskSize, 0).rgb;
     vec3 intensity = masked * amplify;
     vec3 around = interpolate(area, kissSize, (vec2(pixel) + 0.5) / scale);
-    vec3 share = vec3(0.0);
-    for (int color = 0; color < 3; color++) {
-        // Just enough that the pixel doesn't get brighter than 1, assuming that its neighbors give all their light to
-        // the bloom too.
-        if (intensity[color] > 0.0) {
-            float fromNeighbors = max(0.0, around[color] - centerWeight * intensity[color]);
-            share[color] = clamp(((1.0 - bloomUnderestimate * fromNeighbors) / (bloomUnderestimate * intensity[color])
-                                  - 1.0) / (centerWeight - 1.0),
-                                 0.0, 1.0);
-        }
-    }
-    brightpass = vec4(masked * share, 1.0);
-    kept = vec4(masked - brightpass.rgb, 1.0);
+    // Without a loop over the colors, and without reading `brightpass` back: the old version had both, and with it the
+    // OpenGL driver of Intel UHD Graphics on Windows (10th gen Core, drivers 30 and 31) sent no light to the bloom.
+    // Which of the two caused that is unknown.
+    vec3 share = vec3(bloomShare(intensity.r, around.r), bloomShare(intensity.g, around.g),
+                      bloomShare(intensity.b, around.b));
+    vec3 bright = masked * share;
+    brightpass = vec4(bright, 1.0);
+    kept = vec4(masked - bright, 1.0);
 }
