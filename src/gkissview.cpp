@@ -27,6 +27,8 @@
 #include "crtfilter.h"
 #include <QString>
 #include <QMouseEvent>
+#include <QKeyEvent>
+#include <QScrollBar>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -246,6 +248,13 @@ bool GKissView::renderCurCnfAllSets()
 void GKissView::mousePressEvent(QMouseEvent *event)
 {
     qkDebug << "[DEBUG] View::mousePressEvent() event->ignore()";
+    // Space + left button scrolls the view. The scene doesn't get the press, so no item moves and no FKiSS event runs.
+    if (m_spacePressed && event->button() == Qt::LeftButton) {
+        m_panningWithSpace = true;
+        m_panLastPos = event->position().toPoint();
+        updatePanCursor();
+        return;
+    }
     switch (event->button()) {
     case Qt::MouseButton::BackButton:
         emit requestSwitchingSet(-1);
@@ -264,6 +273,14 @@ void GKissView::mousePressEvent(QMouseEvent *event)
 
 void GKissView::mouseMoveEvent(QMouseEvent *event)
 {
+    if (m_panningWithSpace) {
+        // The content follows the mouse.
+        const QPoint delta = event->position().toPoint() - m_panLastPos;
+        m_panLastPos = event->position().toPoint();
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
+        return;
+    }
     if (scene() == nullptr) { return; }
     QPointF scenePos = mapToScene(event->pos());
     QGraphicsItem *curItemRaw = scene()->itemAt(scenePos, QTransform());
@@ -279,6 +296,69 @@ void GKissView::mouseMoveEvent(QMouseEvent *event)
     }
     // Handle other events
     QGraphicsView::mouseMoveEvent(event);
+}
+
+void GKissView::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (m_panningWithSpace && event->button() == Qt::LeftButton) {
+        m_panningWithSpace = false;
+        updatePanCursor();
+        return;
+    }
+    QGraphicsView::mouseReleaseEvent(event);
+}
+
+void GKissView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    // The second press of a double click comes here, not to mousePressEvent(). With Space held, it scrolls too.
+    if (m_spacePressed && event->button() == Qt::LeftButton) {
+        mousePressEvent(event);
+        return;
+    }
+    QGraphicsView::mouseDoubleClickEvent(event);
+}
+
+void GKissView::keyPressEvent(QKeyEvent *event)
+{
+    // ATTENTION: The feature to pan by `Space + Mouse dragging` will conflict with FKiSS4 `keypress()` (I have no plan
+    // to implement FKiSS4 spec, though)
+    // Holding a key repeats its press (and on some systems its release too). Only the first press counts.
+    if (event->key() == Qt::Key_Space && !event->isAutoRepeat()) {
+        m_spacePressed = true;
+        updatePanCursor();
+        return;
+    }
+    QGraphicsView::keyPressEvent(event);
+}
+
+void GKissView::keyReleaseEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Space && !event->isAutoRepeat()) {
+        m_spacePressed = false;
+        updatePanCursor();
+        return;
+    }
+    QGraphicsView::keyReleaseEvent(event);
+}
+
+void GKissView::focusOutEvent(QFocusEvent *event)
+{
+    // Another widget or window gets the release of Space (e.g. after Alt+Tab), and maybe of the mouse button too.
+    m_spacePressed = false;
+    m_panningWithSpace = false;
+    updatePanCursor();
+    QGraphicsView::focusOutEvent(event);
+}
+
+void GKissView::updatePanCursor()
+{
+    if (m_panningWithSpace) {
+        viewport()->setCursor(Qt::ClosedHandCursor);
+    } else if (m_spacePressed) {
+        viewport()->setCursor(Qt::OpenHandCursor);
+    } else {
+        viewport()->unsetCursor();
+    }
 }
 
 void GKissView::dragEnterEvent(QDragEnterEvent *event)

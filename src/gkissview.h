@@ -62,6 +62,11 @@ protected:
 
     virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent *event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+    virtual void keyPressEvent(QKeyEvent *event) override;
+    virtual void keyReleaseEvent(QKeyEvent *event) override;
+    virtual void focusOutEvent(QFocusEvent *event) override;
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dropEvent(QDropEvent *event) override;
     virtual void wheelEvent(QWheelEvent *event) override;
@@ -70,6 +75,7 @@ protected:
 private:
     /// For the CRT filter: paints a filtered copy of the scene in `rect` over it. Called by drawForeground().
     void drawCrtFilteredScene(QPainter *painter, const QRectF &rect, qreal devicePixelsPerKissPixel);
+    void updatePanCursor();
 
     ArchiveFile *m_archiveFile = nullptr;
     /// Each set is stored in its scene.
@@ -81,6 +87,14 @@ private:
     QKiSS::CrtSimulationPreset m_crtSimulation = QKiSS::CrtSimulationPreset::None;
     /// Does the work of CrtFilter::render() and CrtFilter::apply() on the graphics card, when it can.
     CrtFilterGL m_crtFilterGL;
+    /// Space is held: dragging with the left button scrolls the view, just like Photoshop and Inkscape.
+    /// (QGraphicsView::ScrollHandDrag can't do this: it scrolls only when the scene ignores the press, and GKissScene accepts every press.)
+    /// NOTE: On Linux laptops, when keyboard is pressed, the touchpad will be disabled by libinput. So on laptop, directly use two-fingers to scroll instead.
+    bool m_spacePressed = false;
+    /// Is panning (navigating), via space + mouse dragging, on viewport.
+    bool m_panningWithSpace = false;
+    /// Where the mouse was in the viewport at the last event of the scrolling.
+    QPoint m_panLastPos;
 
 
 };
