@@ -15,7 +15,7 @@ permissions:
 env:
   # The release of our lha fork that goes into the Windows package: https://github.com/kuanyui/lha/releases
   # To update lha, change only this line. Both the download URL and the cache key of `bin_deps` use it.
-  LHA_VERSION: 1.14i-ac20260723-ky20261014
+  LHA_VERSION: 1.14i-ac20260723-ky20261029
 
 # == About actions/cache ==============================================================
 #
