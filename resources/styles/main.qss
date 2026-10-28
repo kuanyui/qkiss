@@ -1,2 +1,5 @@
 QToolBar { padding: 4px 2px; }
 QToolBar QLabel { padding-left: 4px; }
+
+/* Make icons on dialogs' buttons (e.g. OK, Apply, Cancel) also show on Windows. */
+QDialogButtonBox { dialogbuttonbox-buttons-have-icons: 1; }
