@@ -24,6 +24,7 @@
 #include <QLocale>
 #include <QTranslator>
 #include <QFile>
+#include <QDir>
 #include "dockwidgetproxystyle.h"
 #include "translationmanager.h"
 #include "ztranslator.h"
@@ -122,6 +123,19 @@ int main(int argc, char *argv[])
     if (qEnvironmentVariableIsEmpty("QT_STYLE_OVERRIDE")) { qputenv("QT_STYLE_OVERRIDE", "Fusion"); }
 #endif
     QApplication app(argc, argv);
+#ifdef Q_OS_MACOS
+    /// - An app opened from Finder gets only `/usr/bin:/bin:/usr/sbin:/sbin` as PATH. Then `QProcess` cannot find `lha` or `unar`.
+    /// - So put `qkiss.app/Contents/Helpers/` first in PATH. It has the `lha` that comes with the app.
+    /// - And put the folders of Homebrew (Apple silicon, Intel) and MacPorts last, where the user may have installed `unar`.
+    /// - `applicationDirPath()` needs the `QApplication` object, so this is after it.
+    QStringList pathDirs = qEnvironmentVariable("PATH").split(u':', Qt::SkipEmptyParts);
+    pathDirs.prepend(QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../Helpers"));
+    const QStringList packageManagerDirs = {"/opt/homebrew/bin", "/usr/local/bin", "/opt/local/bin"};
+    for (const QString &dir : packageManagerDirs) {
+        if (!pathDirs.contains(dir)) { pathDirs.append(dir); }
+    }
+    qputenv("PATH", QFile::encodeName(pathDirs.join(u':')));
+#endif
     // Our-defined `DockWidgetProxyStyle`. Without a base style, it uses the style of `QT_STYLE_OVERRIDE` or `-style`, else the style of the system.
     app.setStyle(new DockWidgetProxyStyle{});
     QFile qssFile(":/styles/main.qss");

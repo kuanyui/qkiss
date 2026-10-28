@@ -74,7 +74,12 @@ if (WIN_PYTHON3_EXE)
     set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
 elseif(DEFINED ENV{pythonLocation})
     # If found env var `pythonLocation` is defined (by Github Action `actions/setup-python`)
-    file(TO_CMAKE_PATH "$ENV{pythonLocation}/python.exe" __PYTHON3__)  # Convert back-slash to slash
+    if (WIN32)
+        file(TO_CMAKE_PATH "$ENV{pythonLocation}/python.exe" __PYTHON3__)  # Convert back-slash to slash
+    else()
+        # On macOS and Linux, `actions/setup-python` puts the interpreter in `bin/`.
+        set(__PYTHON3__ "$ENV{pythonLocation}/bin/python3")
+    endif()
     set(__PYTHON3__ "${__PYTHON3__}" CACHE FILEPATH "final python path")  # Use CACHE to remember this value at configure time.
 elseif(Python3_EXECUTABLE)
     file(TO_CMAKE_PATH "${Python3_EXECUTABLE}" __PYTHON3__)  # Convert back-slash to slash
@@ -258,6 +263,52 @@ if (WIN32)
 
 endif()
 
+if (APPLE)
+    # =======================================================
+    # macOS .icns file
+    # =======================================================
+    # NOTE: `project()` is not executed yet, don't use PROJECT_NAME here.
+    # `iconutil` (comes with macOS) makes a .icns from a folder `*.iconset`, which must have PNGs with Apple's names.
+    # Each item is <name in the .iconset>:<folder in our PNG icon theme>. `@2x` means twice the pixels.
+    # Our theme has no 128 px and no 1024 px PNG, so `icon_128x128.png` and `icon_512x512@2x.png` are left out.
+    find_program(ICONUTIL_EXECUTABLE iconutil REQUIRED)
+    set(MACOS_ICONSET_DIR "${PROJ_GENERATED_DIR}/macos/${PROJ_NAME}.iconset")
+    set(MACOS_ICNS_FILE   "${PROJ_GENERATED_DIR}/macos/${PROJ_NAME}.icns")
+    set(macos_iconset_items
+        "icon_16x16.png:16x16"            #  16 px
+        "icon_16x16@2x.png:16x16@2"       #  32 px
+        "icon_32x32.png:32x32"            #  32 px
+        "icon_32x32@2x.png:32x32@2"       #  64 px
+        "icon_128x128@2x.png:256x256"     # 256 px
+        "icon_256x256.png:256x256"        # 256 px
+        "icon_256x256@2x.png:256x256@2"   # 512 px
+        "icon_512x512.png:256x256@2"      # 512 px
+    )
+    set(SRC_PNGS)
+    set(copy_commands)
+    foreach(item    IN LISTS    macos_iconset_items)
+        string(REPLACE ":" ";" item "${item}")
+        list(GET item 0 iconsetName)
+        list(GET item 1 themeSize)
+        set(srcPng "${ICON_PNG_XDG_THEME_DIR}/${themeSize}/apps/${PROJ_NAME}.png")
+        list(APPEND SRC_PNGS "${srcPng}")
+        list(APPEND copy_commands COMMAND ${CMAKE_COMMAND} -E copy "${srcPng}" "${MACOS_ICONSET_DIR}/${iconsetName}")
+    endforeach()
+    list(REMOVE_DUPLICATES SRC_PNGS)
+    add_custom_command(
+        OUTPUT "${MACOS_ICNS_FILE}"
+        COMMAND ${CMAKE_COMMAND} -E rm -rf "${MACOS_ICONSET_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${MACOS_ICONSET_DIR}"
+        ${copy_commands}
+        COMMAND ${ICONUTIL_EXECUTABLE} -c icns -o "${MACOS_ICNS_FILE}" "${MACOS_ICONSET_DIR}"
+        DEPENDS ${SRC_PNGS}
+        COMMENT "Generating macOS Icon (.icns) from PNG sources"
+    )
+    # CMake copies this file into `qkiss.app/Contents/Resources/`. `MACOSX_BUNDLE_ICON_FILE` (below) adds its name to Info.plist.
+    set_source_files_properties("${MACOS_ICNS_FILE}" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set(MACOS_ICNS_RESOURCE "${MACOS_ICNS_FILE}")  # add to `qt_add_executable()`
+endif()
+
 
 # ==============================================
 # Git commit hash / time
@@ -313,8 +364,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # https://gcc.gnu.org/onlinedocs//gcc/Static-Analyzer-Options.html
+# `-Wanalyzer-*` is for GCC only. Clang (also AppleClang on macOS) does not know it, and `-Werror` makes that an error.
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    add_compile_options(-Wall -Wextra -Wunused -Wunused-variable -Wanalyzer-null-dereference -Werror
+    add_compile_options(-Wall -Wextra -Wunused -Wunused-variable $<$<CXX_COMPILER_ID:GNU>:-Wanalyzer-null-dereference> -Werror
         # -fanalyzer
         # -Wno-analyzer-use-of-uninitialized-value
     )
@@ -529,6 +581,7 @@ qt_add_executable("${PROJ_NAME}"
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
     ${WIN_ICO_RESOURCE}
+    ${MACOS_ICNS_RESOURCE}
     resources/styles/index.qrc
     resources/flags/index.qrc
     resources/crt-royale/index.qrc
@@ -691,6 +744,18 @@ set_target_properties(qkiss PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+if(APPLE)
+    # For `Info.plist` of `qkiss.app`:
+    # - The bundle ID. Without it, Qt uses `com.yourcompany.qkiss`. QSettings also uses the name `app.qkiss.qkiss`
+    #   (from `setOrganizationDomain("qkiss.app")` and the app name `qkiss` in main.cpp).
+    # - The name in the menu bar. Without it, the name is `qkiss`.
+    # - The icon, from the `.icns` above.
+    set_target_properties(qkiss PROPERTIES
+        MACOSX_BUNDLE_GUI_IDENTIFIER "app.qkiss.qkiss"
+        MACOSX_BUNDLE_BUNDLE_NAME "${PROJ_DISPLAY_NAME}"
+        MACOSX_BUNDLE_ICON_FILE "${PROJ_NAME}.icns"
+    )
+endif()
 
 if(QT_VERSION_MAJOR EQUAL 6)
     # Before install(), after target_link_libraries()
@@ -965,5 +1030,67 @@ elseif(WIN32)
     set(CPACK_NSIS_MANIFEST_DPI_AWARE ON)
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)  # Force uninstall old version before installing
     set(CPACK_NSIS_URL_INFO_ABOUT "${PROJECT_HOMEPAGE_URL}")
+    include(CPack)  # execute CPack to read the defined variables.
+
+elseif(APPLE)
+    # ===================================================
+    # `CPACK_*` variables
+    # ===================================================
+
+    # The package is a disk image (`DragNDrop`), for example `qkiss-0.9.3-macos-arm64.dmg`.
+    # It has `qkiss.app` and a link to /Applications: the user drags the app onto the link.
+    # Default value of ${CPACK_PACKAGE_FILE_NAME} is
+    # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
+    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")  # use id instead of human-oriented display-name
+    set(CPACK_PACKAGE_VENDOR "QKiSS Project")
+    set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+    set(CPACK_SYSTEM_NAME "macos-${CMAKE_SYSTEM_PROCESSOR}")  # Without this, it is `Darwin`. The processor is `arm64` on Apple silicon.
+    set(CPACK_GENERATOR "DragNDrop")
+    set(CPACK_DMG_VOLUME_NAME "${PROJ_DISPLAY_NAME}")  # The name of the disk image in Finder
+
+    # ===================================================
+    # `install()` external program lha
+    # ===================================================
+
+    set(MACOS_EXTERNAL_BIN_DEPS_DIR "" CACHE PATH "[macOS only] Path to the unzipped macOS release ZIP of https://github.com/kuanyui/lha")
+
+    if(MACOS_EXTERNAL_BIN_DEPS_DIR)
+        # Only from this directory, never from PATH. For example, the lha of MacPorts needs the libraries of MacPorts,
+        # which the users may not have.
+        find_program(LHA_EXECUTABLE lha PATHS "${MACOS_EXTERNAL_BIN_DEPS_DIR}" NO_DEFAULT_PATH REQUIRED)
+        # `Contents/Helpers/` is Apple's place for helper programs in an app.
+        # main.cpp puts this folder first in PATH, so `QProcess` finds this lha.
+        install(PROGRAMS "${LHA_EXECUTABLE}" DESTINATION "${PROJECT_NAME}.app/Contents/Helpers")
+
+        # The same rule as on Windows: lha must come with its source code, and with FORK_MODIFICATIONS.md (what our fork changed).
+        # There must be exactly one source ZIP. Two would mean that the source code of an old lha is still in the folder.
+        get_filename_component(LHA_DIR "${LHA_EXECUTABLE}" DIRECTORY)
+        file(GLOB LHA_SOURCE_ZIP "${LHA_DIR}/lha-*-src.zip")
+        list(LENGTH LHA_SOURCE_ZIP LHA_SOURCE_ZIP_COUNT)
+        if(EXISTS "${LHA_DIR}/FORK_MODIFICATIONS.md" AND LHA_SOURCE_ZIP_COUNT EQUAL 1)
+            install(FILES "${LHA_DIR}/FORK_MODIFICATIONS.md" ${LHA_SOURCE_ZIP} DESTINATION "${PROJECT_NAME}.app/Contents/Resources/third-party/lha")
+        else()
+            message(FATAL_ERROR "FORK_MODIFICATIONS.md and exactly one lha-*-src.zip must be next to ${LHA_EXECUTABLE} (found ${LHA_SOURCE_ZIP_COUNT}: ${LHA_SOURCE_ZIP}). lha cannot be distributed without them. Use lha from the macOS release ZIP of https://github.com/kuanyui/lha")
+        endif()
+    else()
+        message(WARNING "MACOS_EXTERNAL_BIN_DEPS_DIR is not set, so qkiss.app has no lha. The app can still use an lha in PATH (for example, from MacPorts), but do not distribute this package.")
+    endif()
+
+    # ===================================================
+    # `install()` Qt frameworks and plugins via `macdeployqt`, and sign the app
+    # ===================================================
+
+    # Find `macdeployqt` in the folder of `qmake`, like `windeployqt` above.
+    get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
+    get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
+    find_program(MACDEPLOYQT_EXECUTABLE_CONFIGURED macdeployqt HINTS "${_qt_bin_dir}" REQUIRED)
+    find_program(CODESIGN_EXECUTABLE_CONFIGURED codesign REQUIRED)
+    configure_file(
+        "${CMAKE_SOURCE_DIR}/packaging/macos/deploy_qt_runtime.cmake.in"
+        "${PROJ_GENERATED_DIR}/packaging/macos/deploy_qt_runtime.cmake"
+        @ONLY)
+    # Runs after the `install()` above, so lha is already in the app.
+    install(SCRIPT "${PROJ_GENERATED_DIR}/packaging/macos/deploy_qt_runtime.cmake")
+
     include(CPack)  # execute CPack to read the defined variables.
 endif()

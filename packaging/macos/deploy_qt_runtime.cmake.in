@@ -1,0 +1,83 @@
+# =============================================
+# !!!!! BE CAREFUL !!!!!
+# - This file only handles "install-time".
+# - This file should be used via `install(SCRIPT ...)` in CMakeLists.txt
+# - It runs after `qkiss.app` and its `Contents/Helpers/lha` are installed. Then CPack puts the app into the .dmg.
+# - `macdeployqt` copies the Qt frameworks and plugins into the app. The other libraries (from vcpkg) are static,
+#   so they are already in the executable.
+#   - Explicit:
+#     - MACDEPLOYQT_EXECUTABLE_CONFIGURED
+#     - CODESIGN_EXECUTABLE_CONFIGURED
+#
+#   - Implicit:
+#     - CMAKE_PROJECT_NAME (via `project(<name>`)
+# =============================================
+cmake_policy(SET CMP0011 NEW)  # if P includes this script, this script includes C, then the policies of C won't effect this script
+
+# `set()` here for improving syntax highlights of cmake.
+set(MACDEPLOYQT_EXECUTABLE_CONFIGURED "@MACDEPLOYQT_EXECUTABLE_CONFIGURED@")
+set(CODESIGN_EXECUTABLE_CONFIGURED "@CODESIGN_EXECUTABLE_CONFIGURED@")
+
+set(CMAKE_PROJECT_NAME "@CMAKE_PROJECT_NAME@")
+
+# `DESTDIR` is empty unless it is set, for example `DESTDIR=/tmp/stage cmake --install build`.
+set(APP_BUNDLE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CMAKE_PROJECT_NAME}.app")
+set(LHA_HELPER "${APP_BUNDLE}/Contents/Helpers/lha")
+
+message("[deploy_qt_runtime] CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
+message("[deploy_qt_runtime] CMAKE_INSTALL_COMPONENT = ${CMAKE_INSTALL_COMPONENT}")
+message("[deploy_qt_runtime] MACDEPLOYQT_EXECUTABLE_CONFIGURED = ${MACDEPLOYQT_EXECUTABLE_CONFIGURED}")
+message("[deploy_qt_runtime] APP_BUNDLE = ${APP_BUNDLE}")
+
+if(NOT EXISTS "${APP_BUNDLE}/Contents/MacOS/${CMAKE_PROJECT_NAME}")
+    message(WARNING "[deploy_qt_runtime] Skip macdeployqt, because \"${APP_BUNDLE}\" was not installed for component \"${CMAKE_INSTALL_COMPONENT}\".")
+    return()
+endif()
+
+# Step 1: Sign lha (ad-hoc, `-`). Apple silicon does not run a program without a signature.
+#
+# It must be signed before the app: signing the app records every file in it, so a file that changes
+# later breaks the signature of the app. `macdeployqt -codesign` signs only the files in `Contents/MacOS`,
+# `Contents/PlugIns` and `Contents/Frameworks`, so it does not touch `Contents/Helpers/lha`.
+if(EXISTS "${LHA_HELPER}")
+    execute_process(
+        COMMAND "${CODESIGN_EXECUTABLE_CONFIGURED}" --force --sign - "${LHA_HELPER}"
+        RESULT_VARIABLE CODESIGN_RESULT
+    )
+    if(NOT CODESIGN_RESULT EQUAL 0)
+        message(FATAL_ERROR "[deploy_qt_runtime] codesign failed for \"${LHA_HELPER}\": ${CODESIGN_RESULT}")
+    endif()
+endif()
+
+# Step 2: Copy the Qt frameworks and plugins into the app, then sign everything (ad-hoc).
+#
+# `macdeployqt` options:
+#   -always-overwrite   Copy files even if the target file exists.
+#   -codesign=-         Sign with the identity `-`, which means ad-hoc: no certificate is needed.
+#   -verbose=2          Also print what it copies, for the CI log.
+#
+# NOTE: macdeployqt prints `ERROR: ...` when something fails, but still exits with 0. So check its output too.
+execute_process(
+    COMMAND "${MACDEPLOYQT_EXECUTABLE_CONFIGURED}"
+    "${APP_BUNDLE}"
+    -always-overwrite
+    -codesign=-
+    -verbose=2
+    RESULT_VARIABLE MACDEPLOYQT_RESULT
+    OUTPUT_VARIABLE MACDEPLOYQT_OUTPUT
+    ERROR_VARIABLE MACDEPLOYQT_OUTPUT
+)
+message("[deploy_qt_runtime] macdeployqt log:\n${MACDEPLOYQT_OUTPUT}")
+
+if(NOT MACDEPLOYQT_RESULT EQUAL 0 OR MACDEPLOYQT_OUTPUT MATCHES "ERROR:")
+    message(FATAL_ERROR "[deploy_qt_runtime] macdeployqt failed (exit code ${MACDEPLOYQT_RESULT}). See `ERROR:` in the log above.")
+endif()
+
+# Step 3: Check the signature of the whole app, strictly.
+execute_process(
+    COMMAND "${CODESIGN_EXECUTABLE_CONFIGURED}" --verify --deep --strict --verbose=2 "${APP_BUNDLE}"
+    RESULT_VARIABLE CODESIGN_RESULT
+)
+if(NOT CODESIGN_RESULT EQUAL 0)
+    message(FATAL_ERROR "[deploy_qt_runtime] The signature of \"${APP_BUNDLE}\" is not valid: ${CODESIGN_RESULT}")
+endif()

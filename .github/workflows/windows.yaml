@@ -15,6 +15,7 @@ permissions:
 env:
   # The release of our lha fork that goes into the Windows package: https://github.com/kuanyui/lha/releases
   # To update lha, change only this line. Both the download URL and the cache key of `bin_deps` use it.
+  # Windows and macOS use the same lha, so change `LHA_VERSION` in `macos.yaml` too. Its first step checks that both are the same.
   LHA_VERSION: 1.14i-ac20260723-ky20261029
 
 # == About actions/cache ==============================================================

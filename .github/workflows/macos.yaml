@@ -1,0 +1,430 @@
+name: Qt6 macOS Build
+
+# ============================================================================================
+# What this workflow does
+# ============================================================================================
+#
+# It builds `qkiss-VERSION-macos-arm64.dmg` for Apple silicon, and keeps it as an artifact of
+# the run. It does not put it on the release page yet.
+#
+#   1. Install Qt, Python, the icons (Inkscape), and the libraries of vcpkg.json.
+#   2. Download our lha (https://github.com/kuanyui/lha/releases), the same version as Windows.
+#   3. cmake + cpack -> `qkiss.app` inside the .dmg:
+#        Contents/MacOS/qkiss                        the app
+#        Contents/Helpers/lha                        our lha (main.cpp puts this folder in PATH)
+#        Contents/Resources/third-party/lha/         its source code and FORK_MODIFICATIONS.md
+#        Contents/Frameworks/, Contents/PlugIns/     Qt (copied by macdeployqt)
+#      Everything is signed ad-hoc (no certificate). See `packaging/macos/deploy_qt_runtime.cmake.in`.
+#   4. Check the .dmg, then upload it.
+#
+# Nobody in this project has a Mac, so step 4 does what a user would do first:
+# it checks the signature and the libraries of every file, starts the app, and opens an LZH file.
+#
+# A user who downloads the .dmg must allow the app once, because it is not notarized by Apple:
+# System Settings > Privacy & Security > "Open Anyway".
+#
+# == One job ===========================================================================
+#
+# Windows splits the work into 4 jobs, so that each cache is saved as soon as its part works.
+# Here, `actions/cache/restore` + `actions/cache/save` do the same in one job: each cache is
+# saved right after its step, even when a later step fails.
+
+on:
+  push:
+    branches: [ "master", "gh_actions" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+env:
+  # The release of our lha fork that goes into the macOS package: https://github.com/kuanyui/lha/releases
+  # Windows and macOS use the same version. So change it in `windows.yaml` too: the first step checks this.
+  LHA_VERSION: 1.14i-ac20260723-ky20261029
+
+jobs:
+  build-main:
+    name: Build main project
+    runs-on: macos-15    # Apple silicon (arm64)
+    defaults:
+      run:
+        # Also adds `-eo pipefail`: a step stops at its first failing command.
+        shell: bash
+    env:
+      # Qt 6.9 supports the macOS SDK 14 and 15 (`qtbase/.cmake.conf`). Xcode 16.4 has the macOS 15.5 SDK.
+      # Without this, a newer default Xcode of the runner could bring an SDK that Qt 6.9 does not support.
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      # The oldest macOS that the app runs on. Qt 6.9 supports macOS 12 and later.
+      # CMake, clang and the builds of vcpkg all read this variable.
+      MACOSX_DEPLOYMENT_TARGET: '12.0'
+      # The runner exports this only in `~/.bashrc`, which the steps do not read.
+      VCPKG_INSTALLATION_ROOT: /usr/local/share/vcpkg
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_cache/archives
+      VCPKG_DOWNLOADS: ${{ github.workspace }}/vcpkg_cache/downloads
+
+    steps:
+      # Step 1: Download the source code
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: 'recursive'
+
+      # Step 2: Check the settings before the long steps
+      - name: Check that Windows and macOS use the same lha
+        run: |
+          if ! grep -q -x -F "  LHA_VERSION: ${LHA_VERSION}" .github/workflows/windows.yaml; then
+            echo "::error::LHA_VERSION of macos.yaml (${LHA_VERSION}) is not the one in windows.yaml. Change both."
+            exit 1
+          fi
+
+      - name: Get the Xcode version for the vcpkg cache key
+        id: getXcodeVer
+        run: |
+          xcodebuild -version
+          echo "macOS SDK: $(xcrun --show-sdk-version)"
+          # For example `Xcode-16.4-Build-version-16F6`
+          echo "xcodeVer=$(xcodebuild -version | tr -s '[:space:]' '-' | sed 's/-$//')" >> "$GITHUB_OUTPUT"
+
+      # Step 3: Install Qt 6
+      # A third-party action, so it is pinned to a commit: the tag `v4.5.0` could be moved to other code later, a commit cannot.
+      - name: Install Qt
+        uses: jurplel/install-qt-action@b344308e4483fc892e0d27b3cd1b173ebdd95f06 # v4.5.0
+        with:
+          # Use this to see all Qt versions https://ddalcino.github.io/aqt-list-server/
+          version: '6.9.3'          # Same as windows.yaml
+          arch: 'clang_64'          # On macOS, it has both arm64 and x86_64.
+          target: 'desktop'
+          modules: 'qtmultimedia'   # Important!
+          cache: true               # [Cache] built-in cache
+
+      # Step 4: Set up Python 3.13 (build_icons.py needs 3.13 or newer)
+      # Keep this after "Install Qt": install-qt-action runs its own `actions/setup-python` (3.14), and the
+      # last one sets `pythonLocation`, which CMakeLists.txt uses to find Python.
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install Python dependencies
+        run: python -m pip install jsonschema pyyaml
+
+      # Step 5: [Cache] The PNG icons, converted from SVG by Inkscape
+      - name: Get submodule commit hash
+        id: icon_submodule
+        run: echo "commitHash=$(git -C resources/tango-remixer rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore generated icons cache
+        id: icon_cache
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            generated/icon_theme__png
+            generated/icon_theme__svg
+            generated/icons_built.stamp
+          # The same key as in windows.yaml. `runner.os` keeps the caches of Windows and macOS apart.
+          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.icon_submodule.outputs.commitHash }}
+
+      - name: Install Inkscape via Homebrew
+        if: steps.icon_cache.outputs.cache-hit != 'true'
+        run: |
+          brew install --cask inkscape
+          echo "/Applications/Inkscape.app/Contents/MacOS" >> "$GITHUB_PATH"
+
+      - name: Convert icons via CMake script mode
+        if: steps.icon_cache.outputs.cache-hit != 'true'
+        run: cmake -DTASK=GENERATE_ICONS -P CMakeLists.txt
+
+      - name: Save generated icons cache
+        if: steps.icon_cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            generated/icon_theme__png
+            generated/icon_theme__svg
+            generated/icons_built.stamp
+          key: ${{ steps.icon_cache.outputs.cache-primary-key }}
+
+      # Step 6: [Cache] Build the libraries of vcpkg.json. `arm64-osx` makes static libraries, so they
+      # go into the executable, and the app needs no extra .dylib from vcpkg.
+      - name: Create the vcpkg cache directories
+        run: mkdir -p "${VCPKG_DEFAULT_BINARY_CACHE}" "${VCPKG_DOWNLOADS}"
+
+      - name: Restore `vcpkg_cache`
+        id: vcpkg_cache
+        uses: actions/cache/restore@v5
+        with:
+          path: vcpkg_cache
+          # vcpkg does not put MACOSX_DEPLOYMENT_TARGET into its own hashes, so it is in this key.
+          key: ${{ runner.os }}-${{ runner.arch }}-${{ steps.getXcodeVer.outputs.xcodeVer }}-macos${{ env.MACOSX_DEPLOYMENT_TARGET }}-vcpkg-mega-cache-${{ hashFiles('vcpkg.json') }}
+
+      - name: Download & build & install packages via vcpkg
+        run: vcpkg install --triplet arm64-osx
+
+      - name: Save `vcpkg_cache`
+        if: steps.vcpkg_cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: vcpkg_cache
+          key: ${{ steps.vcpkg_cache.outputs.cache-primary-key }}
+
+      # A library built for a newer macOS could make the app crash on an older one.
+      # The `minos` value is the oldest macOS version that can run the object file.
+      - name: Check that the vcpkg libraries are built for macOS ${{ env.MACOSX_DEPLOYMENT_TARGET }}
+        run: |
+          shopt -s nullglob
+          libs=(vcpkg_installed/arm64-osx/lib/*.a)
+          if [ ${#libs[@]} -eq 0 ]; then
+            echo "::error::No library in vcpkg_installed/arm64-osx/lib/"
+            exit 1
+          fi
+          for lib in "${libs[@]}"; do
+            versions=$(otool -l "$lib" | awk '$1 == "minos" { print $2 }' | sort -u | tr '\n' ' ' | sed 's/ $//')
+            echo "${lib}: minos ${versions}"
+            if [ "$versions" != "$MACOSX_DEPLOYMENT_TARGET" ]; then
+              echo "::error::${lib} is built for macOS ${versions}, not ${MACOSX_DEPLOYMENT_TARGET}"
+              exit 1
+            fi
+          done
+
+      # Step 7: Download our lha. The release ZIP has lha, FORK_MODIFICATIONS.md and lha-VERSION-src.zip.
+      # CMakeLists.txt installs all three, because lha must not be distributed without the other two.
+      - name: Download lha
+        run: |
+          mkdir -p "${RUNNER_TEMP}/bin_deps"
+          url="https://github.com/kuanyui/lha/releases/download/${LHA_VERSION}/lha-${LHA_VERSION}-macos-universal.zip"
+          if ! curl -fsSL -o "${RUNNER_TEMP}/lha.zip" "$url"; then
+            echo "::error::Cannot download lha ${LHA_VERSION}. Is it on https://github.com/kuanyui/lha/releases ?"
+            exit 1
+          fi
+          unzip -q "${RUNNER_TEMP}/lha.zip" -d "${RUNNER_TEMP}/bin_deps"
+          ls -l "${RUNNER_TEMP}/bin_deps"
+
+      # Step 8: Build with CMake (build to `build/`)
+      # - ICU is turned off: it would come from Homebrew, which is built only for the macOS of the runner.
+      #   Without ICU, the app uses the iconv of macOS, like the Windows build uses iconv.
+      - name: CMake Configure and Build
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_TOOLCHAIN_FILE="${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake" \
+            -DVCPKG_TARGET_TRIPLET=arm64-osx \
+            -DCMAKE_DISABLE_FIND_PACKAGE_ICU=ON \
+            -DMACOS_EXTERNAL_BIN_DEPS_DIR="${RUNNER_TEMP}/bin_deps"
+          cmake --build build
+
+      # Step 9: Package with CPack. The generator (DragNDrop, a .dmg) is defined in CMakeLists.txt.
+      # `hdiutil`, which makes the .dmg, sometimes fails on CI runners with "Resource busy". So try up to 3 times.
+      - name: Package with CPack
+        working-directory: build
+        run: |
+          for attempt in 1 2 3; do
+            if cpack -VV -C Release; then
+              exit 0
+            fi
+            echo "::warning::cpack failed (attempt ${attempt} of 3)"
+          done
+          exit 1
+
+      # Step 10: Check the .dmg, as a user on a Mac would first see it.
+      - name: Mount the .dmg
+        run: |
+          shopt -s nullglob
+          dmgs=(build/qkiss-*-macos-arm64.dmg)
+          if [ ${#dmgs[@]} -ne 1 ]; then
+            echo "::error::Expected exactly 1 file build/qkiss-*-macos-arm64.dmg, found: ${dmgs[*]}"
+            exit 1
+          fi
+          mkdir -p "${RUNNER_TEMP}/dmg"
+          hdiutil attach -readonly -nobrowse -mountpoint "${RUNNER_TEMP}/dmg" "${dmgs[0]}"
+          # Right after mounting, so that "Unmount the .dmg" (the last step) knows that the .dmg is mounted.
+          echo "APP=${RUNNER_TEMP}/dmg/qkiss.app" >> "$GITHUB_ENV"
+          ls -la "${RUNNER_TEMP}/dmg"
+
+      # The signature of the whole app also covers the files that are not programs, for example Info.plist.
+      # `packaging/macos/deploy_qt_runtime.cmake.in` checks it before CPack makes the .dmg. This checks the app in the .dmg.
+      - name: Check the signature of the whole app
+        run: |
+          if ! codesign --verify --deep --strict --verbose=2 "$APP"; then
+            echo "::error::The signature of qkiss.app is not valid"
+            exit 1
+          fi
+
+      - name: Check Info.plist, the icon, the Qt plugins and lha
+        run: |
+          # check_plist KEY EXPECTED_VALUE
+          check_plist() {
+            local actual
+            actual=$(plutil -extract "$1" raw -o - "${APP}/Contents/Info.plist")
+            echo "$1 = ${actual}"
+            if [ "$actual" != "$2" ]; then
+              echo "::error::$1 in Info.plist is \"${actual}\", not \"$2\""
+              exit 1
+            fi
+          }
+          check_plist CFBundleIdentifier app.qkiss.qkiss
+          check_plist CFBundleName QKiSS
+          check_plist CFBundleExecutable qkiss
+          check_plist CFBundleIconFile qkiss.icns
+          check_plist LSMinimumSystemVersion "$MACOSX_DEPLOYMENT_TARGET"
+
+          for f in \
+              Contents/Resources/qkiss.icns \
+              Contents/PlugIns/platforms/libqcocoa.dylib \
+              Contents/Helpers/lha \
+              Contents/Resources/third-party/lha/FORK_MODIFICATIONS.md \
+              "Contents/Resources/third-party/lha/lha-${LHA_VERSION}-src.zip"; do
+            if [ ! -f "${APP}/${f}" ]; then
+              echo "::error::qkiss.app has no ${f}"
+              exit 1
+            fi
+          done
+
+          shopt -s nullglob
+          multimedia=("${APP}"/Contents/PlugIns/multimedia/*.dylib)
+          if [ ${#multimedia[@]} -eq 0 ]; then
+            echo "::error::qkiss.app has no Qt Multimedia plugin"
+            exit 1
+          fi
+          echo "Qt Multimedia plugins: ${multimedia[*]##*/}"
+
+          # lha prints `LHa for UNIX version VERSION (PLATFORM)`.
+          "${APP}/Contents/Helpers/lha" --version | tee "${RUNNER_TEMP}/lha-version.txt"
+          if ! grep -q -F " version ${LHA_VERSION} " "${RUNNER_TEMP}/lha-version.txt"; then
+            echo "::error::The lha in qkiss.app is not version ${LHA_VERSION}"
+            exit 1
+          fi
+
+      # For each program and library (Mach-O file) in the app:
+      # - Its signature is valid.
+      # - It links only to files in the app (`@rpath/...` and so on) or in macOS (`/usr/lib/`, `/System/Library/`).
+      #   A path like `/Users/runner/...` or `/opt/homebrew/...` would not exist on the computer of the user.
+      # - Its rpaths (where `@rpath/` looks) are all inside the app.
+      # - It runs on macOS MACOSX_DEPLOYMENT_TARGET (its `minos` is not newer).
+      - name: Check every program and library in the app
+        run: |
+          count=0
+          while IFS= read -r -d '' f; do
+            case "$(file -b "$f")" in
+              *Mach-O*) ;;
+              *) continue ;;
+            esac
+            count=$((count + 1))
+            echo "== ${f#"${APP}/"}"
+
+            if ! codesign --verify --strict "$f"; then
+              echo "::error::Invalid signature: ${f}"
+              exit 1
+            fi
+
+            outside=$(otool -L "$f" | awk '/^\t/ { print $1 }' \
+                      | grep -v -E '^(@rpath/|@executable_path/|@loader_path/|/usr/lib/|/System/Library/)' || true)
+            if [ -n "$outside" ]; then
+              echo "::error::${f} links to files outside the app and macOS: ${outside}"
+              exit 1
+            fi
+
+            # In `otool -l`, the path of an LC_RPATH is 2 lines after `cmd LC_RPATH`.
+            absolute_rpaths=$(otool -l "$f" | awk '$1 == "cmd" && $2 == "LC_RPATH" { getline; getline; if ($2 ~ /^\//) print $2 }')
+            if [ -n "$absolute_rpaths" ]; then
+              echo "::error::${f} has an rpath outside the app: ${absolute_rpaths}"
+              exit 1
+            fi
+
+            newer=$(otool -l "$f" | awk -v target="$MACOSX_DEPLOYMENT_TARGET" '
+              $1 == "minos" {
+                split($2, v, "."); split(target, t, ".")
+                if (v[1] + 0 > t[1] + 0 || (v[1] + 0 == t[1] + 0 && v[2] + 0 > t[2] + 0)) print $2
+              }')
+            if [ -n "$newer" ]; then
+              echo "::error::${f} needs macOS ${newer}, newer than ${MACOSX_DEPLOYMENT_TARGET}"
+              exit 1
+            fi
+          done < <(find "$APP" -type f -print0)
+          echo "Checked ${count} Mach-O files."
+          if [ "$count" -lt 3 ]; then
+            echo "::error::Too few Mach-O files. Did macdeployqt run?"
+            exit 1
+          fi
+
+      # The app must start, and load libraries only from itself and from macOS.
+      # `DYLD_PRINT_LIBRARIES` makes the loader of macOS print every file that it loads: `dyld[PID]: PATH`.
+      - name: Start the app, and check the libraries that it loads
+        run: |
+          log="${RUNNER_TEMP}/dyld.log"
+          DYLD_PRINT_LIBRARIES=1 "${APP}/Contents/MacOS/qkiss" > "$log" 2>&1 &
+          pid=$!
+          sleep 15
+          # `kill` fails when the process is gone, that is, when qkiss stopped (or crashed) by itself.
+          if ! kill "$pid" 2> /dev/null; then
+            cat "$log"
+            echo "::error::qkiss stopped within 15 seconds"
+            exit 1
+          fi
+          wait "$pid" || true
+
+          sed -n -E 's/^dyld(\[[0-9]+\])?: (loaded: )?//p' "$log" > "${RUNNER_TEMP}/loaded.txt"
+          echo "Loaded $(wc -l < "${RUNNER_TEMP}/loaded.txt") files."
+          if [ ! -s "${RUNNER_TEMP}/loaded.txt" ]; then
+            cat "$log"
+            echo "::error::No output of DYLD_PRINT_LIBRARIES"
+            exit 1
+          fi
+          failed=0
+          while IFS= read -r path; do
+            case "$path" in
+              "${APP}"/*|/usr/lib/*|/System/*) ;;
+              *) echo "::error::qkiss loaded a file from outside the app and macOS: ${path}"; failed=1 ;;
+            esac
+          done < "${RUNNER_TEMP}/loaded.txt"
+          exit "$failed"
+
+      # Open an LZH file with the app. This checks that the app finds the lha in `Contents/Helpers/`
+      # (see `src/main.cpp`), and that this lha works inside the app.
+      - name: Open an LZH file with the app
+        run: |
+          work="${RUNNER_TEMP}/lzh-test"
+          mkdir -p "$work"
+          printf '; This file is only for the test in macos.yaml\n' > "${work}/test.cnf"
+          (cd "$work" && "${APP}/Contents/Helpers/lha" a test.lzh test.cnf)
+
+          log="${work}/qkiss.log"
+          # Without QT_FORCE_STDERR_LOGGING, Qt on macOS logs to stderr only when stderr is a terminal.
+          QT_FORCE_STDERR_LOGGING=1 "${APP}/Contents/MacOS/qkiss" "${work}/test.lzh" > "$log" 2>&1 &
+          pid=$!
+          for _ in $(seq 30); do
+            if grep -q 'is extracted successfully' "$log" || ! kill -0 "$pid" 2> /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          kill "$pid" 2> /dev/null || true
+          wait "$pid" || true
+          cat "$log"
+          # Both lines are from `src/archiveprocessorexternallha.cpp`.
+          # The first line shows that the app used lha instead of unar or libarchive.
+          for expected in \
+              'Trying to extract LZH file "test.lzh" via LHa...' \
+              'LZH file "test.lzh" is extracted successfully'; do
+            if ! grep -q -F "$expected" "$log"; then
+              echo "::error::qkiss could not open test.lzh with the lha in qkiss.app. The log has no line: ${expected}"
+              exit 1
+            fi
+          done
+
+      # Step 11: Upload the .dmg
+      # Default value of ${CPACK_PACKAGE_FILE_NAME} is
+      # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: QKiSS-macOS-arm64
+          path: build/qkiss-*-macos-arm64.dmg
+          if-no-files-found: error
+
+      # The runner empties RUNNER_TEMP at the end of the job, so do not leave the .dmg mounted there.
+      # `always()` runs this step even after a failed step. `-force` unmounts the .dmg even if a file in it is still open.
+      - name: Unmount the .dmg
+        if: always() && env.APP != ''
+        run: hdiutil detach -force "${RUNNER_TEMP}/dmg"
