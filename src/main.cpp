@@ -24,7 +24,7 @@
 #include <QLocale>
 #include <QTranslator>
 #include <QFile>
-#include <QStyleFactory>
+#include "dockwidgetproxystyle.h"
 #include "translationmanager.h"
 #include "ztranslator.h"
 #include "logging.h"
@@ -114,11 +114,16 @@ int main(int argc, char *argv[])
     // avoid wrong icon bouncing when startup in KDE
     QGuiApplication::setDesktopFileName("qkiss");
 
-    QApplication app(argc, argv);
 #ifdef Q_OS_WIN
-    // Windows style + color is too ugly on Windows... So use Fusion on Windows
-    app.setStyle(QStyleFactory::create("Fusion"));
+    /// - Windows style + color is too ugly on Windows... So use `Fusion` on Windows.
+    /// - Nevertheless, I tend to allow user to override via envvar `QT_STYLE_OVERRIDE` or `-style` option.
+    /// - Qt has no API that tells whether the option `-style` was given.
+    /// - `QApplication` reads envvar `QT_STYLE_OVERRIDE`, while `-style` still wins over it.
+    if (qEnvironmentVariableIsEmpty("QT_STYLE_OVERRIDE")) { qputenv("QT_STYLE_OVERRIDE", "Fusion"); }
 #endif
+    QApplication app(argc, argv);
+    // Our-defined `DockWidgetProxyStyle`. Without a base style, it uses the style of `QT_STYLE_OVERRIDE` or `-style`, else the style of the system.
+    app.setStyle(new DockWidgetProxyStyle{});
     QFile qssFile(":/styles/main.qss");
     [[maybe_unused]] bool success = qssFile.open(QFile::ReadOnly);
     QString qssContent = QLatin1String(qssFile.readAll());
