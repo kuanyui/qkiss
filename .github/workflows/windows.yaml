@@ -364,8 +364,9 @@ jobs:
           }
 
       # Step 10: Install Qt 6
+      # A third-party action, so it is pinned to a commit: the tag `v4.5.0` could be moved to other code later, a commit cannot.
       - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@b344308e4483fc892e0d27b3cd1b173ebdd95f06 # v4.5.0
         with:
           # Use this to see all Qt versions https://ddalcino.github.io/aqt-list-server/
           version: '6.9.3'    # >= 6.9.0 supports emoji on Windows, so don't use 6.8.3 even if it's LTS  https://www.qt.io/blog/emoji-in-qt-6.9
@@ -375,8 +376,9 @@ jobs:
           cache: true      # [Cache] built-in cache
 
       # Step 11: Initialize MSVC Environment
+      # Also a third-party action, so also pinned to a commit.
       - name: Set up MSVC
-        uses: ilammy/msvc-dev-cmd@v1
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
 
       # Step 12: Build with CMake (build to `build/`)
       - name: CMake Configure and Build
