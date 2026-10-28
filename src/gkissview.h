@@ -95,6 +95,8 @@ private:
     bool m_panningWithSpace = false;
     /// Where the mouse was in the viewport at the last event of the scrolling.
     QPoint m_panLastPos;
+    /// For zooming with Ctrl + wheel: the sum of the wheel values that has not been used yet. See wheelEvent().
+    int m_zoomWheelDelta = 0;
 
 
 };

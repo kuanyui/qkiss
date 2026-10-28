@@ -376,10 +376,16 @@ void GKissView::dropEvent(QDropEvent *event)
 void GKissView::wheelEvent(QWheelEvent *event)
 {
     if (event->modifiers() & Qt::ControlModifier) {
-        if (event->angleDelta().y() > 0) {
+        // Most mouse wheels send 120 for each notch. A touchpad sends many small values instead,
+        // and sometimes 0 (for example, when the fingers move sideways).
+        // So sum them all, and zoom one step when the sum reaches 120 or -120.
+        m_zoomWheelDelta += event->angleDelta().y();
+        if (m_zoomWheelDelta >= QWheelEvent::DefaultDeltasPerStep) {
             emit requestZoomIn();
-        } else {
+            m_zoomWheelDelta = 0;
+        } else if (m_zoomWheelDelta <= -QWheelEvent::DefaultDeltasPerStep) {
             emit requestZoomOut();
+            m_zoomWheelDelta = 0;
         }
         event->accept();
         return;

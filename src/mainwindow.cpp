@@ -777,10 +777,16 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             return QMainWindow::eventFilter(watched, event);
         }
         QWheelEvent *ev = static_cast<QWheelEvent *>(event);
-        if (ev->angleDelta().y() > 0) {  // scroll up
+        // Most mouse wheels send 120 for each notch. A touchpad sends many small values instead,
+        // and sometimes 0 (for example, when the fingers move sideways).
+        // So add them up, and zoom one step when the sum reaches 120 or -120.
+        m_zoomWheelDelta += ev->angleDelta().y();
+        if (m_zoomWheelDelta >= QWheelEvent::DefaultDeltasPerStep) {  // scroll up
             m_cfg.zoomInByPredefinedSteps();
-        } else {  // scroll down
+            m_zoomWheelDelta = 0;
+        } else if (m_zoomWheelDelta <= -QWheelEvent::DefaultDeltasPerStep) {  // scroll down
             m_cfg.zoomOutByPredefinedSteps();
+            m_zoomWheelDelta = 0;
         }
         return true;  // Capture this event.
     }

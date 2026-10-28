@@ -100,6 +100,7 @@ protected:
     QButtonGroup *m_btnGroupSceneSets;
     QButtonGroup *m_btnGroupColorSets;
     QComboBox *m_cboxZoomScale;
+    int m_zoomWheelDelta = 0;
     QAction *m_crtSimulationToggle;
     ArchiveFile *m_archiveFile;
     GKissView *m_kissView;
