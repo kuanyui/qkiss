@@ -72,6 +72,36 @@ void DockWidgetProxyStyle::drawControl(QStyle::ControlElement element, const QSt
     QProxyStyle::drawControl(element, option, painter, widget);
 }
 
+#ifdef Q_OS_MACOS
+QRect DockWidgetProxyStyle::subElementRect(QStyle::SubElement element, const QStyleOption *option, const QWidget *widget) const
+{
+    // The macOS style puts the close & float buttons on the left of the dock title, where we draw the icon.
+    // It mirrors them with `visualRect()`, so with the opposite direction they go to the right, as in other styles.
+    switch (element) {
+    case QStyle::SE_DockWidgetCloseButton:
+    case QStyle::SE_DockWidgetFloatButton:
+    case QStyle::SE_DockWidgetTitleBarText:
+    case QStyle::SE_DockWidgetIcon:
+        if (const QStyleOptionDockWidget *opt = qstyleoption_cast<const QStyleOptionDockWidget *>(option)) {
+            QStyleOptionDockWidget mirroredOpt = *opt;
+            mirroredOpt.direction = (opt->direction == Qt::RightToLeft) ? Qt::LeftToRight : Qt::RightToLeft;
+            return QProxyStyle::subElementRect(element, &mirroredOpt, widget);
+        }
+        break;
+    default:
+        break;
+    }
+    return QProxyStyle::subElementRect(element, option, widget);
+}
+
+int DockWidgetProxyStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const
+{
+    // The macOS style shows no icons on the buttons of `QDialogButtonBox` (OK, Cancel, Apply...). Show them, as on other systems.
+    if (hint == QStyle::SH_DialogButtonBox_ButtonsHaveIcons) { return 1; }
+    return QProxyStyle::styleHint(hint, option, widget, returnData);
+}
+#endif
+
 int DockWidgetProxyStyle::getMostFitIconSize(const QStyleOption &option)
 {
     static const QList<int> AVAILABLE_SIZE_LIST = {48, 32, 24, 22, 16};
