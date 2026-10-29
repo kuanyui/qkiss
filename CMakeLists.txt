@@ -1037,14 +1037,21 @@ elseif(APPLE)
     # `CPACK_*` variables
     # ===================================================
 
-    # The package is a disk image (`DragNDrop`), for example `qkiss-0.9.3-macos-arm64.dmg`.
+    # The package is a disk image (`DragNDrop`), for example `qkiss-0.9.3-macos-universal.dmg`.
     # It has `qkiss.app` and a link to /Applications: the user drags the app onto the link.
     # Default value of ${CPACK_PACKAGE_FILE_NAME} is
     # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
     set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")  # use id instead of human-oriented display-name
     set(CPACK_PACKAGE_VENDOR "QKiSS Project")
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-    set(CPACK_SYSTEM_NAME "macos-${CMAKE_SYSTEM_PROCESSOR}")  # Without this, it is `Darwin`. The processor is `arm64` on Apple silicon.
+    # Without this, it is `Darwin`.
+    # `universal` when the app has the code for both Apple silicon and Intel (CMAKE_OSX_ARCHITECTURES `arm64;x86_64`, see macos.yaml).
+    list(LENGTH CMAKE_OSX_ARCHITECTURES macosArchCount)
+    if(macosArchCount GREATER 1)
+        set(CPACK_SYSTEM_NAME "macos-universal")
+    else()
+        set(CPACK_SYSTEM_NAME "macos-${CMAKE_SYSTEM_PROCESSOR}")  # The processor is `arm64` on Apple silicon.
+    endif()
     set(CPACK_GENERATOR "DragNDrop")
     set(CPACK_DMG_VOLUME_NAME "${PROJ_DISPLAY_NAME}")  # The name of the disk image in Finder
 

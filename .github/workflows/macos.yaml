@@ -4,8 +4,8 @@ name: Qt6 macOS Build
 # What this workflow does
 # ============================================================================================
 #
-# It builds `qkiss-VERSION-macos-arm64.dmg` for Apple silicon, and keeps it as an artifact of
-# the run. It does not put it on the release page yet.
+# It builds `qkiss-VERSION-macos-universal.dmg`, which runs on both Apple silicon (arm64) and
+# Intel (x86_64) Macs, and keeps it as an artifact of the run. It does not put it on the release page yet.
 #
 #   1. Install Qt, Python, the icons (Inkscape), and the libraries of vcpkg.json.
 #   2. Download our lha (https://github.com/kuanyui/lha/releases), the same version as Windows.
@@ -19,6 +19,9 @@ name: Qt6 macOS Build
 #
 # Nobody in this project has a Mac, so step 4 does what a user would do first:
 # it checks the signature and the libraries of every file, starts the app, and opens an LZH file.
+#
+# The runner is Apple silicon, so only the arm64 code of the app is started. For the x86_64 code,
+# step 4 checks only that every program and library has it, and for which macOS it is built.
 #
 # A user who downloads the .dmg must allow the app once, because it is not notarized by Apple:
 # System Settings > Privacy & Security > "Open Anyway".
@@ -146,8 +149,9 @@ jobs:
             generated/icons_built.stamp
           key: ${{ steps.icon_cache.outputs.cache-primary-key }}
 
-      # Step 6: [Cache] Build the libraries of vcpkg.json. `arm64-osx` makes static libraries, so they
-      # go into the executable, and the app needs no extra .dylib from vcpkg.
+      # Step 6: [Cache] Build the libraries of vcpkg.json. `universal-osx` makes static libraries, so they
+      # go into the executable, and the app needs no extra .dylib from vcpkg. vcpkg has no such triplet:
+      # it is ours, in `packaging/macos/vcpkg-triplets/` (arm64 + x86_64 in each library).
       - name: Create the vcpkg cache directories
         run: mkdir -p "${VCPKG_DEFAULT_BINARY_CACHE}" "${VCPKG_DOWNLOADS}"
 
@@ -157,10 +161,11 @@ jobs:
         with:
           path: vcpkg_cache
           # vcpkg does not put MACOSX_DEPLOYMENT_TARGET into its own hashes, so it is in this key.
-          key: ${{ runner.os }}-${{ runner.arch }}-${{ steps.getXcodeVer.outputs.xcodeVer }}-macos${{ env.MACOSX_DEPLOYMENT_TARGET }}-vcpkg-mega-cache-${{ hashFiles('vcpkg.json') }}
+          # The triplet is in this key too: after a change to it, vcpkg builds new libraries, which need a new key to be saved.
+          key: ${{ runner.os }}-${{ runner.arch }}-${{ steps.getXcodeVer.outputs.xcodeVer }}-macos${{ env.MACOSX_DEPLOYMENT_TARGET }}-vcpkg-mega-cache-${{ hashFiles('vcpkg.json', 'packaging/macos/vcpkg-triplets/*.cmake') }}
 
       - name: Download & build & install packages via vcpkg
-        run: vcpkg install --triplet arm64-osx
+        run: vcpkg install --triplet universal-osx --overlay-triplets=packaging/macos/vcpkg-triplets
 
       - name: Save `vcpkg_cache`
         if: steps.vcpkg_cache.outputs.cache-hit != 'true'
@@ -171,21 +176,28 @@ jobs:
 
       # A library built for a newer macOS could make the app crash on an older one.
       # The `minos` value is the oldest macOS version that can run the object file.
-      - name: Check that the vcpkg libraries are built for macOS ${{ env.MACOSX_DEPLOYMENT_TARGET }}
+      # Each library must also have the code for both CPUs.
+      - name: Check that the vcpkg libraries are built for macOS ${{ env.MACOSX_DEPLOYMENT_TARGET }}, arm64 and x86_64
         run: |
           shopt -s nullglob
-          libs=(vcpkg_installed/arm64-osx/lib/*.a)
+          libs=(vcpkg_installed/universal-osx/lib/*.a)
           if [ ${#libs[@]} -eq 0 ]; then
-            echo "::error::No library in vcpkg_installed/arm64-osx/lib/"
+            echo "::error::No library in vcpkg_installed/universal-osx/lib/"
             exit 1
           fi
           for lib in "${libs[@]}"; do
-            versions=$(otool -l "$lib" | awk '$1 == "minos" { print $2 }' | sort -u | tr '\n' ' ' | sed 's/ $//')
-            echo "${lib}: minos ${versions}"
-            if [ "$versions" != "$MACOSX_DEPLOYMENT_TARGET" ]; then
-              echo "::error::${lib} is built for macOS ${versions}, not ${MACOSX_DEPLOYMENT_TARGET}"
+            if ! lipo "$lib" -verify_arch arm64 x86_64; then
+              echo "::error::${lib} does not have both arm64 and x86_64: $(lipo -info "$lib")"
               exit 1
             fi
+            for arch in arm64 x86_64; do
+              versions=$(otool -arch "$arch" -l "$lib" | awk '$1 == "minos" { print $2 }' | sort -u | tr '\n' ' ' | sed 's/ $//')
+              echo "${lib} (${arch}): minos ${versions}"
+              if [ "$versions" != "$MACOSX_DEPLOYMENT_TARGET" ]; then
+                echo "::error::The ${arch} code of ${lib} is built for macOS ${versions}, not ${MACOSX_DEPLOYMENT_TARGET}"
+                exit 1
+              fi
+            done
           done
 
       # Step 7: Download our lha. The release ZIP has lha, FORK_MODIFICATIONS.md and lha-VERSION-src.zip.
@@ -204,12 +216,16 @@ jobs:
       # Step 8: Build with CMake (build to `build/`)
       # - ICU is turned off: it would come from Homebrew, which is built only for the macOS of the runner.
       #   Without ICU, the app uses the iconv of macOS, like the Windows build uses iconv.
+      # - CMAKE_OSX_ARCHITECTURES: the app has the code for both Apple silicon and Intel.
+      #   Qt (`clang_64`), our lha and the vcpkg libraries (`universal-osx`) also have both.
       - name: CMake Configure and Build
         run: |
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
             -DCMAKE_TOOLCHAIN_FILE="${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake" \
-            -DVCPKG_TARGET_TRIPLET=arm64-osx \
+            -DVCPKG_TARGET_TRIPLET=universal-osx \
+            -DVCPKG_OVERLAY_TRIPLETS="${GITHUB_WORKSPACE}/packaging/macos/vcpkg-triplets" \
             -DCMAKE_DISABLE_FIND_PACKAGE_ICU=ON \
             -DMACOS_EXTERNAL_BIN_DEPS_DIR="${RUNNER_TEMP}/bin_deps"
           cmake --build build
@@ -231,9 +247,9 @@ jobs:
       - name: Mount the .dmg
         run: |
           shopt -s nullglob
-          dmgs=(build/qkiss-*-macos-arm64.dmg)
+          dmgs=(build/qkiss-*-macos-universal.dmg)
           if [ ${#dmgs[@]} -ne 1 ]; then
-            echo "::error::Expected exactly 1 file build/qkiss-*-macos-arm64.dmg, found: ${dmgs[*]}"
+            echo "::error::Expected exactly 1 file build/qkiss-*-macos-universal.dmg, found: ${dmgs[*]}"
             exit 1
           fi
           mkdir -p "${RUNNER_TEMP}/dmg"
@@ -298,6 +314,8 @@ jobs:
 
       # For each program and library (Mach-O file) in the app:
       # - Its signature is valid.
+      # - It has the code for both arm64 and x86_64. Below, `otool -arch all` checks the code for both CPUs:
+      #   without it, otool shows only the code for the CPU of the runner (arm64).
       # - It links only to files in the app (`@rpath/...` and so on) or in macOS (`/usr/lib/`, `/System/Library/`).
       #   A path like `/Users/runner/...` or `/opt/homebrew/...` would not exist on the computer of the user.
       # - Its rpaths (where `@rpath/` looks) are all inside the app.
@@ -318,7 +336,12 @@ jobs:
               exit 1
             fi
 
-            outside=$(otool -L "$f" | awk '/^\t/ { print $1 }' \
+            if ! lipo "$f" -verify_arch arm64 x86_64; then
+              echo "::error::${f} does not have both arm64 and x86_64: $(lipo -info "$f")"
+              exit 1
+            fi
+
+            outside=$(otool -arch all -L "$f" | awk '/^\t/ { print $1 }' \
                       | grep -v -E '^(@rpath/|@executable_path/|@loader_path/|/usr/lib/|/System/Library/)' || true)
             if [ -n "$outside" ]; then
               echo "::error::${f} links to files outside the app and macOS: ${outside}"
@@ -326,13 +349,13 @@ jobs:
             fi
 
             # In `otool -l`, the path of an LC_RPATH is 2 lines after `cmd LC_RPATH`.
-            absolute_rpaths=$(otool -l "$f" | awk '$1 == "cmd" && $2 == "LC_RPATH" { getline; getline; if ($2 ~ /^\//) print $2 }')
+            absolute_rpaths=$(otool -arch all -l "$f" | awk '$1 == "cmd" && $2 == "LC_RPATH" { getline; getline; if ($2 ~ /^\//) print $2 }')
             if [ -n "$absolute_rpaths" ]; then
               echo "::error::${f} has an rpath outside the app: ${absolute_rpaths}"
               exit 1
             fi
 
-            newer=$(otool -l "$f" | awk -v target="$MACOSX_DEPLOYMENT_TARGET" '
+            newer=$(otool -arch all -l "$f" | awk -v target="$MACOSX_DEPLOYMENT_TARGET" '
               $1 == "minos" {
                 split($2, v, "."); split(target, t, ".")
                 if (v[1] + 0 > t[1] + 0 || (v[1] + 0 == t[1] + 0 && v[2] + 0 > t[2] + 0)) print $2
@@ -419,8 +442,8 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: QKiSS-macOS-arm64
-          path: build/qkiss-*-macos-arm64.dmg
+          name: QKiSS-macOS-universal
+          path: build/qkiss-*-macos-universal.dmg
           if-no-files-found: error
 
       # The runner empties RUNNER_TEMP at the end of the job, so do not leave the .dmg mounted there.
