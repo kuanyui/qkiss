@@ -376,6 +376,9 @@ jobs:
       - name: Start the app, and check the libraries that it loads
         run: |
           log="${RUNNER_TEMP}/dyld.log"
+          # install-qt-action sets QT_PLUGIN_PATH to the Qt on the runner, and Qt loads plugins from there
+          # before `Contents/PlugIns/`. Users have no QT_PLUGIN_PATH.
+          unset QT_PLUGIN_PATH
           DYLD_PRINT_LIBRARIES=1 "${APP}/Contents/MacOS/qkiss" > "$log" 2>&1 &
           pid=$!
           sleep 15
@@ -387,7 +390,7 @@ jobs:
           fi
           wait "$pid" || true
 
-          sed -n -E 's/^dyld(\[[0-9]+\])?: (loaded: )?//p' "$log" > "${RUNNER_TEMP}/loaded.txt"
+          sed -n -E 's/^dyld(\[[0-9]+\])?: (loaded: |<[0-9A-Fa-f-]+> )//p' "$log" > "${RUNNER_TEMP}/loaded.txt"
           echo "Loaded $(wc -l < "${RUNNER_TEMP}/loaded.txt") files."
           if [ ! -s "${RUNNER_TEMP}/loaded.txt" ]; then
             cat "$log"
@@ -413,6 +416,8 @@ jobs:
           (cd "$work" && "${APP}/Contents/Helpers/lha" a test.lzh test.cnf)
 
           log="${work}/qkiss.log"
+          # See "Start the app, and check the libraries that it loads".
+          unset QT_PLUGIN_PATH
           # Without QT_FORCE_STDERR_LOGGING, Qt on macOS logs to stderr only when stderr is a terminal.
           QT_FORCE_STDERR_LOGGING=1 "${APP}/Contents/MacOS/qkiss" "${work}/test.lzh" > "$log" 2>&1 &
           pid=$!
