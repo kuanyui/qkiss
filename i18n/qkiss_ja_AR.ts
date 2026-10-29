@@ -297,6 +297,73 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     </message>
 </context>
 <context>
+    <name>CrtFilterGL</name>
+    <message>
+        <source>[CRT Simulation] The OpenGL shader %1 failed, so the CRT Simulation runs on the CPU:</source>
+        <translation>[CRTシミュレーション] OpenGLシェーダー %1 が失敗いたしましたので、CRTシミュレーションはCPUで実行いたしますわ。不出来なシェーダーには退場を命じましたの。言い訳は次の行で伺いますわ：</translation>
+    </message>
+    <message>
+        <source>OpenGL can&apos;t create a framebuffer (%1)</source>
+        <translation>OpenGLがフレームバッファーを作成できない（%1）</translation>
+    </message>
+    <message>
+        <source>OpenGL error 0x%1 (%2)</source>
+        <translation>OpenGLエラー 0x%1（%2）が発生した</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] The environment variable QKISS_RENDERER is software, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] 環境変数 QKISS_RENDERER の値が software ですので、CRTシミュレーションはCPUで実行いたしますわ。CPUには、わたくしの映像を支える栄誉を差し上げますの！</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] The environment variable QKISS_RENDERER is &quot;%1&quot;, but the only valid values are auto, opengl and software. Using auto.</source>
+        <translation>[CRTシミュレーション] 環境変数 QKISS_RENDERER の値は「%1」ですけれど、有効な値は auto、opengl、software のみですわ。autoを使用いたしますの。招待客名簿にないお名前で入れるとお思い？おほほほ！</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL is not available, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] OpenGLが利用できませんので、CRTシミュレーションはCPUで実行いたしますわ。呼びつけても姿を見せないとは、ずいぶんな遅刻ですこと！</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] It needs OpenGL 3.3, but this system has %1 %2.%3, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] OpenGL 3.3 が必要ですけれど、このシステムは %1 %2.%3 ですので、CRTシミュレーションはCPUで実行いたしますわ。入場資格に届かない方は、舞台袖でお待ちなさい！</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL can&apos;t be used, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] OpenGLを使用できませんので、CRTシミュレーションはCPUで実行いたしますわ。使えない道具を飾って眺める趣味は、わたくしにはございませんの。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL renderer: %1. Version: %2.</source>
+        <translation>[CRTシミュレーション] OpenGLレンダラー：%1。バージョン：%2。まずは素性を明かしていただきませんとね。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] This OpenGL renderer has no 3D acceleration, so the CRT Simulation runs on the CPU without it. The environment variable QKISS_RENDERER=opengl uses it anyway.</source>
+        <translation>[CRTシミュレーション] このOpenGLレンダラーには3Dアクセラレーションがございませんので、CRTシミュレーションはこのレンダラーを使わずCPUで実行いたしますわ。環境変数 QKISS_RENDERER の値を opengl にする（QKISS_RENDERER=opengl）と、それでもこのレンダラーを使用いたしますの。御者のいない馬車にそれでも乗るとおっしゃるなら、お止めはいたしませんことよ！</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL error 0x%1 while preparing, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] 準備中にOpenGLエラー 0x%1 が発生いたしましたので、CRTシミュレーションはCPUで実行いたしますわ。開幕前に躓く役者など、主役の器ではなくってよ！</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL draws the test picture of %1 wrongly (a color differs from the CPU by %2 of 255 levels), so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] OpenGLが %1 のテスト画像を正しく描画できませんので（ある色がCPUの結果と255段階中%2段階異なりますわ）、CRTシミュレーションはCPUで実行いたしますの。ドレスの色を取り違える仕立屋など、お屋敷には置けませんわ！</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL draws the test picture correctly (the colors differ from the CPU by at most %1 of 255 levels), so the CRT Simulation runs on the graphics card.</source>
+        <translation>[CRTシミュレーション] OpenGLはテスト画像を正しく描画できますわ（色とCPUの結果との差は最大でも255段階中%1段階ですの）。CRTシミュレーションはグラフィックカードで実行いたします。まあ、わたくしの舞台を任せる最低限の腕前はあるようですわね！</translation>
+    </message>
+    <message>
+        <source>OpenGL stopped working</source>
+        <translation>OpenGLが動作しなくなった</translation>
+    </message>
+    <message>
+        <source>OpenGL lost its context (for example, after a reset of the graphics card)</source>
+        <translation>OpenGLのコンテキストが失われた（グラフィックカードのリセット後など）</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] %1, so the CRT Simulation runs on the CPU from now on.</source>
+        <translation>[CRTシミュレーション] %1ため、今後CRTシミュレーションはCPUで実行いたしますわ。途中で役目を投げ出した者に、二度も喝采は差し上げませんことよ！</translation>
+    </message>
+</context>
+<context>
     <name>FileSystemBrowser</name>
     <message>
         <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
@@ -781,6 +848,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じて�
     <message>
         <source>3D acceleration is strongly recommended; without it, performance will be very poor.</source>
         <translation>3Dアクセラレーションの整った環境でお使いになることを、断固おすすめいたしますわ。さもなくば、性能は見るも無残ですのよ。</translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>有効ですわ</translation>
     </message>
 </context>
 <context>

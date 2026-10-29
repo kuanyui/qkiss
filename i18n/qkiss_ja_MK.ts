@@ -299,6 +299,73 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     </message>
 </context>
 <context>
+    <name>CrtFilterGL</name>
+    <message>
+        <source>[CRT Simulation] The OpenGL shader %1 failed, so the CRT Simulation runs on the CPU:</source>
+        <translation>[CRTシミュレーション] OpenGLシェーダー %1 が失敗したから、CRTシミュレーションはCPUで動かすね〜。シェーダーひとつ通せないとか、よわよわすぎ〜♥：</translation>
+    </message>
+    <message>
+        <source>OpenGL can&apos;t create a framebuffer (%1)</source>
+        <translation>OpenGLがフレームバッファーを作れない（%1）</translation>
+    </message>
+    <message>
+        <source>OpenGL error 0x%1 (%2)</source>
+        <translation>OpenGLエラー 0x%1（%2）が発生した</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] The environment variable QKISS_RENDERER is software, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] 環境変数 QKISS_RENDERER の値が software だから、CRTシミュレーションはCPUで動かすよ〜。わざわざグラボをお休みにして、CPUだけ働かせるんだ？へぇ〜♥</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] The environment variable QKISS_RENDERER is &quot;%1&quot;, but the only valid values are auto, opengl and software. Using auto.</source>
+        <translation>[CRTシミュレーション] 環境変数 QKISS_RENDERER の値は「%1」だけど、有効な値は auto、opengl、software だけだよ。autoを使うね〜。三択も選べないとか、ざぁ〜こ♥</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL is not available, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] OpenGLが利用できないから、CRTシミュレーションはCPUで動かすよ〜。入口にも立てないとか、OpenGLちゃんかわいそ〜w</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] It needs OpenGL 3.3, but this system has %1 %2.%3, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] OpenGL 3.3 が必要なのに、このシステムは %1 %2.%3 だから、CRTシミュレーションはCPUで動かすね〜。バージョンの通知表、赤点じゃん♥</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL can&apos;t be used, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] OpenGLを使えないから、CRTシミュレーションはCPUで動かすよ〜。使えない機能を飾っとくだけとか、見栄っ張り〜♥</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL renderer: %1. Version: %2.</source>
+        <translation>[CRTシミュレーション] OpenGLレンダラー：%1。バージョン：%2。ふ〜ん、名乗るだけは一人前なんだ？</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] This OpenGL renderer has no 3D acceleration, so the CRT Simulation runs on the CPU without it. The environment variable QKISS_RENDERER=opengl uses it anyway.</source>
+        <translation>[CRTシミュレーション] このOpenGLレンダラーには3Dアクセラレーションがないから、CRTシミュレーションはこのレンダラーを使わずCPUで動かすよ。環境変数 QKISS_RENDERER の値を opengl にする（QKISS_RENDERER=opengl）と、それでもこのレンダラーを使うからね〜。根性で速くなると思ってる？ぷっ♥</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL error 0x%1 while preparing, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] 準備中にOpenGLエラー 0x%1 が出たから、CRTシミュレーションはCPUで動かすよ〜。靴ひも結ぶところで転んでんじゃんw</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL draws the test picture of %1 wrongly (a color differs from the CPU by %2 of 255 levels), so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRTシミュレーション] OpenGLが %1 のテスト画像をちゃんと描けないから（ある色がCPUの結果と255段階中%2段階も違うよ）、CRTシミュレーションはCPUで動かすね〜。お絵描きからやり直してきたらぁ？♥</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL draws the test picture correctly (the colors differ from the CPU by at most %1 of 255 levels), so the CRT Simulation runs on the graphics card.</source>
+        <translation>[CRTシミュレーション] OpenGLはテスト画像を正しく描けたよ（色とCPUの結果との差は最大でも255段階中%1段階）。CRTシミュレーションはグラフィックカードで動かすね〜。へぇ、やればできんじゃん。ほめてほしいのぉ？</translation>
+    </message>
+    <message>
+        <source>OpenGL stopped working</source>
+        <translation>OpenGLが動かなくなった</translation>
+    </message>
+    <message>
+        <source>OpenGL lost its context (for example, after a reset of the graphics card)</source>
+        <translation>OpenGLのコンテキストが失われた（グラフィックカードのリセット後とかに）</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] %1, so the CRT Simulation runs on the CPU from now on.</source>
+        <translation>[CRTシミュレーション] %1から、これからCRTシミュレーションはCPUで動かすね〜。グラボちゃん、途中でギブアップとかよわ〜♥</translation>
+    </message>
+</context>
+<context>
     <name>FileSystemBrowser</name>
     <message>
         <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
@@ -783,6 +850,10 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
     <message>
         <source>3D acceleration is strongly recommended; without it, performance will be very poor.</source>
         <translation>3Dアクセラレーションある環境で使うの、超おすすめ〜。ないとパフォーマンス激悪なんだけどw</translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>有効〜♥</translation>
     </message>
 </context>
 <context>

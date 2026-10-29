@@ -295,6 +295,73 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
     </message>
 </context>
 <context>
+    <name>CrtFilterGL</name>
+    <message>
+        <source>[CRT Simulation] The OpenGL shader %1 failed, so the CRT Simulation runs on the CPU:</source>
+        <translation>[CRT 模擬] OpenGL 著色器 %1 失敗，因此 CRT 模擬改用 CPU 執行：</translation>
+    </message>
+    <message>
+        <source>OpenGL can&apos;t create a framebuffer (%1)</source>
+        <translation>OpenGL 無法建立畫面緩衝區（%1）</translation>
+    </message>
+    <message>
+        <source>OpenGL error 0x%1 (%2)</source>
+        <translation>發生 OpenGL 錯誤 0x%1（%2）</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] The environment variable QKISS_RENDERER is software, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT 模擬] 環境變數 QKISS_RENDERER 的值為 software，因此 CRT 模擬使用 CPU 執行。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] The environment variable QKISS_RENDERER is &quot;%1&quot;, but the only valid values are auto, opengl and software. Using auto.</source>
+        <translation>[CRT 模擬] 環境變數 QKISS_RENDERER 的值為「%1」，但合法的值只有 auto、opengl 或 software。改用 auto。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL is not available, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT 模擬] 沒有可用的 OpenGL，因此 CRT 模擬使用 CPU 執行。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] It needs OpenGL 3.3, but this system has %1 %2.%3, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT 模擬] 需要 OpenGL 3.3，但此系統只有 %1 %2.%3，因此 CRT 模擬使用 CPU 執行。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL can&apos;t be used, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT 模擬] 無法使用 OpenGL，因此 CRT 模擬使用 CPU 執行。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL renderer: %1. Version: %2.</source>
+        <translation>[CRT 模擬] OpenGL 算繪器：%1。版本：%2。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] This OpenGL renderer has no 3D acceleration, so the CRT Simulation runs on the CPU without it. The environment variable QKISS_RENDERER=opengl uses it anyway.</source>
+        <translation>[CRT 模擬] 此 OpenGL 算繪器沒有 3D 加速，因此 CRT 模擬不使用它，改用 CPU 執行。設定環境變數 QKISS_RENDERER=opengl 則仍會使用它。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL error 0x%1 while preparing, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT 模擬] 準備時發生 OpenGL 錯誤 0x%1，因此 CRT 模擬使用 CPU 執行。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL draws the test picture of %1 wrongly (a color differs from the CPU by %2 of 255 levels), so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT 模擬] OpenGL 繪製 %1 的測試圖片有誤（有一個顏色與 CPU 的結果相差 255 階中的 %2 階），因此 CRT 模擬使用 CPU 執行。</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL draws the test picture correctly (the colors differ from the CPU by at most %1 of 255 levels), so the CRT Simulation runs on the graphics card.</source>
+        <translation>[CRT 模擬] OpenGL 正確繪製了測試圖片（顏色與 CPU 的結果最多相差 255 階中的 %1 階），因此 CRT 模擬使用顯示卡執行。</translation>
+    </message>
+    <message>
+        <source>OpenGL stopped working</source>
+        <translation>OpenGL 停止運作</translation>
+    </message>
+    <message>
+        <source>OpenGL lost its context (for example, after a reset of the graphics card)</source>
+        <translation>OpenGL 遺失了 context（例如在顯示卡重設之後）</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] %1, so the CRT Simulation runs on the CPU from now on.</source>
+        <translation>[CRT 模擬] %1，因此之後 CRT 模擬改用 CPU 執行。</translation>
+    </message>
+</context>
+<context>
     <name>FileSystemBrowser</name>
     <message>
         <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
@@ -779,6 +846,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
     <message>
         <source>3D acceleration is strongly recommended; without it, performance will be very poor.</source>
         <translation>極度建議在有 3D 加速的環境中使用，否則效能很差</translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>啟用</translation>
     </message>
 </context>
 <context>

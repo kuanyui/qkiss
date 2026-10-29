@@ -596,13 +596,14 @@ bool CrtFilterGL::init()
 {
     const QString renderer = qEnvironmentVariable("QKISS_RENDERER");
     if (renderer == "software"_L1) {
-        qkInfo.noquote() << tr("[CRT Simulation] QKISS_RENDERER is software, so the CRT Simulation runs on the CPU.");
+        qkInfo.noquote() << tr("[CRT Simulation] The environment variable QKISS_RENDERER is software, so the CRT "
+                               "Simulation runs on the CPU.");
         return false;
     }
     const bool forced = renderer == "opengl"_L1;
     if (!forced && !renderer.isEmpty() && renderer != "auto"_L1) {
-        qkWarning.noquote() << tr("[CRT Simulation] QKISS_RENDERER is \"%1\", but it can only be auto, "
-                                  "opengl or software. Using auto.").arg(renderer);
+        qkWarning.noquote() << tr("[CRT Simulation] The environment variable QKISS_RENDERER is \"%1\", but the "
+                                  "only valid values are auto, opengl and software. Using auto.").arg(renderer);
     }
 
     // OpenGL 3.3 has everything that the shaders need. Graphics cards since about 2010 have it. The core profile leaves
@@ -654,7 +655,8 @@ bool CrtFilterGL::init()
     });
     if (runsOnCpu && !forced) {
         qkInfo.noquote() << tr("[CRT Simulation] This OpenGL renderer has no 3D acceleration, so the CRT Simulation "
-                               "runs on the CPU without it. QKISS_RENDERER=opengl uses it anyway.");
+                               "runs on the CPU without it. The environment variable QKISS_RENDERER=opengl uses "
+                               "it anyway.");
         return false;
     }
 

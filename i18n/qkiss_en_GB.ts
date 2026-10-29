@@ -295,6 +295,73 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
     </message>
 </context>
 <context>
+    <name>CrtFilterGL</name>
+    <message>
+        <source>[CRT Simulation] The OpenGL shader %1 failed, so the CRT Simulation runs on the CPU:</source>
+        <translation>[CRT Presentation] The OpenGL shader %1 has failed, so the CRT Presentation will be conducted on the CPU. I regret that the shader’s account of itself follows below:</translation>
+    </message>
+    <message>
+        <source>OpenGL can&apos;t create a framebuffer (%1)</source>
+        <translation>OpenGL cannot create a framebuffer (%1)</translation>
+    </message>
+    <message>
+        <source>OpenGL error 0x%1 (%2)</source>
+        <translation>OpenGL error 0x%1 occurred (%2)</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] The environment variable QKISS_RENDERER is software, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT Presentation] The environment variable QKISS_RENDERER has the value software, so the CRT Presentation will be conducted on the CPU, precisely as instructed.</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] The environment variable QKISS_RENDERER is &quot;%1&quot;, but the only valid values are auto, opengl and software. Using auto.</source>
+        <translation>[CRT Presentation] The environment variable QKISS_RENDERER has the value &quot;%1&quot;, but I am afraid the only valid values are auto, opengl and software. I shall use auto.</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL is not available, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT Presentation] OpenGL is not available, so the CRT Presentation will be conducted on the CPU.</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] It needs OpenGL 3.3, but this system has %1 %2.%3, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT Presentation] OpenGL 3.3 is required, but this system offers %1 %2.%3, so the CRT Presentation will be conducted on the CPU.</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL can&apos;t be used, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT Presentation] OpenGL cannot be used, so the CRT Presentation will be conducted on the CPU.</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL renderer: %1. Version: %2.</source>
+        <translation>[CRT Presentation] OpenGL renderer: %1. Version: %2.</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] This OpenGL renderer has no 3D acceleration, so the CRT Simulation runs on the CPU without it. The environment variable QKISS_RENDERER=opengl uses it anyway.</source>
+        <translation>[CRT Presentation] This OpenGL renderer has no 3D acceleration, so the CRT Presentation will be conducted on the CPU without this renderer. Setting the environment variable QKISS_RENDERER to opengl (QKISS_RENDERER=opengl) will employ it nevertheless, should one insist.</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL error 0x%1 while preparing, so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT Presentation] OpenGL error 0x%1 occurred whilst preparations were under way, so the CRT Presentation will be conducted on the CPU.</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL draws the test picture of %1 wrongly (a color differs from the CPU by %2 of 255 levels), so the CRT Simulation runs on the CPU.</source>
+        <translation>[CRT Presentation] OpenGL draws the %1 test picture incorrectly (one colour differs from the CPU result by %2 levels out of 255), so the CRT Presentation will be conducted on the CPU.</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] OpenGL draws the test picture correctly (the colors differ from the CPU by at most %1 of 255 levels), so the CRT Simulation runs on the graphics card.</source>
+        <translation>[CRT Presentation] OpenGL draws the test picture correctly (the colours differ from the CPU result by no more than %1 levels out of 255), so the CRT Presentation will be conducted on the graphics card.</translation>
+    </message>
+    <message>
+        <source>OpenGL stopped working</source>
+        <translation>OpenGL has ceased to function</translation>
+    </message>
+    <message>
+        <source>OpenGL lost its context (for example, after a reset of the graphics card)</source>
+        <translation>OpenGL has lost its context (for example, following a reset of the graphics card)</translation>
+    </message>
+    <message>
+        <source>[CRT Simulation] %1, so the CRT Simulation runs on the CPU from now on.</source>
+        <translation>[CRT Presentation] %1, so from this point onward the CRT Presentation will be conducted on the CPU.</translation>
+    </message>
+</context>
+<context>
     <name>FileSystemBrowser</name>
     <message>
         <source>File path &quot;%1&quot; is not found, abort loading this path.</source>
@@ -779,6 +846,10 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
     <message>
         <source>3D acceleration is strongly recommended; without it, performance will be very poor.</source>
         <translation>It is most strongly recommended that 3D acceleration be available; otherwise, performance will be decidedly poor.</translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation>In Service</translation>
     </message>
 </context>
 <context>
