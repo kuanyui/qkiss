@@ -94,6 +94,15 @@ QRect DockWidgetProxyStyle::subElementRect(QStyle::SubElement element, const QSt
     return QProxyStyle::subElementRect(element, option, widget);
 }
 
+int DockWidgetProxyStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
+{
+    // The macOS style makes toolbar icons 32x32. Fusion, the style on Windows, makes toolbar icons 24x24.
+    // Fusion gets this size from `QCommonStyle`, the base class of Fusion and the macOS style.
+    // So call `QCommonStyle::pixelMetric()` directly, not the one in the macOS style.
+    if (metric == QStyle::PM_ToolBarIconSize) { return QCommonStyle::pixelMetric(metric, option, widget); }
+    return QProxyStyle::pixelMetric(metric, option, widget);
+}
+
 int DockWidgetProxyStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const
 {
     // The macOS style shows no icons on the buttons of `QDialogButtonBox` (OK, Cancel, Apply...). Show them, as on other systems.
