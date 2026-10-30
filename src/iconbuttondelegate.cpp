@@ -57,8 +57,10 @@ QSize IconButtonDelegate::sizeHint(const QStyleOptionViewItem &option, const QMo
             textHeight + padVert * 2
         };
     }
+    // Same as the spacing between icon and text in paint()
+    int iconSpacing = (!icon.isNull() && !text.isEmpty()) ? padHori : 0;
     QSize hint {
-        iconSize.width() + textSize.width(),
+        iconSize.width() + iconSpacing + textSize.width(),
         qMax(iconSize.height(), textSize.height())
     };
     return hint;
@@ -78,10 +80,11 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         return;
     }
     int padHori = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-    int padVert = opt.widget->style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
-    // qkDebug << padHori << padVert;
-    int itemHeight = opt.rect.height();
-    int itemIconSize = itemHeight - padVert * 3;   // FIXME: Magic number... Donno why 2 gives out a too-large icon after upgrade Qt...
+    // qkDebug << padHori;
+    QFontMetrics fm(opt.font);
+    int itemIconSize = fm.height();   // Same as the icon size in sizeHint(). (The row can be taller than sizeHint(), so don't use `opt.rect.height()` here, or the icon becomes larger than the width that sizeHint() gave)
+    // Not QStyle's spacing of QPushButton (hardcoded 4px in `QCommonStyle`, no QStyle::PixelMetric for it), which looks too large with these small paddings.
+    int iconSpacing = (!icon.isNull() && !text.isEmpty()) ? padHori : 0;
     QRect iconRect;
     QRect textRect;
 
@@ -104,23 +107,19 @@ void IconButtonDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     // Draw according to standard style of QStyle::ControlElement::PushButton
     QApplication::style()->drawControl(QStyle::CE_PushButton, &buttonOption, painter);
 
+    // Center icon + spacing + text in the button as a whole
+    // Calculate text width
+    int textWidth = fm.horizontalAdvance(text);
+    int iconAndTextWidth = (icon.isNull() ? 0 : itemIconSize) + iconSpacing + textWidth;
+    int x = opt.rect.x() + (opt.rect.width() - iconAndTextWidth) / 2;
     if (!icon.isNull()) {
-        iconRect = opt.rect.adjusted(padHori, padVert, 0, 0);
-        iconRect.setHeight(itemIconSize);
-        iconRect.setWidth(itemIconSize);
+        iconRect = QRect(x, opt.rect.center().y() - itemIconSize / 2, itemIconSize, itemIconSize);
         QPixmap pixmap = icon.pixmap(itemIconSize, itemIconSize);
         painter->drawPixmap(iconRect.topLeft(), pixmap);
+        x = iconRect.right() + 1 + iconSpacing;   // Text starts after the icon (not at `iconRect.width()`, which ignores where the icon starts)
     }
     if (!text.isEmpty()) {
-        // Calculate text width
-        QFontMetrics fm(opt.font);
-        int textWidth = fm.horizontalAdvance(text);
-        int textHeight = fm.height();
-
-        textRect.setX(opt.rect.x() + iconRect.width());
-        textRect.setY(opt.rect.y() + padVert);
-        textRect.setWidth(textWidth);
-        textRect.setHeight(textHeight);
+        textRect = QRect(x, opt.rect.y(), textWidth, opt.rect.height());
         painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignHCenter, text);
     }
     // qkDebug << opt.rect << iconRect << textRect;
