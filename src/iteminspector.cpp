@@ -30,6 +30,7 @@ ItemInspector::ItemInspector(QWidget *parent)
     : QWidget{parent}
 {
     QVBoxLayout *vboxLayout = new QVBoxLayout{this};
+    vboxLayout->setContentsMargins(0, 0, 0, 0);
     QScrollArea *scrollArea = new QScrollArea{};
     QWidget *scrolledWidget = new QWidget{};
     m_gridLayout = new QGridLayout();
