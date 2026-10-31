@@ -22,6 +22,7 @@
 #include "extractorsandbox.h"
 #include "logging.h"
 
+#include <QCoreApplication>
 #include <QDirIterator>
 #include <QTemporaryDir>
 using namespace Qt::Literals::StringLiterals;
@@ -59,7 +60,7 @@ AbstractArchiveProcessor::Info ArchiveProcessorExternalUnar::info() const
 bool ArchiveProcessorExternalUnar::checkAvailability()
 {
     QProcess p {};
-    p.start("unar", {"-h"});
+    p.start(getUnarProgram(), {"-h"});
     p.waitForFinished();
     return p.exitCode() == 0;
 }
@@ -120,6 +121,18 @@ const char *ArchiveProcessorExternalUnar::getEncodingParam()
     }
 }
 
+QString ArchiveProcessorExternalUnar::getUnarProgram()
+{
+#ifdef Q_OS_WIN
+    // Some DLLs files are conflicted with the DLLs used by qkiss (for example `zlib1.dll`), so `unar.exe` and its DLLs are in a child folder `unar/`.
+    const QString unarExePath = QCoreApplication::applicationDirPath() + "/unar/unar.exe";
+    if (QFileInfo::exists(unarExePath)) { return unarExePath; }
+#endif
+    // - Linux: the `unar` of the distro.
+    // - macOS: `main.cpp` puts `qkiss.app/Contents/Helpers/` first in PATH. We put the binary of `unar` under it.
+    return QStringLiteral("unar");
+}
+
 
 bool ArchiveProcessorExternalUnar::startUnarProcessToExtractLzh(const QString &lzhFilePath)
 {
@@ -130,8 +143,9 @@ bool ArchiveProcessorExternalUnar::startUnarProcessToExtractLzh(const QString &l
     m_elapsedTimer.start();
     m_archiveFilePath = lzhFilePath;
     m_buffer.clear();
-    sandboxExtractorProcess(m_process, "unar", lzhFilePath, m_tmpDir->path());
-    m_process->start("unar",
+    const QString program = getUnarProgram();
+    sandboxExtractorProcess(m_process, program, lzhFilePath, m_tmpDir->path());
+    m_process->start(program,
                      {
                         "-no-directory",
                         "-output-directory", m_tmpDir->path(),

@@ -37,6 +37,9 @@ public:
 
 private:
     static const char *getEncodingParam();
+    /// The `unar` to run. On Windows, it is the `unar\unar.exe` that comes with the app, when it exists.
+    /// Otherwise, it is `unar` in PATH.
+    static QString getUnarProgram();
     bool startUnarProcessToExtractLzh(const QString &lzhFilePath);
     QStringList getAllFileNamesInTmpDirRecursively();
     std::shared_ptr<QMap<QString, QByteArray>> getAllFileRawContentsInTmpDirRecursively();

@@ -17,6 +17,9 @@ env:
   # To update lha, change only this line. Both the download URL and the cache key of `bin_deps` use it.
   # Windows and macOS use the same lha, so change `LHA_VERSION` in `macos.yaml` too. Its first step checks that both are the same.
   LHA_VERSION: 1.14i-ac20260723-ky20261029
+  # The release of our unar fork that goes into the Windows package: https://github.com/kuanyui/XADMaster/releases
+  # The same rules as for LHA_VERSION: change only this line, and change `UNAR_VERSION` in `macos.yaml` too.
+  UNAR_VERSION: 1.10.7-ky20261031
 
 # == About actions/cache ==============================================================
 #
@@ -179,8 +182,8 @@ jobs:
         with:
           path: ${{ runner.temp }}/bin_deps
           # A saved cache never changes. With LHA_VERSION in the key, a new LHA_VERSION downloads lha again,
-          # instead of restoring the cached old lha.exe.
-          key: ${{ runner.os }}-external-binary-dependencies-v1-lha-${{ env.LHA_VERSION }}
+          # instead of restoring the cached old lha.exe. The same applies to UNAR_VERSION.
+          key: ${{ runner.os }}-external-binary-dependencies-v1-lha-${{ env.LHA_VERSION }}-unar-${{ env.UNAR_VERSION }}
 
       # Step 2: Download and extract external binary dependencies (LHA & unar)
       - name: Download & extract external binary dependencies
@@ -197,9 +200,13 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "Cannot download lha ${{ env.LHA_VERSION }}. Is it on https://github.com/kuanyui/lha/releases ?" }
           powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/lha.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
 
-          # Handle unar
-          curl -L -o "${{ runner.temp }}/bin_deps/unar.zip" https://cdn.theunarchiver.com/downloads/unarWindows.zip
-          powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/unar.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
+          # Handle unar: the release ZIP of our fork has unar.exe, lsar.exe, the DLLs that they need, and their licenses.
+          # It goes into a folder of its own, `bin_deps/unar/`: CMakeLists.txt installs this whole folder as `bin/unar/`.
+          # The same `-f` and check as for lha. The second check also fails the job when the ZIP cannot be unzipped.
+          curl -fL -o "${{ runner.temp }}/bin_deps/unar.zip" "https://github.com/kuanyui/XADMaster/releases/download/${{ env.UNAR_VERSION }}/unar-${{ env.UNAR_VERSION }}-win64.zip"
+          if ($LASTEXITCODE -ne 0) { throw "Cannot download unar ${{ env.UNAR_VERSION }}. Is it on https://github.com/kuanyui/XADMaster/releases ?" }
+          powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/unar.zip" -DestinationPath "${{ runner.temp }}/bin_deps/unar"
+          if (-not (Test-Path "${{ runner.temp }}/bin_deps/unar/unar.exe")) { throw "No unar.exe in unar.zip" }
 
   build-main:
     name: Build main project
@@ -277,7 +284,7 @@ jobs:
         with:
           path: ${{ runner.temp }}/bin_deps
           # Must be the same key as in `prepare-external-bin-deps-cache`.
-          key: ${{ runner.os }}-external-binary-dependencies-v1-lha-${{ env.LHA_VERSION }}
+          key: ${{ runner.os }}-external-binary-dependencies-v1-lha-${{ env.LHA_VERSION }}-unar-${{ env.UNAR_VERSION }}
 
       # Step 4.1: Add external binary dependencies directory to system PATH
       - name: Add external dependencies to PATH
@@ -453,6 +460,31 @@ jobs:
       - name: List build directory (Windows)
         run: Get-ChildItem -Path build -Depth 1
 
+      # Step 13.1: Check unar in the portable ZIP, as a user would unzip it:
+      # - `bin/unar/` has unar.exe and the license files, and no lsar.exe (qkiss does not use it).
+      # - `bin/` has no Foundation.1.0.dll, the DLL of the old unar from theunarchiver.com.
+      # - unar.exe runs with the DLLs next to it, and it is version UNAR_VERSION.
+      - name: Check unar in the portable ZIP
+        run: |
+          $zips = @(Get-ChildItem build/qkiss-*-win64.zip)
+          if ($zips.Count -ne 1) { throw "Expected exactly 1 file build/qkiss-*-win64.zip, found: $($zips.Name)" }
+          Expand-Archive -Path $zips[0].FullName -DestinationPath "${{ runner.temp }}/portable"
+          $unar = @(Get-ChildItem "${{ runner.temp }}/portable" -Recurse -Filter unar.exe)
+          if ($unar.Count -ne 1) { throw "Expected exactly 1 unar.exe in the portable ZIP, found: $($unar.FullName)" }
+          $unarDir = $unar[0].Directory
+          if ($unarDir.Name -ne 'unar' -or $unarDir.Parent.Name -ne 'bin') { throw "unar.exe is not in bin/unar/: $($unar[0].FullName)" }
+          foreach ($file in 'LICENSE', 'FORK_MODIFICATIONS.md', 'THIRD-PARTY.txt', 'licenses') {
+            if (-not (Test-Path "$($unarDir.FullName)/$file")) { throw "bin/unar/ has no $file" }
+          }
+          if (Test-Path "$($unarDir.FullName)/lsar.exe") { throw "bin/unar/ has lsar.exe, which qkiss does not use" }
+          if (Test-Path "$($unarDir.Parent.FullName)/Foundation.1.0.dll") { throw "bin/ still has Foundation.1.0.dll of the old unar" }
+          # unar prints its version, for example `v1.10.7-ky20261031`.
+          $version = & $unar[0].FullName -version 2>&1 | Out-String
+          Write-Host "unar -version: $version"
+          if ($LASTEXITCODE -ne 0 -or -not $version.Contains("v${{ env.UNAR_VERSION }}")) {
+            throw "unar.exe in the portable ZIP does not run, or it is not version ${{ env.UNAR_VERSION }}"
+          }
+
       # Step 14: Upload the entire Release folder
       # Default value of ${CPACK_PACKAGE_FILE_NAME} is
       # ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}
@@ -490,6 +522,7 @@ jobs:
   # - the installer: `qkiss-0.9.0-win64.exe`
   # - the portable ZIP: `qkiss-0.9.0-win64.zip`
   # Before that, it attests their build provenance, so that anyone can check where they come from.
+  # With them, it uploads the source code of the unar in both files (`unar-UNAR_VERSION-src.tar.xz`).
   #
   # Good to know:
   # - This is a small job of its own, so that only this job gets write permission.
@@ -530,7 +563,16 @@ jobs:
         with:
           subject-path: windows-files/*
 
-      # Step 3: Upload them to the release page of this tag, with `gh` (GitHub CLI, already on the runner).
+      # Step 3: Download the source code of the unar in the Windows files, from the release page of our fork.
+      # The license of unar (LGPL-2.1, section 6d) requires its source code to be offered from the same place as the
+      # programs: here, the release page of qkiss. It is not attested in Step 2, because this workflow did not build it.
+      # macOS uses the same UNAR_VERSION, so this file is also the source code of the unar in the .dmg.
+      - name: Download the source code of unar
+        run: |
+          curl -fsSL -o "windows-files/unar-${UNAR_VERSION}-src.tar.xz" \
+            "https://github.com/kuanyui/XADMaster/releases/download/${UNAR_VERSION}/unar-${UNAR_VERSION}-src.tar.xz"
+
+      # Step 4: Upload them to the release page of this tag, with `gh` (GitHub CLI, already on the runner).
       # If the release page does not exist yet, it is created. `tarball-and-obs.yaml` may create it at the
       # same moment: then `gh release create` fails here, and the second `gh release view` finds the page
       # that the other workflow made.

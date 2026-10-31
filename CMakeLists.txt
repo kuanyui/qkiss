@@ -898,14 +898,14 @@ elseif(WIN32)
 
     # Search external dependencies in variable `WIN_EXTERNAL_BIN_DEPS_DIR`, falling back to System PATH if not found.
     find_program(LHA_EXECUTABLE lha HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
-    find_program(UNAR_EXECUTABLE unar HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
-    find_file(FOUNDATION_DLL "Foundation.1.0.dll" HINTS "${WIN_EXTERNAL_BIN_DEPS_DIR}")
+    # unar is different: it is found only in `unar/`, because its whole folder is installed (see below).
+    find_program(UNAR_EXECUTABLE unar PATHS "${WIN_EXTERNAL_BIN_DEPS_DIR}/unar" NO_DEFAULT_PATH)
 
-    if(LHA_EXECUTABLE AND UNAR_EXECUTABLE AND FOUNDATION_DLL)
-        install(FILES "${LHA_EXECUTABLE}" "${UNAR_EXECUTABLE}" "${FOUNDATION_DLL}" DESTINATION ${CMAKE_INSTALL_BINDIR})
+    if(LHA_EXECUTABLE AND UNAR_EXECUTABLE)
+        install(FILES "${LHA_EXECUTABLE}" DESTINATION ${CMAKE_INSTALL_BINDIR})
         message(STATUS "External dependencies (lha/unar) found and scheduled for installation.")
     else()
-        message(FATAL_ERROR "External dependencies (lha/unar) not found in WIN_EXTERNAL_BIN_DEPS_DIR nor PATH! Installer will be incomplete.")
+        message(FATAL_ERROR "External dependencies (lha/unar) not found! lha must be in WIN_EXTERNAL_BIN_DEPS_DIR or PATH, and unar in WIN_EXTERNAL_BIN_DEPS_DIR/unar. Installer will be incomplete.")
     endif()
 
     # The terms of LHa for UNIX (man/lha.man) do not allow distributing lha.exe alone: it must come with its
@@ -918,6 +918,22 @@ elseif(WIN32)
         install(FILES "${LHA_DIR}/FORK_MODIFICATIONS.md" ${LHA_SOURCE_ZIP} DESTINATION "third-party/lha")
     else()
         message(FATAL_ERROR "FORK_MODIFICATIONS.md and lha-*-src.zip must be next to ${LHA_EXECUTABLE}: lha.exe cannot be distributed without them. Use lha.exe from the release ZIP of https://github.com/kuanyui/lha")
+    endif()
+
+    # unar: the Windows release ZIP of our fork (https://github.com/kuanyui/XADMaster/releases), unzipped into `unar/`.
+    # The whole folder is installed as `bin/unar/`: unar.exe, the DLLs that it needs, and their licenses.
+    # - A folder of its own: some of these DLLs have the same names as DLLs of qkiss (for example `zlib1.dll`
+    #   from vcpkg), but they are different builds. `ArchiveProcessorExternalUnar::getUnarProgram()` runs `unar\unar.exe`.
+    # - Without lsar.exe: qkiss does not use it.
+    # - The licenses of unar (LGPL-2.1) and of its DLLs require them to be distributed with LICENSE,
+    #   FORK_MODIFICATIONS.md, THIRD-PARTY.txt and `licenses/`. Their source code (unar-VERSION-src.tar.xz) is a separate file on the
+    #   release page of qkiss (see the job `upload-to-release` in windows.yaml).
+    get_filename_component(UNAR_DIR "${UNAR_EXECUTABLE}" DIRECTORY)
+    file(GLOB UNAR_LICENSE_FILES "${UNAR_DIR}/licenses/*")
+    if(EXISTS "${UNAR_DIR}/LICENSE" AND EXISTS "${UNAR_DIR}/FORK_MODIFICATIONS.md" AND EXISTS "${UNAR_DIR}/THIRD-PARTY.txt" AND UNAR_LICENSE_FILES)
+        install(DIRECTORY "${UNAR_DIR}/" DESTINATION "${CMAKE_INSTALL_BINDIR}/unar" PATTERN "lsar.exe" EXCLUDE)
+    else()
+        message(FATAL_ERROR "LICENSE, FORK_MODIFICATIONS.md, THIRD-PARTY.txt and licenses/ must be next to ${UNAR_EXECUTABLE}: unar.exe cannot be distributed without them. Use the Windows release ZIP of https://github.com/kuanyui/XADMaster")
     endif()
 
     # ===================================================
@@ -1056,10 +1072,10 @@ elseif(APPLE)
     set(CPACK_DMG_VOLUME_NAME "${PROJ_DISPLAY_NAME}")  # The name of the disk image in Finder
 
     # ===================================================
-    # `install()` external program lha
+    # `install()` external programs lha and unar
     # ===================================================
 
-    set(MACOS_EXTERNAL_BIN_DEPS_DIR "" CACHE PATH "[macOS only] Path to the unzipped macOS release ZIP of https://github.com/kuanyui/lha")
+    set(MACOS_EXTERNAL_BIN_DEPS_DIR "" CACHE PATH "[macOS only] Path to the unzipped macOS release ZIP of https://github.com/kuanyui/lha. Its folder `unar/` has the unzipped macOS release ZIP of https://github.com/kuanyui/XADMaster (unar).")
 
     if(MACOS_EXTERNAL_BIN_DEPS_DIR)
         # Only from this directory, never from PATH. For example, the lha of MacPorts needs the libraries of MacPorts,
@@ -1079,8 +1095,22 @@ elseif(APPLE)
         else()
             message(FATAL_ERROR "FORK_MODIFICATIONS.md and exactly one lha-*-src.zip must be next to ${LHA_EXECUTABLE} (found ${LHA_SOURCE_ZIP_COUNT}: ${LHA_SOURCE_ZIP}). lha cannot be distributed without them. Use lha from the macOS release ZIP of https://github.com/kuanyui/lha")
         endif()
+
+        # unar: the macOS release ZIP of our fork (https://github.com/kuanyui/XADMaster/releases), unzipped into `unar/`.
+        # A folder of its own, because the ZIP also has a FORK_MODIFICATIONS.md. Without lsar: qkiss does not use it.
+        find_program(UNAR_EXECUTABLE unar PATHS "${MACOS_EXTERNAL_BIN_DEPS_DIR}/unar" NO_DEFAULT_PATH REQUIRED)
+        install(PROGRAMS "${UNAR_EXECUTABLE}" DESTINATION "${PROJECT_NAME}.app/Contents/Helpers")
+
+        # The license of unar (LGPL-2.1) requires it to be distributed with LICENSE and FORK_MODIFICATIONS.md (what our fork changed).
+        # Its source code (unar-VERSION-src.tar.xz) is a separate file on the release page, as on Windows.
+        get_filename_component(UNAR_DIR "${UNAR_EXECUTABLE}" DIRECTORY)
+        if(EXISTS "${UNAR_DIR}/LICENSE" AND EXISTS "${UNAR_DIR}/FORK_MODIFICATIONS.md")
+            install(FILES "${UNAR_DIR}/LICENSE" "${UNAR_DIR}/FORK_MODIFICATIONS.md" DESTINATION "${PROJECT_NAME}.app/Contents/Resources/third-party/unar")
+        else()
+            message(FATAL_ERROR "LICENSE and FORK_MODIFICATIONS.md must be next to ${UNAR_EXECUTABLE}: unar cannot be distributed without them. Use unar from the macOS release ZIP of https://github.com/kuanyui/XADMaster")
+        endif()
     else()
-        message(WARNING "MACOS_EXTERNAL_BIN_DEPS_DIR is not set, so qkiss.app has no lha. The app can still use an lha in PATH (for example, from MacPorts), but do not distribute this package.")
+        message(WARNING "MACOS_EXTERNAL_BIN_DEPS_DIR is not set, so qkiss.app has no lha and no unar. The app can still use the ones in PATH (for example, from MacPorts or Homebrew), but do not distribute this package.")
     endif()
 
     # ===================================================
@@ -1096,7 +1126,7 @@ elseif(APPLE)
         "${CMAKE_SOURCE_DIR}/packaging/macos/deploy_qt_runtime.cmake.in"
         "${PROJ_GENERATED_DIR}/packaging/macos/deploy_qt_runtime.cmake"
         @ONLY)
-    # Runs after the `install()` above, so lha is already in the app.
+    # Runs after the `install()` above, so lha and unar are already in the app.
     install(SCRIPT "${PROJ_GENERATED_DIR}/packaging/macos/deploy_qt_runtime.cmake")
 
     include(CPack)  # execute CPack to read the defined variables.

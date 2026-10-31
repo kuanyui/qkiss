@@ -2,7 +2,7 @@
 # !!!!! BE CAREFUL !!!!!
 # - This file only handles "install-time".
 # - This file should be used via `install(SCRIPT ...)` in CMakeLists.txt
-# - It runs after `qkiss.app` and its `Contents/Helpers/lha` are installed. Then CPack puts the app into the .dmg.
+# - It runs after `qkiss.app` and its `Contents/Helpers/lha` and `Contents/Helpers/unar` are installed. Then CPack puts the app into the .dmg.
 # - `macdeployqt` copies the Qt frameworks and plugins into the app. The other libraries (from vcpkg) are static,
 #   so they are already in the executable.
 #   - Explicit:
@@ -22,7 +22,7 @@ set(CMAKE_PROJECT_NAME "@CMAKE_PROJECT_NAME@")
 
 # `DESTDIR` is empty unless it is set, for example `DESTDIR=/tmp/stage cmake --install build`.
 set(APP_BUNDLE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${CMAKE_PROJECT_NAME}.app")
-set(LHA_HELPER "${APP_BUNDLE}/Contents/Helpers/lha")
+set(HELPERS "${APP_BUNDLE}/Contents/Helpers/lha" "${APP_BUNDLE}/Contents/Helpers/unar")
 
 message("[deploy_qt_runtime] CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 message("[deploy_qt_runtime] CMAKE_INSTALL_COMPONENT = ${CMAKE_INSTALL_COMPONENT}")
@@ -34,20 +34,22 @@ if(NOT EXISTS "${APP_BUNDLE}/Contents/MacOS/${CMAKE_PROJECT_NAME}")
     return()
 endif()
 
-# Step 1: Sign lha (ad-hoc, `-`). Apple silicon does not run a program without a signature.
+# Step 1: Sign lha and unar (ad-hoc, `-`). Apple silicon does not run a program without a signature.
 #
-# It must be signed before the app: signing the app records every file in it, so a file that changes
+# They must be signed before the app: signing the app records every file in it, so a file that changes
 # later breaks the signature of the app. `macdeployqt -codesign` signs only the files in `Contents/MacOS`,
-# `Contents/PlugIns` and `Contents/Frameworks`, so it does not touch `Contents/Helpers/lha`.
-if(EXISTS "${LHA_HELPER}")
-    execute_process(
-        COMMAND "${CODESIGN_EXECUTABLE_CONFIGURED}" --force --sign - "${LHA_HELPER}"
-        RESULT_VARIABLE CODESIGN_RESULT
-    )
-    if(NOT CODESIGN_RESULT EQUAL 0)
-        message(FATAL_ERROR "[deploy_qt_runtime] codesign failed for \"${LHA_HELPER}\": ${CODESIGN_RESULT}")
+# `Contents/PlugIns` and `Contents/Frameworks`, so it does not touch `Contents/Helpers/`.
+foreach(HELPER IN LISTS HELPERS)
+    if(EXISTS "${HELPER}")
+        execute_process(
+            COMMAND "${CODESIGN_EXECUTABLE_CONFIGURED}" --force --sign - "${HELPER}"
+            RESULT_VARIABLE CODESIGN_RESULT
+        )
+        if(NOT CODESIGN_RESULT EQUAL 0)
+            message(FATAL_ERROR "[deploy_qt_runtime] codesign failed for \"${HELPER}\": ${CODESIGN_RESULT}")
+        endif()
     endif()
-endif()
+endforeach()
 
 # Step 2: Copy the Qt frameworks and plugins into the app, then sign everything (ad-hoc).
 #

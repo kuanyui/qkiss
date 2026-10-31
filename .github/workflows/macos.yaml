@@ -8,17 +8,21 @@ name: Qt6 macOS Build
 # Intel (x86_64) Macs, and keeps it as an artifact of the run. It does not put it on the release page yet.
 #
 #   1. Install Qt, Python, the icons (Inkscape), and the libraries of vcpkg.json.
-#   2. Download our lha (https://github.com/kuanyui/lha/releases), the same version as Windows.
+#   2. Download our lha (https://github.com/kuanyui/lha/releases) and our unar
+#      (https://github.com/kuanyui/XADMaster/releases), the same versions as Windows.
 #   3. cmake + cpack -> `qkiss.app` inside the .dmg:
 #        Contents/MacOS/qkiss                        the app
 #        Contents/Helpers/lha                        our lha (main.cpp puts this folder in PATH)
+#        Contents/Helpers/unar                       our unar
 #        Contents/Resources/third-party/lha/         its source code and FORK_MODIFICATIONS.md
+#        Contents/Resources/third-party/unar/        its LICENSE and FORK_MODIFICATIONS.md
 #        Contents/Frameworks/, Contents/PlugIns/     Qt (copied by macdeployqt)
 #      Everything is signed ad-hoc (no certificate). See `packaging/macos/deploy_qt_runtime.cmake.in`.
 #   4. Check the .dmg, then upload it.
 #
 # Nobody in this project has a Mac, so step 4 does what a user would do first:
-# it checks the signature and the libraries of every file, starts the app, and opens an LZH file.
+# it checks the signature and the libraries of every file, starts the app, and opens an LZH file
+# with lha and with unar.
 #
 # The runner is Apple silicon, so only the arm64 code of the app is started. For the x86_64 code,
 # step 4 checks only that every program and library has it, and for which macOS it is built.
@@ -46,6 +50,9 @@ env:
   # The release of our lha fork that goes into the macOS package: https://github.com/kuanyui/lha/releases
   # Windows and macOS use the same version. So change it in `windows.yaml` too: the first step checks this.
   LHA_VERSION: 1.14i-ac20260723-ky20261029
+  # The release of our unar fork that goes into the macOS package: https://github.com/kuanyui/XADMaster/releases
+  # The same rule as for LHA_VERSION: change it in `windows.yaml` too.
+  UNAR_VERSION: 1.10.7-ky20261031
 
 jobs:
   build-main:
@@ -75,12 +82,15 @@ jobs:
           submodules: 'recursive'
 
       # Step 2: Check the settings before the long steps
-      - name: Check that Windows and macOS use the same lha
+      - name: Check that Windows and macOS use the same lha and unar
         run: |
-          if ! grep -q -x -F "  LHA_VERSION: ${LHA_VERSION}" .github/workflows/windows.yaml; then
-            echo "::error::LHA_VERSION of macos.yaml (${LHA_VERSION}) is not the one in windows.yaml. Change both."
-            exit 1
-          fi
+          # `${!variable}` is the value of the variable whose name is in `variable`.
+          for variable in LHA_VERSION UNAR_VERSION; do
+            if ! grep -q -x -F "  ${variable}: ${!variable}" .github/workflows/windows.yaml; then
+              echo "::error::${variable} of macos.yaml (${!variable}) is not the one in windows.yaml. Change both."
+              exit 1
+            fi
+          done
 
       - name: Get the Xcode version for the vcpkg cache key
         id: getXcodeVer
@@ -213,11 +223,24 @@ jobs:
           unzip -q "${RUNNER_TEMP}/lha.zip" -d "${RUNNER_TEMP}/bin_deps"
           ls -l "${RUNNER_TEMP}/bin_deps"
 
+      # Step 7.1: Download our unar. The release ZIP has unar, lsar, LICENSE and FORK_MODIFICATIONS.md.
+      # It goes into `bin_deps/unar/`, because lha has another FORK_MODIFICATIONS.md in `bin_deps/`.
+      # CMakeLists.txt installs unar, LICENSE and FORK_MODIFICATIONS.md, but not lsar: qkiss does not use it.
+      - name: Download unar
+        run: |
+          url="https://github.com/kuanyui/XADMaster/releases/download/${UNAR_VERSION}/unar-${UNAR_VERSION}-macos-universal.zip"
+          if ! curl -fsSL -o "${RUNNER_TEMP}/unar.zip" "$url"; then
+            echo "::error::Cannot download unar ${UNAR_VERSION}. Is it on https://github.com/kuanyui/XADMaster/releases ?"
+            exit 1
+          fi
+          unzip -q "${RUNNER_TEMP}/unar.zip" -d "${RUNNER_TEMP}/bin_deps/unar"
+          ls -l "${RUNNER_TEMP}/bin_deps/unar"
+
       # Step 8: Build with CMake (build to `build/`)
       # - ICU is turned off: it would come from Homebrew, which is built only for the macOS of the runner.
       #   Without ICU, the app uses the iconv of macOS, like the Windows build uses iconv.
       # - CMAKE_OSX_ARCHITECTURES: the app has the code for both Apple silicon and Intel.
-      #   Qt (`clang_64`), our lha and the vcpkg libraries (`universal-osx`) also have both.
+      #   Qt (`clang_64`), our lha, our unar and the vcpkg libraries (`universal-osx`) also have both.
       - name: CMake Configure and Build
         run: |
           cmake -B build -G Ninja \
@@ -267,7 +290,7 @@ jobs:
             exit 1
           fi
 
-      - name: Check Info.plist, the icon, the Qt plugins and lha
+      - name: Check Info.plist, the icon, the Qt plugins, lha and unar
         run: |
           # check_plist KEY EXPECTED_VALUE
           check_plist() {
@@ -290,7 +313,10 @@ jobs:
               Contents/PlugIns/platforms/libqcocoa.dylib \
               Contents/Helpers/lha \
               Contents/Resources/third-party/lha/FORK_MODIFICATIONS.md \
-              "Contents/Resources/third-party/lha/lha-${LHA_VERSION}-src.zip"; do
+              "Contents/Resources/third-party/lha/lha-${LHA_VERSION}-src.zip" \
+              Contents/Helpers/unar \
+              Contents/Resources/third-party/unar/LICENSE \
+              Contents/Resources/third-party/unar/FORK_MODIFICATIONS.md; do
             if [ ! -f "${APP}/${f}" ]; then
               echo "::error::qkiss.app has no ${f}"
               exit 1
@@ -309,6 +335,13 @@ jobs:
           "${APP}/Contents/Helpers/lha" --version | tee "${RUNNER_TEMP}/lha-version.txt"
           if ! grep -q -F " version ${LHA_VERSION} " "${RUNNER_TEMP}/lha-version.txt"; then
             echo "::error::The lha in qkiss.app is not version ${LHA_VERSION}"
+            exit 1
+          fi
+
+          # unar prints its version, for example `v1.10.7-ky20261031`.
+          "${APP}/Contents/Helpers/unar" -version 2>&1 | tee "${RUNNER_TEMP}/unar-version.txt"
+          if ! grep -q -F "v${UNAR_VERSION}" "${RUNNER_TEMP}/unar-version.txt"; then
+            echo "::error::The unar in qkiss.app is not version ${UNAR_VERSION}"
             exit 1
           fi
 
@@ -437,6 +470,45 @@ jobs:
               'LZH file "test.lzh" is extracted successfully'; do
             if ! grep -q -F "$expected" "$log"; then
               echo "::error::qkiss could not open test.lzh with the lha in qkiss.app. The log has no line: ${expected}"
+              exit 1
+            fi
+          done
+
+      # Open the same LZH file with the unar in `Contents/Helpers/`. The app uses the extractor that its settings
+      # select (lha by default), and no other one. So first select unar: `ExternalUnarProcess` is 2 in `src/enums.h`.
+      # - QSettings of Qt on macOS keeps the settings in the domain `com.qkiss-app.qkiss`. `comify()` in
+      #   qsettings_mac.cpp makes it from `organizationDomain()` (`qkiss.app`, see src/main.cpp), because Qt
+      #   does not take `app` as the end of an Internet domain.
+      # - In a key, QSettings turns `/` into `.`: `Global/LzhDecompressorBackend ` (with its space, as in
+      #   src/configfile.h) becomes `Global.LzhDecompressorBackend `.
+      - name: Open the LZH file with the unar in the app
+        run: |
+          work="${RUNNER_TEMP}/lzh-test"
+          defaults write com.qkiss-app.qkiss 'Global.LzhDecompressorBackend ' -int 2
+
+          log="${work}/qkiss-unar.log"
+          # See "Start the app, and check the libraries that it loads".
+          unset QT_PLUGIN_PATH
+          QT_FORCE_STDERR_LOGGING=1 "${APP}/Contents/MacOS/qkiss" "${work}/test.lzh" > "$log" 2>&1 &
+          pid=$!
+          for _ in $(seq 30); do
+            if grep -q 'is extracted successfully' "$log" || ! kill -0 "$pid" 2> /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          kill "$pid" 2> /dev/null || true
+          wait "$pid" || true
+          cat "$log"
+          # Both lines are from `src/archiveprocessorexternalunar.cpp`.
+          # The first line shows that the app used unar, so the setting above worked.
+          for expected in \
+              'Trying to extract LZH file "test.lzh" via Unar...' \
+              'LZH file "test.lzh" is extracted successfully'; do
+            if ! grep -q -F "$expected" "$log"; then
+              # If the domain above is wrong, the settings files of the app show the right one.
+              ls -l ~/Library/Preferences | grep -i qkiss || true
+              echo "::error::qkiss could not open test.lzh with the unar in qkiss.app. The log has no line: ${expected}"
               exit 1
             fi
           done

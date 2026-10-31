@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 #ifdef Q_OS_MACOS
     /// - An app opened from Finder gets only `/usr/bin:/bin:/usr/sbin:/sbin` as PATH. Then `QProcess` cannot find `lha` or `unar`.
-    /// - So put `qkiss.app/Contents/Helpers/` first in PATH. It has the `lha` that comes with the app.
+    /// - So put `qkiss.app/Contents/Helpers/` first in PATH. It has the `lha` and `unar` that come with the app.
     /// - And put the folders of Homebrew (Apple silicon, Intel) and MacPorts last, where the user may have installed `unar`.
     /// - `applicationDirPath()` needs the `QApplication` object, so this is after it.
     QStringList pathDirs = qEnvironmentVariable("PATH").split(u':', Qt::SkipEmptyParts);
