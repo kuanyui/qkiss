@@ -25,7 +25,7 @@
 #include <QTranslator>
 #include <QFile>
 #include <QDir>
-#include "dockwidgetproxystyle.h"
+#include "zproxystyle.h"
 #include "translationmanager.h"
 #include "ztranslator.h"
 #include "logging.h"
@@ -139,8 +139,8 @@ int main(int argc, char *argv[])
     /// - `QApplication` sets this attribute in its constructor, so this is after it.
     QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
 #endif
-    // Our-defined `DockWidgetProxyStyle`. Without a base style, it uses the style of `QT_STYLE_OVERRIDE` or `-style`, else the style of the system.
-    app.setStyle(new DockWidgetProxyStyle{});
+    // Our-defined `ZProxyStyle`. Without a base style, it uses the style of `QT_STYLE_OVERRIDE` or `-style`, else the style of the system.
+    app.setStyle(new ZProxyStyle{});
     QFile qssFile(":/styles/main.qss");
     [[maybe_unused]] bool success = qssFile.open(QFile::ReadOnly);
     QString qssContent = QLatin1String(qssFile.readAll());

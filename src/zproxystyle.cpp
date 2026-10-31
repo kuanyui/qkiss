@@ -17,9 +17,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
-#include "dockwidgetproxystyle.h"
+#include "zproxystyle.h"
 
-void DockWidgetProxyStyle::drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const
+void ZProxyStyle::drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const
 {
     if (element == QStyle::CE_DockWidgetTitle) {
         const QStyleOptionDockWidget *opt = qstyleoption_cast<const QStyleOptionDockWidget *>(option);
@@ -73,7 +73,7 @@ void DockWidgetProxyStyle::drawControl(QStyle::ControlElement element, const QSt
 }
 
 #ifdef Q_OS_MACOS
-QRect DockWidgetProxyStyle::subElementRect(QStyle::SubElement element, const QStyleOption *option, const QWidget *widget) const
+QRect ZProxyStyle::subElementRect(QStyle::SubElement element, const QStyleOption *option, const QWidget *widget) const
 {
     // The macOS style puts the close & float buttons on the left of the dock title, where we draw the icon.
     // It mirrors them with `visualRect()`, so with the opposite direction they go to the right, as in other styles.
@@ -94,7 +94,7 @@ QRect DockWidgetProxyStyle::subElementRect(QStyle::SubElement element, const QSt
     return QProxyStyle::subElementRect(element, option, widget);
 }
 
-int DockWidgetProxyStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
+int ZProxyStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
 {
     // The macOS style makes toolbar icons 32x32. Fusion, the style on Windows, makes toolbar icons 24x24.
     // Fusion gets this size from `QCommonStyle`, the base class of Fusion and the macOS style.
@@ -103,7 +103,7 @@ int DockWidgetProxyStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOp
     return QProxyStyle::pixelMetric(metric, option, widget);
 }
 
-int DockWidgetProxyStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const
+int ZProxyStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const
 {
     // The macOS style shows no icons on the buttons of `QDialogButtonBox` (OK, Cancel, Apply...). Show them, as on other systems.
     if (hint == QStyle::SH_DialogButtonBox_ButtonsHaveIcons) { return 1; }
@@ -111,7 +111,7 @@ int DockWidgetProxyStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *
 }
 #endif
 
-int DockWidgetProxyStyle::getMostFitIconSize(const QStyleOption &option)
+int ZProxyStyle::getMostFitIconSize(const QStyleOption &option)
 {
     static const QList<int> AVAILABLE_SIZE_LIST = {48, 32, 24, 22, 16};
     int textHeight = option.fontMetrics.height();

@@ -631,7 +631,7 @@ qt_add_executable("${PROJ_NAME}"
     src/casepreservedstring.h src/casepreservedstring.cpp
     src/ztranslator.h src/ztranslator.cpp
     src/ztreewidget.h src/ztreewidget.cpp
-    src/dockwidgetproxystyle.h src/dockwidgetproxystyle.cpp
+    src/zproxystyle.h src/zproxystyle.cpp
     src/mycstr.h
     src/unipath.h src/unipath.cpp
     src/crtfilter.h src/crtfilter.cpp
