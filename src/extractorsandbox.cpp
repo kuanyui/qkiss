@@ -45,13 +45,13 @@ namespace {
 // ======================================================
 // Notes
 // ======================================================
-// - All code within this anonymous namespace runs in the child process, between fork() and exec().
+// - All code within this anonymous namespace runs in the child process, **between fork() and exec()**.
 // - The parent also calls landlockCreateRuleset(), but only to log the Landlock ABI version.
 // - In the child, only async-signal-safe functions may be called: no memory allocation, no Qt. So this code uses system calls and C strings.
 
 
 // ======================================================
-// Landlock Wrapper Functions
+// Landlock System Call Wrapper Functions
 // ======================================================
 
 // glibc has no wrappers for Landlock, so wrap them by ourselves.
@@ -81,6 +81,10 @@ int landlockRestrictSelf(int rulesetFd)
     return static_cast<int>(syscall(__NR_landlock_restrict_self, rulesetFd, 0));
 }
 
+// ======================================================
+// Landlock Contants
+// ======================================================
+
 constexpr __u64 FS_READ =
         LANDLOCK_ACCESS_FS_READ_FILE |
         LANDLOCK_ACCESS_FS_READ_DIR;
@@ -96,7 +100,7 @@ constexpr __u64 FS_WRITE =
         LANDLOCK_ACCESS_FS_REFER |
         LANDLOCK_ACCESS_FS_TRUNCATE;
 
-/// The only rights that a rule on a file (not a folder) may have.
+/// The only rights that a rule on a file (**NOT** a folder!!!) may have.
 constexpr __u64 FILE_RIGHTS =
         LANDLOCK_ACCESS_FS_EXECUTE |
         LANDLOCK_ACCESS_FS_WRITE_FILE |
@@ -110,7 +114,7 @@ struct PathRule {
 };
 
 /// The necessary paths that LZH extractor may use.
-constexpr PathRule SYSTEM_RULES[] = {
+constexpr PathRule SYSTEM_PATH_RULES[] = {
     { "/usr", FS_READ | FS_EXECUTE },
     { "/bin", FS_READ | FS_EXECUTE },
     { "/sbin", FS_READ | FS_EXECUTE },
@@ -127,7 +131,9 @@ constexpr PathRule SYSTEM_RULES[] = {
 
 /// - Get our-defined list of `LANDLOCK_ACCESS_FS_*`, which will be blocked by default.
 ///   - `landlock_ruleset_attr` contains fields `handled_access_fs`, `handled_access_net`, `scoped`. This function only returns `handled_access_fs`.
-/// @return fs_access
+/// - If set this into `landlock_ruleset_attr.handled_access_fs`, **ALL paths in this system** will be denied by default (blacklist mode),
+///   you need to add exceptions into whitelist via `landlock_path_beneath_attr.allowed_access` and `__NR_landlock_add_rule`
+/// @return `fs_access` (`landlock_ruleset_attr.handled_access_fs`)
 __u64 getDefaultBlockedLandlockAccesFs(int abi)
 {
     __u64 access =
@@ -150,10 +156,35 @@ __u64 getDefaultBlockedLandlockAccesFs(int abi)
     return access;
 }
 
-/// Grants `access` beneath the folder `path`, or on `path` itself if it is a file.
-/// Returns false on error. A path that does not exist is skipped.
-bool allowPath(int rulesetFd, const char *path, __u64 access)
+/// No TCP bind or connect.
+/// NOTE: `seccomp` will still be used to restrict the `socket()` syscall, which can restrict UDP and UNIX socket
+/// @return `net_access` (`landlock_ruleset_attr.handled_access_net`)
+__u64 getDefaultBlockedLandlockAccessNet(int abi)
 {
+    if (abi < 4) { return 0; }
+    return LANDLOCK_ACCESS_NET_BIND_TCP | LANDLOCK_ACCESS_NET_CONNECT_TCP;
+}
+
+/// Signals and abstract UNIX sockets only within the sandbox.
+/// @return `scope` (`landlock_ruleset_attr.scoped`)
+__u64 getLandlockScoped(int abi)
+{
+    if (abi < 6) { return 0; }
+    return LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET | LANDLOCK_SCOPE_SIGNAL;
+}
+
+// ======================================================
+// Landlock Logics
+// ======================================================
+
+/// Add allow (`access`) rule to ruleset.
+/// Grants `access` beneath the folder `path`, or on `path` itself if it is a file.
+/// @returns false on error. A path that does not exist is skipped without raising error.
+bool allowPath(int rulesetFd, const char *path, __u64 accessFlags)
+{
+    // (Remind: By default, `open()` follows symlink.)
+    // O_PATH: locate the path only (merely ensure it's existed) without even read permission.
+    // O_CLOEXEC: close-on-exec. When process calls `exec()`, the fd will be closed by kernel automatically.
     const int fd = open(path, O_PATH | O_CLOEXEC);
     if (fd < 0) { return errno == ENOENT; }  // If the path doesn't exist, return true.
     struct stat status;
@@ -161,40 +192,56 @@ bool allowPath(int rulesetFd, const char *path, __u64 access)
     if (ok) {
         landlock_path_beneath_attr rule = {};
         rule.parent_fd = fd;
-        rule.allowed_access = S_ISDIR(status.st_mode) ? access : access & FILE_RIGHTS;
+        rule.allowed_access = S_ISDIR(status.st_mode) ? accessFlags : accessFlags & FILE_RIGHTS;
         ok = rule.allowed_access == 0 || landlockAddPathRule(rulesetFd, &rule) == 0;
     }
     close(fd);
     return ok;
 }
 
-// Limits the file system with Landlock. Returns false on error. A kernel without Landlock is not an error.
-bool restrictFileSystem(const char *program, const char *archive, const char *writableDir)
+/// Limits the file system with Landlock.
+/// This function will:
+/// 1. Check availability of Landlock.
+/// 2. Create a `landlock_ruleset_attr`, then fill the following rules into this structure:
+///       (i) Deny all FS & Net access by default
+///      (ii) Add pre-defined, limited-accessible system paths (ex: `/usr` is RO, `/dev/null` is RW)
+///     (iii) Allow some dynamic paths which are determined during runtime. (ex: `lha` path, lzh file path)
+/// 3. Create a ruleset and get its fd, pass the `landlock_ruleset_attr` into the fd.
+/// 4. Apply the ruleset on the current process. The process is restricted from now on.
+/// @returns false on error. (A kernel without Landlock is not an error.)
+bool restrictFileSystemViaLandlock(const char *program, const char *archive, const char *writableDir)
 {
-    const int abi = landlockGetAbiVersion();
-    if (abi < 0) {
+    const int abiVersion = landlockGetAbiVersion();
+    if (abiVersion < 0) {
         return errno == ENOSYS || errno == EOPNOTSUPP;  // Not built into this kernel, or disabled at boot.
     }
     landlock_ruleset_attr attributes = {};
-    attributes.handled_access_fs = getDefaultBlockedLandlockAccesFs(abi);
-    if (abi >= 6) {
-        // Signals and abstract UNIX sockets only within the sandbox.
-        attributes.scoped = LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET | LANDLOCK_SCOPE_SIGNAL;
-    }
+    // (i) Deny all FS & Net access by default
+    attributes.handled_access_fs = getDefaultBlockedLandlockAccesFs(abiVersion);   // deny all fs access in this system
+    attributes.handled_access_net = getDefaultBlockedLandlockAccessNet(abiVersion);
+    attributes.scoped = getLandlockScoped(abiVersion);
+
     const int rulesetFd = landlockCreateRuleset(&attributes, sizeof(attributes), 0);
     if (rulesetFd < 0) { return false; }
-    const __u64 handled = attributes.handled_access_fs;
+
+    const __u64 allowedFsFlags = attributes.handled_access_fs;
     bool ok = true;
-    for (const PathRule &rule : SYSTEM_RULES) {
-        ok = ok && allowPath(rulesetFd, rule.path, rule.access & handled);
+    // (ii) Add pre-defined, limited-accessible system paths (ex: `/usr` is RO, `/dev/null` is RW)
+    for (const PathRule &pathRule : SYSTEM_PATH_RULES) {
+        ok = ok && allowPath(rulesetFd, pathRule.path, pathRule.access & allowedFsFlags);
     }
-    ok = ok && (program == nullptr || allowPath(rulesetFd, program, (FS_READ | FS_EXECUTE) & handled));
-    ok = ok && allowPath(rulesetFd, archive, FS_READ & handled);
-    ok = ok && (writableDir == nullptr || allowPath(rulesetFd, writableDir, (FS_READ | FS_WRITE) & handled));
+    // (iii) Allow some dynamic paths which are determined during runtime. (ex: `lha` path, lzh file path)
+    ok = ok && (program == nullptr || allowPath(rulesetFd, program, (FS_READ | FS_EXECUTE) & allowedFsFlags));
+    ok = ok && allowPath(rulesetFd, archive, FS_READ & allowedFsFlags);
+    ok = ok && (writableDir == nullptr || allowPath(rulesetFd, writableDir, (FS_READ | FS_WRITE) & allowedFsFlags));
     ok = ok && landlockRestrictSelf(rulesetFd) == 0;
     close(rulesetFd);
     return ok;
 }
+
+// ======================================================
+// `seccomp` Constants
+// ======================================================
 
 // The system call numbers in the filter are only valid for the architecture they were compiled for.
 #if defined(__x86_64__)
@@ -209,8 +256,14 @@ bool restrictFileSystem(const char *program, const char *archive, const char *wr
     BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_##name, 0, 1), \
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | (error))
 
-constexpr __u32 NEW_NAMESPACES = CLONE_NEWNS | CLONE_NEWCGROUP | CLONE_NEWUTS | CLONE_NEWIPC | CLONE_NEWUSER
-                               | CLONE_NEWPID | CLONE_NEWNET;
+constexpr __u32 NEW_NAMESPACES =
+        CLONE_NEWNS |
+        CLONE_NEWCGROUP |
+        CLONE_NEWUTS |
+        CLONE_NEWIPC |
+        CLONE_NEWUSER |
+        CLONE_NEWPID |
+        CLONE_NEWNET;
 
 constexpr sock_filter SECCOMP_FILTER[] = {
     // Kill the process on a system call of another architecture: the numbers below mean other system calls there.
@@ -235,7 +288,7 @@ constexpr sock_filter SECCOMP_FILTER[] = {
     DENY(process_vm_readv, EPERM),
     DENY(process_vm_writev, EPERM),
     DENY(pidfd_getfd, EPERM),
-    // Kernel attack surface that command-line tools do not need.
+    // Kernel attack surfaces that command-line tools do not need.
     DENY(io_uring_setup, EPERM),
     DENY(io_uring_enter, EPERM),
     DENY(io_uring_register, EPERM),
@@ -268,8 +321,14 @@ constexpr sock_filter SECCOMP_FILTER[] = {
 };
 #undef DENY
 
-// Limits the system calls with seccomp. Returns false on error.
-bool restrictSystemCalls()
+
+// ======================================================
+// `seccomp` Logics
+// ======================================================
+
+
+/// Limits the system calls with seccomp. Returns false on error.
+bool restrictSystemCallsViaSeccomp()
 {
     const sock_fprog program = {
         static_cast<unsigned short>(sizeof(SECCOMP_FILTER) / sizeof(SECCOMP_FILTER[0])),
@@ -278,12 +337,17 @@ bool restrictSystemCalls()
     return prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &program) == 0;
 }
 #else
-// No filter for this architecture yet.
-bool restrictSystemCalls()
+/// No filter for this architecture yet.
+bool restrictSystemCallsViaSeccomp()
 {
     return true;
 }
 #endif
+
+// ======================================================
+// Main
+// ======================================================
+
 
 void writeError(const char *text)
 {
@@ -299,17 +363,22 @@ void writeError(const char *text)
     _exit(127);
 }
 
-// Runs in the child process, just before exec().
+/// Runs in the child process, just before exec().
 void restrictThisProcess(const char *program, const char *archive, const char *writableDir)
 {
     // Required by Landlock and by seccomp without root. The extractor can never gain privileges, e.g. from setuid.
     if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0) { failSandbox("no_new_privs"); }
-    if (!restrictFileSystem(program, archive, writableDir)) { failSandbox("Landlock"); }
-    if (!restrictSystemCalls()) { failSandbox("seccomp"); }
+    if (!restrictFileSystemViaLandlock(program, archive, writableDir)) { failSandbox("Landlock"); }
+    if (!restrictSystemCallsViaSeccomp()) { failSandbox("seccomp"); }
 }
 
 } // namespace
 #endif // Q_OS_LINUX
+
+
+// ======================================================
+// Public APIs
+// ======================================================
 
 void sandboxExtractorProcess(QProcess *process, const QString &program, const QString &archiveFilePath, const QString &writableDirPath)
 {
