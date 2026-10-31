@@ -220,8 +220,13 @@ But even if you use SELinux, you still have the protection of Landlock and secco
 - For display flags on various platforms (especially for fucking Windows 11), this project adopts [lipis/flag-icons](https://github.com/lipis/flag-icons).
 - For extracting LZH file, this project relys on multiple backends from various projects:
   - [libarchive](https://github.com/libarchive/libarchive) originated from FreeBSD Project by Tim Kientzle.
-  - [LHa for UNIX](https://github.com/jca02266/lha) as an optional external program.
-  - [Unarchiver](https://theunarchiver.com/command-line) as an optional external program.
+  - LHa for UNIX (`lha`):  as an optional external program. ([Our forked Git repo]((https://github.com/kuanyui/lha)), [Upstream Git repo]((https://github.com/jca02266/lha)))
+    - Linux: uses the package provided by distro. (Notice: some distro may provide other `lha`-compatible implementations with the same CLI interfaces, such as [Lhasa](https://github.com/fragglet/lhasa), [jLHA](https://tracker.debian.org/pkg/libjlha-java))
+    - Windows & Mac: uses our fork. (for latest Windows and Mac OS Universal support. Built via Github Actions)
+  - Unarchiver (`unar`): as an optional external program. ([Our forked Git repo](https://github.com/kuanyui/XADMaster), [Upstream Git repo](https://github.com/MacPaw/XADMaster)), [Homepage](https://theunarchiver.com/command-line))
+    - Linux: uses the package provided by distro.
+    - Windows & Mac: uses our fork. (for latest GNUStep build + Windows, and Mac OS Universal support. Built via Github Actions)
+
 
 ## Disclosuring Usage of LLMs
 
