@@ -57,6 +57,7 @@ namespace {
 // glibc has no wrappers for Landlock, so wrap them by ourselves.
 
 /// Create empty ruleset and return a fd of it.
+/// @return -1 if error.
 int landlockCreateRuleset(const landlock_ruleset_attr *attributes, size_t size, __u32 flags)
 {
     return static_cast<int>(syscall(__NR_landlock_create_ruleset, attributes, size, flags));
@@ -70,12 +71,14 @@ int landlockGetAbiVersion()
 }
 
 /// Add rule into ruleset (ex: `/usr` is RO)
+/// @return -1 if error. 0 if success.
 int landlockAddPathRule(int rulesetFd, const landlock_path_beneath_attr *rule)
 {
     return static_cast<int>(syscall(__NR_landlock_add_rule, rulesetFd, LANDLOCK_RULE_PATH_BENEATH, rule, 0));
 }
 
 /// Apply ruleset to self (and cannot be removed by itself anymore.)
+/// @return -1 if error. 0 if success.
 int landlockRestrictSelf(int rulesetFd)
 {
     return static_cast<int>(syscall(__NR_landlock_restrict_self, rulesetFd, 0));
@@ -134,7 +137,7 @@ constexpr PathRule SYSTEM_PATH_RULES[] = {
 /// - If set this into `landlock_ruleset_attr.handled_access_fs`, **ALL paths in this system** will be denied by default (blacklist mode),
 ///   you need to add exceptions into whitelist via `landlock_path_beneath_attr.allowed_access` and `__NR_landlock_add_rule`
 /// @return `fs_access` (`landlock_ruleset_attr.handled_access_fs`)
-__u64 getDefaultBlockedLandlockAccesFs(int abi)
+__u64 getDefaultBlockedLandlockAccesFs(int abiVersion)
 {
     __u64 access =
             LANDLOCK_ACCESS_FS_EXECUTE |
@@ -150,9 +153,9 @@ __u64 getDefaultBlockedLandlockAccesFs(int abi)
             LANDLOCK_ACCESS_FS_MAKE_FIFO |
             LANDLOCK_ACCESS_FS_MAKE_BLOCK |
             LANDLOCK_ACCESS_FS_MAKE_SYM;
-    if (abi >= 2) { access |= LANDLOCK_ACCESS_FS_REFER; }
-    if (abi >= 3) { access |= LANDLOCK_ACCESS_FS_TRUNCATE; }
-    if (abi >= 5) { access |= LANDLOCK_ACCESS_FS_IOCTL_DEV; }
+    if (abiVersion >= 2) { access |= LANDLOCK_ACCESS_FS_REFER; }
+    if (abiVersion >= 3) { access |= LANDLOCK_ACCESS_FS_TRUNCATE; }
+    if (abiVersion >= 5) { access |= LANDLOCK_ACCESS_FS_IOCTL_DEV; }
     return access;
 }
 
@@ -192,8 +195,12 @@ bool allowPath(int rulesetFd, const char *path, __u64 accessFlags)
     if (ok) {
         landlock_path_beneath_attr rule = {};
         rule.parent_fd = fd;
-        rule.allowed_access = S_ISDIR(status.st_mode) ? accessFlags : accessFlags & FILE_RIGHTS;
-        ok = rule.allowed_access == 0 || landlockAddPathRule(rulesetFd, &rule) == 0;
+        if (S_ISDIR(status.st_mode)) {
+            rule.allowed_access = accessFlags;
+        } else {
+            rule.allowed_access = accessFlags & FILE_RIGHTS;
+        }
+        if (rule.allowed_access) { ok = landlockAddPathRule(rulesetFd, &rule) == 0; }
     }
     close(fd);
     return ok;
@@ -224,16 +231,16 @@ bool restrictFileSystemViaLandlock(const char *program, const char *archive, con
     const int rulesetFd = landlockCreateRuleset(&attributes, sizeof(attributes), 0);
     if (rulesetFd < 0) { return false; }
 
-    const __u64 allowedFsFlags = attributes.handled_access_fs;
+    const __u64 supportedFsAccessFlags = attributes.handled_access_fs;
     bool ok = true;
     // (ii) Add pre-defined, limited-accessible system paths (ex: `/usr` is RO, `/dev/null` is RW)
     for (const PathRule &pathRule : SYSTEM_PATH_RULES) {
-        ok = ok && allowPath(rulesetFd, pathRule.path, pathRule.access & allowedFsFlags);
+        ok = ok && allowPath(rulesetFd, pathRule.path, pathRule.access & supportedFsAccessFlags);
     }
     // (iii) Allow some dynamic paths which are determined during runtime. (ex: `lha` path, lzh file path)
-    ok = ok && (program == nullptr || allowPath(rulesetFd, program, (FS_READ | FS_EXECUTE) & allowedFsFlags));
-    ok = ok && allowPath(rulesetFd, archive, FS_READ & allowedFsFlags);
-    ok = ok && (writableDir == nullptr || allowPath(rulesetFd, writableDir, (FS_READ | FS_WRITE) & allowedFsFlags));
+    ok = ok && (program == nullptr || allowPath(rulesetFd, program, (FS_READ | FS_EXECUTE) & supportedFsAccessFlags));
+    ok = ok && allowPath(rulesetFd, archive, FS_READ & supportedFsAccessFlags);
+    ok = ok && (writableDir == nullptr || allowPath(rulesetFd, writableDir, (FS_READ | FS_WRITE) & supportedFsAccessFlags));
     ok = ok && landlockRestrictSelf(rulesetFd) == 0;
     close(rulesetFd);
     return ok;
@@ -278,7 +285,7 @@ bool restrictFileSystemViaLandlock(const char *program, const char *archive, con
  * Use bitwise `|` to select command, for example:
  *
  * class          operation         source
- * BPF_JMP        BPF_JEQ           BPF_K
+ * BPF_JMP   |    BPF_JEQ    |      BPF_K
  *
  */
 
