@@ -135,9 +135,6 @@ int main(int argc, char *argv[])
         if (!pathDirs.contains(dir)) { pathDirs.append(dir); }
     }
     qputenv("PATH", QFile::encodeName(pathDirs.join(u':')));
-    /// - Qt shows no icons in menus on macOS before 26 (Tahoe). Show them, as on other systems.
-    /// - `QApplication` sets this attribute in its constructor, so this is after it.
-    QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
 #endif
     // Our-defined `ZProxyStyle`. Without a base style, it uses the style of `QT_STYLE_OVERRIDE` or `-style`, else the style of the system.
     app.setStyle(new ZProxyStyle{});

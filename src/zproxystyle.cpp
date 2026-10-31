@@ -72,6 +72,22 @@ void ZProxyStyle::drawControl(QStyle::ControlElement element, const QStyleOption
     QProxyStyle::drawControl(element, option, painter, widget);
 }
 
+int ZProxyStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const
+{
+    // On MacOS and Windows, Qt shows no icons on the buttons of `QDialogButtonBox` (OK, Cancel, Apply...). Force shows them,
+    if (hint == QStyle::SH_DialogButtonBox_ButtonsHaveIcons) { return 1; }
+    return QProxyStyle::styleHint(hint, option, widget, returnData);
+}
+
+void ZProxyStyle::polish(QApplication *app)
+{
+    QProxyStyle::polish(app);
+    // Qt shows no icons in menus on some versions of Mac OS. Force shows them.
+    // `QApplication` sets this attribute only in its constructor.
+    // `QApplication::setStyle()` calls `polish()` later, so Qt does not overwrite this value.
+    QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
+}
+
 #ifdef Q_OS_MACOS
 QRect ZProxyStyle::subElementRect(QStyle::SubElement element, const QStyleOption *option, const QWidget *widget) const
 {
@@ -102,13 +118,6 @@ int ZProxyStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *opt
     if (metric == QStyle::PM_ToolBarIconSize) { return QCommonStyle::pixelMetric(metric, option, widget); }
     return QProxyStyle::pixelMetric(metric, option, widget);
 }
-
-int ZProxyStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const
-{
-    // The macOS style shows no icons on the buttons of `QDialogButtonBox` (OK, Cancel, Apply...). Show them, as on other systems.
-    if (hint == QStyle::SH_DialogButtonBox_ButtonsHaveIcons) { return 1; }
-    return QProxyStyle::styleHint(hint, option, widget, returnData);
-}
 #endif
 
 int ZProxyStyle::getMostFitIconSize(const QStyleOption &option)
@@ -122,4 +131,3 @@ int ZProxyStyle::getMostFitIconSize(const QStyleOption &option)
     }
     return AVAILABLE_SIZE_LIST.last();
 }
-
