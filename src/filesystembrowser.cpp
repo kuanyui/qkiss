@@ -173,7 +173,9 @@ void FileSystemBrowser::setupUi()
     m_view->header()->setSectionResizeMode(QHeaderView::Interactive);
     m_view->header()->resizeSection(ColIdx::ColIdxStateIcon, 22);
     m_view->header()->resizeSection(ColIdx::ColIdxFileName, 150);
-    m_view->header()->resizeSection(ColIdx::ColIdxSize, 50);
+    // HACK: use fixed string `1023 KB` to calculate the width of the size column.
+    const int textHoriMargin = m_view->style()->pixelMetric(QStyle::PM_FocusFrameHMargin, nullptr, m_view) + 1;  // The meaningless magic number and misleading enum name are copied from QCommonStyle source code.
+    m_view->header()->resizeSection(ColIdx::ColIdxSize, m_view->fontMetrics().horizontalAdvance("1023 KB") + textHoriMargin * 2);
     // m_view->resizeColumnToContents(2);
     m_view->header()->setSectionResizeMode(ColIdx::ColIdxStateIcon, QHeaderView::ResizeMode::Fixed);
     m_view->header()->setSectionResizeMode(ColIdx::ColIdxPatchBtn, QHeaderView::ResizeMode::ResizeToContents);
@@ -510,6 +512,3 @@ bool FileSystemBrowser::eventFilter(QObject *watched, QEvent *event)
     // default behavior
     return QWidget::eventFilter(watched, event);
 }
-
-
-
