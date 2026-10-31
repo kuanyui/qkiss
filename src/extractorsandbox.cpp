@@ -52,34 +52,34 @@ namespace {
 
 // ======================================================
 // Landlock System Call Wrapper Functions
+// (glibc has no wrappers for Landlock, so wrap them by ourselves.)
 // ======================================================
 
-// glibc has no wrappers for Landlock, so wrap them by ourselves.
 
 /// Create empty ruleset and return a fd of it.
 /// @return -1 if error.
-int landlockCreateRuleset(const landlock_ruleset_attr *attributes, size_t size, __u32 flags)
+int syscallLandlockCreateRuleset(const landlock_ruleset_attr *attributes, size_t size, __u32 flags)
 {
     return static_cast<int>(syscall(__NR_landlock_create_ruleset, attributes, size, flags));
 }
 
 /// Yeah... syscall `__NR_landlock_create_ruleset` is also used to get Landlock ABI version...
 /// @return -1 means not support.
-int landlockGetAbiVersion()
+int syscallLandlockGetAbiVersion()
 {
     return static_cast<int>(syscall(__NR_landlock_create_ruleset, nullptr, 0, LANDLOCK_CREATE_RULESET_VERSION));
 }
 
 /// Add rule into ruleset (ex: `/usr` is RO)
 /// @return -1 if error. 0 if success.
-int landlockAddPathRule(int rulesetFd, const landlock_path_beneath_attr *rule)
+int syscallLandlockAddPathRule(int rulesetFd, const landlock_path_beneath_attr *rule)
 {
     return static_cast<int>(syscall(__NR_landlock_add_rule, rulesetFd, LANDLOCK_RULE_PATH_BENEATH, rule, 0));
 }
 
 /// Apply ruleset to self (and cannot be removed by itself anymore.)
 /// @return -1 if error. 0 if success.
-int landlockRestrictSelf(int rulesetFd)
+int syscallLandlockRestrictSelf(int rulesetFd)
 {
     return static_cast<int>(syscall(__NR_landlock_restrict_self, rulesetFd, 0));
 }
@@ -88,12 +88,12 @@ int landlockRestrictSelf(int rulesetFd)
 // Landlock Contants
 // ======================================================
 
-constexpr __u64 FS_READ =
+constexpr __u64 AGG_LANDLOCK_ACCESS_FS_READ =
         LANDLOCK_ACCESS_FS_READ_FILE |
         LANDLOCK_ACCESS_FS_READ_DIR;
-constexpr __u64 FS_EXECUTE =
+constexpr __u64 AGG_LANDLOCK_ACCESS_FS_EXECUTE =
         LANDLOCK_ACCESS_FS_EXECUTE;
-constexpr __u64 FS_WRITE =
+constexpr __u64 AGG_LANDLOCK_ACCESS_FS_WRITE =
         LANDLOCK_ACCESS_FS_WRITE_FILE |
         LANDLOCK_ACCESS_FS_REMOVE_DIR |
         LANDLOCK_ACCESS_FS_REMOVE_FILE |
@@ -103,8 +103,8 @@ constexpr __u64 FS_WRITE =
         LANDLOCK_ACCESS_FS_REFER |
         LANDLOCK_ACCESS_FS_TRUNCATE;
 
-/// The only rights that a rule on a file (**NOT** a folder!!!) may have.
-constexpr __u64 FILE_RIGHTS =
+/// The rights that only a file (**NOT** a folder!!!) can have.
+constexpr __u64 AGG_LANDLOCK_ACCESS_FS__FILE_RIGHTS =
         LANDLOCK_ACCESS_FS_EXECUTE |
         LANDLOCK_ACCESS_FS_WRITE_FILE |
         LANDLOCK_ACCESS_FS_READ_FILE |
@@ -118,18 +118,18 @@ struct PathRule {
 
 /// The necessary paths that LZH extractor may use.
 constexpr PathRule SYSTEM_PATH_RULES[] = {
-    { "/usr", FS_READ | FS_EXECUTE },
-    { "/bin", FS_READ | FS_EXECUTE },
-    { "/sbin", FS_READ | FS_EXECUTE },
-    { "/lib", FS_READ | FS_EXECUTE },
-    { "/lib32", FS_READ | FS_EXECUTE },
-    { "/lib64", FS_READ | FS_EXECUTE },
-    { "/etc", FS_READ },
-    { "/proc/self", FS_READ },               // Extractor process itself
-    { "/sys/devices/system/cpu", FS_READ },  // The number of CPUs, for glibc.
-    { "/dev/null", FS_READ | FS_WRITE },
-    { "/dev/random", FS_READ },
-    { "/dev/urandom", FS_READ },
+    { "/usr", AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_EXECUTE },
+    { "/bin", AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_EXECUTE },
+    { "/sbin", AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_EXECUTE },
+    { "/lib", AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_EXECUTE },
+    { "/lib32", AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_EXECUTE },
+    { "/lib64", AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_EXECUTE },
+    { "/etc", AGG_LANDLOCK_ACCESS_FS_READ },
+    { "/proc/self", AGG_LANDLOCK_ACCESS_FS_READ },               // Extractor process itself
+    { "/sys/devices/system/cpu", AGG_LANDLOCK_ACCESS_FS_READ },  // The number of CPUs, for glibc.
+    { "/dev/null", AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_WRITE },
+    { "/dev/random", AGG_LANDLOCK_ACCESS_FS_READ },
+    { "/dev/urandom", AGG_LANDLOCK_ACCESS_FS_READ },
 };
 
 /// - Get our-defined list of `LANDLOCK_ACCESS_FS_*`, which will be blocked by default.
@@ -198,9 +198,9 @@ bool allowPath(int rulesetFd, const char *path, __u64 accessFlags)
         if (S_ISDIR(status.st_mode)) {
             rule.allowed_access = accessFlags;
         } else {
-            rule.allowed_access = accessFlags & FILE_RIGHTS;
+            rule.allowed_access = accessFlags & AGG_LANDLOCK_ACCESS_FS__FILE_RIGHTS;
         }
-        if (rule.allowed_access) { ok = landlockAddPathRule(rulesetFd, &rule) == 0; }
+        if (rule.allowed_access) { ok = syscallLandlockAddPathRule(rulesetFd, &rule) == 0; }
     }
     close(fd);
     return ok;
@@ -216,9 +216,9 @@ bool allowPath(int rulesetFd, const char *path, __u64 accessFlags)
 /// 3. Create a ruleset and get its fd, pass the `landlock_ruleset_attr` into the fd.
 /// 4. Apply the ruleset on the current process. The process is restricted from now on.
 /// @returns false on error. (A kernel without Landlock is not an error.)
-bool restrictFileSystemViaLandlock(const char *program, const char *archive, const char *writableDir)
+bool restrictFileSystemViaLandlock(const char *programPath, const char *archivePath, const char *writableDirPath)
 {
-    const int abiVersion = landlockGetAbiVersion();
+    const int abiVersion = syscallLandlockGetAbiVersion();
     if (abiVersion < 0) {
         return errno == ENOSYS || errno == EOPNOTSUPP;  // Not built into this kernel, or disabled at boot.
     }
@@ -228,7 +228,7 @@ bool restrictFileSystemViaLandlock(const char *program, const char *archive, con
     attributes.handled_access_net = getDefaultBlockedLandlockAccessNet(abiVersion);
     attributes.scoped = getLandlockScoped(abiVersion);
 
-    const int rulesetFd = landlockCreateRuleset(&attributes, sizeof(attributes), 0);
+    const int rulesetFd = syscallLandlockCreateRuleset(&attributes, sizeof(attributes), 0);
     if (rulesetFd < 0) { return false; }
 
     const __u64 supportedFsAccessFlags = attributes.handled_access_fs;
@@ -238,10 +238,10 @@ bool restrictFileSystemViaLandlock(const char *program, const char *archive, con
         ok = ok && allowPath(rulesetFd, pathRule.path, pathRule.access & supportedFsAccessFlags);
     }
     // (iii) Allow some dynamic paths which are determined during runtime. (ex: `lha` path, lzh file path)
-    ok = ok && (program == nullptr || allowPath(rulesetFd, program, (FS_READ | FS_EXECUTE) & supportedFsAccessFlags));
-    ok = ok && allowPath(rulesetFd, archive, FS_READ & supportedFsAccessFlags);
-    ok = ok && (writableDir == nullptr || allowPath(rulesetFd, writableDir, (FS_READ | FS_WRITE) & supportedFsAccessFlags));
-    ok = ok && landlockRestrictSelf(rulesetFd) == 0;
+    ok = ok && (programPath == nullptr || allowPath(rulesetFd, programPath, (AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_EXECUTE) & supportedFsAccessFlags));
+    ok = ok && allowPath(rulesetFd, archivePath, AGG_LANDLOCK_ACCESS_FS_READ & supportedFsAccessFlags);
+    ok = ok && (writableDirPath == nullptr || allowPath(rulesetFd, writableDirPath, (AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_WRITE) & supportedFsAccessFlags));
+    ok = ok && syscallLandlockRestrictSelf(rulesetFd) == 0;
     close(rulesetFd);
     return ok;
 }
@@ -298,7 +298,8 @@ bool restrictFileSystemViaLandlock(const char *program, const char *archive, con
     BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_##name, 0, 1), \
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | (error))
 
-constexpr __u32 NEW_NAMESPACES =
+/// The
+constexpr __u32 AGG_CLONE_NEW_NAMESPACES =
         CLONE_NEWNS |
         CLONE_NEWCGROUP |
         CLONE_NEWUTS |
@@ -307,7 +308,7 @@ constexpr __u32 NEW_NAMESPACES =
         CLONE_NEWPID |
         CLONE_NEWNET;
 
-constexpr sock_filter SECCOMP_FILTER[] = {
+constexpr sock_filter OUR_SECCOMP_FILTERS[] = {
     /// Kill the process on a system call of another architecture: the numbers below mean other system calls there.
     /// This is a classical attack surface. For example, calling 32-bit system call via x86 instruction (0x80) on x86_64 system,
     /// but when restricting process under x86_64 system with seccomp, macros `__NR_*` is defined during compiling time, whose value may be different across various CPU architecture.
@@ -361,8 +362,8 @@ constexpr sock_filter SECCOMP_FILTER[] = {
     DENY(execveat, EPERM),
     /// clone() without new namespaces. Its flags are the first argument (the low 32 bits come first on little-endian).
     BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_clone, 0, 3),   // If A == `__NR_clone`, goto next line
-    BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(seccomp_data, args)),  // Read 4 bytes from `seccomp_data.args` into `A`. (All values in NEW_NAMESPACES <= 4 bytes, so this is enough)
-    BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, NEW_NAMESPACES, 0, 1),  // args[0] (the first arg in syscall `clone()`) ==> `if (args[0] & NEW_NAMESPACES) { goto next line } else { skip next line }`
+    BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(seccomp_data, args)),  // Read 4 bytes from `seccomp_data.args` into `A`. (All values in AGG_CLONE_NEW_NAMESPACES <= 4 bytes, so this is enough)
+    BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, AGG_CLONE_NEW_NAMESPACES, 0, 1),  // args[0] (the first arg in syscall `clone()`) ==> `if (args[0] & AGG_CLONE_NEW_NAMESPACES) { goto next line } else { skip next line }`
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),   // Return contant K, SECCOMP_RET_ALLOW, which means allowing this system call.
 };
@@ -379,8 +380,8 @@ constexpr sock_filter SECCOMP_FILTER[] = {
 bool restrictSystemCallsViaSeccomp()
 {
     const sock_fprog program = {
-        static_cast<unsigned short>(sizeof(SECCOMP_FILTER) / sizeof(SECCOMP_FILTER[0])),
-        const_cast<sock_filter *>(SECCOMP_FILTER),
+        static_cast<unsigned short>(sizeof(OUR_SECCOMP_FILTERS) / sizeof(OUR_SECCOMP_FILTERS[0])),
+        const_cast<sock_filter *>(OUR_SECCOMP_FILTERS),
     };
     return prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &program) == 0;
 }
@@ -412,11 +413,11 @@ void writeError(const char *text)
 }
 
 /// Runs in the child process, just before exec().
-void restrictThisProcess(const char *program, const char *archive, const char *writableDir)
+void restrictThisProcess(const char *programPath, const char *archivePath, const char *writableDir)
 {
     // Required by Landlock and by seccomp without root. The extractor can never gain privileges, e.g. via setuid.
     if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0) { failSandbox("no_new_privs"); }
-    if (!restrictFileSystemViaLandlock(program, archive, writableDir)) { failSandbox("Landlock"); }
+    if (!restrictFileSystemViaLandlock(programPath, archivePath, writableDir)) { failSandbox("Landlock"); }
     if (!restrictSystemCallsViaSeccomp()) { failSandbox("seccomp"); }
 }
 
@@ -428,21 +429,23 @@ void restrictThisProcess(const char *program, const char *archive, const char *w
 // Public APIs
 // ======================================================
 
-void sandboxExtractorProcess(QProcess *process, const QString &program, const QString &archiveFilePath, const QString &writableDirPath)
+void sandboxExtractorProcess(QProcess *process, const QString &programPath, const QString &archiveFilePath, const QString &writableDirPath)
 {
 #ifdef Q_OS_LINUX
-    // Converted here, in the parent process, because the child must not allocate memory.
-    const QByteArray programPath = QFile::encodeName(QStandardPaths::findExecutable(program));
-    const QByteArray archive = QFile::encodeName(archiveFilePath);
-    const QByteArray writableDir = QFile::encodeName(writableDirPath);
-    process->setChildProcessModifier([programPath, archive, writableDir]() {
-        restrictThisProcess(programPath.isEmpty() ? nullptr : programPath.constData(), archive.constData(),
-                            writableDir.isEmpty() ? nullptr : writableDir.constData());
+    // Convert strings in the parent process, because child cannot allocate memory.
+    const QByteArray programPathByteArray = QFile::encodeName(QStandardPaths::findExecutable(programPath));
+    const QByteArray archivePathByteArray = QFile::encodeName(archiveFilePath);
+    const QByteArray writableDirPathByteArray = QFile::encodeName(writableDirPath);
+    process->setChildProcessModifier([programPathByteArray, archivePathByteArray, writableDirPathByteArray]() {
+        const char *_programPath = programPathByteArray.isEmpty() ? nullptr : programPathByteArray.constData();
+        const char *_writableDirPath = writableDirPathByteArray.isEmpty() ? nullptr : writableDirPathByteArray.constData();
+        const char *_archiveFilePath = archivePathByteArray.isEmpty() ? nullptr : archivePathByteArray.constData();
+        restrictThisProcess(_programPath, _archiveFilePath, _writableDirPath);
     });
-    qkDebug << "Sandbox for" << program << "with Landlock ABI" << landlockGetAbiVersion() << "(Note: -1 means no Landlock)";
+    qkDebug << "Sandbox for" << programPath << "with Landlock ABI" << syscallLandlockGetAbiVersion() << "(Note: -1 means no Landlock)";
 #else
     Q_UNUSED(process);
-    Q_UNUSED(program);
+    Q_UNUSED(programPath);
     Q_UNUSED(archiveFilePath);
     Q_UNUSED(writableDirPath);
 #endif

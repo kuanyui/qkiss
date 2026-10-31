@@ -27,15 +27,15 @@ class QProcess;
 /**
  * Sandbox for the external LZH extractors (lha, unar), which parse untrusted archives.
  *
- * On Linux, the program that `process` starts runs under Landlock and seccomp. It can:
+ * On Linux, the programPath that `process` starts runs under Landlock and seccomp. It can:
  * - Read the system folders (`/usr`, `/etc`...) and `archiveFilePath`, but nothing else: nothing in the home folder.
  * - Write the files only beneath `writableDirPath`, when it is given.
- * - Run only programs from the system folders, and `program` itself.
+ * - Run only programs from the system folders, and `programPath` itself.
  * - Not create sockets or namespaces, use io_uring, read other processes' memory, or send them signals.
  * Each limit applies only when the kernel supports it. On other platforms, this does nothing.
  *g
- * Call this function before each `process->start(program, ...)`.
+ * Call this function before each `process->start(programPath, ...)`.
  */
-void sandboxExtractorProcess(QProcess *process, const QString &program, const QString &archiveFilePath, const QString &writableDirPath = QString());
+void sandboxExtractorProcess(QProcess *process, const QString &programPath, const QString &archiveFilePath, const QString &writableDirPath = QString());
 
 #endif // EXTRACTORSANDBOX_H
