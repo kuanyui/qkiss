@@ -41,21 +41,41 @@
 
 namespace {
 
-// This code runs in the child process, between fork() and exec() (the parent also asks the Landlock ABI, for the log).
-// There, only async-signal-safe functions may be called: no memory allocation, no Qt. So it uses system calls and
-// C strings.
 
-// glibc has no wrappers for the Landlock system calls.
+// ======================================================
+// Notes
+// ======================================================
+// - All code within this anonymous namespace runs in the child process, between fork() and exec().
+// - The parent also calls landlockCreateRuleset(), but only to log the Landlock ABI version.
+// - In the child, only async-signal-safe functions may be called: no memory allocation, no Qt. So this code uses system calls and C strings.
+
+
+// ======================================================
+// Landlock Wrapper Functions
+// ======================================================
+
+// glibc has no wrappers for Landlock, so wrap them by ourselves.
+
+/// Create empty ruleset and return a fd of it.
 int landlockCreateRuleset(const landlock_ruleset_attr *attributes, size_t size, __u32 flags)
 {
     return static_cast<int>(syscall(__NR_landlock_create_ruleset, attributes, size, flags));
 }
 
+/// Yeah... syscall `__NR_landlock_create_ruleset` is also used to get Landlock ABI version...
+/// -1 means not support.
+int landlockGetAbiVersion()
+{
+    return static_cast<int>(syscall(__NR_landlock_create_ruleset, nullptr, 0, LANDLOCK_CREATE_RULESET_VERSION));
+}
+
+/// Add rule into ruleset (ex: `/usr` is RO)
 int landlockAddPathRule(int rulesetFd, const landlock_path_beneath_attr *rule)
 {
     return static_cast<int>(syscall(__NR_landlock_add_rule, rulesetFd, LANDLOCK_RULE_PATH_BENEATH, rule, 0));
 }
 
+/// Apply ruleset to self (and cannot be removed by itself anymore.)
 int landlockRestrictSelf(int rulesetFd)
 {
     return static_cast<int>(syscall(__NR_landlock_restrict_self, rulesetFd, 0));
@@ -75,7 +95,8 @@ constexpr __u64 FS_WRITE =
         LANDLOCK_ACCESS_FS_MAKE_SYM |
         LANDLOCK_ACCESS_FS_REFER |
         LANDLOCK_ACCESS_FS_TRUNCATE;
-// The only rights that a rule on a file (not a folder) may have.
+
+/// The only rights that a rule on a file (not a folder) may have.
 constexpr __u64 FILE_RIGHTS =
         LANDLOCK_ACCESS_FS_EXECUTE |
         LANDLOCK_ACCESS_FS_WRITE_FILE |
@@ -88,8 +109,7 @@ struct PathRule {
     __u64 access;
 };
 
-// What every extractor may use. Paths that do not exist are skipped.
-// On distros with a merged /usr, /bin, /sbin and /lib* are links into /usr.
+/// The necessary paths that LZH extractor may use.
 constexpr PathRule SYSTEM_RULES[] = {
     { "/usr", FS_READ | FS_EXECUTE },
     { "/bin", FS_READ | FS_EXECUTE },
@@ -98,15 +118,17 @@ constexpr PathRule SYSTEM_RULES[] = {
     { "/lib32", FS_READ | FS_EXECUTE },
     { "/lib64", FS_READ | FS_EXECUTE },
     { "/etc", FS_READ },
-    { "/proc/self", FS_READ },               // Opened before exec(), so it is the extractor's own folder.
+    { "/proc/self", FS_READ },               // Extractor process itself
     { "/sys/devices/system/cpu", FS_READ },  // The number of CPUs, for glibc.
     { "/dev/null", FS_READ | FS_WRITE },
     { "/dev/random", FS_READ },
     { "/dev/urandom", FS_READ },
 };
 
-// The rights that this kernel's Landlock knows. The sandbox denies each of them, except where a rule grants it.
-__u64 handledAccess(int abi)
+/// - Get our-defined list of `LANDLOCK_ACCESS_FS_*`, which will be blocked by default.
+///   - `landlock_ruleset_attr` contains fields `handled_access_fs`, `handled_access_net`, `scoped`. This function only returns `handled_access_fs`.
+/// @return fs_access
+__u64 getDefaultBlockedLandlockAccesFs(int abi)
 {
     __u64 access =
             LANDLOCK_ACCESS_FS_EXECUTE |
@@ -128,12 +150,12 @@ __u64 handledAccess(int abi)
     return access;
 }
 
-// Grants `access` beneath the folder `path`, or on `path` itself if it is a file.
-// Returns false on error. A path that does not exist is skipped.
+/// Grants `access` beneath the folder `path`, or on `path` itself if it is a file.
+/// Returns false on error. A path that does not exist is skipped.
 bool allowPath(int rulesetFd, const char *path, __u64 access)
 {
     const int fd = open(path, O_PATH | O_CLOEXEC);
-    if (fd < 0) { return errno == ENOENT; }
+    if (fd < 0) { return errno == ENOENT; }  // If the path doesn't exist, return true.
     struct stat status;
     bool ok = fstat(fd, &status) == 0;
     if (ok) {
@@ -149,12 +171,12 @@ bool allowPath(int rulesetFd, const char *path, __u64 access)
 // Limits the file system with Landlock. Returns false on error. A kernel without Landlock is not an error.
 bool restrictFileSystem(const char *program, const char *archive, const char *writableDir)
 {
-    const int abi = landlockCreateRuleset(nullptr, 0, LANDLOCK_CREATE_RULESET_VERSION);
+    const int abi = landlockGetAbiVersion();
     if (abi < 0) {
         return errno == ENOSYS || errno == EOPNOTSUPP;  // Not built into this kernel, or disabled at boot.
     }
     landlock_ruleset_attr attributes = {};
-    attributes.handled_access_fs = handledAccess(abi);
+    attributes.handled_access_fs = getDefaultBlockedLandlockAccesFs(abi);
     if (abi >= 6) {
         // Signals and abstract UNIX sockets only within the sandbox.
         attributes.scoped = LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET | LANDLOCK_SCOPE_SIGNAL;
@@ -182,7 +204,7 @@ bool restrictFileSystem(const char *program, const char *archive, const char *wr
 #endif
 
 #ifdef SANDBOX_SECCOMP_ARCH
-// A system call that fails with `error`.
+// Makes the system call `name` fail with `error`.
 #define DENY(name, error) \
     BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_##name, 0, 1), \
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | (error))
@@ -191,7 +213,7 @@ constexpr __u32 NEW_NAMESPACES = CLONE_NEWNS | CLONE_NEWCGROUP | CLONE_NEWUTS | 
                                | CLONE_NEWPID | CLONE_NEWNET;
 
 constexpr sock_filter SECCOMP_FILTER[] = {
-    // Kill a system call of another architecture: the numbers below mean other system calls there.
+    // Kill the process on a system call of another architecture: the numbers below mean other system calls there.
     BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(seccomp_data, arch)),
     BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, SANDBOX_SECCOMP_ARCH, 1, 0),
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_KILL_PROCESS),
@@ -300,8 +322,7 @@ void sandboxExtractorProcess(QProcess *process, const QString &program, const QS
         restrictThisProcess(programPath.isEmpty() ? nullptr : programPath.constData(), archive.constData(),
                             writableDir.isEmpty() ? nullptr : writableDir.constData());
     });
-    qkDebug << "Sandbox for" << program << "with Landlock ABI"
-            << landlockCreateRuleset(nullptr, 0, LANDLOCK_CREATE_RULESET_VERSION) << "(-1: no Landlock)";
+    qkDebug << "Sandbox for" << program << "with Landlock ABI" << landlockGetAbiVersion() << "(Note: -1 means no Landlock)";
 #else
     Q_UNUSED(process);
     Q_UNUSED(program);
