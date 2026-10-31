@@ -46,7 +46,7 @@ namespace {
 // Notes
 // ======================================================
 // - All code within this anonymous namespace runs in the child process, **between fork() and exec()**.
-// - The parent also calls landlockCreateRuleset(), but only to log the Landlock ABI version.
+// - The parent also calls `syscallLandlockGetAbiVersion()`, but only to log the Landlock ABI version.
 // - In the child, only async-signal-safe functions may be called: no memory allocation, no Qt. So this code uses system calls and C strings.
 
 
@@ -55,7 +55,7 @@ namespace {
 // (glibc has no wrappers for Landlock, so wrap them by ourselves.)
 // ======================================================
 
-
+/// Syscall wrapper for Landlock.
 /// Create empty ruleset and return a fd of it.
 /// @return -1 if error.
 int syscallLandlockCreateRuleset(const landlock_ruleset_attr *attributes, size_t size, __u32 flags)
@@ -63,6 +63,7 @@ int syscallLandlockCreateRuleset(const landlock_ruleset_attr *attributes, size_t
     return static_cast<int>(syscall(__NR_landlock_create_ruleset, attributes, size, flags));
 }
 
+/// Syscall wrapper for Landlock.
 /// Yeah... syscall `__NR_landlock_create_ruleset` is also used to get Landlock ABI version...
 /// @return -1 means not support.
 int syscallLandlockGetAbiVersion()
@@ -70,6 +71,7 @@ int syscallLandlockGetAbiVersion()
     return static_cast<int>(syscall(__NR_landlock_create_ruleset, nullptr, 0, LANDLOCK_CREATE_RULESET_VERSION));
 }
 
+/// Syscall wrapper for Landlock.
 /// Add rule into ruleset (ex: `/usr` is RO)
 /// @return -1 if error. 0 if success.
 int syscallLandlockAddPathRule(int rulesetFd, const landlock_path_beneath_attr *rule)
@@ -77,6 +79,7 @@ int syscallLandlockAddPathRule(int rulesetFd, const landlock_path_beneath_attr *
     return static_cast<int>(syscall(__NR_landlock_add_rule, rulesetFd, LANDLOCK_RULE_PATH_BENEATH, rule, 0));
 }
 
+/// Syscall wrapper for Landlock.
 /// Apply ruleset to self (and cannot be removed by itself anymore.)
 /// @return -1 if error. 0 if success.
 int syscallLandlockRestrictSelf(int rulesetFd)
@@ -134,7 +137,7 @@ constexpr PathRule SYSTEM_PATH_RULES[] = {
 
 /// - Get our-defined list of `LANDLOCK_ACCESS_FS_*`, which will be blocked by default.
 ///   - `landlock_ruleset_attr` contains fields `handled_access_fs`, `handled_access_net`, `scoped`. This function only returns `handled_access_fs`.
-/// - If set this into `landlock_ruleset_attr.handled_access_fs`, **ALL paths in this system** will be denied by default (blacklist mode),
+/// - If set this into `landlock_ruleset_attr.handled_access_fs`, **ALL paths in this system** will be denied by default (whitelist mode),
 ///   you need to add exceptions into whitelist via `landlock_path_beneath_attr.allowed_access` and `__NR_landlock_add_rule`
 /// @return `fs_access` (`landlock_ruleset_attr.handled_access_fs`)
 __u64 getDefaultBlockedLandlockAccesFs(int abiVersion)
@@ -270,7 +273,8 @@ bool restrictFileSystemViaLandlock(const char *programPath, const char *archiveP
  *
  *
  * # (only 2, though) C Macros
- * Used to fill structure `sock_filter` and `seccomp_data`
+ * - The 2 macros are used to fill structure `sock_filter`  (this unreasonable naming is due to historical reason)
+ * - `seccomp_data` will be filled by kernel.
  *
  * 1. BPF_JUMP(code, k, jt, jf)
  *   - code: what "command".
