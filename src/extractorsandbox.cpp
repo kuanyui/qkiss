@@ -63,7 +63,7 @@ int landlockCreateRuleset(const landlock_ruleset_attr *attributes, size_t size, 
 }
 
 /// Yeah... syscall `__NR_landlock_create_ruleset` is also used to get Landlock ABI version...
-/// -1 means not support.
+/// @return -1 means not support.
 int landlockGetAbiVersion()
 {
     return static_cast<int>(syscall(__NR_landlock_create_ruleset, nullptr, 0, LANDLOCK_CREATE_RULESET_VERSION));
@@ -240,7 +240,7 @@ bool restrictFileSystemViaLandlock(const char *program, const char *archive, con
 }
 
 // ======================================================
-// `seccomp` Constants
+// `seccomp` and BPF definitions
 // ======================================================
 
 // The system call numbers in the filter are only valid for the architecture they were compiled for.
@@ -251,7 +251,42 @@ bool restrictFileSystemViaLandlock(const char *program, const char *archive, con
 #endif
 
 #ifdef SANDBOX_SECCOMP_ARCH
-// Makes the system call `name` fail with `error`.
+
+/**
+ * BPF (Berkeley Packet Filter) is a mini virtual machine in kernel.
+ *
+ * # Register
+ * - In our using scenario, we use only one register `A` (accumulator)
+ * - The value in `A` mutates during runtime.
+ * - Our `BPF_*` are "defining a program", they are immutable (atarimaeda!).
+ *   - The `k` in the program are our-defined constant.
+ *
+ *
+ * # (only 2, though) C Macros
+ * Used to fill structure `sock_filter` and `seccomp_data`
+ *
+ * 1. BPF_JUMP(code, k, jt, jf)
+ *   - code: what "command".
+ *   - k: its meaning depends on code.
+ *   - jt: if true, jump forward N command(s).
+ *   - jf: if false, jump forward N command(s).
+ *
+ * 2. BPF_STMT(code, k)
+ *   - STMT means "statment", just execute this code (command), then go to next command.
+ *
+ * # Code
+ * Use bitwise `|` to select command, for example:
+ *
+ * class          operation         source
+ * BPF_JMP        BPF_JEQ           BPF_K
+ *
+ */
+
+
+/// Makes the system call `name` fail with `error`.
+///
+/// if the constant K (that is, `__NR_##name`) == A,
+/// return the constant K (that is, `SECCOMP_RET_ERRNO | error`), this means deny this system call (`nr`).
 #define DENY(name, error) \
     BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_##name, 0, 1), \
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | (error))
@@ -266,29 +301,34 @@ constexpr __u32 NEW_NAMESPACES =
         CLONE_NEWNET;
 
 constexpr sock_filter SECCOMP_FILTER[] = {
-    // Kill the process on a system call of another architecture: the numbers below mean other system calls there.
-    BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(seccomp_data, arch)),
-    BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, SANDBOX_SECCOMP_ARCH, 1, 0),
+    /// Kill the process on a system call of another architecture: the numbers below mean other system calls there.
+    /// This is a classical attack surface. For example, calling 32-bit system call via x86 instruction (0x80) on x86_64 system,
+    /// but when restricting process under x86_64 system with seccomp, macros `__NR_*` is defined during compiling time, whose value may be different across various CPU architecture.
+    /// Therefore, seccomp maybe unable to filter the system call defined in other architecture.
+    BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(seccomp_data, arch)), // Read 4 bytes from `seccomp_data.arch` into A
+    BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, SANDBOX_SECCOMP_ARCH, 1, 0), // If SANDBOX_SECCOMP_ARCH (that is, contant K) == A, skip the following 1 command.
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_KILL_PROCESS),
-    BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(seccomp_data, nr)),
+    BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(seccomp_data, nr)), // Read 4 bytes from `seccomp_data.nr` (current syscall number) into register `A`, so that our `DENY` macro can read it.
 #ifdef __x86_64__
-    // x32 system calls come as AUDIT_ARCH_X86_64 too, with this bit set in their numbers.
-    BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, __X32_SYSCALL_BIT, 0, 1),
+    /// Also deny x32 system calls. x32's NR must >= `__X32_SYSCALL_BIT`.
+    /// (x32 is a rarely used special mode / syscalls (or...compiler option),
+    /// a x32 programs can be executed in a x86_64 system, but the size all pointers are only 32-bits, for saving memory... So bizarre...
+    BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, __X32_SYSCALL_BIT, 0, 1),  // if nr >= `__X32_SYSCALL_BIT`, goto next line.
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_KILL_PROCESS),
 #endif
-    // Network, and local sockets such as D-Bus, X11 and Wayland.
+    /// Network, and local sockets such as D-Bus, X11 and Wayland.
     DENY(socket, EPERM),
     DENY(socketpair, EPERM),
-    // Namespaces. A filter cannot read the flags of clone3(), which are in memory: ENOSYS makes glibc use clone().
-    DENY(clone3, ENOSYS),
+    /// Namespaces. A filter cannot read the flags of clone3(), which are in memory: ENOSYS makes glibc use clone().
+    DENY(clone3, ENOSYS),   // `clone3()`'s content is a structure whose content is invisible in `seccomp_data`, so block it. glibc will fallback to `clone()` automatically when `clone3()` returns `ENOSYS`
     DENY(unshare, EPERM),
     DENY(setns, EPERM),
-    // Other processes: their memory and their file descriptors.
+    /// Other processes: their memory and their file descriptors.
     DENY(ptrace, EPERM),
     DENY(process_vm_readv, EPERM),
     DENY(process_vm_writev, EPERM),
     DENY(pidfd_getfd, EPERM),
-    // Kernel attack surfaces that command-line tools do not need.
+    /// Kernel attack surfaces that command-line tools do not need.
     DENY(io_uring_setup, EPERM),
     DENY(io_uring_enter, EPERM),
     DENY(io_uring_register, EPERM),
@@ -309,25 +349,26 @@ constexpr sock_filter SECCOMP_FILTER[] = {
     DENY(move_mount, EPERM),
     DENY(open_tree, EPERM),
     DENY(mount_setattr, EPERM),
-    // Running a program from memory, which Landlock cannot check.
+    /// Running a program from memory, which Landlock cannot check.
     DENY(memfd_create, EPERM),
     DENY(execveat, EPERM),
-    // clone() without new namespaces. Its flags are the first argument (the low 32 bits come first on little-endian).
-    BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_clone, 0, 3),
-    BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(seccomp_data, args)),
-    BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, NEW_NAMESPACES, 0, 1),
+    /// clone() without new namespaces. Its flags are the first argument (the low 32 bits come first on little-endian).
+    BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_clone, 0, 3),   // If A == `__NR_clone`, goto next line
+    BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(seccomp_data, args)),  // Read 4 bytes from `seccomp_data.args` into `A`. (All values in NEW_NAMESPACES <= 4 bytes, so this is enough)
+    BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, NEW_NAMESPACES, 0, 1),  // args[0] (the first arg in syscall `clone()`) ==> `if (args[0] & NEW_NAMESPACES) { goto next line } else { skip next line }`
     BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | EPERM),
-    BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
+    BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),   // Return contant K, SECCOMP_RET_ALLOW, which means allowing this system call.
 };
 #undef DENY
 
 
 // ======================================================
-// `seccomp` Logics
+// `seccomp` and `prctl()`
 // ======================================================
 
 
-/// Limits the system calls with seccomp. Returns false on error.
+/// Limits the system calls with seccomp.
+/// @returns false on error.
 bool restrictSystemCallsViaSeccomp()
 {
     const sock_fprog program = {
@@ -366,7 +407,7 @@ void writeError(const char *text)
 /// Runs in the child process, just before exec().
 void restrictThisProcess(const char *program, const char *archive, const char *writableDir)
 {
-    // Required by Landlock and by seccomp without root. The extractor can never gain privileges, e.g. from setuid.
+    // Required by Landlock and by seccomp without root. The extractor can never gain privileges, e.g. via setuid.
     if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0) { failSandbox("no_new_privs"); }
     if (!restrictFileSystemViaLandlock(program, archive, writableDir)) { failSandbox("Landlock"); }
     if (!restrictSystemCallsViaSeccomp()) { failSandbox("seccomp"); }
