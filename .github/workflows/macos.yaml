@@ -56,12 +56,12 @@ jobs:
         # Also adds `-eo pipefail`: a step stops at its first failing command.
         shell: bash
     env:
-      # Qt 6.9 supports the macOS SDK 14 and 15 (`qtbase/.cmake.conf`). Xcode 16.4 has the macOS 15.5 SDK.
-      # Without this, a newer default Xcode of the runner could bring an SDK that Qt 6.9 does not support.
+      # Qt 6.10 supports the macOS SDK 14 to 26 (`qtbase/.cmake.conf`). Xcode 16.4 has the macOS 15.5 SDK.
+      # Without this, a newer default Xcode of the runner could bring an SDK that Qt 6.10 does not support.
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
-      # The oldest macOS that the app runs on. Qt 6.9 supports macOS 12 and later.
+      # The oldest macOS that the app runs on. Qt 6.10 supports macOS 13 and later.
       # CMake, clang and the builds of vcpkg all read this variable.
-      MACOSX_DEPLOYMENT_TARGET: '12.0'
+      MACOSX_DEPLOYMENT_TARGET: '13.0'
       # The runner exports this only in `~/.bashrc`, which the steps do not read.
       VCPKG_INSTALLATION_ROOT: /usr/local/share/vcpkg
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_cache/archives
@@ -96,7 +96,7 @@ jobs:
         uses: jurplel/install-qt-action@b344308e4483fc892e0d27b3cd1b173ebdd95f06 # v4.5.0
         with:
           # Use this to see all Qt versions https://ddalcino.github.io/aqt-list-server/
-          version: '6.9.3'          # Same as windows.yaml
+          version: '6.10.3'         # Same as windows.yaml
           arch: 'clang_64'          # On macOS, it has both arm64 and x86_64.
           target: 'desktop'
           modules: 'qtmultimedia'   # Important!
