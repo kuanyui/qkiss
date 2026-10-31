@@ -201,7 +201,7 @@ jobs:
           powershell Expand-Archive -Path "${{ runner.temp }}/bin_deps/lha.zip" -DestinationPath "${{ runner.temp }}/bin_deps"
 
           # Handle unar: the release ZIP of our fork has unar.exe, lsar.exe, the DLLs that they need, and their licenses.
-          # It goes into a folder of its own, `bin_deps/unar/`: CMakeLists.txt installs this whole folder as `bin/unar/`.
+          # It goes into a folder of its own, `bin_deps/unar/`: CMakeLists.txt installs this whole folder as `unar/` next to qkiss.exe.
           # The same `-f` and check as for lha. The second check also fails the job when the ZIP cannot be unzipped.
           curl -fL -o "${{ runner.temp }}/bin_deps/unar.zip" "https://github.com/kuanyui/XADMaster/releases/download/${{ env.UNAR_VERSION }}/unar-${{ env.UNAR_VERSION }}-win64.zip"
           if ($LASTEXITCODE -ne 0) { throw "Cannot download unar ${{ env.UNAR_VERSION }}. Is it on https://github.com/kuanyui/XADMaster/releases ?" }
@@ -461,8 +461,9 @@ jobs:
         run: Get-ChildItem -Path build -Depth 1
 
       # Step 13.1: Check unar in the portable ZIP, as a user would unzip it:
-      # - `bin/unar/` has unar.exe and the license files, and no lsar.exe (qkiss does not use it).
-      # - `bin/` has no Foundation.1.0.dll, the DLL of the old unar from theunarchiver.com.
+      # - The folder `unar/` next to qkiss.exe has unar.exe and the license files, and no lsar.exe (qkiss does not use it).
+      #   On Windows, qkiss.exe is at the top of the package, not in `bin/` (CMAKE_INSTALL_BINDIR is `.` in CMakeLists.txt).
+      # - The folder of qkiss.exe has no Foundation.1.0.dll, the DLL of the old unar from theunarchiver.com.
       # - unar.exe runs with the DLLs next to it, and it is version UNAR_VERSION.
       - name: Check unar in the portable ZIP
         run: |
@@ -472,12 +473,13 @@ jobs:
           $unar = @(Get-ChildItem "${{ runner.temp }}/portable" -Recurse -Filter unar.exe)
           if ($unar.Count -ne 1) { throw "Expected exactly 1 unar.exe in the portable ZIP, found: $($unar.FullName)" }
           $unarDir = $unar[0].Directory
-          if ($unarDir.Name -ne 'unar' -or $unarDir.Parent.Name -ne 'bin') { throw "unar.exe is not in bin/unar/: $($unar[0].FullName)" }
+          $appDir = $unarDir.Parent.FullName
+          if ($unarDir.Name -ne 'unar' -or -not (Test-Path "$appDir/qkiss.exe")) { throw "unar.exe is not in the folder unar/ next to qkiss.exe: $($unar[0].FullName)" }
           foreach ($file in 'LICENSE', 'FORK_MODIFICATIONS.md', 'THIRD-PARTY.txt', 'licenses') {
-            if (-not (Test-Path "$($unarDir.FullName)/$file")) { throw "bin/unar/ has no $file" }
+            if (-not (Test-Path "$($unarDir.FullName)/$file")) { throw "unar/ has no $file" }
           }
-          if (Test-Path "$($unarDir.FullName)/lsar.exe") { throw "bin/unar/ has lsar.exe, which qkiss does not use" }
-          if (Test-Path "$($unarDir.Parent.FullName)/Foundation.1.0.dll") { throw "bin/ still has Foundation.1.0.dll of the old unar" }
+          if (Test-Path "$($unarDir.FullName)/lsar.exe") { throw "unar/ has lsar.exe, which qkiss does not use" }
+          if (Test-Path "$appDir/Foundation.1.0.dll") { throw "The folder of qkiss.exe still has Foundation.1.0.dll of the old unar" }
           # unar prints its version, for example `v1.10.7-ky20261031`.
           $version = & $unar[0].FullName -version 2>&1 | Out-String
           Write-Host "unar -version: $version"

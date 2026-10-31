@@ -921,7 +921,7 @@ elseif(WIN32)
     endif()
 
     # unar: the Windows release ZIP of our fork (https://github.com/kuanyui/XADMaster/releases), unzipped into `unar/`.
-    # The whole folder is installed as `bin/unar/`: unar.exe, the DLLs that it needs, and their licenses.
+    # The whole folder is installed as `unar/` next to qkiss.exe: unar.exe, the DLLs that it needs, and their licenses.
     # - A folder of its own: some of these DLLs have the same names as DLLs of qkiss (for example `zlib1.dll`
     #   from vcpkg), but they are different builds. `ArchiveProcessorExternalUnar::getUnarProgram()` runs `unar\unar.exe`.
     # - Without lsar.exe: qkiss does not use it.
