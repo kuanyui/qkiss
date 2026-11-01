@@ -30,6 +30,7 @@ Tango            edit-undo                                  {-24}
 Tango            edit-redo                                  {-24}
 # Tango            edit-delete                              {-24}    # SVG is not drawn in all sizes yet
 Nome             user-trash          edit-delete            {-24}
+LibreOfficeElementary    wrap-text                          {-32}
 
 # ===================================================================
 # Docks

@@ -579,7 +579,7 @@ void MainWindow::setupDockWindows()
     // ==================================================
     QFont fontMono {"Monospace"};
     fontMono.setStyleHint(QFont::TypeWriter);
-    m_docViewer= new QPlainTextEdit(this);
+    m_docViewer= new ZPlainTextEdit(this);
     m_docViewer->setReadOnly(true);
     m_docViewer->setFont(fontMono);
     ui->dockWidget_docViewer->setWidget(m_docViewer);

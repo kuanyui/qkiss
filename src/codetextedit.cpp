@@ -63,7 +63,7 @@
 #include "codetextedit.h"
 
 CodeTextEdit::CodeTextEdit(QWidget *parent):
-    QPlainTextEdit{parent}
+    ZPlainTextEdit{parent}
 {
     m_lineNumberArea = new CodeTextEditLineNumberArea(this);
     m_syntaxHighlighter = new CodeTextEditSyntaxHighlighter(this->document());

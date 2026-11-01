@@ -65,8 +65,9 @@
 #include "codetexteditlinenumberarea.h"
 #include "codetexteditsyntaxhighlighter.h"
 #include "thememanager.h"
+#include "zplaintextedit.h"
 
-class CodeTextEdit : public QPlainTextEdit
+class CodeTextEdit : public ZPlainTextEdit
 {
     Q_OBJECT
 public:
