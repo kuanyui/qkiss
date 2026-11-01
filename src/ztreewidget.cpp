@@ -19,8 +19,11 @@
 
 #include "ztreewidget.h"
 #include <QEvent>
+#include <QHeaderView>
 #include <QHelpEvent>
 #include <QToolTip>
+
+#include "zwraptopaligneditemdelegate.h"
 
 
 ZTreeWidget::ZTreeWidget(QWidget *parent) :
@@ -29,6 +32,11 @@ ZTreeWidget::ZTreeWidget(QWidget *parent) :
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, &QTreeWidget::customContextMenuRequested,
             this, &ZTreeWidget::showContextMenu);
+    // Keep the icon on the first line when word wrap is on.
+    setItemDelegate(new ZWrapTopAlignedItemDelegate(this));
+    connect(header(), &QHeaderView::sectionResized, this, [this]() {
+        if (wordWrap()) { scheduleDelayedItemsLayout(); }
+    });
 }
 
 bool ZTreeWidget::viewportEvent(QEvent *event)
@@ -47,15 +55,24 @@ bool ZTreeWidget::viewportEvent(QEvent *event)
 
 void ZTreeWidget::showContextMenu(const QPoint &pos) {
     QModelIndex index = indexAt(pos);
-    if (!index.isValid()) { return; }
-    QString text = index.data(Qt::DisplayRole).toString();
-    if (text.isEmpty()) { return; }
+    QString text = index.isValid() ? index.data(Qt::DisplayRole).toString() : QString();
     QMenu menu{this};
-    static const char* strCopy { "&Copy" };  // Workaround to avoid being caught by `lupdate`, because `lupdate` cannot analyze dynamic string.
-    QAction *copyAction = menu.addAction(QCoreApplication::tr(strCopy));
-    copyAction->setIcon(QIcon::fromTheme("edit-copy"));
+    QAction *copyAction = nullptr;
+    if (!text.isEmpty()) {
+        static const char* strCopy { "&Copy" };  // Workaround to avoid being caught by `lupdate`, because `lupdate` cannot analyze dynamic string.
+        copyAction = menu.addAction(QCoreApplication::tr(strCopy));
+        copyAction->setIcon(QIcon::fromTheme("edit-copy"));
+    }
+    // The menu also shows the actions that the owner of `ZTreeWidget` added
+    // with `QWidget::addAction()`, for example a "Word Wrap" toggle. The menu shows
+    // these actions even when the user right-clicks on empty space.
+    if (!actions().isEmpty()) {
+        if (copyAction != nullptr) { menu.addSeparator(); }
+        menu.addActions(actions());
+    }
+    if (menu.isEmpty()) { return; }
     QAction *selected = menu.exec(viewport()->mapToGlobal(pos));
-    if (selected == copyAction) {
+    if (selected != nullptr && selected == copyAction) {
         QClipboard *cb = QGuiApplication::clipboard();
         cb->setText(text);
     }
