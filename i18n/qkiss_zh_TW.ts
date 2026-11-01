@@ -644,6 +644,10 @@ QKiSS 透過 `[tango-remixer](https://github.com/kuanyui/tango-remixer)` 使用�
         <source>Message</source>
         <translation>訊息</translation>
     </message>
+    <message>
+        <source>&amp;Word Wrap</source>
+        <translation>自動換行(&amp;W)</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>

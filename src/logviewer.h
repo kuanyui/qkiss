@@ -34,6 +34,7 @@ signals:
 private:
     void setupLayout();
     ZTreeWidget *m_treeWidget;
+    QAction *m_wordWrapAction;
 };
 
 #endif // LOGVIEWER_H

@@ -28,7 +28,8 @@
 
 LogViewer::LogViewer(QWidget *parent)
     : QWidget{parent},
-      m_treeWidget{new ZTreeWidget{this}}
+      m_treeWidget{new ZTreeWidget{this}},
+      m_wordWrapAction{new QAction{this}}
 {
     setupLayout();
 }
@@ -90,7 +91,16 @@ void LogViewer::setupLayout()
     m_treeWidget->setColumnCount(2);
     TranslationManager::instance().registerLanguageChangeCallback(this, [this](){
         m_treeWidget->setHeaderLabels({ tr("Severity"), tr("Message") });
+        m_wordWrapAction->setText(tr("&Word Wrap"));
     });
+    // `ZTreeWidget` shows `m_wordWrapAction` in the right-click menu.
+    // The Word Wrap choice is not saved to the settings file. Word wrap is on
+    // every time the app starts.
+    m_wordWrapAction->setCheckable(true);
+    m_wordWrapAction->setChecked(true);
+    m_treeWidget->setWordWrap(true);
+    connect(m_wordWrapAction, &QAction::toggled, m_treeWidget, &QTreeView::setWordWrap);
+    m_treeWidget->addAction(m_wordWrapAction);
     m_treeWidget->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);   // Let user can scroll to the middle of a row, if the row contains multiple lines.
     // m_treeWidget->setHeaderLabels({tr""});
     QVBoxLayout *layout = new QVBoxLayout(this);

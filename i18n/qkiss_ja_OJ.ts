@@ -646,6 +646,10 @@ QKiSSは`[tango-remixer](https://github.com/kuanyui/tango-remixer)`を通じま�
         <source>Message</source>
         <translation>御言</translation>
     </message>
+    <message>
+        <source>&amp;Word Wrap</source>
+        <translation>御言を折り返しますの(&amp;W)</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>

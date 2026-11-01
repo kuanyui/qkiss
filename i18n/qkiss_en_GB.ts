@@ -644,6 +644,10 @@ QKiSS has also borrowed, with the utmost gratitude, a number of third-party SVG 
         <source>Message</source>
         <translation>Remarks</translation>
     </message>
+    <message>
+        <source>&amp;Word Wrap</source>
+        <translation>Permit &amp;Word Wrapping</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>

@@ -648,6 +648,10 @@ QKiSS は GPLv3 ライセンスの下で提供されてま〜す。タダで使�
         <source>Message</source>
         <translation>メッセージ～</translation>
     </message>
+    <message>
+        <source>&amp;Word Wrap</source>
+        <translation>折り返し表示〜。長文も追えないの？ざぁこ♥(&amp;W)</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
