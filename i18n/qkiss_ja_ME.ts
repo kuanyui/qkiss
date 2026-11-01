@@ -697,27 +697,27 @@ QKiSSは…`[tango-remixer](https://github.com/kuanyui/tango-remixer)`…を通�
     </message>
     <message>
         <source>File System Browser</source>
-        <translation>ファイルシステムブラウザ</translation>
+        <translation>ふぁ、ファイルシステムブラウザ…ま、迷子になりまふ…</translation>
     </message>
     <message>
         <source>Inner File Selector</source>
-        <translation>内部ファイルセレクタ</translation>
+        <translation>な、内部ファイルセレクタ…CNFは、ど、どれですかぁ…</translation>
     </message>
     <message>
         <source>Logs</source>
-        <translation>ログ</translation>
+        <translation>ろ、ログ…え、エラーは見なかったことに…</translation>
     </message>
     <message>
         <source>CNF Code Viewer</source>
-        <translation>CNFコードビューア</translation>
+        <translation>CNFコードビューア…じゅ、術式は唱えません…</translation>
     </message>
     <message>
         <source>Document Viewer</source>
-        <translation>ドキュメントビューア</translation>
+        <translation>ドドドドドキュメントビューア…お、音読は無理ですぅ…</translation>
     </message>
     <message>
         <source>Item Inspector</source>
-        <translation>アイテムインスペクタ</translation>
+        <translation>ア、アイテムインスペクタ…こ、細かく調べて怒られないかな…</translation>
     </message>
     <message>
         <source>&amp;Open File</source>
