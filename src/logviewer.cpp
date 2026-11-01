@@ -96,6 +96,7 @@ void LogViewer::setupLayout()
     // `ZTreeWidget` shows `m_wordWrapAction` in the right-click menu.
     // The Word Wrap choice is not saved to the settings file. Word wrap is on
     // every time the app starts.
+    m_wordWrapAction->setIcon(QIcon::fromTheme("wrap-text"));
     m_wordWrapAction->setCheckable(true);
     m_wordWrapAction->setChecked(true);
     m_treeWidget->setWordWrap(true);
