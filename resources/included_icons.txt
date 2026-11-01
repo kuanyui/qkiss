@@ -130,7 +130,9 @@ BlueNome            view-refresh               reset-position                   
 # ===================================================================
 # CEL Inspector
 # ===================================================================
-BlueNome              sticky-note            comment                               {-32}
+# LibreOfficeElementary    show-note           comment                               {-32}
+LibreOfficeElementary    edit-annotation           comment                               {-32}
+# BlueNome              sticky-note            comment                               {-32}    # GPL-2.0-only, so replaced with LibreOfficeElementary
 # BlueNome            help-faq              comment
 # InkscapeTango            dialog-messages            comment
 
