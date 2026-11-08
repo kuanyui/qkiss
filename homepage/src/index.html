@@ -256,7 +256,9 @@
               <img src="images/os/windows.svg" alt="" width="44" height="44">
               <h3>Windows</h3>
             </div>
-            <p id="footnote-ref-attestation" data-i18n-html="download.windows.body">A portable ZIP and an installer, automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation">*5</a></sup>.</p>
+            <!-- Windows 10 version 1809 is the oldest Windows that Qt 6.10 supports (https://doc.qt.io/qt-6.10/supported-platforms.html).
+                 Check it again when .github/workflows/windows.yaml moves to a newer Qt. -->
+            <p id="footnote-ref-attestation" data-i18n-html="download.windows.body">A portable ZIP and an installer, supporting Windows 10 version 1809 and later. It is automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation">*5</a></sup>.</p>
             <div class="button-row">
               <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.exe$"><img class="button-icon" src="images/qkiss-installer.svg" alt="" width="22" height="22"><span data-i18n="download.windows.installer">Installer</span></a>
               <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.zip$"><img class="button-icon" src="images/icons/package-x-generic.svg" alt="" width="22" height="22"><span data-i18n="download.windows.portable">Portable ZIP</span></a>            </div>
@@ -368,6 +370,7 @@
               </ul>
               <p data-i18n="faq.security.scope">Landlock and seccomp are built into QKiSS, with nothing to install, but they cover only these two external programs, not QKiSS itself.</p>
               <p data-i18n="faq.security.windows">As for Windows: as Eisen once said, anyone who uses Windows is a brave warrior, and needs none of these little tricks.</p>
+              <p data-i18n="faq.security.macos">As for the App Sandbox of macOS, I have given up on it for now. I believe Himmel the Hero, who, like me, never bought a Mac nor subscribed to the Apple Developer Program, would have done the same.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -430,12 +433,13 @@
             </div>
           </details>
           <details class="faq-item" id="faq-macos-signing">
-            <summary data-i18n="faq.macsign.q">When I start QKiSS, macOS says it is not signed. That is a pain. Why not buy a signature?</summary>
+            <!-- The words of the warning on macOS 13 and 14. macOS 15 and later say that Apple could not verify that QKiSS is free of malware. -->
+            <summary data-i18n="faq.macsign.q">When I start QKiSS, macOS says “the developer cannot be verified”. That is a pain. Why not buy a signature?</summary>
             <div class="faq-answer">
-              <p data-i18n-html="faq.macsign.a">Because it means paying Apple 99 US dollars every year for the <a href="https://developer.apple.com/programs/">Apple Developer Program</a>.</p>
+              <p data-i18n-html="faq.macsign.a">This is also a signature problem, and it works much like <a href="#faq-windows-signing">the warning on Windows</a>. I don't buy one because it means paying Apple 99 US dollars every year for the <a href="https://developer.apple.com/programs/">Apple Developer Program</a>.</p>
               <p data-i18n-html="faq.macsign.why">But first, I stopped being a Mac user long ago; second, I don't make a living from the Mac or iOS; third, I'm only developing a free software project that I like, and its source code and build process are all public, right there. So I have no wish at all to spend 99 dollars every year feeding this company, which wants to control even the <a href="https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf">ways you pay</a>.</p>
               <!-- A parody of chapter 84 of Chainsaw Man: Makima asks, and Kishibe no longer knows what it was. -->
-              <blockquote class="faq-dialogue" data-i18n-html="faq.macsign.dialogue"><p>Makima: “Do you remember what Apple did to out-of-store payments?”</p><p>Kishibe: “Out-of-store payments…?”</p></blockquote>
+              <blockquote class="faq-dialogue" data-i18n-html="faq.macsign.dialogue"><p>Makima: “Do you remember what Apple did to out-of-store payments?”</p><p>Kishibe: “”</p><p>Kishibe: “”</p><p>Kishibe: “Out-of-store payments…?”</p></blockquote>
               <p data-i18n="faq.macsign.bugs" hidden></p>
               <blockquote class="musing" hidden>
                 <img class="musing-icon" src="images/icons/sticky-note.svg" alt="" width="48" height="48">

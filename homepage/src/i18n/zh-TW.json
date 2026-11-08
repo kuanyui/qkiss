@@ -116,7 +116,7 @@
   "download.linux.link": "安裝說明",
   "download.linux.obs": "OBS 技術細節頁面",
   "download.linux.appimage": "如果你用的發行版不在上面，也可以用 AppImage：單一檔案、<span id=\"footnote-ref-appimage-fuse\">免安裝</span><sup class=\"footnote-ref\"><a href=\"#footnote-appimage-fuse\">*2</a></sup>，但<strong>只支援 x86_64</strong>，而且你使用的 Linux 發行版<strong>必須要 glibc 2.39 以上</strong>。但它跟上面的套件不同，是由 GitHub Actions 自動化建置並提供數位簽章<sup class=\"footnote-ref\"><a href=\"#footnote-attestation-appimage\">*3</a></sup>，而不是 OBS，所以沒有 OBS 的 GPG 數位簽章。注意，如果你很在意安全性，<span id=\"footnote-ref-appimage-security\">建議優先透過 OBS 安裝 QKiSS</span><sup class=\"footnote-ref\"><a href=\"#footnote-appimage-security\">*4</a></sup>。",
-  "download.windows.body": "提供免安裝版 ZIP 與安裝程式，由 GitHub Actions 自動化建置並提供數位簽章<sup class=\"footnote-ref\"><a href=\"#footnote-attestation\">*5</a></sup>。",
+  "download.windows.body": "提供免安裝版 ZIP 與安裝程式，支援 Windows 10 版本 1809 以上。由 GitHub Actions 自動化建置並提供數位簽章<sup class=\"footnote-ref\"><a href=\"#footnote-attestation\">*5</a></sup>。",
   "download.windows.installer": "安裝程式",
   "download.windows.portable": "免安裝版 ZIP",
   "download.macos.body": "同時支援 Apple 自家晶片與 Intel Mac 的 Universal 磁碟映像檔，支援 macOS 13 以上版本。由 GitHub Actions 自動化建置並提供數位簽章<sup class=\"footnote-ref\"><a href=\"#footnote-attestation-macos\">*6</a></sup>。",
@@ -157,6 +157,7 @@
   "faq.security.apparmor": "<strong>AppArmor</strong>（選用的 <code>qkiss-apparmor</code> 套件，Debian／Ubuntu／openSUSE 限定）：再限制一次 lha 與 unar，同時禁止 QKiSS 本身讀取 <code>~/.ssh</code> 等機密檔案，或者寫入 <code>~/.bashrc</code> 等持久攻擊檔案。",
   "faq.security.scope": "Landlock 與 seccomp 內建在 QKiSS 裡，不用另外安裝，但只管這兩個外部程式，不管 QKiSS 本身。",
   "faq.security.windows": "至於 Windows，艾冉曾經說過，會用 Windows 的人都是勇士，不需要這種小把戲。",
+  "faq.security.macos": "至於 macOS 的 App Sandbox 機制，目前決定放棄，相信跟我一樣沒有買 Mac 也沒有訂蘋果開發者方案的勇者欣梅爾一定也會這麼作的。",
   "faq.selinux.q": "為什麼只有提供 AppArmor 支援？沒有 SELinux 支援嗎？",
   "faq.selinux.model": "使用情境不適合，SELinux 的安全模型天生難以作到「禁止少數幾個像 <code>~/.config/autostart</code> 的資料夾的存取，其餘全部允許存取」，總不能強迫使用者只能把 KiSS LZH 檔案丟進某個寫死的 <code>~/qkiss</code> 資料夾內。",
   "faq.selinux.rare": "而且在 Linux 桌面中，刻意讓 GUI 應用程式脫離 <code>unconfined_t</code> 執行的人應該很罕見。這種人不是在五角大樓上班<sup class=\"footnote-ref\"><a href=\"#footnote-work\">*1</a></sup>，就是早就已經跑去用 Qubes OS。",
@@ -209,16 +210,16 @@
     "safe":   "",
     "danger": "其實微軟也有<a href=\"https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks\">類似的條款</a>，不准使用或修改 Windows 的標誌，只是至少還沒離譜到連「真的窗戶」都禁止，也沒聽說過他們拿標誌去跟開發者的網頁內指示性的圖標找碴。他們真的出手的，都是名字撞到「Windows」的，比如明顯在蹭名字的 <a href=\"https://en.wikipedia.org/wiki/Microsoft_vs._Lindows\">Lindows</a>，或者（我猜）可能是會被誤認為是微軟官方出品的 <a href=\"https://www.ghisler.ch/wiki/index.php/What_happened_to_Windows_Commander%3F\">Windows Commander</a>（現 Total Commander）。"
   },
-  "faq.macsign.q": "QKiSS 啟動時 macOS 說沒簽章，這樣很麻煩耶，不買一個嗎？",
+  "faq.macsign.q": "QKiSS 啟動時 macOS 說「無法驗證開發者」，這樣很麻煩耶，不買個簽章嗎？",
   "faq.macsign.a": {
-    "safe":   "因為這要每年花 99 美金跟 Apple 訂閱開發者方案（<a href=\"https://developer.apple.com/programs/\">Apple Developer Program</a>）。",
-    "danger": "因為這要每年跟 Apple 繳保護費訂閱開發者方案（<a href=\"https://developer.apple.com/programs/\">Apple Developer Program</a>）。"
+    "safe":   "這也是簽章問題，原理類似 <a href=\"#faq-windows-signing\">Windows 的警告</a>。因為這要每年花 99 美金跟 Apple 訂閱開發者方案（<a href=\"https://developer.apple.com/programs/\">Apple Developer Program</a>）。",
+    "danger": "這也是<ruby>買簽章<rt>保護費</rt></ruby>的問題，原理類似 <a href=\"#faq-windows-signing\">Windows 的警告</a>。因為這要每年跟 Apple 繳保護費訂閱開發者方案（<a href=\"https://developer.apple.com/programs/\">Apple Developer Program</a>）。"
   },
   "faq.macsign.why": {
     "safe":   "但首先我早就不是 Mac 使用者，二我也不靠 Mac 或 iOS 吃飯，三是我只是開發我喜歡的自由軟體專案，程式碼與編譯流程都公開都擺在那了，所以完全不想每年花 99 美金去供養這個連<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">付款方式</a>都想要管的企業。",
     "danger": "但首先我早就不是 Mac 使用者，二我也不靠 Mac 或 iOS 吃飯，三是我只是開發我喜歡的自由軟體專案，程式碼與編譯流程都公開都擺在那了，所以完全沒有理由也不爽每年花 99 美金去供養這個連<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">付款方式</a>都要管的醜陋貪婪企業。"
   },
-  "faq.macsign.dialogue": "<p>真紀真：「你還記得蘋果對商店外付款作了些什麼嗎？」</p><p>岸邊：「商店外付款...？」</p>",
+  "faq.macsign.dialogue": "<p>真紀真：「你還記得蘋果對商店外付款作了些什麼嗎？」</p><p>岸邊：「」</p><p>岸邊：「」</p><p>岸邊：「商店外付款...？」</p>",
   "faq.macsign.bugs": {
     "safe":   "",
     "danger": "而且一堆明顯 UI bug 都能擺爛幾年一直修不好的 OS，我完全不想花錢跟這種 OS 廠商買簽章，一樣的錢拿去捐款給 KDE 對人類進步有價值太多太多。"

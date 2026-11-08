@@ -116,7 +116,7 @@
   "download.linux.link": "インストール方法",
   "download.linux.obs": "OBS の技術情報",
   "download.linux.appimage": "お使いのディストリビューションが上にない場合は、AppImage もあります。<span id=\"footnote-ref-appimage-fuse\">インストール不要</span><sup class=\"footnote-ref\"><a href=\"#footnote-appimage-fuse\">*2</a></sup>の単一ファイルですが、<strong>x86_64 専用</strong>で、お使いの Linux ディストリビューションには <strong>glibc 2.39 以降が必要</strong>です。ただし上のパッケージとは違い、OBS ではなく GitHub Actions で自動ビルド・電子署名<sup class=\"footnote-ref\"><a href=\"#footnote-attestation-appimage\">*3</a></sup>しているため、OBS の GPG 署名はありません。注意：セキュリティを重視するなら、<span id=\"footnote-ref-appimage-security\">OBS 経由で QKiSS をインストールすることをおすすめします</span><sup class=\"footnote-ref\"><a href=\"#footnote-appimage-security\">*4</a></sup>。",
-  "download.windows.body": "ポータブル版 ZIP とインストーラーを、GitHub Actions で自動ビルド・電子署名<sup class=\"footnote-ref\"><a href=\"#footnote-attestation\">*5</a></sup>して提供しています。",
+  "download.windows.body": "ポータブル版 ZIP とインストーラーで、Windows 10 バージョン 1809 以降をサポートしています。GitHub Actions で自動ビルド・電子署名<sup class=\"footnote-ref\"><a href=\"#footnote-attestation\">*5</a></sup>して提供しています。",
   "download.windows.installer": "インストーラー",
   "download.windows.portable": "ポータブル版 ZIP",
   "download.macos.body": "Apple シリコンと Intel の両方の Mac に対応した Universal ディスクイメージで、macOS 13 以降をサポートしています。GitHub Actions で自動ビルド・電子署名<sup class=\"footnote-ref\"><a href=\"#footnote-attestation-macos\">*6</a></sup>して提供しています。",
@@ -157,6 +157,7 @@
   "faq.security.apparmor": "<strong>AppArmor</strong>（オプションパッケージ <code>qkiss-apparmor</code>、Debian / Ubuntu / openSUSE 限定）：lha と unar をもう一度制限し、QKiSS 本体にも <code>~/.ssh</code> などの機密ファイルを読ませず、<code>~/.bashrc</code> など攻撃の永続化に使われるファイルにも書き込ませません。",
   "faq.security.scope": "Landlock と seccomp は QKiSS に組み込まれているので、別途インストールは不要です。ただし守るのはこの 2 つの外部プログラムだけで、QKiSS 本体は対象外です。",
   "faq.security.windows": "Windows については、アイゼンが言っていたように、Windows を使う人はみんな戦士なので、こんな小細工は要りません。",
+  "faq.security.macos": "macOS の App Sandbox については、今のところ諦めることにしました。私と同じく Mac も買わず、Apple Developer Program にも加入していない勇者ヒンメルなら、きっとそうしたはずです。",
   "faq.selinux.q": "なぜ AppArmor にしか対応していないのですか？ SELinux には対応しないのですか？",
   "faq.selinux.model": "使い方に合わないからです。SELinux のセキュリティモデルは、「<code>~/.config/autostart</code> など少数のフォルダへのアクセスだけを禁止し、ほかはすべて許可する」というのが根本的に苦手です。だからといって、KiSS の LZH ファイルを決め打ちの <code>~/qkiss</code> フォルダにしか置けないよう、ユーザーに強制するわけにもいきません。",
   "faq.selinux.rare": "それに Linux デスクトップで、GUI アプリをわざわざ <code>unconfined_t</code> の外で動かす人なんて、めったにいないでしょう。そういう人はペンタゴン勤務<sup class=\"footnote-ref\"><a href=\"#footnote-work\">*1</a></sup>か、とっくに Qubes OS に移っているかのどちらかです。",
@@ -209,16 +210,16 @@
     "safe":   "",
     "danger": "実は Microsoft にも<a href=\"https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks\">似たような規約</a>があり、Windows のロゴを使ったり変えたりすることは禁止されています。ただ、少なくとも「本物の窓」まで禁止するほど度を越してはいませんし、開発者がウェブページで「Windows 用」と示すためだけに使うアイコンに、ロゴを理由に難癖をつけたという話も聞いたことがありません。彼らが実際に動いたのは、どれも名前が「Windows」とかぶったものです。たとえば、明らかに名前に便乗した <a href=\"https://en.wikipedia.org/wiki/Microsoft_vs._Lindows\">Lindows</a> や、（私の推測ですが）Microsoft の公式製品と間違えられかねない <a href=\"https://www.ghisler.ch/wiki/index.php/What_happened_to_Windows_Commander%3F\">Windows Commander</a>（現 Total Commander）などです。"
   },
-  "faq.macsign.q": "QKiSS を起動すると、macOS に署名がないと言われて面倒です。署名を買わないのですか？",
+  "faq.macsign.q": "QKiSS を起動すると、macOS で「開発元を検証できない」と表示されて面倒です。署名を買わないのですか？",
   "faq.macsign.a": {
-    "safe":   "毎年 99 米ドルを払って <a href=\"https://developer.apple.com/jp/programs/\">Apple Developer Program</a> に加入しなければならないからです。",
-    "danger": "毎年 Apple にショバ代を払って <a href=\"https://developer.apple.com/jp/programs/\">Apple Developer Program</a> に加入しなければならないからです。"
+    "safe":   "これも署名の問題で、仕組みは<a href=\"#faq-windows-signing\">Windows の警告</a>と似ています。買わないのは、毎年 99 米ドルを払って <a href=\"https://developer.apple.com/jp/programs/\">Apple Developer Program</a> に加入しなければならないからです。",
+    "danger": "これも<ruby>署名の購入<rt>ショバ代</rt></ruby>の問題で、仕組みは<a href=\"#faq-windows-signing\">Windows の警告</a>と似ています。買わないのは、毎年 Apple にショバ代を払って <a href=\"https://developer.apple.com/jp/programs/\">Apple Developer Program</a> に加入しなければならないからです。"
   },
   "faq.macsign.why": {
     "safe":   "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">支払い方法</a>まで支配したがる企業を養うために毎年 99 ドル払う気はまったくありません。",
     "danger": "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">支払い方法</a>まで支配したがる醜く強欲な企業を養うために毎年 99 ドル払う理由はまったくないし、払う気にもなりません。"
   },
-  "faq.macsign.dialogue": "<p>マキマ：「<ruby>貴方<rt>あなた</rt></ruby>はアップルがストア<ruby>外<rt>がい</rt></ruby><ruby>決済<rt>けっさい</rt></ruby>に<ruby>何<rt>なに</rt></ruby>をしたのか<ruby>覚<rt>おぼ</rt></ruby>えていますか？」</p><p><ruby>岸辺<rt>きしべ</rt></ruby>：「ストア<ruby>外<rt>がい</rt></ruby><ruby>決済<rt>けっさい</rt></ruby>…？」</p>",
+  "faq.macsign.dialogue": "<p>マキマ：「<ruby>貴方<rt>あなた</rt></ruby>はアップルがストア<ruby>外<rt>がい</rt></ruby><ruby>決済<rt>けっさい</rt></ruby>に<ruby>何<rt>なに</rt></ruby>をしたのか<ruby>覚<rt>おぼ</rt></ruby>えていますか？」</p><p><ruby>岸辺<rt>きしべ</rt></ruby>：「」</p><p><ruby>岸辺<rt>きしべ</rt></ruby>：「」</p><p><ruby>岸辺<rt>きしべ</rt></ruby>：「ストア<ruby>外<rt>がい</rt></ruby><ruby>決済<rt>けっさい</rt></ruby>…？」</p>",
   "faq.macsign.bugs": {
     "safe":   "",
     "danger": "それに、明らかな UI のバグを何年も放置して直せない OS のために、そのメーカーから署名を買う気はまったくありません。同じお金を KDE に寄付するほうが、人類の進歩にとってはるかに価値があります。"
