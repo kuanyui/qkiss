@@ -1062,6 +1062,54 @@ sup {
 /* A link around the icon of a card, like the banana of macOS: a flex box too, so that there is no gap under the image. */
 .download-icon-link {
   display: flex;
+  position: relative;
+}
+
+/*
+ * Pointing at the banana (or reaching it with the keyboard) shows something over it, which main.js picks by the cut
+ * (<html data-cut>): in the Wholesome Cut, a caption after Magritte's painting "Ceci n'est pas une pomme" (1964); in
+ * the Director's Cut, a censor bar across the banana.
+ */
+.download-icon-link::after {
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.download-icon-link:is(:hover, :focus-visible)::after {
+  opacity: 1;
+}
+
+:root[data-cut="safe"] .download-icon-link::after {
+  content: "Ceci n’est pas une pomme.";
+  top: calc(100% + 0.3rem);
+  left: 0;
+  padding: 0.1rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-family: "Segoe Script", "Brush Script MT", cursive;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+
+/*
+ * Across the banana, toward its tip, and well out past the bite, beyond the icon itself: measured on the 44 px icon.
+ * It shows at once, unfaded.
+ */
+:root[data-cut="danger"] .download-icon-link::after {
+  content: "";
+  top: 43.2%;
+  left: 78.4%;
+  width: 62.5%;
+  height: 9%;
+  background: #000;
+  transform: translate(-50%, -50%) rotate(30deg);
+  transition: none;
 }
 
 .download-card h3 {

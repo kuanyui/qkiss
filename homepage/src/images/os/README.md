@@ -6,4 +6,4 @@ The Download section shows these icons on the cards of the operating systems. Ea
 |---|---|---|
 | `tux.svg` | Linux | A copy of `resources/appicon/actions/22/tux.svg`, an icon of the app (GPL-3.0-or-later). It is still 22 × 22 px, until it is drawn again at 48 × 48 px. |
 | `windows.svg` | Windows | Drawn for this website |
-| `banana.svg` | macOS | Drawn for this website |
+| `banana.svg` | macOS | Drawn for this website. It is a link to the question about it in Q&A (see `style.css` for what pointing at it shows). |

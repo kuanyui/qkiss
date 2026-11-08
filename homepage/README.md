@@ -196,6 +196,7 @@ A string that differs between the cuts is an object with one version per cut, in
 - The same way, an element that is empty and `hidden` in `index.html` shows only in the languages that translate it. For example, the translations in the quote of Apple's guidelines in Q&A (`faq.banana.quote-*`), which English does not need.
 - `main.js` numbers the footnotes of each `.footnotes` block (`*1`, `*2`, …), skipping the hidden ones, so the numbers written in the strings do not matter. Only the numbers in `index.html` must be right for the Wholesome Cut, for visitors without JavaScript.
 - `build.py` rejects malformed versions, and warns about a string that has a version per cut in one language but not in another.
+- `main.js` also marks the cut of the page on `<html data-cut>`, for the styles that differ between the cuts. For example, pointing at the banana of macOS in Download shows a caption after Magritte, "Ceci n'est pas une pomme", in the Wholesome Cut, and a censor bar in the Director's Cut.
 
 The terms and their additional articles are documents, not strings of the page: `src/legal/terms.json` and `src/legal/amendments.json`. `main.js` downloads one when its dialog opens, and writes it into the `.terms-content` of the dialog, in the language of the page. So the page does not grow with them.
 

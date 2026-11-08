@@ -272,6 +272,7 @@
     numberFootnotes();
     if (cut === 'danger') typesetFormulas();
     root.lang = htmlLang(id);
+    root.dataset.cut = cut;   // for the styles that differ between the cuts, like the banana of macOS in Download
     renderGallery();
     renderReleaseLinks();
     renderCutPicker();
