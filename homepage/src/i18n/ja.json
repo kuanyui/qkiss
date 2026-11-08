@@ -214,13 +214,10 @@
     "danger": "毎年 Apple にショバ代を払って <a href=\"https://developer.apple.com/jp/programs/\">Apple Developer Program</a> に加入しなければならないからです。"
   },
   "faq.macsign.why": {
-    "safe":   "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、署名のために毎年 99 ドル払う理由はまったくありません。",
+    "safe":   "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">支払い方法</a>まで支配したがる企業を養うために毎年 99 ドル払う気はまったくありません。",
     "danger": "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">支払い方法</a>まで支配したがる醜く強欲な企業を養うために毎年 99 ドル払う理由はまったくないし、払う気にもなりません。"
   },
-  "faq.macsign.dialogue": {
-    "safe":   "",
-    "danger": "<p>マキマ：「Apple がストア外決済に何をしたか覚えていますか？」</p><p>岸辺：「ストア外決済…？」</p>"
-  },
+  "faq.macsign.dialogue": "<p>マキマ：「<ruby>貴方<rt>あなた</rt></ruby>はアップルがストア<ruby>外<rt>がい</rt></ruby><ruby>決済<rt>けっさい</rt></ruby>に<ruby>何<rt>なに</rt></ruby>をしたのか<ruby>覚<rt>おぼ</rt></ruby>えていますか？」</p><p><ruby>岸辺<rt>きしべ</rt></ruby>：「ストア<ruby>外<rt>がい</rt></ruby><ruby>決済<rt>けっさい</rt></ruby>…？」</p>",
   "faq.macsign.bugs": {
     "safe":   "",
     "danger": "それに、明らかな UI のバグを何年も放置して直せない OS のために、そのメーカーから署名を買う気はまったくありません。同じお金を KDE に寄付するほうが、人類の進歩にとってはるかに価値があります。"
