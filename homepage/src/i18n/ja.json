@@ -85,7 +85,7 @@
   },
   "features.misc.title": "エンジニアリングと美学のロマン",
   "features.misc.handmade": "本体プログラムのコードは、95% 超が人間の手打ち<sup class=\"footnote-ref\"><a href=\"#footnote-website\">*2</a></sup> <sup class=\"footnote-ref\"><a href=\"#footnote-handtyped\">*3</a></sup>（そしてたぶん、作者が手で書く最後のソフトウェアプロジェクト。大事に使ってね）。",
-  "features.misc.linux": "Linux はもう二級市民じゃない（Windows のほうこそ）。",
+  "features.misc.linux": "Linux はもう二級市民じゃない（Windows と macOS のほうこそ）。",
   "features.misc.open": "オープンソース＋自動ビルドで、私が中にこっそりわるいものを仕込んでいないことを保証<sup class=\"footnote-ref\"><a href=\"#footnote-supply-chain\">*3</a></sup>。",
   "features.misc.tango": "Tango アイコン風の UI アイコンで、2000 年代の夢をもう一度。",
   "features.misc.apparmor": {

@@ -85,7 +85,7 @@
   },
   "features.misc.title": "工程與美學的浪漫",
   "features.misc.handmade": "主程式的程式碼 > 95% 為人類手敲程式碼<sup class=\"footnote-ref\"><a href=\"#footnote-website\">*2</a></sup> <sup class=\"footnote-ref\"><a href=\"#footnote-handtyped\">*3</a></sup>（而且恐怕是作者最後一次手寫軟體專案，且用且珍惜）。",
-  "features.misc.linux": "Linux 不再是次等公民（Windows 才是）。",
+  "features.misc.linux": "Linux 不再是次等公民（Windows 跟 macOS 才是）。",
   "features.misc.open": "開放原始碼 + 自動化建置，確定我沒有在裡面偷塞壞壞的東西<sup class=\"footnote-ref\"><a href=\"#footnote-supply-chain\">*3</a></sup>。",
   "features.misc.tango": "Tango Icon 風格的 UI 圖標，讓你夢回 2000 年代。",
   "features.misc.apparmor": {
