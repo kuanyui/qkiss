@@ -1123,6 +1123,14 @@ sup {
   color: var(--text-muted);
 }
 
+/* The AppImage at the end of the Linux card: a line above it, because GitHub Actions builds it, not OBS. */
+.download-card p.download-appimage {
+  flex: none;
+  width: 100%;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+}
+
 /* A download button joined to the toggle of its menu, as one split button (made by main.js from
    #download-menu-template). The menu opens under it. */
 .split-button {

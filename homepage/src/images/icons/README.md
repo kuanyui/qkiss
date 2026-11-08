@@ -1,4 +1,4 @@
-# Icons from Tango and Nome, and the mark of Tango Remixer
+# Icons from Tango and Nome, the mark of Tango Remixer, and the logo of AppImage
 
 These are copies of icons from the icon themes that [Tango Remixer](https://kuanyui.github.io/tango-remixer/) remixes.
 They are copies because the CI of this website does not fetch the submodules. To update one, copy it again from its path below.
@@ -37,6 +37,7 @@ When there is a copy of the same icon from each theme, the name of each copy end
 - The icons of the buttons are from [Nome](https://github.com/kuanyui/nome-icon-theme), which continues the GNOME Icon Theme. Each file states its license in an SPDX comment.
 - In Highlights, the title of each group has a 32 px icon: `applications-utilities.svg` for the features, `emblem-favorite.svg` (Tango) for the faithfulness to the specs and to the users, and `applications-engineering.svg` for the romance of engineering and aesthetics.
 - In Download, `applications-development.svg` is the icon of the Source code card, and `network-server.svg` is on the button to the OBS package page.
+- `appimage.svg`, on the button of the AppImage in the Linux card of Download, is not from these themes. It is the logo of AppImage, in the style of Tango, by Simon Peter: a copy of [`resources/appimagetool.svg`](https://github.com/AppImage/AppImageKit/blob/98dd8179/resources/appimagetool.svg) of AppImageKit. Its license is MIT, written in the file.
 - In Q&A, the answer about LLMs uses some of these icons for the areas of the project that have no logo (the logos are in `images/tech/`):
   - `preferences-desktop-locale.svg` for the translations. It is the Tango version, because the Nome one is six times bigger.
   - `accessories-dictionary.svg` for the FKiSS specification.
