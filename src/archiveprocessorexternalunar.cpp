@@ -129,6 +129,7 @@ QString ArchiveProcessorExternalUnar::getUnarProgram()
     if (QFileInfo::exists(unarExePath)) { return unarExePath; }
 #endif
     // - Linux: the `unar` of the distro.
+    // - Linux AppImage: `main.cpp` puts the folder of its own `unar` first in PATH.
     // - macOS: `main.cpp` puts `qkiss.app/Contents/Helpers/` first in PATH. We put the binary of `unar` under it.
     return QStringLiteral("unar");
 }

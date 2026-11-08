@@ -25,6 +25,8 @@
 #include <QTranslator>
 #include <QFile>
 #include <QDir>
+#include <QFileInfo>
+#include "extractorsandbox.h"
 #include "zproxystyle.h"
 #include "translationmanager.h"
 #include "ztranslator.h"
@@ -135,6 +137,16 @@ int main(int argc, char *argv[])
         if (!pathDirs.contains(dir)) { pathDirs.append(dir); }
     }
     qputenv("PATH", QFile::encodeName(pathDirs.join(u':')));
+#endif
+#ifdef Q_OS_LINUX
+    /// Use the `lha` and `unar` of the AppImage (see `bundledHelpersDirPath()`) before the ones of the system, as on macOS.
+    const QString helpersDir = bundledHelpersDirPath();
+    if (QFileInfo(helpersDir).isDir()) {
+        QStringList pathDirs = {helpersDir + "/lha", helpersDir + "/unar/bin"};
+        const QString path = qEnvironmentVariable("PATH");
+        if (!path.isEmpty()) { pathDirs.append(path); }
+        qputenv("PATH", QFile::encodeName(pathDirs.join(u':')));
+    }
 #endif
     // Our-defined `ZProxyStyle`. Without a base style, it uses the style of `QT_STYLE_OVERRIDE` or `-style`, else the style of the system.
     app.setStyle(new ZProxyStyle{});

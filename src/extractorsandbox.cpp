@@ -20,7 +20,10 @@
 #include "extractorsandbox.h"
 #include "logging.h"
 
+#include <QCoreApplication>
+#include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QProcess>
 #include <QStandardPaths>
 
@@ -219,7 +222,7 @@ bool allowPath(int rulesetFd, const char *path, __u64 accessFlags)
 /// 3. Create a ruleset and get its fd, pass the `landlock_ruleset_attr` into the fd.
 /// 4. Apply the ruleset on the current process. The process is restricted from now on.
 /// @returns false on error. (A kernel without Landlock is not an error.)
-bool restrictFileSystemViaLandlock(const char *programPath, const char *archivePath, const char *writableDirPath)
+bool restrictFileSystemViaLandlock(const char *programPath, const char *archivePath, const char *readableDirPath, const char *writableDirPath)
 {
     const int abiVersion = syscallLandlockGetAbiVersion();
     if (abiVersion < 0) {
@@ -243,6 +246,8 @@ bool restrictFileSystemViaLandlock(const char *programPath, const char *archiveP
     // (iii) Allow some dynamic paths which are determined during runtime. (ex: `lha` path, lzh file path)
     ok = ok && (programPath == nullptr || allowPath(rulesetFd, programPath, (AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_EXECUTE) & supportedFsAccessFlags));
     ok = ok && allowPath(rulesetFd, archivePath, AGG_LANDLOCK_ACCESS_FS_READ & supportedFsAccessFlags);
+    // Read only: the dynamic loader maps the libraries with mmap(), which LANDLOCK_ACCESS_FS_EXECUTE does not cover.
+    ok = ok && (readableDirPath == nullptr || allowPath(rulesetFd, readableDirPath, AGG_LANDLOCK_ACCESS_FS_READ & supportedFsAccessFlags));
     ok = ok && (writableDirPath == nullptr || allowPath(rulesetFd, writableDirPath, (AGG_LANDLOCK_ACCESS_FS_READ | AGG_LANDLOCK_ACCESS_FS_WRITE) & supportedFsAccessFlags));
     ok = ok && syscallLandlockRestrictSelf(rulesetFd) == 0;
     close(rulesetFd);
@@ -417,15 +422,32 @@ void writeError(const char *text)
 }
 
 /// Runs in the child process, just before exec().
-void restrictThisProcess(const char *programPath, const char *archivePath, const char *writableDir)
+void restrictThisProcess(const char *programPath, const char *archivePath, const char *readableDir, const char *writableDir)
 {
     // Required by Landlock and by seccomp without root. The extractor can never gain privileges, e.g. via setuid.
     if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0) { failSandbox("no_new_privs"); }
-    if (!restrictFileSystemViaLandlock(programPath, archivePath, writableDir)) { failSandbox("Landlock"); }
+    if (!restrictFileSystemViaLandlock(programPath, archivePath, readableDir, writableDir)) { failSandbox("Landlock"); }
     if (!restrictSystemCallsViaSeccomp()) { failSandbox("seccomp"); }
 }
 
+/// Returns the folder `bundledHelpersDirPath()/NAME/` that has `programPath` in it, or an empty string for other programs.
+/// The program must read this folder: `unar/bin/unar` loads its libraries from `unar/lib/`.
+/// The paths are canonical, so that a symbolic link or `..` cannot make the folder wider.
+QString getBundledHelperDirPath(const QString &programPath)
+{
+    const QString helpersDirPath = QFileInfo(bundledHelpersDirPath()).canonicalFilePath();
+    const QString canonicalProgramPath = QFileInfo(programPath).canonicalFilePath();
+    if (helpersDirPath.isEmpty() || !canonicalProgramPath.startsWith(helpersDirPath + u'/')) { return QString(); }
+    const QString helperName = canonicalProgramPath.mid(helpersDirPath.size() + 1).section(u'/', 0, 0);
+    return helpersDirPath + u'/' + helperName;
+}
+
 } // namespace
+
+QString bundledHelpersDirPath()
+{
+    return QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../lib/qkiss/helpers");
+}
 #endif // Q_OS_LINUX
 
 
@@ -437,14 +459,17 @@ void sandboxExtractorProcess(QProcess *process, const QString &programPath, cons
 {
 #ifdef Q_OS_LINUX
     // Convert strings in the parent process, because child cannot allocate memory.
-    const QByteArray programPathByteArray = QFile::encodeName(QStandardPaths::findExecutable(programPath));
+    const QString resolvedProgramPath = QStandardPaths::findExecutable(programPath);
+    const QByteArray programPathByteArray = QFile::encodeName(resolvedProgramPath);
     const QByteArray archivePathByteArray = QFile::encodeName(archiveFilePath);
+    const QByteArray readableDirPathByteArray = QFile::encodeName(getBundledHelperDirPath(resolvedProgramPath));
     const QByteArray writableDirPathByteArray = QFile::encodeName(writableDirPath);
-    process->setChildProcessModifier([programPathByteArray, archivePathByteArray, writableDirPathByteArray]() {
+    process->setChildProcessModifier([programPathByteArray, archivePathByteArray, readableDirPathByteArray, writableDirPathByteArray]() {
         const char *_programPath = programPathByteArray.isEmpty() ? nullptr : programPathByteArray.constData();
+        const char *_readableDirPath = readableDirPathByteArray.isEmpty() ? nullptr : readableDirPathByteArray.constData();
         const char *_writableDirPath = writableDirPathByteArray.isEmpty() ? nullptr : writableDirPathByteArray.constData();
         const char *_archiveFilePath = archivePathByteArray.isEmpty() ? nullptr : archivePathByteArray.constData();
-        restrictThisProcess(_programPath, _archiveFilePath, _writableDirPath);
+        restrictThisProcess(_programPath, _archiveFilePath, _readableDirPath, _writableDirPath);
     });
     qkDebug << "Sandbox for" << programPath << "with Landlock ABI" << syscallLandlockGetAbiVersion() << "(Note: -1 means no Landlock)";
 #else

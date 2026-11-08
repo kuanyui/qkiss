@@ -29,6 +29,7 @@ class QProcess;
  *
  * On Linux, the programPath that `process` starts runs under Landlock and seccomp. It can:
  * - Read the system folders (`/usr`, `/etc`...) and `archiveFilePath`, but nothing else: nothing in the home folder.
+ *   A helper program of the AppImage can also read its own folder in `bundledHelpersDirPath()`, which has its libraries.
  * - Write the files only beneath `writableDirPath`, when it is given.
  * - Run only programs from the system folders, and `programPath` itself.
  * - Not create sockets or namespaces, use io_uring, read other processes' memory, or send them signals.
@@ -37,5 +38,14 @@ class QProcess;
  * Call this function before each `process->start(programPath, ...)`.
  */
 void sandboxExtractorProcess(QProcess *process, const QString &programPath, const QString &archiveFilePath, const QString &writableDirPath = QString());
+
+#ifdef Q_OS_LINUX
+/**
+ * The folder of the helper programs that come with the AppImage: `usr/lib/qkiss/helpers/`, next to `usr/bin/qkiss`.
+ * Each program has a folder of its own: `lha/lha`, and `unar/bin/unar` with its libraries in `unar/lib/`.
+ * A distro package has no such folder.
+ */
+QString bundledHelpersDirPath();
+#endif
 
 #endif // EXTRACTORSANDBOX_H
