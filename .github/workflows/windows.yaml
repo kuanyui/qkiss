@@ -358,7 +358,8 @@ jobs:
       - name: Install Python dependencies
         # use `python -m pip` instead of `pip` to ensure the runtime installed
         # by `actions/setup-python@v4` is chosen.
-        run: python -m pip install jsonschema pyyaml
+        run: |
+          python -m pip install --require-hashes --only-binary :all: -r scripts/changelog/requirements.txt
 
       # Step 9: Ensure location of ImageMagick (for converting .PNGs to .ICO)
       - name: Locate ImageMagick (for converting .PNGs to .ICO)

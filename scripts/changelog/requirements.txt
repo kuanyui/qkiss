@@ -1,0 +1,47 @@
+# The pins and hashes here protect the CI from supply-chain attacks through PyPI. The CI installs these packages,
+# and the build uses them (CMake runs scripts/changelog/changelog.py), so a malicious release could change the build.
+# - The versions are fixed. Each one is the newest that was at least two weeks old on 2026-11-09:
+#   a malicious new release is often found by then.
+# - `--require-hashes`: a file on PyPI that differs from its SHA-256 here fails the install.
+#   The hashes are of the wheels for Python 3.13, from https://pypi.org/pypi/NAME/VERSION/json.
+# - `--only-binary :all:`: only wheels, so no package runs its own build code during the install.
+
+pyyaml==6.0.3 \
+    --hash=sha256:8da9669d359f02c0b91ccc01cac4a67f16afec0dac22c2ad09f46bee0697eba8 \
+    --hash=sha256:2283a07e2c21a2aa78d9c4442724ec1eb15f5e42a723b99cb3d822d48f5f7ad1 \
+    --hash=sha256:ee2922902c45ae8ccada2c5b501ab86c36525b883eff4255313a253a3160861c \
+    --hash=sha256:a33284e20b78bd4a18c8c2282d549d10bc8408a2a7ff57653c0cf0b9be0afce5 \
+    --hash=sha256:0f29edc409a6392443abf94b9cf89ce99889a1dd5376d94316ae5145dfedd5d6 \
+    --hash=sha256:f7057c9a337546edc7973c0d3ba84ddcdf0daa14533c2065749c9075001090e6 \
+    --hash=sha256:eda16858a3cab07b80edaf74336ece1f986ba330fdb8ee0d6c0d68fe82bc96be \
+    --hash=sha256:d0eae10f8159e8fdad514efdc92d74fd8d682c933a6dd088030f3834bc8e6b26 \
+    --hash=sha256:79005a0d97d5ddabfeeea4cf676af11e647e41d81c9a7722a193022accdb6b7c \
+    --hash=sha256:5498cd1645aa724a7c71c8f378eb29ebe23da2fc0d7a08071d89469bf1d2defb
+jsonschema==4.26.0 \
+    --hash=sha256:d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce
+# For jsonschema and referencing:
+attrs==26.1.0 \
+    --hash=sha256:c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309
+# For jsonschema:
+jsonschema-specifications==2025.9.1 \
+    --hash=sha256:98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe
+# For jsonschema and jsonschema-specifications:
+referencing==0.37.0 \
+    --hash=sha256:381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231
+# For jsonschema and referencing:
+rpds-py==2026.9.1 \
+    --hash=sha256:a36b70596407634ca82d4b989a3729074a008537a0522e4c8046a67c729103e9 \
+    --hash=sha256:eba5d173f7d5708b22a93815017a4611873ed54db9f268077c0dd1ed99cfc858 \
+    --hash=sha256:457866b85daf5034296666168b84a69e0b2e89dc4f1af102b46f6448a60b9063 \
+    --hash=sha256:a3a52a3ba86436ab3aef510fbe21512abc2ddd1993005dfe50514bd2284ef025 \
+    --hash=sha256:d7841166b7fa64c9c56404617ae4341448847482d45933b13135d26c130519e5 \
+    --hash=sha256:926bdd3e3b5998ddf70cc64bc8cf57209571f9044542913afb673799fec77dd0 \
+    --hash=sha256:7868b85224291c6cb6759f9b5adb9745f486d226f62b16a614dd5a2a5ab2b35b \
+    --hash=sha256:3cd182d7291d29b92c521a0069d9c01ba6193628a9a105531d11b40a6d731a33 \
+    --hash=sha256:e6ea1cda8d8c688278430e4268a42f5e5da3bdd74578dfadc0820c3f1766ce83 \
+    --hash=sha256:5943980471829f6de242a20b109de3111ba6b77e3af0ffc587028ac854b05e6c \
+    --hash=sha256:76d3af9732d2dab69f28179b40ba2d87e2f1d5824b4a694780aa787d685e8f36 \
+    --hash=sha256:78326f4cb4427a56ba4996c0762b63be45f06b85f086526420d2b3a66e40f84d \
+    --hash=sha256:172e47169583f46ce118cbec68e6795d0da0f4606b488b6434f8276bca0a058c \
+    --hash=sha256:3e93b2cd69a9830be33e03945cd7cda940a0a8bfcfbff41d6144f0cb0d3d8bd9 \
+    --hash=sha256:d151e148117294133bf8af7eeace085e7e87432db15ab6adf640330298a47f6f
