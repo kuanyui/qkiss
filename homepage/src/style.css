@@ -1370,15 +1370,17 @@ sup {
   padding: 0 1.25rem 1.25rem;
 }
 
-/* A quotation in an answer, such as a rule quoted from a document. */
-.faq-quote {
+/* A quotation in an answer, such as a rule quoted from a document, or a short dialogue (one line for each speaker). */
+.faq-quote,
+.faq-dialogue {
   margin: 0 0 1.1rem;
   padding-inline-start: 1rem;
   border-inline-start: 3px solid var(--border-strong);
   color: var(--text-muted);
 }
 
-.faq-quote p {
+.faq-quote p,
+.faq-dialogue p {
   margin: 0;
 }
 

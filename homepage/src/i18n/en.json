@@ -89,6 +89,9 @@
   "faq.macsign.why": {
     "danger": "But first, I stopped being a Mac user long ago; second, I don't make a living from the Mac or iOS; third, I'm only developing a free software project that I like, and its source code and build process are all public, right there. So there is no reason at all, and I'm in no mood, to spend 99 dollars every year feeding this ugly, greedy corporation that wants to control even the <a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">ways you pay</a>."
   },
+  "faq.macsign.dialogue": {
+    "danger": "<p>Makima: “Do you remember what Apple did to out-of-store payments?”</p><p>Kishibe: “Out-of-store payments…?”</p>"
+  },
   "faq.macsign.bugs": {
     "danger": "Besides, for an OS whose obvious UI bugs can sit there for years without being fixed, I don't want to spend a cent on a signature from its vendor. The same money donated to KDE is worth far, far more to human progress."
   },
