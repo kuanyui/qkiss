@@ -246,7 +246,7 @@
               <a class="button" href="https://build.opensuse.org/package/show/home:kuanyui:stable/qkiss"><img class="button-icon" src="images/icons/network-server.svg" alt="" width="22" height="22"><span data-i18n="download.linux.obs">OBS details</span></a>
             </div>
             <!-- The AppImage is built by GitHub Actions (.github/workflows/linux-appimage.yaml), not by OBS. -->
-            <p class="download-appimage" id="footnote-ref-attestation-appimage" data-i18n-html="download.linux.appimage">If your distribution is not one of these, there is also an AppImage: a single file that runs <span id="footnote-ref-appimage-fuse">without installing</span><sup class="footnote-ref"><a href="#footnote-appimage-fuse">*2</a></sup>, but <strong>only on x86_64</strong>, and your Linux distribution <strong>must have glibc 2.39 or later</strong>. Unlike the packages above, it is automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation-appimage">*3</a></sup>, not by OBS, so it has no GPG signature from OBS.</p>
+            <p class="download-appimage" id="footnote-ref-attestation-appimage" data-i18n-html="download.linux.appimage">If your distribution is not one of these, there is also an AppImage: a single file that runs <span id="footnote-ref-appimage-fuse">without installing</span><sup class="footnote-ref"><a href="#footnote-appimage-fuse">*2</a></sup>, but <strong>only on x86_64</strong>, and your Linux distribution <strong>must have glibc 2.39 or later</strong>. Unlike the packages above, it is automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation-appimage">*3</a></sup>, not by OBS, so it has no GPG signature from OBS. Note: if you care a lot about security, <span id="footnote-ref-appimage-security">it is better to install QKiSS through OBS</span><sup class="footnote-ref"><a href="#footnote-appimage-security">*4</a></sup>.</p>
             <div class="button-row">
               <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-linux-x86_64\.AppImage$"><img class="button-icon" src="images/icons/appimage.svg" alt="" width="22" height="22"><span>AppImage</span></a>
             </div>
@@ -256,7 +256,7 @@
               <img src="images/os/windows.svg" alt="" width="44" height="44">
               <h3>Windows</h3>
             </div>
-            <p id="footnote-ref-attestation" data-i18n-html="download.windows.body">A portable ZIP and an installer, automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation">*4</a></sup>.</p>
+            <p id="footnote-ref-attestation" data-i18n-html="download.windows.body">A portable ZIP and an installer, automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation">*5</a></sup>.</p>
             <div class="button-row">
               <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.exe$"><img class="button-icon" src="images/qkiss-installer.svg" alt="" width="22" height="22"><span data-i18n="download.windows.installer">Installer</span></a>
               <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.zip$"><img class="button-icon" src="images/icons/package-x-generic.svg" alt="" width="22" height="22"><span data-i18n="download.windows.portable">Portable ZIP</span></a>            </div>
@@ -268,7 +268,7 @@
                  data-i18n-attr="aria-label:download.macos.banana;title:download.macos.banana-huh"><img src="images/os/banana.svg" alt="" width="44" height="44"></a>
               <h3>macOS</h3>
             </div>
-            <p id="footnote-ref-attestation-macos" data-i18n-html="download.macos.body">A Universal disk image for both Apple silicon and Intel Macs, supporting macOS 13 and later. It is automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation-macos">*5</a></sup>.</p>
+            <p id="footnote-ref-attestation-macos" data-i18n-html="download.macos.body">A Universal disk image for both Apple silicon and Intel Macs, supporting macOS 13 and later. It is automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation-macos">*6</a></sup>.</p>
             <div class="button-row">
               <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-macos-universal\.dmg$"><img class="button-icon" src="images/icons/package-x-generic.svg" alt="" width="22" height="22"><span data-i18n="download.macos.dmg">Disk image (DMG)</span></a>
             </div>
@@ -302,14 +302,19 @@
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*3</a>
             <span data-i18n-html="download.footnote.attestation-appimage">This signature is a <a href="https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations">GitHub artifact attestation</a>: it proves that <a href="https://github.com/kuanyui/qkiss/actions">GitHub Actions</a> built the AppImage from the source code of this repository. To check a downloaded file, run <code>gh attestation verify FILE -R kuanyui/qkiss</code> (<a href="https://cli.github.com/">GitHub CLI</a>). But unlike the packages of OBS, it has no GPG signature that your package manager checks, and it does not update itself: to update QKiSS, download the AppImage of the new version of QKiSS yourself.</span>
           </p>
+          <p id="footnote-appimage-security">
+            <a class="footnote-back" href="#footnote-ref-appimage-security" aria-label="Back to the text" title="Back to the text"
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*4</a>
+            <span data-i18n-html="download.footnote.appimage-security">The AppImage has two weak points for security. First, the optional AppArmor profile (the <code>qkiss-apparmor</code> package) only knows QKiSS installed as <code>/usr/bin/qkiss</code>, so it does not cover the AppImage. Second, the libraries inside the AppImage (such as Qt, FFmpeg and libarchive) do not get the security updates of your distribution: they are updated only with a new version of QKiSS. But the Landlock and seccomp sandbox used when extracting LZH files works in the AppImage too.</span>
+          </p>
           <p id="footnote-attestation">
             <a class="footnote-back" href="#footnote-ref-attestation" aria-label="Back to the text" title="Back to the text"
-               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*4</a>
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*5</a>
             <span data-i18n-html="download.footnote.attestation">This signature is a <a href="https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations">GitHub artifact attestation</a>: it proves that <a href="https://github.com/kuanyui/qkiss/actions">GitHub Actions</a> built the Windows files and the source tarball from the source code of this repository. To check a downloaded file, run <code>gh attestation verify FILE -R kuanyui/qkiss</code> (<a href="https://cli.github.com/">GitHub CLI</a>). It is not a signature inside the Windows executables themselves (Authenticode), so Windows still shows a warning the first time you run them.</span>
           </p>
           <p id="footnote-attestation-macos">
             <a class="footnote-back" href="#footnote-ref-attestation-macos" aria-label="Back to the text" title="Back to the text"
-               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*5</a>
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*6</a>
             <span data-i18n-html="download.footnote.attestation-macos">This signature is a <a href="https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations">GitHub artifact attestation</a>: it proves that <a href="https://github.com/kuanyui/qkiss/actions">GitHub Actions</a> built the disk image from the source code of this repository. To check a downloaded file, run <code>gh attestation verify FILE -R kuanyui/qkiss</code> (<a href="https://cli.github.com/">GitHub CLI</a>). But the app itself is signed only ad hoc, without an Apple Developer ID certificate, and is not notarized by Apple. So the first time you open it, macOS refuses to open it. Then close that message, go to System Settings › Privacy &amp; Security, scroll down to QKiSS, click “Open Anyway”, and confirm. You need to do this only once, but you will need to do it again after each update of QKiSS. See also <a href="https://support.apple.com/guide/mac-help/mh40616/mac">Apple's guide</a>.</span>
           </p>
         </div>
