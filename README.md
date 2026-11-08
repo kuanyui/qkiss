@@ -228,6 +228,19 @@ But even if you use SELinux, you still have the protection of Landlock and secco
     - Windows & Mac: uses our fork. (for latest GNUStep build + Windows, and Mac OS Universal support. Built via Github Actions)
 
 
+## Related Projects
+
+> [!TIP]
+> The following projects were created or forked for the development of QKiSS.
+
+- [Tango Remixer](https://github.com/kuanyui/tango-remixer)
+  - [Tango Icon Theme](https://github.com/kuanyui/tango-icon-theme) *(forked)*
+  - [Nome Icon Theme](https://github.com/kuanyui/nome-icon-theme) *(forked)*
+  - [Humanity Icon Theme](https://github.com/kuanyui/humanity-icon-theme) *(forked)*
+  - [FLOSS Icon Collections](https://github.com/kuanyui/floss-icon-collections)
+- [LHa for UNIX](https://github.com/kuanyui/lha) *(forked)* -- with GitHub Actions, build executable for Windows, macOS (Universal), Linux (x86_64, for AppImage only)
+- [XADMaster](https://github.com/kuanyui/XADMaster) *(forked)* -- with GitHub Actions, build executable for Windows, macOS (Universal), Linux (x86_64, for AppImage only)
+
 ## Disclosuring Usage of LLMs
 
 - This project uses LLMs as development assistants, but keeps them under control as much as possible, with various engineering methods (e.g. isolating LLM agents in KVM, the principle of least privilege, manual review of commits).
