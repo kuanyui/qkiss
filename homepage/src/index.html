@@ -76,7 +76,7 @@
       <!-- The main screenshot: the first one in screenshots/screenshots.json. Filled by main.js, which hides it when there are no screenshots. -->
       <div class="main-screenshot" id="main-screenshot"></div>
       <div class="container prose">
-        <h2 data-i18n="about.title">What is KiSS?</h2>
+        <h2><span data-i18n="about.title">What is KiSS?</span><a class="heading-link" href="#about" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
         <p data-i18n-html="about.kiss"><a href="https://en.wikipedia.org/wiki/Kisekae_Set_System">KiSS (Kisekae Set System)</a> is a format of digital paper dolls. You dress the characters up by dragging their clothes with the mouse, and FKiSS scripts add interactions such as animations and sounds.</p>
         <p data-i18n-html="about.kisekae">“Kisekae” comes from the Japanese word “<span lang="ja">着せ替え人形</span>” (pronunciation: “kisekae ningyou”), meaning “dress-up dolls”.</p>
         <p data-i18n-html="about.origin">KiSS originated from Japanese <a href="https://ja.wikipedia.org/wiki/おたく">otaku</a> subculture and personal computer enthusiasts community (particularly those using the <a href="https://ja.wikipedia.org/wiki/PC-9800シリーズ">NEC PC-9800 series</a>) in the 1990s, and gained popularity throughout the 1990s and early 2000s.</p>
@@ -106,7 +106,7 @@
 
     <section class="section section-alt" id="features">
       <div class="container">
-        <h2 data-i18n="features.title">Highlights</h2>
+        <h2><span data-i18n="features.title">Highlights</span><a class="heading-link" href="#features" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
         <ul class="feature-grid">
           <li class="feature">
             <h3><img class="feature-icon" src="images/icons/applications-utilities.svg" alt="" width="32" height="32"><span data-i18n="features.ui.title">Full-featured, with a handy UI</span></h3>
@@ -172,7 +172,7 @@
 
     <section class="section" id="screenshots">
       <div class="container">
-        <h2 data-i18n="screenshots.title">Screenshots</h2>
+        <h2><span data-i18n="screenshots.title">Screenshots</span><a class="heading-link" href="#screenshots" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
         <!--
           Filled by main.js from screenshots/screenshots.json, without its first screenshot (the main one, above "What is KiSS?").
           build.py copies that file from homepage/screenshots.json in this repository, and the images it lists from the wiki.
@@ -198,7 +198,7 @@
 
     <section class="section section-alt" id="download">
       <div class="container">
-        <h2 data-i18n="download.title">Download</h2>
+        <h2><span data-i18n="download.title">Download</span><a class="heading-link" href="#download" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
         <!-- The latest version, then every release (with the files of every platform). -->
         <div class="download-meta">
           <!-- Filled by main.js from the latest GitHub release. It stays hidden if that fails. -->
@@ -227,10 +227,10 @@
           </div>
         </template>
         <div class="download-grid">
-          <article class="download-card download-card-linux">
+          <article class="download-card download-card-linux" id="download-linux">
             <div class="download-head">
               <img src="images/os/tux.svg" alt="" width="44" height="44">
-              <h3>Linux</h3>
+              <h3>Linux<a class="heading-link" href="#download-linux" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h3>
             </div>
             <p id="footnote-ref-gpg" data-i18n-html="download.linux.body">Packages automatically built by the <a href="https://openbuildservice.org/">Open Build Service</a> (OBS) and digitally signed with GPG<sup class="footnote-ref"><a href="#footnote-gpg">*1</a></sup>, for these distributions:</p>
             <!-- The logos come from Simple Icons. See images/distros/README.md. -->
@@ -251,10 +251,10 @@
               <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-linux-x86_64\.AppImage$"><img class="button-icon" src="images/icons/appimage.svg" alt="" width="22" height="22"><span>AppImage</span></a>
             </div>
           </article>
-          <article class="download-card">
+          <article class="download-card" id="download-windows">
             <div class="download-head">
               <img src="images/os/windows.svg" alt="" width="44" height="44">
-              <h3>Windows</h3>
+              <h3>Windows<a class="heading-link" href="#download-windows" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h3>
             </div>
             <!-- Windows 10 version 1809 is the oldest Windows that Qt 6.10 supports (https://doc.qt.io/qt-6.10/supported-platforms.html).
                  Check it again when .github/workflows/windows.yaml moves to a newer Qt. -->
@@ -263,22 +263,22 @@
               <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.exe$"><img class="button-icon" src="images/qkiss-installer.svg" alt="" width="22" height="22"><span data-i18n="download.windows.installer">Installer</span></a>
               <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.zip$"><img class="button-icon" src="images/icons/package-x-generic.svg" alt="" width="22" height="22"><span data-i18n="download.windows.portable">Portable ZIP</span></a>            </div>
           </article>
-          <article class="download-card">
+          <article class="download-card" id="download-macos">
             <div class="download-head">
               <!-- The banana is a link to the question about it in Q&A, which main.js opens (setUpQuestionLinks). -->
               <a class="download-icon-link" href="#faq-banana" aria-label="Why a banana?" title="Huh?"
                  data-i18n-attr="aria-label:download.macos.banana;title:download.macos.banana-huh"><img src="images/os/banana.svg" alt="" width="44" height="44"></a>
-              <h3>macOS</h3>
+              <h3>macOS<a class="heading-link" href="#download-macos" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h3>
             </div>
             <p id="footnote-ref-attestation-macos" data-i18n-html="download.macos.body">A Universal disk image for both Apple silicon and Intel Macs, supporting macOS 13 and later. It is automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation-macos">*6</a></sup>.</p>
             <div class="button-row">
               <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-macos-universal\.dmg$"><img class="button-icon" src="images/icons/package-x-generic.svg" alt="" width="22" height="22"><span data-i18n="download.macos.dmg">Disk image (DMG)</span></a>
             </div>
           </article>
-          <article class="download-card download-card-source">
+          <article class="download-card download-card-source" id="download-source">
             <div class="download-head">
               <img src="images/icons/applications-development.svg" alt="" width="44" height="44">
-              <h3 data-i18n="download.source.title">Source code</h3>
+              <h3><span data-i18n="download.source.title">Source code</span><a class="heading-link" href="#download-source" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h3>
             </div>
             <p data-i18n-html="download.source.body">Want to build it yourself? See <a href="https://github.com/kuanyui/qkiss#development">Development</a> in the README.</p>
             <div class="button-row">
@@ -325,11 +325,13 @@
 
     <section class="section" id="faq">
       <div class="container prose">
-        <h2 data-i18n="faq.title">Q&amp;A</h2>
-        <!-- Each question is a <details>: a click on the question shows its answer. A link to one opens it (see main.js). -->
+        <h2><span data-i18n="faq.title">Q&amp;A</span><a class="heading-link" href="#faq" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
+        <!-- Each question is a <details>: a click on the question shows its answer. A link to one opens it (see main.js).
+             The text of a question is in its own <span>, because data-i18n replaces all of the text of an element, and
+             the ¶ after it would go too. The ¶ is a link to the question; a click on it does not hide the answer. -->
         <div class="faq">
-          <details class="faq-item">
-            <summary data-i18n="faq.specs.q">Which versions of FKiSS does QKiSS support?</summary>
+          <details class="faq-item" id="faq-specs">
+            <summary><span><span data-i18n="faq.specs.q">Which versions of FKiSS does QKiSS support?</span><a class="heading-link" href="#faq-specs" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <ul>
                 <li data-i18n-html="faq.specs.kiss"><a href="https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html">KISS/GS</a> (General Specification), with its <a href="https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/COMMENT.HTM">extended comments</a>.</li>
@@ -339,8 +341,8 @@
               <p data-i18n-html="faq.specs.shell">But I deliberately decided not to implement the <code>shell()</code> command, to avoid unnecessary security holes. (I don't think I've ever seen a KiSS set that uses it, either.)</p>
             </div>
           </details>
-          <details class="faq-item">
-            <summary data-i18n="faq.name.q">Why the name “QKiSS”?</summary>
+          <details class="faq-item" id="faq-name">
+            <summary><span><span data-i18n="faq.name.q">Why the name “QKiSS”?</span><a class="heading-link" href="#faq-name" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <p data-i18n-html="faq.name.a">A <a href="https://en.wikipedia.org/wiki/Kisekae_Set_System">KiSS</a> viewer implemented in <a href="https://en.wikipedia.org/wiki/Qt_(software)"><strong>Q</strong>t</a> 6. Having “KiSS” in the name is a convention of KiSS viewers, like fkiss, GnomeKiSS, KISSLD, and Direct KiSS.</p>
               <p data-i18n="faq.name.others">I also considered a few other names:</p>
@@ -350,16 +352,16 @@
               </ul>
             </div>
           </details>
-          <details class="faq-item">
-            <summary data-i18n="faq.sets.q">Where can I find KiSS sets to open?</summary>
+          <details class="faq-item" id="faq-sets">
+            <summary><span><span data-i18n="faq.sets.q">Where can I find KiSS sets to open?</span><a class="heading-link" href="#faq-sets" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <p data-i18n-html="faq.sets.otakuworld">The biggest archive right now is probably <a href="https://otakuworld.com/kiss/">Otaku World</a>, though you have to dig through it patiently. It has sets by both Japanese and Western artists.</p>
               <p data-i18n-html="faq.sets.viewers">Some people have also written their own implementations, such as <a href="https://kisekae.org/">one in JavaScript</a> or <a href="https://emhoracek.github.io/smooch/index.html">one in Haskell</a>, with online demos you can open right in your browser. But most of the sample sets they provide were dug up from Otaku World, too.</p>
               <p data-i18n="faq.sets.nsfw">Note that these KiSS sets may contain NSFW content, and I can't make any guarantees.</p>
             </div>
           </details>
-          <details class="faq-item">
-            <summary data-i18n="faq.security.q">What security measures are there for the LZH format and external programs such as lha?</summary>
+          <details class="faq-item" id="faq-security">
+            <summary><span><span data-i18n="faq.security.q">What security measures are there for the LZH format and external programs such as lha?</span><a class="heading-link" href="#faq-security" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <p data-i18n-html="faq.security.history"><a href="https://ja.wikipedia.org/wiki/LHA">LZH / LHA</a> is a free compression format and tool, developed in 1988 by Haruyasu Yoshizaki, a Japanese physician. It was very popular in the Japanese personal computer scene of the time (by comparison, PKZIP, the ZIP tool that later became the mainstream, did not appear until 1989, and was shareware), so the KiSS developer community, which originated in Japan, naturally adopted LZH to compress KiSS sets.</p>
               <p data-i18n="faq.security.why">But today, both the format and its implementations are old, and lha and unar extract LZH files of unknown origin, which makes them the easiest target for a malicious file. So on Linux, QKiSS locks them up:</p>
@@ -373,8 +375,8 @@
               <p data-i18n="faq.security.macos">As for the App Sandbox of macOS, I have given up on it for now. I believe Himmel the Hero, who, like me, never bought a Mac nor subscribed to the Apple Developer Program, would have done the same.</p>
             </div>
           </details>
-          <details class="faq-item">
-            <summary data-i18n="faq.selinux.q">Why is only AppArmor supported? Is there no SELinux support?</summary>
+          <details class="faq-item" id="faq-selinux">
+            <summary><span><span data-i18n="faq.selinux.q">Why is only AppArmor supported? Is there no SELinux support?</span><a class="heading-link" href="#faq-selinux" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <p data-i18n-html="faq.selinux.model">It doesn't fit the use case. SELinux's security model is inherently bad at “deny access to a few folders such as <code>~/.config/autostart</code>, and allow access to everything else”, and I can't force users to put their KiSS LZH files only into some hardcoded <code>~/qkiss</code> folder.</p>
               <p id="footnote-ref-work" data-i18n-html="faq.selinux.rare">Besides, on the Linux desktop, people who deliberately run GUI apps outside <code>unconfined_t</code> must be rare. Such people either work at the Pentagon<sup class="footnote-ref"><a href="#footnote-work">*1</a></sup>, or moved to Qubes OS long ago.</p>
@@ -390,7 +392,7 @@
             </div>
           </details>
           <details class="faq-item" id="faq-windows-signing">
-            <summary data-i18n="faq.winsign.q">Why does Windows say “Unknown publisher” when I start QKiSS?</summary>
+            <summary><span><span data-i18n="faq.winsign.q">Why does Windows say “Unknown publisher” when I start QKiSS?</span><a class="heading-link" href="#faq-windows-signing" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <p data-i18n="faq.winsign.a">Because I didn't buy a code signing certificate from Microsoft.</p>
               <p data-i18n="faq.winsign.what">A “signature” (or digital signature) is one of the uses of asymmetric cryptography: a mathematical way to prove that “something was really made by a certain person, and nobody else has changed it”. But I can't say much about it here, or this would get very long, so I only give the main points. If you want to understand it more deeply, ask an LLM.</p>
@@ -401,7 +403,7 @@
             </div>
           </details>
           <details class="faq-item" id="faq-banana">
-            <summary data-i18n="faq.banana.q">Why is the macOS icon in the Download section… a banana?</summary>
+            <summary><span><span data-i18n="faq.banana.q">Why is the macOS icon in the Download section… a banana?</span><a class="heading-link" href="#faq-banana" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <p data-i18n-html="faq.banana.prepear">Because I don't want a <a href="https://duckduckgo.com/?q=Prepear+Apple+trademark">Prepear incident</a> of my own (<a href="https://ttabvue.uspto.gov/ttabvue/v?pno=91254886">the case record at the US Patent and Trademark Office</a>).</p>
               <p data-i18n-html="faq.banana.rule"><a href="https://www.apple.com/legal/intellectual-property/guidelinesfor3rdparties.html">Apple's official guidelines</a> say this:</p>
@@ -434,7 +436,7 @@
           </details>
           <details class="faq-item" id="faq-macos-signing">
             <!-- The words of the warning on macOS 13 and 14. macOS 15 and later say that Apple could not verify that QKiSS is free of malware. -->
-            <summary data-i18n="faq.macsign.q">When I start QKiSS, macOS says “the developer cannot be verified”. That is a pain. Why not buy a signature?</summary>
+            <summary><span><span data-i18n="faq.macsign.q">When I start QKiSS, macOS says “the developer cannot be verified”. That is a pain. Why not buy a signature?</span><a class="heading-link" href="#faq-macos-signing" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <p data-i18n-html="faq.macsign.a">This is also a signature problem, and it works much like <a href="#faq-windows-signing">the warning on Windows</a>. I don't buy one because it means paying Apple 99 US dollars every year for the <a href="https://developer.apple.com/programs/">Apple Developer Program</a>.</p>
               <p data-i18n-html="faq.macsign.why">But first, I stopped being a Mac user long ago; second, I don't make a living from the Mac or iOS; third, I'm only developing a free software project that I like, and its source code and build process are all public, right there. So I have no wish at all to spend 99 dollars every year feeding this company, which wants to control even the <a href="https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf">ways you pay</a>.</p>
@@ -449,8 +451,8 @@
               </blockquote>
             </div>
           </details>
-          <details class="faq-item">
-            <summary data-i18n="faq.web.q">Why not Electron or Web technologies?</summary>
+          <details class="faq-item" id="faq-web">
+            <summary><span><span data-i18n="faq.web.q">Why not Electron or Web technologies?</span><a class="heading-link" href="#faq-web" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <p id="footnote-ref-native" data-i18n-html="faq.web.intro">Although I already mentioned that this project was meant to be a “native desktop application”<sup class="footnote-ref"><a href="#footnote-native">*1</a></sup> from the start, this is a question people really do ask sometimes, so let me answer it here anyway.</p>
               <p data-i18n="faq.web.a">I know there are some KiSS implementations which can run in a Web browser by using Web technologies directly, but they are (technically and architecturally) awkward when you want to turn them into a desktop application integrated with your OS and file system; and such a thing which actually can be done in a lightweight way should not need a browser at all.</p>
@@ -473,8 +475,8 @@
               </div>
             </div>
           </details>
-          <details class="faq-item">
-            <summary data-i18n="faq.rust.q">Why not Rust?</summary>
+          <details class="faq-item" id="faq-rust">
+            <summary><span><span data-i18n="faq.rust.q">Why not Rust?</span><a class="heading-link" href="#faq-rust" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <ul>
                 <li data-i18n="faq.rust.kde">I'm a KDE user, and Qt feels the most seamless to use.</li>
@@ -485,7 +487,7 @@
             </div>
           </details>
           <details class="faq-item" id="faq-llm">
-            <summary data-i18n="faq.llm.q">Did you use AI (LLMs)?</summary>
+            <summary><span><span data-i18n="faq.llm.q">Did you use AI (LLMs)?</span><a class="heading-link" href="#faq-llm" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <ul>
                 <li data-i18n="faq.llm.assistant">This project does use help from LLMs, but keeps it under control as much as possible, with various engineering methods (e.g. isolating LLM agents in KVM virtual machines, the principle of least privilege, and reviewing commits by hand).</li>

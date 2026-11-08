@@ -592,6 +592,29 @@ code {
   vertical-align: 0.12em;
 }
 
+/*
+ * A ¶ after a title: a link to it, so that the address bar has a link to share. It shows when the title is pointed
+ * at, or when the ¶ has the keyboard focus. On a touch screen, which cannot point, it always shows, but faintly.
+ */
+.heading-link {
+  margin-inline-start: 0.35em;
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+:is(h2, h3, summary):hover .heading-link,
+.heading-link:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .heading-link {
+    opacity: 0.45;
+  }
+}
+
 .prose p {
   margin: 0 0 1.1rem;
 }
@@ -1963,7 +1986,8 @@ html:has(.reading-check-dialog[open]) .terms-text {
   .screenshot-button,
   .site-nav a::after,
   .llselect-trigger-arrow,
-  .faq-item > summary::after {
+  .faq-item > summary::after,
+  .heading-link {
     transition: none;
   }
 
