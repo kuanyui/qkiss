@@ -367,11 +367,11 @@
             </div>
           </details>
           <details class="faq-item" id="faq-windows-signing">
-            <summary data-i18n="faq.winsign.q">Windows says “Unknown publisher” when I open it</summary>
+            <summary data-i18n="faq.winsign.q">When I start QKiSS, Windows says “Unknown publisher”</summary>
             <div class="faq-answer">
               <p data-i18n="faq.winsign.a">Because I didn't buy a code signing certificate from Microsoft.</p>
-              <p data-i18n="faq.winsign.how">Simply put, “buying a signature” means: once you have written your program, you pay Microsoft itself (or a certificate authority it trusts), and they put my public key into a certificate and issue it to me. Then I can digitally sign the compiled executables with my own private key, so that any Windows computer can use the public certificate to verify that “this executable was released by me, signed with my private key, and not by someone pretending to be me”. Indirectly, it also implies that “there is no malware hidden inside” (because once malware is found in it, Microsoft revokes the signature and refuses to sign from then on).</p>
-              <p data-i18n-html="faq.winsign.why">The whole compiling and building process of the software is transparent: you can check it yourself on <a href="https://github.com/kuanyui/qkiss/actions">GitHub Actions</a>.</p>
+              <p data-i18n="faq.winsign.how">Simply put, “buying a signature” means: once you have written your program, you pay Microsoft (or a certificate authority it trusts), and they put my public key into a certificate and issue it to me. Then I can digitally sign the compiled executables with my own private key, so that any Windows computer can use the public certificate to verify that “this executable was released by me, signed with my private key, and not by someone pretending to be me”. Indirectly, it also implies that “there is no malware hidden inside” (because once malware is found in it, Microsoft revokes the signature and refuses to sign from then on).</p>
+              <p data-i18n-html="faq.winsign.why">There is no signature, but the whole compiling and building process of the software is transparent: you can check it yourself on <a href="https://github.com/kuanyui/qkiss/actions">GitHub Actions</a>.</p>
               <p data-i18n="faq.winsign.lha">Also, the license of the lha bundled in the packages of this project is a bit unusual: it is not a license approved by the Open Source Initiative (OSI). So I can't apply for a free signature from the companies that offer free signing to free software projects, either.</p>
               <p data-i18n="faq.winsign.easy">Anyway, opening an unsigned program on Windows isn't much trouble: just a couple more clicks to confirm.</p>
             </div>
@@ -398,7 +398,7 @@
               </blockquote>
               <p id="footnote-ref-microsoft" data-i18n-html="faq.banana.tyrant" hidden></p>
               <p data-i18n-html="faq.banana.fairuse">Under the <a href="https://en.wikipedia.org/wiki/Nominative_use">nominative fair use</a> of trademark law, you may mention someone else's trademark to say that your product works with theirs, but only “as much as is reasonably necessary”. So I may only write plain text like “macOS”, because in theory that is already enough to say what it means, and I can't add an Apple icon to it. But my OCD makes me feel uncomfortable all over without a little icon for decoration, and since even images of a “real apple” are banned, I had to think of something else.</p>
-              <p data-i18n="faq.banana.ai" hidden></p>
+              <p data-i18n-html="faq.banana.ai" hidden></p>
               <div class="footnotes" hidden>
                 <p id="footnote-microsoft" hidden>
                   <a class="footnote-back" href="#footnote-ref-microsoft" aria-label="Back to the text" title="Back to the text"
@@ -409,10 +409,10 @@
             </div>
           </details>
           <details class="faq-item" id="faq-macos-signing">
-            <summary data-i18n="faq.macsign.q">Opening an unsigned app on macOS is a pain. Why not buy a signature?</summary>
+            <summary data-i18n="faq.macsign.q">When I start QKiSS, macOS says it is not signed. That is a pain. Why not buy a signature?</summary>
             <div class="faq-answer">
-              <p data-i18n="faq.macsign.a">Because it costs 99 US dollars every year, paid to Apple.</p>
-              <p data-i18n-html="faq.macsign.why">But first, I stopped being a Mac user long ago; second, I don't make a living from the Mac or iOS; third, I'm only developing a free software project that I like, and its source code and build process are all public, right there. So there is no reason at all to spend 99 dollars every year.</p>
+              <p data-i18n-html="faq.macsign.a">Because it means paying Apple 99 US dollars every year for the <a href="https://developer.apple.com/programs/">Apple Developer Program</a>.</p>
+              <p data-i18n-html="faq.macsign.why">But first, I stopped being a Mac user long ago; second, I don't make a living from the Mac or iOS; third, I'm only developing a free software project that I like, and its source code and build process are all public, right there. So there is no reason at all to spend 99 dollars every year on a signature.</p>
               <p data-i18n="faq.macsign.bugs" hidden></p>
               <blockquote class="musing" hidden>
                 <img class="musing-icon" src="images/icons/sticky-note.svg" alt="" width="48" height="48">

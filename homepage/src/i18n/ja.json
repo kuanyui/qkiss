@@ -162,17 +162,17 @@
   },
   "faq.selinux.landlock": "とはいえ SELinux を使っていても、Landlock と seccomp による保護はちゃんとあります。ただし守るのは、lha と unar という 2 つの外部プログラムによる展開処理だけです。",
   "faq.selinux.footnote": "一般的に、職場でどんな種類の KiSS ビューアで遊ぶことも、おすすめはしません。",
-  "faq.winsign.q": "Windows で開くと「発行元を確認できませんでした」と表示される",
+  "faq.winsign.q": "QKiSS を起動すると、Windows で「発行元を確認できませんでした」と表示される",
   "faq.winsign.a": {
     "safe":   "Microsoft から署名を買っていないからです。",
     "danger": "Microsoft にみかじめ料を払って署名を買っていないからです。"
   },
   "faq.winsign.how": {
-    "safe":   "「署名を買う」とは、簡単に言えば、プログラムを書き上げたあと、Microsoft の本家（またはそれが認める認証局）に料金を払うと、私の公開鍵を証明書に入れて発行してくれる、ということです。すると私は自分の秘密鍵でビルドした実行ファイルに電子署名でき、どの Windows パソコンでも公開された証明書で「この実行ファイルは本人が発行し、本人の秘密鍵で署名したもので、なりすましではない」と検証できます。さらに間接的に「中にマルウェアは仕込まれていない」という意味も含みます（マルウェアが見つかれば、Microsoft は署名を取り消し、以後は署名を拒否するからです）。",
+    "safe":   "「署名を買う」とは、簡単に言えば、プログラムを書き上げたあと、Microsoft（または Microsoft が認める認証局）に料金を払うと、私の公開鍵を証明書に入れて発行してくれる、ということです。すると私は自分の秘密鍵でビルドした実行ファイルに電子署名でき、どの Windows パソコンでも公開された証明書で「この実行ファイルは本人が発行し、本人の秘密鍵で署名したもので、なりすましではない」と検証できます。さらに間接的に「中にマルウェアは仕込まれていない」という意味も含みます（マルウェアが見つかれば、Microsoft は署名を取り消し、以後は署名を拒否するからです）。",
     "danger": "「署名を買う」とは、簡単に言えば、プログラムを書き上げたあと、Microsoft の本家（またはその傘下の組）にみかじめ料を払うと、私の公開鍵を証明書に入れて発行してくれる、ということです。すると私は自分の秘密鍵でビルドした実行ファイルに電子署名でき、どの Windows パソコンでも公開された証明書で「この実行ファイルは本人が発行し、本人の秘密鍵で署名したもので、なりすましではない」と検証できます。さらに間接的に「中にマルウェアは仕込まれていない」という意味も含みます（マルウェアが見つかれば、Microsoft は署名を取り消し、以後は署名を拒否するからです）。"
   },
   "faq.winsign.why": {
-    "safe":   "ソフトウェアのコンパイルとビルドの過程はすべて透明で、<a href=\"https://github.com/kuanyui/qkiss/actions\">GitHub Actions</a> で自分で確認できます。",
+    "safe":   "署名はありませんが、ソフトウェアのコンパイルとビルドの過程はすべて透明で、<a href=\"https://github.com/kuanyui/qkiss/actions\">GitHub Actions</a> で自分で確認できます。",
     "danger": "でも私は普段 Windows をまったく使わず、ゲームをするときにしか使わないので、Microsoft から署名を買う気はまったくありません。とはいえ、ソフトウェアのコンパイルとビルドの過程はすべて透明で、<a href=\"https://github.com/kuanyui/qkiss/actions\">GitHub Actions</a> で自分で確認できます。"
   },
   "faq.winsign.lha": "また、このプロジェクトのパッケージに同梱している lha のライセンスは少し特殊で、Open Source Initiative（OSI）が承認したライセンスではありません。そのため、フリーソフトウェアのプロジェクトに無料で署名を提供している会社に申し込むこともできません。",
@@ -198,19 +198,19 @@
   },
   "faq.banana.ai": {
     "safe":   "",
-    "danger": "このプロジェクトに使う余暇は貴重です。大企業の理不尽なわがままで発明されたクソみたいな理由で、給料をもらっている法務部に取り下げと描き直しを求められるかもしれないアイコンを、わざわざ手で描くために、人生の時間を少しも使いたくありません。かといって強迫性のせいで、代わりに求められるクソダサい「macOS」の文字だけのロゴも到底受け入れられません。こんなくだらないものは、AI に適当に下書きを描かせて（リンゴでさえなければ何でもいい）、私が適当に手直しすれば十分です。どうせ Mac Pro 2013 は、Apple の美学の亡骸を納めた骨壺なのですから。"
+    "danger": "このプロジェクトに使う余暇は貴重です。大企業の理不尽なわがままで発明されたクソみたいな理由で、給料をもらっている法務部に取り下げと描き直しを求められるかもしれないアイコンを、わざわざ手で描くために、人生の時間を少しも使いたくありません。かといって強迫性のせいで、代わりに求められるクソダサい「macOS」の文字だけのロゴも到底受け入れられません。こんなくだらないものは、AI に適当に下書きを描かせて（リンゴの形とはまったく結びつかず、<a href=\"https://en.wikipedia.org/wiki/A_moron_in_a_hurry\">急いでいる愚か者</a>でも取り違えないような果物なら何でもいい）、私が適当に手直しすれば十分です。どうせ Mac Pro 2013 は、Apple の美学の亡骸を納めた骨壺なのですから。"
   },
   "faq.banana.footnote": {
     "safe":   "",
-    "danger": "実は Microsoft にも<a href=\"https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks\">似たような規約</a>があり、Windows のロゴを使ったり変えたりすることは禁止されています。ただ、少なくとも「本物の窓」まで禁止するほど度を越してはいませんし、開発者がウェブページで「Windows 用」と示すためだけに使うアイコンに、ロゴを理由に難癖をつけたという話も聞いたことがありません。彼らが実際に動いたのは、どれも名前が「Windows」とかぶったものです。たとえば、明らかに名前に便乗した「<a href=\"https://en.wikipedia.org/wiki/Microsoft_vs._Lindows\">Lindows</a>」や、（私の推測ですが）Microsoft の公式製品と間違えられかねない <a href=\"https://www.ghisler.ch/wiki/index.php/What_happened_to_Windows_Commander%3F\">Windows Commander</a>（現 Total Commander）などです。"
+    "danger": "実は Microsoft にも<a href=\"https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks\">似たような規約</a>があり、Windows のロゴを使ったり変えたりすることは禁止されています。ただ、少なくとも「本物の窓」まで禁止するほど度を越してはいませんし、開発者がウェブページで「Windows 用」と示すためだけに使うアイコンに、ロゴを理由に難癖をつけたという話も聞いたことがありません。彼らが実際に動いたのは、どれも名前が「Windows」とかぶったものです。たとえば、明らかに名前に便乗した <a href=\"https://en.wikipedia.org/wiki/Microsoft_vs._Lindows\">Lindows</a> や、（私の推測ですが）Microsoft の公式製品と間違えられかねない <a href=\"https://www.ghisler.ch/wiki/index.php/What_happened_to_Windows_Commander%3F\">Windows Commander</a>（現 Total Commander）などです。"
   },
-  "faq.macsign.q": "macOS で署名のないアプリを開くのは面倒です。署名を買わないのですか？",
+  "faq.macsign.q": "QKiSS を起動すると、macOS に署名がないと言われて面倒です。署名を買わないのですか？",
   "faq.macsign.a": {
-    "safe":   "Apple に毎年 99 米ドルを払わなければならないからです。",
-    "danger": "Apple に毎年 99 米ドルのみかじめ税を払わなければならないからです。"
+    "safe":   "毎年 99 米ドルを払って <a href=\"https://developer.apple.com/jp/programs/\">Apple Developer Program</a> に加入しなければならないからです。",
+    "danger": "毎年 Apple にショバ代を払って <a href=\"https://developer.apple.com/jp/programs/\">Apple Developer Program</a> に加入しなければならないからです。"
   },
   "faq.macsign.why": {
-    "safe":   "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、毎年 99 ドル払う理由はまったくありません。",
+    "safe":   "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、署名のために毎年 99 ドル払う理由はまったくありません。",
     "danger": "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">支払い方法</a>まで支配したがる醜く強欲な企業を養うために毎年 99 ドル払う理由はまったくないし、払う気にもなりません。"
   },
   "faq.macsign.bugs": {
