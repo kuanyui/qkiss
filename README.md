@@ -42,15 +42,24 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 ## Windows
 QKiSS for Windows is built via GitHub Actions CI/CD, the portable ZIP and NSIS installer are available on [GitHub release page](https://github.com/kuanyui/qkiss/releases)
 
+## macOS
+- Only macOS >= 13 (Ventura) is supported, on both Apple silicon and Intel Macs.
+- QKiSS for macOS is built via GitHub Actions CI/CD, the universal `.dmg` is available on [GitHub release page](https://github.com/kuanyui/qkiss/releases)
+- QKiSS is not notarized by Apple, so you need to allow it once: System Settings > Privacy & Security > "Open Anyway".
+
+> [!WARNING]
+> I have no Mac for long-term testing, so it is a third-class citizen.
+
 # Development
 ## Requirements
 
 - OS
   - Linux
   - Windows (requires `vcpkg`)
+  - macOS (requires `vcpkg`)
 
 - Build Toolchains (Required when building)
-  - C++ 20 compiler (tested on GCC, MSVC)
+  - C++ 20 compiler (tested on GCC, MSVC, Apple Clang)
   - Qt >= 6.4.2 (recommended: >= 6.8.3)
     - `QtMultimedia`
   - Python >= 3.13
@@ -172,9 +181,6 @@ This website "Big Kiss" is the largest existing KiSS community in the world. Its
 This is quite enough to load nearly most of all Japanese KiSS files I'm able to find on Internet.
 
 But the `shell()` command is not implemented on purpose, to avoid any security vulnerability.
-
-## Is this able to be ported to macOS?
-- I have no Mac. So donno.
 
 ## Why called "QKiSS"?
 
