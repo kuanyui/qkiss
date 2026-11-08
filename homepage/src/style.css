@@ -21,6 +21,7 @@
   --danger-hover: #820000;
   --on-danger: #ffffff;
   --danger-soft: #f9e0e0;       /* the background of a warning (.musing-warning) */
+  --quote-bg: #f2f2ee;          /* the background of a quotation or a dialogue in Q&A (.faq-quote, .faq-dialogue) */
   --error-text: #a40000;        /* an error message in a document (.terms-error) */
   --checker: #eef0e4;           /* the "transparent pixels" pattern behind the hero */
   --highlight: rgb(255 255 255 / 0.6);
@@ -49,6 +50,7 @@
     --accent-soft: #2e3421;
     --on-accent: #1b1d18;
     --danger-soft: #3b1814;
+    --quote-bg: #2b2d28;
     --error-text: #ff8080;
     --checker: #20231b;
     --highlight: rgb(255 255 255 / 0.06);
@@ -1378,18 +1380,57 @@ sup {
   padding: 0 1.25rem 1.25rem;
 }
 
-/* A quotation in an answer, such as a rule quoted from a document, or a short dialogue (one line for each speaker). */
+/*
+ * A quotation in an answer, such as a rule quoted from a document (`.faq-quote`), or a short dialogue, one line for
+ * each speaker (`.faq-dialogue`): a box with a faint background and a big, faint quotation mark at its start.
+ */
 .faq-quote,
 .faq-dialogue {
+  position: relative;
   margin: 0 0 1.1rem;
-  padding-inline-start: 1rem;
-  border-inline-start: 3px solid var(--border-strong);
-  color: var(--text-muted);
+  padding: 0.9rem 1.25rem;
+  padding-inline-start: 4.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--quote-bg);
+}
+
+.faq-quote::before,
+.faq-dialogue::before {
+  content: "\201C";
+  position: absolute;
+  top: -0.35rem;
+  inset-inline-start: 0.55rem;
+  color: var(--accent);
+  font: normal 700 6.5rem/1 Georgia, "Times New Roman", "DejaVu Serif", serif;
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 .faq-quote p,
 .faq-dialogue p {
   margin: 0;
+}
+
+.faq-dialogue {
+  font-size: 1.05rem;
+}
+
+.faq-dialogue p + p {
+  margin-top: 0.3rem;
+}
+
+/* On a phone, a smaller mark leaves more room for the lines. */
+@media (max-width: 40rem) {
+  .faq-quote,
+  .faq-dialogue {
+    padding-inline-start: 3.25rem;
+  }
+
+  .faq-quote::before,
+  .faq-dialogue::before {
+    font-size: 5rem;
+  }
 }
 
 /* A quote is in italics. In the languages other than English, its translation is in green. */
