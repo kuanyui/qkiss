@@ -2,6 +2,44 @@
 releases:
   - srcpkgname: "qkiss"
     maintainer: "kuanyui <azazabc123@gmail.com>"
+    version: "0.9.4"
+    date: "2026-11-09T07:20:00+08:00"
+    deb:
+      urgency: "medium"
+    body:
+      added:
+        - View > CRT Simulation makes the dolls look as on an old CRT screen, with the presets Sharp, Soft and Glow.
+        - A .dmg for macOS, for both Apple silicon and Intel Macs, with `lha` and `unar` inside.
+        - An AppImage for Linux (x86_64, glibc 2.39 or later, for example Ubuntu 24.04 or later), with `lha` and `unar` inside. They run in the same sandbox (Landlock and seccomp) as in the other Linux packages.
+        - Build provenance attestations for the .dmg and the AppImage, as for the Windows files.
+        - Space + mouse drag moves the view.
+        - The item inspector shows the color depth of each CEL.
+        - The log viewer and the text editors have a context menu item to turn word wrap on and off.
+        - The Licenses tab of the About dialog lists every icon theme and its license.
+      security:
+        - An LZH file that `lha` extracts only in part (for example, a truncated or damaged one) no longer makes qkiss read past the end of the extracted data.
+        - Truncated or broken CEL and KCF files no longer make qkiss read past the end of their data.
+        - A CEL too large for the memory (for example, with a huge size in a broken or crafted file) is not drawn.
+        - FKiSS sounds use a limited number of audio players, so a set that plays many sounds at once cannot use up the resources of the system.
+      fixed:
+        - Better compatibility with FKiSS sets, and fixes for FKiSS commands and events that were implemented wrongly.
+        - Two memory leaks, in CEL files and in the items of the view.
+        - With a touchpad, zooming (Ctrl + scrolling on the view, or scrolling on the zoom box) moves one step at a time, as with a mouse wheel.
+        - On Windows, the Fusion style is no longer replaced by the default style (windows11).
+        - Missed icon for Copy in context menu.
+        - Replace an icon incompatible with GPLv3.
+      style:
+        - On Windows, buttons show icons, as on the other systems.
+        - The size column of the file browser is cut off less often.
+        - Icons and texts line up better in lists with items of several lines.
+        - The item inspector and the log viewer have no margin around them.
+        - Messages spell the program name as LHa.
+      build:
+        - Use own-forked `unar` (https://github.com/kuanyui/XADMaster) for Windows & macOS.
+        - The Windows and macOS packages use Qt 6.10.3. It fixes a bug in the SVG icons of the macOS menus.
+        - The bundled `lha` is 1.14i-ac20260723-ky20261108, and the bundled `unar` is 1.10.7-ky20261108.
+  - srcpkgname: "qkiss"
+    maintainer: "kuanyui <azazabc123@gmail.com>"
     version: "0.9.3"
     date: "2026-10-14T20:51:00+08:00"
     deb:
