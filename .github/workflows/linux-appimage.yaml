@@ -91,7 +91,8 @@ jobs:
 
       # Step 4: Install Qt 6, the files that the installer of Qt downloads, without the installer.
       # Qt publishes the SHA-256 of each file on its `.mirrorlist` page. The files come from a mirror.
-      # Not qtdeclarative (117 MB) and qttranslations: qkiss uses neither.
+      # qtdeclarative (117 MB): Qt is built with EGLFS, so Qt Multimedia's FFmpeg plugin links to Qt Quick.
+      # See `src/plugins/multimedia/ffmpeg/CMakeLists.txt` of qtmultimedia. Not qttranslations: qkiss does not use it.
       - name: Install Qt
         run: |
           base=https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_6103/qt6_6103
@@ -106,6 +107,7 @@ jobs:
           done <<'EOF'
           3c12871c69f5350c82a9f04e9a064fc78953008dfa93278a58ebcc622cf401a8 qt.qt6.6103.linux_gcc_64 qtbase-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
           0993f77ab7efe07df87857cdaefd313759d0fef2949b076b88e92a300d3c6742 qt.qt6.6103.linux_gcc_64 qtsvg-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
+          098a985c49c3fe819f1baeb881671fa0310aff2a18f5716a8d47a0ca454d8ff1 qt.qt6.6103.linux_gcc_64 qtdeclarative-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
           f32a53e2c1569246bffce542497aa44f3eb378ff911c6153cdfcfe22603b1bf5 qt.qt6.6103.linux_gcc_64 qttools-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
           e1b74b283d0f810e852526018c883d98869e8f48a6e66d8d3296039d5f704c17 qt.qt6.6103.linux_gcc_64 qtwayland-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
           513830e56495b5a5d4b74e7b9ec861906cf0938fa5a8b79d08e097d41011eb6c qt.qt6.6103.linux_gcc_64 icu-linux-Rhel8.6-x86_64.7z lib
@@ -246,6 +248,7 @@ jobs:
           done <<'EOF'
           383dc907816338f0cba72088a524c07458dfc69ce684ca9132fcc4fe91c24b0b qtbase
           b3223fe005f6a4c7f21f34e4ee6ce0094737cff9503ba15bbb171ac18794f76d qtsvg
+          dadf80d43b8e08ca63aa65d46859a42b920a7777cf7e0ecfcb4c4537f9e65c76 qtdeclarative
           2e93322a86b562113cfa3a5f0aa8b1e4e185d6284af49b529578d27d52ca85d3 qtwayland
           dd228fe54051e8834ca53e558794742c8814f217849f9dfa8f9a9df80441903a qtmultimedia
           EOF
