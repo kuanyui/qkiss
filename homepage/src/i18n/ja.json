@@ -118,21 +118,24 @@
   "download.windows.body": "ポータブル版 ZIP とインストーラーを、GitHub Actions で自動ビルド・電子署名<sup class=\"footnote-ref\"><a href=\"#footnote-attestation\">*2</a></sup>して提供しています。",
   "download.windows.installer": "インストーラー",
   "download.windows.portable": "ポータブル版 ZIP",
+  "download.macos.body": "Apple シリコンと Intel の両方の Mac に対応した Universal ディスクイメージで、macOS 13 以降をサポートしています。GitHub Actions で自動ビルド・電子署名<sup class=\"footnote-ref\"><a href=\"#footnote-attestation-macos\">*3</a></sup>して提供しています。",
+  "download.macos.dmg": "ディスクイメージ（DMG）",
+  "download.macos.banana": "なぜバナナ？",
+  "download.macos.banana-huh": "え？",
   "download.source.title": "ソースコード",
   "download.source.body": "自分でビルドしたい場合は、README の <a href=\"https://github.com/kuanyui/qkiss#development\">Development</a> を参照してください。",
   "download.source.tarball": "最新版の tarball",
   "download.source.git": "Git リポジトリ",
   "download.note": "現在、すべてのバイナリは x86_64 でのみテストしています。",
   "download.footnote.gpg": "秘密鍵は OBS サーバーの内部で生成されたものです。公開鍵のフィンガープリントは<a href=\"https://build.opensuse.org/projects/home:kuanyui:stable/signing_keys\">この OBS のページ</a>で確認できます。",
-  "download.footnote.attestation": "この電子署名は <a href=\"https://docs.github.com/ja/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations\">GitHub の成果物の証明（artifact attestation）</a>で、Windows 版のファイルとソースコードの tarball を、このリポジトリの GitHub Actions がビルドしたことを証明します。ダウンロードしたファイルは GitHub CLI で検証できます：<code>gh attestation verify ファイル -R kuanyui/qkiss</code>。ただし、Windows の実行ファイル自体への電子署名（Authenticode）ではないため、初回の実行時には Windows の警告が表示されます。",
+  "download.footnote.attestation": "この電子署名は <a href=\"https://docs.github.com/ja/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations\">GitHub の成果物の証明（artifact attestation）</a>で、Windows 版のファイルとソースコードの tarball を、<a href=\"https://github.com/kuanyui/qkiss/actions\">このリポジトリの GitHub Actions</a> がソースコードからビルドしたことを証明します。ダウンロードしたファイルは <a href=\"https://cli.github.com/\">GitHub CLI</a> で検証できます：<code>gh attestation verify ファイル -R kuanyui/qkiss</code>。ただし、Windows の実行ファイル自体への電子署名（Authenticode）ではないため、初回の実行時には Windows の警告が表示されます。",
+  "download.footnote.attestation-macos": "この電子署名は <a href=\"https://docs.github.com/ja/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations\">GitHub の成果物の証明（artifact attestation）</a>で、ディスクイメージを、<a href=\"https://github.com/kuanyui/qkiss/actions\">このリポジトリの GitHub Actions</a> がソースコードからビルドしたことを証明します。ダウンロードしたファイルは <a href=\"https://cli.github.com/\">GitHub CLI</a> で検証できます：<code>gh attestation verify ファイル -R kuanyui/qkiss</code>。ただし、アプリ自体にはアドホック署名しかなく、Apple の Developer ID 証明書による署名も、Apple による公証（notarization）もありません。そのため初めて開くとき、macOS は開くのを拒否します。その場合は、そのメッセージを閉じてから「システム設定」›「プライバシーとセキュリティ」を開き、QKiSS までスクロールして「このまま開く」をクリックし、確定してください。この操作は一度だけで済みますが、今後 QKiSS をアップデートした後には、もう一度行う必要があります。<a href=\"https://support.apple.com/ja-jp/guide/mac-help/mh40616/mac\">Apple の説明</a>も参照してください。",
   "faq.title": "Q&A",
   "faq.specs.q": "QKiSS はどのバージョンの FKiSS に対応していますか？",
   "faq.specs.kiss": "<a href=\"https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html\">KISS/GS</a>（General Specification、基本仕様）と、その<a href=\"https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/COMMENT.HTM\">拡張コメント</a>。",
   "faq.specs.fkiss": "<a href=\"https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/TTFKSMN4.HTM\">FKiSS</a>（スクリプト言語）：バージョン 1・2。",
   "faq.specs.enough": "ネットで見つけられた日本の KiSS データは、これでほぼすべて読み込めます。",
   "faq.specs.shell": "ただし、不要なセキュリティホールを避けるため、<code>shell()</code> コマンドはあえて実装しないことにしました。（そもそも、これを使っている KiSS データは見たことがない気がします。）",
-  "faq.macos.q": "QKiSS は macOS に移植できますか？",
-  "faq.macos.a": "Mac を持っていないので、わかりません。",
   "faq.name.q": "なぜ「QKiSS」という名前？",
   "faq.name.a": "<a href=\"https://ja.wikipedia.org/wiki/Qt\"><strong>Q</strong>t</a> 6 で実装した <a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS</a> ビューアだからです。名前に KiSS が入っているのは KiSS ビューアの慣例で、fkiss、GnomeKiSS、KISSLD、Direct KiSS などがあります。",
   "faq.name.others": "ほかにもいくつか名前を考えました：",
@@ -159,6 +162,65 @@
   },
   "faq.selinux.landlock": "とはいえ SELinux を使っていても、Landlock と seccomp による保護はちゃんとあります。ただし守るのは、lha と unar という 2 つの外部プログラムによる展開処理だけです。",
   "faq.selinux.footnote": "一般的に、職場でどんな種類の KiSS ビューアで遊ぶことも、おすすめはしません。",
+  "faq.winsign.q": "Windows で開くと「発行元を確認できませんでした」と表示される",
+  "faq.winsign.a": {
+    "safe":   "Microsoft から署名を買っていないからです。",
+    "danger": "Microsoft にみかじめ料を払って署名を買っていないからです。"
+  },
+  "faq.winsign.how": {
+    "safe":   "「署名を買う」とは、簡単に言えば、プログラムを書き上げたあと、Microsoft の本家（またはそれが認める認証局）に料金を払うと、私の公開鍵を証明書に入れて発行してくれる、ということです。すると私は自分の秘密鍵でビルドした実行ファイルに電子署名でき、どの Windows パソコンでも公開された証明書で「この実行ファイルは本人が発行し、本人の秘密鍵で署名したもので、なりすましではない」と検証できます。さらに間接的に「中にマルウェアは仕込まれていない」という意味も含みます（マルウェアが見つかれば、Microsoft は署名を取り消し、以後は署名を拒否するからです）。",
+    "danger": "「署名を買う」とは、簡単に言えば、プログラムを書き上げたあと、Microsoft の本家（またはその傘下の組）にみかじめ料を払うと、私の公開鍵を証明書に入れて発行してくれる、ということです。すると私は自分の秘密鍵でビルドした実行ファイルに電子署名でき、どの Windows パソコンでも公開された証明書で「この実行ファイルは本人が発行し、本人の秘密鍵で署名したもので、なりすましではない」と検証できます。さらに間接的に「中にマルウェアは仕込まれていない」という意味も含みます（マルウェアが見つかれば、Microsoft は署名を取り消し、以後は署名を拒否するからです）。"
+  },
+  "faq.winsign.why": {
+    "safe":   "ソフトウェアのコンパイルとビルドの過程はすべて透明で、<a href=\"https://github.com/kuanyui/qkiss/actions\">GitHub Actions</a> で自分で確認できます。",
+    "danger": "でも私は普段 Windows をまったく使わず、ゲームをするときにしか使わないので、Microsoft から署名を買う気はまったくありません。とはいえ、ソフトウェアのコンパイルとビルドの過程はすべて透明で、<a href=\"https://github.com/kuanyui/qkiss/actions\">GitHub Actions</a> で自分で確認できます。"
+  },
+  "faq.winsign.lha": "また、このプロジェクトのパッケージに同梱している lha のライセンスは少し特殊で、Open Source Initiative（OSI）が承認したライセンスではありません。そのため、フリーソフトウェアのプロジェクトに無料で署名を提供している会社に申し込むこともできません。",
+  "faq.winsign.easy": "とはいえ、Windows で署名のないプログラムを開くのはたいした手間ではありません。確認を 2 回ほど多くクリックするだけです。",
+  "faq.banana.q": "なぜこのサイトのダウンロード欄の macOS のアイコンは……バナナなのですか？",
+  "faq.banana.prepear": {
+    "safe":   "<a href=\"https://duckduckgo.com/?q=Prepear+Apple+%E5%95%86%E6%A8%99\">Prepear 事件</a>（<a href=\"https://ttabvue.uspto.gov/ttabvue/v?pno=91254886\">米国特許商標庁の事件記録</a>）のような目に遭いたくないからです。",
+    "danger": "<a href=\"https://duckduckgo.com/?q=Prepear+Apple+%E5%95%86%E6%A8%99\">Prepear 事件</a>（<a href=\"https://ttabvue.uspto.gov/ttabvue/v?pno=91254886\">米国特許商標庁の事件記録</a>）のような目に遭いたくないからです。<a href=\"https://www.techtransparencyproject.org/articles/apples-trademark-bullying-targets-small-businesses-nonprofits\">Apple は一体どうかしているのか、こういうことにやたらと熱心です</a>。法務部が KPI を稼ぎたいのか、経営陣が仕事をしているところを見せたいのかは知りませんが。"
+  },
+  "faq.banana.rule": "<a href=\"https://www.apple.com/legal/intellectual-property/guidelinesfor3rdparties.html\">Apple の公式ガイドライン</a>には、こう書かれています：",
+  "faq.banana.quote-scope": "本ガイドラインは、Apple のライセンシー、正規販売店、開発者、顧客、その他、販促・広告・説明・参考資料において、または<strong>ウェブサイト</strong>、製品、ラベル、パッケージ上で、Apple の商標、サービスマーク、または画像を使用しようとするすべての方を対象としています。",
+  "faq.banana.quote-authorized": "（Apple 商標の許可使用）",
+  "faq.banana.quote-compatibility": "2. 互換性：開発者は、パッケージや販促・広告資料において、Apple、Macintosh、iMac、その他の Apple の文字商標（<strong>Apple ロゴは含みません</strong>。Apple 所有のその他の図形シンボルやロゴも同様です）を参照的な表現の中で使い、第三者の製品が言及した Apple の製品や技術と互換性があることを示すことができます。ただし、以下の要件を満たす必要があります。",
+  "faq.banana.quote-unauthorized": "（Apple 商標の無許可使用）",
+  "faq.banana.quote-rule": "3. バリエーション、模倣、略称：いかなる目的であっても、<strong>本物のリンゴ</strong>の画像や、Apple ロゴのその他のバリエーションを使用してはなりません。第三者は、いかなる目的であっても、Apple の商標のバリエーション、音の似た語、外国語での同等語、模倣、略称を使用することはできません。",
+  "faq.banana.tyrant": {
+    "safe":   "",
+    "danger": "この一文を読むまで、資本家がこんなところまで横暴を働けるとは思ってもみませんでした。できることなら、アイザック・ニュートンまで企業の商標として登録したいくらいなのでしょう。<sup class=\"footnote-ref\"><a href=\"#footnote-microsoft\">*1</a></sup>"
+  },
+  "faq.banana.fairuse": {
+    "safe":   "商標法の「<a href=\"https://en.wikipedia.org/wiki/Nominative_use\">指名的フェアユース</a>」の原則では、互換性を説明するために他人の商標に触れることはできますが、使えるのは「必要最小限の部分」だけです。つまり私が書けるのは「macOS」のような文字だけで、理論上それだけで macOS の意味は十分に伝わるので、リンゴのアイコンを付け足すことはできません。とはいえ強迫性のせいで、飾りのアイコンがないとどうにも落ち着かないのですが、「本物のリンゴ」の画像すら禁止の対象なので、ほかの手を考えるしかありませんでした。",
+    "danger": "商標法の「<a href=\"https://en.wikipedia.org/wiki/Nominative_use\">指名的フェアユース</a>」の原則では、互換性を説明するために他人の商標に触れることはできますが、使えるのは「必要最小限の部分」だけです。つまり私が書けるのは「macOS」のような文字だけで、理論上それだけで macOS の意味は十分に伝わるので、リンゴのアイコンを付け足すことはできません。とはいえ強迫性のせいで、飾りのアイコンがないとどうにも落ち着かないのですが、「本物のリンゴ」の画像すら難癖の対象なので、ほかの手を考えるしかありませんでした。"
+  },
+  "faq.banana.ai": {
+    "safe":   "",
+    "danger": "このプロジェクトに使う余暇は貴重です。大企業の理不尽なわがままで発明されたクソみたいな理由で、給料をもらっている法務部に取り下げと描き直しを求められるかもしれないアイコンを、わざわざ手で描くために、人生の時間を少しも使いたくありません。かといって強迫性のせいで、代わりに求められるクソダサい「macOS」の文字だけのロゴも到底受け入れられません。こんなくだらないものは、AI に適当に下書きを描かせて（リンゴでさえなければ何でもいい）、私が適当に手直しすれば十分です。どうせ Mac Pro 2013 は、Apple の美学の亡骸を納めた骨壺なのですから。"
+  },
+  "faq.banana.footnote": {
+    "safe":   "",
+    "danger": "実は Microsoft にも<a href=\"https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks\">似たような規約</a>があり、Windows のロゴを使ったり変えたりすることは禁止されています。ただ、少なくとも「本物の窓」まで禁止するほど度を越してはいませんし、開発者がウェブページで「Windows 用」と示すためだけに使うアイコンに、ロゴを理由に難癖をつけたという話も聞いたことがありません。彼らが実際に動いたのは、どれも名前が「Windows」とかぶったものです。たとえば、明らかに名前に便乗した「<a href=\"https://en.wikipedia.org/wiki/Microsoft_vs._Lindows\">Lindows</a>」や、（私の推測ですが）Microsoft の公式製品と間違えられかねない <a href=\"https://www.ghisler.ch/wiki/index.php/What_happened_to_Windows_Commander%3F\">Windows Commander</a>（現 Total Commander）などです。"
+  },
+  "faq.macsign.q": "macOS で署名のないアプリを開くのは面倒です。署名を買わないのですか？",
+  "faq.macsign.a": {
+    "safe":   "Apple に毎年 99 米ドルを払わなければならないからです。",
+    "danger": "Apple に毎年 99 米ドルのみかじめ税を払わなければならないからです。"
+  },
+  "faq.macsign.why": {
+    "safe":   "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、毎年 99 ドル払う理由はまったくありません。",
+    "danger": "でも、まず私はとっくに Mac ユーザーではありませんし、次に Mac や iOS で食べているわけでもありません。さらに、好きなフリーソフトウェアを開発しているだけで、ソースコードもビルドの流れもすべて公開されています。だから、<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">支払い方法</a>まで支配したがる醜く強欲な企業を養うために毎年 99 ドル払う理由はまったくないし、払う気にもなりません。"
+  },
+  "faq.macsign.bugs": {
+    "safe":   "",
+    "danger": "それに、明らかな UI のバグを何年も放置して直せない OS のために、そのメーカーから署名を買う気はまったくありません。同じお金を KDE に寄付するほうが、人類の進歩にとってはるかに価値があります。"
+  },
+  "faq.macsign.musing": {
+    "safe":   "",
+    "danger": "振り返ってみると、Mac OS 9.2.2 はメモリ安全性がいまひとつだったことを除けば、バグはほとんどなく、何年も使っていました。ところが 2016〜2018 年ごろ、macOS を 1 年あまり使ったところで頭にきて Linux を入れました。3 回の macOS アップグレードを経ても、普段の操作に大きく響く低レベルなバグが一向に直らない。いったい何をして給料をもらっているのか、本当にわかりません。"
+  },
   "faq.web.q": "なぜ Electron やウェブ技術で実装しないのですか？",
   "faq.web.intro": "前にも書いたとおり、このプロジェクトはもともと「ネイティブのデスクトップアプリ」<sup class=\"footnote-ref\"><a href=\"#footnote-native\">*1</a></sup>にしたかったんだけど、これはたまに本当に聞かれる質問なので、一応ここで答えておく。",
   "faq.web.a": {

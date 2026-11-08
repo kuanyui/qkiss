@@ -229,7 +229,7 @@
         <div class="download-grid">
           <article class="download-card">
             <div class="download-head">
-              <img src="images/tux.svg" alt="" width="44" height="44">
+              <img src="images/os/tux.svg" alt="" width="44" height="44">
               <h3>Linux</h3>
             </div>
             <p id="footnote-ref-gpg" data-i18n-html="download.linux.body">Packages automatically built by the Open Build Service (OBS) and digitally signed with GPG<sup class="footnote-ref"><a href="#footnote-gpg">*1</a></sup>, for these distributions:</p>
@@ -248,7 +248,7 @@
           </article>
           <article class="download-card">
             <div class="download-head">
-              <img src="images/windows.svg" alt="" width="44" height="44">
+              <img src="images/os/windows.svg" alt="" width="44" height="44">
               <h3>Windows</h3>
             </div>
             <p id="footnote-ref-attestation" data-i18n-html="download.windows.body">A portable ZIP and an installer, automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation">*2</a></sup>.</p>
@@ -256,7 +256,19 @@
               <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.exe$"><img class="button-icon" src="images/qkiss-installer.svg" alt="" width="22" height="22"><span data-i18n="download.windows.installer">Installer</span></a>
               <a class="button" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-win64\.zip$"><img class="button-icon" src="images/icons/package-x-generic.svg" alt="" width="22" height="22"><span data-i18n="download.windows.portable">Portable ZIP</span></a>            </div>
           </article>
-          <article class="download-card download-source">
+          <article class="download-card">
+            <div class="download-head">
+              <!-- The banana is a link to the question about it in Q&A, which main.js opens (setUpQuestionLinks). -->
+              <a class="download-icon-link" href="#faq-banana" aria-label="Why a banana?" title="Huh?"
+                 data-i18n-attr="aria-label:download.macos.banana;title:download.macos.banana-huh"><img src="images/os/banana.svg" alt="" width="44" height="44"></a>
+              <h3>macOS</h3>
+            </div>
+            <p id="footnote-ref-attestation-macos" data-i18n-html="download.macos.body">A Universal disk image for both Apple silicon and Intel Macs, supporting macOS 13 and later. It is automatically built and digitally signed by GitHub Actions<sup class="footnote-ref"><a href="#footnote-attestation-macos">*3</a></sup>.</p>
+            <div class="button-row">
+              <a class="button button-primary" href="https://github.com/kuanyui/qkiss/releases/latest" data-release-asset="-macos-universal\.dmg$"><img class="button-icon" src="images/icons/package-x-generic.svg" alt="" width="22" height="22"><span data-i18n="download.macos.dmg">Disk image (DMG)</span></a>
+            </div>
+          </article>
+          <article class="download-card">
             <div class="download-head">
               <img src="images/icons/applications-development.svg" alt="" width="44" height="44">
               <h3 data-i18n="download.source.title">Source code</h3>
@@ -278,7 +290,12 @@
           <p id="footnote-attestation">
             <a class="footnote-back" href="#footnote-ref-attestation" aria-label="Back to the text" title="Back to the text"
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
-            <span data-i18n-html="download.footnote.attestation">This signature is a <a href="https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations">GitHub artifact attestation</a>: it proves that GitHub Actions built the Windows files and the source tarball from this repository. To check a downloaded file, run <code>gh attestation verify FILE -R kuanyui/qkiss</code> (GitHub CLI). It is not a signature inside the Windows executables themselves (Authenticode), so Windows still shows a warning the first time you run them.</span>
+            <span data-i18n-html="download.footnote.attestation">This signature is a <a href="https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations">GitHub artifact attestation</a>: it proves that <a href="https://github.com/kuanyui/qkiss/actions">GitHub Actions</a> built the Windows files and the source tarball from the source code of this repository. To check a downloaded file, run <code>gh attestation verify FILE -R kuanyui/qkiss</code> (<a href="https://cli.github.com/">GitHub CLI</a>). It is not a signature inside the Windows executables themselves (Authenticode), so Windows still shows a warning the first time you run them.</span>
+          </p>
+          <p id="footnote-attestation-macos">
+            <a class="footnote-back" href="#footnote-ref-attestation-macos" aria-label="Back to the text" title="Back to the text"
+               data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*3</a>
+            <span data-i18n-html="download.footnote.attestation-macos">This signature is a <a href="https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations">GitHub artifact attestation</a>: it proves that <a href="https://github.com/kuanyui/qkiss/actions">GitHub Actions</a> built the disk image from the source code of this repository. To check a downloaded file, run <code>gh attestation verify FILE -R kuanyui/qkiss</code> (<a href="https://cli.github.com/">GitHub CLI</a>). But the app itself is signed only ad hoc, without an Apple Developer ID certificate, and is not notarized by Apple. So the first time you open it, macOS refuses to open it. Then close that message, go to System Settings › Privacy &amp; Security, scroll down to QKiSS, click “Open Anyway”, and confirm. You need to do this only once, but you will need to do it again after each update of QKiSS. See also <a href="https://support.apple.com/guide/mac-help/mh40616/mac">Apple's guide</a>.</span>
           </p>
         </div>
       </div>
@@ -298,12 +315,6 @@
               </ul>
               <p data-i18n="faq.specs.enough">That is quite enough to load nearly all the Japanese KiSS sets I could find on the Internet.</p>
               <p data-i18n-html="faq.specs.shell">But I deliberately decided not to implement the <code>shell()</code> command, to avoid unnecessary security holes. (I don't think I've ever seen a KiSS set that uses it, either.)</p>
-            </div>
-          </details>
-          <details class="faq-item">
-            <summary data-i18n="faq.macos.q">Can QKiSS be ported to macOS?</summary>
-            <div class="faq-answer">
-              <p data-i18n="faq.macos.a">I have no Mac. So, no idea.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -353,6 +364,62 @@
                   <span data-i18n="faq.selinux.footnote">Generally speaking, playing any kind of KiSS viewer in the workplace is not recommended.</span>
                 </p>
               </div>
+            </div>
+          </details>
+          <details class="faq-item" id="faq-windows-signing">
+            <summary data-i18n="faq.winsign.q">Windows says “Unknown publisher” when I open it</summary>
+            <div class="faq-answer">
+              <p data-i18n="faq.winsign.a">Because I didn't buy a code signing certificate from Microsoft.</p>
+              <p data-i18n="faq.winsign.how">Simply put, “buying a signature” means: once you have written your program, you pay Microsoft itself (or a certificate authority it trusts), and they put my public key into a certificate and issue it to me. Then I can digitally sign the compiled executables with my own private key, so that any Windows computer can use the public certificate to verify that “this executable was released by me, signed with my private key, and not by someone pretending to be me”. Indirectly, it also implies that “there is no malware hidden inside” (because once malware is found in it, Microsoft revokes the signature and refuses to sign from then on).</p>
+              <p data-i18n-html="faq.winsign.why">The whole compiling and building process of the software is transparent: you can check it yourself on <a href="https://github.com/kuanyui/qkiss/actions">GitHub Actions</a>.</p>
+              <p data-i18n="faq.winsign.lha">Also, the license of the lha bundled in the packages of this project is a bit unusual: it is not a license approved by the Open Source Initiative (OSI). So I can't apply for a free signature from the companies that offer free signing to free software projects, either.</p>
+              <p data-i18n="faq.winsign.easy">Anyway, opening an unsigned program on Windows isn't much trouble: just a couple more clicks to confirm.</p>
+            </div>
+          </details>
+          <details class="faq-item" id="faq-banana">
+            <summary data-i18n="faq.banana.q">Why is the macOS icon in the Download section… a banana?</summary>
+            <div class="faq-answer">
+              <p data-i18n-html="faq.banana.prepear">Because I don't want a <a href="https://duckduckgo.com/?q=Prepear+Apple+trademark">Prepear incident</a> of my own (<a href="https://ttabvue.uspto.gov/ttabvue/v?pno=91254886">the case record at the US Patent and Trademark Office</a>).</p>
+              <p data-i18n-html="faq.banana.rule"><a href="https://www.apple.com/legal/intellectual-property/guidelinesfor3rdparties.html">Apple's official guidelines</a> say this:</p>
+              <!-- With its context: who the guidelines are for, what they allow, and the titles of the sections. For the
+                   languages other than English, each part is followed by its translation, and each title by its translation in
+                   brackets. -->
+              <blockquote class="faq-quote">
+                <p lang="en">These guidelines are for Apple licensees, authorized resellers, developers, customers, and other parties wishing to use Apple’s trademarks, service marks or images in promotional, advertising, instructional, or reference materials, or on their <strong>web sites</strong>, products, labels, or packaging. […]</p>
+                <p class="faq-quote-translation" data-i18n-html="faq.banana.quote-scope" hidden></p>
+                <p><strong lang="en">Authorized Use of Apple Trademarks</strong><span class="faq-quote-translation" data-i18n="faq.banana.quote-authorized" hidden></span></p>
+                <p lang="en">[…]</p>
+                <p lang="en">2. Compatibility: Developers may use Apple, Macintosh, iMac, or any other Apple word mark (<strong>but not the Apple Logo</strong> or other Apple-owned graphic symbol/logo) in a referential phrase on packaging or promotional/advertising materials to describe that the third party product is compatible with the referenced Apple product or technology, provided they comply with the following requirements. […]</p>
+                <p class="faq-quote-translation" data-i18n-html="faq.banana.quote-compatibility" hidden></p>
+                <p><strong lang="en">Unauthorized Use of Apple Trademarks</strong><span class="faq-quote-translation" data-i18n="faq.banana.quote-unauthorized" hidden></span></p>
+                <p lang="en">[…]</p>
+                <p lang="en">3. Variations, Takeoffs or Abbreviations: You may not use an image of a <strong>real apple</strong> or other variation of the Apple logo for any purpose. Third parties cannot use a variation, phonetic equivalent, foreign language equivalent, takeoff, or abbreviation of an Apple trademark for any purpose. […]</p>
+                <p class="faq-quote-translation" data-i18n-html="faq.banana.quote-rule" hidden></p>
+              </blockquote>
+              <p id="footnote-ref-microsoft" data-i18n-html="faq.banana.tyrant" hidden></p>
+              <p data-i18n-html="faq.banana.fairuse">Under the <a href="https://en.wikipedia.org/wiki/Nominative_use">nominative fair use</a> of trademark law, you may mention someone else's trademark to say that your product works with theirs, but only “as much as is reasonably necessary”. So I may only write plain text like “macOS”, because in theory that is already enough to say what it means, and I can't add an Apple icon to it. But my OCD makes me feel uncomfortable all over without a little icon for decoration, and since even images of a “real apple” are banned, I had to think of something else.</p>
+              <p data-i18n="faq.banana.ai" hidden></p>
+              <div class="footnotes" hidden>
+                <p id="footnote-microsoft" hidden>
+                  <a class="footnote-back" href="#footnote-ref-microsoft" aria-label="Back to the text" title="Back to the text"
+                     data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
+                  <span data-i18n-html="faq.banana.footnote"></span>
+                </p>
+              </div>
+            </div>
+          </details>
+          <details class="faq-item" id="faq-macos-signing">
+            <summary data-i18n="faq.macsign.q">Opening an unsigned app on macOS is a pain. Why not buy a signature?</summary>
+            <div class="faq-answer">
+              <p data-i18n="faq.macsign.a">Because it costs 99 US dollars every year, paid to Apple.</p>
+              <p data-i18n-html="faq.macsign.why">But first, I stopped being a Mac user long ago; second, I don't make a living from the Mac or iOS; third, I'm only developing a free software project that I like, and its source code and build process are all public, right there. So there is no reason at all to spend 99 dollars every year.</p>
+              <p data-i18n="faq.macsign.bugs" hidden></p>
+              <blockquote class="musing" hidden>
+                <img class="musing-icon" src="images/icons/sticky-note.svg" alt="" width="48" height="48">
+                <div>
+                  <p data-i18n="faq.macsign.musing"></p>
+                </div>
+              </blockquote>
             </div>
           </details>
           <details class="faq-item">

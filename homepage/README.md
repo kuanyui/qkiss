@@ -18,9 +18,9 @@ homepage/
         ├── distros/              # Logos of the Linux distributions, from Simple Icons. See images/distros/README.md.
         ├── icons/                # Icons from Tango and Nome, and the mark of Tango Remixer. See images/icons/README.md.
         ├── marks/                # GitHub and GitLab marks for the buttons, from Simple Icons. See images/marks/README.md.
+        ├── os/                   # Icons of the operating systems in Download. See images/os/README.md.
         ├── tech/                 # Logos of the technologies in Q&A (Python, C++, CMake, GitHub Actions). See images/tech/README.md.
-        ├── og-image.svg          # The link-preview image (see below)
-        └── windows.svg           # The icon of the Windows card in Download, drawn for this website
+        └── og-image.svg          # The link-preview image (see below)
 ```
 
 The download links point to the files of the latest release on GitHub. `main.js` looks them up with the GitHub API when the page opens. If that fails, the links open the page of the latest release instead.
@@ -192,7 +192,8 @@ A string that differs between the cuts is an object with one version per cut, in
 - The two versions are always next to each other, so that they are easy to compare, and neither one is forgotten.
 - English: the Wholesome Cut is written in `index.html` (or `controls.html`), like every English string. The Director's Cut is in `i18n/en.json`, whose strings are all such objects with only `"danger"`. `main.js` downloads it only for the Director's Cut, so crawlers, link previews and visitors without JavaScript only ever see the Wholesome Cut.
 - Only the strings of `data-i18n` and `data-i18n-html` can have a version per cut, not attributes.
-- An empty version hides its element. For example, `"safe": ""` for a paragraph, a footnote or a musing that only the Director's Cut has. In `index.html`, such an element is empty and `hidden` (for a footnote, its `<p>`; for a musing, its `<blockquote>`, and for a row of the chart of LLMs, its `<li>`, whose strings are then all like this), so that it stays hidden without JavaScript too.
+- An empty version hides its element. For example, `"safe": ""` for a paragraph, a footnote or a musing that only the Director's Cut has. In `index.html`, such an element is empty and `hidden` (for a footnote, its `<p>`; for a musing, its `<blockquote>`, and for a row of the chart of LLMs, its `<li>`, whose strings are then all like this), so that it stays hidden without JavaScript too. A `.footnotes` block whose footnotes are all like this is `hidden` too.
+- The same way, an element that is empty and `hidden` in `index.html` shows only in the languages that translate it. For example, the translations in the quote of Apple's guidelines in Q&A (`faq.banana.quote-*`), which English does not need.
 - `main.js` numbers the footnotes of each `.footnotes` block (`*1`, `*2`, …), skipping the hidden ones, so the numbers written in the strings do not matter. Only the numbers in `index.html` must be right for the Wholesome Cut, for visitors without JavaScript.
 - `build.py` rejects malformed versions, and warns about a string that has a version per cut in one language but not in another.
 

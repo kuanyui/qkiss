@@ -1042,11 +1042,6 @@ sup {
   gap: 1.25rem;
 }
 
-/* The source code card: under Linux and Windows, across the whole row. */
-.download-source {
-  grid-column: 1 / -1;
-}
-
 .download-card {
   display: flex;
   flex-direction: column;
@@ -1062,6 +1057,11 @@ sup {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+/* A link around the icon of a card, like the banana of macOS: a flex box too, so that there is no gap under the image. */
+.download-icon-link {
+  display: flex;
 }
 
 .download-card h3 {
@@ -1320,6 +1320,31 @@ sup {
 
 .faq-answer {
   padding: 0 1.25rem 1.25rem;
+}
+
+/* A quotation in an answer, such as a rule quoted from a document. */
+.faq-quote {
+  margin: 0 0 1.1rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 3px solid var(--border-strong);
+  color: var(--text-muted);
+}
+
+.faq-quote p {
+  margin: 0;
+}
+
+/* A quote is in italics. In the languages other than English, its translation is in green. */
+.faq-quote {
+  font-style: italic;
+}
+
+.faq-quote-translation {
+  color: var(--accent);
+}
+
+.faq-quote > p:not(.faq-quote-translation):not(:first-child) {
+  margin-top: 0.6rem;
 }
 
 /* No room under the last element of an answer. The elements after it that the current cut hides do not count. */

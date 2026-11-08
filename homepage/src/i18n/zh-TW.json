@@ -118,21 +118,24 @@
   "download.windows.body": "提供免安裝版 ZIP 與安裝程式，由 GitHub Actions 自動化建置並提供數位簽章<sup class=\"footnote-ref\"><a href=\"#footnote-attestation\">*2</a></sup>。",
   "download.windows.installer": "安裝程式",
   "download.windows.portable": "免安裝版 ZIP",
+  "download.macos.body": "同時支援 Apple 自家晶片與 Intel Mac 的 Universal 磁碟映像檔，支援 macOS 13 以上版本。由 GitHub Actions 自動化建置並提供數位簽章<sup class=\"footnote-ref\"><a href=\"#footnote-attestation-macos\">*3</a></sup>。",
+  "download.macos.dmg": "磁碟映像檔（DMG）",
+  "download.macos.banana": "為什麼是香蕉？",
+  "download.macos.banana-huh": "蛤？",
   "download.source.title": "原始碼",
   "download.source.body": "想自己編譯？請參考 README 中的 <a href=\"https://github.com/kuanyui/qkiss#development\">Development</a>。",
   "download.source.tarball": "最新版 tarball",
   "download.source.git": "Git 儲存庫",
   "download.note": "目前所有執行檔都只在 x86_64 上測試過。",
   "download.footnote.gpg": "私鑰由 OBS server 內部產生，公鑰指紋可於<a href=\"https://build.opensuse.org/projects/home:kuanyui:stable/signing_keys\">此 OBS 頁面</a>閱覽。",
-  "download.footnote.attestation": "這份數位簽章是 <a href=\"https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations\">GitHub 成品證明（artifact attestation）</a>，證明 Windows 檔案與原始碼 tarball 確實是由這個 repo 的 GitHub Actions 建置的。下載後可用 GitHub CLI 驗證：<code>gh attestation verify 檔案 -R kuanyui/qkiss</code>。但它不是 Windows 執行檔本身的數位簽章（Authenticode），所以初次執行時，Windows 依舊會跳出警告。",
+  "download.footnote.attestation": "這份數位簽章是 <a href=\"https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations\">GitHub 成品證明（artifact attestation）</a>，證明 Windows 檔案與原始碼 tarball 確實是由<a href=\"https://github.com/kuanyui/qkiss/actions\">這個 repo 的 GitHub Actions</a> 從原始碼開始建置的。下載後可用 <a href=\"https://cli.github.com/\">GitHub CLI</a> 驗證：<code>gh attestation verify 檔案 -R kuanyui/qkiss</code>。但它不是 Windows 執行檔本身的數位簽章（Authenticode），所以初次執行時，Windows 依舊會跳出警告。",
+  "download.footnote.attestation-macos": "這份數位簽章是 <a href=\"https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations\">GitHub 成品證明（artifact attestation）</a>，證明磁碟映像檔確實是由<a href=\"https://github.com/kuanyui/qkiss/actions\">這個 repo 的 GitHub Actions</a> 從原始碼開始建置的。下載後可用 <a href=\"https://cli.github.com/\">GitHub CLI</a> 驗證：<code>gh attestation verify 檔案 -R kuanyui/qkiss</code>。但 App 本身只有 ad hoc 簽章，沒有用 Apple Developer ID 憑證簽署，也沒有經過 Apple 公證（notarization）。因此第一次開啟時，macOS 會拒絕開啟，這時請先關閉該訊息，再前往「系統設定」›「隱私權與安全性」，捲動到 QKiSS 並按下「強制打開」並確認。此動作只需要做一次，但未來更新 QKiSS 之後還會需要重複一次此動作。另請參考 <a href=\"https://support.apple.com/zh-tw/guide/mac-help/mh40616/mac\">Apple 的說明</a>。",
   "faq.title": "Q&A",
   "faq.specs.q": "QKiSS 支援哪些版本的 FKiSS？",
   "faq.specs.kiss": "<a href=\"https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html\">KISS/GS</a>（General Specification，基本規格），以及它的<a href=\"https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/COMMENT.HTM\">擴充註解</a>。",
   "faq.specs.fkiss": "<a href=\"https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/TTFKSMN4.HTM\">FKiSS</a>（腳本語言）：版本 1、2。",
   "faq.specs.enough": "這已經足以載入我在網路上找得到的幾乎所有日本 KiSS 檔案了。",
   "faq.specs.shell": "不過 <code>shell()</code> 指令是故意決定不實作的，以免造成不必要的資安漏洞。（我好像也沒看過哪個 KiSS 檔有這個。）",
-  "faq.macos.q": "QKiSS 能移植到 macOS 嗎？",
-  "faq.macos.a": "我沒有 Mac，所以不知道。",
   "faq.name.q": "為什麼叫「QKiSS」？",
   "faq.name.a": "以 <a href=\"https://zh.wikipedia.org/zh-tw/Qt\"><strong>Q</strong>t</a> 6 實作的 <a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS</a> 檢視器。名稱有個 KiSS 是 KiSS 檢視器的慣例，像 fkiss, GnomeKiSS, KISSLD, Direct KiSS 之類的。",
   "faq.name.others": "我也考慮過其他幾個名字：",
@@ -159,6 +162,65 @@
   },
   "faq.selinux.landlock": "不過就算你用 SELinux，依舊還是有 Landlock 與 seccomp 的保護，但只保護 lha 與 unar 這兩個外部程式的解壓過程。",
   "faq.selinux.footnote": "一般來說，通常並不建議使用者在工作場所玩任何種類的 KiSS 檢視器。",
+  "faq.winsign.q": "Windows 打開說「無法驗證發行者」",
+  "faq.winsign.a": {
+    "safe":   "這是因為我沒跟微軟買簽章。",
+    "danger": "這是因為我沒跟微軟繳保護費買簽章。"
+  },
+  "faq.winsign.how": {
+    "safe":   "「買簽章」簡單說就是你寫好程式後，跟微軟本家（或者其認可的憑證機構）付費，就會把我的公鑰貼進證書裡頒發證書給我，我就可以拿自己的私鑰把編譯出的執行檔加上數位簽章、這樣任何 Windows 電腦都能用公開證書驗證「此執行檔是由我本人發行、用我的私鑰簽章過的、不是別人冒充的」，且間接會隱含「裡面不會藏有惡意程式」的意義（因為一旦被發現含有惡意程式，微軟會撤銷簽章從此也拒絕簽章）。",
+    "danger": "「買簽章」簡單說就是你寫好程式後，跟微軟本家（或者底下的堂口）繳保護費，就會把我的公鑰貼進證書裡頒發證書給我，我就可以拿自己的私鑰把編譯出的執行檔加上數位簽章、這樣任何 Windows 電腦都能用公開證書驗證「此執行檔是由我本人發行、用我的私鑰簽章過的、不是別人冒充的」，且間接會隱含「裡面不會藏有惡意程式」的意義（因為一旦被發現含有惡意程式，微軟會撤銷簽章從此也拒絕簽章）。"
+  },
+  "faq.winsign.why": {
+    "safe":   "整個軟體的編譯與建置過程是透明的，你可以自行去 <a href=\"https://github.com/kuanyui/qkiss/actions\">GitHub Actions</a> 審查。",
+    "danger": "但是我平常根本不用 Windows，Windows 我都只是拿來打電動的，所以我完全沒興趣跟微軟買簽章。不過整個軟體的編譯與建置過程是透明的，你可以自行去 <a href=\"https://github.com/kuanyui/qkiss/actions\">GitHub Actions</a> 審查。"
+  },
+  "faq.winsign.lha": "而且由於此專案打包時隨附的 lha 所使用的授權條款有點特殊，並不是開放原始碼促進會（OSI）認可的授權條款，所以我也無法去跟提供自由軟體專案免費簽章的公司申請免費的簽章。",
+  "faq.winsign.easy": "不過 Windows 上面沒簽章的程式打開也沒多麻煩，多按兩下確認而已。",
+  "faq.banana.q": "為什麼這網站的下載區裡面 macOS 的圖示是...香蕉？",
+  "faq.banana.prepear": {
+    "safe":   "因為我不想遇到 <a href=\"https://duckduckgo.com/?q=Prepear+%E8%98%8B%E6%9E%9C+%E5%95%86%E6%A8%99\">Prepear 事件</a>（<a href=\"https://ttabvue.uspto.gov/ttabvue/v?pno=91254886\">美國專利商標局案件紀錄</a>）。",
+    "danger": "因為我不想遇到 <a href=\"https://duckduckgo.com/?q=Prepear+%E8%98%8B%E6%9E%9C+%E5%95%86%E6%A8%99\">Prepear 事件</a>（<a href=\"https://ttabvue.uspto.gov/ttabvue/v?pno=91254886\">美國專利商標局案件紀錄</a>）。<a href=\"https://www.techtransparencyproject.org/articles/apples-trademark-bullying-targets-small-businesses-nonprofits\">蘋果不知有什麼毛病超級積極的在幹這些事</a>，不知道是法務想要 KPI 還是管理層想要證明自己有在做事。"
+  },
+  "faq.banana.rule": "<a href=\"https://www.apple.com/legal/intellectual-property/guidelinesfor3rdparties.html\">Apple 官方規範</a>是這樣寫的：",
+  "faq.banana.quote-scope": "本規範適用於 Apple 的被授權人、授權經銷商、開發者、客戶，以及其他希望在宣傳、廣告、教學或參考資料中，或在其<strong>網站</strong>、產品、標籤或包裝上，使用 Apple 的商標、服務標章或圖像的各方。",
+  "faq.banana.quote-authorized": "（經授權使用 Apple 商標）",
+  "faq.banana.quote-compatibility": "2. 相容性：開發者可以在包裝或宣傳／廣告資料上，以指稱性的說法使用 Apple、Macintosh、iMac 或任何其他 Apple 文字商標（<strong>但不包括 Apple 標誌</strong>或其他 Apple 擁有的圖形符號／標誌），說明第三方產品與所指的 Apple 產品或技術相容，前提是符合下列要求。",
+  "faq.banana.quote-unauthorized": "（未經授權使用 Apple 商標）",
+  "faq.banana.quote-rule": "3. 變體、仿作或縮寫：您不得基於任何目的，使用<strong>真實蘋果</strong>的圖像，或 Apple 標誌的其他變體。第三方不得基於任何目的，使用 Apple 商標的變體、諧音、外語對應詞、仿作或縮寫。",
+  "faq.banana.tyrant": {
+    "safe":   "",
+    "danger": "看到這句之前我都沒想到資本家連這種地方都能橫行霸道，如果做得到他們大概恨不得也想把艾薩克牛頓註冊成企業商標。<sup class=\"footnote-ref\"><a href=\"#footnote-microsoft\">*1</a></sup>"
+  },
+  "faq.banana.fairuse": {
+    "safe":   "根據商標法的「<a href=\"https://en.wikipedia.org/wiki/Nominative_use\">指示性合理使用</a>」原則，為了說明相容性，可以提到別人的商標，但只能用「必要的最少部分」。也就是說我只能寫 macOS 這種純文字，因為這理論上已經足夠表示 macOS 的含意了，不能再加上蘋果圖示。然而因為強迫症使然，不放個裝飾圖示我就渾身不蘇湖，但既然連「真實蘋果」的圖片都在禁止範圍內，只好想想其他辦法。",
+    "danger": "根據商標法的「<a href=\"https://en.wikipedia.org/wiki/Nominative_use\">指示性合理使用</a>」原則，為了說明相容性，可以提到別人的商標，但只能用「必要的最少部分」。也就是說我只能寫 macOS 這種純文字，因為這理論上已經足夠表示 macOS 的含意了，不能再加上蘋果圖示。然而因為強迫症使然，不放個裝飾圖示我就渾身不蘇湖，但既然連「真實蘋果」的圖片都在找碴範圍內，只好想想其他辦法。"
+  },
+  "faq.banana.ai": {
+    "safe":   "",
+    "danger": "我用來作專案的業餘時間很寶貴，我一點都不想花費我的生命中的時間去專門用人工畫出一個可能因為這種大企業的無理任性而發明出的狗屎理由而被這些領薪水的法務要求下架重畫的圖示。但因為強迫症使然，我也完全無法接受使用那醜的要死的 macOS 純文字字樣要求來代替圖標。這種時候拿 AI 應付這種愚蠢的東西隨便畫畫草稿（只要不要是蘋果就好）我再隨便修修就好。反正 Mac Pro 2013 就是裝著蘋果美學殘骸的骨灰罈。"
+  },
+  "faq.banana.footnote": {
+    "safe":   "",
+    "danger": "其實微軟也有<a href=\"https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks\">類似的條款</a>，不准使用或修改 Windows 的標誌，只是至少還沒離譜到連「真的窗戶」都禁止，也沒聽說過他們拿標誌去跟開發者的網頁內指示性的圖標找碴。他們真的出手的，都是名字撞到「Windows」的，比如明顯在蹭名字的「<a href=\"https://en.wikipedia.org/wiki/Microsoft_vs._Lindows\">Lindows</a>」，或者（我猜）可能是會被誤認為是微軟官方出品的 <a href=\"https://www.ghisler.ch/wiki/index.php/What_happened_to_Windows_Commander%3F\">Windows Commander</a>（現 Total Commander）。"
+  },
+  "faq.macsign.q": "macOS 沒簽章打開很麻煩耶，不買一個嗎？",
+  "faq.macsign.a": {
+    "safe":   "因為這要每年跟 Apple 花 99 美金。",
+    "danger": "因為這要每年跟 Apple 花錢繳 99 美金的保護稅。"
+  },
+  "faq.macsign.why": {
+    "safe":   "但首先我早就不是 Mac 使用者，二我也不靠 Mac 或 iOS 吃飯，三是我只是開發我喜歡的自由軟體專案，程式碼與編譯流程都公開都擺在那了，所以完全沒有理由每年花 99 美金。",
+    "danger": "但首先我早就不是 Mac 使用者，二我也不靠 Mac 或 iOS 吃飯，三是我只是開發我喜歡的自由軟體專案，程式碼與編譯流程都公開都擺在那了，所以完全沒有理由也不爽每年花 99 美金去供養這個連<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">付款方式</a>都要管的醜陋貪婪企業。"
+  },
+  "faq.macsign.bugs": {
+    "safe":   "",
+    "danger": "而且一堆明顯 UI bug 都能擺爛幾年一直修不好的 OS，我完全不想花錢跟這種 OS 廠商買簽章，一樣的錢拿去捐款給 KDE 對人類進步有價值太多太多。"
+  },
+  "faq.macsign.musing": {
+    "safe":   "",
+    "danger": "回想起來 Mac OS 9.2.2 除了記憶體安全性不太好以外倒是沒啥 bug，我用了好幾年，但 2016~2018 左右用了一年多就被氣到灌 Linux，經歷了三個 macOS 升級一堆嚴重影響一般操作的低級 bug 一直不修真的不知道他們幹什麼吃的。"
+  },
   "faq.web.q": "為什麼不用 Electron 或 Web 技術實作？",
   "faq.web.intro": "雖然我前面有提到我這專案本來就想要做成「原生桌面應用程式」<sup class=\"footnote-ref\"><a href=\"#footnote-native\">*1</a></sup>，不過這個屬於有時真的會有人問的問題，所以還是講一下。",
   "faq.web.a": {

@@ -58,5 +58,41 @@
   },
   "features.footnote.browsers": {
     "danger": "Oh Firefox, what on earth is wrong with you, insisting on removing a pile of icons from the UI? Did it never occur to you that people with dyslexia quite likely use a UI by relying on “position → icon color → icon details → and only then the text”? Making the icons monochrome wasn't enough, and now you've removed them altogether. Even Chrome and Edge, two rogues who don't care whether their users live or die, do a little better than you on this: at least they kept the icons in their application menu. On icons, DuckDuckGo Browser actually does the best job. As far as I know, DuckDuckGo is currently (as of October 2026) the only mainstream browser that still keeps icons in its right-click context menu, crushing Firefox, Chrome, Edge, Vivaldi and Brave, every single one of them. And the icons of its settings screen are even in color! Do you know how excited I was to see that!"
+  },
+  "faq.winsign.a": {
+    "danger": "Because I didn't pay Microsoft protection money for a code signing certificate."
+  },
+  "faq.winsign.how": {
+    "danger": "Simply put, “buying a signature” means: once you have written your program, you pay protection money to the Microsoft family itself (or one of its local gangs), and they put my public key into a certificate and issue it to me. Then I can digitally sign the compiled executables with my own private key, so that any Windows computer can use the public certificate to verify that “this executable was released by me, signed with my private key, and not by someone pretending to be me”. Indirectly, it also implies that “there is no malware hidden inside” (because once malware is found in it, Microsoft revokes the signature and refuses to sign from then on)."
+  },
+  "faq.winsign.why": {
+    "danger": "But I don't use Windows in daily life at all: I only use it to play video games. So I have no interest at all in buying a signature from Microsoft. Still, the whole compiling and building process of the software is transparent: you can check it yourself on <a href=\"https://github.com/kuanyui/qkiss/actions\">GitHub Actions</a>."
+  },
+  "faq.banana.prepear": {
+    "danger": "Because I don't want a <a href=\"https://duckduckgo.com/?q=Prepear+Apple+trademark\">Prepear incident</a> of my own (<a href=\"https://ttabvue.uspto.gov/ttabvue/v?pno=91254886\">the case record at the US Patent and Trademark Office</a>). <a href=\"https://www.techtransparencyproject.org/articles/apples-trademark-bullying-targets-small-businesses-nonprofits\">I don't know what's wrong with Apple, but it is super eager to do this kind of thing</a>: maybe its lawyers want to hit their KPIs, or maybe its managers want to show that they are doing something."
+  },
+  "faq.banana.tyrant": {
+    "danger": "Before I read that line, I never imagined that capitalists could push people around even here. If they could, they would probably love to register Isaac Newton as a corporate trademark too.<sup class=\"footnote-ref\"><a href=\"#footnote-microsoft\">*1</a></sup>"
+  },
+  "faq.banana.fairuse": {
+    "danger": "Under the <a href=\"https://en.wikipedia.org/wiki/Nominative_use\">nominative fair use</a> of trademark law, you may mention someone else's trademark to say that your product works with theirs, but only “as much as is reasonably necessary”. So I may only write plain text like “macOS”, because in theory that is already enough to say what it means, and I can't add an Apple icon to it. But my OCD makes me feel uncomfortable all over without a little icon for decoration, and since they pick on even images of a “real apple”, I had to think of something else."
+  },
+  "faq.banana.ai": {
+    "danger": "My spare time for this project is precious. I don't want to spend a single moment of my life drawing an icon by hand, only for salaried lawyers to make me take it down and redraw it, for some bullshit reason invented by the unreasonable whims of a big corporation. But my OCD can't accept the ugly-as-hell plain “macOS” wordmark they require in its place, either. For something this stupid, it's enough to let AI scribble a rough draft (anything but an apple), then touch it up a little myself. Anyway, the 2013 Mac Pro is the urn that holds the remains of Apple's aesthetics."
+  },
+  "faq.banana.footnote": {
+    "danger": "Actually, Microsoft has <a href=\"https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks\">similar rules</a> too: you may not use or change the Windows logo. But at least they aren't crazy enough to ban even “real windows”, and I've never heard of them going after the icons that developers use on their web pages only to show that something is for Windows. When they did act, it was always against names that clash with “Windows”: for example, <a href=\"https://en.wikipedia.org/wiki/Microsoft_vs._Lindows\">Lindows</a>, which was clearly trying to sound like Windows, or (my guess) <a href=\"https://www.ghisler.ch/wiki/index.php/What_happened_to_Windows_Commander%3F\">Windows Commander</a> (now Total Commander), which could be mistaken for an official Microsoft product."
+  },
+  "faq.macsign.a": {
+    "danger": "Because it means paying Apple a protection tax of 99 US dollars every year."
+  },
+  "faq.macsign.why": {
+    "danger": "But first, I stopped being a Mac user long ago; second, I don't make a living from the Mac or iOS; third, I'm only developing a free software project that I like, and its source code and build process are all public, right there. So there is no reason at all, and I'm in no mood, to spend 99 dollars every year feeding this ugly, greedy corporation that wants to control even the <a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">ways you pay</a>."
+  },
+  "faq.macsign.bugs": {
+    "danger": "Besides, for an OS whose obvious UI bugs can sit there for years without being fixed, I don't want to spend a cent on a signature from its vendor. The same money donated to KDE is worth far, far more to human progress."
+  },
+  "faq.macsign.musing": {
+    "danger": "Looking back, Mac OS 9.2.2 hardly had any bugs, apart from its poor memory safety, and I used it for years. But around 2016–2018, after a bit over a year with macOS, I got so angry that I installed Linux: through three macOS upgrades, piles of stupid bugs that badly hurt everyday use were never fixed. I really have no idea what they are paid for."
   }
 }
