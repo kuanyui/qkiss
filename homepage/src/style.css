@@ -1037,11 +1037,26 @@ sup {
 
 /* ---- Download ------------------------------------------------------------ */
 
-/* At most two cards per row (24rem is too wide for three), so that the buttons of a card can sit side by side. */
+/* One card per row on a narrow screen. On a wide screen: Linux on the left, Windows on the right with macOS under it, then the source code across the whole row. */
 .download-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem;
+}
+
+/* 52rem: wide enough for two cards of 24rem in the container. */
+@media (min-width: 52rem) {
+  .download-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .download-card-linux {
+    grid-row: span 2;
+  }
+
+  .download-card-source {
+    grid-column: 1 / -1;
+  }
 }
 
 .download-card {
