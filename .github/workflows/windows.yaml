@@ -15,11 +15,11 @@ permissions:
 env:
   # The release of our lha fork that goes into the Windows package: https://github.com/kuanyui/lha/releases
   # To update lha, change only this line. Both the download URL and the cache key of `bin_deps` use it.
-  # Windows and macOS use the same lha, so change `LHA_VERSION` in `macos.yaml` too. Its first step checks that both are the same.
-  LHA_VERSION: 1.14i-ac20260723-ky20261029
+  # Windows, macOS and Linux use the same lha. So change `LHA_VERSION` in `macos.yaml` and `linux-appimage.yaml` too: both of them check that it is the same as here.
+  LHA_VERSION: 1.14i-ac20260723-ky20261108
   # The release of our unar fork that goes into the Windows package: https://github.com/kuanyui/XADMaster/releases
-  # The same rules as for LHA_VERSION: change only this line, and change `UNAR_VERSION` in `macos.yaml` too.
-  UNAR_VERSION: 1.10.7-ky20261031
+  # The same rules as for LHA_VERSION: change only this line, and change `UNAR_VERSION` in `macos.yaml` and `linux-appimage.yaml` too.
+  UNAR_VERSION: 1.10.7-ky20261108
 
 # == About actions/cache ==============================================================
 #

@@ -870,6 +870,72 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
         endforeach()
     endif()
 
+    # ===================================================
+    # AppImage: lha, unar, Qt and the libraries that they need (see `.github/workflows/linux-appimage.yaml`)
+    # ===================================================
+
+    set(LINUX_APPIMAGE_BIN_DEPS_DIR "" CACHE PATH "[Linux only] For the AppImage: a folder with the unzipped Linux release ZIP of https://github.com/kuanyui/lha in `lha/`, and the one of https://github.com/kuanyui/XADMaster (unar) in `unar/`. With this folder, `cmake --install` also copies Qt and the libraries that qkiss needs.")
+
+    if(LINUX_APPIMAGE_BIN_DEPS_DIR)
+        # `bundledHelpersDirPath()` in src/extractorsandbox.cpp looks for the helpers in `../lib/qkiss/helpers` from qkiss.
+        if(NOT CMAKE_INSTALL_LIBDIR STREQUAL "lib")
+            message(FATAL_ERROR "LINUX_APPIMAGE_BIN_DEPS_DIR needs -DCMAKE_INSTALL_LIBDIR=lib, not ${CMAKE_INSTALL_LIBDIR}")
+        endif()
+        set(appimageHelpersDir "lib/${PROJECT_NAME}/helpers")
+
+        # Each helper has a folder of its own, which main.cpp puts in PATH.
+        # The same rule as on Windows and macOS: lha must come with its source code, and with FORK_MODIFICATIONS.md.
+        find_program(LHA_EXECUTABLE lha PATHS "${LINUX_APPIMAGE_BIN_DEPS_DIR}/lha" NO_DEFAULT_PATH REQUIRED)
+        get_filename_component(LHA_DIR "${LHA_EXECUTABLE}" DIRECTORY)
+        file(GLOB LHA_SOURCE_ZIP "${LHA_DIR}/lha-*-src.zip")
+        list(LENGTH LHA_SOURCE_ZIP LHA_SOURCE_ZIP_COUNT)
+        if(EXISTS "${LHA_DIR}/FORK_MODIFICATIONS.md" AND LHA_SOURCE_ZIP_COUNT EQUAL 1)
+            install(PROGRAMS "${LHA_EXECUTABLE}" DESTINATION "${appimageHelpersDir}/lha")
+            install(FILES "${LHA_DIR}/FORK_MODIFICATIONS.md" ${LHA_SOURCE_ZIP} DESTINATION "${appimageHelpersDir}/lha")
+        else()
+            message(FATAL_ERROR "FORK_MODIFICATIONS.md and exactly one lha-*-src.zip must be next to ${LHA_EXECUTABLE} (found ${LHA_SOURCE_ZIP_COUNT}: ${LHA_SOURCE_ZIP}). lha cannot be distributed without them. Use lha from the Linux release ZIP of https://github.com/kuanyui/lha")
+        endif()
+
+        # unar: the whole Linux release ZIP of our fork, with the licenses of its libraries, but without lsar (qkiss does not use it).
+        # The source code of unar and of these libraries is unar-VERSION-src.tar.xz on the release page, as on Windows.
+        find_program(UNAR_EXECUTABLE unar PATHS "${LINUX_APPIMAGE_BIN_DEPS_DIR}/unar/bin" NO_DEFAULT_PATH REQUIRED)
+        set(UNAR_DIR "${LINUX_APPIMAGE_BIN_DEPS_DIR}/unar")
+        file(GLOB UNAR_LICENSE_FILES "${UNAR_DIR}/licenses/*")
+        if(EXISTS "${UNAR_DIR}/LICENSE" AND EXISTS "${UNAR_DIR}/FORK_MODIFICATIONS.md" AND EXISTS "${UNAR_DIR}/THIRD-PARTY.txt" AND UNAR_LICENSE_FILES)
+            install(DIRECTORY "${UNAR_DIR}/" DESTINATION "${appimageHelpersDir}/unar" USE_SOURCE_PERMISSIONS PATTERN "lsar" EXCLUDE)
+        else()
+            message(FATAL_ERROR "LICENSE, FORK_MODIFICATIONS.md, THIRD-PARTY.txt and licenses/ must be in ${UNAR_DIR}: unar cannot be distributed without them. Use the Linux release ZIP of https://github.com/kuanyui/XADMaster")
+        endif()
+
+        # qkiss finds Qt in `../lib` with its RUNPATH, and the plugins with the `qt.conf` that the deployment writes.
+        set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
+
+        # The libraries of the user's system are not copied. `[.]` instead of `\.`: the deployment script is
+        # generated, and CMake would turn `\.` into `.` there.
+        file(STRINGS "${CMAKE_SOURCE_DIR}/packaging/linux/appimage-host-libraries.txt" appimageHostLibraries REGEX "^[^#]")
+        set(hostLibraryNameRegexes "")
+        set(hostLibraryPathRegexes "")
+        foreach(name IN LISTS appimageHostLibraries)
+            string(REGEX REPLACE "([.+])" "[\\1]" nameRegex "${name}")
+            list(APPEND hostLibraryNameRegexes "^${nameRegex}$")
+            list(APPEND hostLibraryPathRegexes "/${nameRegex}$")
+        endforeach()
+
+        # Plugins: qkiss uses no network (`networkinformation`, `tls`), and runs on a desktop (not `egldeviceintegrations`, `generic`).
+        # The GTK 3 theme and GStreamer would need GTK 3 and GStreamer on the user's system. FFmpeg comes with Qt.
+        # Not EXCLUDE_PLUGINS: Qt 6.10.3 ignores it (`_qt_internal_get_qt_plugins_to_deploy()` reads `arg_EXCLUDED`).
+        qt_generate_deploy_app_script(
+            TARGET ${PROJECT_NAME}
+            OUTPUT_SCRIPT appimageDeployScript
+            NO_TRANSLATIONS  # qkiss does not load the translations of Qt.
+            EXCLUDE_PLUGIN_TYPES networkinformation tls egldeviceintegrations generic platformthemes multimedia
+            INCLUDE_PLUGINS qxdgdesktopportal ffmpegmediaplugin qxcb qwayland
+            PRE_EXCLUDE_REGEXES ${hostLibraryNameRegexes}
+            POST_EXCLUDE_REGEXES ${hostLibraryPathRegexes}
+        )
+        install(SCRIPT "${appimageDeployScript}")
+    endif()
+
 elseif(WIN32)
     # ===================================================
     # `CPACK_*` variables

@@ -49,10 +49,10 @@ permissions:
 env:
   # The release of our lha fork that goes into the macOS package: https://github.com/kuanyui/lha/releases
   # Windows and macOS use the same version. So change it in `windows.yaml` too: the first step checks this.
-  LHA_VERSION: 1.14i-ac20260723-ky20261029
+  LHA_VERSION: 1.14i-ac20260723-ky20261108
   # The release of our unar fork that goes into the macOS package: https://github.com/kuanyui/XADMaster/releases
   # The same rule as for LHA_VERSION: change it in `windows.yaml` too.
-  UNAR_VERSION: 1.10.7-ky20261031
+  UNAR_VERSION: 1.10.7-ky20261108
 
 jobs:
   build-main:

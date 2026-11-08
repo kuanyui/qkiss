@@ -1,0 +1,515 @@
+name: Qt6 Linux AppImage Build
+
+# Builds `qkiss-VERSION-linux-x86_64.AppImage` on Ubuntu 24.04: it runs on Linux systems with glibc 2.39 or later.
+# For a version tag, the job `upload-to-release` puts it on the release page.
+#
+#   usr/bin/qkiss                    the app
+#   usr/lib/, usr/plugins/           Qt (its official binaries), and the libraries of Ubuntu that Qt needs
+#   usr/lib/qkiss/helpers/lha/       our lha (https://github.com/kuanyui/lha/releases), with its source code
+#   usr/lib/qkiss/helpers/unar/      our unar (https://github.com/kuanyui/XADMaster/releases), with its libraries
+#   usr/share/doc/qkiss/             the licenses (see `packaging/linux/appdir_tool.py`)
+#
+# The source code of Qt, FFmpeg and the libraries of Ubuntu goes into `qkiss-VERSION-linux-x86_64-third-party-src.tar`,
+# next to the AppImage.
+
+on:
+  push:
+    branches: [ "master", "gh_actions" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+env:
+  # Keep these the same as in windows.yaml and macos.yaml: step 2 checks this.
+  LHA_VERSION: 1.14i-ac20260723-ky20261108
+  UNAR_VERSION: 1.10.7-ky20261108
+  # The SHA-256 of these files on the release pages (their `digest`). Change them with the versions.
+  LHA_LINUX_ZIP_SHA256: ac0faf2f8368b6d08633616e144d94942d63eae7f64e9c887f6d9a5cfdf5f596
+  UNAR_LINUX_ZIP_SHA256: dc82f34bb52cbfb83cb47eff77a50e79eb71b6cb0016f7ab777fd026a5689362
+  UNAR_SRC_SHA256: 717716a48075e574439a7a89b05a0e14c1d45f9478e14534fb1f0874e4217cd0
+
+jobs:
+  build-appimage:
+    name: Build the AppImage
+    # Not `ubuntu-latest`: a newer Ubuntu would make the AppImage need a newer glibc.
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        # Also adds `-eo pipefail`: a step stops at its first failing command.
+        shell: bash
+    env:
+      # The glibc and the libstdc++ (GCC 14) of Ubuntu 24.04. The AppImage uses the ones of the user's system.
+      MAX_GLIBC_VERSION: '2.39'
+      MAX_GLIBCXX_VERSION: '3.4.33'
+      # GCC 14, as on Debian 13: CMakeLists.txt turns warnings into errors (`-Werror`), and the warnings depend on
+      # the version of GCC. CMake and vcpkg both read these variables.
+      CC: gcc-14
+      CXX: g++-14
+      VCPKG_INSTALLATION_ROOT: /usr/local/share/vcpkg
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_cache/archives
+      VCPKG_DOWNLOADS: ${{ github.workspace }}/vcpkg_cache/downloads
+
+    steps:
+      # Step 1: Download the source code
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: 'recursive'
+
+      # Step 2: Check the settings before the long steps
+      - name: Check that Windows, macOS and Linux use the same lha and unar
+        run: |
+          for variable in LHA_VERSION UNAR_VERSION; do
+            if ! grep -q -x -F "  ${variable}: ${!variable}" .github/workflows/windows.yaml; then
+              echo "::error::${variable} in linux-appimage.yaml (${!variable}) is not the same as in windows.yaml. Use the same version in windows.yaml, macos.yaml and linux-appimage.yaml."
+              exit 1
+            fi
+          done
+
+      - name: Set the paths
+        run: |
+          {
+            echo "QKISS_VERSION=$(tr -d '[:space:]' < VERSION)"
+            echo "QT_DIR=${RUNNER_TEMP}/Qt/6.10.3/gcc_64"
+            echo "APP_DIR=${RUNNER_TEMP}/AppDir"
+            echo "SOURCES_DIR=${RUNNER_TEMP}/third-party-src"
+          } >> "$GITHUB_ENV"
+
+      # Step 3: Install the tools, and the libraries that the Qt plugins need: the deployment copies them into
+      # the AppImage from this system. deb-src is for `apt-get source` in step 12.
+      - name: Install the build tools and the libraries
+        run: |
+          sudo sed -i 's/^Types: deb$/Types: deb deb-src/' /etc/apt/sources.list.d/ubuntu.sources
+          if ! grep -q '^Types: deb deb-src$' /etc/apt/sources.list.d/ubuntu.sources; then
+            echo "::error::Cannot enable the source packages in /etc/apt/sources.list.d/ubuntu.sources"
+            exit 1
+          fi
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            g++-14 ninja-build patchelf 7zip unzip xvfb fuse3 \
+            libgl-dev libegl-dev libxkbcommon-dev \
+            libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-shape0 libxcb-sync1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xinput0 \
+            libxcb-xkb1 libwayland-cursor0 libwayland-egl1 libdbus-1-3 libglib2.0-0t64 libpulse0
+
+      # Step 4: Install Qt 6, the files that the installer of Qt downloads, without the installer.
+      # Qt publishes the SHA-256 of each file on its `.mirrorlist` page. The files come from a mirror.
+      # Not qtdeclarative (117 MB) and qttranslations: qkiss uses neither.
+      - name: Install Qt
+        run: |
+          base=https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_6103/qt6_6103
+          build=6.10.3-0-202603310406
+          mkdir -p "${RUNNER_TEMP}/qt-archives" "$QT_DIR"
+          # SHA-256, package, file, and the folder in gcc_64/ that the installer extracts it into (Updates.xml).
+          while read -r sha256 package archive folder; do
+            file="${RUNNER_TEMP}/qt-archives/${archive}"
+            curl -fsSL --retry 3 -o "$file" "${base}/${package}/${build}${archive}"
+            echo "${sha256}  ${file}" | sha256sum -c
+            7z x -y -bd -o"${QT_DIR}/${folder}" "$file" > /dev/null
+          done <<'EOF'
+          3c12871c69f5350c82a9f04e9a064fc78953008dfa93278a58ebcc622cf401a8 qt.qt6.6103.linux_gcc_64 qtbase-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
+          0993f77ab7efe07df87857cdaefd313759d0fef2949b076b88e92a300d3c6742 qt.qt6.6103.linux_gcc_64 qtsvg-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
+          f32a53e2c1569246bffce542497aa44f3eb378ff911c6153cdfcfe22603b1bf5 qt.qt6.6103.linux_gcc_64 qttools-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
+          e1b74b283d0f810e852526018c883d98869e8f48a6e66d8d3296039d5f704c17 qt.qt6.6103.linux_gcc_64 qtwayland-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
+          513830e56495b5a5d4b74e7b9ec861906cf0938fa5a8b79d08e097d41011eb6c qt.qt6.6103.linux_gcc_64 icu-linux-Rhel8.6-x86_64.7z lib
+          db1066ae70f13cbc74e5b4c6cc1b6c1c15964997f5e532ecb838fbe78b51df4d qt.qt6.6103.addons.qtmultimedia.linux_gcc_64 qtmultimedia-Linux-RHEL_9_4-GCC-Linux-RHEL_9_4-X86_64.7z .
+          EOF
+          # readelf fails if 7z did not make the symbolic links, or if the files are not where CMake looks for them.
+          for f in lib/libQt6Core.so.6 lib/libicuuc.so.73 lib/libQt6Multimedia.so.6; do
+            readelf -h "${QT_DIR}/${f}" > /dev/null
+          done
+          ls "${QT_DIR}/lib/cmake/Qt6/Qt6Config.cmake" "${QT_DIR}/plugins/platforms"
+
+      # Step 5: Set up Python 3.13 (build_icons.py needs 3.13 or newer)
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install Python dependencies
+        run: python -m pip install jsonschema pyyaml
+
+      # Step 6: [Cache] The PNG icons, converted from SVG by Inkscape
+      - name: Get submodule commit hash
+        id: icon_submodule
+        run: echo "commitHash=$(git -C resources/tango-remixer rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore generated icons cache
+        id: icon_cache
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            generated/icon_theme__png
+            generated/icon_theme__svg
+            generated/icons_built.stamp
+          # The same key as in windows.yaml and macos.yaml.
+          key: ${{ runner.os }}-generatedicons-${{ hashFiles('resources/included_icons.txt') }}-${{ steps.icon_submodule.outputs.commitHash }}
+
+      - name: Install Inkscape
+        if: steps.icon_cache.outputs.cache-hit != 'true'
+        run: sudo apt-get install -y --no-install-recommends inkscape
+
+      - name: Convert icons via CMake script mode
+        if: steps.icon_cache.outputs.cache-hit != 'true'
+        run: cmake -DTASK=GENERATE_ICONS -P CMakeLists.txt
+
+      - name: Save generated icons cache
+        if: steps.icon_cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            generated/icon_theme__png
+            generated/icon_theme__svg
+            generated/icons_built.stamp
+          key: ${{ steps.icon_cache.outputs.cache-primary-key }}
+
+      # Step 7: [Cache] Build the libraries of vcpkg.json. `x64-linux` makes static libraries, so they go into
+      # the executable. Without them, the AppImage would need libarchive of Ubuntu, which needs libxml2 and ICU 74,
+      # besides the ICU 73 of Qt.
+      - name: Create the vcpkg cache directories
+        run: mkdir -p "${VCPKG_DEFAULT_BINARY_CACHE}" "${VCPKG_DOWNLOADS}"
+
+      - name: Restore `vcpkg_cache`
+        id: vcpkg_cache
+        uses: actions/cache/restore@v5
+        with:
+          path: vcpkg_cache
+          key: ${{ runner.os }}-${{ runner.arch }}-ubuntu-24.04-vcpkg-mega-cache-${{ hashFiles('vcpkg.json') }}
+
+      - name: Download & build & install packages via vcpkg
+        run: vcpkg install --triplet x64-linux
+
+      - name: Save `vcpkg_cache`
+        if: steps.vcpkg_cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: vcpkg_cache
+          key: ${{ steps.vcpkg_cache.outputs.cache-primary-key }}
+
+      # Step 8: The sandbox of lha and unar (src/extractorsandbox.cpp) needs the Landlock header of Linux 6.12.
+      # Ubuntu 24.04 has the one of Linux 6.8. It is only a header: the app checks the Landlock of the running kernel.
+      - name: Download the Landlock header of Linux 6.12
+        run: |
+          mkdir -p "${RUNNER_TEMP}/linux-headers/linux"
+          file="${RUNNER_TEMP}/linux-headers/linux/landlock.h"
+          curl -fsSL --retry 3 -o "$file" https://raw.githubusercontent.com/torvalds/linux/v6.12/include/uapi/linux/landlock.h
+          echo "ea5575c369326da8fef2e62d0a9b528b45f4aa2302f836e995cb6d5c33bacc49  ${file}" | sha256sum -c
+
+      # Step 9: Download our lha and unar. CMakeLists.txt installs each release ZIP into a folder of its own.
+      - name: Download lha and unar
+        run: |
+          mkdir -p "${RUNNER_TEMP}/bin_deps"
+          # name, URL, SHA-256
+          while read -r name url sha256; do
+            file="${RUNNER_TEMP}/${name}.zip"
+            if ! curl -fsSL --retry 3 -o "$file" "$url"; then
+              echo "::error::Cannot download ${url}"
+              exit 1
+            fi
+            echo "${sha256}  ${file}" | sha256sum -c
+            unzip -q "$file" -d "${RUNNER_TEMP}/bin_deps/${name}"
+            ls -l "${RUNNER_TEMP}/bin_deps/${name}"
+          done <<EOF
+          lha https://github.com/kuanyui/lha/releases/download/${LHA_VERSION}/lha-${LHA_VERSION}-linux-x86_64.zip ${LHA_LINUX_ZIP_SHA256}
+          unar https://github.com/kuanyui/XADMaster/releases/download/${UNAR_VERSION}/unar-${UNAR_VERSION}-linux-x86_64.zip ${UNAR_LINUX_ZIP_SHA256}
+          EOF
+
+      # Step 10: Build with CMake (build to `build/`)
+      # - ICU is turned off for qkiss: it uses the iconv of glibc. Qt still has its own ICU 73.
+      # - VCPKG_INSTALLED_DIR: the libraries of step 7, which step 12 lists.
+      - name: CMake Configure and Build
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+            -DCMAKE_INSTALL_LIBDIR=lib \
+            -DCMAKE_PREFIX_PATH="$QT_DIR" \
+            -DCMAKE_TOOLCHAIN_FILE="${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake" \
+            -DVCPKG_TARGET_TRIPLET=x64-linux \
+            -DVCPKG_INSTALLED_DIR="${GITHUB_WORKSPACE}/vcpkg_installed" \
+            -DCMAKE_DISABLE_FIND_PACKAGE_ICU=ON \
+            -DCMAKE_CXX_FLAGS="-isystem ${RUNNER_TEMP}/linux-headers" \
+            -DLINUX_APPIMAGE_BIN_DEPS_DIR="${RUNNER_TEMP}/bin_deps"
+          cmake --build build
+
+      # Step 11: Install into the AppDir. The deployment of Qt (CMakeLists.txt) also copies Qt and the libraries.
+      - name: Install into the AppDir
+        run: DESTDIR="$APP_DIR" cmake --install build
+
+      # Step 12: The licenses, and the source code of the third-party components.
+      # The pins of Qt are from its `.mirrorlist` pages. Qt builds FFmpeg from this file, with this SHA-1
+      # (`coin/provisioning/common/unix/ffmpeg-installation-utils.sh` of Qt 6.10.3).
+      - name: Download the source code of Qt and FFmpeg, and the license of ICU
+        run: |
+          mkdir -p "${SOURCES_DIR}/qt" "${SOURCES_DIR}/ffmpeg"
+          while read -r sha256 module; do
+            file="${SOURCES_DIR}/qt/${module}-everywhere-src-6.10.3.tar.xz"
+            curl -fsSL --retry 3 -o "$file" "https://download.qt.io/official_releases/qt/6.10/6.10.3/submodules/${module}-everywhere-src-6.10.3.tar.xz"
+            echo "${sha256}  ${file}" | sha256sum -c
+          done <<'EOF'
+          383dc907816338f0cba72088a524c07458dfc69ce684ca9132fcc4fe91c24b0b qtbase
+          b3223fe005f6a4c7f21f34e4ee6ce0094737cff9503ba15bbb171ac18794f76d qtsvg
+          2e93322a86b562113cfa3a5f0aa8b1e4e185d6284af49b529578d27d52ca85d3 qtwayland
+          dd228fe54051e8834ca53e558794742c8814f217849f9dfa8f9a9df80441903a qtmultimedia
+          EOF
+          file="${SOURCES_DIR}/ffmpeg/FFmpeg-n7.1.3.tar.gz"
+          curl -fsSL --retry 3 -o "$file" https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n7.1.3.tar.gz
+          echo "27051817deec88bed3b9652d49f9127d22268d83  ${file}" | sha1sum -c
+          file="${RUNNER_TEMP}/icu-LICENSE"
+          curl -fsSL --retry 3 -o "$file" https://raw.githubusercontent.com/unicode-org/icu/release-73-2/icu4c/LICENSE
+          echo "f3005e195ff74d8812cc1f182a1c446fab678d70a10e3dada497585befee5416  ${file}" | sha256sum -c
+
+      # Before `set-runpath`: it finds the package of each library by comparing it with the files of this system.
+      - name: Write the licenses into the AppDir
+        run: |
+          python3 -I packaging/linux/appdir_tool.py licenses "$APP_DIR" \
+            --qt-dir "$QT_DIR" \
+            --sources "$SOURCES_DIR" \
+            --icu-license "${RUNNER_TEMP}/icu-LICENSE" --icu-version 73.2 \
+            --vcpkg-installed vcpkg_installed/x64-linux \
+            --source-archive "qkiss-${QKISS_VERSION}-linux-x86_64-third-party-src.tar" \
+            --ubuntu-sources-list "${RUNNER_TEMP}/ubuntu-sources.txt"
+
+      # Step 13: Check the AppDir, and get the source code of the libraries of Ubuntu in it
+      - name: Check every program and library in the AppDir
+        run: |
+          python3 -I packaging/linux/appdir_tool.py set-runpath "$APP_DIR"
+          python3 -I packaging/linux/appdir_tool.py check "$APP_DIR" \
+            --max-glibc "$MAX_GLIBC_VERSION" --max-glibcxx "$MAX_GLIBCXX_VERSION"
+
+      # The source packages are signed by Ubuntu, like the binary packages.
+      - name: Download the source code of the libraries of Ubuntu
+        working-directory: ${{ env.SOURCES_DIR }}
+        run: |
+          mkdir ubuntu
+          cd ubuntu
+          xargs --no-run-if-empty apt-get source --download-only < "${RUNNER_TEMP}/ubuntu-sources.txt"
+          cp "${APP_DIR}/usr/share/doc/qkiss/THIRD-PARTY.txt" "${SOURCES_DIR}/"
+          ls -l
+
+      # appimagetool needs the desktop file and the icon at the top of the AppDir. AppRun is what the AppImage starts.
+      - name: Add AppRun, the desktop file and the icon
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          cp usr/share/applications/qkiss.desktop qkiss.desktop
+          cp usr/share/icons/hicolor/256x256/apps/qkiss.png qkiss.png
+          ln -s usr/bin/qkiss AppRun
+
+      - name: Check the plugins of Qt, lha and unar in the AppDir
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          failed=0
+          for f in \
+              usr/bin/qt.conf \
+              usr/plugins/platforms/libqxcb.so \
+              usr/plugins/platforms/libqwayland.so \
+              usr/plugins/platformthemes/libqxdgdesktopportal.so \
+              usr/plugins/multimedia/libffmpegmediaplugin.so \
+              usr/lib/qkiss/helpers/lha/lha \
+              usr/lib/qkiss/helpers/lha/FORK_MODIFICATIONS.md \
+              "usr/lib/qkiss/helpers/lha/lha-${LHA_VERSION}-src.zip" \
+              usr/lib/qkiss/helpers/unar/bin/unar \
+              usr/lib/qkiss/helpers/unar/LICENSE \
+              usr/lib/qkiss/helpers/unar/FORK_MODIFICATIONS.md \
+              usr/lib/qkiss/helpers/unar/THIRD-PARTY.txt; do
+            if [ ! -f "$f" ]; then
+              echo "::error::The AppDir has no ${f}"
+              failed=1
+            fi
+          done
+          # The GTK 3 theme and GStreamer would need GTK 3 and GStreamer on the user's system. qkiss does not use lsar.
+          for f in usr/plugins/platformthemes/libqgtk3.so usr/plugins/multimedia/libgstreamermediaplugin.so usr/lib/qkiss/helpers/unar/bin/lsar; do
+            if [ -e "$f" ]; then
+              echo "::error::The AppDir has ${f}"
+              failed=1
+            fi
+          done
+          find usr/plugins -type f | sort
+
+          # lha prints `LHa for UNIX version VERSION (PLATFORM)`.
+          usr/lib/qkiss/helpers/lha/lha --version | tee "${RUNNER_TEMP}/lha-version.txt"
+          if ! grep -q -F " version ${LHA_VERSION} " "${RUNNER_TEMP}/lha-version.txt"; then
+            echo "::error::The lha in the AppDir is not version ${LHA_VERSION}"
+            failed=1
+          fi
+          # unar prints its version, for example `v1.10.7-ky20261108`.
+          usr/lib/qkiss/helpers/unar/bin/unar -version 2>&1 | tee "${RUNNER_TEMP}/unar-version.txt"
+          if ! grep -q -F "v${UNAR_VERSION}" "${RUNNER_TEMP}/unar-version.txt"; then
+            echo "::error::The unar in the AppDir is not version ${UNAR_VERSION}"
+            failed=1
+          fi
+          exit "$failed"
+
+      # Step 14: Make the AppImage. With the pinned runtime: without `--runtime-file`, appimagetool downloads the latest one.
+      # No update information (`-u`): the AppImage never looks for updates by itself.
+      - name: Make the AppImage
+        run: |
+          curl -fsSL --retry 3 -o "${RUNNER_TEMP}/appimagetool" https://github.com/AppImage/appimagetool/releases/download/1.9.1/appimagetool-x86_64.AppImage
+          echo "ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0  ${RUNNER_TEMP}/appimagetool" | sha256sum -c
+          curl -fsSL --retry 3 -o "${RUNNER_TEMP}/runtime-x86_64" https://github.com/AppImage/type2-runtime/releases/download/20251108/runtime-x86_64
+          echo "2fca8b443c92510f1483a883f60061ad09b46b978b2631c807cd873a47ec260d  ${RUNNER_TEMP}/runtime-x86_64" | sha256sum -c
+          chmod +x "${RUNNER_TEMP}/appimagetool"
+          appimage="${GITHUB_WORKSPACE}/build/qkiss-${QKISS_VERSION}-linux-x86_64.AppImage"
+          # `--appimage-extract-and-run`: appimagetool is an AppImage too, and this runs it without FUSE.
+          SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)" ARCH=x86_64 "${RUNNER_TEMP}/appimagetool" --appimage-extract-and-run \
+            --runtime-file "${RUNNER_TEMP}/runtime-x86_64" "$APP_DIR" "$appimage"
+          echo "APPIMAGE_FILE=${appimage}" >> "$GITHUB_ENV"
+          echo "::notice::$(basename "$appimage"): $(( $(stat -c %s "$appimage") / 1048576 )) MB"
+
+      - name: Pack the source code of the third-party components
+        run: |
+          tar -C "$SOURCES_DIR" -cf "build/qkiss-${QKISS_VERSION}-linux-x86_64-third-party-src.tar" \
+            --sort=name --owner=0 --group=0 --numeric-owner --mtime="@$(git log -1 --format=%ct)" .
+          ls -l build/*.tar
+
+      # Step 15: Start the AppImage, as a user would. Without a screen, on a virtual X server.
+      - name: Start a virtual X server
+        run: |
+          Xvfb :99 -screen 0 1280x1024x24 -nolisten tcp > "${RUNNER_TEMP}/xvfb.log" 2>&1 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+          echo "QT_QPA_PLATFORM=xcb" >> "$GITHUB_ENV"
+
+      # `/proc/PID/maps` lists the files that the process has loaded. A system file with the same name as a file in
+      # usr/lib/ is not a mistake: the libraries in appimage-host-libraries.txt load what they need from the system
+      # (libfreetype loads libbz2). `appdir_tool.py check` checks that the files of the AppImage find each other.
+      - name: Start the AppImage, and list the system files that it loads
+        run: |
+          log="${RUNNER_TEMP}/start.log"
+          # setsid: a group of its own, so that `kill` below stops the AppImage and all its processes.
+          setsid "$APPIMAGE_FILE" > "$log" 2>&1 &
+          group=$!
+          sleep 15
+          pids=()
+          for candidate in $(pgrep -g "$group" || true); do
+            if [[ "$(readlink "/proc/${candidate}/exe" 2> /dev/null)" == */usr/bin/qkiss ]]; then
+              pids+=("$candidate")
+            fi
+          done
+          if [ "${#pids[@]}" -ne 1 ]; then
+            kill -TERM -- "-${group}" 2> /dev/null || true
+            cat "$log"
+            echo "::error::Expected 1 qkiss process after 15 seconds, found ${#pids[@]}"
+            exit 1
+          fi
+          pid="${pids[0]}"
+          exe="$(readlink "/proc/${pid}/exe")"
+          mount_dir="${exe%/usr/bin/qkiss}"
+          awk '$6 ~ /^\// { print $6 }' "/proc/${pid}/maps" | sort -u > "${RUNNER_TEMP}/loaded.txt"
+          kill -TERM -- "-${group}" 2> /dev/null || true
+          wait "$group" || true
+          cat "$log"
+          echo "Files from outside the AppImage:"
+          grep -v -F "${mount_dir}/" "${RUNNER_TEMP}/loaded.txt" || true
+
+      # `LzhDecompressorBackend` selects the extractor: 1 is lha, 2 is unar (src/enums.h). The key in src/configfile.h ends
+      # with a space, which QSettings writes as `%20`. Test both ways of running an AppImage: with FUSE, and without.
+      - name: Open an LZH file with the lha and the unar of the AppImage
+        run: |
+          work="${RUNNER_TEMP}/lzh-test"
+          mkdir -p "${work}/config/qkiss"
+          printf '; This file is only for the test in linux-appimage.yaml\n' > "${work}/test.cnf"
+          (cd "$work" && "${APP_DIR}/usr/lib/qkiss/helpers/lha/lha" a test.lzh test.cnf)
+          failed=0
+          for mode in fuse extract-and-run; do
+            options=()
+            if [ "$mode" = extract-and-run ]; then
+              options=(--appimage-extract-and-run)
+            fi
+            for backend in 1:LHa 2:Unar; do
+              printf '[Global]\nLzhDecompressorBackend%%20=%s\n' "${backend%%:*}" > "${work}/config/qkiss/qkiss.conf"
+              log="${work}/qkiss-${mode}-${backend#*:}.log"
+              XDG_CONFIG_HOME="${work}/config" setsid "$APPIMAGE_FILE" "${options[@]}" "${work}/test.lzh" > "$log" 2>&1 &
+              group=$!
+              for _ in $(seq 30); do
+                if grep -q 'is extracted successfully' "$log" || ! kill -0 "$group" 2> /dev/null; then
+                  break
+                fi
+                sleep 1
+              done
+              kill -TERM -- "-${group}" 2> /dev/null || true
+              wait "$group" || true
+              echo "== ${mode}, ${backend#*:}"
+              cat "$log"
+              # Both lines are from `src/archiveprocessorexternallha.cpp` or `src/archiveprocessorexternalunar.cpp`.
+              for expected in \
+                  "Trying to extract LZH file \"test.lzh\" via ${backend#*:}..." \
+                  'LZH file "test.lzh" is extracted successfully'; do
+                if ! grep -q -F "$expected" "$log"; then
+                  echo "::error::qkiss (${mode}) could not open test.lzh with ${backend#*:}. The log has no line: ${expected}"
+                  failed=1
+                fi
+              done
+            done
+          done
+          # The sandbox restricts the extractors only when the kernel has Landlock: tell whether this test had it.
+          landlock="$(grep -h -o 'with Landlock ABI [-0-9]*' "$work"/qkiss-*.log | sort -u | tr '\n' ' ' || true)"
+          echo "::notice::The extractors ran ${landlock:-without a line about Landlock in the logs} (-1: no Landlock)"
+          exit "$failed"
+
+      # Step 16: Upload the AppImage and the source code
+      - name: Upload the AppImage
+        uses: actions/upload-artifact@v7
+        with:
+          name: QKiSS-Linux-AppImage
+          path: build/qkiss-*-linux-x86_64.AppImage
+          if-no-files-found: error
+
+      - name: Upload the source code of the third-party components
+        uses: actions/upload-artifact@v7
+        with:
+          name: QKiSS-Linux-third-party-src
+          path: build/qkiss-*-linux-x86_64-third-party-src.tar
+          if-no-files-found: error
+
+  # == Put the Linux files on the release page ==========================================
+  #
+  # The same as `upload-to-release` in windows.yaml: only for a version tag, and only GitHub's own tools,
+  # because this job can write to the repository and sign attestations.
+  upload-to-release:
+    name: Upload the Linux files to the release page
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build-appimage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - name: Download the Linux files
+        uses: actions/download-artifact@v8
+        with:
+          pattern: QKiSS-Linux-*
+          path: linux-files
+          merge-multiple: true
+
+      #   gh attestation verify qkiss-0.9.0-linux-x86_64.AppImage -R kuanyui/qkiss
+      - name: Attest the build provenance of the Linux files
+        uses: actions/attest@v4
+        with:
+          subject-path: linux-files/*
+
+      # The license of unar (LGPL-2.1) requires its source code on the same page as the program.
+      # windows.yaml uploads the same file, maybe at the same moment: so upload it only if it is not there yet.
+      - name: Download the source code of unar
+        run: |
+          file="unar-${UNAR_VERSION}-src.tar.xz"
+          curl -fsSL --retry 3 -o "$file" "https://github.com/kuanyui/XADMaster/releases/download/${UNAR_VERSION}/${file}"
+          echo "${UNAR_SRC_SHA256}  ${file}" | sha256sum -c
+
+      - name: Upload to the release page
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release view "${GITHUB_REF_NAME}" > /dev/null 2>&1 ||
+            gh release create "${GITHUB_REF_NAME}" --verify-tag --title "${GITHUB_REF_NAME}" ||
+            { sleep 10; gh release view "${GITHUB_REF_NAME}" > /dev/null; }
+          gh release upload "${GITHUB_REF_NAME}" linux-files/* --clobber
+          unar_src="unar-${UNAR_VERSION}-src.tar.xz"
+          has_unar_src() {
+            gh release view "${GITHUB_REF_NAME}" --json assets --jq '.assets[].name' | grep -q -x -F "$unar_src"
+          }
+          has_unar_src || gh release upload "${GITHUB_REF_NAME}" "$unar_src" || has_unar_src
