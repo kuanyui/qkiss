@@ -470,7 +470,8 @@
    * Set up a dialog that shows a document of the Director's Cut (legal/<name>.json), loaded when it opens. Its
    * button that continues (.terms-continue) waits until the end of the document is visible: after scrolling to it, or at once if the document
    * fits. Returns `open`, the function that loads the document, then opens the dialog at its top, and `rewind`, which
-   * shows the open dialog at its top again, its button that continues waiting again.
+   * shows the open dialog again at its top, or at the `scrollTop` given: its button that continues waits again, unless
+   * the end of the document is visible there.
    */
   function setUpDocumentDialog(dialog, name) {
     const body = dialog.querySelector('.terms-body');
@@ -490,12 +491,22 @@
       }
     }, { root: text }).observe(dialog.querySelector('.terms-end'));
 
-    function rewind() {
-      continueButton.disabled = true;
-      hint.hidden = false;
+    /** Whether the end of the document is visible now. */
+    function endVisible() {
+      const end = dialog.querySelector('.terms-end').getBoundingClientRect();
+      const box = text.getBoundingClientRect();
+      return end.top < box.bottom && end.bottom > box.top;
+    }
+
+    function rewind(scrollTop = 0) {
       text.focus();   // The keyboard scrolls the document, as when the dialog opens.
       body.scrollTop = 0;   // On a short screen, the whole dialog scrolls (see style.css), and the focus scrolled it.
-      text.scrollTop = 0;
+      text.scrollTop = scrollTop;
+      // Checked here, because the IntersectionObserver above only reports changes: when the end was visible before
+      // and still is, it says nothing.
+      const waiting = !(loaded && endVisible());
+      continueButton.disabled = waiting;
+      hint.hidden = !waiting;
     }
 
     const open = async () => {
@@ -517,20 +528,24 @@
   /**
    * Check that the visitor reads the document of a dialog of setUpDocumentDialog(), rather than scrolling through it:
    * once a second while it is open, and when its button that continues is pressed. The visitor skimmed it if they
-   * scrolled past more of it than they could have read since the check started, at the pace of MIN_READING_SECONDS
-   * for the whole of it, with a head start of READING_HEAD_START_SECONDS. Then the check stops, and calls `onSkimmed`
-   * with the seconds since it started.
+   * scrolled further past where the check started than they could have read since then, at the pace of
+   * MIN_READING_SECONDS for the whole of it, with a head start of READING_HEAD_START_SECONDS. Then the check stops,
+   * and calls `onSkimmed` with the seconds since it started.
    * It measures the share of the document scrolled past, not pixels: so the pace depends neither on the language nor
    * on the size of the screen or of the text.
-   * Returns the function that starts the check, once the document is shown at its top.
+   * Returns `start`, which starts the check from where the document is shown now, and `readTop`, which returns how far
+   * the visitor has surely read: the furthest `scrollTop` that a check found at the pace. For example, a visitor who
+   * reads slowly to 20% of the document, then scrolls straight to its end, is caught, and `readTop` is at 20%.
    */
   function setUpReadingCheck(dialog, onSkimmed) {
     const text = dialog.querySelector('.terms-text');
     let startTime = 0;
+    let startTop = 0;
+    let readTop = 0;
     let timer = 0;
 
     const seconds = () => (performance.now() - startTime) / 1000;
-    const skimmed = () => (text.scrollTop / text.scrollHeight) * MIN_READING_SECONDS
+    const skimmed = () => ((text.scrollTop - startTop) / text.scrollHeight) * MIN_READING_SECONDS
       > seconds() + READING_HEAD_START_SECONDS;
 
     function caught() {
@@ -544,12 +559,20 @@
       caught();
     });
     dialog.addEventListener('close', () => clearInterval(timer));
-    return () => {
+    const start = () => {
+      clearInterval(timer);
       startTime = performance.now();
+      startTop = text.scrollTop;
+      readTop = startTop;
       timer = setInterval(() => {
-        if (skimmed()) caught();
+        if (skimmed()) {
+          caught();
+        } else {
+          readTop = Math.max(readTop, text.scrollTop);
+        }
       }, 1000);
     };
+    return { start, readTop: () => readTop };
   }
 
   /**
@@ -560,7 +583,8 @@
    * The additional articles also check that they are read (setUpReadingCheck()). A visitor caught skimming them is
    * asked whether they read them carefully (#amendments-check-dialog), then whether they are sure
    * (#amendments-recheck-dialog). Insisting twice refuses them (#amendments-refused-dialog): no more cut picker until
-   * the page is loaded again. Any other answer sends them back to the top of the additional articles.
+   * the page is loaded again. Any other answer sends them back to the additional articles: the first time they are
+   * caught, to the top; after that, only to what they have surely read (readingCheck.readTop()).
    */
   function setUpCutPicker() {
     const { llselect } = window;
@@ -573,7 +597,10 @@
     const refused = document.getElementById('amendments-refused-dialog');
     const openTerms = setUpDocumentDialog(terms, 'terms').open;
     const { open: openAmendments, rewind: rewindAmendments } = setUpDocumentDialog(amendments, 'amendments');
-    const checkReading = setUpReadingCheck(amendments, (seconds) => {
+    /** How many times the visitor was caught skimming the additional articles, since the page was loaded. */
+    let timesCaught = 0;
+    const readingCheck = setUpReadingCheck(amendments, (seconds) => {
+      timesCaught++;
       document.getElementById('amendments-check-kirito').hidden = seconds >= KIRITO_SECONDS;
       ask(check);
     });
@@ -611,20 +638,23 @@
     terms.addEventListener('close', async () => {
       if (terms.returnValue !== 'danger') return;
       await openAmendments();
-      if (amendments.open) checkReading();
+      if (amendments.open) readingCheck.start();
     });
     amendments.addEventListener('close', () => {
       if (amendments.returnValue !== 'danger') return;
       store(TERMS_STORAGE_KEY, 'agreed');
       chooseCut('danger');
     });
-    /** Back to the top of the additional articles, to read them again. */
+    /**
+     * Back to the additional articles, to read them again: the first time the visitor is caught, from their top; after
+     * that, from what they have surely read. The check of the pace starts again from there.
+     */
     function readAgain() {
       // From now on, until the page is loaded again, the button that turns back points at itself five times as hard.
       // No-break spaces between the arrows: they stay on one line.
       amendments.querySelector('.pointing-arrow').textContent = '←\u00a0←\u00a0←\u00a0←\u00a0←';
-      rewindAmendments();
-      checkReading();
+      rewindAmendments(timesCaught === 1 ? 0 : readingCheck.readTop());
+      readingCheck.start();
     }
     check.addEventListener('close', () => {
       if (check.returnValue === 'danger') {
