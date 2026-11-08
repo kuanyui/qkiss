@@ -465,7 +465,7 @@ jobs:
           subject-path: linux-files/*
 
       # The license of unar (LGPL-2.1) requires its source code on the same page as the program.
-      # windows.yaml uploads the same file, maybe at the same moment: so upload it only if it is not there yet.
+      # windows.yaml and macos.yaml may upload the same file at the same time. So upload it only if it is missing.
       - name: Download the source code of unar
         run: |
           file="unar-${UNAR_VERSION}-src.tar.xz"

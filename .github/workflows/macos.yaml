@@ -5,7 +5,8 @@ name: Qt6 macOS Build
 # ============================================================================================
 #
 # It builds `qkiss-VERSION-macos-universal.dmg`, which runs on both Apple silicon (arm64) and
-# Intel (x86_64) Macs, and keeps it as an artifact of the run. It does not put it on the release page yet.
+# Intel (x86_64) Macs, and keeps it as an artifact of the run. For a version tag, the job `upload-to-release` also
+# puts it on the release page.
 #
 #   1. Install Qt, Python, the icons (Inkscape), and the libraries of vcpkg.json.
 #   2. Download our lha (https://github.com/kuanyui/lha/releases) and our unar
@@ -53,6 +54,8 @@ env:
   # The release of our unar fork that goes into the macOS package: https://github.com/kuanyui/XADMaster/releases
   # The same rule as for LHA_VERSION: change it in `windows.yaml` too.
   UNAR_VERSION: 1.10.7-ky20261108
+  # The SHA-256 of unar-UNAR_VERSION-src.tar.xz on the release page of our fork (its `digest`). Change it with UNAR_VERSION.
+  UNAR_SRC_SHA256: 717716a48075e574439a7a89b05a0e14c1d45f9478e14534fb1f0874e4217cd0
 
 jobs:
   build-main:
@@ -529,3 +532,52 @@ jobs:
       - name: Unmount the .dmg
         if: always() && env.APP != ''
         run: hdiutil detach -force "${RUNNER_TEMP}/dmg"
+
+  # == Put the .dmg on the release page ==================================================
+  #
+  # The same as `upload-to-release` in windows.yaml and linux-appimage.yaml. It runs only for a version tag.
+  # It uses only GitHub's own tools, because it can write to the repository and sign attestations.
+  upload-to-release:
+    name: Upload the .dmg to the release page
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build-main
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - name: Download the .dmg
+        uses: actions/download-artifact@v8
+        with:
+          name: QKiSS-macOS-universal
+          path: macos-files
+
+      #   gh attestation verify qkiss-0.9.0-macos-universal.dmg -R kuanyui/qkiss
+      - name: Attest the build provenance of the .dmg
+        uses: actions/attest@v4
+        with:
+          subject-path: macos-files/*
+
+      # The license of unar (LGPL-2.1) requires its source code on the same page as the program.
+      # windows.yaml and linux-appimage.yaml may upload the same file at the same time. So upload it only if it is missing.
+      - name: Download the source code of unar
+        run: |
+          file="unar-${UNAR_VERSION}-src.tar.xz"
+          curl -fsSL --retry 3 -o "$file" "https://github.com/kuanyui/XADMaster/releases/download/${UNAR_VERSION}/${file}"
+          echo "${UNAR_SRC_SHA256}  ${file}" | sha256sum -c
+
+      - name: Upload to the release page
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release view "${GITHUB_REF_NAME}" > /dev/null 2>&1 ||
+            gh release create "${GITHUB_REF_NAME}" --verify-tag --title "${GITHUB_REF_NAME}" ||
+            { sleep 10; gh release view "${GITHUB_REF_NAME}" > /dev/null; }
+          gh release upload "${GITHUB_REF_NAME}" macos-files/* --clobber
+          unar_src="unar-${UNAR_VERSION}-src.tar.xz"
+          has_unar_src() {
+            gh release view "${GITHUB_REF_NAME}" --json assets --jq '.assets[].name' | grep -q -x -F "$unar_src"
+          }
+          has_unar_src || gh release upload "${GITHUB_REF_NAME}" "$unar_src" || has_unar_src
