@@ -28,7 +28,7 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
 - It is very fun and romantic to read and implement some specifications comes from 30 years ago (and nearly as old as myself).
 - Nostalgia and pixel-art from the childhood using Windows 95 / 98 (though I never heard KISS at that time).
 - Real life is so painful. Wellness is in manga, anime, and novel.
-  > Verily, verily, I say unto you: ye shall consider nijigen and isekai. Animen.
+  > Verily, verily, I say unto you: ye shall consider nijigen and isekai. Anime.
 
 # Download Binaries
 > [!NOTE]
