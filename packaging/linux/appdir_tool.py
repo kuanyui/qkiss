@@ -31,12 +31,6 @@ PROGRAM_LOADER = "/lib64/ld-linux-x86-64.so.2"
 # lha and unar come with their own license files and source code, and their own libraries (see CMakeLists.txt).
 HELPERS_DIR = "usr/lib/qkiss/helpers"
 
-# The license of each package of Ubuntu that the AppImage takes libraries from, from the `License:` fields of the
-# copyright file of the package. qkiss is GPL-3.0-or-later, so none of them can be GPL-2.0-only.
-# A package that is not here fails `licenses`, which then prints the fields to add it.
-UBUNTU_LICENSES = {
-}
-
 problems = []
 
 
@@ -199,16 +193,19 @@ def check(args):
 # ======================================================================
 
 def set_runpath(args):
-    """Adds the RUNPATH `$ORIGIN` to the copied libraries of Ubuntu that have none. Without it, such a library would load
-    the libraries that it needs from the system, not from `usr/lib/`."""
+    """Sets the RUNPATH `$ORIGIN` on the copied libraries of Ubuntu. Without it, such a library would load the libraries
+    that it needs from the system, not from `usr/lib/`. For example, the RUNPATH /usr/lib/x86_64-linux-gnu/pulseaudio of
+    libpulse would load the libpulsecommon of the system."""
     lib_dir = Path(args.appdir).resolve() / "usr/lib"
     for path in elf_files(lib_dir):
         if path.parent != lib_dir:
             continue
         entries = dynamic_entries(path)
-        if "RUNPATH" in entries or "RPATH" in entries:
+        search_paths = entries.get("RUNPATH", []) + entries.get("RPATH", [])
+        # patchelf also turns an RPATH into a RUNPATH, the only one that `check` allows.
+        if "RPATH" not in entries and search_paths and all(p.startswith(("$ORIGIN", "${ORIGIN}")) for p in search_paths):
             continue
-        if any("/" not in needed and (lib_dir / needed).is_file() for needed in entries.get("NEEDED", [])):
+        if search_paths or any("/" not in needed and (lib_dir / needed).is_file() for needed in entries.get("NEEDED", [])):
             print(f"RUNPATH $ORIGIN: usr/lib/{path.name}")
             run("patchelf", "--set-rpath", "$ORIGIN", str(path))
     finish()
@@ -243,24 +240,21 @@ def copy_from_archive(archive, wanted, destination):
 
 def find_ubuntu_package(path):
     """The package of Ubuntu that has the same file as `path`: (system file, package, version, source package, source version)."""
-    for directory in ("/usr/lib/x86_64-linux-gnu", "/lib/x86_64-linux-gnu", "/usr/lib", "/lib"):
-        system_file = Path(directory, path.name)
-        if not system_file.is_file() or not filecmp.cmp(system_file, path, shallow=False):
+    # Some libraries are in a folder of their own, for example /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-16.1.so.
+    try:
+        output = run("dpkg-query", "-S", f"*/{path.name}")
+    except subprocess.CalledProcessError:
+        return None
+    # A line looks like `libxkbcommon0:amd64: /usr/lib/x86_64-linux-gnu/libxkbcommon.so.0.0.0`.
+    for line in output.splitlines():
+        owners, _, name = line.partition(": ")
+        if line.startswith("diversion ") or not Path(name).is_file() or not filecmp.cmp(name, path, shallow=False):
             continue
-        # Ubuntu moved the files from /lib to /usr/lib, so dpkg may know the file by either path.
-        for name in {str(system_file), str(system_file).removeprefix("/usr"), "/usr" + str(system_file).removeprefix("/usr")}:
-            try:
-                output = run("dpkg-query", "-S", name)
-            except subprocess.CalledProcessError:
-                continue
-            # A line looks like `libxkbcommon0:amd64: /usr/lib/x86_64-linux-gnu/libxkbcommon.so.0.0.0`.
-            owners = [line.split(": ", 1)[0] for line in output.splitlines() if not line.startswith("diversion ")]
-            if len(owners) != 1 or "," in owners[0]:
-                problem(f"{name} is in more than one package: {output.strip()}")
-                return None
-            package = owners[0]
-            fields = run("dpkg-query", "-W", "-f", "${Package}\t${Version}\t${source:Package}\t${source:Version}", package).split("\t")
-            return (system_file, *fields)
+        if "," in owners:
+            problem(f"{name} is in more than one package: {line}")
+            return None
+        fields = run("dpkg-query", "-W", "-f", "${Package}\t${Version}\t${source:Package}\t${source:Version}", owners).split("\t")
+        return (Path(name), *fields)
     return None
 
 
@@ -307,7 +301,6 @@ def licenses(args):
 
     rows = []
     ubuntu_sources = set()
-    unknown_packages = {}
     for path in elf_files(appdir):
         relative = path.relative_to(usr) if path.is_relative_to(usr) else None
         if relative is None:
@@ -340,9 +333,9 @@ def licenses(args):
                 rows.append((relative, "ICU", args.icu_version, "ICU", "third-party/icu/"))
             elif re.match(r"lib(av|sw)\w+\.so\.", path.name):
                 data = path.read_bytes()
-                # Each library of FFmpeg has the strings `FFmpeg version VERSION` and the license of the build.
+                # Each library of FFmpeg has the license of the build, and `FFmpeg version VERSION`. libswscale has only the license.
                 # `--enable-gpl` would make it GPL, and `--enable-nonfree` not distributable at all.
-                if not re.search(rb"FFmpeg version n?" + re.escape(ffmpeg_version.encode()) + rb"(?![.\d])", data):
+                if not path.name.startswith("libswscale.") and not re.search(rb"FFmpeg version n?" + re.escape(ffmpeg_version.encode()) + rb"(?![.\d])", data):
                     problem(f"usr/{relative} is not FFmpeg {ffmpeg_version}, the version of the source code in {sources / 'ffmpeg'}")
                 if b"LGPL version 2.1 or later" not in data or re.search(rb"(?<!L)GPL version [23] or later|nonfree and unredistributable", data):
                     problem(f"usr/{relative} is not a build of FFmpeg under LGPL-2.1-or-later")
@@ -372,17 +365,8 @@ def licenses(args):
                 shutil.copyfile(license_file, out / "ubuntu/common-licenses" / name)
             else:
                 problem(f"The copyright file of {package} names {license_file}, which does not exist")
-        license_name = UBUNTU_LICENSES.get(package)
-        if license_name is None:
-            fields = sorted(set(re.findall(r"^License:\s*(.+?)\s*$", text, re.M)))
-            unknown_packages[package] = f"{package} (source {source_package}): License: fields: {' | '.join(fields) or 'none'}"
-            license_name = "?"
-        rows.append((relative, package, version, license_name, f"third-party/ubuntu/{package}/"))
-        ubuntu_sources.add(f"{source_package}={source_version}")
-
-    if unknown_packages:
-        # One annotation with all the packages.
-        problem(f"Add these packages to UBUNTU_LICENSES in {Path(__file__).name}:\n" + "\n".join(unknown_packages.values()))
+        rows.append((relative, package, version, "see the file", f"third-party/ubuntu/{package}/"))
+        ubuntu_sources.add((source_package, source_version))
 
     # The libraries of vcpkg are static: they are in bin/qkiss.
     vcpkg_rows = []
@@ -400,26 +384,37 @@ def licenses(args):
             shutil.copyfile(copyright_file, out / "vcpkg" / port / "copyright")
             vcpkg_rows.append((Path("bin/qkiss"), port, version, "see the file", f"third-party/vcpkg/{port}/"))
 
-    Path(args.ubuntu_sources_list).write_text("".join(f"{s}\n" for s in sorted(ubuntu_sources)), encoding="utf-8")
-
     table = [("File in usr/", "Component", "Version", "License", "License texts and notices")] + rows + vcpkg_rows
     widths = [max(len(str(row[i])) for row in table) for i in range(4)]
     lines = ["  ".join(str(cell).ljust(width) for cell, width in zip(row, widths + [0])).rstrip() for row in table]
+    # Each address has the version in it, so it keeps pointing to the source code of this build.
+    qt_series = ".".join(qt_version.split(".")[:2])
+    source_links = [
+        (f"Qt {qt_version}", f"https://download.qt.io/archive/qt/{qt_series}/{qt_version}/submodules/"),
+        (f"FFmpeg {ffmpeg_version}", f"https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n{ffmpeg_version}.tar.gz"),
+        (f"ICU {args.icu_version}", f"https://github.com/unicode-org/icu/releases/tag/release-{args.icu_version.replace('.', '-')}"),
+    ] + [(f"{name} {version}", f"https://launchpad.net/ubuntu/+source/{name}/{version}") for name, version in sorted(ubuntu_sources)]
+    width = max(len(name) for name, _ in source_links)
+    source_lines = [f"{name.ljust(width)}  {url}" for name, url in source_links]
     (doc_dir / "THIRD-PARTY.txt").write_text(f"""\
 qkiss is under the GNU General Public License, version 3 or later: see LICENSE next to this file.
 This AppImage also has the programs and libraries of others, listed below.
 
 - The last column is the folder with the license texts and the notices of each component, next to this file.
-- The source code of these components is in {args.source_archive}, on the release page of this
-  version of qkiss: https://github.com/kuanyui/qkiss/releases
+- Links to the source code of Qt, FFmpeg, ICU and the libraries of Ubuntu are at the end of this file.
 - Qt and FFmpeg are linked dynamically. To use your own build of Qt or FFmpeg, extract the AppImage with
   `--appimage-extract`. Then replace the files in usr/lib/ and usr/plugins/.
 - lha and unar are in usr/lib/qkiss/helpers/. Each of the two folders has the license files of its program.
   The folder of lha also has the source code of lha.
-  The source code of unar is unar-VERSION-src.tar.xz, on the same release page.
+  The source code of unar is unar-VERSION-src.tar.xz, on the release page of this version of qkiss:
+  https://github.com/kuanyui/qkiss/releases
 - The libraries of vcpkg are linked statically into bin/qkiss.
 
 {chr(10).join(lines)}
+
+The source code:
+
+{chr(10).join(source_lines)}
 """, encoding="utf-8")
     print((doc_dir / "THIRD-PARTY.txt").read_text(encoding="utf-8"))
     finish()
@@ -446,8 +441,6 @@ def main():
     p.add_argument("--icu-license", required=True, help="The LICENSE file of ICU")
     p.add_argument("--icu-version", required=True, help="The version of ICU of that LICENSE file, for example 73.2")
     p.add_argument("--vcpkg-installed", required=True, help="For example vcpkg_installed/x64-linux")
-    p.add_argument("--source-archive", required=True, help="The file name of the source code of the third-party components on the release page")
-    p.add_argument("--ubuntu-sources-list", required=True, help="Output: the source packages of Ubuntu, one `NAME=VERSION` per line, for `apt-get source`")
     p.set_defaults(function=licenses)
 
     args = parser.parse_args()

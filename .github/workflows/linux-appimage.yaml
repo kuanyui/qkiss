@@ -9,8 +9,7 @@ name: Qt6 Linux AppImage Build
 #   usr/lib/qkiss/helpers/unar/      our unar (https://github.com/kuanyui/XADMaster/releases), with its libraries
 #   usr/share/doc/qkiss/             the licenses (see `packaging/linux/appdir_tool.py`)
 #
-# The source code of Qt, FFmpeg and the libraries of Ubuntu goes into `qkiss-VERSION-linux-x86_64-third-party-src.tar`,
-# next to the AppImage.
+# THIRD-PARTY.txt in usr/share/doc/qkiss/ links to the source code of Qt, FFmpeg, ICU and the libraries of Ubuntu.
 
 on:
   push:
@@ -79,14 +78,9 @@ jobs:
           } >> "$GITHUB_ENV"
 
       # Step 3: Install the tools, and the libraries that the Qt plugins need: the deployment copies them into
-      # the AppImage from this system. deb-src is for `apt-get source` in step 12.
+      # the AppImage from this system.
       - name: Install the build tools and the libraries
         run: |
-          sudo sed -i 's/^Types: deb$/Types: deb deb-src/' /etc/apt/sources.list.d/ubuntu.sources
-          if ! grep -q '^Types: deb deb-src$' /etc/apt/sources.list.d/ubuntu.sources; then
-            echo "::error::Cannot enable the source packages in /etc/apt/sources.list.d/ubuntu.sources"
-            exit 1
-          fi
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             g++-14 ninja-build patchelf 7zip unzip xvfb fuse3 \
@@ -239,7 +233,7 @@ jobs:
       - name: Install into the AppDir
         run: DESTDIR="$APP_DIR" cmake --install build
 
-      # Step 12: The licenses, and the source code of the third-party components.
+      # Step 12: The licenses. The license texts of Qt and FFmpeg, and the notices of the code in Qt, are in their source code.
       # The pins of Qt are from its `.mirrorlist` pages. Qt builds FFmpeg from this file, with this SHA-1
       # (`coin/provisioning/common/unix/ffmpeg-installation-utils.sh` of Qt 6.10.3).
       - name: Download the source code of Qt and FFmpeg, and the license of ICU
@@ -269,26 +263,14 @@ jobs:
             --qt-dir "$QT_DIR" \
             --sources "$SOURCES_DIR" \
             --icu-license "${RUNNER_TEMP}/icu-LICENSE" --icu-version 73.2 \
-            --vcpkg-installed vcpkg_installed/x64-linux \
-            --source-archive "qkiss-${QKISS_VERSION}-linux-x86_64-third-party-src.tar" \
-            --ubuntu-sources-list "${RUNNER_TEMP}/ubuntu-sources.txt"
+            --vcpkg-installed vcpkg_installed/x64-linux
 
-      # Step 13: Check the AppDir, and get the source code of the libraries of Ubuntu in it
+      # Step 13: Check the AppDir
       - name: Check every program and library in the AppDir
         run: |
           python3 -I packaging/linux/appdir_tool.py set-runpath "$APP_DIR"
           python3 -I packaging/linux/appdir_tool.py check "$APP_DIR" \
             --max-glibc "$MAX_GLIBC_VERSION" --max-glibcxx "$MAX_GLIBCXX_VERSION"
-
-      # The source packages are signed by Ubuntu, like the binary packages.
-      - name: Download the source code of the libraries of Ubuntu
-        working-directory: ${{ env.SOURCES_DIR }}
-        run: |
-          mkdir ubuntu
-          cd ubuntu
-          xargs --no-run-if-empty apt-get source --download-only < "${RUNNER_TEMP}/ubuntu-sources.txt"
-          cp "${APP_DIR}/usr/share/doc/qkiss/THIRD-PARTY.txt" "${SOURCES_DIR}/"
-          ls -l
 
       # appimagetool needs the desktop file and the icon at the top of the AppDir. AppRun is what the AppImage starts.
       - name: Add AppRun, the desktop file and the icon
@@ -358,12 +340,6 @@ jobs:
             --runtime-file "${RUNNER_TEMP}/runtime-x86_64" "$APP_DIR" "$appimage"
           echo "APPIMAGE_FILE=${appimage}" >> "$GITHUB_ENV"
           echo "::notice::$(basename "$appimage"): $(( $(stat -c %s "$appimage") / 1048576 )) MB"
-
-      - name: Pack the source code of the third-party components
-        run: |
-          tar -C "$SOURCES_DIR" -cf "build/qkiss-${QKISS_VERSION}-linux-x86_64-third-party-src.tar" \
-            --sort=name --owner=0 --group=0 --numeric-owner --mtime="@$(git log -1 --format=%ct)" .
-          ls -l build/*.tar
 
       # Step 15: Start the AppImage, as a user would. Without a screen, on a virtual X server.
       - name: Start a virtual X server
@@ -449,19 +425,12 @@ jobs:
           echo "::notice::The extractors ran ${landlock:-without a line about Landlock in the logs} (-1: no Landlock)"
           exit "$failed"
 
-      # Step 16: Upload the AppImage and the source code
+      # Step 16: Upload the AppImage
       - name: Upload the AppImage
         uses: actions/upload-artifact@v7
         with:
           name: QKiSS-Linux-AppImage
           path: build/qkiss-*-linux-x86_64.AppImage
-          if-no-files-found: error
-
-      - name: Upload the source code of the third-party components
-        uses: actions/upload-artifact@v7
-        with:
-          name: QKiSS-Linux-third-party-src
-          path: build/qkiss-*-linux-x86_64-third-party-src.tar
           if-no-files-found: error
 
   # == Put the Linux files on the release page ==========================================
