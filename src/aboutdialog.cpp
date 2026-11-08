@@ -30,11 +30,55 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QRegularExpression>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include "configfile.h"
 #include "version.h"
 #include "logging.h"
 
 using namespace Qt::Literals::StringLiterals;
+
+namespace {
+
+/// The icon themes that the icons come from, with their licenses, as a Markdown list.
+/// tango-remixer writes licenses.json when it builds the icons, so the list is always up to date.
+QString iconThemeLicensesMd()
+{
+    QFile file{u":/xdg_icon_themes/CustomizedTango/licenses.json"_s};
+    if (!file.open(QIODevice::ReadOnly)) {
+        qkWarning << "Cannot read" << file.fileName();
+        return {};
+    }
+    QJsonParseError error;
+    const QJsonValue srcThemes = QJsonDocument::fromJson(file.readAll(), &error).object().value("src_themes"_L1);
+    if (error.error != QJsonParseError::NoError || !srcThemes.isArray()) {
+        qkWarning << "Cannot read the icon themes in" << file.fileName() << error.errorString();
+        return {};
+    }
+    QString md;
+    for (const QJsonValue &srcThemeValue : srcThemes.toArray()) {
+        const QJsonObject srcTheme = srcThemeValue.toObject();
+        const QString name = srcTheme.value("src_theme"_L1).toString();
+        // Skip AppIcon: it has the icons of qkiss itself (`--extra-icon-theme` in CMakeLists.txt), under qkiss's license.
+        if (name == "AppIcon"_L1) {
+            continue;
+        }
+        const QString url = srcTheme.value("src_theme_url"_L1).toString();
+        md += url.isEmpty() ? u"- %1"_s.arg(name) : u"- [%1](%2)"_s.arg(name, url);
+        md += u": `%1`\n"_s.arg(srcTheme.value("src_theme_license"_L1).toString());
+        for (const QJsonValue &exceptionValue : srcTheme.value("icon_license_exceptions"_L1).toArray()) {
+            const QJsonObject exception = exceptionValue.toObject();
+            md += u"  - `%1` (`%2`): `%3`\n"_s.arg(exception.value("dst_context_and_icon_name"_L1).toString(),
+                                                  exception.value("src_context_and_icon_name"_L1).toString(),
+                                                  exception.value("icon_license"_L1).toString());
+        }
+    }
+    return md;
+}
+
+}  // namespace
 
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent)
@@ -163,10 +207,8 @@ This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a 
             tr(R"(QKiSS is licensed under GPLv3.
 
 QKiSS used some third-parties SVG icons from other FLOSS projects via `[tango-remixer](https://github.com/kuanyui/tango-remixer)`, and they are released under various licenses:)") +
-            QStringLiteral(R"(
-- [Tango Icon Theme](https://github.com/kuanyui/tango-icon-theme): `GPL v2` or `GPL v3`
-- [Nome Icon Theme](https://github.com/kuanyui/nome-icon-theme): `LGPL v3` or `CC by-sa 3.0`
-- [flag-icons](https://github.com/lipis/flag-icons): `MIT`
+            u"\n"_s + iconThemeLicensesMd() +
+            QStringLiteral(R"(- [flag-icons](https://github.com/lipis/flag-icons): `MIT`
 )")));
     m_tabWidget->addTab(browserLicense, tr("Licenses"));
 
@@ -189,6 +231,7 @@ QString AboutDialog::md2Html(const QString &markdown) {
     static const QRegularExpression reEmptyPara(R"(<p>\s*</p>)");
 
     static const QRegularExpression reUlLi(R"(^[*-] (.+)$)", QRegularExpression::PatternOption::MultilineOption);
+    static const QRegularExpression reUlLiNested(R"(^  [*-] (.+)$)", QRegularExpression::PatternOption::MultilineOption);
     static const QRegularExpression reUlLiWorkaround(R"(<\/ul>\n*<ul>)");
 
     QString html = markdown;
@@ -198,6 +241,8 @@ QString AboutDialog::md2Html(const QString &markdown) {
     html.replace('>', "&gt;");
 
     html.replace(reUlLi, R"(<ul><li>\1</li></ul>)");
+    // Qt indents a list by the number of open `<ul>` elements, so a `<ul>` in a `<ul>` is one level deeper.
+    html.replace(reUlLiNested, R"(<ul><ul><li>\1</li></ul></ul>)");
     html.replace(reUlLiWorkaround, "");
 
     html.replace(reLink, R"(<a href="\2" title="\2">\1</a>)");   // `title=""` is for tooltip
