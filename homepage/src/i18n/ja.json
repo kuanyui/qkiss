@@ -52,6 +52,7 @@
   "platforms.alt.linux": "Linux で動作する QKiSS 0.9.4",
   "platforms.alt.windows": "Windows 11 で動作する QKiSS 0.9.4",
   "platforms.alt.macos": "macOS で動作する QKiSS 0.9.4",
+  "platforms.caption": "QKiSS は Linux・Windows・macOS の三大 OS に同時対応し、生物多様性と生態系のバランスの維持に努めています。",
   "about.title": "KiSS とは？",
   "about.kiss": "<a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS（Kisekae Set System）</a>は、デジタルの着せ替え人形のためのフォーマットです。マウスで服をドラッグしてキャラクターを着せ替えでき、FKiSS スクリプトを使えばアニメーションや音などの仕掛けも加えられます。",
   "about.kisekae": "「Kisekae」は見ての通り、日本語の「着せ替え人形」に由来し、その意味を持ちます。",
@@ -83,6 +84,7 @@
   "features.specs.kiss": "KISS/GS の基本仕様と、FKiSS 1・2 のインタラクティブなスクリプトのインタプリタを実装（実測で日本の KiSS データの 9 割が正常に動作）。",
   "features.specs.fkiss34": "FKiSS 3・4 はデータが少なすぎるうえ、日本の KiSS 作者はほとんど使っていないので、めんどくさくて実装はパス。",
   "features.specs.unfix": "ワンクリックで固定解除：外れるまでちまちまクリックし続けるなんて、誰がやるの？　遊びが仕事になっちゃダメ。",
+  "features.specs.platforms": "Linux・Windows・macOS の三大 OS に同時対応し、生物多様性と生態系のバランスを維持。",
   "features.specs.electron": {
     "safe":   "Electron は不使用。",
     "danger": "ユーザーの誰にも好かれていない Electron は不使用（Electron でウェブページをネイティブアプリに着せ替える Weblin<sup class=\"footnote-ref\"><a href=\"#footnote-weblin\">*1</a></sup> たちは、あなたのメモリがタダだとでも思っているらしい）。"

@@ -52,6 +52,7 @@
   "platforms.alt.linux": "在 Linux 上執行的 QKiSS 0.9.4",
   "platforms.alt.windows": "在 Windows 11 上執行的 QKiSS 0.9.4",
   "platforms.alt.macos": "在 macOS 上執行的 QKiSS 0.9.4",
+  "platforms.caption": "QKiSS 同時支援 Linux、Windows、macOS 三大 OS，致力於維持物種多樣性與生態平衡。",
   "about.title": "什麼是 KiSS？",
   "about.kiss": "<a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS（Kisekae Set System）</a>是一種數位紙娃娃的格式。用滑鼠拖曳衣服就能幫角色換裝，FKiSS 腳本還能加入動畫、音效等互動。",
   "about.kisekae": "「Kisekae」源自日文「<span lang=\"ja\">着せ替え人形</span>」（發音：「kisekae ningyou」），意思是「換裝人偶」。",
@@ -83,6 +84,7 @@
   "features.specs.kiss": "實作了 KISS/GS 基礎規格與 FKiSS 1・2 互動腳本直譯器（實測 9 成日本 KiSS 檔案可以正常執行）。",
   "features.specs.fkiss34": "FKiSS 3・4 太少檔案了，尤其日本 KiSS 作者幾乎沒人作，所以懶得實作。",
   "features.specs.unfix": "一鍵解鎖：誰要在那裡 Unfix 慢慢點啊，玩遊戲不該像是工作。",
+  "features.specs.platforms": "同時支援 Linux、Windows、macOS 三大 OS，維持物種多樣性與生態平衡。",
   "features.specs.electron": {
     "safe":   "不用 Electron。",
     "danger": "不用沒有使用者喜歡的 Electron（這些用 Electron 把網頁打扮成原生應用程式的 Weblin<sup class=\"footnote-ref\"><a href=\"#footnote-weblin\">*1</a></sup> 好像以為你的記憶體不用錢一樣）。"

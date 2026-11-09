@@ -1296,6 +1296,27 @@ sup {
   height: auto;
 }
 
+/* The line under a figure of the page, like the stack of #platforms: its legend. Smaller, in italics, under a short
+   rule, so that it does not read like the text around it. */
+.figure-legend {
+  max-width: 40rem;
+  margin: 1.25rem auto 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-style: italic;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.figure-legend::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  margin: 0 auto 0.6rem;
+  border-top: 1px solid var(--border-strong);
+}
+
 /* ---- Download ------------------------------------------------------------ */
 
 /* At most two cards per row (24rem is too wide for three), so that the buttons of a card can sit side by side. */
