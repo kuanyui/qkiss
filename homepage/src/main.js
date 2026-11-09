@@ -280,6 +280,7 @@
     renderGallery();
     renderReleaseLinks();
     renderCutPicker();
+    crtZoomPicker?.rerender();   // the name of the level "fit", in the language of the page
     fitHeroIntro();
     root.classList.remove('i18n-loading');
   }
@@ -731,22 +732,67 @@
   /** What each block of the page with images from the wiki needs, once its images are set (see showBlocks()). */
   const BLOCK_SETUPS = {
     platforms: setUpPlatforms,
+    crt: setUpCrt,
   };
 
   /**
-   * The blocks of the page that show images from the wiki outside the gallery: `blocks` in
-   * screenshots.json, like `{"platforms": {"linux": "os/linux.png"}}`. A block is an element with
-   * `data-block="platforms"`, hidden until its images are set; each of its images is an
-   * `<img data-block-image="platforms.linux">`. build.py checks that the page and screenshots.json name the same
-   * blocks and images. Without screenshots.json (a build without screenshots), the blocks stay hidden.
+   * A 2 x 2 AVIF at full color resolution (chroma 4:4:4): red and blue, in a checkerboard. A browser that decodes AVIF
+   * only at half the color resolution blends them into purple, and it would lose the 1-pixel color dots of the CRT
+   * Simulation (#crt) the same way.
    */
-  function showBlocks(blocks) {
+  const AVIF_444_PROBE = 'data:image/avif;base64,AAAAHGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZgAAANZtZXRhAAAAAAAAACFoZGxyAAAAAAAAAABwaWN0AAAAAAAAAAAAAAAAAAAAAA5waXRtAAAAAAABAAAAImlsb2MAAAAAREAAAQABAAAAAAD6AAEAAAAAAAAAoAAAACNpaW5mAAAAAAABAAAAFWluZmUCAAAAAAEAAGF2MDEAAAAAVmlwcnAAAAA4aXBjbwAAAAxhdjFDgUBiAAAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwwMDAAAABZpcG1hAAAAAAAAAAEAAQOBAgMAAACobWRhdBIACghYADY0BDQaIDKRARAAAPzOpf96f///6h992SStTqqjopLnqjotTqr7pr7pnzmpLnmblpLnr7ppLnpLnp0o/////////3g5kjaL77C++wv/8b77C++wv/8b//G++wv/8b//G//xv/8b//G//xv44T/////9JdERSyg2Gg2Gge2Q2Gg2Gge2Qe2Q2Gge2Qe2Qe2Qe2Qe2Qe2Q3Wxj9Q=';
+  /** Whether this browser shows AVIF at full color resolution (see AVIF_444_PROBE): a promise, made when first needed. */
+  let avif444Supported = null;
+
+  function supportsAvif444() {
+    avif444Supported ??= (async () => {
+      try {
+        const image = new Image();
+        image.src = AVIF_444_PROBE;
+        await image.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = canvas.height = 2;
+        const context = canvas.getContext('2d', { willReadFrequently: true });
+        context.drawImage(image, 0, 0);
+        const [red0, , blue0, , red1, , blue1] = context.getImageData(0, 0, 2, 1).data;
+        // Roughly, since a browser may change the pixels of a canvas a little, against fingerprinting.
+        return red0 > 160 && blue0 < 96 && blue1 > 160 && red1 < 96;
+      } catch {
+        return false;
+      }
+    })();
+    return avif444Supported;
+  }
+
+  /** The URL of an image of a block: the first of its paths that this browser can show, or null. */
+  async function blockImageUrl(paths) {
+    for (const path of Array.isArray(paths) ? paths : [paths]) {
+      if (!/\.avif$/i.test(path) || await supportsAvif444()) return SCREENSHOTS_DIR + path;
+    }
+    return null;
+  }
+
+  /**
+   * The blocks of the page that show images from the wiki outside the gallery: `blocks` in screenshots.json, like
+   * `{"platforms": {"linux": "os/linux.png"}}`. A block is an element with `data-block="platforms"`, hidden until its
+   * images are set; each of its images is an `<img data-block-image="platforms.linux">`. build.py checks that the page
+   * and screenshots.json name the same blocks and images. Without screenshots.json (a build without screenshots), the
+   * blocks stay hidden.
+   * An image may have several paths, the best first: the first one that this browser can show is used. An AVIF is used
+   * only if the browser shows AVIF at full color resolution (see supportsAvif444()).
+   * An image with `data-block-defer` is not loaded here: its URL goes to `data-block-src`, for the setup of its block.
+   */
+  async function showBlocks(blocks) {
     for (const block of document.querySelectorAll('[data-block]')) {
       const name = block.dataset.block;
       if (!Object.hasOwn(blocks, name)) continue;
-      for (const image of block.querySelectorAll('img[data-block-image]')) {
-        image.src = SCREENSHOTS_DIR + blocks[name][image.dataset.blockImage.split('.')[1]];
-      }
+      const images = [...block.querySelectorAll('img[data-block-image]')];
+      const urls = await Promise.all(images.map((image) => blockImageUrl(blocks[name][image.dataset.blockImage.split('.')[1]])));
+      if (urls.includes(null)) continue;   // a picture that this browser cannot show: the block stays hidden
+      images.forEach((image, i) => {
+        if (image.hasAttribute('data-block-defer')) image.dataset.blockSrc = urls[i];
+        else image.src = urls[i];
+      });
       block.hidden = false;
       BLOCK_SETUPS[name]?.();
     }
@@ -1381,6 +1427,165 @@
     container.addEventListener('focusin', touch);
     container.addEventListener('focusout', release);
     restartAuto();
+  }
+
+  /**
+   * The zoom levels of #crt, in its picker: 'fit' shows the whole picture; a number is how many CSS pixels show each
+   * pixel of the screenshots.
+   */
+  const CRT_ZOOMS = ['fit', 1, 2, 3, 4];
+  /** The zoom of #crt at first: enough to see the dots of the CRT Simulation. */
+  const CRT_FIRST_ZOOM = 2;
+  /** How far an arrow key moves the line of #crt, as a share of its width. */
+  const CRT_KEY_STEP = 0.05;
+  /** The zoom picker of #crt, once set up: null when @llselect/core did not load. */
+  let crtZoomPicker = null;
+
+  /**
+   * #crt: the CRT Simulation, compared with the original like in an image editor. None is on the left of the line, the
+   * chosen preset on its right. The line follows a drag (a pointer, or the arrow keys once it has the keyboard focus).
+   * The zoom picker enlarges both pictures; then they scroll in the window, by dragging them with a mouse, or as usual
+   * (wheel, finger). A preset shows once its picture is decoded. Soft and Glow load when the block comes near (or,
+   * when the browser is asked to save data, when they are chosen).
+   */
+  function setUpCrt() {
+    const block = document.getElementById('crt');
+    const view = block.querySelector('.crt-view');
+    const frame = block.querySelector('.crt-frame');
+    const stage = block.querySelector('.crt-stage');
+    const original = block.querySelector('.crt-original');
+    const presets = Object.fromEntries([...block.querySelectorAll('.crt-preset')].map((image) => [image.dataset.preset, image]));
+    const buttons = [...block.querySelectorAll('.crt-preset-button')];
+    const sideNames = [...block.querySelectorAll('.crt-side-right [data-preset]')];
+    const divider = block.querySelector('.crt-divider');
+    const pictureWidth = Number(original.getAttribute('width'));
+    const pictureHeight = Number(original.getAttribute('height'));
+    let wanted = 'sharp';   // the preset chosen last: one that finishes loading later is shown only if still wanted
+    let split = 0.5;        // where the line is, as a share of the width of the window
+    let zoom = 'fit';
+
+    const load = (image) => {
+      if (!image.getAttribute('src')) image.src = image.dataset.blockSrc;
+      return image.decode().catch(() => {});
+    };
+
+    // The line, and the clip of the preset in the stage (which may be scrolled): drawn once per frame at most.
+    let frameRequest = 0;
+    const drawSplit = () => {
+      cancelAnimationFrame(frameRequest);
+      frameRequest = requestAnimationFrame(() => {
+        const x = split * frame.clientWidth;
+        view.style.setProperty('--split', `${x}px`);
+        stage.style.setProperty('--split', `${frame.scrollLeft + x}px`);
+        divider.setAttribute('aria-valuenow', String(Math.round(split * 100)));
+      });
+    };
+    const clamp = (value) => Math.min(1, Math.max(0, value));
+
+    const choose = async (next) => {
+      wanted = next;
+      buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.preset === next)));
+      await load(presets[next]);
+      if (wanted !== next) return;
+      for (const [name, image] of Object.entries(presets)) image.hidden = name !== next;
+      sideNames.forEach((name) => {
+        name.hidden = name.dataset.preset !== next;
+      });
+    };
+    buttons.forEach((button) => button.addEventListener('click', () => choose(button.dataset.preset)));
+
+    if (!navigator.connection?.saveData) {
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        Object.values(presets).forEach(load);
+      }, { rootMargin: '600px 0px' });
+      observer.observe(block);
+    }
+
+    // The zoom keeps the center of the window where it is.
+    const setZoom = (next) => {
+      const centerX = (frame.scrollLeft + frame.clientWidth / 2) / stage.offsetWidth;
+      const centerY = (frame.scrollTop + frame.clientHeight / 2) / stage.offsetHeight;
+      zoom = next;
+      stage.style.width = zoom === 'fit' ? '' : `${pictureWidth * zoom}px`;
+      stage.style.height = zoom === 'fit' ? '' : `${pictureHeight * zoom}px`;
+      block.classList.toggle('crt-zoomed', zoom !== 'fit');
+      frame.scrollLeft = centerX * stage.offsetWidth - frame.clientWidth / 2;
+      frame.scrollTop = centerY * stage.offsetHeight - frame.clientHeight / 2;
+      drawSplit();
+    };
+
+    const moveLineTo = (clientX) => {
+      split = clamp((clientX - frame.getBoundingClientRect().left) / frame.clientWidth);
+      drawSplit();
+    };
+    divider.addEventListener('pointerdown', (event) => {
+      divider.setPointerCapture(event.pointerId);
+      moveLineTo(event.clientX);
+      event.preventDefault();   // no text selection, no scrolling
+    });
+    divider.addEventListener('pointermove', (event) => {
+      if (divider.hasPointerCapture(event.pointerId)) moveLineTo(event.clientX);
+    });
+    divider.addEventListener('keydown', (event) => {
+      const steps = { ArrowLeft: -CRT_KEY_STEP, ArrowDown: -CRT_KEY_STEP, ArrowRight: CRT_KEY_STEP, ArrowUp: CRT_KEY_STEP };
+      if (event.key === 'Home') split = 0;
+      else if (event.key === 'End') split = 1;
+      else if (Object.hasOwn(steps, event.key)) split = clamp(split + steps[event.key]);
+      else return;
+      event.preventDefault();
+      drawSplit();
+    });
+
+    // Dragging the enlarged pictures with a mouse scrolls them, like a hand tool. A finger scrolls them by itself.
+    let pan = null;
+    frame.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'mouse' || event.button !== 0 || zoom === 'fit') return;
+      pan = { x: event.clientX, y: event.clientY, left: frame.scrollLeft, top: frame.scrollTop };
+      frame.setPointerCapture(event.pointerId);
+      frame.classList.add('crt-panning');
+      event.preventDefault();
+    });
+    frame.addEventListener('pointermove', (event) => {
+      if (pan === null) return;
+      frame.scrollLeft = pan.left - (event.clientX - pan.x);
+      frame.scrollTop = pan.top - (event.clientY - pan.y);
+    });
+    const endPan = () => {
+      pan = null;
+      frame.classList.remove('crt-panning');
+    };
+    frame.addEventListener('pointerup', endPan);
+    frame.addEventListener('pointercancel', endPan);
+    frame.addEventListener('scroll', drawSplit, { passive: true });
+    window.addEventListener('resize', drawSplit);
+
+    // The zoom picker shows each level as its copy in #zoom-options; its trigger adds a 16 px magnifier.
+    const { llselect } = window;
+    if (llselect) {
+      const zoomEl = (level) => block.querySelector(`#zoom-options [data-zoom="${level}"]`).cloneNode(true);
+      crtZoomPicker = new llselect.LLSelectSingle(document.getElementById('zoom-select'), {
+        ariaLabelledBy: 'zoom-label',
+        itemToStringFn: (level) => zoomEl(level).textContent,
+        createPopupListItemContentElFn: zoomEl,
+        createTriggerContentElFn: ({ chosenItem }) => {
+          if (chosenItem == null) return null;
+          const el = zoomEl(chosenItem);
+          el.prepend(Object.assign(document.createElement('img'), { src: 'images/icons/16/system-search.svg', alt: '', width: 16, height: 16 }));
+          return el;
+        },
+        createTriggerArrowContentElFn: () => llselect.createChevronDownSvgEl(),
+        onChange: (level, _previous, meta) => {
+          if (meta.source === 'user' && level != null) setZoom(level);
+        },
+      });
+      crtZoomPicker.setItems(CRT_ZOOMS);
+      crtZoomPicker.setChosenItem(CRT_FIRST_ZOOM);
+      block.querySelector('.crt-zoom').hidden = false;
+    }
+    setZoom(CRT_FIRST_ZOOM);
+    frame.scrollTo(0, 0);   // at first, the top left corner of the window
   }
 
   document.addEventListener('DOMContentLoaded', async () => {

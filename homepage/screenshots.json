@@ -54,6 +54,12 @@
       "linux": "os/qkiss_linux_0_9_4_noshadow.png",
       "windows": "os/qkiss_win_0_9_4_noshadow.png",
       "macos": "os/qkiss_mac_0_9_4_noshadow.png"
+    },
+    "crt": {
+      "none": "crt/crt_00_original_lossless.webp",
+      "sharp": ["crt/crt_01_sharp.avif", "crt/crt_01_sharp_lossless.webp"],
+      "soft": ["crt/crt_02_soft.avif", "crt/crt_02_soft_lossless.webp"],
+      "glow": ["crt/crt_03_glow.avif", "crt/crt_03_glow_lossless.webp"]
     }
   }
 }

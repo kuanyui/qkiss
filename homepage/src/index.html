@@ -175,6 +175,7 @@
               <li data-i18n="features.misc.linux">Linux is no longer a second-class citizen (Windows is. As for macOS, it is a third-class citizen because I have no Mac to test on).</li>
               <li id="footnote-ref-supply-chain" data-i18n-html="features.misc.open">Open source and automated builds make sure I didn't sneak anything naughty in<sup class="footnote-ref"><a href="#footnote-supply-chain">*3</a></sup>.</li>
               <li data-i18n="features.misc.tango">Tango-style UI icons take you back to the 2000s.</li>
+              <li data-i18n="features.misc.crt">A built-in CRT monitor simulation takes you back, as in a dream, to the 1990s, when monitors needed screensavers and pixels were not quite sharp.</li>
               <li id="footnote-ref-author" data-i18n-html="features.misc.apparmor">An AppArmor profile for tinfoil-hat security nerds.</li>
               <li data-i18n="features.misc.qt">Built with Qt 6 / C++ 20, without caring about old systems.</li>
             </ul>
@@ -206,6 +207,58 @@
                data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*5</a>
             <span data-i18n="features.footnote.author"></span>
           </p>
+        </div>
+        <!--
+          The CRT Simulation of the app, compared with the original, like in an image editor: None on the left, the
+          chosen preset on the right, on either side of a line that can be dragged. The zoom picker enlarges both; the
+          picture then scrolls in its window (see setUpCrt() in main.js). The images come from `blocks` in
+          screenshots.json, like those of #platforms. Soft and Glow have data-block-defer: main.js loads them when the
+          block comes near (see showBlocks()).
+        -->
+        <div class="crt" id="crt" data-block="crt" hidden>
+          <div class="crt-controls">
+            <div class="crt-presets" role="group" aria-label="CRT Simulation" data-i18n-attr="aria-label:crt.title">
+              <button type="button" class="button crt-preset-button" data-preset="sharp" aria-pressed="true" data-i18n="crt.mode.sharp">Sharp</button>
+              <button type="button" class="button crt-preset-button" data-preset="soft" aria-pressed="false" data-i18n="crt.mode.soft">Soft</button>
+              <button type="button" class="button crt-preset-button" data-preset="glow" aria-pressed="false" data-i18n="crt.mode.glow">Glow</button>
+            </div>
+            <!-- The zoom picker: @llselect/core, like the language picker. It stays hidden if that library did not load. -->
+            <!-- No id of the zoom picker starts with "crt-": the AdGuard Base filter hides div[id^="crt-"][style] as an ad,
+                 and @llselect/core sets a style on #zoom-select. -->
+            <div class="crt-zoom" hidden>
+              <span class="visually-hidden" id="zoom-label" data-i18n="crt.zoom">Zoom</span>
+              <div id="zoom-select"></div>
+            </div>
+            <!-- The zoom levels, as main.js shows them in the picker (a copy of each, like #cut-options). Its trigger adds a magnifier. -->
+            <div id="zoom-options" hidden>
+              <span class="crt-zoom-option" data-zoom="fit"><span data-i18n="crt.zoom.fit">Fit</span></span>
+              <span class="crt-zoom-option" data-zoom="1">100%</span>
+              <span class="crt-zoom-option" data-zoom="2">200%</span>
+              <span class="crt-zoom-option" data-zoom="3">300%</span>
+              <span class="crt-zoom-option" data-zoom="4">400%</span>
+            </div>
+          </div>
+          <div class="crt-view">
+            <div class="crt-frame">
+              <div class="crt-stage">
+                <img class="crt-image crt-original" data-block-image="crt.none" loading="lazy" alt="QKiSS 0.9.4, CRT Simulation: None" width="1320" height="960"
+                     data-i18n-attr="alt:crt.alt.none">
+                <img class="crt-image crt-preset" data-preset="sharp" data-block-image="crt.sharp" loading="lazy" alt="QKiSS 0.9.4, CRT Simulation: Sharp" width="1320" height="960"
+                     data-i18n-attr="alt:crt.alt.sharp">
+                <img class="crt-image crt-preset" data-preset="soft" data-block-image="crt.soft" data-block-defer hidden alt="QKiSS 0.9.4, CRT Simulation: Soft" width="1320" height="960"
+                     data-i18n-attr="alt:crt.alt.soft">
+                <img class="crt-image crt-preset" data-preset="glow" data-block-image="crt.glow" data-block-defer hidden alt="QKiSS 0.9.4, CRT Simulation: Glow" width="1320" height="960"
+                     data-i18n-attr="alt:crt.alt.glow">
+              </div>
+            </div>
+            <span class="crt-side crt-side-left" aria-hidden="true" data-i18n="crt.original">Original</span>
+            <span class="crt-side crt-side-right" aria-hidden="true"><span data-preset="sharp" data-i18n="crt.mode.sharp">Sharp</span><span data-preset="soft" data-i18n="crt.mode.soft" hidden>Soft</span><span data-preset="glow" data-i18n="crt.mode.glow" hidden>Glow</span></span>
+            <div class="crt-divider" role="slider" tabindex="0" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"
+                 aria-label="CRT Simulation" data-i18n-attr="aria-label:crt.title">
+              <span class="crt-divider-handle"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </div>
+          <p class="figure-legend" data-i18n="crt.legend">The CRT Simulation of QKiSS: the original on the left, the chosen preset on the right. Drag the line in the middle to compare them.</p>
         </div>
       </div>
     </section>

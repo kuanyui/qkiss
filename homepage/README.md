@@ -113,7 +113,7 @@ The wiki must exist before the first deployment: create its first page on the we
 
 ### Images of the blocks
 
-Some blocks of the page show images from the wiki outside the gallery. For example, the app running on the three systems, at the top of About (`#platforms`). `blocks` in `homepage/screenshots.json` names their images, by block:
+Some blocks of the page show images from the wiki outside the gallery. For example, the app running on the three systems, at the top of About (`#platforms`), and the CRT Simulation, at the end of Highlights (`#crt`). `blocks` in `homepage/screenshots.json` names their images, by block:
 
 ```json
 "blocks": {
@@ -127,6 +127,8 @@ Some blocks of the page show images from the wiki outside the gallery. For examp
 
 - In `index.html`, the block is an element with `data-block="platforms"` and `hidden`. Each of its images is an `<img data-block-image="platforms.linux">`, without `src`.
 - `main.js` sets the `src` of each image from `blocks`, then shows the block (`showBlocks()`). Without screenshots (`--no-screenshots`), the block stays hidden.
+- An image may be an array of paths of the same picture, the best first, like `["crt/crt_01_sharp.avif", "crt/crt_01_sharp_lossless.webp"]`. `main.js` uses the first one that the browser can show. An AVIF is used only if the browser shows AVIF at full color resolution (chroma 4:4:4): `main.js` checks that once, with a tiny AVIF of red and blue dots. That keeps the 1-pixel color dots of the CRT Simulation, which AVIF at half the color resolution, or any lossy WebP, would lose.
+- An image with `data-block-defer` is not loaded with the block: `main.js` puts its URL in `data-block-src`, and the setup of the block loads it later. For example, the CRT Simulation (`#crt`) loads None at once, and its other modes when the block comes near.
 - A block that needs JavaScript once its images are there, like the stack of `#platforms`, is set up from `BLOCK_SETUPS` in `main.js`.
 - `build.py` checks that `blocks` and the page name the same blocks, and the same images in each.
 - An image may be in a subfolder of `screenshots/`, like `os/`. Each part of its path may only contain letters, digits, `.`, `_` and `-`, and must not start with `.`. The extensions are the same as for the screenshots.

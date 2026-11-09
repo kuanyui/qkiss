@@ -567,11 +567,18 @@ def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, st
                 errors.append(f"{block_where}.{image}: no image of the page has data-block-image=\"{block}.{image}\"")
             else:
                 errors.append(f"{block_where}: missing {image!r}, which index.html has (data-block-image)")
-        for image, name in block_images.items():
-            if not isinstance(name, str) or not PATT_BLOCK_IMAGE_PATH.fullmatch(name):
-                errors.append(f"{block_where}.{image}: invalid path {name!r}; use folders and a file name of letters, digits, `.`, `_`, `-`, not starting with `.`, with one of the extensions png, jpg, jpeg, webp, avif, gif, webm")
-            elif check_file(name, f"{block_where}.{image}"):
-                images.append(name)
+        # An image is one path, or several paths of the same picture, the best first: main.js uses the first one that the
+        # browser can show (see showBlocks()).
+        for image, value in block_images.items():
+            names = value if isinstance(value, list) else [value]
+            if not names or not all(isinstance(name, str) for name in names) or len(set(names)) != len(names):
+                errors.append(f"{block_where}.{image}: must be a path, or an array of different paths (the best first); got {value!r}")
+                continue
+            for name in names:
+                if not PATT_BLOCK_IMAGE_PATH.fullmatch(name):
+                    errors.append(f"{block_where}.{image}: invalid path {name!r}; use folders and a file name of letters, digits, `.`, `_`, `-`, not starting with `.`, with one of the extensions png, jpg, jpeg, webp, avif, gif, webm")
+                elif check_file(name, f"{block_where}.{image}"):
+                    images.append(name)
     if errors:
         raise BuildError("\n".join(errors))
     return sorted(set(images))

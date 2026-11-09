@@ -18,6 +18,7 @@ Each copy is in a folder named after its size in pixels (`16/`, `22/`, `32/`, `4
 | `32/emblem-favorite.svg` | `tango-icon-theme/32x32/emblems/emblem-favorite.svg` | GPL-2.0-only or GPL-3.0-only |
 | `32/applications-multimedia.svg` | `tango-icon-theme/32x32/categories/applications-multimedia.svg` | GPL-2.0-only or GPL-3.0-only |
 | `48/application-certificate-tango.svg` | `tango-icon-theme/48x48/mimetypes/application-certificate.svg` | GPL-2.0-only or GPL-3.0-only |
+| `16/system-search.svg` | `tango-icon-theme/16x16/actions/system-search.svg` | GPL-2.0-only or GPL-3.0-only |
 | `48/system-search.svg` | `tango-icon-theme/48x48/actions/system-search.svg` | GPL-2.0-only or GPL-3.0-only |
 | `22/emblem-downloads.svg` | `nome-icon-theme/src/emblems/22/emblem-downloads.svg` | LGPL-3.0-only or CC-BY-SA-3.0 |
 | `22/package-x-generic.svg` | `nome-icon-theme/src/mimetypes/22/package-x-generic.svg` | LGPL-3.0-only or CC-BY-SA-3.0 |
@@ -39,7 +40,7 @@ Each copy is in a folder named after its size in pixels (`16/`, `22/`, `32/`, `4
 - The icons of the buttons are from [Nome](https://github.com/kuanyui/nome-icon-theme), which continues the GNOME Icon Theme. Each file states its license in an SPDX comment.
 - In Highlights, the title of each group has a 32 px icon: `applications-utilities.svg` for the features, `emblem-favorite.svg` (Tango) for the faithfulness to the specs and to the users, and `applications-engineering.svg` for the romance of engineering and aesthetics.
 - In Download, `applications-development.svg` is the icon of the Source code card, and `network-server.svg` is on the button to the OBS package page.
-- The windows of the three platforms (`#platforms`) have `48/system-search.svg` (Tango) on the button that enlarges the front one.
+- The windows of the three platforms (`#platforms`) have `48/system-search.svg` (Tango) on the button that enlarges the front one. The zoom picker of the CRT Simulation (`#crt`) has `16/system-search.svg` in its trigger.
 - `appimage.svg`, on the button of the AppImage in the Linux card of Download, is not from these themes. It is the logo of AppImage, in the style of Tango, by Simon Peter: a copy of [`resources/appimagetool.svg`](https://github.com/AppImage/AppImageKit/blob/98dd8179/resources/appimagetool.svg) of AppImageKit. Its license is MIT, written in the file.
 - In Q&A, the answer about LLMs uses some of these icons for the areas of the project that have no logo (the logos are in `images/tech/`):
   - `preferences-desktop-locale.svg` for the translations. It is the Tango version, because the Nome one is six times bigger.
