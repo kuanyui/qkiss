@@ -44,10 +44,11 @@
   "amendments.recheck.admit": "呃...其實沒有仔細看",
   "amendments.refused.title": "抱歉，經過異世界人入境委員會評估決定，您可能不適合入境",
   "amendments.refused.close": "角煮",
+  "hero.intro": "在現代系統上重溫 1990 年代的數位紙娃娃",
   "hero.tagline": "自我感覺良好的 KiSS 文藝復興",
   "hero.lead": "QKiSS 是一個以 Qt 6 實作、支援 KISS/GS 與 FKiSS 1・2 規格的現代 <a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS</a> 檢視器。",
   "hero.download": "下載",
-  "hero.note": "GPLv3 自由軟體 · Linux · Windows",
+  "hero.note": "GPLv3 自由軟體 · Linux · Windows · Mac",
   "about.title": "什麼是 KiSS？",
   "about.kiss": "<a href=\"https://ja.wikipedia.org/wiki/KISekae_Set_system\">KiSS（Kisekae Set System）</a>是一種數位紙娃娃的格式。用滑鼠拖曳衣服就能幫角色換裝，FKiSS 腳本還能加入動畫、音效等互動。",
   "about.kisekae": "「Kisekae」源自日文「<span lang=\"ja\">着せ替え人形</span>」（發音：「kisekae ningyou」），意思是「換裝人偶」。",
@@ -176,7 +177,7 @@
   "faq.winsign.what": "「簽章」（或稱數位簽章）是「非對稱密碼學」的應用之一，即用數學方法證明「一個東西確實是某人作的、沒被他人竄改」，但我沒辦法講太多不然篇幅會超級長所以這裡只講重點，有興趣深入理解的請自行問 LLM 。",
   "faq.winsign.how": {
     "safe":   "「買簽章」簡單說就是我是開發者、我寫好程式後，付費給微軟（或者微軟認可的憑證機構）、對方確認我的身分後，就會把我的公鑰貼進證書裡頒發公開的證書給我，我就可以拿自己的私鑰把編譯出的執行檔加上數位簽章、這樣任何 Windows 電腦都能用公開證書驗證「此執行檔是由我本人發行、用我的私鑰簽章過的、不是別人冒充的」，且間接會隱含「裡面不會藏有惡意程式」的意義（因為一旦被發現含有惡意程式，對方會撤銷這張證書，而且我的身分也已經被對方確認過了、所以 FBI 隨時可以找上門）。",
-    "danger": "「買簽章」簡單說就是我是開發者、我寫好程式後，跟微軟本家（或者底下的堂口）繳保護費、對方派小弟調我的身家底細後，就會把我的公鑰貼進證書裡頒發公開的證書給我，我就可以拿自己的私鑰把編譯出的執行檔加上數位簽章、這樣任何 Windows 電腦都能用公開證書驗證「此執行檔是由我本人發行、用我的私鑰簽章過的、不是別人冒充的」，且間接會隱含「裡面不會藏有惡意程式」的意義（因為一旦被發現含有惡意程式，對方會撤銷這張證書，而且我的姓名電話住址出生年月日身份證字號也已經被對方調查過了、所以隨時可以上門把我作成消波塊）。"
+    "danger": "「買簽章」簡單說就是我是開發者、我寫好程式後，跟微軟本家（或者底下的堂口）繳保護費、對方派小弟調我的身家底細後，就會把我的公鑰貼進證書裡頒發公開的證書給我，我就可以拿自己的私鑰把編譯出的執行檔加上數位簽章、這樣任何 Windows 電腦都能用公開證書驗證「此執行檔是由我本人發行、用我的私鑰簽章過的、不是別人冒充的」，且間接會隱含「裡面不會藏有惡意程式」的意義（因為一旦被發現含有惡意程式，對方會撤銷這張證書，而且我的姓名電話住址出生年月日身份證字號血型星座八字也已經被對方掌握了、所以隨時可以上門把我作成消波塊）。"
   },
   "faq.winsign.why": {
     "safe":   "雖然沒有簽章，不過整個軟體的編譯與建置過程是透明的，你可以自行去 <a href=\"https://github.com/kuanyui/qkiss/actions\">GitHub Actions</a> 審查。",
@@ -197,28 +198,28 @@
   "faq.banana.quote-rule": "3. 變體、仿作或縮寫：您不得基於任何目的，使用<strong>真實蘋果</strong>的圖像，或 Apple 標誌的其他變體。第三方不得基於任何目的，使用 Apple 商標的變體、諧音、外語對應詞、仿作或縮寫。",
   "faq.banana.tyrant": {
     "safe":   "",
-    "danger": "看到這句之前我都沒想到資本家連這種地方都能橫行霸道，如果做得到他們大概恨不得也想把艾薩克牛頓註冊成企業商標。<sup class=\"footnote-ref\"><a href=\"#footnote-microsoft\">*1</a></sup>"
+    "danger": "看到這句之前我都沒想到資本家連這種地方都能橫行霸道，如果做得到他們大概恨不得也想把艾薩克牛頓的半身肖像畫註冊成企業商標，然後每本物理課本都收取權利金。<sup class=\"footnote-ref\"><a href=\"#footnote-microsoft\">*1</a></sup>"
   },
   "faq.banana.fairuse": {
     "safe":   "根據商標法的「<a href=\"https://en.wikipedia.org/wiki/Nominative_use\">指示性合理使用</a>」原則，為了說明相容性，可以提到別人的商標，但只能用「必要的最少部分」。也就是說我只能寫 macOS 這種純文字，因為這理論上已經足夠表示 macOS 的含意了，不能再加上蘋果圖示。然而因為強迫症使然，不放個裝飾圖示我就渾身不蘇湖，但既然連「真實蘋果」的圖片都在禁止範圍內，只好想想其他辦法。",
     "danger": "根據商標法的「<a href=\"https://en.wikipedia.org/wiki/Nominative_use\">指示性合理使用</a>」原則，為了說明相容性，可以提到別人的商標，但只能用「必要的最少部分」。也就是說我只能寫 macOS 這種純文字，因為這理論上已經足夠表示 macOS 的含意了，不能再加上蘋果圖示。然而因為強迫症使然，不放個裝飾圖示我就渾身不蘇湖，但既然連「真實蘋果」的圖片都在找碴範圍內，只好想想其他辦法。"
   },
   "faq.banana.ai": {
-    "safe":   "",
-    "danger": "我用來作專案的業餘時間很寶貴，我一點都不想花費我的生命中的時間去專門用人工畫出一個可能因為這種大企業的無理任性而發明出的狗屎理由而被這些領薪水的法務要求下架重畫的圖示。但因為強迫症使然，我也完全無法接受使用那醜的要死的 macOS 純文字字樣要求來代替圖標。這種時候拿 AI 應付這種愚蠢的東西隨便畫畫草稿（只要是跟蘋果形狀完全關連不上、連<a href=\"https://en.wikipedia.org/wiki/A_moron_in_a_hurry\">趕時間的白痴</a>都不會搞混的水果就好）我再隨便修修就好。反正 Mac Pro 2013 就是裝著蘋果美學殘骸的骨灰罈。"
+    "safe":   "我用來作專案的業餘時間很寶貴，我一點都不想花費我的生命中的時間去專門用人工畫出一個可能因為這種理由而被這些領薪水的法務要求下架重畫的圖示。但我也完全無法接受使用那醜的要死的 macOS 純文字字樣要求來代替圖標。這種時候拿 AI 隨便產草稿我再隨便修修應付就好（只要是跟蘋果形狀完全關連不上、連一歲小孩都不會搞混的水果就好）。",
+    "danger": "我用來作專案的業餘時間很寶貴，我一點都不想花費我的生命中的時間去專門用人工畫出一個可能因為這種大企業的無理任性而發明出的狗屎理由而被這些領薪水的法務要求下架重畫的圖示。但我也完全無法接受使用那醜的要死的 macOS 純文字字樣要求來代替圖標。這種時候拿 AI 應付這種愚蠢的東西隨便畫畫草稿（只要是跟蘋果形狀完全關連不上、連一歲小孩都不會搞混的水果就好）我再隨便修修就好。反正 Mac Pro 2013 就是裝著蘋果美學殘骸的骨灰罈。"
   },
   "faq.banana.footnote": {
     "safe":   "",
     "danger": "其實微軟也有<a href=\"https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks\">類似的條款</a>，不准使用或修改 Windows 的標誌，只是至少還沒離譜到連「真的窗戶」都禁止，也沒聽說過他們拿標誌去跟開發者的網頁內指示性的圖標找碴。他們真的出手的，都是名字撞到「Windows」的，比如明顯在蹭名字的 <a href=\"https://en.wikipedia.org/wiki/Microsoft_vs._Lindows\">Lindows</a>，或者（我猜）可能是會被誤認為是微軟官方出品的 <a href=\"https://www.ghisler.ch/wiki/index.php/What_happened_to_Windows_Commander%3F\">Windows Commander</a>（現 Total Commander）。"
   },
-  "faq.macsign.q": "QKiSS 啟動時 macOS 說「無法驗證開發者」，這樣很麻煩耶，不買個簽章嗎？",
+  "faq.macsign.q": "QKiSS 啟動時 macOS 說「無法驗證開發者」，這樣很麻煩耶，不能想想辦法嗎？",
   "faq.macsign.a": {
     "safe":   "這也是簽章問題，原理類似 <a href=\"#faq-windows-signing\">Windows 的警告</a>。因為這要每年花 99 美金跟 Apple 訂閱開發者方案（<a href=\"https://developer.apple.com/programs/\">Apple Developer Program</a>）。",
     "danger": "這也是<ruby>買簽章<rt>保護費</rt></ruby>的問題，原理類似 <a href=\"#faq-windows-signing\">Windows 的警告</a>。因為這要每年跟 Apple 繳保護費訂閱開發者方案（<a href=\"https://developer.apple.com/programs/\">Apple Developer Program</a>）。"
   },
   "faq.macsign.why": {
-    "safe":   "但首先我早就不是 Mac 使用者，二我也不靠 Mac 或 iOS 吃飯，三是我只是開發我喜歡的自由軟體專案，程式碼與編譯流程都公開都擺在那了，所以完全不想每年花 99 美金去供養這個連<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">付款方式</a>都想要管的企業。",
-    "danger": "但首先我早就不是 Mac 使用者，二我也不靠 Mac 或 iOS 吃飯，三是我只是開發我喜歡的自由軟體專案，程式碼與編譯流程都公開都擺在那了，所以完全沒有理由也不爽每年花 99 美金去供養這個連<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">付款方式</a>都要管的醜陋貪婪企業。"
+    "safe":   "但首先我早就不是 Mac 使用者，二我也不靠 Mac 或 iOS 吃飯，三是我只是開發我喜歡的、免費提供的自由軟體專案，程式碼與編譯流程都公開都擺在那了，所以完全不想每年花 99 美金去供養這個連<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">付款方式</a>都想要管的企業。",
+    "danger": "但首先我早就不是 Mac 使用者，二我也不靠 Mac 或 iOS 吃飯，三是我只是開發我喜歡的、免費提供的自由軟體專案，程式碼與編譯流程都公開都擺在那了，所以完全沒有理由也不爽每年花 99 美金去供養這個連<a href=\"https://www.govinfo.gov/content/pkg/USCOURTS-cand-4_20-cv-05640/pdf/USCOURTS-cand-4_20-cv-05640-35.pdf\">付款方式</a>都要管的醜陋貪婪企業。"
   },
   "faq.macsign.dialogue": "<p>真紀真：「你還記得蘋果對商店外付款作了些什麼嗎？」</p><p>岸邊：「」</p><p>岸邊：「」</p><p>岸邊：「商店外付款...？」</p>",
   "faq.macsign.bugs": {

@@ -37,6 +37,8 @@
    * (#amendments-check-kirito).
    */
   const KIRITO_SECONDS = 10;
+  /** For testing: typing these keys in the additional articles turns off the check of the pace until the page is loaded again. */
+  const SKIP_READING_CHECK_KEYS = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
   /** Show the page anyway if the translation takes longer than this. */
   const LOADING_TIMEOUT_MS = 2000;
   const SCREENSHOTS_DIR = 'screenshots/';
@@ -544,9 +546,13 @@
     let startTop = 0;
     let readTop = 0;
     let timer = 0;
+    /** Set by SKIP_READING_CHECK_KEYS. */
+    let off = false;
+    /** The last keys typed in the dialog, as many as SKIP_READING_CHECK_KEYS. */
+    const typed = [];
 
     const seconds = () => (performance.now() - startTime) / 1000;
-    const skimmed = () => ((text.scrollTop - startTop) / text.scrollHeight) * MIN_READING_SECONDS
+    const skimmed = () => !off && ((text.scrollTop - startTop) / text.scrollHeight) * MIN_READING_SECONDS
       > seconds() + READING_HEAD_START_SECONDS;
 
     function caught() {
@@ -560,8 +566,17 @@
       caught();
     });
     dialog.addEventListener('close', () => clearInterval(timer));
+    dialog.addEventListener('keydown', (event) => {
+      typed.push(event.key.length === 1 ? event.key.toLowerCase() : event.key);
+      if (typed.length > SKIP_READING_CHECK_KEYS.length) typed.shift();
+      if (off || typed.join() !== SKIP_READING_CHECK_KEYS.join()) return;
+      off = true;
+      clearInterval(timer);
+      console.info('The check of the reading pace is off until the page is loaded again.');
+    });
     const start = () => {
       clearInterval(timer);
+      if (off) return;
       startTime = performance.now();
       startTop = text.scrollTop;
       readTop = startTop;

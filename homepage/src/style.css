@@ -553,15 +553,70 @@ code {
   font-size: 0.95rem;
 }
 
+/* The line above the name, in a speech bubble: the shirt of the logo says it. Drop shadows draw its outline, so that
+   it goes around the tail too. */
+.hero-intro {
+  position: relative;
+  width: fit-content;
+  margin: 0 0 1.6rem;
+  padding: 0.3rem 1.1rem;
+  border-radius: 1.25rem;
+  background: var(--surface);
+  font-weight: 600;
+  text-wrap: balance;
+  filter:
+    drop-shadow(1px 0 0 var(--border-strong)) drop-shadow(-1px 0 0 var(--border-strong))
+    drop-shadow(0 1px 0 var(--border-strong)) drop-shadow(0 -1px 0 var(--border-strong))
+    drop-shadow(0 3px 6px rgb(46 52 54 / 0.15));
+}
+
+/* Its tail, pointing down to the left, at the logo. */
+.hero-intro::before {
+  content: "";
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0.25rem;
+  width: 2.25rem;
+  height: 1rem;
+  background: inherit;
+  clip-path: polygon(55% 0, 100% 0, 0 100%);
+}
+
 @media (max-width: 40rem) {
   .hero-body {
     grid-template-columns: 1fr;
     justify-items: center;
+    row-gap: 0;
     text-align: center;
   }
 
   .hero .button-row {
     justify-content: center;
+  }
+
+  /* The text block lets its children into the grid of the hero, so that the line above the name can go above the
+     logo. They have no margins that would collapse, so the spaces between them stay the same. */
+  .hero-body > div {
+    display: contents;
+  }
+
+  /* Instead of the row gap of the grid, which would also come between the lines of the text. */
+  .hero-logo {
+    margin-bottom: 2rem;
+  }
+
+  /* Above the logo, and smaller, so that it fits on one line on most phones. */
+  .hero-intro {
+    order: -1;
+    font-size: 0.9rem;
+  }
+
+  /* The logo is under it: the tail points straight down. */
+  .hero-intro::before {
+    left: calc(50% - 0.75rem);
+    width: 1.5rem;
+    height: 0.9rem;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
   }
 }
 
@@ -1120,6 +1175,22 @@ sup {
   font-family: "Segoe Script", "Brush Script MT", cursive;
   font-size: 1.05rem;
   white-space: nowrap;
+}
+
+/*
+ * The handwriting of the caption, the same on every computer (see fonts/README.md). Only the rule below names it, so
+ * it is downloaded only when the card of macOS is pointed at or has the keyboard focus: before the caption is shown.
+ * If it has not arrived yet, the caption waits for it (font-display: block), for at most 3 seconds.
+ */
+@font-face {
+  font-family: "Dancing Script";
+  src: url("fonts/DancingScript.ttf") format("truetype");
+  font-weight: 400 700;
+  font-display: block;
+}
+
+:root[data-cut="safe"] .download-card:is(:hover, :focus-within) .download-icon-link::after {
+  font-family: "Dancing Script", "Segoe Script", "Brush Script MT", cursive;
 }
 
 /*
