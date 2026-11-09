@@ -280,6 +280,7 @@
     renderGallery();
     renderReleaseLinks();
     renderCutPicker();
+    fitHeroIntro();
     root.classList.remove('i18n-loading');
   }
 
@@ -1161,6 +1162,26 @@
   }
 
   // ---------------------------------------------------------------------------
+  // Hero: the speech bubble over the name
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Make the bubble only as wide as its longest line. When its text wraps, `text-wrap: balance` makes the lines
+   * shorter than the box, which still takes all the width it has: style.css cannot shrink it to them.
+   */
+  function fitHeroIntro() {
+    const intro = document.querySelector('.hero-intro');
+    intro.style.width = '';
+    const range = document.createRange();
+    range.selectNodeContents(intro);
+    const lines = [...range.getClientRects()];
+    if (lines.length < 2) return;   // on one line, `width: fit-content` fits it already
+    const style = getComputedStyle(intro);
+    const padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+    intro.style.width = `${Math.ceil(Math.max(...lines.map((line) => line.width)) + padding)}px`;
+  }
+
+  // ---------------------------------------------------------------------------
   // Start
   // ---------------------------------------------------------------------------
 
@@ -1198,6 +1219,7 @@
       setUpCutPicker();
       window.addEventListener('resize', fitHeader);
     }
+    window.addEventListener('resize', fitHeroIntro);
     setUpShowcase();
     setUpLightbox();
     setUpScrollSpy();

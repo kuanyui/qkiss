@@ -611,12 +611,13 @@ code {
     font-size: 0.9rem;
   }
 
-  /* The logo is under it: the tail points straight down. */
+  /* The logo is under it: the tail points down to it, from right of the middle, so that it does not look like the
+     arrow of a tooltip. */
   .hero-intro::before {
-    left: calc(50% - 0.75rem);
-    width: 1.5rem;
+    left: calc(50% + 1.75rem);
+    width: 1.75rem;
     height: 0.9rem;
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    clip-path: polygon(37% 0, 100% 0, 0 100%);
   }
 }
 
