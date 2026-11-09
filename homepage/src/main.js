@@ -364,7 +364,7 @@
       ariaLabelledBy: 'language-label',
       compareFn: (a, b) => a.id === b.id,
       itemToStringFn: (language) => language.name,
-      createItemContentElFn: createLanguageEl,
+      createPopupListItemContentElFn: createLanguageEl,
       createTriggerContentElFn: ({ chosenItem }) => (chosenItem ? createLanguageEl(chosenItem) : null),
       createTriggerArrowContentElFn: () => llselect.createChevronDownSvgEl(),
       onChange: (language, _previous, meta) => {
@@ -627,7 +627,7 @@
     cutPicker = new llselect.LLSelectSingle(document.getElementById('cut-select'), {
       ariaLabelledBy: 'cut-label',
       itemToStringFn: (cut) => createCutEl(cut).textContent,
-      createItemContentElFn: createCutEl,
+      createPopupListItemContentElFn: createCutEl,
       createTriggerContentElFn: ({ chosenItem }) => (chosenItem ? createCutEl(chosenItem) : null),
       createTriggerArrowContentElFn: () => llselect.createChevronDownSvgEl(),
       onChange: (cut, _previous, meta) => {

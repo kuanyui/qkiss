@@ -411,18 +411,18 @@ code {
   font-size: 0.95rem;
 }
 
-.llselect-item {
+.llselect-popup-list-row {
   padding: 0.35rem 0.75rem;
   line-height: 1.4;
   cursor: pointer;
 }
 
-.llselect-item:hover,
-.llselect-item-focused {
+.llselect-popup-list-row:hover,
+.llselect-popup-list-row-focused {
   background: var(--accent-soft);
 }
 
-.llselect-item[aria-selected='true'] {
+.llselect-popup-list-row[aria-selected='true'] {
   color: var(--accent);
   font-weight: 600;
 }
