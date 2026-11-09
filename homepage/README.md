@@ -14,6 +14,7 @@ homepage/
     ├── main.js     # The list of languages, translations, the language and cut pickers, the screenshot gallery and the download links
     ├── i18n/       # One JSON file per language other than English, and en.json for the English of the Director's Cut
     ├── legal/      # The documents of the Director's Cut: terms.json, and amendments.json for their additional articles
+    ├── fonts/      # The handwriting of the caption over the banana of macOS. See fonts/README.md.
     └── images/
         ├── distros/              # Logos of the Linux distributions, from Simple Icons. See images/distros/README.md.
         ├── icons/                # Icons from Tango and Nome, and the mark of Tango Remixer. See images/icons/README.md.
