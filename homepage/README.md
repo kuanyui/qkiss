@@ -57,7 +57,7 @@ The screenshots come from the wiki by default. `HOMEPAGE_SCREENSHOTS` picks anot
 | Command | Screenshots |
 |---|---|
 | `make homepage-dev-server` | From the wiki. Each run downloads it (or updates it) into `generated/wiki/` first. |
-| `make homepage-dev-server HOMEPAGE_SCREENSHOTS=` | None. Nothing is downloaded, so it works offline. |
+| `make homepage-dev-server HOMEPAGE_SCREENSHOTS=` | None. Nothing is downloaded, so it works offline. The blocks with images from the wiki stay hidden. |
 | `make homepage-dev-server HOMEPAGE_SCREENSHOTS=~/proj/qkiss.wiki/screenshots` | The screenshots in that folder, used as they are. For example, use your own clone of the wiki to see new screenshots before you push them. |
 
 `make homepage-build` writes the site into `generated/homepage/` instead, the way CI builds it. `HOMEPAGE_SCREENSHOTS` works the same way there.
@@ -68,7 +68,7 @@ Opening `src/index.html` directly (`file://`) does not work, because translation
 
 Screenshot images are not stored in this repository, so they never bloat its history, however often they are replaced:
 
-- `homepage/screenshots.json`, here, lists them: their order and captions.
+- `homepage/screenshots.json`, here, lists them: the screenshots of the gallery, in order, with their captions, and the images of some blocks of the page (see [Images of the blocks](#images-of-the-blocks)).
 - The images live in the `screenshots/` folder of the wiki, a separate Git repository on each host: https://github.com/kuanyui/qkiss.wiki.git and https://gitlab.com/kuanyui/qkiss.wiki.git. The web pages of a wiki only list its pages, not these files.
 
 At deploy time, CI clones the wiki of its own host with `--depth 1`, and `build.py` copies `homepage/screenshots.json` and the images it lists into the site.
@@ -110,6 +110,26 @@ The wiki must exist before the first deployment: create its first page on the we
 - The page shows the same files scaled down, so keep them reasonably small (for example about 1600 px wide, WebP or an optimized PNG).
 
 `build.py` rejects anything else, and then nothing is deployed. It checks `homepage/screenshots.json` even without `--screenshots`, so a local preview catches its mistakes too.
+
+### Images of the blocks
+
+Some blocks of the page show images from the wiki outside the gallery. For example, the app running on the three systems, at the top of About (`#platforms`). `blocks` in `homepage/screenshots.json` names their images, by block:
+
+```json
+"blocks": {
+  "platforms": {
+    "linux": "os/qkiss_linux_0_9_4_noshadow.png",
+    "windows": "os/qkiss_win_0_9_4_noshadow.png",
+    "macos": "os/qkiss_mac_0_9_4_noshadow.png"
+  }
+}
+```
+
+- In `index.html`, the block is an element with `data-block="platforms"` and `hidden`. Each of its images is an `<img data-block-image="platforms.linux">`, without `src`.
+- `main.js` sets the `src` of each image from `blocks`, then shows the block (`showBlocks()`). Without screenshots (`--no-screenshots`), the block stays hidden.
+- A block that needs JavaScript once its images are there, like the stack of `#platforms`, is set up from `BLOCK_SETUPS` in `main.js`.
+- `build.py` checks that `blocks` and the page name the same blocks, and the same images in each.
+- An image may be in a subfolder of `screenshots/`, like `os/`. Each part of its path may only contain letters, digits, `.`, `_` and `-`, and must not start with `.`. The extensions are the same as for the screenshots.
 
 ### Adding or replacing a screenshot
 

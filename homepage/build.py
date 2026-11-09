@@ -69,8 +69,9 @@ LEGAL_DOCUMENTS: tuple[str, ...] = ("terms.json", "amendments.json")
 
 SCREENSHOTS_SUBDIR: str = "screenshots"
 SCREENSHOTS_MANIFEST: str = "screenshots.json"
-# This file sets the order and the captions of the screenshots in the gallery. The images
-# themselves come from the wiki, through the folder given with --screenshots.
+# This file sets the order and the captions of the screenshots in the gallery, and the images that some blocks of the
+# page show outside the gallery (`blocks`). The images themselves come from the wiki, through the folder given with
+# --screenshots.
 SCREENSHOTS_MANIFEST_PATH: Path = HOMEPAGE_DIR / SCREENSHOTS_MANIFEST
 
 # The link-preview image (`og:image` in index.html). Link previews do not show SVG, so the build uses rsvg-convert
@@ -88,6 +89,11 @@ PATT_ATTRIBUTE = re.compile(r"[a-z][a-z0-9-]*")
 PATT_LANGUAGE_ID = re.compile(r"[A-Za-z]{2,3}(-[A-Za-z0-9]+)*")
 PATT_FLAG = re.compile(r"[a-z]{2}(-[a-z]+)*")
 PATT_IMAGE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\.(png|jpg|jpeg|webp|avif|gif|webm)")
+# The images of a block may be in subfolders of the screenshots folder, like `os/linux.png`. No part starts with `.`.
+PATT_BLOCK_IMAGE_PATH = re.compile(r"([A-Za-z0-9][A-Za-z0-9._-]*/)*[A-Za-z0-9][A-Za-z0-9._-]*\.(png|jpg|jpeg|webp|avif|gif|webm)")
+# The name of a block, and of each of its images, like `platforms` or `linux`: lowercase letters, digits and `-`,
+# starting with a letter.
+PATT_BLOCK_NAME = re.compile(r"[a-z][a-z0-9-]*")
 
 
 class BuildError(Exception):
@@ -129,15 +135,25 @@ LANGUAGES_MARKERS: tuple[str, str] = ("/* languages: */", "/* :languages */")
 
 
 class PageParser(HTMLParser):
-    """Collect the translation keys of one HTML file of the page (`name`, in SRC_DIR)."""
+    """Collect the translation keys of one HTML file of the page (`name`, in SRC_DIR), and its blocks with images
+    from the wiki: `data-block="name"` and `hidden` on a block, `data-block-image="name.image"` on each <img> inside
+    it."""
 
     def __init__(self, name: str) -> None:
         super().__init__()
         self.name = name
         self.keys: dict[str, str] = {}       # key -> how it is used: "data-i18n", "data-i18n-html" or "data-i18n-attr"
+        self.blocks: set[str] = set()
+        self.block_images: set[str] = set()  # "name.image"
+        # The blocks open at this point of the file: [name, tag, depth], the depth counting the elements of the same
+        # tag opened inside the block, so that its own end tag is found.
+        self.open_blocks: list[list[Any]] = []
         self.errors: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        for block in self.open_blocks:
+            if block[1] == tag:
+                block[2] += 1
         for name, value in attrs:
             if name in ("data-i18n", "data-i18n-html"):
                 self._add_key(value, name)
@@ -148,9 +164,35 @@ class PageParser(HTMLParser):
                         self._add_key(key, name)
                     else:
                         self._error(f"data-i18n-attr: invalid item {item!r}; expected `attribute:key`, items separated by `;` without spaces")
+            elif name == "data-block":
+                if value is None or not PATT_BLOCK_NAME.fullmatch(value):
+                    self._error(f"data-block: invalid name {value!r}; use lowercase letters, digits and `-`, starting with a letter, e.g. `platforms`")
+                elif value in self.blocks:
+                    self._error(f"data-block: {value!r} is used twice")
+                else:
+                    self.blocks.add(value)
+                    self.open_blocks.append([value, tag, 1])
+                    if "hidden" not in dict(attrs):
+                        self._error(f"data-block: {value!r} must be `hidden`; main.js shows it once its images are set")
+            elif name == "data-block-image":
+                block, dot, image = (value or "").partition(".")
+                if tag != "img" or not (dot and PATT_BLOCK_NAME.fullmatch(block) and PATT_BLOCK_NAME.fullmatch(image)):
+                    self._error(f"data-block-image: expected `<img data-block-image=\"block.image\">`, e.g. `platforms.linux`; got {value!r} on <{tag}>")
+                elif not any(open_block[0] == block for open_block in self.open_blocks):
+                    self._error(f"data-block-image: {value!r} must be inside the element with data-block={block!r}; main.js only looks there")
+                elif value in self.block_images:
+                    self._error(f"data-block-image: {value!r} is used twice")
+                else:
+                    self.block_images.add(value)
             elif name == "id" and self.name == "index.html" and value in NOT_IN_INDEX:
                 home = "LANGUAGES in main.js" if value == "languages" else "controls.html"
                 self._error(f"must not contain #{value}; it belongs in {home}")
+
+    def handle_endtag(self, tag: str) -> None:
+        for block in self.open_blocks:
+            if block[1] == tag:
+                block[2] -= 1
+        self.open_blocks = [block for block in self.open_blocks if block[2] > 0]
 
     def _add_key(self, key: str | None, usage: str) -> None:
         if key is None or not PATT_KEY.fullmatch(key):
@@ -163,9 +205,12 @@ class PageParser(HTMLParser):
         self.errors.append(f"{self.name}:{line}:{column + 1}: {message}")
 
 
-def check_page() -> dict[str, str]:
-    """Collect the translation keys of the page (PAGE_FILES). PageParser also rejects NOT_IN_INDEX in index.html."""
+def check_page() -> tuple[dict[str, str], dict[str, set[str]]]:
+    """Collect the translation keys of the page (PAGE_FILES), and its blocks with images from the wiki: a mapping from
+    the name of each block to the names of its images. PageParser also rejects NOT_IN_INDEX in index.html."""
     keys: dict[str, str] = {}
+    blocks: dict[str, set[str]] = {}
+    block_images: set[str] = set()
     errors: list[str] = []
     for name in PAGE_FILES:
         text = (SRC_DIR / name).read_text(encoding="utf-8")
@@ -176,9 +221,22 @@ def check_page() -> dict[str, str]:
         for key, usage in page.keys.items():
             if keys.setdefault(key, usage) != usage:
                 errors.append(f"{name}: key {key!r} is used by both {keys[key]} and {usage}; use one key per usage")
+        for block in sorted(page.blocks & blocks.keys()):
+            errors.append(f"{name}: data-block {block!r} is in another file of the page too")
+        blocks.update({block: set() for block in page.blocks})
+        block_images |= page.block_images
+    for value in sorted(block_images):
+        block, _, image = value.partition(".")
+        if block in blocks:
+            blocks[block].add(image)
+        else:
+            errors.append(f"data-block-image {value!r}: no element of the page has data-block={block!r}")
+    for block, images in sorted(blocks.items()):
+        if not images:
+            errors.append(f"data-block {block!r}: has no image (data-block-image=\"{block}.…\")")
     if errors:
         raise BuildError("\n".join(errors))
-    return keys
+    return keys, blocks
 
 
 def languages_json() -> str | None:
@@ -428,17 +486,18 @@ def check_legal_documents(languages: list[dict[str, str]]) -> list[str]:
 # screenshots.json
 # ==========================================
 
-def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, str]]) -> list[str]:
-    """Validate `homepage/screenshots.json`. If screenshots_dir is given, also check that it
-    contains every image the manifest lists. Return the image file names the manifest uses."""
+def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, str]], page_blocks: dict[str, set[str]]) -> list[str]:
+    """Validate `homepage/screenshots.json`, and that its `blocks` are exactly the blocks of the page (page_blocks,
+    from check_page). If screenshots_dir is given, also check that it contains every image the manifest lists.
+    Return the paths of the images the manifest uses, relative to the screenshots folder."""
     where = str(SCREENSHOTS_MANIFEST_PATH.relative_to(REPO_ROOT_DIR))
     if not SCREENSHOTS_MANIFEST_PATH.is_file():
         raise BuildError(f"{where}: not found")
     if screenshots_dir is not None and not screenshots_dir.is_dir():
         raise BuildError(f"{screenshots_dir}: not a directory (--screenshots)")
     manifest = load_json(SCREENSHOTS_MANIFEST_PATH.read_text(encoding="utf-8"), where)
-    if not isinstance(manifest, dict) or manifest.keys() != {"screenshots"}:
-        raise BuildError(f'{where}: must be an object with exactly one key, "screenshots"')
+    if not isinstance(manifest, dict) or "screenshots" not in manifest or not manifest.keys() <= {"screenshots", "blocks"}:
+        raise BuildError(f'{where}: must be an object with the key "screenshots", and optionally "blocks"')
     entries = manifest["screenshots"]
     if not isinstance(entries, list) or len(entries) < 2:
         raise BuildError(f'{where}: "screenshots" must be an array of at least 2 screenshots: the main screenshot, then at least one for the Screenshots section')
@@ -465,6 +524,16 @@ def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, st
             return []
         return values
 
+    def check_file(name: str, field_where: str) -> bool:
+        """Whether the image `name` is a regular file inside screenshots_dir, when it is given."""
+        if screenshots_dir is None:
+            return True
+        path = screenshots_dir / name
+        if path.is_symlink() or not path.is_file() or not path.resolve().is_relative_to(screenshots_dir.resolve()):
+            errors.append(f"{field_where}: {name!r} is not a regular file in {screenshots_dir}; push the image to the wiki first")
+            return False
+        return True
+
     images: list[str] = []
     for i, entry in enumerate(entries):
         entry_where = f"{where}: screenshots[{i}]"
@@ -475,9 +544,33 @@ def check_screenshots(screenshots_dir: Path | None, languages: list[dict[str, st
         for name in localized_values(entry["image"], f"{entry_where}.image"):
             if not PATT_IMAGE_NAME.fullmatch(name):
                 errors.append(f"{entry_where}.image: invalid file name {name!r}; use letters, digits, `.`, `_`, `-` and one of the extensions png, jpg, jpeg, webp, avif, gif, webm")
-            elif screenshots_dir is not None and ((screenshots_dir / name).is_symlink() or not (screenshots_dir / name).is_file()):
-                errors.append(f"{entry_where}.image: {name!r} is not a regular file in {screenshots_dir}; push the image to the wiki first")
+            elif check_file(name, f"{entry_where}.image"):
+                images.append(name)
+
+    # The images of the blocks of the page: `{"block": {"image": "path", ...}, ...}`, the same names as the page.
+    blocks = manifest.get("blocks", {})
+    if not isinstance(blocks, dict):
+        errors.append(f'{where}: "blocks" must be an object, like {{"platforms": {{"linux": "os/linux.png"}}}}')
+        blocks, page_blocks = {}, {}   # nothing more to compare
+    for block in sorted(page_blocks.keys() - blocks.keys()):
+        errors.append(f'{where}: blocks: missing {block!r}, which index.html has (data-block)')
+    for block, block_images in blocks.items():
+        block_where = f"{where}: blocks.{block}"
+        if block not in page_blocks:
+            errors.append(f"{block_where}: no element of the page has data-block={block!r}")
+            continue
+        if not isinstance(block_images, dict):
+            errors.append(f'{block_where}: must be an object of `"image": "path"`')
+            continue
+        for image in sorted(page_blocks[block] ^ block_images.keys()):
+            if image in block_images:
+                errors.append(f"{block_where}.{image}: no image of the page has data-block-image=\"{block}.{image}\"")
             else:
+                errors.append(f"{block_where}: missing {image!r}, which index.html has (data-block-image)")
+        for image, name in block_images.items():
+            if not isinstance(name, str) or not PATT_BLOCK_IMAGE_PATH.fullmatch(name):
+                errors.append(f"{block_where}.{image}: invalid path {name!r}; use folders and a file name of letters, digits, `.`, `_`, `-`, not starting with `.`, with one of the extensions png, jpg, jpeg, webp, avif, gif, webm")
+            elif check_file(name, f"{block_where}.{image}"):
                 images.append(name)
     if errors:
         raise BuildError("\n".join(errors))
@@ -539,11 +632,11 @@ def site_files(screenshots_dir: Path | None, images: list[str], languages: list[
 def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path | bytes], list[str]]:
     """Check everything the site is made from. Return its files and the warnings to print. Each file is either
     the path to copy it from (from site_files), or its content (the PNG from og_image_png)."""
-    keys = check_page()
+    keys, page_blocks = check_page()
     languages = check_languages(languages_json())
     warnings = check_translations(languages, keys)
     warnings += check_legal_documents(languages)
-    images = check_screenshots(screenshots_dir, languages)   # screenshots.json is checked even without --screenshots
+    images = check_screenshots(screenshots_dir, languages, page_blocks)   # screenshots.json is checked even without --screenshots
     if screenshots_dir is None:
         warnings.append("Without screenshots (--no-screenshots): fine for a preview, never publish it.")
     files: dict[str, Path | bytes] = {**site_files(screenshots_dir, images, languages), OG_IMAGE_PNG: og_image_png()}
@@ -585,10 +678,10 @@ def build_into_temp_dir(screenshots_dir: Path | None) -> tuple[Path, list[str]]:
 def watched_sources(screenshots_dir: Path | None) -> dict[Path, tuple[int, int]]:
     """The files the site is made from, each with its (mtime, size): everything under
     `src/`, `screenshots.json`, the APP_ICONS, the flags, the files of the screenshots
-    folder, and this script."""
+    folder (its subfolders too, for the images of the blocks), and this script."""
     paths = [*SRC_DIR.rglob("*"), SCREENSHOTS_MANIFEST_PATH, *APP_ICONS.values(), *FLAGS_DIR.rglob("*"), SCRIPT_PATH]
     if screenshots_dir is not None and screenshots_dir.is_dir():
-        paths += screenshots_dir.iterdir()
+        paths += screenshots_dir.rglob("*")
     found: dict[Path, tuple[int, int]] = {}
     for path in paths:
         try:

@@ -708,18 +708,48 @@
   /** The screenshot shown in the showcase: an index in `screenshots`, never 0 (the main screenshot). */
   let showcaseIndex = 1;
   let lightbox = null;
+  /** What the lightbox goes through: `screenshots`, or the windows of #platforms (see setUpPlatforms()). */
+  let lightboxItems = [];
   let lightboxIndex = 0;
 
   async function loadScreenshots() {
+    let blocks = {};
     try {
       const response = await fetch(`${SCREENSHOTS_DIR}screenshots.json`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      screenshots = (await response.json()).screenshots;
+      const manifest = await response.json();
+      screenshots = manifest.screenshots;
+      blocks = manifest.blocks ?? {};
     } catch (error) {
       console.warn('No screenshots:', error);
       screenshots = [];
     }
     renderGallery();
+    showBlocks(blocks);
+  }
+
+  /** What each block of the page with images from the wiki needs, once its images are set (see showBlocks()). */
+  const BLOCK_SETUPS = {
+    platforms: setUpPlatforms,
+  };
+
+  /**
+   * The blocks of the page that show images from the wiki outside the gallery: `blocks` in
+   * screenshots.json, like `{"platforms": {"linux": "os/linux.png"}}`. A block is an element with
+   * `data-block="platforms"`, hidden until its images are set; each of its images is an
+   * `<img data-block-image="platforms.linux">`. build.py checks that the page and screenshots.json name the same
+   * blocks and images. Without screenshots.json (a build without screenshots), the blocks stay hidden.
+   */
+  function showBlocks(blocks) {
+    for (const block of document.querySelectorAll('[data-block]')) {
+      const name = block.dataset.block;
+      if (!Object.hasOwn(blocks, name)) continue;
+      for (const image of block.querySelectorAll('img[data-block-image]')) {
+        image.src = SCREENSHOTS_DIR + blocks[name][image.dataset.blockImage.split('.')[1]];
+      }
+      block.hidden = false;
+      BLOCK_SETUPS[name]?.();
+    }
   }
 
   /** A value in screenshots.json: either a single string used for every language, or an object with one string per language ID. */
@@ -788,7 +818,7 @@
    * A video starts if `play` is true, unless the visitor prefers reduced motion (REDUCED_MOTION).
    */
   function showMedia(image, video, screenshot, play) {
-    const url = SCREENSHOTS_DIR + localize(screenshot.image);
+    const url = screenshot.url ?? SCREENSHOTS_DIR + localize(screenshot.image);   // `url`: a window of #platforms
     const caption = localize(screenshot.caption);
     const isVideo = VIDEO_EXTENSION.test(url);
     image.hidden = isVideo;
@@ -846,16 +876,17 @@
     });
   }
 
-  function openLightbox(index) {
+  function openLightbox(index, items = screenshots) {
     document.getElementById('showcase-video').pause();   // Only one video plays at a time.
+    lightboxItems = items;
     showScreenshot(index);
     lightbox.showModal();
   }
 
   function showScreenshot(index) {
-    const count = screenshots.length;
+    const count = lightboxItems.length;
     lightboxIndex = (index + count) % count;
-    const screenshot = screenshots[lightboxIndex];
+    const screenshot = lightboxItems[lightboxIndex];
     showMedia(document.getElementById('lightbox-image'), document.getElementById('lightbox-video'), screenshot, true);
     document.getElementById('lightbox-caption').textContent = localize(screenshot.caption);
     document.getElementById('lightbox-counter').textContent = `${lightboxIndex + 1} / ${count}`;
@@ -1209,6 +1240,148 @@
       }),
     new Promise((resolve) => setTimeout(() => resolve(null), LOADING_TIMEOUT_MS)),
   ]);
+
+  /** How long a window of #platforms takes to fade out, before it comes back at the other end of the stack (see style.css). */
+  const PLATFORM_FADING_MS = 300;
+  /** How long a window of #platforms takes to move in the stack, or to fade in (see style.css). The next move waits for it. */
+  const PLATFORM_MOVING_MS = 350;
+  /** A touch that moves sideways at least this far (in CSS pixels) over #platforms is a swipe. */
+  const PLATFORM_SWIPE_PX = 40;
+  /** When nobody touches #platforms, its front window goes to the back by itself this often. */
+  const PLATFORM_AUTO_MS = 7000;
+
+  /**
+   * The windows of #platforms, stacked like Flip 3D of Windows Vista. A click on the stack, or a swipe to the left,
+   * sends the front window to the back. A right click, or a swipe to the right, brings the back window to the front.
+   * When nobody touches it, it goes on by itself every PLATFORM_AUTO_MS, except for a visitor who prefers reduced
+   * motion.
+   * The other windows move with the transitions of style.css. The button under the stack opens the front window in
+   * the lightbox, where the arrows go through the three.
+   */
+  function setUpPlatforms() {
+    const stage = document.querySelector('.platforms-stage');
+    const platforms = [...stage.querySelectorAll('.platform')];
+    const order = [...platforms];   // front to back
+    let moving = false;
+
+    const place = (platform, slot) => platform.style.setProperty('--slot', slot);
+
+    const sendFrontToBack = () => {
+      if (moving) return;
+      const front = order.shift();
+      order.push(front);
+      if (REDUCED_MOTION.matches) {
+        order.forEach(place);
+        return;
+      }
+      moving = true;
+      front.classList.add('platform-leaving');
+      order.slice(0, -1).forEach(place);
+      setTimeout(() => {
+        // Jump to the back while invisible, then fade in there.
+        front.classList.add('platform-entering');
+        front.classList.remove('platform-leaving');
+        place(front, order.length - 1);
+        front.getBoundingClientRect();   // apply that before the fade in starts
+        front.classList.remove('platform-entering');
+        setTimeout(() => {
+          moving = false;
+        }, PLATFORM_MOVING_MS);
+      }, PLATFORM_FADING_MS);
+    };
+
+    const sendBackToFront = () => {
+      if (moving) return;
+      const back = order.pop();
+      order.unshift(back);
+      if (REDUCED_MOTION.matches) {
+        order.forEach(place);
+        return;
+      }
+      moving = true;
+      back.classList.add('platform-fading');
+      order.slice(1).forEach((platform, i) => place(platform, i + 1));
+      setTimeout(() => {
+        // Jump under the front while invisible, then slide up to the front and fade in.
+        back.classList.add('platform-entering', 'platform-leaving');
+        back.classList.remove('platform-fading');
+        place(back, 0);
+        back.getBoundingClientRect();   // apply that before the slide starts
+        back.classList.remove('platform-entering', 'platform-leaving');
+        setTimeout(() => {
+          moving = false;
+        }, PLATFORM_MOVING_MS);
+      }, PLATFORM_FADING_MS);
+    };
+
+    // A swipe on a touch screen. The click that may follow it is part of it.
+    let swipeStart = null;
+    let swiped = false;
+    stage.addEventListener('pointerdown', (event) => {
+      swiped = false;
+      swipeStart = event.pointerType === 'touch' ? { x: event.clientX, y: event.clientY } : null;
+    });
+    stage.addEventListener('pointercancel', () => {
+      swipeStart = null;
+    });
+    stage.addEventListener('pointerup', (event) => {
+      if (swipeStart === null) return;
+      const dx = event.clientX - swipeStart.x;
+      const dy = event.clientY - swipeStart.y;
+      swipeStart = null;
+      if (Math.abs(dx) < PLATFORM_SWIPE_PX || Math.abs(dx) < Math.abs(dy)) return;
+      swiped = true;
+      if (dx < 0) sendFrontToBack();
+      else sendBackToFront();
+    });
+
+    stage.addEventListener('click', (event) => {
+      if (swiped || event.target.closest('a')) return;   // a link, like the banana, goes where it points
+      sendFrontToBack();
+    });
+    stage.addEventListener('contextmenu', (event) => {
+      if (event.target.closest('a')) return;   // a link keeps its menu (open in a new tab, copy the link…)
+      event.preventDefault();
+      sendBackToFront();
+    });
+    // The lightbox shows each window with the text of its image, in the language of the page at that time.
+    document.querySelector('.platforms-enlarge').addEventListener('click', () => {
+      const items = platforms.map((platform) => {
+        const image = platform.querySelector(':scope > img');
+        return { url: image.getAttribute('src'), caption: image.alt };
+      });
+      openLightbox(platforms.indexOf(order[0]), items);
+    });
+
+    // Going on by itself: only while the stack is on the screen, and nobody points at it, has the keyboard focus in
+    // it, or looks at the lightbox. Pointing at it and leaving it starts the wait again.
+    const container = document.getElementById('platforms');
+    let onScreen = false;
+    let touched = false;
+    let autoTimer = null;
+    const restartAuto = () => {
+      clearTimeout(autoTimer);
+      autoTimer = setTimeout(() => {
+        if (onScreen && !touched && !document.hidden && !lightbox.open && !REDUCED_MOTION.matches) sendFrontToBack();
+        restartAuto();
+      }, PLATFORM_AUTO_MS);
+    };
+    new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+    }).observe(container);
+    const touch = () => {
+      touched = true;
+    };
+    const release = () => {
+      touched = false;
+      restartAuto();
+    };
+    container.addEventListener('pointerenter', touch);
+    container.addEventListener('pointerleave', release);
+    container.addEventListener('focusin', touch);
+    container.addEventListener('focusout', release);
+    restartAuto();
+  }
 
   document.addEventListener('DOMContentLoaded', async () => {
     setUpDownloadMenus();   // before collectTargets(): the menus are translated too

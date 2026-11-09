@@ -48,5 +48,12 @@
         "zh-TW": "支援全彩、無調色盤的 KISS/GS 規格"
       }
     }
-  ]
+  ],
+  "blocks": {
+    "platforms": {
+      "linux": "os/qkiss_linux_0_9_4_noshadow.png",
+      "windows": "os/qkiss_win_0_9_4_noshadow.png",
+      "macos": "os/qkiss_mac_0_9_4_noshadow.png"
+    }
+  }
 }

@@ -74,6 +74,41 @@
     </section>
 
     <section class="section" id="about">
+      <!--
+        The app running on the three systems, stacked like Flip 3D of Windows Vista (see setUpPlatforms() in main.js).
+        Its images come from the wiki, like the screenshots: main.js sets them from `blocks` in screenshots.json, and
+        shows the block only then (see showBlocks()).
+      -->
+      <div class="platforms" id="platforms" data-block="platforms" hidden>
+        <!--
+          Front to back. --slot is the place in the stack (0 at the front); main.js changes it (see setUpPlatforms()).
+        -->
+        <div class="platforms-stage">
+          <figure class="platform platform-linux" style="--slot: 0">
+            <img data-block-image="platforms.linux" alt="QKiSS 0.9.4 running on Linux" width="1579" height="975"
+                 data-i18n-attr="alt:platforms.alt.linux">
+            <figcaption class="platform-label"><img src="images/os/tux.svg" alt="" width="64" height="64">Linux</figcaption>
+          </figure>
+          <figure class="platform platform-windows" style="--slot: 1">
+            <img data-block-image="platforms.windows" alt="QKiSS 0.9.4 running on Windows 11" width="1475" height="932"
+                 data-i18n-attr="alt:platforms.alt.windows">
+            <figcaption class="platform-label"><img src="images/os/windows.svg" alt="" width="64" height="64">Windows</figcaption>
+          </figure>
+          <figure class="platform platform-macos" style="--slot: 2">
+            <img data-block-image="platforms.macos" alt="QKiSS 0.9.4 running on macOS" width="1475" height="878"
+                 data-i18n-attr="alt:platforms.alt.macos">
+            <figcaption class="platform-label">
+              <!-- The same link as the banana of the macOS card in Download. -->
+              <a class="download-icon-link" href="#faq-banana" aria-label="Why a banana?" title="Huh?"
+                 data-i18n-attr="aria-label:download.macos.banana;title:download.macos.banana-huh"><img src="images/os/banana.svg" alt="" width="64" height="64"></a>
+              macOS
+            </figcaption>
+          </figure>
+        </div>
+        <!-- Opens the front window in the lightbox. -->
+        <button type="button" class="platforms-enlarge"
+                aria-label="Enlarge" title="Enlarge" data-i18n-attr="aria-label:screenshots.enlarge;title:screenshots.enlarge"><img src="images/icons/system-search.svg" alt="" width="48" height="48"></button>
+      </div>
       <div class="container prose">
         <h2><span data-i18n="about.title">What is KiSS?</span><a class="heading-link" href="#about" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
         <p data-i18n-html="about.kiss"><a href="https://en.wikipedia.org/wiki/Kisekae_Set_System">KiSS (Kisekae Set System)</a> is a format of digital paper dolls. You dress the characters up by dragging their clothes with the mouse, and FKiSS scripts add interactions such as animations and sounds.</p>

@@ -1115,6 +1115,187 @@ sup {
   }
 }
 
+/* ---- The three platforms ------------------------------------------------- */
+
+/* Three windows of the app, one per system, stacked in 3D like the window switcher of Windows Vista (Flip 3D). See
+   setUpPlatforms() in main.js for how the visitor goes through them.
+   The screenshots have no shadow and no transparent corners: the shadows and the rounded corners of each system are
+   drawn here. */
+.platforms {
+  /* One pixel of the screenshots (the macOS one is a Retina screenshot: its file has twice as many). Every length of
+     the stack is in it, so that the stack scales with the page. The stage is 1870 x 1240 of them: what the stack
+     covers in every order, the labels included. */
+  --px: calc(100cqw / 1870);
+  /* The center of the front window, and the point the stack is seen from. */
+  --cx: 815;
+  --cy: 678;
+  position: relative;
+  width: min(100% - 2rem, 68rem);   /* as wide as the .container of the text */
+  margin: 0 auto clamp(2.5rem, 6vw, 4rem);
+  container-type: inline-size;
+}
+
+/* Horizontal swipes are for going through the windows (see setUpPlatforms()); vertical ones still scroll the page. */
+.platforms-stage {
+  position: relative;
+  aspect-ratio: 1870 / 1240;
+  perspective: calc(3200 * var(--px));
+  perspective-origin: calc(var(--cx) * var(--px)) calc(var(--cy) * var(--px));
+  transform-style: preserve-3d;
+  touch-action: pan-y;
+  user-select: none;   /* quick clicks go through the windows: a double click must not select them */
+  /* The stage itself is a plane at depth 0, in front of everything turned or pushed behind it (the right side of
+     every window, and the windows at the back): it would catch the pointer instead of them, like the banana of a
+     label. So only the windows get the pointer, and their clicks still reach the stage. */
+  pointer-events: none;
+}
+
+/* --slot is the place in the stack: 0 at the front. Each window behind is further up, right and back. The stack is
+   only slightly turned, and tight, so that each window shows as much of its system as possible. */
+.platform {
+  --slot: 0;
+  position: absolute;
+  left: calc((var(--cx) - var(--w) / 2) * var(--px));
+  top: calc((var(--cy) - var(--h) / 2) * var(--px));
+  width: calc(var(--w) * var(--px));
+  margin: 0;
+  transform:
+    translate3d(calc(var(--slot) * 220 * var(--px)), calc(var(--slot) * -130 * var(--px)), calc(var(--slot) * -240 * var(--px)))
+    rotateY(10deg);
+  transition: transform 0.35s ease, opacity 0.3s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* The front window, on its way to the back: it slides down out of the stack and fades out, then fades in at the
+   back. Going the other way, the back window fades out (.platform-fading), and slides up from there to the front. */
+.platform-leaving {
+  opacity: 0;
+  transform: translate3d(0, calc(140 * var(--px)), 0) rotateY(10deg);
+}
+
+.platform-fading {
+  opacity: 0;
+}
+
+.platform-entering {
+  opacity: 0;
+  transition: none;
+}
+
+.platform > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.platform-linux {
+  --w: 1579;
+  --h: 975;
+}
+
+.platform-windows {
+  --w: 1475;
+  --h: 932;
+}
+
+/* Its window was smaller (1353 x 805) when it was captured: it is enlarged to the width of the Windows one, so that
+   the three look about the same size. Its text is 9% larger than in the others. */
+.platform-macos {
+  --w: 1475;
+  --h: 877.6;
+}
+
+/* The same shadow for the three, and the rounded corners of each system: KDE Plasma (Breeze), Windows 11, macOS. */
+.platform > img {
+  box-shadow: 0 calc(8 * var(--px)) calc(34 * var(--px)) rgb(0 0 0 / 0.32);
+}
+
+.platform-linux > img {
+  border-radius: calc(5 * var(--px));
+}
+
+.platform-windows > img {
+  border-radius: calc(8 * var(--px));
+}
+
+.platform-macos > img {
+  border-radius: calc(13 * var(--px));   /* 12, measured on the outline of its corners, enlarged with it */
+}
+
+/* On a dark page the shadows hardly show, so a faint light edge sets the windows apart. */
+@media (prefers-color-scheme: dark) {
+  .platform > img {
+    outline: 1px solid rgb(255 255 255 / 0.12);
+    outline-offset: -1px;
+  }
+}
+
+/* The system, over the bottom right corner of its window, so that it covers no title bar. It turns with its
+   window, but never gets too small to read. */
+.platform-label {
+  position: absolute;
+  right: calc(-40 * var(--px));
+  bottom: calc(-50 * var(--px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(18 * var(--px)) calc(26 * var(--px)) calc(10 * var(--px));
+  border: 1px solid var(--border-strong);
+  border-radius: calc(24 * var(--px));
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: max(0.7rem, 40 * var(--px));
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.platform-label img {
+  width: max(2.25rem, 120 * var(--px));
+  height: auto;
+}
+
+/* The one button that opens the front window in the lightbox, at the bottom left corner of the front window (of
+   the Linux one: 3, 1187 on the stage). It is outside the stage, so that it is never turned in 3D, and the windows
+   never cover it. It shows when the pointer is over the stack, or when it has the keyboard focus. Without a mouse,
+   it always shows. */
+.platforms-enlarge {
+  position: absolute;
+  left: calc(3 * var(--px));
+  top: calc(1187 * var(--px));
+  display: grid;
+  place-items: center;
+  padding: calc(14 * var(--px));
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  cursor: zoom-in;
+  opacity: 0;
+  translate: 0 -50%;
+  transition: opacity 0.2s ease;
+}
+
+.platforms:hover .platforms-enlarge,
+.platforms-enlarge:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .platforms-enlarge {
+    opacity: 1;
+  }
+}
+
+.platforms-enlarge:hover {
+  background: var(--surface-sunken);
+}
+
+.platforms-enlarge > img {
+  width: max(2rem, 96 * var(--px));
+  height: auto;
+}
+
 /* ---- Download ------------------------------------------------------------ */
 
 /* At most two cards per row (24rem is too wide for three), so that the buttons of a card can sit side by side. */
@@ -1181,7 +1362,8 @@ sup {
 
 /*
  * The handwriting of the caption, the same on every computer (see fonts/README.md). Only the rule below names it, so
- * it is downloaded only when the card of macOS is pointed at or has the keyboard focus: before the caption is shown.
+ * it is downloaded only when the card of macOS (or the label of its window in #platforms) is pointed at or has the
+ * keyboard focus: before the caption is shown.
  * If it has not arrived yet, the caption waits for it (font-display: block), for at most 3 seconds.
  */
 @font-face {
@@ -1191,7 +1373,7 @@ sup {
   font-display: block;
 }
 
-:root[data-cut="safe"] .download-card:is(:hover, :focus-within) .download-icon-link::after {
+:root[data-cut="safe"] :is(.download-card, .platform-label):is(:hover, :focus-within) .download-icon-link::after {
   font-family: "Dancing Script", "Segoe Script", "Brush Script MT", cursive;
 }
 
@@ -2123,6 +2305,11 @@ html:has(.reading-check-dialog[open]) .terms-text {
 
   .screenshot-button:hover {
     transform: none;
+  }
+
+  .platform,
+  .platforms-enlarge {
+    transition: none;
   }
 
   .pointing-arrow {
