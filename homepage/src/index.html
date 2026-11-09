@@ -74,8 +74,6 @@
     </section>
 
     <section class="section" id="about">
-      <!-- The main screenshot: the first one in screenshots/screenshots.json. Filled by main.js, which hides it when there are no screenshots. -->
-      <div class="main-screenshot" id="main-screenshot"></div>
       <div class="container prose">
         <h2><span data-i18n="about.title">What is KiSS?</span><a class="heading-link" href="#about" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
         <p data-i18n-html="about.kiss"><a href="https://en.wikipedia.org/wiki/Kisekae_Set_System">KiSS (Kisekae Set System)</a> is a format of digital paper dolls. You dress the characters up by dragging their clothes with the mouse, and FKiSS scripts add interactions such as animations and sounds.</p>
@@ -84,6 +82,10 @@
 
         <h3 data-i18n="about.why.title">Why QKiSS?</h3>
         <p data-i18n-html="about.why.charm">KiSS is full of the fascinating creative passion of the <a href="https://ja.wikipedia.org/wiki/2次元">nijigen</a> <a href="https://ja.wikipedia.org/wiki/同人">doujin</a> communities: the 8-bit (or even lower) pixel aesthetics, full of the flavor of 1990s personal computers, that they showed off as best they could within the hardware limits of the computers of that time, all kinds of anime memes from the Japanese nijigen doujin <a href="https://ja.wikipedia.org/wiki/同人サークル">communities</a>, and wildly imaginative, bizarre ideas and humor. Many artists' outfit designs really have great taste, too: just looking at them puts me in a good mood.</p>
+      </div>
+      <!-- The main screenshot: the first one in screenshots/screenshots.json. Filled by main.js, which hides it when there are no screenshots. -->
+      <div class="main-screenshot" id="main-screenshot"></div>
+      <div class="container prose">
         <p id="footnote-ref-palmkiss" data-i18n-html="about.why.story">This stinky otaku first heard of KiSS<sup class="footnote-ref"><a href="#footnote-palmkiss">*1</a></sup> around 2007, from often seeing the eye-catching, weird name “<a href="https://devel.tlrmx.org/kiss/">GnomeKiSS</a>” while poking around in Synaptic on Ubuntu. But at the time, I had no idea how to use it. It was only around 2012 that I looked into it and figured out what KiSS was. Even though KiSS was already in decline by then, its Japanese anime characters and pretty outfits, its anime memes, and the memories of the pixel aesthetics of the Windows 95/98 era still kept me playing with GnomeKiSS for a long time.</p>
         <p data-i18n-html="about.why.body">But in 2024, when I felt like revisiting those KiSS sets for a while, I found that the native KiSS viewers that Linux had at the time had all stopped working: <a href="https://www2s.biglobe.ne.jp/~yav/kiss/index.html">fkiss</a> can still be built but no longer runs, and <a href="https://devel.tlrmx.org/kiss/">GnomeKiSS</a> depends on outdated GNOME 2 libraries that most distributions no longer ship. So I thought: why not write one myself? And if I was going to make one, it absolutely had to run natively on Linux, with a UI/UX that I was happy with; it would also be a chance to practice writing a somewhat sizable project in Qt / C++. So I started building QKiSS, a brand-new KiSS viewer, from scratch in Qt / C++, while chewing through the KISS/GS specification.</p>
         <p data-i18n-html="about.why.practice">And writing it really is a lot of fun: first understanding KISS/GS's own palette and bitmap formats, so that the images show up correctly, then implementing a parser and an interpreter of the FKiSS script language from its specification, so that things start to move. Since the formats are so old, you also run into lots of things that a modern developer like me never thought of (for example, the old Mac OS used <code>\r</code> for line breaks). The fun of writing all this has long since surpassed the KiSS sets themselves.</p>
@@ -175,7 +177,7 @@
       <div class="container">
         <h2><span data-i18n="screenshots.title">Screenshots</span><a class="heading-link" href="#screenshots" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
         <!--
-          Filled by main.js from screenshots/screenshots.json, without its first screenshot (the main one, above "What is KiSS?").
+          Filled by main.js from screenshots/screenshots.json, without its first screenshot (the main one, in "Why QKiSS?").
           build.py copies that file from homepage/screenshots.json in this repository, and the images it lists from the wiki.
           The showcase shows one screenshot large; the gallery under it has a thumbnail for each, to pick the one to show.
         -->

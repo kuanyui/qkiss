@@ -100,7 +100,7 @@ The wiki must exist before the first deployment: create its first page on the we
 }
 ```
 
-- The first screenshot is the main one. It is shown large, above “What is KiSS?”.
+- The first screenshot is the main one. It is shown large, in “Why QKiSS?”, after its first paragraph.
 - The others go to the Screenshots section, in the order of the array. There, a showcase shows one screenshot large. At first, it is the second one of the array. The thumbnails under the showcase pick another one.
 - There must be at least 2 screenshots: the main one, and one for the Screenshots section.
 - `image` and `caption` are both required. Each one is either a single string, used for every language, or an object with one string per language ID, like `{ "en": "...", "ja": "..." }`, which must include `en`. A language missing from the object falls back like any other string (see [Translations](#translations)).

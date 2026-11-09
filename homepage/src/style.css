@@ -902,11 +902,12 @@ sup {
   pointer-events: none;
 }
 
-/* The main screenshot, above "What is KiSS?". Until main.js fills it, it reserves the space of a 4:3 picture,
-   so that the text under it does not move when the picture appears. */
+/* The main screenshot, in "Why QKiSS?" after its first paragraph, wider than the text around it. Until main.js
+   fills it, it reserves the space of a 4:3 picture, so that the text under it does not move when the picture
+   appears. */
 .main-screenshot {
   width: min(100% - 2rem, 56rem);
-  margin: 0 auto clamp(2.5rem, 6vw, 4rem);
+  margin: clamp(2rem, 5vw, 3rem) auto;
 }
 
 .main-screenshot:empty {

@@ -700,7 +700,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Screenshots: the main one above "What is KiSS?", the others in the showcase
+  // Screenshots: the main one in "Why QKiSS?", the others in the showcase
   // ---------------------------------------------------------------------------
 
   /** Entries of screenshots/screenshots.json: null until loaded, [] when there are none. The first one is the main screenshot. */
