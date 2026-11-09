@@ -215,8 +215,9 @@
           name matches that regular expression. Without main.js, the links open the page of the
           latest release.
           main.js also puts a clone of this template after each of these links: a toggle and its
-          menu, which shows the SHA-256 of the file in #checksum-dialog. The toggle stays hidden
-          until the SHA-256 is known.
+          menu, which shows the SHA-256 of the file in #checksum-dialog, or the command that checks
+          its artifact attestation in #attestation-dialog. The toggle stays hidden until the SHA-256
+          is known.
         -->
         <template id="download-menu-template">
           <button type="button" class="button download-menu-toggle" aria-expanded="false" hidden
@@ -224,7 +225,8 @@
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="download-menu" hidden>
-            <button type="button" class="download-menu-item" data-i18n="download.checksum">SHA-256 checksum</button>
+            <button type="button" class="download-menu-item download-menu-checksum" data-i18n="download.checksum">SHA-256 checksum</button>
+            <button type="button" class="download-menu-item download-menu-attestation" data-i18n="download.attestation">GitHub artifact attestation</button>
           </div>
         </template>
         <div class="download-grid">
@@ -711,6 +713,38 @@
       </div>
       <p class="checksum-label">SHA-256</p>
       <code class="checksum-value" id="checksum-value"></code>
+      <!-- A command that checks the downloaded file against it: in PowerShell on Windows, in a terminal on the others.
+           The system is the one of the browser at first (see main.js), but it can be switched here, since a file may be
+           downloaded and checked on another system than the one it is for. main.js shows the label of its shell. -->
+      <div class="checksum-section">
+        <div class="checksum-systems">
+          <span class="checksum-label" id="checksum-system-label" data-i18n="download.checksum.system">Check it on</span>
+          <span class="checksum-system-options" role="radiogroup" aria-labelledby="checksum-system-label">
+            <label class="checksum-system"><input class="visually-hidden" type="radio" name="checksum-system" value="linux">Linux</label>
+            <label class="checksum-system"><input class="visually-hidden" type="radio" name="checksum-system" value="macos">macOS</label>
+            <label class="checksum-system"><input class="visually-hidden" type="radio" name="checksum-system" value="windows">Windows</label>
+          </span>
+        </div>
+        <p class="checksum-label" id="checksum-terminal" data-i18n="download.checksum.terminal">To check the downloaded file, open a terminal in its folder, and run this command. It prints “OK” if the file is intact.</p>
+        <p class="checksum-label" id="checksum-powershell" data-i18n="download.checksum.powershell" hidden>To check the downloaded file, open PowerShell in its folder, and run this command. It prints “True” if the file is intact.</p>
+        <code class="checksum-value checksum-command" id="checksum-command"></code>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- The command that checks the artifact attestation of a file of the latest release, opened from the menu of its
+       download button (see main.js). It looks like #checksum-dialog. -->
+  <dialog class="checksum-dialog" id="attestation-dialog" aria-labelledby="attestation-file">
+    <div class="checksum-body">
+      <div class="checksum-head">
+        <h2 class="checksum-file" id="attestation-file"></h2>
+        <button type="button" class="checksum-close" id="attestation-close"
+                aria-label="Close" title="Close" data-i18n-attr="aria-label:lightbox.close;title:lightbox.close">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <p class="checksum-label" data-i18n-html="download.attestation.command">To check that GitHub Actions built this file from the source code of QKiSS, run this command with the <a href="https://cli.github.com/">GitHub CLI</a>, in the folder of the downloaded file. It prints “Verification succeeded!” if so.</p>
+      <code class="checksum-value" id="attestation-command"></code>
     </div>
   </dialog>
 <!--

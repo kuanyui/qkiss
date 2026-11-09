@@ -1352,6 +1352,78 @@ sup {
   user-select: all;
 }
 
+/* Keep the two spaces between the hash and the name of the file, also when copied: `shasum --check` needs both. */
+.checksum-command {
+  white-space: pre-wrap;
+}
+
+/* The command that checks the downloaded file against the SHA-256: a block of its own, under a line. */
+.checksum-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  align-self: stretch;
+  margin-top: 0.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* The system to check the file on: a row of joined buttons, the chosen one green like .button-primary. */
+.checksum-systems {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+}
+
+.checksum-system-options {
+  display: inline-flex;
+}
+
+.checksum-system {
+  position: relative;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--border-strong);
+  background: linear-gradient(var(--surface), var(--surface-sunken));
+  box-shadow: inset 0 1px 0 var(--highlight);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.checksum-system + .checksum-system {
+  margin-inline-start: -1px;   /* one line between two buttons, not two */
+}
+
+.checksum-system:first-child {
+  border-start-start-radius: 6px;
+  border-end-start-radius: 6px;
+}
+
+.checksum-system:last-child {
+  border-start-end-radius: 6px;
+  border-end-end-radius: 6px;
+}
+
+/* Above its neighbors, so that its whole border shows. */
+.checksum-system:is(:hover, :has(:checked)) {
+  z-index: 1;
+  border-color: var(--accent);
+}
+
+.checksum-system:has(:checked) {
+  border-color: var(--accent-hover);
+  background: linear-gradient(var(--accent-top), var(--accent));
+  color: var(--on-accent);
+}
+
+.checksum-system:has(:focus-visible) {
+  z-index: 2;
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
 
 /* The latest version, followed by the button to every release. */
 .download-meta {

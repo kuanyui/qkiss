@@ -25,7 +25,8 @@ homepage/
 ```
 
 The download links point to the files of the latest release on GitHub. `main.js` looks them up with the GitHub API when the page opens. If that fails, the links open the page of the latest release instead.
-Each of these download buttons also gets a menu, which shows the SHA-256 of its file, also from the GitHub API (`digest`).
+Each of these download buttons also gets a menu, which shows the SHA-256 of its file, also from the GitHub API (`digest`), with a command that checks the downloaded file against it (PowerShell on Windows, `shasum` on macOS, `sha256sum` on the others). The system of the command is the one of the browser at first, and the visitor can switch it, since a file may be checked on another system than the one it is for.
+The menu also shows the command that checks the artifact attestation of the file with the GitHub CLI (`gh attestation verify`).
 The page also shows the version of that release, and the time of its commit: in the time zone of the visitor, and in the format of the About dialog of the app.
 
 At build time, `build.py` also copies:

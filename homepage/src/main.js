@@ -50,6 +50,8 @@
   const LATEST_RELEASE_API = 'https://api.github.com/repos/kuanyui/qkiss/releases/latest';
   /** The commits of QKiSS in the GitHub API. Followed by a tag name, the URL gives the commit of that tag. */
   const COMMITS_API = 'https://api.github.com/repos/kuanyui/qkiss/commits/';
+  /** The repository whose GitHub Actions attest the files of the releases, for `gh attestation verify -R`. */
+  const ATTESTING_REPOSITORY = 'kuanyui/qkiss';
   /**
    * KaTeX, for the formulas of the Director's Cut. Like @llselect/core in index.html, the URLs name an exact version,
    * and `integrity` makes the browser refuse any other file (see homepage/README.md).
@@ -939,7 +941,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Download menus: the SHA-256 of each file of the latest release
+  // Download menus: the SHA-256 and the artifact attestation of each file of the latest release
   // ---------------------------------------------------------------------------
 
   /** The toggle whose menu is open, or null. */
@@ -968,9 +970,13 @@
       const toggle = split.querySelector('.download-menu-toggle');
       toggle.classList.toggle('button-primary', link.classList.contains('button-primary'));
       toggle.addEventListener('click', () => setMenuOpen(toggle, toggle.getAttribute('aria-expanded') !== 'true'));
-      split.querySelector('.download-menu-item').addEventListener('click', () => {
+      split.querySelector('.download-menu-checksum').addEventListener('click', () => {
         setMenuOpen(toggle, false);
         showChecksum(releaseAsset(link));
+      });
+      split.querySelector('.download-menu-attestation').addEventListener('click', () => {
+        setMenuOpen(toggle, false);
+        showAttestation(releaseAsset(link));
       });
     }
     // A click anywhere else, or Escape, closes the open menu.
@@ -983,18 +989,61 @@
         setMenuOpen(openMenuToggle, false);
       }
     });
-    const dialog = document.getElementById('checksum-dialog');
-    document.getElementById('checksum-close').addEventListener('click', () => dialog.close());
-    dialog.addEventListener('click', (event) => {
-      if (event.target === dialog) dialog.close();   // a click on the backdrop (the padding is on .checksum-body)
-    });
+    for (const dialog of document.querySelectorAll('.checksum-dialog')) {
+      dialog.querySelector('.checksum-close').addEventListener('click', () => dialog.close());
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();   // a click on the backdrop (the padding is on .checksum-body)
+      });
+    }
+    for (const radio of document.querySelectorAll('input[name="checksum-system"]')) {
+      radio.addEventListener('change', () => {
+        checksumSystem = radio.value;
+        renderChecksumCommand();
+      });
+    }
   }
 
-  /** Show the SHA-256 of a file of the latest release. GitHub gives it as `digest`, like "sha256:df7523…". */
+  /**
+   * The system of the command in #checksum-dialog: the one of the browser at first, then the one chosen there, for the
+   * other files too. Phones and the other systems get the one of Linux.
+   */
+  let checksumSystem = /Windows/.test(navigator.userAgent) ? 'windows'
+    : /Mac/.test(navigator.userAgent) ? 'macos' : 'linux';
+
+  /** The file of the latest release shown in #checksum-dialog. */
+  let checksumAsset = null;
+
+  /**
+   * Show the SHA-256 of a file of the latest release, and a command that checks the downloaded file against it. GitHub
+   * gives the SHA-256 as `digest`, like "sha256:df7523…".
+   */
   function showChecksum(asset) {
+    checksumAsset = asset;
     document.getElementById('checksum-file').textContent = asset.name;
     document.getElementById('checksum-value').textContent = asset.digest.replace(/^sha256:/, '');
+    document.querySelector(`input[name="checksum-system"][value="${checksumSystem}"]`).checked = true;
+    renderChecksumCommand();
     document.getElementById('checksum-dialog').showModal();
+  }
+
+  /** Write the command of #checksum-dialog for `checksumSystem`: PowerShell on Windows, `shasum` on macOS, `sha256sum` on the others. */
+  function renderChecksumCommand() {
+    const { name } = checksumAsset;
+    const hash = checksumAsset.digest.replace(/^sha256:/, '');
+    const powershell = checksumSystem === 'windows';
+    document.getElementById('checksum-terminal').hidden = powershell;
+    document.getElementById('checksum-powershell').hidden = !powershell;
+    document.getElementById('checksum-command').textContent = powershell
+      ? `(Get-FileHash '${name}' -Algorithm SHA256).Hash -eq '${hash}'`
+      : `echo '${hash}  ${name}' | ${checksumSystem === 'macos' ? 'shasum -a 256' : 'sha256sum'} --check`;
+  }
+
+  /** Show the command that checks the artifact attestation of a file of the latest release, with the GitHub CLI. */
+  function showAttestation(asset) {
+    document.getElementById('attestation-file').textContent = asset.name;
+    document.getElementById('attestation-command').textContent =
+      `gh attestation verify ${asset.name} -R ${ATTESTING_REPOSITORY}`;
+    document.getElementById('attestation-dialog').showModal();
   }
 
   // ---------------------------------------------------------------------------
