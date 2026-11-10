@@ -12,7 +12,7 @@
   --border: #d3d7cf;
   --border-strong: #babdb6;
   --accent: #5a6b1a;
-  --accent-top: #66791f;        /* top of the primary button gradient */
+  --accent-top: #66791f;        /* the upper half of the primary button, just above the break in the middle */
   --accent-hover: #445016;
   --accent-soft: #e9eed3;
   --on-accent: #ffffff;
@@ -20,6 +20,29 @@
   --danger: #a40000;
   --danger-hover: #820000;
   --on-danger: #ffffff;
+
+  /*
+   * Buttons and pickers have a gloss after Clearlooks (the GNOME 2 theme of the days of the Tango icons).
+   * The upper half of a button is lighter. At the middle, the color drops at once to a darker lower half.
+   * Under the pointer, the whole button gets a little lighter.
+   */
+  --button-face: linear-gradient(#ffffff, #f8f9f4 50%, #eef0e6 50%, #e6e9da);
+  --button-face-hover: linear-gradient(#ffffff, #fdfdfb 50%, #f4f5ee 50%, #eceee2);
+  --primary-face: linear-gradient(#758b24, var(--accent-top) 50%, var(--accent) 50%, #516017);
+  --primary-face-hover: linear-gradient(#829a30, #71862a 50%, #64771d 50%, #5a6b1a);
+  --danger-face: linear-gradient(#e41c1c, var(--danger-top) 50%, var(--danger) 50%, #960000);
+  --danger-face-hover: linear-gradient(#ec3030, #d91111 50%, #b50000 50%, #a40000);
+  /* For a small tag, such as *1: --accent-soft with the gloss. */
+  --accent-soft-face: linear-gradient(#f5f7ea, #f0f3e0 50%, #e6ecce 50%, #e1e8c4);
+  /*
+   * The lit row of a list, and the current section in the header: darker than --accent-soft, so that the row is easy
+   * to see, but light enough for green text (contrast 4.5:1 in the middle, behind the text).
+   * The lines (--lit-row-line) go only on the edges that touch nothing else:
+   * - A row of a list: above and below. The sides of the row touch the border of the list.
+   * - The block in the header: on the sides. The top and the bottom of the block are the edges of the header.
+   */
+  --lit-row-face: linear-gradient(#e7eccf, #e1e7c3 50%, #dee5bd 50%, #d8e0b1);
+  --lit-row-line: color-mix(in srgb, var(--accent) 40%, transparent);
   --danger-soft: #f9e0e0;       /* the background of a warning (.musing-warning) */
   --quote-bg: #f2f2ee;          /* the background of a quotation or a dialogue in Q&A (.faq-quote, .faq-dialogue) */
   --error-text: #a40000;        /* an error message in a document (.terms-error) */
@@ -55,6 +78,12 @@
     --checker: #20231b;
     --highlight: rgb(255 255 255 / 0.06);
     --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 16px rgb(0 0 0 / 0.25);
+    --button-face: linear-gradient(#303429, #2a2d24 50%, #22251b 50%, #1f2219);
+    --button-face-hover: linear-gradient(#373c30, #30342a 50%, #272a20 50%, #24271d);
+    --primary-face: linear-gradient(#c5da69, var(--accent-top) 50%, var(--accent) 50%, #acc739);
+    --primary-face-hover: linear-gradient(#cee07e, #c8dc6e 50%, #bad152 50%, #b4cd44);
+    --accent-soft-face: linear-gradient(#3a422b, #353c27 50%, #2e3421 50%, #2b311f);
+    --lit-row-face: linear-gradient(#485527, #424e24 50%, #3f4a22 50%, #3a441f);
   }
 }
 
@@ -192,7 +221,7 @@ code {
   font-size: 0.95rem;
 }
 
-/* ---- Buttons (a little GTK+ 2: gradient, 1px border, inner highlight) ---- */
+/* ---- Buttons (the gloss of Clearlooks: see --button-face) --------------- */
 
 .button-row {
   display: flex;
@@ -209,7 +238,7 @@ code {
   padding: 0.55rem 1.15rem;
   border: 1px solid var(--border-strong);
   border-radius: 8px;
-  background: linear-gradient(var(--surface), var(--surface-sunken));
+  background: var(--button-face);
   box-shadow: inset 0 1px 0 var(--highlight), 0 1px 2px rgb(0 0 0 / 0.08);
   color: var(--text);
   font-weight: 600;
@@ -219,30 +248,31 @@ code {
 
 .button:hover {
   border-color: var(--accent);
+  background: var(--button-face-hover);
   color: var(--text);
 }
 
 .button-primary {
   border-color: var(--accent-hover);
-  background: linear-gradient(var(--accent-top), var(--accent));
+  background: var(--primary-face);
   color: var(--on-accent);
 }
 
 .button-primary:hover {
-  background: var(--accent-hover);
+  background: var(--primary-face-hover);
   color: var(--on-accent);
 }
 
 /* A red button, for an action to think twice about (agreeing to the Director's Cut). */
 .button-danger {
   border-color: var(--danger-hover);
-  background: linear-gradient(var(--danger-top), var(--danger));
+  background: var(--danger-face);
   color: var(--on-danger);
 }
 
 .button-danger:hover {
   border-color: var(--danger-hover);
-  background: var(--danger-hover);
+  background: var(--danger-face-hover);
   color: var(--on-danger);
 }
 
@@ -279,7 +309,7 @@ code {
   top: 0;
   z-index: 10;
   border-bottom: 1px solid var(--border);
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  background: linear-gradient(var(--highlight), transparent), color-mix(in srgb, var(--bg) 90%, transparent);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
@@ -307,15 +337,21 @@ code {
   color: var(--text);
 }
 
+/* So that the block of the current section (below) fills the header from the top to the bottom. */
 .site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
+  align-self: stretch;
+  margin-block: -0.5rem;
   margin-inline-start: auto;
 }
 
 .site-nav a {
   position: relative;
+  isolation: isolate;   /* the block of the current section (::after) stays behind the text */
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 0.625rem;   /* 1.25rem between the texts of two links */
   color: var(--text-muted);
   font-weight: 500;
   text-decoration: none;
@@ -325,17 +361,17 @@ code {
   color: var(--accent);
 }
 
-/* The section being read, which main.js marks with aria-current: green text, and a green underline growing in. */
+/* The section being read, which main.js marks with aria-current: green text, on a block lit like the chosen row of a
+   picker (--lit-row-face), fading in. */
 .site-nav a::after {
   content: "";
   position: absolute;
-  inset-inline: 0;
-  bottom: -0.3rem;
-  height: 3px;
-  border-radius: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transition: transform 0.2s ease;
+  inset: 0;
+  z-index: -1;
+  background: var(--lit-row-face);
+  box-shadow: inset 1px 0 0 var(--lit-row-line), inset -1px 0 0 var(--lit-row-line);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .site-nav a[aria-current="true"] {
@@ -343,7 +379,7 @@ code {
 }
 
 .site-nav a[aria-current="true"]::after {
-  transform: scaleX(1);
+  opacity: 1;
 }
 
 .language-picker {
@@ -371,7 +407,8 @@ code {
   padding: 0.3rem 0.5rem 0.3rem 0.6rem;
   border: 1px solid var(--border-strong);
   border-radius: 6px;
-  background: var(--surface);
+  background: var(--button-face);
+  box-shadow: inset 0 1px 0 var(--highlight), 0 1px 2px rgb(0 0 0 / 0.08);
   color: var(--text);
   line-height: 1.4;
   cursor: pointer;
@@ -381,6 +418,7 @@ code {
 .llselect-trigger:hover,
 .llselect-trigger[data-state='open'] {
   border-color: var(--accent);
+  background: var(--button-face-hover);
 }
 
 .llselect-trigger-content {
@@ -421,7 +459,8 @@ code {
 
 .llselect-popup-list-row:hover,
 .llselect-popup-list-row-focused {
-  background: var(--accent-soft);
+  background: var(--lit-row-face);
+  box-shadow: inset 0 1px 0 var(--lit-row-line), inset 0 -1px 0 var(--lit-row-line);
 }
 
 .llselect-popup-list-row[aria-selected='true'] {
@@ -477,8 +516,11 @@ code {
   .site-nav {
     order: 1;
     width: 100%;
-    margin-inline-start: 0;
-    padding-bottom: 0.25rem;
+    /* The block of the current section reaches down to the bottom of the header, not up into the row above. */
+    margin-top: 0;
+    /* The text of the first link lines up with the logo. The block of that link starts a little to the left of the
+       logo. */
+    margin-inline-start: -0.625rem;
   }
 }
 
@@ -491,8 +533,8 @@ code {
 .header-bar.is-stacked .site-nav {
   order: 1;
   width: 100%;
-  margin-inline-start: 0;
-  padding-bottom: 0.25rem;
+  margin-top: 0;
+  margin-inline-start: -0.625rem;
 }
 
 /* On a phone, when the logo and both pickers do not fit on one row, main.js hides the name in the closed pickers (see
@@ -641,14 +683,14 @@ code {
   font-size: clamp(1.6rem, 3.2vw, 2rem);
 }
 
-/* A small square, like one pixel of the pixel art in KiSS cels. */
+/* A small square, like one pixel of the pixel art in KiSS cels. The square has the gloss of a primary button. */
 .section h2::before {
   content: "";
   display: inline-block;
   width: 0.45em;
   height: 0.45em;
   margin-inline-end: 0.5em;
-  background: var(--accent);
+  background: var(--primary-face);
   vertical-align: 0.12em;
 }
 
@@ -737,12 +779,13 @@ code {
   list-style: none;
 }
 
+/* The same background as .download-card. */
 .feature {
   padding: 1.25rem 1.25rem 1.1rem;
   border: 1px solid var(--border);
   border-top: 3px solid var(--accent);
   border-radius: var(--radius);
-  background: var(--bg);
+  background: linear-gradient(var(--surface), var(--bg) 6rem);
 }
 
 .feature h3 {
@@ -789,18 +832,19 @@ sup {
 .footnote-back {
   padding: 0.05em 0.35em;
   border-radius: 4px;
-  background: var(--accent-soft);
+  background: var(--accent-soft-face);
   color: var(--accent);
   font-weight: 700;
   text-decoration: none;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  /* Not the background: browsers switch from one gradient to another at once, without a transition. */
+  transition: color 0.15s ease;
 }
 
 .footnote-ref a:hover,
 .footnote-back:hover,
 :target > .footnote-back,
 :target .footnote-ref a {
-  background: var(--accent);
+  background: var(--primary-face);
   color: var(--on-accent);
 }
 
@@ -1080,13 +1124,16 @@ sup {
   padding: 0;
   border: 1px solid rgb(255 255 255 / 0.25);
   border-radius: 50%;
-  background: rgb(255 255 255 / 0.1);
+  /* The gloss of the buttons, see-through. */
+  background: linear-gradient(rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.13) 50%,
+                              rgb(255 255 255 / 0.06) 50%, rgb(255 255 255 / 0.1));
   color: #ffffff;
   cursor: pointer;
 }
 
 .lightbox-button:hover {
-  background: rgb(255 255 255 / 0.2);
+  background: linear-gradient(rgb(255 255 255 / 0.32), rgb(255 255 255 / 0.23) 50%,
+                              rgb(255 255 255 / 0.16) 50%, rgb(255 255 255 / 0.2));
 }
 
 .lightbox-prev {
@@ -1248,8 +1295,8 @@ sup {
   padding: calc(18 * var(--px)) calc(26 * var(--px)) calc(10 * var(--px));
   border: 1px solid var(--border-strong);
   border-radius: calc(24 * var(--px));
-  background: var(--surface);
-  box-shadow: var(--shadow);
+  background: var(--button-face);
+  box-shadow: inset 0 1px 0 var(--highlight), var(--shadow);
   font-size: max(0.7rem, 40 * var(--px));
   font-weight: 600;
   line-height: 1.4;
@@ -1376,16 +1423,15 @@ sup {
 /* The chosen preset: like a primary button. */
 .crt-preset-button[aria-pressed="true"] {
   border-color: var(--accent-hover);
-  background: linear-gradient(var(--accent-top), var(--accent));
+  background: var(--primary-face);
   color: var(--on-accent);
 }
 
-/* The zoom picker looks like the buttons beside it (.button): as high, with the same corners, surface and weight. */
+/* The zoom picker looks like the buttons beside it (.button): as high, with the same corners and weight. The gloss
+   comes from .llselect-trigger. */
 .crt-zoom .llselect-trigger {
   height: 2.75rem;
   border-radius: 8px;
-  background: linear-gradient(var(--surface), var(--surface-sunken));
-  box-shadow: inset 0 1px 0 var(--highlight), 0 1px 2px rgb(0 0 0 / 0.08);
   font-weight: 600;
 }
 
@@ -1529,7 +1575,7 @@ sup {
   padding: 1.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--bg);
+  background: linear-gradient(var(--surface), var(--bg) 6rem);   /* the same background as .feature */
 }
 
 .download-head {
@@ -1684,7 +1730,8 @@ sup {
 
 .download-menu-item:hover,
 .download-menu-item:focus-visible {
-  background: var(--accent-soft);
+  background: var(--lit-row-face);
+  box-shadow: inset 0 1px 0 var(--lit-row-line), inset 0 -1px 0 var(--lit-row-line);
 }
 
 /* The SHA-256 of a file, opened from the menu of its download button. The dialog that asks before switching to the
@@ -1793,7 +1840,7 @@ sup {
   position: relative;
   padding: 0.3rem 0.8rem;
   border: 1px solid var(--border-strong);
-  background: linear-gradient(var(--surface), var(--surface-sunken));
+  background: var(--button-face);
   box-shadow: inset 0 1px 0 var(--highlight);
   font-size: 0.9rem;
   font-weight: 600;
@@ -1820,9 +1867,13 @@ sup {
   border-color: var(--accent);
 }
 
+.checksum-system:hover {
+  background: var(--button-face-hover);
+}
+
 .checksum-system:has(:checked) {
   border-color: var(--accent-hover);
-  background: linear-gradient(var(--accent-top), var(--accent));
+  background: var(--primary-face);
   color: var(--on-accent);
 }
 
@@ -1873,11 +1924,11 @@ sup {
 
 /* The logos keep their brand colors. Some of them, like the dark red of Debian, need a light
    background, also in the dark theme. The padding is inside the 32 px, so a logo is drawn at
-   24 px, the size of the Simple Icons grid. */
+   24 px, the size of the Simple Icons grid. The background has the gloss of the buttons. */
 .distro-list img {
   padding: 4px;
   border-radius: 8px;
-  background: #ffffff;
+  background: linear-gradient(#ffffff, #fbfbf9 50%, #f1f2ec 50%, #e9ebe3);
   box-shadow: 0 0 0 1px var(--border);
 }
 
@@ -1927,7 +1978,7 @@ sup {
   flex: none;
   padding: 0.05em 0.45em;
   border-radius: 4px;
-  background: var(--accent-soft);
+  background: var(--accent-soft-face);
   color: var(--accent);
   font-weight: 700;
 }
