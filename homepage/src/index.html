@@ -208,6 +208,32 @@
             <span data-i18n="features.footnote.author"></span>
           </p>
         </div>
+      </div>
+    </section>
+
+    <section class="section" id="screenshots">
+      <div class="container">
+        <h2><span data-i18n="screenshots.title">Screenshots</span><a class="heading-link" href="#screenshots" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
+        <!--
+          Filled by main.js from screenshots/screenshots.json, without its first screenshot (the main one, in "Why QKiSS?").
+          build.py copies that file from homepage/screenshots.json in this repository, and the images it lists from the wiki.
+          The showcase shows one screenshot large; the gallery under it has a thumbnail for each, to pick the one to show.
+        -->
+        <figure class="showcase" id="showcase" hidden>
+          <div class="showcase-media">
+            <img id="showcase-image" alt="">
+            <!-- Used instead of the image above, when the screenshot is a video (webm). -->
+            <video id="showcase-video" controls loop muted playsinline preload="metadata" hidden></video>
+            <button type="button" class="showcase-enlarge" id="showcase-enlarge"
+                    aria-label="Enlarge" title="Enlarge" data-i18n-attr="aria-label:screenshots.enlarge;title:screenshots.enlarge">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <figcaption id="showcase-caption"></figcaption>
+        </figure>
+        <ul class="gallery" id="gallery"></ul>
+        <p class="notice" id="gallery-notice" hidden data-i18n="screenshots.unavailable">Screenshots are not available in this build of the website.</p>
+        <noscript><p class="notice">Screenshots need JavaScript.</p></noscript>
         <!--
           The CRT Simulation of the app, compared with the original, like in an image editor: None on the left, the
           chosen preset on the right, on either side of a line that can be dragged. The zoom picker enlarges both; the
@@ -216,6 +242,8 @@
           block comes near (see showBlocks()).
         -->
         <div class="crt" id="crt" data-block="crt" hidden>
+          <h3><span data-i18n="crt.heading">CRT Simulation</span><a class="heading-link" href="#crt" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h3>
+          <p data-i18n="crt.intro">This is a comparison of real screenshots of the CRT Simulation effects built into QKiSS 0.9.4.</p>
           <div class="crt-controls">
             <div class="crt-presets" role="group" aria-label="CRT Simulation" data-i18n-attr="aria-label:crt.title">
               <button type="button" class="button crt-preset-button" data-preset="sharp" aria-pressed="true" data-i18n="crt.mode.sharp">Sharp</button>
@@ -258,34 +286,8 @@
               <span class="crt-divider-handle"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             </div>
           </div>
-          <p class="figure-legend" data-i18n="crt.legend">The CRT Simulation of QKiSS: the original on the left, the chosen preset on the right. Drag the line in the middle to compare them.</p>
+          <p class="figure-legend" data-i18n="crt.legend">The original on the left, the chosen preset on the right. Drag the line in the middle to compare them.</p>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="screenshots">
-      <div class="container">
-        <h2><span data-i18n="screenshots.title">Screenshots</span><a class="heading-link" href="#screenshots" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
-        <!--
-          Filled by main.js from screenshots/screenshots.json, without its first screenshot (the main one, in "Why QKiSS?").
-          build.py copies that file from homepage/screenshots.json in this repository, and the images it lists from the wiki.
-          The showcase shows one screenshot large; the gallery under it has a thumbnail for each, to pick the one to show.
-        -->
-        <figure class="showcase" id="showcase" hidden>
-          <div class="showcase-media">
-            <img id="showcase-image" alt="">
-            <!-- Used instead of the image above, when the screenshot is a video (webm). -->
-            <video id="showcase-video" controls loop muted playsinline preload="metadata" hidden></video>
-            <button type="button" class="showcase-enlarge" id="showcase-enlarge"
-                    aria-label="Enlarge" title="Enlarge" data-i18n-attr="aria-label:screenshots.enlarge;title:screenshots.enlarge">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-          </div>
-          <figcaption id="showcase-caption"></figcaption>
-        </figure>
-        <ul class="gallery" id="gallery"></ul>
-        <p class="notice" id="gallery-notice" hidden data-i18n="screenshots.unavailable">Screenshots are not available in this build of the website.</p>
-        <noscript><p class="notice">Screenshots need JavaScript.</p></noscript>
       </div>
     </section>
 

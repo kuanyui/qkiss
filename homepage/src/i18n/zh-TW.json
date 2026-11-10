@@ -321,6 +321,8 @@
     "danger": "Firefox 啊你堅持拿掉一堆 UI 上的圖示到底是有什麼毛病啊？從來沒想過閱讀障礙者操作 UI 很可能是優先依賴「座標位置 → 圖示的顏色 → 圖示的細節 → 最後才是文字」嗎？圖示變單色還不夠，現在連圖示都拿掉了，連 Chrome 跟 Edge 這兩個沒在管使用者死活的流氓在這點上都比你好一點，至少人家主程式主選單還有保留圖示。圖示這點 DuckDuckGo Browser 反而是作的最好的，DuckDuckGo 是目前（截至 2026/10 為止）就我所知唯一一個右鍵 context menu 還保留圖示的主流瀏覽器、打趴 Firefox Chrome Edge Vivaldi Brave 所有人，而且他的設定畫面的圖示還是彩色的！你知道我看到這有多激動嗎！"
   },
   "crt.title": "CRT 模擬",
+  "crt.heading": "CRT 模擬",
+  "crt.intro": "此為 QKiSS 0.9.4 內建的 CRT 模擬效果畫面實拍比對圖。",
   "crt.mode.sharp": "銳利",
   "crt.mode.soft": "柔和",
   "crt.mode.glow": "炫光",
@@ -331,7 +333,7 @@
   "crt.zoom": "縮放",
   "crt.zoom.fit": "全圖",
   "crt.original": "原圖",
-  "crt.legend": "QKiSS 的 CRT 螢幕模擬：左邊是原圖，右邊是選擇的效果。拖曳中間的分隔線來比較。",
+  "crt.legend": "左邊是原圖，右邊是選擇的效果。拖曳中間的分隔線來比較。",
   "footer.license": "QKiSS 是自由軟體，以 <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License v3</a> 授權釋出。",
   "footer.source": "原始碼",
   "footer.specs.title": "KiSS 規格",

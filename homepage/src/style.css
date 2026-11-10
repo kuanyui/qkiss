@@ -1324,10 +1324,16 @@ sup {
 
 /* ---- The CRT Simulation ------------------------------------------------- */
 
-/* #crt, at the end of Highlights: the presets and the zoom picker, over None (left) and the chosen preset (right),
+/* #crt, at the end of Screenshots: the presets and the zoom picker, over None (left) and the chosen preset (right),
    on either side of a line. See setUpCrt() in main.js. */
 .crt {
   margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+/* Its heading, a level under the one of Screenshots, like "Why QKiSS?" under "What is KiSS?". */
+.crt h3 {
+  margin: 0 0 1.25rem;
+  font-size: 1.3rem;
 }
 
 .crt-controls {
