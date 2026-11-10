@@ -360,6 +360,7 @@ code {
 .llselect-root {
   position: relative;
   display: inline-block;
+  vertical-align: top;   /* not on the baseline: the line of text would keep room below it for letters like g and y */
   font-size: 0.95rem;
 }
 
@@ -411,8 +412,9 @@ code {
   font-size: 0.95rem;
 }
 
+/* Tall enough to tap easily on a phone. */
 .llselect-popup-list-row {
-  padding: 0.35rem 0.75rem;
+  padding: 0.5rem 0.75rem;
   line-height: 1.4;
   cursor: pointer;
 }
@@ -427,8 +429,10 @@ code {
   font-weight: 600;
 }
 
+/* This one, .cut-option and .crt-zoom-option are flex, not inline-flex. An inline-flex box would sit on a line of
+   text, which keeps room below it for letters like g and y, so the icon and the name would sit too high. */
 .language-option {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
 }
@@ -454,7 +458,7 @@ code {
 
 /* The cut picker is an llselect too, styled above. A cut is shown by its icon and its name (.cut-option). */
 .cut-option {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
   white-space: nowrap;
@@ -1355,7 +1359,7 @@ sup {
 }
 
 .crt-zoom-option {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.4rem;
   white-space: nowrap;
