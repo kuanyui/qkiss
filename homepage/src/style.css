@@ -1541,6 +1541,14 @@ sup {
   white-space: nowrap;
 }
 
+/* In #platforms, the banana is near the right edge of the page, so the caption grows to the left of it. Even hidden
+   (opacity 0), the caption still counts in the scrollable width of the page: on the right, it would make the page
+   wider than the screen. */
+:root[data-cut="safe"] .platform-label .download-icon-link::after {
+  left: auto;
+  right: 0;
+}
+
 /*
  * The handwriting of the caption, the same on every computer (see fonts/README.md). Only the rule below names it, so
  * it is downloaded only when the card of macOS (or the label of its window in #platforms) is pointed at or has the
