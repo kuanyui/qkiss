@@ -62,10 +62,7 @@
   "about.why.story": "本臭宅是 2007 左右才第一次聽說 KiSS<sup class=\"footnote-ref\"><a href=\"#footnote-palmkiss\">*1</a></sup>，是因為在 Ubuntu 的 Synaptic 裡面亂翻常常看到「<a href=\"https://devel.tlrmx.org/kiss/\">GnomeKiSS</a>」這搶眼的怪名字，但當時也不知道要怎用，直到了 2012 左右調查了才搞清楚 KiSS 是什麼，即使當時都已經是 KiSS 沒落的年代了，但裡面那些日本動漫角色與漂亮的服裝、動漫梗與 Windows 95/98 時代的像素美學的回憶還是讓我用 GnomeKiSS 玩了很久。",
   "about.why.body": "然而到了 2024 年，有陣子想要重溫一下那些 KiSS 檔，卻發現當時 Linux 上現有的原生 KiSS 檢視器都已經無法使用：<a href=\"https://www2s.biglobe.ne.jp/~yav/kiss/index.html\">fkiss</a> 雖然還能編譯，卻已無法執行；<a href=\"https://devel.tlrmx.org/kiss/\">GnomeKiSS</a> 則依賴過時的 GNOME 2 函式庫，大多數發行版都已不再收錄。於是想說不然自己來寫一個，而且要做就絕對要作一個 Linux 上面原生支援且 UI/UX 要讓自己滿意的，另外也是順便練習拿 Qt / C++ 寫個稍微有規模的專案，所以就開始用 Qt / C++ 一邊啃 KISS/GS 規格書從零開始打造 QKiSS 這個全新的 KiSS 檢視器。卅年傳統，全新感受。",
   "about.why.practice": "而且寫起來也真的饒富趣味：從理解 KISS/GS 調色盤與點陣圖專屬的格式讓圖片正確顯示出來，再根據 FKiSS 規格實作出腳本語言的解析器與直譯器讓畫面動起來，由於是年代久遠的格式，還會遇到一堆我這種現代開發者從沒想過的事情（比如 Mac OS 以前是拿 <code>\\r</code> 來當換行符號的），寫這些東西的樂趣早就超過 KiSS 檔案本身。",
-  "about.why.burnout": {
-    "safe":   "",
-    "danger": "雖然等我寫完時除了奔奧外，有了 LLM 的這個世界，似乎也已經不需要我這種 LeetCode 刷三個月就開始想轉生異世界的廢物寫程式了。"
-  },
+  "about.why.burnout": "雖然等我寫完時除了<ruby>奔奧<rt>burn-out</rt></ruby>外，有了 LLM 的這個世界，似乎也已經不需要我這種 LeetCode 每天一題連續刷三個月就開始想轉生異世界的廢物寫程式了。",
   "about.nostalgia": {
     "safe":   "這個專案一部分也是源自對 Windows 95/98 與 GTK+ 2 時代的懷舊。現實世界已經足夠可怕，至少<a href=\"https://ja.wikipedia.org/wiki/2次元\">二次元</a>與<a href=\"https://w.wiki/4So4\">異世界</a>保留著賜予我們純淨的應許之地。",
     "danger": "這個專案一部分也是源自對 Windows 95/98 與 GTK+ 2 時代的懷舊 —— 那是一個在網際網路還沒被 AI 生成的垃圾污染之前的已失落的文明年代（雖然這個專案本身也有用到一些 AI...）。現實世界已經足夠可怕，至少<a href=\"https://ja.wikipedia.org/wiki/2次元\">二次元</a>與<a href=\"https://w.wiki/4So4\">異世界</a>保留著賜予我們純淨的應許之地。"

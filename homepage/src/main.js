@@ -712,6 +712,8 @@
   /** What the lightbox goes through: `screenshots`, or the windows of #platforms (see setUpPlatforms()). */
   let lightboxItems = [];
   let lightboxIndex = 0;
+  /** A touch that moves sideways at least this far (in CSS pixels) in the lightbox is a swipe, as over #platforms. */
+  const LIGHTBOX_SWIPE_PX = 40;
 
   async function loadScreenshots() {
     let blocks = {};
@@ -919,6 +921,32 @@
       if (event.target.closest('video')) return;   // When the video has the focus, the arrow keys seek in it.
       if (event.key === 'ArrowLeft') showScreenshot(lightboxIndex - 1);
       if (event.key === 'ArrowRight') showScreenshot(lightboxIndex + 1);
+    });
+
+    // A swipe on a touch screen: to the left for the next screenshot, to the right for the previous one.
+    // Touch events, not pointer events as in #platforms: pointer events would need `touch-action: pan-y`, and then a
+    // visitor who zoomed in on a screenshot could not move it sideways.
+    // Also on the video: the videos are short, so going to another one matters more than seeking in it. Only with
+    // one finger, and not on a button or while zoomed in (a move then pans the page).
+    let swipeStart = null;
+    lightbox.addEventListener('touchstart', (event) => {
+      const zoomedIn = (window.visualViewport?.scale ?? 1) > 1.01;
+      const touch = event.touches[0];
+      swipeStart = event.touches.length === 1 && !zoomedIn && !event.target.closest('button')
+        ? { x: touch.clientX, y: touch.clientY }
+        : null;
+    }, { passive: true });
+    lightbox.addEventListener('touchcancel', () => {
+      swipeStart = null;
+    });
+    lightbox.addEventListener('touchend', (event) => {
+      if (swipeStart === null) return;
+      const touch = event.changedTouches[0];
+      const dx = touch.clientX - swipeStart.x;
+      const dy = touch.clientY - swipeStart.y;
+      swipeStart = null;
+      if (Math.abs(dx) < LIGHTBOX_SWIPE_PX || Math.abs(dx) < Math.abs(dy)) return;
+      showScreenshot(lightboxIndex + (dx < 0 ? 1 : -1));
     });
   }
 

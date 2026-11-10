@@ -20,9 +20,6 @@
   "footer.disclaimer": {
     "danger": "<strong>Disclaimer:</strong> QKiSS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License</a> for more details. NONETHELESS, POLITICAL INCORRECTNESS IS ABSOLUTELY GUARANTEED. After all, this project was made in a country banned from flying its flag at the Olympics, banned from listing its nationality at the Chopin Competition, banned from joining the United Nations, and where the WHO doesn’t believe a single breathing human lives. The author(s) accept(s) no liability for hurting the feelings of the Whatever people."
   },
-  "about.why.burnout": {
-    "danger": "Though by the time I finished, I was not only burnt out: this world of LLMs also no longer seemed to need a loser like me to write programs, the kind who grinds LeetCode for three months, then starts wishing to be reincarnated in another world."
-  },
   "about.nostalgia": {
     "danger": "This project comes from nostalgia for the Windows 95/98 and GTK+ 2 era —— a lost age before Internet was polluted by AI-generated junk (this project does use some AI though). After all, life is frightening enough as it is; the real world is a hot mess, while <a href=\"https://ja.wikipedia.org/wiki/2次元\">nijigen</a> and <a href=\"https://w.wiki/4So4\">isekai</a> remain a pure promised land."
   },

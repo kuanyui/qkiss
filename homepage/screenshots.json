@@ -17,6 +17,14 @@
       }
     },
     {
+      "image": "kiss_gs_4bit_palette_switch.webm",
+      "caption": {
+        "en": "Support for the earliest KISS/GS specification, with 4-bit palettes",
+        "ja": "最初期の 4 ビットパレットの KISS/GS 規格に対応",
+        "zh-TW": "支援最早期 4 位元調色盤的 KISS/GS 規格"
+      }
+    },
+    {
       "image": "switch_page_eva.webm",
       "caption": {
         "en": "Cycle through the scenes with one click",
@@ -30,14 +38,6 @@
         "en": "The buttons to switch scenes",
         "ja": "シーン切り替えボタン",
         "zh-TW": "切換場景的按鈕"
-      }
-    },
-    {
-      "image": "kiss_gs_4bits_palatte.webp",
-      "caption": {
-        "en": "Support for the earliest KISS/GS specification, with 4-bit palettes",
-        "ja": "最初期の 4 ビットパレットの KISS/GS 規格に対応",
-        "zh-TW": "支援最早期 4 位元調色盤的 KISS/GS 規格"
       }
     },
     {
