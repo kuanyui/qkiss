@@ -921,7 +921,14 @@
       // A click anywhere but on the screenshot, its caption or a button closes it.
       if (!event.target.closest('img, video, figcaption, button')) lightbox.close();
     });
-    lightbox.addEventListener('close', () => document.getElementById('lightbox-video').pause());
+    lightbox.addEventListener('close', () => {
+      // One video file in one video element at a time (see openLightbox()): the lightbox lets go of its video, and
+      // the showcase gets its own back.
+      const video = document.getElementById('lightbox-video');
+      video.removeAttribute('src');
+      video.load();
+      if (!document.getElementById('showcase').hidden) showInShowcase(showcaseIndex, false);
+    });
     lightbox.addEventListener('keydown', (event) => {
       if (event.target.closest('video')) return;   // When the video has the focus, the arrow keys seek in it.
       if (event.key === 'ArrowLeft') showScreenshot(lightboxIndex - 1);
@@ -956,7 +963,12 @@
   }
 
   function openLightbox(index, items) {
-    document.getElementById('showcase-video').pause();   // Only one video plays at a time.
+    // Only one video plays at a time, and only one element holds a video file: the showcase lets go of its video until
+    // the lightbox closes. In Firefox, while the showcase still held the same file, the lightbox could show only the
+    // controls of the video (seen with an AV1 video on Linux).
+    const showcaseVideo = document.getElementById('showcase-video');
+    showcaseVideo.removeAttribute('src');
+    showcaseVideo.load();
     lightboxItems = items;
     showScreenshot(index);
     lightbox.showModal();
