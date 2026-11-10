@@ -81,6 +81,11 @@ OG_IMAGE_PNG: str = "images/og-image.png"
 # Its width and height in pixels. These must match `og:image:width` and `og:image:height` in index.html.
 OG_IMAGE_SIZE: tuple[int, int] = (1280, 640)
 
+# The sitemap, written by sitemap_xml(), and the URL that its addresses start with: the site on GitHub Pages, like
+# `og:image` in index.html. See "Search engines" in homepage/README.md.
+SITEMAP: str = "sitemap.xml"
+SITE_URL: str = "https://kuanyui.github.io/qkiss/"
+
 # The fields a language may have in `LANGUAGES` of main.js, and whether each one is required.
 LANGUAGE_FIELDS: dict[str, bool] = {"id": True, "name": True, "lang": False, "fallback": False, "flag": False}
 
@@ -606,6 +611,25 @@ def og_image_png() -> bytes:
 
 
 # ==========================================
+# The sitemap
+# ==========================================
+
+def sitemap_xml(languages: list[dict[str, str]]) -> bytes:
+    """List the page in every language, so that search engines index the translations too: at `?lang=<id>`, or
+    without `?lang=` for the source language, as chooseLanguage() in main.js writes it. Each URL names all of them
+    (hreflang), and the one without `?lang=` is also `x-default`, because it follows the languages of the browser."""
+    if (SRC_DIR / SITEMAP).exists():
+        raise BuildError(f"{SRC_DIR / SITEMAP}: must not exist; the build writes it from LANGUAGES in main.js")
+    urls = [(language.get("lang", language["id"]), SITE_URL if language is languages[0] else f"{SITE_URL}?lang={language['id']}")
+            for language in languages]
+    links = "".join(f'\n    <xhtml:link rel="alternate" hreflang="{tag}" href="{url}"/>' for tag, url in [*urls, ("x-default", SITE_URL)])
+    entries = "".join(f"\n  <url>\n    <loc>{url}</loc>{links}\n  </url>" for _, url in urls)
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+            f"{entries}\n</urlset>\n").encode("utf-8")
+
+
+# ==========================================
 # The site
 # ==========================================
 
@@ -638,7 +662,7 @@ def site_files(screenshots_dir: Path | None, images: list[str], languages: list[
 
 def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path | bytes], list[str]]:
     """Check everything the site is made from. Return its files and the warnings to print. Each file is either
-    the path to copy it from (from site_files), or its content (the PNG from og_image_png)."""
+    the path to copy it from (from site_files), or its content (the PNG from og_image_png, the sitemap from sitemap_xml)."""
     keys, page_blocks = check_page()
     languages = check_languages(languages_json())
     warnings = check_translations(languages, keys)
@@ -646,7 +670,8 @@ def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path | bytes], l
     images = check_screenshots(screenshots_dir, languages, page_blocks)   # screenshots.json is checked even without --screenshots
     if screenshots_dir is None:
         warnings.append("Without screenshots (--no-screenshots): fine for a preview, never publish it.")
-    files: dict[str, Path | bytes] = {**site_files(screenshots_dir, images, languages), OG_IMAGE_PNG: og_image_png()}
+    files: dict[str, Path | bytes] = {**site_files(screenshots_dir, images, languages), OG_IMAGE_PNG: og_image_png(),
+                                      SITEMAP: sitemap_xml(languages)}
     return files, warnings
 
 
