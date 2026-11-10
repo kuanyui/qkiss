@@ -709,7 +709,10 @@
   /** The screenshot shown in the showcase: an index in `screenshots`, never 0 (the main screenshot). */
   let showcaseIndex = 1;
   let lightbox = null;
-  /** What the lightbox goes through: `screenshots`, or the windows of #platforms (see setUpPlatforms()). */
+  /**
+   * What the lightbox goes through: the main screenshot alone, the screenshots of the showcase, or the windows of
+   * #platforms (see setUpPlatforms()).
+   */
   let lightboxItems = [];
   let lightboxIndex = 0;
   /** A touch that moves sideways at least this far (in CSS pixels) in the lightbox is a swipe, as over #platforms. */
@@ -843,9 +846,9 @@
 
   function renderGallery() {
     if (screenshots === null) return;
-    // The main screenshot. A click enlarges it.
+    // The main screenshot. A click enlarges it alone: it is not one of the screenshots of the showcase.
     const main = document.getElementById('main-screenshot');
-    if (screenshots.length > 0) main.replaceChildren(createScreenshotButton(0, () => openLightbox(0)));
+    if (screenshots.length > 0) main.replaceChildren(createScreenshotButton(0, () => openLightbox(0, screenshots.slice(0, 1))));
     main.hidden = screenshots.length === 0;
     // The others: one thumbnail each. A click shows that screenshot in the showcase.
     const items = screenshots.slice(1).map((_, i) => {
@@ -902,9 +905,11 @@
   }
 
   function setUpShowcase() {
-    // The showcase image and the Enlarge button both open the shown screenshot in the lightbox.
-    document.getElementById('showcase-image').addEventListener('click', () => openLightbox(showcaseIndex));
-    document.getElementById('showcase-enlarge').addEventListener('click', () => openLightbox(showcaseIndex));
+    // The showcase image and the Enlarge button both open the shown screenshot in the lightbox, which then goes
+    // through the screenshots of the showcase, without the main one.
+    const enlarge = () => openLightbox(showcaseIndex - 1, screenshots.slice(1));
+    document.getElementById('showcase-image').addEventListener('click', enlarge);
+    document.getElementById('showcase-enlarge').addEventListener('click', enlarge);
   }
 
   function setUpLightbox() {
@@ -950,7 +955,7 @@
     });
   }
 
-  function openLightbox(index, items = screenshots) {
+  function openLightbox(index, items) {
     document.getElementById('showcase-video').pause();   // Only one video plays at a time.
     lightboxItems = items;
     showScreenshot(index);
