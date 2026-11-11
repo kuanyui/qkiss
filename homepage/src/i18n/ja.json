@@ -339,6 +339,9 @@
   "footer.specs.title": "KiSS の仕様",
   "footer.specs.yav": "yav 氏の fkiss（日本語）",
   "footer.specs.otakuworld": "Otaku World（英語）",
+  "footer.author.title": "作者",
+  "footer.author.homepage": "ホームページ",
+  "footer.author.donate": "寄付",
   "footer.icons.title": "アイコン",
   "footer.icons.tango": "<a href=\"https://github.com/kuanyui/tango-icon-theme\">Tango Icon Theme</a>（作者：Tango Desktop Project contributors from freedesktop.org、GPL）",
   "footer.icons.simple": "<a href=\"https://simpleicons.org/\">Simple Icons</a>（CC0）：GitHub、GitHub Actions、各 Linux ディストリビューションのロゴ。いずれもそれぞれの所有者の商標です",
@@ -349,5 +352,13 @@
   },
   "lightbox.close": "閉じる",
   "lightbox.prev": "前のスクリーンショット",
-  "lightbox.next": "次のスクリーンショット"
+  "lightbox.next": "次のスクリーンショット",
+  "donation.free": "私が開発・公開している<strong>すべて</strong>のオープンソースソフトウェアのプロジェクトは<strong>無料</strong>で、<strong>すべて</strong> <code>WTFPL</code>、<code>GPL</code>、<code>LGPL</code>、<code>MIT</code>、<code>MPL</code> のいずれかのライセンスで公開しています。",
+  "donation.time": "とはいえ、私の自由な時間は<strong>タダではありません</strong>。私のソフトウェア作品のどれかが役に立ったり、単純に使っていてめちゃくちゃ気持ちいいと思ったりしたなら、寄付をご検討ください。（できれば、どのプロジェクトで寄付したくなったのかも教えてください）",
+  "donation.attention": "注意：寄付は<strong>あなたが本当に気持ちよくできるときだけ</strong>にしてください。これは完全に任意です。<strong>私がソフトウェアのプロジェクトを作る理由は、いつも「自分にその使い道があるから」</strong>で、他の人が必要としているから<strong>ではありません</strong>。だから私は強迫的なこだわりのせいで、時間やリソースなどの条件が許す限り、自分が満足できるまで、私の想像力<sup class=\"footnote-ref\"><a href=\"#footnote-imagination\">*1</a></sup>で想像できる限界<sup class=\"footnote-ref\"><a href=\"#footnote-limits\">*2</a></sup>まで、できるだけプロジェクトを作り込んでしまいます。そして、ついでに公開して、もしかしたら他の人にも必要とされたり、便利だと思ってもらえたりしたらいいなと思っています。",
+  "donation.warranty": "寄付していただけたら、うれしいですし、感謝します。<strong>ただし、寄付をしていただいても、プロジェクトについてはいかなる保証もできません</strong>。",
+  "donation.thanks": "ご協力ありがとうございます。Happy hacking!",
+  "donation.footnote.imagination": "「ソフトウェア開発というのはイメージの世界だ。」大エンジニア・ゼーリエ――は、そんなことを言っていない。",
+  "donation.footnote.limits": "人間ってのは時間に限界があるなあ…人間はサイドプロジェクトを書けば書くほど、どんなに必死に書いても、書きたいプロジェクトが次から次へと出てきて、永遠に書き終わらないってことだ…人間を超えるものにならない限りな…",
+  "donation.trademarks": "PayPal、Liberapay、Patreon は、それぞれの所有者の商標です。"
 }

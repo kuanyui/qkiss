@@ -17,7 +17,8 @@ homepage/
     ├── fonts/      # The handwriting of the caption over the banana of macOS. See fonts/README.md.
     └── images/
         ├── distros/              # Logos of the Linux distributions, from Simple Icons. See images/distros/README.md.
-        ├── icons/                # Icons from Tango and Nome, and the mark of Tango Remixer. See images/icons/README.md.
+        ├── funding/              # Logos of the donation platforms in the Donate dialog, from the README of the author. See images/funding/README.md.
+        ├── icons/                # Icons from Tango, Nome, Humanity and LibreOffice Elementary, and the mark of Tango Remixer. See images/icons/README.md.
         ├── marks/                # GitHub and GitLab marks for the buttons, from Simple Icons. See images/marks/README.md.
         ├── os/                   # Icons of the operating systems in Download. See images/os/README.md.
         ├── tech/                 # Logos of the technologies in Q&A (Python, C++, CMake, GitHub Actions). See images/tech/README.md.

@@ -757,13 +757,24 @@
           <li><a href="https://otakuworld.com/kiss/kisshelp/" hreflang="en" data-i18n="footer.specs.otakuworld">Otaku World (English)</a></li>
         </ul>
       </div>
+      <div>
+        <h2 class="footer-heading" data-i18n="footer.author.title">Author</h2>
+        <ul class="footer-links">
+          <li><a class="footer-icon-link" href="https://kuanyui.github.io/"><img src="images/icons/16/go-home.svg" alt="" width="16" height="16"><span data-i18n="footer.author.homepage">Homepage</span></a></li>
+          <li><a class="footer-icon-link" href="https://github.com/kuanyui"><span class="button-mark github"></span>GitHub</a></li>
+          <!-- Opens #donation-dialog (see main.js), so it is a button, drawn like the links above it. -->
+          <li><button type="button" class="footer-link-button footer-icon-link" id="donation-open"><img src="images/icons/16/currency-field.svg" alt="" width="16" height="16"><span data-i18n="footer.author.donate">Donate</span></button></li>
+        </ul>
+      </div>
       <!-- The sources and licenses of the icons of this website. The README files in images/icons, images/marks,
-           images/distros and images/flags give more details. -->
+           images/distros, images/funding and images/flags give more details. -->
       <div class="footer-credits">
         <h2 class="footer-heading" data-i18n="footer.icons.title">Icons</h2>
         <ul class="footer-links">
           <li data-i18n-html="footer.icons.tango"><a href="https://github.com/kuanyui/tango-icon-theme">Tango Icon Theme</a>, by the Tango Desktop Project contributors from freedesktop.org (GPL)</li>
           <li><a href="https://github.com/kuanyui/nome-icon-theme">Nome Icon Theme</a> (LGPL)</li>
+          <li><a href="https://github.com/kuanyui/humanity-icon-theme">Humanity Icon Theme</a> (GPL)</li>
+          <li><a href="https://github.com/kuanyui/floss-icon-collections">LibreOffice Elementary</a> (GPL)</li>
           <li><a href="https://github.com/lipis/flag-icons">flag-icons</a> (MIT)</li>
           <li data-i18n-html="footer.icons.simple"><a href="https://simpleicons.org/">Simple Icons</a> (CC0): the logos of GitHub, GitHub Actions and the Linux distributions, which are trademarks of their owners</li>
           <li data-i18n-html="footer.icons.official">The logos of <a href="https://www.python.org/community/logos/">Python</a>, <a href="https://github.com/isocpp/logos">C++</a> and <a href="https://cmake.org/">CMake</a>, trademarks of the Python Software Foundation, of the Standard C++ Foundation and of Kitware. QKiSS is not affiliated with them.</li>
@@ -839,6 +850,44 @@
       </div>
       <p class="checksum-label" data-i18n-html="download.attestation.command">To check that GitHub Actions built this file from the source code of QKiSS, run this command with the <a href="https://cli.github.com/">GitHub CLI</a>, in the folder of the downloaded file. It prints “Verification succeeded!” if so.</p>
       <code class="checksum-value" id="attestation-command"></code>
+    </div>
+  </dialog>
+
+  <!-- The author's note about donations, copied from the README of their GitHub profile (github.com/kuanyui), with the
+       links to donate. Opened by Donate in the footer (see main.js). It looks like #checksum-dialog, and closes like
+       it. -->
+  <dialog class="checksum-dialog" id="donation-dialog" aria-labelledby="donation-title">
+    <div class="checksum-body donation-body">
+      <div class="checksum-head">
+        <h2 class="checksum-file" id="donation-title" data-i18n="footer.author.donate">Donate</h2>
+        <button type="button" class="checksum-close"
+                aria-label="Close" title="Close" data-i18n-attr="aria-label:lightbox.close;title:lightbox.close">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <p data-i18n-html="donation.free">I develop and release <strong>all</strong> of my open-source software projects <strong>for free</strong>, and they are <strong>all</strong> licensed under <code>WTFPL</code>, <code>GPL</code>, <code>LGPL</code>, <code>MIT</code>, or <code>MPL</code>.</p>
+      <p data-i18n-html="donation.time">However, my “free time” is <strong>not free</strong> at all. If some of my software works are helpful to you, or you simply feel the software is super awesome to use, please consider donating. (And tell me which project makes you want to donate, if you can.)</p>
+      <blockquote class="musing">
+        <div>
+          <p id="footnote-ref-imagination" data-i18n-html="donation.attention">Attention: Donate <strong>only if you feel really happy</strong>; it is totally voluntary. <strong>I always make software projects “because I need them myself”</strong>, <strong>not</strong> because others need them. So my OCD makes me try as hard as I can, as far as my time and resources allow, to make the projects good enough to satisfy me, as far as my imagination<sup class="footnote-ref"><a href="#footnote-imagination">*1</a></sup> can go, to its limits<sup class="footnote-ref"><a href="#footnote-limits">*2</a></sup>. And I also just throw them out there, and wish my work could also be needed or useful to others.</p>
+          <p data-i18n-html="donation.warranty">If you donate, I will be glad and grateful, <strong>but I cannot provide any guarantee or warranty for the projects even if you do this</strong>.</p>
+        </div>
+      </blockquote>
+      <p><strong data-i18n="donation.thanks">Thanks for your contribution and happy hacking!</strong></p>
+      <!-- Numbered like the footnotes of the page (see numberFootnotes() in main.js). The last line has no number. -->
+      <div class="footnotes">
+        <p id="footnote-imagination">
+          <a class="footnote-back" href="#footnote-ref-imagination" aria-label="Back to the text" title="Back to the text"
+             data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*1</a>
+          <span data-i18n="donation.footnote.imagination">“Software development is a world of imagination.” — Great Engineer Serie, who never said this.</span>
+        </p>
+        <p id="footnote-limits">
+          <a class="footnote-back" href="#footnote-ref-imagination" aria-label="Back to the text" title="Back to the text"
+             data-i18n-attr="aria-label:features.footnote.back;title:features.footnote.back">*2</a>
+          <span data-i18n="donation.footnote.limits">Humans' time has its limits... The more side projects you write, the more you find that no matter how hard you write, the projects you want to write keep coming one after another, and you can never finish them all. Unless you surpass humanity...</span>
+        </p>
+        <p data-i18n="donation.trademarks">PayPal, Liberapay and Patreon are trademarks of their respective owners.</p>
+      </div>
     </div>
   </dialog>
 <!--

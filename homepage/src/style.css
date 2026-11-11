@@ -1843,6 +1843,22 @@ sup {
   outline-offset: 2px;
 }
 
+/* The author's note about donations, opened from the footer: paragraphs in the frame of .checksum-dialog. */
+.donation-body {
+  gap: 0.9rem;
+}
+
+.donation-body > p,
+.donation-body > .musing {
+  margin: 0;
+}
+
+/* The footnotes, and the line about the trademarks, under a line across the dialog. */
+.donation-body > .footnotes {
+  align-self: stretch;
+  margin-top: 0;
+}
+
 
 /* The latest version, followed by the button to every release. */
 .download-meta {
@@ -2220,7 +2236,7 @@ sup {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 2rem;
 }
 
@@ -2256,6 +2272,38 @@ sup {
 
 .footer-links li + li {
   margin-top: 0.35rem;
+}
+
+/* Donate opens a dialog, so it is a button, drawn like the links next to it. */
+.footer-link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  text-decoration: underline 1px;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+}
+
+.footer-link-button:hover {
+  color: var(--accent-hover);
+  text-decoration-thickness: 2px;
+}
+
+/* A link of the footer with a 16 px icon before its text: an icon of images/icons/, or a brand mark painted in the
+   color of the link (.button-mark). Aligned to the top of its line, so that its row is as tall as the rows of the
+   other columns. */
+.footer-icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  vertical-align: top;
+}
+
+.footer-icon-link .button-mark {
+  width: 16px;
+  height: 16px;
 }
 
 /* The sources and licenses of the icons, and the disclaimer at the very end of the page, span all the columns of the

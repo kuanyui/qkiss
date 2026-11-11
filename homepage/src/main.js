@@ -1237,6 +1237,17 @@
   }
 
   // ---------------------------------------------------------------------------
+  // Footer: Donate shows the author's note about donations
+  // ---------------------------------------------------------------------------
+
+  /** #donation-dialog closes like the dialogs of the download menus (see setUpDownloadMenus()). */
+  function setUpDonation() {
+    document.getElementById('donation-open').addEventListener('click', () => {
+      document.getElementById('donation-dialog').showModal();
+    });
+  }
+
+  // ---------------------------------------------------------------------------
   // The pickers and the dialogs of the cuts (controls.html)
   // ---------------------------------------------------------------------------
 
@@ -1648,6 +1659,7 @@
     setUpLightbox();
     setUpScrollSpy();
     setUpQuestionLinks();
+    setUpDonation();
     setLanguage(currentLanguage);
     loadScreenshots();
     loadLatestRelease();

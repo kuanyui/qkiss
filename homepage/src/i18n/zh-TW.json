@@ -339,6 +339,9 @@
   "footer.specs.title": "KiSS 規格",
   "footer.specs.yav": "yav 的 fkiss（日文）",
   "footer.specs.otakuworld": "Otaku World（英文）",
+  "footer.author.title": "作者",
+  "footer.author.homepage": "個人網站",
+  "footer.author.donate": "捐款",
   "footer.icons.title": "圖示",
   "footer.icons.tango": "<a href=\"https://github.com/kuanyui/tango-icon-theme\">Tango Icon Theme</a>（作者：Tango Desktop Project contributors from freedesktop.org，GPL）",
   "footer.icons.simple": "<a href=\"https://simpleicons.org/\">Simple Icons</a>（CC0）：GitHub、GitHub Actions 與各 Linux 發行版的標誌，皆為其所有者的商標",
@@ -349,5 +352,13 @@
   },
   "lightbox.close": "關閉",
   "lightbox.prev": "上一張截圖",
-  "lightbox.next": "下一張截圖"
+  "lightbox.next": "下一張截圖",
+  "donation.free": "我開發、發布的<strong>所有</strong>開放原始碼軟體專案都是<strong>免費</strong>的，而且<strong>全部</strong>以 <code>WTFPL</code>、<code>GPL</code>、<code>LGPL</code>、<code>MIT</code> 或 <code>MPL</code> 授權釋出。",
+  "donation.time": "不過，我的空閒時間<strong>不是免費的</strong>。如果我的某些軟體作品你覺得有幫助到你，或者單純你覺得這軟體用起來超爽，請考慮捐款。（可以的話，也告訴我是哪個專案讓你想捐款）",
+  "donation.attention": "注意：請<strong>只在你覺得很爽的情況下</strong>捐款，這完全是自願的。<strong>我做軟體專案的原因一向都是出自於「因為我自己有這個使用需求」</strong>而<strong>不是</strong>出自因為別人需要，所以我的強迫症會讓我在時間與資源等條件允許下、盡量把專案做到我能滿意、我的想像力<sup class=\"footnote-ref\"><a href=\"#footnote-imagination\">*1</a></sup>所能想像到的極限<sup class=\"footnote-ref\"><a href=\"#footnote-limits\">*2</a></sup>，同時也順便丟出來希望我的作品也許別人也會需要或覺得好用。",
+  "donation.warranty": "如果你捐款，我會很高興也很感激，<strong>但即使你捐了款，我也無法為這些專案提供任何保證或擔保</strong>。",
+  "donation.thanks": "感謝你的貢獻，Happy hacking！",
+  "donation.footnote.imagination": "「軟體開發就是想像的世界。」大工程師賽莉艾——並沒有說過這句話。",
+  "donation.footnote.limits": "人的時間是有極限的...人越是寫 side-project，就越會發現自己怎麼拼命寫，想寫的專案一個接著一個永遠寫不完，除非超越人類...",
+  "donation.trademarks": "PayPal、Liberapay 與 Patreon 分別為各自所有者的商標。"
 }
