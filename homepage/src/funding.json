@@ -1,0 +1,22 @@
+{
+  "links": [
+    {
+      "name": "PayPal",
+      "url": "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G4F7NM38ADPEC&source=url",
+      "logo": "paypal.svg",
+      "show": false
+    },
+    {
+      "name": "Liberapay",
+      "url": "https://liberapay.com/onoono",
+      "logo": "liberapay.svg",
+      "show": true
+    },
+    {
+      "name": "Patreon",
+      "url": "https://www.patreon.com/onoono",
+      "logo": "patreon.svg",
+      "show": true
+    }
+  ]
+}
