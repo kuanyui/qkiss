@@ -971,6 +971,7 @@
     showcaseVideo.load();
     lightboxItems = items;
     showScreenshot(index);
+    // FIXME: A known bug (Firefox 156 only): right after refreshing the page WITHOUT ANY SCROLL, open the lightbox modal, and the page, dunno why, scrolls to another place.
     lightbox.showModal();
   }
 
