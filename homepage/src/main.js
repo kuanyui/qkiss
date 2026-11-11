@@ -1249,15 +1249,15 @@
   }
 
   /**
-   * Fill #donation-links with the links of funding.json. They are in a file of their own, so that every change of
-   * them is easy to audit (see "Donation links" in homepage/README.md). build.py has checked the file.
+   * Fill #donation-links with the links of funding.json whose `show` is true. They are in a file of their own, so that
+   * every change of them is easy to audit (see "Donation links" in homepage/README.md). build.py has checked the file.
    */
   async function loadDonationLinks() {
     try {
       const response = await fetch('funding.json');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const { links } = await response.json();
-      document.getElementById('donation-links').replaceChildren(...links.map(createDonationLinkEl));
+      document.getElementById('donation-links').replaceChildren(...links.filter((link) => link.show).map(createDonationLinkEl));
     } catch (error) {
       console.error('Cannot load funding.json:', error);
     }

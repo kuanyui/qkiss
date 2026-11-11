@@ -263,7 +263,7 @@ git log -p --show-signature -- homepage/src/funding.json
 ```json
 {
   "links": [
-    { "name": "Liberapay", "url": "https://liberapay.com/onoono", "logo": "liberapay.svg" }
+    { "name": "Liberapay", "url": "https://liberapay.com/onoono", "logo": "liberapay.svg", "show": true }
   ]
 }
 ```
@@ -271,9 +271,10 @@ git log -p --show-signature -- homepage/src/funding.json
 - `name`: the text of the button.
 - `url`: where the button goes. It must start with `https://`.
 - `logo`: the name of an SVG file in `src/images/funding/` (see its `README.md`).
+- `show`: `true` to show the button, `false` to keep the link in the file without showing it. A hidden link is still in the published `funding.json`.
 
-`build.py` refuses any other key, an empty list, two links with the same name, a URL that is not `https://`, and a logo that is not there.
-The line about trademarks under the links names the platforms (`donation.trademarks`): change it too when the platforms change.
+`build.py` refuses any other key, a missing key, an empty list, two links with the same name, a URL that is not `https://`, a logo that is not there, and a `show` that is not `true` or `false`.
+The line about trademarks under the links names the platforms that are shown (`donation.trademarks`): change it too when a `show` or the platforms change.
 
 ## Deployment
 

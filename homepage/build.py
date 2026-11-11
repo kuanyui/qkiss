@@ -72,7 +72,7 @@ LEGAL_DOCUMENTS: tuple[str, ...] = ("terms.json", "amendments.json")
 # change of them is easy to audit (see "Donation links" in homepage/README.md). Each link has exactly these fields.
 FUNDING_PATH: Path = SRC_DIR / "funding.json"
 FUNDING_LOGOS_DIR: Path = SRC_DIR / "images/funding"
-FUNDING_LINK_FIELDS: tuple[str, ...] = ("name", "url", "logo")
+FUNDING_LINK_FIELDS: tuple[str, ...] = ("name", "url", "logo", "show")
 
 SCREENSHOTS_SUBDIR: str = "screenshots"
 SCREENSHOTS_MANIFEST: str = "screenshots.json"
@@ -502,7 +502,8 @@ def check_legal_documents(languages: list[dict[str, str]]) -> list[str]:
 
 def check_funding() -> None:
     """Validate funding.json (FUNDING_PATH): `{"links": [...]}`, with at least one link. Each link has exactly a name,
-    an https:// URL, and the file name of its logo in images/funding/. Two links cannot have the same name."""
+    an https:// URL, the file name of its logo in images/funding/, and whether the dialog shows it (`show`, true or
+    false). Two links cannot have the same name."""
     where = str(FUNDING_PATH.relative_to(REPO_ROOT_DIR))
     if not FUNDING_PATH.is_file():
         raise BuildError(f"{where}: not found")
@@ -519,7 +520,7 @@ def check_funding() -> None:
         if not isinstance(link, dict) or link.keys() != set(FUNDING_LINK_FIELDS):
             errors.append(f"{link_where}: must be an object with exactly the keys {', '.join(FUNDING_LINK_FIELDS)}")
             continue
-        name, url, logo = (link[field] for field in FUNDING_LINK_FIELDS)
+        name, url, logo, show = (link[field] for field in FUNDING_LINK_FIELDS)
         if not is_nonempty_string(name) or name != name.strip():
             errors.append(f"{link_where}.name: must be a non-empty string, without spaces at its ends; got {name!r}")
         elif name in names:
@@ -537,6 +538,8 @@ def check_funding() -> None:
             errors.append(f'{link_where}.logo: must be the name of an SVG file in images/funding/, like "liberapay.svg"; got {logo!r}')
         elif not (FUNDING_LOGOS_DIR / logo).is_file():
             errors.append(f"{link_where}.logo: images/funding/{logo} not found")
+        if not isinstance(show, bool):
+            errors.append(f"{link_where}.show: must be true or false; got {show!r}")
     if errors:
         raise BuildError("\n".join(errors))
 
