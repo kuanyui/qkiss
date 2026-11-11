@@ -1245,6 +1245,34 @@
     document.getElementById('donation-open').addEventListener('click', () => {
       document.getElementById('donation-dialog').showModal();
     });
+    loadDonationLinks();
+  }
+
+  /**
+   * Fill #donation-links with the links of funding.json. They are in a file of their own, so that every change of
+   * them is easy to audit (see "Donation links" in homepage/README.md). build.py has checked the file.
+   */
+  async function loadDonationLinks() {
+    try {
+      const response = await fetch('funding.json');
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const { links } = await response.json();
+      document.getElementById('donation-links').replaceChildren(...links.map(createDonationLinkEl));
+    } catch (error) {
+      console.error('Cannot load funding.json:', error);
+    }
+  }
+
+  /** A button to donate: the logo of the platform, then its name. */
+  function createDonationLinkEl(link) {
+    const logo = Object.assign(document.createElement('img'), {
+      className: 'button-icon', src: `images/funding/${link.logo}`, alt: '', width: 22, height: 22,
+    });
+    const button = Object.assign(document.createElement('a'), { className: 'button', href: link.url });
+    button.append(logo, link.name);
+    const item = document.createElement('li');
+    item.append(button);
+    return item;
   }
 
   // ---------------------------------------------------------------------------

@@ -14,6 +14,7 @@ homepage/
     ├── main.js     # The list of languages, translations, the language and cut pickers, the screenshot gallery and the download links
     ├── i18n/       # One JSON file per language other than English, and en.json for the English of the Director's Cut
     ├── legal/      # The documents of the Director's Cut: terms.json, and amendments.json for their additional articles
+    ├── funding.json  # The links of the Donate dialog in the footer (see "Donation links" below)
     ├── fonts/      # The handwriting of the caption over the banana of macOS. See fonts/README.md.
     └── images/
         ├── distros/              # Logos of the Linux distributions, from Simple Icons. See images/distros/README.md.
@@ -248,6 +249,31 @@ To upgrade it, change the version in `KATEX_JS` and `KATEX_CSS` in `main.js`, an
 curl -fsSL https://cdn.jsdelivr.net/npm/katex@VERSION/dist/katex.min.js | openssl dgst -sha384 -binary | openssl base64 -A
 curl -fsSL https://cdn.jsdelivr.net/npm/katex@VERSION/dist/katex.min.css | openssl dgst -sha384 -binary | openssl base64 -A
 ```
+
+## Donation links
+
+Donate, in the footer, opens a dialog with the links of `src/funding.json`.
+They are in a file of their own, not in `index.html`, so that any change of them stands out when it is audited.
+This command shows every change of the file, and whether its commit is signed:
+
+```sh
+git log -p --show-signature -- homepage/src/funding.json
+```
+
+```json
+{
+  "links": [
+    { "name": "Liberapay", "url": "https://liberapay.com/onoono", "logo": "liberapay.svg" }
+  ]
+}
+```
+
+- `name`: the text of the button.
+- `url`: where the button goes. It must start with `https://`.
+- `logo`: the name of an SVG file in `src/images/funding/` (see its `README.md`).
+
+`build.py` refuses any other key, an empty list, two links with the same name, a URL that is not `https://`, and a logo that is not there.
+The line about trademarks under the links names the platforms (`donation.trademarks`): change it too when the platforms change.
 
 ## Deployment
 

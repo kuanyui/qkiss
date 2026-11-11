@@ -37,6 +37,7 @@ import sys
 import tempfile
 import threading
 import time
+import urllib.parse
 from html.parser import HTMLParser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -66,6 +67,12 @@ FLAGS_DIR: Path = REPO_ROOT_DIR / "resources/flags"
 # Every text is an object with one string per language (see "The Director's Cut" in homepage/README.md).
 LEGAL_DIR: Path = SRC_DIR / "legal"
 LEGAL_DOCUMENTS: tuple[str, ...] = ("terms.json", "amendments.json")
+
+# The links of the Donate dialog in the footer, that main.js loads. They are in a file of their own, so that every
+# change of them is easy to audit (see "Donation links" in homepage/README.md). Each link has exactly these fields.
+FUNDING_PATH: Path = SRC_DIR / "funding.json"
+FUNDING_LOGOS_DIR: Path = SRC_DIR / "images/funding"
+FUNDING_LINK_FIELDS: tuple[str, ...] = ("name", "url", "logo")
 
 SCREENSHOTS_SUBDIR: str = "screenshots"
 SCREENSHOTS_MANIFEST: str = "screenshots.json"
@@ -99,6 +106,8 @@ PATT_BLOCK_IMAGE_PATH = re.compile(r"([A-Za-z0-9][A-Za-z0-9._-]*/)*[A-Za-z0-9][A
 # The name of a block, and of each of its images, like `platforms` or `linux`: lowercase letters, digits and `-`,
 # starting with a letter.
 PATT_BLOCK_NAME = re.compile(r"[a-z][a-z0-9-]*")
+# The logo of a donation link: the name of an SVG file in images/funding/, like `liberapay.svg`.
+PATT_FUNDING_LOGO = re.compile(r"[a-z0-9][a-z0-9-]*\.svg")
 
 
 class BuildError(Exception):
@@ -488,6 +497,51 @@ def check_legal_documents(languages: list[dict[str, str]]) -> list[str]:
 
 
 # ==========================================
+# funding.json
+# ==========================================
+
+def check_funding() -> None:
+    """Validate funding.json (FUNDING_PATH): `{"links": [...]}`, with at least one link. Each link has exactly a name,
+    an https:// URL, and the file name of its logo in images/funding/. Two links cannot have the same name."""
+    where = str(FUNDING_PATH.relative_to(REPO_ROOT_DIR))
+    if not FUNDING_PATH.is_file():
+        raise BuildError(f"{where}: not found")
+    data = load_json(FUNDING_PATH.read_text(encoding="utf-8"), where)
+    if not isinstance(data, dict) or data.keys() != {"links"}:
+        raise BuildError(f'{where}: must be an object with only the key "links"')
+    links = data["links"]
+    if not isinstance(links, list) or not links:
+        raise BuildError(f'{where}: "links" must be an array of at least one link')
+    errors: list[str] = []
+    names: set[str] = set()
+    for i, link in enumerate(links):
+        link_where = f"{where}: links[{i}]"
+        if not isinstance(link, dict) or link.keys() != set(FUNDING_LINK_FIELDS):
+            errors.append(f"{link_where}: must be an object with exactly the keys {', '.join(FUNDING_LINK_FIELDS)}")
+            continue
+        name, url, logo = (link[field] for field in FUNDING_LINK_FIELDS)
+        if not is_nonempty_string(name) or name != name.strip():
+            errors.append(f"{link_where}.name: must be a non-empty string, without spaces at its ends; got {name!r}")
+        elif name in names:
+            errors.append(f"{link_where}.name: {name!r} is already the name of another link")
+        else:
+            names.add(name)
+        try:
+            valid_url = (isinstance(url, str) and url.startswith("https://") and not any(c.isspace() for c in url)
+                         and bool(urllib.parse.urlsplit(url).hostname))
+        except ValueError:
+            valid_url = False
+        if not valid_url:
+            errors.append(f'{link_where}.url: must be an https:// URL without spaces, like "https://liberapay.com/name"; got {url!r}')
+        if not isinstance(logo, str) or not PATT_FUNDING_LOGO.fullmatch(logo):
+            errors.append(f'{link_where}.logo: must be the name of an SVG file in images/funding/, like "liberapay.svg"; got {logo!r}')
+        elif not (FUNDING_LOGOS_DIR / logo).is_file():
+            errors.append(f"{link_where}.logo: images/funding/{logo} not found")
+    if errors:
+        raise BuildError("\n".join(errors))
+
+
+# ==========================================
 # screenshots.json
 # ==========================================
 
@@ -667,6 +721,7 @@ def check_site(screenshots_dir: Path | None) -> tuple[dict[str, Path | bytes], l
     languages = check_languages(languages_json())
     warnings = check_translations(languages, keys)
     warnings += check_legal_documents(languages)
+    check_funding()
     images = check_screenshots(screenshots_dir, languages, page_blocks)   # screenshots.json is checked even without --screenshots
     if screenshots_dir is None:
         warnings.append("Without screenshots (--no-screenshots): fine for a preview, never publish it.")
