@@ -262,6 +262,19 @@
     }
   }
 
+  /**
+   * Write the current season of TV anime, like "Fall 2026", into each `.anime-season` of the translated page. The
+   * seasons start in January, April, July and October. Each element has the words of its translation: `data-seasons`,
+   * the names of the four seasons from winter, separated by `,`, and `data-format`, where `{year}` and `{season}` go.
+   */
+  function fillAnimeSeasons() {
+    const now = new Date();
+    for (const element of document.querySelectorAll('.anime-season')) {
+      const season = element.dataset.seasons.split(',')[Math.floor(now.getMonth() / 3)];
+      element.textContent = element.dataset.format.replace('{year}', now.getFullYear()).replace('{season}', season);
+    }
+  }
+
   const englishOnly = isEnglishOnly();
   /** The language chosen last. A translation arriving for an earlier choice (of language or cut) is dropped. */
   let currentLanguage = englishOnly ? SOURCE_LANGUAGE : chooseInitialLanguage();
@@ -274,6 +287,7 @@
     if (currentLanguage !== id || currentCut !== cut) return;
     for (const target of targets) target.apply(lookUp(target, chain));
     numberFootnotes();
+    fillAnimeSeasons();
     if (cut === 'danger') typesetFormulas();
     root.lang = htmlLang(id);
     root.dataset.cut = cut;   // for the styles that differ between the cuts, like the banana of macOS in Download

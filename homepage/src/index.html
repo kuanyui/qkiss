@@ -425,10 +425,20 @@
         <h2><span data-i18n="faq.title">Q&amp;A</span><a class="heading-link" href="#faq" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h2>
         <!-- Each question is a <details>: a click on the question shows its answer. A link to one opens it (see main.js).
              The text of a question is in its own <span>, because data-i18n replaces all of the text of an element, and
-             the ¶ after it would go too. The ¶ is a link to the question; a click on it does not hide the answer. -->
+             the ¶ after it would go too. The ¶ is a link to the question; a click on it does not hide the answer.
+             The questions are in three groups, each under its heading. -->
+        <h3 id="faq-group-kiss"><span data-i18n="faq.group.kiss">KiSS basics</span><a class="heading-link" href="#faq-group-kiss" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h3>
         <div class="faq">
+          <details class="faq-item" id="faq-sets">
+            <summary><span><span data-i18n="faq.sets.q">Where can I find KiSS sets to open?</span><a class="heading-link" href="#faq-sets" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
+            <div class="faq-answer">
+              <p data-i18n-html="faq.sets.otakuworld">The biggest archive right now is probably <a href="https://otakuworld.com/kiss/">Otaku World</a>, though you have to dig through it patiently. It has sets by both Japanese and Western artists.</p>
+              <p data-i18n-html="faq.sets.viewers">Some people have also written their own implementations, such as <a href="https://kisekae.org/">one in JavaScript</a> or <a href="https://emhoracek.github.io/smooch/index.html">one in Haskell</a>, with online demos you can open right in your browser. But most of the sample sets they provide were dug up from Otaku World, too.</p>
+              <p data-i18n="faq.sets.nsfw">Note that these KiSS sets may contain NSFW content, and I can't make any guarantees.</p>
+            </div>
+          </details>
           <details class="faq-item" id="faq-specs">
-            <summary><span><span data-i18n="faq.specs.q">Which versions of FKiSS does QKiSS support?</span><a class="heading-link" href="#faq-specs" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
+            <summary><span><span data-i18n="faq.specs.q">Which specifications of KiSS files does QKiSS support?</span><a class="heading-link" href="#faq-specs" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
               <ul>
                 <li data-i18n-html="faq.specs.kiss"><a href="https://www2s.biglobe.ne.jp/~yav/kiss/kissgsj.html">KISS/GS</a> (General Specification), with its <a href="https://www2s.biglobe.ne.jp/~yav/soft/fkiss/tt/COMMENT.HTM">extended comments</a>.</li>
@@ -436,6 +446,22 @@
               </ul>
               <p data-i18n="faq.specs.enough">That is quite enough to load nearly all the Japanese KiSS sets I could find on the Internet.</p>
               <p data-i18n-html="faq.specs.shell">But I deliberately decided not to implement the <code>shell()</code> command, to avoid unnecessary security holes. (I don't think I've ever seen a KiSS set that uses it, either.)</p>
+            </div>
+          </details>
+          <details class="faq-item" id="faq-make-sets">
+            <summary><span><span data-i18n="faq.makesets.q">These existing KiSS sets make my hands itch and my heart flutter, and I want to make my own KiSS set too. Where do I start?</span><a class="heading-link" href="#faq-make-sets" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
+            <div class="faq-answer">
+              <p data-i18n-html="faq.makesets.tools">To be honest, I don't know how to make a new KiSS set, because I'm not interested in it. <a href="https://otakuworld.com/kiss/">Otaku World</a> introduces some tools for making KiSS sets, but most of them are very old, and it's unclear whether they still run on modern systems. I haven't tried.</p>
+              <p data-i18n-html="faq.makesets.llm">Ah, but LLM agents are so capable these days: just <strong>feed one <a href="#faq-spec-docs">the KISS/GS and FKiSS 1 &amp; 2 specifications</a></strong>, and having it make a tool for your own use shouldn't be hard.</p>
+            </div>
+          </details>
+          <details class="faq-item" id="faq-spec-docs">
+            <summary><span><span data-i18n="faq.specdocs.q">I want to understand the KISS/GS and FKiSS 1 &amp; 2 specifications! Where can I find them?</span><a class="heading-link" href="#faq-spec-docs" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
+            <div class="faq-answer">
+              <!-- main.js writes the current anime season into .anime-season, in the words of data-seasons and data-format
+                   (see fillAnimeSeasons()). -->
+              <p data-i18n-html="faq.specdocs.why">If you think QKiSS is really badly written and want to write your own KiSS viewer, or want to make a new KiSS set (putting characters of the <span class="anime-season" data-format="{season} {year}" data-seasons="Winter,Spring,Summer,Fall"></span> anime season into the KiSS specification that appeared in 1991 (older than Linux!): that alone sounds super romantic), then besides making it with the existing KiSS tools, you could also consider feeding the KISS/GS and FKiSS 1 &amp; 2 specifications to an LLM agent, and see how it can help you turn your drawings into a KiSS LZH.</p>
+              <p data-i18n-html="faq.specdocs.where">The original specifications of KISS/GS and FKiSS are on the earliest site, <a href="https://www2s.biglobe.ne.jp/~yav/kiss/" hreflang="ja">fkiss by yav</a> (in Japanese, partly in English), and on the newer <a href="https://otakuworld.com/kiss/kisshelp/" hreflang="en">Otaku World</a> (in English). <strong>But! To keep LLM agents from crawling around like a DDoS and flooding their servers (please do not disturb the peace of other people's servers!)</strong>, I have backed up all the documents of the specifications in <a href="https://github.com/kuanyui/qkiss/tree/master/vendor/references"><code>vendor/references/</code></a> of the git repo of qkiss. If you want an LLM agent to read all the KiSS specifications, just tell it: “<span class="llm-prompt">Shallow clone the vendor/references/ folder of the kuanyui/qkiss project on GitHub, and read the KISS/GS and FKiSS 1 &amp; 2 specifications in it. Note that the FKiSS 3 and 4 specifications must not be used.</span>” That's enough.</p>
             </div>
           </details>
           <details class="faq-item" id="faq-name">
@@ -449,14 +475,9 @@
               </ul>
             </div>
           </details>
-          <details class="faq-item" id="faq-sets">
-            <summary><span><span data-i18n="faq.sets.q">Where can I find KiSS sets to open?</span><a class="heading-link" href="#faq-sets" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
-            <div class="faq-answer">
-              <p data-i18n-html="faq.sets.otakuworld">The biggest archive right now is probably <a href="https://otakuworld.com/kiss/">Otaku World</a>, though you have to dig through it patiently. It has sets by both Japanese and Western artists.</p>
-              <p data-i18n-html="faq.sets.viewers">Some people have also written their own implementations, such as <a href="https://kisekae.org/">one in JavaScript</a> or <a href="https://emhoracek.github.io/smooch/index.html">one in Haskell</a>, with online demos you can open right in your browser. But most of the sample sets they provide were dug up from Otaku World, too.</p>
-              <p data-i18n="faq.sets.nsfw">Note that these KiSS sets may contain NSFW content, and I can't make any guarantees.</p>
-            </div>
-          </details>
+        </div>
+        <h3 id="faq-group-os"><span data-i18n="faq.group.os">Operating systems</span><a class="heading-link" href="#faq-group-os" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h3>
+        <div class="faq">
           <details class="faq-item" id="faq-security">
             <summary><span><span data-i18n="faq.security.q">What security measures are there for the LZH format and external programs such as lha?</span><a class="heading-link" href="#faq-security" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
@@ -548,6 +569,9 @@
               </blockquote>
             </div>
           </details>
+        </div>
+        <h3 id="faq-group-tech"><span data-i18n="faq.group.tech">Other technical topics</span><a class="heading-link" href="#faq-group-tech" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></h3>
+        <div class="faq">
           <details class="faq-item" id="faq-web">
             <summary><span><span data-i18n="faq.web.q">Why not Electron or Web technologies?</span><a class="heading-link" href="#faq-web" aria-label="Link to this part" title="Link to this part" data-i18n-attr="aria-label:heading.link;title:heading.link">¶</a></span></summary>
             <div class="faq-answer">
@@ -590,7 +614,7 @@
                 <li data-i18n="faq.llm.assistant">This project does use help from LLMs, but keeps it under control as much as possible, with various engineering methods (e.g. isolating LLM agents in KVM virtual machines, the principle of least privilege, and reviewing commits by hand).</li>
                 <li data-i18n="faq.llm.review">No damn vibe coding, ever, in the main program (Qt / C++) or in the Python code. Even with help from LLMs, the code was reviewed and modified by hand, line by line: I can understand and explain every line of it. I also proofread the translations by hand, as much as my broken foreign languages allow.</li>
               </ul>
-              <h3 data-i18n="faq.llm.chart">How much LLMs directly generated in each area</h3>
+              <h4 data-i18n="faq.llm.chart">How much LLMs directly generated in each area</h4>
               <!--
                 One row per area: its icon, the share directly generated by LLMs (a bar, and the number), the LLMs used, and
                 how they were used. `--share` is the width of the bar. For a range like 60–70%, `--share-max` adds a lighter
@@ -743,13 +767,6 @@
         <p class="footer-brand"><img src="images/qkiss-32.svg" alt="" width="24" height="24"> QKiSS</p>
         <p data-i18n-html="footer.license">QKiSS is free software, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License v3</a>. Its source code is available on <a href="https://github.com/kuanyui/qkiss">GitHub</a>.</p>
         <p>Copyright © 2024–2026 ono ono (<a href="https://github.com/kuanyui">kuanyui</a>)</p>
-      </div>
-      <div>
-        <h2 class="footer-heading" data-i18n="footer.specs.title">KiSS specifications</h2>
-        <ul class="footer-links">
-          <li><a href="https://www2s.biglobe.ne.jp/~yav/kiss/" hreflang="ja" data-i18n="footer.specs.yav">fkiss by yav (Japanese)</a></li>
-          <li><a href="https://otakuworld.com/kiss/kisshelp/" hreflang="en" data-i18n="footer.specs.otakuworld">Otaku World (English)</a></li>
-        </ul>
       </div>
       <div>
         <h2 class="footer-heading" data-i18n="footer.author.title">Author</h2>

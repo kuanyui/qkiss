@@ -2074,9 +2074,15 @@ sup {
   color: var(--accent);
 }
 
-.faq-answer h3 {
+.faq-answer h4 {
   margin: 1.75rem 0 0.5rem;
   font-size: 1.1rem;
+}
+
+/* A prompt to give to an LLM agent, in an answer: under a dashed line, unlike the solid line of a link. */
+.llm-prompt {
+  text-decoration: underline dashed 1px;
+  text-underline-offset: 0.25em;
 }
 
 /*
@@ -2248,7 +2254,7 @@ sup {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 2rem;
 }
 
