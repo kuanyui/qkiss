@@ -691,7 +691,6 @@ code {
   margin: 1.5rem 0 0;
   padding: 1rem 1.25rem;
   border-inline-start: 4px solid var(--accent);
-  border-radius: 0 var(--radius) var(--radius) 0;
   background: var(--accent-soft);
 }
 
@@ -1977,7 +1976,6 @@ sup {
   padding: 0.9rem 1.25rem;
   padding-inline-start: 4.25rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
   background: var(--quote-bg);
 }
 
