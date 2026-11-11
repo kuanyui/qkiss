@@ -1240,9 +1240,16 @@
   // Footer: Donate shows the author's note about donations
   // ---------------------------------------------------------------------------
 
-  /** #donation-dialog closes like the dialogs of the download menus (see setUpDownloadMenus()). */
+  /**
+   * Show Donate in the footer. It opens #donation-dialog, which closes like the dialogs of the download menus (see
+   * setUpDownloadMenus()). For the visitors that isEnglishOnly() keeps in English, Donate stays hidden and funding.json
+   * is not even loaded: the author does not take their money.
+   */
   function setUpDonation() {
-    document.getElementById('donation-open').addEventListener('click', () => {
+    if (englishOnly) return;
+    const open = document.getElementById('donation-open');
+    open.closest('li').hidden = false;
+    open.addEventListener('click', () => {
       document.getElementById('donation-dialog').showModal();
     });
     loadDonationLinks();

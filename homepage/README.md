@@ -253,6 +253,7 @@ curl -fsSL https://cdn.jsdelivr.net/npm/katex@VERSION/dist/katex.min.css | opens
 ## Donation links
 
 Donate, in the footer, opens a dialog with the links of `src/funding.json`.
+For the visitors that `isEnglishOnly()` in `main.js` keeps in English, Donate stays hidden, and `funding.json` is not loaded.
 They are in a file of their own, not in `index.html`, so that any change of them stands out when it is audited.
 This command shows every change of the file, and whether its commit is signed:
 

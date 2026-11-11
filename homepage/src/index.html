@@ -762,8 +762,9 @@
         <ul class="footer-links">
           <li><a class="footer-icon-link" href="https://kuanyui.github.io/"><img src="images/icons/16/go-home.svg" alt="" width="16" height="16"><span data-i18n="footer.author.homepage">Homepage</span></a></li>
           <li><a class="footer-icon-link" href="https://github.com/kuanyui"><span class="button-mark github"></span>GitHub</a></li>
-          <!-- Opens #donation-dialog (see main.js), so it is a button, drawn like the links above it. -->
-          <li><button type="button" class="footer-link-button footer-icon-link" id="donation-open"><img src="images/icons/16/currency-field.svg" alt="" width="16" height="16"><span data-i18n="footer.author.donate">Donate</span></button></li>
+          <!-- Opens #donation-dialog (see main.js), so it is a button, drawn like the links above it. Hidden until
+               setUpDonation() in main.js shows it. -->
+          <li hidden><button type="button" class="footer-link-button footer-icon-link" id="donation-open"><img src="images/icons/16/currency-field.svg" alt="" width="16" height="16"><span data-i18n="footer.author.donate">Donate</span></button></li>
         </ul>
       </div>
       <!-- The sources and licenses of the icons of this website. The README files in images/icons, images/marks,
