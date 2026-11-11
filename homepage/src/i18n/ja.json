@@ -91,7 +91,7 @@
   "features.misc.linux": "Linux はもう二級市民じゃない（Windows のほうこそ。macOS に至っては三級市民だ。テストできる Mac を持っていないから）。",
   "features.misc.open": "オープンソース＋自動ビルドで、私が中にこっそりわるいものを仕込んでいないことを保証<sup class=\"footnote-ref\"><a href=\"#footnote-supply-chain\">*3</a></sup>。",
   "features.misc.tango": "Tango アイコン風の UI アイコンで、2000 年代の夢をもう一度。",
-  "features.misc.crt": "CRT モニターのシミュレーションを内蔵。スクリーンセーバーが欠かせず、ピクセルもあまりくっきりしていなかった 1990 年代へ、夢の中で帰れます。",
+  "features.misc.crt": "CRT モニターのシミュレーションを内蔵。スクリーンセーバーが欠かせず、磁石にも気をつけなければならなかった 1990 年代へ、夢の中で帰れます。",
   "features.misc.apparmor": {
     "safe":   "セキュリティに偏執的な傾向があるユーザー向けに、AppArmor プロファイルを用意。",
     "danger": "セキュリティに偏執的な傾向があり、LSM が DENIED の audit ログを吐き出すのを見ると脳汁がドバドバ出る変態ユーザー<sup class=\"footnote-ref\"><a href=\"#footnote-author\">*4</a></sup>向けに、AppArmor プロファイルを用意。"

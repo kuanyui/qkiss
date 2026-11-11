@@ -728,13 +728,25 @@ code {
 
 /* ---- Features ------------------------------------------------------------ */
 
+/* The three cards: one per row, or all three side by side once each gets at least 20rem. Never two per row, which
+   would leave the third alone on its row. */
+#features > .container {
+  container-type: inline-size;
+}
+
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  grid-template-columns: 1fr;
   gap: 1rem;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+@container (min-width: 62rem) {   /* 3 × 20rem, and 2 gaps of 1rem */
+  .feature-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .feature {

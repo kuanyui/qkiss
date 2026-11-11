@@ -91,7 +91,7 @@
   "features.misc.linux": "Linux 不再是次等公民（Windows 才是。至於 macOS 是三等公民，因為我沒有 Mac 可以測試）。",
   "features.misc.open": "開放原始碼 + 自動化建置，確定我沒有在裡面偷塞壞壞的東西<sup class=\"footnote-ref\"><a href=\"#footnote-supply-chain\">*3</a></sup>。",
   "features.misc.tango": "Tango Icon 風格的 UI 圖標，讓你夢回 2000 年代。",
-  "features.misc.crt": "內建 CRT 螢幕模擬，讓你夢回需要螢幕保護程式、像素不太清晰的 1990 年代。",
+  "features.misc.crt": "內建 CRT 螢幕模擬，讓你夢回需要螢幕保護程式、要小心磁鐵的 1990 年代。",
   "features.misc.apparmor": {
     "safe":   "提供 AppArmor profile 給對安全性有偏執傾向的使用者。",
     "danger": "提供 AppArmor profile 給對安全性有偏執傾向、看到 LSM 噴出 DENIED 的 audit log 就會顱內高潮的變態使用者<sup class=\"footnote-ref\"><a href=\"#footnote-author\">*4</a></sup>。"
